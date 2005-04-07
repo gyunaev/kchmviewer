@@ -40,7 +40,11 @@ public:
 	virtual bool	saveIndexFile (const QString& filename) = 0;
 
 	virtual void	invalidate() = 0;
-	virtual bool	parseFile (const QString& filename) = 0;
+
+	virtual void	indexInit () = 0;
+	virtual bool	indexAddFile (const QString& filename) = 0;
+	virtual void	indexDone () = 0;
+
 	virtual bool	doSearch (const QString& query, search_results_t& results) = 0;
 };
 

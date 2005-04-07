@@ -25,6 +25,8 @@
 #include "xchmfile.h"
 #include "kchmexternalsearch.h"
 #include "kchmmainwindow.h"
+#include "kchmexternalsearchengine.h"
+
 
 KCHMExternalSearchBackend::KCHMExternalSearchBackend( )
 {
@@ -56,6 +58,8 @@ bool KCHMExternalSearch::createSearchIndex( )
 		return false;
 	}
 
+	m_searchBackend->indexInit();
+
 	// Create a progress dialog
 	QProgressDialog progress( "Building the index...", "Abort", files.size(),
                           ::mainWindow, "progress", TRUE );
@@ -71,22 +75,20 @@ bool KCHMExternalSearch::createSearchIndex( )
     	qApp->processEvents();
 
     	if ( progress.wasCanceled() )
+		{
+			m_searchBackend->indexDone();
+			m_searchBackend->invalidate();
 			return false;
+		}
 
 		if ( !files[i].endsWith (".htm", FALSE) && !files[i].endsWith (".html", FALSE) )
 			continue;
 
-		if ( ::mainWindow->getChmFile()->GetFileContentAsString (data, files[i]) == 0 )
-		{
-			qWarning ("KCHMExternalSearch::createSearchIndex: Could not get file content of %s", files[i].ascii());
-			continue;
-		}
-
-//		if ( !m_searchBackend->parseFileContent (files[i], data) )
-        	//return false;
+		m_searchBackend->indexAddFile(files[i]);
 	}
 
 	progress.setProgress( files.size() ); // hide the dialog
+	m_searchBackend->indexDone();
 	return true;
 }
 

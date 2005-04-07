@@ -1,7 +1,7 @@
 /****************************************************************************
 ** KCHMBookmarkWindow meta object code from reading C++ file 'kchmbookmarkwindow.h'
 **
-** Created: Tue Apr 5 01:04:49 2005
+** Created: Fri Apr 8 02:05:55 2005
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -29,21 +29,11 @@
 /**
 @author Georgy Yunaev
 */
+class KCHMSearchIndexBuilder;
+
 class KCHMExternalSearchEngine : public KCHMExternalSearchBackend
 {
 public:
-    KCHMExternalSearchEngine();
-    ~KCHMExternalSearchEngine();
-
-	virtual bool	loadIndexFile (const QString& filename);
-	virtual bool	saveIndexFile (const QString& filename);
-
-	virtual void	invalidate();
-	virtual bool	parseFile (const QString& filename);
-	virtual bool	doSearch (const QString& query, search_results_t& results);
-
-private:
-	
 	class IndexEntry
 	{
 		public:
@@ -53,30 +43,33 @@ private:
 			unsigned int	word;
 			unsigned int	offset;
 	};
-	
-	class SearchIndexBuild
-	{
-	public:
-		SearchIndexBuild() { m_pageid = m_wordid = m_indexmapid = 1;}
-		
-		QMap< QString, int >		m_pagesmap;
-		QMap< QString, int >		m_wordsmap;
-		QValueList< IndexEntry >	m_indexmap;
-		
-		unsigned short	m_pageid;
-		unsigned int	m_wordid;
-		unsigned int	m_indexmapid;
-	};
 
-	// text allowed to be changed just to remove need for extra copying
-	void	addPageToIndex (unsigned short pageurl, SearchIndexBuild& build, QString& text);	
-	bool	addToIndex (const QString& url);
+public:
+    KCHMExternalSearchEngine();
+    ~KCHMExternalSearchEngine();
 
+	virtual bool	loadIndexFile (const QString& filename);
+	virtual bool	saveIndexFile (const QString& filename);
+
+	virtual void	invalidate();
+	virtual bool	doSearch (const QString& query, search_results_t& results);
+
+	/*
+	 * Index creation routines.
+	 * Before creating indexes, indexInit() is called once (allocate structures, etc)
+	 * Then indexAddFile() is called several times. 
+	 * And then indexDone() is called (do index creation cleanup).
+	 */
+	virtual void	indexInit ();
+	virtual bool	indexAddFile (const QString& filename);
+	virtual void	indexDone ();
+
+private:
 	QMap<int, QString>			m_pagesmap;
 	QMap<int, QString>			m_wordsmap;
 	QValueList< IndexEntry >	m_indexmap;
 
-	SearchIndexBuild		*	m_buildindex;
+	KCHMSearchIndexBuilder	*	m_indexbuilder;
 };
 
 #endif

@@ -37,10 +37,11 @@
  */
 #define KEEP_ALL_OPENED_DATA_IN_SOURCE_FACTORY
 
-KCHMViewWindow::KCHMViewWindow( QWidget * parent, const char * name)
-	: QTextBrowser (parent, name)
+KCHMViewWindow::KCHMViewWindow( QWidget * parent, bool resolve_images )
+	: QTextBrowser (parent)
 {
 	m_sourcefactory = 0;
+	m_resolveImages = resolve_images;
 	setTextFormat ( Qt::RichText );
 
 	invalidate();

@@ -3,6 +3,13 @@
 # Subdir relative project main directory: ./src
 # Target is an application:  ../bin/kchmviewer
 
+LIBS += ../chmlib-0.35/src/.libs/libchm.a 
+INCLUDEPATH += ../chmlib-0.35/src 
+TARGET = ../bin/kchmviewer 
+CONFIG += debug \
+          warn_on \
+          qt 
+TEMPLATE = app 
 HEADERS += kchmmainwindow.h \
            xchmfile.h \
            kchmtreectrl.h \
@@ -39,10 +46,3 @@ SOURCES += kchmmainwindow.cpp \
            kchmexternalsearch.cpp \
            iconstorage.cpp \
            kchmexternalsearchengine.cpp 
-LIBS += ../chmlib/src/.libs/libchm.a 
-INCLUDEPATH += ../chmlib/src 
-TARGET = ../bin/kchmviewer 
-CONFIG += debug \
-          warn_on \
-          qt 
-TEMPLATE = app 

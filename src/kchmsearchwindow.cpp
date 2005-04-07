@@ -58,7 +58,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 
 #if defined (ENABLE_EXTERNAL_SEARCH)
 	m_useExternalSearch = new QCheckBox (this);
-	m_useExternalSearch->setText (tr("<b>Use external search</b>"));
+	m_useExternalSearch->setText (tr("Use external search"));
 
 	connect( m_useExternalSearch, SIGNAL( stateChanged ( int ) ), this, SLOT( onExternalSearchBoxStateChanged ( int ) ) );
 	m_externalSearch = 0;

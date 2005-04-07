@@ -31,7 +31,7 @@
 class KCHMViewWindow : public QTextBrowser
 {
 public:
-    KCHMViewWindow( QWidget * parent = 0, const char * name = 0 );
+    KCHMViewWindow( QWidget * parent = 0, bool resolve_images = true );
     ~KCHMViewWindow();
 
 	bool	LoadPage (QString url);
@@ -54,6 +54,7 @@ public:
 	static QString makeURLabsoluteIfNeeded ( const QString & url );
 
 	QString		makeURLabsolute ( const QString &url, bool set_as_base = true );
+	bool		areImagesResolved() { return m_resolveImages; }
 
 private:
 	KCHMSourceFactory	*	m_sourcefactory;
@@ -61,6 +62,7 @@ private:
 	int						m_zoomfactor;
 	QString					m_base_url;
 	QString 				m_openedPage;
+	bool					m_resolveImages;
 };
 
 #endif

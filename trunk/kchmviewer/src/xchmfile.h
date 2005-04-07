@@ -36,7 +36,7 @@
 #include "kchmtreeviewitem.h"
 #include "kchmtextencoding.h"
 
-#include "../chmlib/src/chm_lib.h"
+#include "chm_lib.h"
 
 typedef QMap<QString, QString> CHMSearchResults;
 typedef QMap<int, QString> CHMIDMap;

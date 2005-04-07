@@ -55,7 +55,7 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 		chm->GetFileContentAsString (data, abs_name);
 		((QMimeSourceFactory*)this)->setText (abs_name, data);
 	}
-	else
+	else if ( m_viewWindow->areImagesResolved() )
 	{
 		// treat as image
 		chmUnitInfo ui;
@@ -77,6 +77,8 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 		else
 			fprintf (stderr, "Could not resolve %s\n", abs_name.ascii());
 	}
+	else
+		return 0;
 	
 	return QMimeSourceFactory::data (abs_name);
 }

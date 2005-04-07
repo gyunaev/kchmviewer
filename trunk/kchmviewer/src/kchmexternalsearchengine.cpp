@@ -25,65 +25,146 @@
 
 #include "kchmviewwindow.h"
 #include "kchmmainwindow.h"
+#include "kchmexternalsearch.h"
 #include "kchmexternalsearchengine.h"
 
 
+class KCHMSearchIndexBuilder
+{
+public:
+	KCHMSearchIndexBuilder ( QValueList<KCHMExternalSearchEngine::IndexEntry>& map );
+	~KCHMSearchIndexBuilder();
+	
+	bool addWordsFromPage ( const QString& url );
+	void convertPages (QMap<int, QString>& map);
+	void convertWords (QMap<int, QString>& map);
+
+private:
+	KCHMViewWindow		*	m_viewwindow;
+	QClipboard 			*	m_clipboard;
+
+	unsigned short			m_pageid;
+	unsigned int			m_wordid;
+	unsigned int			m_indexmapid;
+
+	QMap<QString, int>		m_pagesmap;
+	QMap<QString, int>		m_wordsmap;
+	QValueList<KCHMExternalSearchEngine::IndexEntry>&	m_indexmap;
+};
+
+
+KCHMSearchIndexBuilder::KCHMSearchIndexBuilder( QValueList< KCHMExternalSearchEngine::IndexEntry > & map )
+	: m_indexmap(map)
+{
+	m_pageid = m_wordid = m_indexmapid = 1;
+	m_viewwindow = new KCHMViewWindow (0, false);
+	m_viewwindow->hide();
+
+	m_clipboard = QApplication::clipboard();
+}
+
+
+KCHMSearchIndexBuilder::~ KCHMSearchIndexBuilder( )
+{
+	m_clipboard->clear(QClipboard::Clipboard);
+	delete m_viewwindow;
+}
+
+
+bool KCHMSearchIndexBuilder::addWordsFromPage( const QString & url )
+{
+	if ( !m_viewwindow->LoadPage(url) )
+		return false;
+
+	m_viewwindow->selectAll();
+	m_viewwindow->copy();
+	
+    // Copy text from the clipboard (paste)
+	QString text = m_clipboard->text(QClipboard::Clipboard);
+
+	if ( m_pagesmap.find (url) == m_pagesmap.end() )
+		m_pagesmap[url] = m_pageid++;
+	
+	text.simplifyWhiteSpace ();
+	QStringList words = QStringList::split ( QRegExp ("[\\.,!'\"\\:\\;\\?\\s]"), text.lower() );
+
+	for ( unsigned int i = 0; i < words.size(); i++ )
+	{
+		// First, search for the word in the wordmap. If absent, add it.
+		if ( m_wordsmap.find (words[i]) == m_wordsmap.end() )
+			m_wordsmap[words[i]] = m_wordid++;
+
+		// Add an index element
+		m_indexmap.push_back (KCHMExternalSearchEngine::IndexEntry (m_pagesmap[url], m_wordsmap[words[i]], i));
+	}
+
+	return true;
+}
+
+
+void KCHMSearchIndexBuilder::convertPages (QMap<int, QString>& map)
+{
+	for ( QMap<QString, int>::const_iterator it = m_pagesmap.begin(); it != m_pagesmap.end(); it++ )
+		map[it.data()] = it.key();
+}
+
+void KCHMSearchIndexBuilder::convertWords (QMap<int, QString>& map)
+{
+	for ( QMap<QString, int>::const_iterator it = m_wordsmap.begin(); it != m_wordsmap.end(); it++ )
+		map[it.data()] = it.key();
+}
+
+/*********************************************************************************************************/
+
 KCHMExternalSearchEngine::KCHMExternalSearchEngine()
 {
+	m_indexbuilder = 0;
 }
 
 
 KCHMExternalSearchEngine::~KCHMExternalSearchEngine()
 {
+	delete m_indexbuilder;
 }
 
-bool KCHMExternalSearchEngine::addToIndex( const QString & url )
+void KCHMExternalSearchEngine::indexInit( )
 {
-	SearchIndexBuild buildidx;
-			
-	KCHMViewWindow * wnd = new KCHMViewWindow(0);
-	wnd->hide();
-	
-	wnd->selectAll();
-	wnd->copy();
-	QClipboard *cb = QApplication::clipboard();
+	m_indexbuilder = new KCHMSearchIndexBuilder (m_indexmap);
+}
 
-    // Copy text from the clipboard (paste)
-	QString text = cb->text(QClipboard::Clipboard);
-	
-	if ( buildidx.m_pagesmap.find (url) == buildidx.m_pagesmap.end() )
-		buildidx.m_pagesmap[url] = buildidx.m_pageid++;
-	
-	addPageToIndex (buildidx.m_pagesmap[url], buildidx, text);
-	
-	cb->clear(QClipboard::Clipboard);
-	
-	// Convert build index to the usable index
-	QMap< QString, int >::const_iterator it;
-	
-	for ( it = buildidx.m_wordsmap.begin(); it != buildidx.m_wordsmap.end(); it++ )
-		m_wordsmap[it.data()] = it.key();
-	
-	for ( it = buildidx.m_pagesmap.begin(); it != buildidx.m_pagesmap.end(); it++ )
-		m_pagesmap[it.data()] = it.key();
-	
-	m_indexmap = buildidx.m_indexmap;
+bool KCHMExternalSearchEngine::indexAddFile( const QString & url )
+{
+	if ( !m_indexbuilder->addWordsFromPage(url) )
+	{
+		qWarning ("KCHMExternalSearchEngine::indexAddFile: Could not add file content of %s", url.ascii());
+		return false;
+	}
+
 	return true;
 }
 
-
-void KCHMExternalSearchEngine::addPageToIndex( unsigned short pageurl, SearchIndexBuild & build, QString & text )
+void KCHMExternalSearchEngine::indexDone( )
 {
-	text.simplifyWhiteSpace ();
-	QStringList tokens = QStringList::split ( QRegExp ("[\\.,!'\"\\:\\;\\?\\s]"), text.lower() );
+	m_indexbuilder->convertPages (m_pagesmap);
+	m_indexbuilder->convertWords (m_wordsmap);
 
-	for ( unsigned int i = 0; i < tokens.size(); i++ )
-	{
-		// First, search for the word in the wordmap. If absent, add it.
-		if ( build.m_wordsmap.find (tokens[i]) == build.m_wordsmap.end() )
-			build.m_wordsmap[tokens[i]] = build.m_wordid++;
-
-		// Add an index element
-		build.m_indexmap.push_back (IndexEntry (pageurl, build.m_wordsmap[tokens[i]], i));
-	}
+	delete m_indexbuilder;
+	m_indexbuilder = 0;
 }
+
+bool KCHMExternalSearchEngine::loadIndexFile( const QString & filename )
+{
+}
+
+bool KCHMExternalSearchEngine::saveIndexFile( const QString & filename )
+{
+}
+
+bool KCHMExternalSearchEngine::doSearch( const QString & query, search_results_t & results )
+{
+}
+
+void KCHMExternalSearchEngine::invalidate( )
+{
+}
+

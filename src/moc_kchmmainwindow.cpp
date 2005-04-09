@@ -1,7 +1,7 @@
 /****************************************************************************
 ** KCHMMainWindow meta object code from reading C++ file 'kchmmainwindow.h'
 **
-** Created: Fri Apr 8 02:05:47 2005
+** Created: Sat Apr 9 01:19:33 2005
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!

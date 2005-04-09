@@ -1,49 +1,34 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="14" >
+ <DocsAndViews NumberOfDocuments="9" >
   <Doc0 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmconfig.cpp" >
    <View0 Type="Source" />
   </Doc0>
   <Doc1 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtreeviewitem.cpp" >
    <View0 line="27" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchtoolbar.cpp" >
-   <View0 line="48" Type="Source" />
-  </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmviewwindow.cpp" >
-   <View0 line="106" Type="Source" />
-  </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsourcefactory.cpp" >
-   <View0 line="87" Type="Source" />
-  </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmviewwindow.h" >
+  <Doc2 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmviewwindow.h" >
    <View0 line="56" Type="Source" />
+  </Doc2>
+  <Doc3 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearchengine.cpp" >
+   <View0 line="184" Type="Source" />
+  </Doc3>
+  <Doc4 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearchengine.h" >
+   <View0 line="59" Type="Source" />
+  </Doc4>
+  <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearch.cpp" >
+   <View0 line="48" Type="Source" />
   </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtreeviewitem.h" >
+  <Doc6 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchwindow.h" >
    <View0 line="47" Type="Source" />
   </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearch.h" >
-   <View0 line="45" Type="Source" />
+  <Doc7 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchwindow.cpp" >
+   <View0 line="140" Type="Source" />
   </Doc7>
-  <Doc8 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearchengine.h" >
-   <View0 line="53" Type="Source" />
+  <Doc8 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearch.h" >
+   <View0 line="38" Type="Source" />
   </Doc8>
-  <Doc9 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearchengine.cpp" >
-   <View0 line="89" Type="Source" />
-  </Doc9>
-  <Doc10 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchwindow.cpp" >
-   <View0 line="111" Type="Source" />
-  </Doc10>
-  <Doc11 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.cpp" >
-   <View0 line="438" Type="Source" />
-  </Doc11>
-  <Doc12 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsourcefactory.h" >
-   <View0 line="31" Type="Source" />
-  </Doc12>
-  <Doc13 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearch.cpp" >
-   <View0 line="79" Type="Source" />
-  </Doc13>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>

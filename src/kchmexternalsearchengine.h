@@ -31,7 +31,7 @@
 */
 class KCHMSearchIndexBuilder;
 
-class KCHMExternalSearchEngine : public KCHMExternalSearchBackend
+class KCHMSearchEngineGeorge : public KCHMSearchBackend
 {
 public:
 	class IndexEntry
@@ -45,14 +45,16 @@ public:
 	};
 
 public:
-    KCHMExternalSearchEngine();
-    ~KCHMExternalSearchEngine();
+    KCHMSearchEngineGeorge();
+    ~KCHMSearchEngineGeorge();
 
 	virtual bool	loadIndexFile (const QString& filename);
 	virtual bool	saveIndexFile (const QString& filename);
 
 	virtual void	invalidate();
-	virtual bool	doSearch (const QString& query, search_results_t& results);
+
+	virtual bool	hasValidIndex ();
+	virtual bool	doSearch (const QString& query, KCHMSearchEngine::searchResults& results, unsigned int limit);
 
 	/*
 	 * Index creation routines.

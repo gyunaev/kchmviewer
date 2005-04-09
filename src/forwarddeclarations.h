@@ -20,6 +20,7 @@
 
 class QComboBox;
 class QListView;
+class QListBox;
 class QListViewItem;
 class QListViewItemIterator;
 class QLineEdit;
@@ -33,6 +34,6 @@ class KCHMSearchWindow;
 class KCHMBookmarkWindow;
 class CHMFile;
 class KCHMSettings;
-class KCHMExternalSearch;
+class KCHMSearchEngine;
 
 class KCHMSearchAndViewToolbar;

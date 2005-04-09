@@ -1,7 +1,7 @@
 /****************************************************************************
 ** KCHMSearchWindow meta object code from reading C++ file 'kchmsearchwindow.h'
 **
-** Created: Tue Apr 5 01:04:46 2005
+** Created: Sat Apr 9 01:57:31 2005
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -59,18 +59,13 @@ QMetaObject* KCHMSearchWindow::staticMetaObject()
 	{ 0, &static_QUType_int, 0, QUParameter::In }
     };
     static const QUMethod slot_1 = {"onDoubleClicked", 3, param_slot_1 };
-    static const QUParameter param_slot_2[] = {
-	{ "state", &static_QUType_int, 0, QUParameter::In }
-    };
-    static const QUMethod slot_2 = {"onExternalSearchBoxStateChanged", 1, param_slot_2 };
     static const QMetaData slot_tbl[] = {
 	{ "onReturnPressed()", &slot_0, QMetaData::Private },
-	{ "onDoubleClicked(QListViewItem*,const QPoint&,int)", &slot_1, QMetaData::Private },
-	{ "onExternalSearchBoxStateChanged(int)", &slot_2, QMetaData::Private }
+	{ "onDoubleClicked(QListViewItem*,const QPoint&,int)", &slot_1, QMetaData::Private }
     };
     metaObj = QMetaObject::new_metaobject(
 	"KCHMSearchWindow", parentObject,
-	slot_tbl, 3,
+	slot_tbl, 2,
 	0, 0,
 #ifndef QT_NO_PROPERTIES
 	0, 0,
@@ -93,7 +88,6 @@ bool KCHMSearchWindow::qt_invoke( int _id, QUObject* _o )
     switch ( _id - staticMetaObject()->slotOffset() ) {
     case 0: onReturnPressed(); break;
     case 1: onDoubleClicked((QListViewItem*)static_QUType_ptr.get(_o+1),(const QPoint&)*((const QPoint*)static_QUType_ptr.get(_o+2)),(int)static_QUType_int.get(_o+3)); break;
-    case 2: onExternalSearchBoxStateChanged((int)static_QUType_int.get(_o+1)); break;
     default:
 	return QWidget::qt_invoke( _id, _o );
     }

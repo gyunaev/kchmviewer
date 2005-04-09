@@ -28,29 +28,31 @@
 #include "kchmexternalsearchengine.h"
 
 
-KCHMExternalSearchBackend::KCHMExternalSearchBackend( )
+KCHMSearchBackend::KCHMSearchBackend( )
 {
 }
 
-KCHMExternalSearchBackend::~ KCHMExternalSearchBackend( )
+KCHMSearchBackend::~ KCHMSearchBackend( )
 {
 }
 
 
-KCHMExternalSearch::KCHMExternalSearch( KCHMExternalSearchBackend * backend )
+KCHMSearchEngine::KCHMSearchEngine ( )
 {
-	m_searchBackend = backend;
+	m_searchBackend = 0;
 }
 
-KCHMExternalSearch::~KCHMExternalSearch()
+KCHMSearchEngine::~KCHMSearchEngine()
 {
 	delete m_searchBackend;
 }
 
-bool KCHMExternalSearch::createSearchIndex( )
+bool KCHMSearchEngine::createIndex( )
 {
 	QValueVector<QString> files;
 	QString data;
+
+	Q_ASSERT (m_searchBackend);
 
 	if ( !::mainWindow->getChmFile()->enumerateArchive (files) )
 	{
@@ -69,7 +71,7 @@ bool KCHMExternalSearch::createSearchIndex( )
 	for ( unsigned int i = 0; i < files.size(); i++ )
 	{
     	progress.setProgress( i );
-		QString label = "Parsing file " + files[i];
+		QString label = "Parsing file " + QString::number(i) + " of " + QString::number(files.size());
     	progress.setLabelText (label);
 
     	qApp->processEvents();
@@ -92,14 +94,19 @@ bool KCHMExternalSearch::createSearchIndex( )
 	return true;
 }
 
-bool KCHMExternalSearch::doSearch( const QString & query, KCHMExternalSearchBackend::search_results_t & results )
+bool KCHMSearchEngine::doSearch (const QString& query, searchResults& results, unsigned int limit_results)
 {
+	Q_ASSERT (m_searchBackend);
 	return false;
 }
 
-bool KCHMExternalSearch::hasSearchIndex( )
+bool KCHMSearchEngine::hasValidIndex( )
 {
-	return false;
+	Q_ASSERT (m_searchBackend);
+	return m_searchBackend->hasValidIndex();
 }
 
-
+void KCHMSearchEngine::setSearchBackend( KCHMSearchBackend * backend )
+{
+	m_searchBackend = backend;
+}

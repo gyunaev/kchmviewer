@@ -24,17 +24,37 @@
 #include <qstring.h>
 
 
+class KCHMSearchBackend;
+
+//! Search engine manager
+class KCHMSearchEngine
+{
+public:
+	// map <url, name>
+	typedef QMap<QString, QString> searchResults;
+
+    KCHMSearchEngine ();
+    ~KCHMSearchEngine ();
+
+	void	setSearchBackend (KCHMSearchBackend * backend);
+	bool	hasValidIndex ();
+	bool	createIndex ();
+	bool	doSearch (const QString& query, searchResults& results, unsigned int limit_results = 100);
+
+private:
+	KCHMSearchBackend 	*	m_searchBackend;
+	bool					m_abortButtonPressed;
+};
+
+
 /*
  * Abstract class, represents specific search engine
  */
-
-class KCHMExternalSearchBackend
+class KCHMSearchBackend
 {
 public:
-	typedef QMap<QString, QString> search_results_t;
-
-    KCHMExternalSearchBackend();
-    virtual ~KCHMExternalSearchBackend();
+    KCHMSearchBackend();
+    virtual ~KCHMSearchBackend();
 
 	virtual bool	loadIndexFile (const QString& filename) = 0;
 	virtual bool	saveIndexFile (const QString& filename) = 0;
@@ -45,23 +65,8 @@ public:
 	virtual bool	indexAddFile (const QString& filename) = 0;
 	virtual void	indexDone () = 0;
 
-	virtual bool	doSearch (const QString& query, search_results_t& results) = 0;
-};
-
-
-class KCHMExternalSearch
-{
-public:
-    KCHMExternalSearch (KCHMExternalSearchBackend * backend);
-    ~KCHMExternalSearch();
-
-	bool	hasSearchIndex ();
-	bool	createSearchIndex ();
-	bool	doSearch (const QString& query, KCHMExternalSearchBackend::search_results_t& results);
-
-private:
-	KCHMExternalSearchBackend 	*	m_searchBackend;
-	bool							m_abortButtonPressed;
+	virtual bool	hasValidIndex () = 0;
+	virtual bool	doSearch (const QString& word, KCHMSearchEngine::searchResults& results, unsigned int limit) = 0;
 };
 
 #endif

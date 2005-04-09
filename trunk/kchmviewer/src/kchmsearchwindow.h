@@ -29,8 +29,6 @@
 #include "kchmsettings.h"
 #include "forwarddeclarations.h"
 
-#define ENABLE_EXTERNAL_SEARCH
-
 /**
 @author Georgy Yunaev
 */
@@ -44,26 +42,22 @@ public:
 	void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
 	void	saveSettings (KCHMSettings::search_saved_settings_t& settings);
 
-	
 private slots:
 	void 	onReturnPressed ();
 	void	onDoubleClicked ( QListViewItem *, const QPoint &, int);
-
-#if defined (ENABLE_EXTERNAL_SEARCH)
-	void	onExternalSearchBoxStateChanged ( int state );
-#endif
+//	void	onCurrentChanged ( QListBoxItem *);
 
 private:
+	bool	checkAndGenerateIndex( );
+
+	QString			m_lastQuery; // for 'Search in results' option
  	QComboBox 	*	m_searchQuery;
 	QListView	*	m_searchList;
 	QCheckBox	*	m_matchSimilarWords;
 	QCheckBox	*	m_searchInResult;
-	QCheckBox	*	m_searchTitles;
 
-#if defined (ENABLE_EXTERNAL_SEARCH)
-	QCheckBox	*	m_useExternalSearch;
-	KCHMExternalSearch * m_externalSearch;
-#endif
+	QComboBox	*	m_chooseSearchEngine;
+	KCHMSearchEngine * m_searchEngine;
 };
 
 #endif

@@ -32,7 +32,7 @@
 class KCHMSearchIndexBuilder
 {
 public:
-	KCHMSearchIndexBuilder ( QValueList<KCHMExternalSearchEngine::IndexEntry>& map );
+	KCHMSearchIndexBuilder ( QValueList<KCHMSearchEngineGeorge::IndexEntry>& map );
 	~KCHMSearchIndexBuilder();
 	
 	bool addWordsFromPage ( const QString& url );
@@ -40,6 +40,9 @@ public:
 	void convertWords (QMap<int, QString>& map);
 
 private:
+	//! Parse a HTML page, stripping out HTML tags, and split into words everything inside the page
+	void parseAndTokenizeHtmlPage ( const QString& page, QStringList& words );
+
 	KCHMViewWindow		*	m_viewwindow;
 	QClipboard 			*	m_clipboard;
 
@@ -49,11 +52,11 @@ private:
 
 	QMap<QString, int>		m_pagesmap;
 	QMap<QString, int>		m_wordsmap;
-	QValueList<KCHMExternalSearchEngine::IndexEntry>&	m_indexmap;
+	QValueList<KCHMSearchEngineGeorge::IndexEntry>&	m_indexmap;
 };
 
 
-KCHMSearchIndexBuilder::KCHMSearchIndexBuilder( QValueList< KCHMExternalSearchEngine::IndexEntry > & map )
+KCHMSearchIndexBuilder::KCHMSearchIndexBuilder( QValueList< KCHMSearchEngineGeorge::IndexEntry > & map )
 	: m_indexmap(map)
 {
 	m_pageid = m_wordid = m_indexmapid = 1;
@@ -73,6 +76,7 @@ KCHMSearchIndexBuilder::~ KCHMSearchIndexBuilder( )
 
 bool KCHMSearchIndexBuilder::addWordsFromPage( const QString & url )
 {
+
 	if ( !m_viewwindow->LoadPage(url) )
 		return false;
 
@@ -82,20 +86,34 @@ bool KCHMSearchIndexBuilder::addWordsFromPage( const QString & url )
     // Copy text from the clipboard (paste)
 	QString text = m_clipboard->text(QClipboard::Clipboard);
 
-	if ( m_pagesmap.find (url) == m_pagesmap.end() )
-		m_pagesmap[url] = m_pageid++;
-	
 	text.simplifyWhiteSpace ();
 	QStringList words = QStringList::split ( QRegExp ("[\\.,!'\"\\:\\;\\?\\s]"), text.lower() );
 
+/*TODO: newest version of HTML parser
+	QString page;
+	QStringList words;
+
+	if ( !::mainWindow->getChmFile()->GetFileContentAsString (page, url) )
+		return false;
+
+	parseAndTokenizeHtmlPage ( page, words );
+	page = QString::null; // save some memory
+*/
+	if ( m_pagesmap.find (url) == m_pagesmap.end() )
+		m_pagesmap[url] = m_pageid++;
+	
 	for ( unsigned int i = 0; i < words.size(); i++ )
 	{
+		// Skip one and two-letter words
+		if ( words[i].length() < 3 )
+			continue;
+
 		// First, search for the word in the wordmap. If absent, add it.
 		if ( m_wordsmap.find (words[i]) == m_wordsmap.end() )
 			m_wordsmap[words[i]] = m_wordid++;
 
 		// Add an index element
-		m_indexmap.push_back (KCHMExternalSearchEngine::IndexEntry (m_pagesmap[url], m_wordsmap[words[i]], i));
+		m_indexmap.push_back (KCHMSearchEngineGeorge::IndexEntry (m_pagesmap[url], m_wordsmap[words[i]], i));
 	}
 
 	return true;
@@ -116,34 +134,34 @@ void KCHMSearchIndexBuilder::convertWords (QMap<int, QString>& map)
 
 /*********************************************************************************************************/
 
-KCHMExternalSearchEngine::KCHMExternalSearchEngine()
+KCHMSearchEngineGeorge::KCHMSearchEngineGeorge()
 {
 	m_indexbuilder = 0;
 }
 
 
-KCHMExternalSearchEngine::~KCHMExternalSearchEngine()
+KCHMSearchEngineGeorge::~KCHMSearchEngineGeorge()
 {
 	delete m_indexbuilder;
 }
 
-void KCHMExternalSearchEngine::indexInit( )
+void KCHMSearchEngineGeorge::indexInit( )
 {
 	m_indexbuilder = new KCHMSearchIndexBuilder (m_indexmap);
 }
 
-bool KCHMExternalSearchEngine::indexAddFile( const QString & url )
+bool KCHMSearchEngineGeorge::indexAddFile( const QString & url )
 {
 	if ( !m_indexbuilder->addWordsFromPage(url) )
 	{
-		qWarning ("KCHMExternalSearchEngine::indexAddFile: Could not add file content of %s", url.ascii());
+		qWarning ("KCHMSearchEngineGeorge::indexAddFile: Could not add file content of %s", url.ascii());
 		return false;
 	}
 
 	return true;
 }
 
-void KCHMExternalSearchEngine::indexDone( )
+void KCHMSearchEngineGeorge::indexDone( )
 {
 	m_indexbuilder->convertPages (m_pagesmap);
 	m_indexbuilder->convertWords (m_wordsmap);
@@ -152,19 +170,29 @@ void KCHMExternalSearchEngine::indexDone( )
 	m_indexbuilder = 0;
 }
 
-bool KCHMExternalSearchEngine::loadIndexFile( const QString & filename )
+bool KCHMSearchEngineGeorge::loadIndexFile( const QString & filename )
 {
+	return false;
 }
 
-bool KCHMExternalSearchEngine::saveIndexFile( const QString & filename )
+bool KCHMSearchEngineGeorge::saveIndexFile( const QString & filename )
 {
+	return false;
 }
 
-bool KCHMExternalSearchEngine::doSearch( const QString & query, search_results_t & results )
+bool KCHMSearchEngineGeorge::doSearch (const QString& query, KCHMSearchEngine::searchResults& results, unsigned int limit)
 {
+	return false;
 }
 
-void KCHMExternalSearchEngine::invalidate( )
+void KCHMSearchEngineGeorge::invalidate( )
 {
+	m_pagesmap.clear();
+	m_wordsmap.clear();
+	m_indexmap.clear();
 }
 
+bool KCHMSearchEngineGeorge::hasValidIndex( )
+{
+	return !m_pagesmap.isEmpty();
+}

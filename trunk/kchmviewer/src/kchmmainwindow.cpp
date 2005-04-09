@@ -68,7 +68,6 @@ KCHMMainWindow::KCHMMainWindow()
 	m_FirstTimeShow = true;
 	chmfile = 0;
 	indexWindow = 0;
-	searchWindow = 0;
 
 	m_currentSettings = new KCHMSettings;
 		
@@ -84,9 +83,11 @@ KCHMMainWindow::KCHMMainWindow()
 	contentsWindow->header()->hide();
 
 	bookmarkWindow = new KCHMBookmarkWindow (m_tabWidget);
+	searchWindow = new KCHMSearchWindow (m_tabWidget);
 
 	// Add the tabs
 	m_tabWidget->addTab (contentsWindow, "Contents");
+	m_tabWidget->addTab (searchWindow, "Search");
 	m_tabWidget->addTab (bookmarkWindow, "Bookmarks");
 
 	viewWindow = new KCHMViewWindow( splitter );
@@ -153,27 +154,6 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 	
 		chmfile = new_chmfile;
 		
-		// Test whether to show/invalidate the search window
-		if ( chmfile->isSearchAvailable() )
-		{
-			if ( !searchWindow )
-			{
-				searchWindow = 	new KCHMSearchWindow (m_tabWidget);
-				m_tabWidget->insertTab (searchWindow, "Search", 1);
-			}
-			else
-				searchWindow->invalidate();
-		}
-		else
-		{
-			if ( searchWindow )
-			{
-				m_tabWidget->removePage (searchWindow);
-				delete searchWindow;
-				searchWindow = 0;
-			}
-		}
-	
 		// Test whether to show/invalidate the index window
 		if ( chmfile->IndexFile().isEmpty() )
 		{
@@ -195,6 +175,7 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 				indexWindow->invalidate();
 		}
 
+		searchWindow->invalidate();
 		bookmarkWindow->invalidate();
 		viewWindow->invalidate();
 		updateView();

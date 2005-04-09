@@ -18,6 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#define USE_GEORGE_SEARCH_ENGINE
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -32,7 +33,7 @@
 #include "kchmconfig.h"
 #include "xchmfile.h"
 
-#if defined (ENABLE_EXTERNAL_SEARCH)
+#if defined (USE_GEORGE_SEARCH_ENGINE)
 	#include "kchmexternalsearchengine.h"
 #endif
 
@@ -46,41 +47,32 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_searchQuery->setFocus();
 	m_searchQuery->setMaxCount (10);
 	
+	m_chooseSearchEngine = new QComboBox (this);
+
 	m_searchList = new QListView (this);
 	m_searchList->addColumn( "Title" );
 	m_searchList->addColumn( "Location" );
 		
 	connect( (m_searchQuery->lineEdit()), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
 	connect( m_searchList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
+//	connect( m_chooseSearchEngine, SIGNAL( currentChanged ( QListBoxItem *) ), this, SLOT( onCurrentChanged ( QListBoxItem *) ) );
 
 	m_matchSimilarWords = new QCheckBox (this);
 	m_matchSimilarWords->setText (tr("Match similar words"));
 
-#if defined (ENABLE_EXTERNAL_SEARCH)
-	m_useExternalSearch = new QCheckBox (this);
-	m_useExternalSearch->setText (tr("Use external search"));
-
-	connect( m_useExternalSearch, SIGNAL( stateChanged ( int ) ), this, SLOT( onExternalSearchBoxStateChanged ( int ) ) );
-	m_externalSearch = 0;
-#endif
-
-//FIXME: search in results	
-//	m_searchInResult = new QCheckBox (this);
-//	m_searchInResult->setText (tr("Search in result"));
+	m_searchInResult = new QCheckBox (this);
+	m_searchInResult->setText (tr("Search in result"));
 	
-	m_searchTitles = new QCheckBox (this);
-	m_searchTitles->setText (tr("Search only titles"));
-
-	layout->addWidget (new QLabel (tr("Type in word(s) to search for:"), this));	
+	layout->addWidget (new QLabel (tr("Use search engine:"), this));
+	layout->addWidget (m_chooseSearchEngine);
+	layout->addWidget (new QLabel (tr("Type in word(s) to search for:"), this));
 	layout->addWidget (m_searchQuery);
 	layout->addSpacing (10);
 	layout->addWidget (m_searchList);
-#if defined (ENABLE_EXTERNAL_SEARCH)
-	layout->addWidget (m_useExternalSearch);
-#endif
 	layout->addWidget (m_matchSimilarWords);
-//	layout->addWidget (m_searchInResult);
-	layout->addWidget (m_searchTitles);
+	layout->addWidget (m_searchInResult);
+
+	m_searchEngine = new KCHMSearchEngine ();
 }
 
 void KCHMSearchWindow::invalidate( )
@@ -88,65 +80,47 @@ void KCHMSearchWindow::invalidate( )
 	m_searchList->clear();
 	m_searchQuery->clear();
 	m_searchQuery->lineEdit()->clear();
+
+	m_chooseSearchEngine->clear();
+
+	// If there is internal search index, add the possibility to search on it
+#if defined (USE_GEORGE_SEARCH_ENGINE)
+	m_chooseSearchEngine->insertItem (tr("Advanced search"));
+#endif
+
+	// And set the current
+#if defined (USE_GEORGE_SEARCH_ENGINE)
+	m_searchEngine->setSearchBackend ( new KCHMSearchEngineGeorge );
+#endif
 }
 
 void KCHMSearchWindow::onReturnPressed( )
 {
-	CHMSearchResults h1;
+	KCHMSearchEngine::searchResults results;
 	QString text = m_searchQuery->lineEdit()->text();
 	
 	if ( text.isEmpty() )
 		return;
 
-	m_searchList->clear();
-
-	QStringList tokens = QStringList::split (QRegExp("\\s+"), text);
-	
-	if ( tokens.size() < 1 )
-		abort();
-	
-	if ( !::mainWindow->getChmFile()->IndexSearch (tokens[0], !m_matchSimilarWords->isChecked(), m_searchTitles->isChecked(), &h1) )
-	{
-		::mainWindow->showInStatusBar( tr("Search failed") );
+	if ( !checkAndGenerateIndex( ) )
 		return;
-	}
-//FIXME: search double words
-//FIXME: search in our own database
-/*
-	for ( unsigned int j = 1; j < tokens.size(); j++ )
-	{
-		CHMSearchResults h2, tmp;
-		
-		::mainWindow->getChmFile()->IndexSearch (tokens[j], !m_matchSimilarWords->isChecked(), m_searchTitles->isChecked(), &h2);
 
-		if ( !h2.isEmpty() )
+	m_searchList->clear();
+	
+	if ( m_searchEngine->doSearch ( text, results ) )
+	{
+		if ( !results.empty() )
 		{
-			for ( CHMSearchResults::iterator it = h2.begin(); it != h2.end(); it++ )
-				if ( h1.find(it->first) != h1.end() )
-					tmp[it->first] = it->second;
-                h1 = tmp;
+			for ( KCHMSearchEngine::searchResults::const_iterator it = results.begin(); it != results.end(); it++ )
+				new KCMSearchTreeViewItem (m_searchList, it.data(), it.key(), it.key());
+		
+			::mainWindow->showInStatusBar( tr("Search returned %1 results") . arg(results.size()) );
 		}
 		else
-		{
-			h1.clear();
-			break;
-		}
+			::mainWindow->showInStatusBar( tr("Search returned no results") );
 	}
-*/
-/*	if ( m_searchTitles->isChecked() && h1.isEmpty() )
-	{
-		PopulateList (_tcl->GetRootItem(), sr, !_partial->IsChecked());
-        m_searchList->triggerUpdate();
-        return;
-	}
-*/
-	if ( !h1.empty() )
-	{
-		for ( CHMSearchResults::iterator it = h1.begin(); it != h1.end(); it++ )
-		{
-			new KCMSearchTreeViewItem (m_searchList, it.data(), it.key(), it.key());
-		}
-	} 
+	else
+		::mainWindow->showInStatusBar( tr("Search failed") );
 }
 
 void KCHMSearchWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int)
@@ -155,7 +129,6 @@ void KCHMSearchWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int
 		return;
 	
 	KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) item;
-	
 	::mainWindow->openPage(treeitem->getUrl(), false);
 }
 
@@ -171,29 +144,24 @@ void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & set
 		settings.push_back (m_searchQuery->text(i));
 }
 
-#if defined (ENABLE_EXTERNAL_SEARCH)
+//void KCHMSearchWindow::onCurrentChanged( QListBoxItem * item )
+//{
+//}
 
-void KCHMSearchWindow::onExternalSearchBoxStateChanged( int state )
+bool KCHMSearchWindow::checkAndGenerateIndex( )
 {
-	if ( state != QButton::On )
-		return;
-
-	if ( !m_externalSearch )
-		m_externalSearch = new KCHMExternalSearch (new KCHMExternalSearchEngine);
-
-	if ( !m_externalSearch->hasSearchIndex() )
+	if ( m_searchEngine->hasValidIndex() )
+		return true;
+	
+   	if ( QMessageBox::question(this,
+		tr ("%1 - need to create the search index") . arg(APP_NAME),
+       	tr ("This file has not been indexed yet.\nThe search engine needs to create the index on this file.\n\nDo you want to proceed?"),
+       	tr("&Yes"), tr("&No"),
+       	QString::null, 0, 1 ) == 0 )
 	{
-   		if ( QMessageBox::question(this,
-			tr ("%1 - need to create the index") . arg(APP_NAME),
-           	tr ("This file has not been indexed yet.\nExternal search engine needs to create the index on this file.\n\nDo you want to proceed?"),
-           	tr("&Yes"), tr("&No"),
-           	QString::null, 0, 1 ) == 0 )
-		{
-			if ( m_externalSearch->createSearchIndex() )
-				return;
-		}
-
-		m_useExternalSearch->setChecked (false);
+		if ( m_searchEngine->createIndex() )
+			return true;
 	}
+
+	return false;
 }
-#endif

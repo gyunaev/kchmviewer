@@ -34,6 +34,5 @@ class KCHMSearchWindow;
 class KCHMBookmarkWindow;
 class CHMFile;
 class KCHMSettings;
-class KCHMSearchEngine;
 
 class KCHMSearchAndViewToolbar;

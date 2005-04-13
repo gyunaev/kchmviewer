@@ -437,7 +437,7 @@ bool CHMFile::ParseAndFillIndex(QListView *indexlist)
 	return ParseHhcAndFillTree (m_indexFile, indexlist, true);
 }
 
-bool CHMFile::IndexSearch(const QString& text, bool wholeWords, bool titlesOnly, KCHMSearchBackend::searchResults& results, unsigned int maxresults)
+bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly, KCHMSearchResults_t& results, unsigned int maxresults)
 {
 	chmUnitInfo ui, uitopics, uiurltbl, uistrings, uiurlstr;
 	bool partial = false;
@@ -659,7 +659,7 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 								unsigned char lr, chmUnitInfo *uimain,
 								chmUnitInfo* uitbl, chmUnitInfo *uistrings,
 								chmUnitInfo* topics, chmUnitInfo *urlstr,
-								KCHMSearchBackend::searchResults& results,
+								KCHMSearchResults_t& results,
 								unsigned int maxresults)
 {
 	int wlc_bit = 7;
@@ -727,7 +727,7 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 			if ( results.size() >= maxresults )
 				return true;
 				
-			results.push_back (KCHMSearchBackend::SearchResult (0, topic, url));
+			results.push_back (KCHMSearchResult (0, topic, url));
 		}
 
 		count = sr_int (buffer.data() + off, &wlc_bit, cs, cr, length);
@@ -737,7 +737,8 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 		{
 			u_int64_t lcode = sr_int (buffer.data() + off, &wlc_bit, ls, lr, length);
 			off += length;
-printf ("Location code: %d\n", (int) lcode);
+//TODO: phrase search
+//printf ("Location code: %d\n", (int) lcode);
 		}
 	}
 
@@ -939,7 +940,7 @@ inline bool CHMFile::InfoFromSystem()
  
 KCHMMainTreeViewItem * CHMFile::getTreeItem( const QString & str )
 {
-	CHMTreeUrlMap::iterator it = m_treeUrlMap.find (str);
+	KCHMTreeUrlMap_t::iterator it = m_treeUrlMap.find (str);
 	if ( it == m_treeUrlMap.end() )
 		return 0;
 		

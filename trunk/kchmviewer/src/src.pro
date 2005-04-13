@@ -3,13 +3,6 @@
 # Subdir relative project main directory: ./src
 # Target is an application:  ../bin/kchmviewer
 
-LIBS += ../chmlib-0.35/src/.libs/libchm.a 
-INCLUDEPATH += ../chmlib-0.35/src 
-TARGET = ../bin/kchmviewer 
-CONFIG += debug \
-          warn_on \
-          qt 
-TEMPLATE = app 
 HEADERS += kchmmainwindow.h \
            xchmfile.h \
            kchmtreectrl.h \
@@ -26,10 +19,7 @@ HEADERS += kchmmainwindow.h \
            kchmtextencoding.h \
            froglogic_getopt.h \
            kde-qt.h \
-           kchmexternalsearch.h \
-           iconstorage.h \
-           kchmexternalsearchengine.h \
-           kchmsearchenginechm.h 
+           iconstorage.h 
 SOURCES += kchmmainwindow.cpp \
            main.cpp \
            xchmfile.cpp \
@@ -44,7 +34,11 @@ SOURCES += kchmmainwindow.cpp \
            kchmsettings.cpp \
            kchmtextencoding.cpp \
            froglogic_getopt.cpp \
-           kchmexternalsearch.cpp \
-           iconstorage.cpp \
-           kchmexternalsearchengine.cpp \
-           kchmsearchenginechm.cpp 
+           iconstorage.cpp 
+LIBS += ../chmlib-0.35/src/.libs/libchm.a
+INCLUDEPATH += ../chmlib-0.35/src
+TARGET = ../bin/kchmviewer
+CONFIG += debug \
+warn_on \
+qt
+TEMPLATE = app

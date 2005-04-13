@@ -35,13 +35,22 @@
 
 #include "kchmtreeviewitem.h"
 #include "kchmtextencoding.h"
-#include "kchmexternalsearch.h" /* for backendSearchResults */
 
 #include "chm_lib.h"
 
-typedef QMap<QString, QString> CHMSearchResults;
-typedef QMap<int, QString> CHMIDMap;
-typedef QMap<QString, KCHMMainTreeViewItem*> CHMTreeUrlMap;
+class KCHMSearchResult
+{
+	public:
+		inline KCHMSearchResult() {}
+		inline KCHMSearchResult (int o, const QString& t, const QString& u) :
+			offset(o), title(t), url(u) {};
+		int		offset;
+		QString	title;
+		QString	url;
+};
+
+typedef QValueVector<KCHMSearchResult> KCHMSearchResults_t;
+
 
 //! Maximum allowed number of search-returned items.
 #define MAX_SEARCH_RESULTS 512
@@ -160,7 +169,7 @@ public:
 	  the URLs and the values are the page titles.
 	  \return true if the search succeeded, false otherwise.
 	 */
-	bool IndexSearch(const QString& text, bool wholeWords, bool titlesOnly, KCHMSearchBackend::searchResults& results, unsigned int maxresults = 200);
+	bool SearchWord (const QString& word, bool wholeWords, bool titlesOnly, KCHMSearchResults_t& results, unsigned int maxresults = 200);
 
 	/*!
 	  \brief Looks up fileName in the archive.
@@ -254,7 +263,7 @@ private:
 			unsigned char lr, chmUnitInfo *uifmain,
 			chmUnitInfo* uitbl, chmUnitInfo *uistrings,
 			chmUnitInfo* topics, chmUnitInfo *urlstr,
-			KCHMSearchBackend::searchResults& results, unsigned int maxresults);
+			KCHMSearchResults_t& results, unsigned int maxresults);
 
 	//! Looks up as much information as possible from #WINDOWS/#STRINGS.
 	bool InfoFromWindows();
@@ -275,6 +284,8 @@ private:
 	bool  changeFileEncoding (const char *qtencoding);
 
 private:
+	typedef QMap<QString, KCHMMainTreeViewItem*> KCHMTreeUrlMap_t;
+
 	//! Pointer to the chmlib structure
 	chmFile	*	m_chmFile;
 	
@@ -294,7 +305,7 @@ private:
 	QString		m_title;
 
 	//! Used by getTreeItem() to find the tree element quickly
-	CHMTreeUrlMap	m_treeUrlMap;
+	KCHMTreeUrlMap_t	m_treeUrlMap;
 
 	//! Indicates whether the built-in search is available
 	bool			m_searchAvailable;

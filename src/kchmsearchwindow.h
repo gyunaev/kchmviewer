@@ -28,6 +28,8 @@
 
 #include "kchmsettings.h"
 #include "forwarddeclarations.h"
+#include "xchmfile.h"
+
 
 /**
 @author Georgy Yunaev
@@ -48,16 +50,21 @@ private slots:
 //	void	onCurrentChanged ( QListBoxItem *);
 
 private:
-	bool	checkAndGenerateIndex( );
+	enum SearchType_t
+	{
+		TYPE_OR,	// just add
+		TYPE_AND,	// remove others
+		TYPE_PHRASE	// not supported yet
+	};
+
+	bool	searchQuery (const QString& query, KCHMSearchResults_t& results, unsigned int limit_results = 100);
+	bool	searchWord (const QString& word, KCHMSearchResults_t& results, unsigned int limit_results, SearchType_t type);
 
 	QString			m_lastQuery; // for 'Search in results' option
  	QComboBox 	*	m_searchQuery;
 	QListView	*	m_searchList;
 	QCheckBox	*	m_matchSimilarWords;
 	QCheckBox	*	m_searchInResult;
-
-	QComboBox	*	m_chooseSearchEngine;
-	KCHMSearchEngine * m_searchEngine;
 };
 
 #endif

@@ -18,7 +18,6 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#define USE_GEORGE_SEARCH_ENGINE
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -29,14 +28,8 @@
 
 #include "kchmmainwindow.h"
 #include "kchmsearchwindow.h"
-#include "kchmexternalsearch.h"
-#include "kchmsearchenginechm.h"
 #include "kchmconfig.h"
 #include "xchmfile.h"
-
-#if defined (USE_GEORGE_SEARCH_ENGINE)
-	#include "kchmexternalsearchengine.h"
-#endif
 
 KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags f )
 	: QWidget (parent, name, f)
@@ -48,15 +41,12 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_searchQuery->setFocus();
 	m_searchQuery->setMaxCount (10);
 	
-	m_chooseSearchEngine = new QComboBox (this);
-
 	m_searchList = new QListView (this);
 	m_searchList->addColumn( "Title" );
 	m_searchList->addColumn( "Location" );
 		
 	connect( (m_searchQuery->lineEdit()), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
 	connect( m_searchList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
-//	connect( m_chooseSearchEngine, SIGNAL( currentChanged ( QListBoxItem *) ), this, SLOT( onCurrentChanged ( QListBoxItem *) ) );
 
 	m_matchSimilarWords = new QCheckBox (this);
 	m_matchSimilarWords->setText (tr("Match similar words"));
@@ -64,16 +54,12 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_searchInResult = new QCheckBox (this);
 	m_searchInResult->setText (tr("Search in result"));
 	
-	layout->addWidget (new QLabel (tr("Use search engine:"), this));
-	layout->addWidget (m_chooseSearchEngine);
 	layout->addWidget (new QLabel (tr("Type in word(s) to search for:"), this));
 	layout->addWidget (m_searchQuery);
 	layout->addSpacing (10);
 	layout->addWidget (m_searchList);
 	layout->addWidget (m_matchSimilarWords);
 	layout->addWidget (m_searchInResult);
-
-	m_searchEngine = new KCHMSearchEngine ();
 }
 
 void KCHMSearchWindow::invalidate( )
@@ -81,69 +67,28 @@ void KCHMSearchWindow::invalidate( )
 	m_searchList->clear();
 	m_searchQuery->clear();
 	m_searchQuery->lineEdit()->clear();
-<<<<<<< kchmsearchwindow.cpp
-
-	m_chooseSearchEngine->clear();
-
-	// If there is internal search index, add the possibility to search on it
-#if defined (USE_GEORGE_SEARCH_ENGINE)
-	m_chooseSearchEngine->insertItem (tr("Advanced search"));
-#endif
-
-	// And set the current
-#if defined (USE_GEORGE_SEARCH_ENGINE)
-	m_searchEngine->setSearchBackend ( new KCHMSearchEngineChm );
-#endif
-=======
-
-	m_chooseSearchEngine->clear();
-
-	// If there is internal search index, add the possibility to search on it
-#if defined (USE_GEORGE_SEARCH_ENGINE)
-	m_chooseSearchEngine->insertItem (tr("Advanced search"));
-#endif
-
-	// And set the current
-#if defined (USE_GEORGE_SEARCH_ENGINE)
-	m_searchEngine->setSearchBackend ( new KCHMSearchEngineGeorge );
-#endif
->>>>>>> 1.3
 }
 
 void KCHMSearchWindow::onReturnPressed( )
 {
-	KCHMSearchEngine::searchResults results;
+	KCHMSearchResults_t results;
 	QString text = m_searchQuery->lineEdit()->text();
 	
 	if ( text.isEmpty() )
 		return;
 
-	if ( !checkAndGenerateIndex( ) )
-		return;
-
 	m_searchList->clear();
 	
-	if ( m_searchEngine->doSearch ( text, results ) )
+	if ( searchQuery ( text, results ) )
 	{
-<<<<<<< kchmsearchwindow.cpp
 		if ( !results.empty() )
 		{
-			for ( KCHMSearchEngine::searchResults::const_iterator it = results.begin(); it != results.end(); it++ )
+			for ( unsigned int i = 0; i < results.size(); i++ )
 			{
-				KCHMMainTreeViewItem * item = ::mainWindow->getChmFile()->getTreeItem (*it);
-				QString name = item ? item->text(0) : *it;
-				new KCMSearchTreeViewItem (m_searchList, name, *it);
+				new KCMSearchTreeViewItem (m_searchList, results[i].title, results[i].url, results[i].url);
 			}
 
 			::mainWindow->showInStatusBar( tr("Search returned %1 results") . arg(results.size()) );
-=======
-		if ( !results.empty() )
-		{
-			for ( KCHMSearchEngine::searchResults::const_iterator it = results.begin(); it != results.end(); it++ )
-				new KCMSearchTreeViewItem (m_searchList, it.data(), it.key(), it.key());
-		
-			::mainWindow->showInStatusBar( tr("Search returned %1 results") . arg(results.size()) );
->>>>>>> 1.3
 		}
 		else
 			::mainWindow->showInStatusBar( tr("Search returned no results") );
@@ -173,24 +118,52 @@ void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & set
 		settings.push_back (m_searchQuery->text(i));
 }
 
-//void KCHMSearchWindow::onCurrentChanged( QListBoxItem * item )
-//{
-//}
-
-bool KCHMSearchWindow::checkAndGenerateIndex( )
+bool KCHMSearchWindow::searchQuery( const QString & query, KCHMSearchResults_t & results, unsigned int limit_results )
 {
-	if ( m_searchEngine->hasValidIndex() )
-		return true;
-	
-   	if ( QMessageBox::question(this,
-		tr ("%1 - need to create the search index") . arg(APP_NAME),
-       	tr ("This file has not been indexed yet.\nThe search engine needs to create the index on this file.\n\nDo you want to proceed?"),
-       	tr("&Yes"), tr("&No"),
-       	QString::null, 0, 1 ) == 0 )
+	// Parse the query
+	QStringList words = QStringList::split (' ', query);
+
+	if ( words.size() < 1 )
+		return false;
+
+	if ( !searchWord (words[0], results, limit_results, TYPE_OR) )
+		return false;
+
+	// Simple 'AND' search
+	for ( unsigned int i = 1; i < words.size(); i++ )
 	{
-		if ( m_searchEngine->createIndex() )
-			return true;
+		if ( !searchWord (words[i], results, limit_results, TYPE_AND) )
+			return false;
 	}
 
-	return false;
+	return true;
+}
+
+bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchResults_t & results, unsigned int limit_results, SearchType_t type)
+{
+	// OR is the simplest case - just fill the structure up.
+	if ( type == TYPE_OR )
+		return ::mainWindow->getChmFile()->SearchWord(word, true, false, results, limit_results);
+	
+	// For AND and PHRASE searches, we need to use temp object.
+	//TODO: move all result array manipulations to the CHMFile itself
+	KCHMSearchResults_t newresults;
+
+	if ( !::mainWindow->getChmFile()->SearchWord(word, true, false, newresults, limit_results) )
+		return false;
+
+	// Only AND is supported now.
+	//FIXME: this is probably the worst possible implementation.
+	unsigned int i, j;
+	for ( i = 0; i < results.size(); i++ )
+	{
+		for ( j = 0; j < newresults.size(); j++ )
+			if ( results[i].title == newresults[j].title )
+				break;
+
+		if ( j == newresults.size() )
+			results.erase (results.begin() + i--);
+	}
+
+	return true;
 }

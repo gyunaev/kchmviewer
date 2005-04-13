@@ -35,6 +35,7 @@
 
 #include "kchmtreeviewitem.h"
 #include "kchmtextencoding.h"
+#include "kchmexternalsearch.h" /* for backendSearchResults */
 
 #include "chm_lib.h"
 
@@ -159,7 +160,7 @@ public:
 	  the URLs and the values are the page titles.
 	  \return true if the search succeeded, false otherwise.
 	 */
-	bool IndexSearch(const QString& text, bool wholeWords, bool titlesOnly, CHMSearchResults *results);
+	bool IndexSearch(const QString& text, bool wholeWords, bool titlesOnly, KCHMSearchBackend::searchResults& results, unsigned int maxresults = 200);
 
 	/*!
 	  \brief Looks up fileName in the archive.
@@ -253,7 +254,7 @@ private:
 			unsigned char lr, chmUnitInfo *uifmain,
 			chmUnitInfo* uitbl, chmUnitInfo *uistrings,
 			chmUnitInfo* topics, chmUnitInfo *urlstr,
-			CHMSearchResults *results);
+			KCHMSearchBackend::searchResults& results, unsigned int maxresults);
 
 	//! Looks up as much information as possible from #WINDOWS/#STRINGS.
 	bool InfoFromWindows();

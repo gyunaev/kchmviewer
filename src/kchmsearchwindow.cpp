@@ -30,6 +30,7 @@
 #include "kchmmainwindow.h"
 #include "kchmsearchwindow.h"
 #include "kchmexternalsearch.h"
+#include "kchmsearchenginechm.h"
 #include "kchmconfig.h"
 #include "xchmfile.h"
 
@@ -80,6 +81,20 @@ void KCHMSearchWindow::invalidate( )
 	m_searchList->clear();
 	m_searchQuery->clear();
 	m_searchQuery->lineEdit()->clear();
+<<<<<<< kchmsearchwindow.cpp
+
+	m_chooseSearchEngine->clear();
+
+	// If there is internal search index, add the possibility to search on it
+#if defined (USE_GEORGE_SEARCH_ENGINE)
+	m_chooseSearchEngine->insertItem (tr("Advanced search"));
+#endif
+
+	// And set the current
+#if defined (USE_GEORGE_SEARCH_ENGINE)
+	m_searchEngine->setSearchBackend ( new KCHMSearchEngineChm );
+#endif
+=======
 
 	m_chooseSearchEngine->clear();
 
@@ -92,6 +107,7 @@ void KCHMSearchWindow::invalidate( )
 #if defined (USE_GEORGE_SEARCH_ENGINE)
 	m_searchEngine->setSearchBackend ( new KCHMSearchEngineGeorge );
 #endif
+>>>>>>> 1.3
 }
 
 void KCHMSearchWindow::onReturnPressed( )
@@ -109,12 +125,25 @@ void KCHMSearchWindow::onReturnPressed( )
 	
 	if ( m_searchEngine->doSearch ( text, results ) )
 	{
+<<<<<<< kchmsearchwindow.cpp
+		if ( !results.empty() )
+		{
+			for ( KCHMSearchEngine::searchResults::const_iterator it = results.begin(); it != results.end(); it++ )
+			{
+				KCHMMainTreeViewItem * item = ::mainWindow->getChmFile()->getTreeItem (*it);
+				QString name = item ? item->text(0) : *it;
+				new KCMSearchTreeViewItem (m_searchList, name, *it);
+			}
+
+			::mainWindow->showInStatusBar( tr("Search returned %1 results") . arg(results.size()) );
+=======
 		if ( !results.empty() )
 		{
 			for ( KCHMSearchEngine::searchResults::const_iterator it = results.begin(); it != results.end(); it++ )
 				new KCMSearchTreeViewItem (m_searchList, it.data(), it.key(), it.key());
 		
 			::mainWindow->showInStatusBar( tr("Search returned %1 results") . arg(results.size()) );
+>>>>>>> 1.3
 		}
 		else
 			::mainWindow->showInStatusBar( tr("Search returned no results") );

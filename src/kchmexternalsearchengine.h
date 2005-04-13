@@ -52,9 +52,17 @@ public:
 	virtual bool	saveIndexFile (const QString& filename);
 
 	virtual void	invalidate();
+<<<<<<< kchmexternalsearchengine.h
+
+	virtual bool	hasValidIndex ();
+	virtual bool	canGenerateIndex()	{	return true; }
+
+	virtual bool	doSearch (const QString& query, KCHMSearchEngine::searchResults& results, unsigned int limit);
+=======
 
 	virtual bool	hasValidIndex ();
 	virtual bool	doSearch (const QString& query, KCHMSearchEngine::searchResults& results, unsigned int limit);
+>>>>>>> 1.3
 
 	/*
 	 * Index creation routines.
@@ -68,7 +76,7 @@ public:
 
 private:
 	QMap<int, QString>			m_pagesmap;
-	QMap<int, QString>			m_wordsmap;
+	QMap<QString, int>			m_wordsmap;
 	QValueList< IndexEntry >	m_indexmap;
 
 	KCHMSearchIndexBuilder	*	m_indexbuilder;

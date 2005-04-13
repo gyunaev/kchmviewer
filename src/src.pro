@@ -28,7 +28,8 @@ HEADERS += kchmmainwindow.h \
            kde-qt.h \
            kchmexternalsearch.h \
            iconstorage.h \
-           kchmexternalsearchengine.h 
+           kchmexternalsearchengine.h \
+           kchmsearchenginechm.h 
 SOURCES += kchmmainwindow.cpp \
            main.cpp \
            xchmfile.cpp \
@@ -45,4 +46,5 @@ SOURCES += kchmmainwindow.cpp \
            froglogic_getopt.cpp \
            kchmexternalsearch.cpp \
            iconstorage.cpp \
-           kchmexternalsearchengine.cpp 
+           kchmexternalsearchengine.cpp \
+           kchmsearchenginechm.cpp 

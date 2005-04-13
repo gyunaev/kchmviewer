@@ -280,6 +280,7 @@ void CHMFile::CloseCHM()
  * FIXME: <OBJECT type="text/sitemap"><param name="Merge" value="hhaxref.chm::/HHOCX_c.hhc"></OBJECT>
  *  (from htmlhelp.chm)
  */
+//TODO: binary TOC parser
 bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool asIndex)
 {
 	chmUnitInfo ui;
@@ -334,7 +335,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 		else
 			tagword = tag.lower();
 
-//		printf ("tag: '%s', tagword: '%s'\n", tag.ascii(), tagword.ascii());
+//		qDebug ("tag: '%s', tagword: '%s'\n", tag.ascii(), tagword.ascii());
 						
 		// <OBJECT type="text/sitemap"> - a topic entry
 		if ( tagword == "object" && tag.find ("text/sitemap", 0, false) != -1 )
@@ -436,8 +437,7 @@ bool CHMFile::ParseAndFillIndex(QListView *indexlist)
 	return ParseHhcAndFillTree (m_indexFile, indexlist, true);
 }
 
-bool CHMFile::IndexSearch(const QString& text, bool wholeWords, 
-						  bool titlesOnly, CHMSearchResults *results)
+bool CHMFile::IndexSearch(const QString& text, bool wholeWords, bool titlesOnly, KCHMSearchBackend::searchResults& results, unsigned int maxresults)
 {
 	chmUnitInfo ui, uitopics, uiurltbl, uistrings, uiurlstr;
 	bool partial = false;
@@ -545,7 +545,7 @@ bool CHMFile::IndexSearch(const QString& text, bool wholeWords,
 						  code_count_r, loc_codes_s, 
 						  loc_codes_r, &ui, &uiurltbl,
 						  &uistrings, &uitopics,
-						  &uiurlstr, results);
+						  &uiurlstr, results, maxresults);
 
 			if ( !wholeWords )
 			{
@@ -559,14 +559,14 @@ bool CHMFile::IndexSearch(const QString& text, bool wholeWords,
 						   code_count_r, loc_codes_s, 
 						   loc_codes_r, &ui, &uiurltbl,
 						   &uistrings, &uitopics,
-						   &uiurlstr, results);
+						   &uiurlstr, results, maxresults);
 
 				}
 				else if ( QString::compare (text.lower(), word.mid(0, text.length())) < -1 )
 					break;
 			}
 
-			if(results->size() >= MAX_SEARCH_RESULTS)
+			if ( results.size() >= maxresults )
 				break;
 		}	
 	}
@@ -653,13 +653,14 @@ inline u_int32_t CHMFile::GetLeafNodeOffset(const QString& text,
 
 
 inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
-								 u_int32_t wlc_offset, unsigned char ds,
-								 unsigned char dr, unsigned char cs,
-								 unsigned char cr, unsigned char ls,
-								 unsigned char lr, chmUnitInfo *uimain,
-								 chmUnitInfo* uitbl, chmUnitInfo *uistrings,
-								 chmUnitInfo* topics, chmUnitInfo *urlstr,
-								 CHMSearchResults *results)
+								u_int32_t wlc_offset, unsigned char ds,
+								unsigned char dr, unsigned char cs,
+								unsigned char cr, unsigned char ls,
+								unsigned char lr, chmUnitInfo *uimain,
+								chmUnitInfo* uitbl, chmUnitInfo *uistrings,
+								chmUnitInfo* topics, chmUnitInfo *urlstr,
+								KCHMSearchBackend::searchResults& results,
+								unsigned int maxresults)
 {
 	int wlc_bit = 7;
 	u_int64_t index = 0, count;
@@ -723,10 +724,10 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 
 		if ( !url.isEmpty() && !topic.isEmpty() )
 		{
-			if ( results->size() >= MAX_SEARCH_RESULTS )
+			if ( results.size() >= maxresults )
 				return true;
 				
-			(*results)[url] = topic;
+			results.push_back (KCHMSearchBackend::SearchResult (0, topic, url));
 		}
 
 		count = sr_int (buffer.data() + off, &wlc_bit, cs, cr, length);
@@ -734,8 +735,9 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 
 		for (u_int64_t j = 0; j < count; ++j)
 		{
-			sr_int (buffer.data() + off, &wlc_bit, ls, lr, length);
+			u_int64_t lcode = sr_int (buffer.data() + off, &wlc_bit, ls, lr, length);
 			off += length;
+printf ("Location code: %d\n", (int) lcode);
 		}
 	}
 

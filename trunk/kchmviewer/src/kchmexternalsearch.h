@@ -21,7 +21,30 @@
 #define KCHMEXTERNALSEARCH_H
 
 #include <qmap.h>
-#include <qstring.h>
+#include <qvaluevector.h>
+
+
+class KCHMSearchBackend;
+
+//! Search engine manager
+class KCHMSearchEngine
+{
+public:
+	// map <url, name>
+	typedef QValueVector<QString> searchResults;
+
+    KCHMSearchEngine ();
+    ~KCHMSearchEngine ();
+
+	void	setSearchBackend (KCHMSearchBackend * backend);
+	bool	hasValidIndex ();
+	bool	createIndex ();
+	bool	doSearch (const QString& query, searchResults& results, unsigned int limit_results = 100);
+
+private:
+	KCHMSearchBackend 	*	m_searchBackend;
+	bool					m_abortButtonPressed;
+};
 
 
 class KCHMSearchBackend;
@@ -65,8 +88,27 @@ public:
 	virtual bool	indexAddFile (const QString& filename) = 0;
 	virtual void	indexDone () = 0;
 
+<<<<<<< kchmexternalsearch.h
+	virtual bool	hasValidIndex () = 0;
+	virtual bool	canGenerateIndex() = 0;
+	virtual bool	doSearch (const QString& word, KCHMSearchEngine::searchResults& results, unsigned int limit) = 0;
+
+	class SearchResult
+	{
+		public:
+			inline SearchResult() {}
+			inline SearchResult (int o, const QString& t, const QString& u) :
+				offset(o), title(t), url(u) {};
+			int		offset;
+			QString	title;
+			QString	url;
+			
+	};
+	typedef QValueVector<SearchResult> searchResults;
+=======
 	virtual bool	hasValidIndex () = 0;
 	virtual bool	doSearch (const QString& word, KCHMSearchEngine::searchResults& results, unsigned int limit) = 0;
+>>>>>>> 1.3
 };
 
 #endif

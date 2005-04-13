@@ -55,19 +55,19 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 		chm->GetFileContentAsString (data, abs_name);
 		((QMimeSourceFactory*)this)->setText (abs_name, data);
 	}
-	else if ( m_viewWindow->areImagesResolved() )
+	else
 	{
 		// treat as image
 		chmUnitInfo ui;
+		QImage img;
 		
-		if ( chm->ResolveObject (abs_name, &ui) )
+		if ( m_viewWindow->areImagesResolved()
+		&& chm->ResolveObject (abs_name, &ui) )
 		{
 			QByteArray buf (ui.length);
 			
 			if ( chm->RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) )
 			{
-				QImage img;
-				
 				if ( img.loadFromData ( (const uchar *) buf.data(), ui.length) )
 					((QMimeSourceFactory*)this)->setImage (abs_name, img);
 			}
@@ -75,10 +75,13 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 				fprintf (stderr, "Could not retrieve %s\n", abs_name.ascii());
 		}
 		else
-			fprintf (stderr, "Could not resolve %s\n", abs_name.ascii());
+		{
+			((QMimeSourceFactory*)this)->setImage (abs_name, img);
+			
+			if ( m_viewWindow->areImagesResolved() )
+				fprintf (stderr, "Could not resolve %s\n", abs_name.ascii());
+		}
 	}
-	else
-		return 0;
 	
 	return QMimeSourceFactory::data (abs_name);
 }

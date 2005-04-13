@@ -1,7 +1,7 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="9" >
+ <DocsAndViews NumberOfDocuments="11" >
   <Doc0 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmconfig.cpp" >
    <View0 Type="Source" />
   </Doc0>
@@ -18,17 +18,23 @@
    <View0 line="59" Type="Source" />
   </Doc4>
   <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearch.cpp" >
-   <View0 line="48" Type="Source" />
+   <View0 line="102" Type="Source" />
   </Doc5>
   <Doc6 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchwindow.h" >
    <View0 line="47" Type="Source" />
   </Doc6>
   <Doc7 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchwindow.cpp" >
-   <View0 line="140" Type="Source" />
+   <View0 line="167" Type="Source" />
   </Doc7>
   <Doc8 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmexternalsearch.h" >
-   <View0 line="38" Type="Source" />
+   <View0 line="50" Type="Source" />
   </Doc8>
+  <Doc9 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qimage.html#details" >
+   <View0 Type="Documentation" />
+  </Doc9>
+  <Doc10 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsourcefactory.cpp" >
+   <View0 line="84" Type="Source" />
+  </Doc10>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>

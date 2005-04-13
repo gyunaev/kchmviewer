@@ -32,12 +32,15 @@
 class KCHMSearchIndexBuilder
 {
 public:
+<<<<<<< kchmexternalsearchengine.cpp
+	KCHMSearchIndexBuilder ( QValueList<KCHMSearchEngineGeorge::IndexEntry>& indexmap, QMap<QString, int>& wordsmap );
+=======
 	KCHMSearchIndexBuilder ( QValueList<KCHMSearchEngineGeorge::IndexEntry>& map );
+>>>>>>> 1.3
 	~KCHMSearchIndexBuilder();
 	
 	bool addWordsFromPage ( const QString& url );
 	void convertPages (QMap<int, QString>& map);
-	void convertWords (QMap<int, QString>& map);
 
 private:
 	//! Parse a HTML page, stripping out HTML tags, and split into words everything inside the page
@@ -51,13 +54,23 @@ private:
 	unsigned int			m_indexmapid;
 
 	QMap<QString, int>		m_pagesmap;
+<<<<<<< kchmexternalsearchengine.cpp
+	QMap<QString, int>&		m_wordsmap;
+	QValueList<KCHMSearchEngineGeorge::IndexEntry>&	m_indexmap;
+=======
 	QMap<QString, int>		m_wordsmap;
 	QValueList<KCHMSearchEngineGeorge::IndexEntry>&	m_indexmap;
+>>>>>>> 1.3
 };
 
 
+<<<<<<< kchmexternalsearchengine.cpp
+KCHMSearchIndexBuilder::KCHMSearchIndexBuilder ( QValueList<KCHMSearchEngineGeorge::IndexEntry>& indexmap, QMap<QString, int>& wordsmap )
+	: m_indexmap(indexmap), m_wordsmap(wordsmap)
+=======
 KCHMSearchIndexBuilder::KCHMSearchIndexBuilder( QValueList< KCHMSearchEngineGeorge::IndexEntry > & map )
 	: m_indexmap(map)
+>>>>>>> 1.3
 {
 	m_pageid = m_wordid = m_indexmapid = 1;
 	m_viewwindow = new KCHMViewWindow (0, false);
@@ -126,12 +139,6 @@ void KCHMSearchIndexBuilder::convertPages (QMap<int, QString>& map)
 		map[it.data()] = it.key();
 }
 
-void KCHMSearchIndexBuilder::convertWords (QMap<int, QString>& map)
-{
-	for ( QMap<QString, int>::const_iterator it = m_wordsmap.begin(); it != m_wordsmap.end(); it++ )
-		map[it.data()] = it.key();
-}
-
 /*********************************************************************************************************/
 
 KCHMSearchEngineGeorge::KCHMSearchEngineGeorge()
@@ -147,7 +154,7 @@ KCHMSearchEngineGeorge::~KCHMSearchEngineGeorge()
 
 void KCHMSearchEngineGeorge::indexInit( )
 {
-	m_indexbuilder = new KCHMSearchIndexBuilder (m_indexmap);
+	m_indexbuilder = new KCHMSearchIndexBuilder (m_indexmap, m_wordsmap);
 }
 
 bool KCHMSearchEngineGeorge::indexAddFile( const QString & url )
@@ -164,7 +171,6 @@ bool KCHMSearchEngineGeorge::indexAddFile( const QString & url )
 void KCHMSearchEngineGeorge::indexDone( )
 {
 	m_indexbuilder->convertPages (m_pagesmap);
-	m_indexbuilder->convertWords (m_wordsmap);
 
 	delete m_indexbuilder;
 	m_indexbuilder = 0;
@@ -180,9 +186,39 @@ bool KCHMSearchEngineGeorge::saveIndexFile( const QString & filename )
 	return false;
 }
 
+<<<<<<< kchmexternalsearchengine.cpp
+bool KCHMSearchEngineGeorge::doSearch (const QString& word, KCHMSearchEngine::searchResults& results, unsigned int limit)
+=======
 bool KCHMSearchEngineGeorge::doSearch (const QString& query, KCHMSearchEngine::searchResults& results, unsigned int limit)
+>>>>>>> 1.3
 {
+<<<<<<< kchmexternalsearchengine.cpp
+	// First, try to find the word index
+	if ( m_wordsmap.find (word.lower()) == m_wordsmap.end() )
+		return true;
+	
+	int wordidx = m_wordsmap[word.lower()];
+	QMap<int, int> found_pages;
+	QMap<int, int>::const_iterator found_pages_it;
+
+	for ( unsigned int i = 0; i < m_indexmap.size(); i++ )
+	{
+		if ( m_indexmap[i].word != wordidx )
+			continue;
+
+		if ( --limit == 0 )
+			break;
+
+		found_pages[m_indexmap[i].page] = 1;
+	}
+
+	for ( found_pages_it = found_pages.begin(); found_pages_it != found_pages.end(); found_pages_it++ )
+		results.push_back (m_pagesmap[found_pages_it.key()]);
+
+	return true;
+=======
 	return false;
+>>>>>>> 1.3
 }
 
 void KCHMSearchEngineGeorge::invalidate( )

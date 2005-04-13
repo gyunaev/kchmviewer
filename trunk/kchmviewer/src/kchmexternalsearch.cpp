@@ -96,8 +96,25 @@ bool KCHMSearchEngine::createIndex( )
 
 bool KCHMSearchEngine::doSearch (const QString& query, searchResults& results, unsigned int limit_results)
 {
+<<<<<<< kchmexternalsearch.cpp
+	Q_ASSERT (m_searchBackend);
+	
+	// Parse the query
+	QStringList words = QStringList::split (' ', query);
+
+	if ( words.size() < 1 )
+		return false;
+
+/*	for ( unsigned int i = 0; i < words.size(); i++ )
+	{
+		
+	}
+*/
+	return m_searchBackend->doSearch (words[0], results, limit_results);
+=======
 	Q_ASSERT (m_searchBackend);
 	return false;
+>>>>>>> 1.3
 }
 
 bool KCHMSearchEngine::hasValidIndex( )

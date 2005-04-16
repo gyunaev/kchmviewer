@@ -231,6 +231,7 @@ void KCHMSearchAndViewToolbar::onBtnViewSource( )
 	QTextEdit * editor = new QTextEdit (0);
 	editor->setTextFormat ( Qt::PlainText );
 	editor->setText (::mainWindow->getViewWindow()->text());
+	editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->getViewWindow()->getOpenedPage() );
 	editor->resize (800, 600);
 	editor->show();
 }

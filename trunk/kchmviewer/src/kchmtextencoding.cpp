@@ -136,7 +136,7 @@ static const KCHMTextEncoding::text_encoding_t text_encoding_table [] =
 	{	"Swedish",	"Finland",	0x081D,	1252,	0,	"CP1252"	},
 	{	"Swedish",	"Sweden",	0x041D,	1252,	0,	"CP1252"	},
 	{	"Tamil",	0,	0x0449,	0,	0,	"TSCII"	},
-	{	"Tatar",	0,	0X0444,	1251,	204,	"CP1251"	},
+	{	"Tatar",	0,	0x0444,	1251,	204,	"CP1251"	},
 	{	"Thai",	0,	0x041E,	874,	222,	"TIS-620"	},
 	{	"Turkish",	0,	0x041F,	1254,	162,	"CP1254"	},
 	{	"Ukrainian",	0,	0x0422,	1251,	0,	"CP1251"	},

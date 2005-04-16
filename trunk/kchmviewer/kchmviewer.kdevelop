@@ -9,7 +9,6 @@
     <keywords>
       <keyword>Qt</keyword>
     </keywords>
-    <versioncontrol>kdevcvsservice</versioncontrol>
     <ignoreparts/>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
@@ -101,7 +100,6 @@
     <general>
       <activedir>src</activedir>
     </general>
-    <subclassing/>
     <make>
       <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
@@ -110,6 +108,7 @@
       <prio>0</prio>
       <envvars/>
     </make>
+    <subclassing/>
   </kdevtrollproject>
   <workspace>
     <openfiles/>

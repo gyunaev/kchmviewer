@@ -27,6 +27,7 @@
 #define INCLUDE_CHMFILE_H
 
 #include <qstring.h>
+#include <qcstring.h>
 #include <qlistview.h>
 #include <qlistbox.h>
 #include <qmap.h>
@@ -282,6 +283,9 @@ private:
 
 	//! Change the current CHM encoding
 	bool  changeFileEncoding (const char *qtencoding);
+
+	//! Convert the word, so it has an appropriate encoding
+	QCString convertSearchWord ( const QString &src );
 
 private:
 	typedef QMap<QString, KCHMMainTreeViewItem*> KCHMTreeUrlMap_t;

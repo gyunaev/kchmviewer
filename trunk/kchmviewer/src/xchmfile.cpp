@@ -445,6 +445,8 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 	if ( text.isEmpty() )
 		return false;
 
+	QString searchword = (QString) convertSearchWord (text);
+
 	if ( !ResolveObject ("/$FIftiMain", &ui)
 	|| !ResolveObject("/#TOPICS", &uitopics)
 	|| !ResolveObject("/#STRINGS", &uistrings)
@@ -484,7 +486,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 
 	QMemArray<unsigned char> buffer(node_len);
 
-	node_offset = GetLeafNodeOffset (text, node_offset, node_len, tree_depth, &ui);
+	node_offset = GetLeafNodeOffset (searchword, node_offset, node_len, tree_depth, &ui);
 
 	if ( !node_offset )
 		return false;
@@ -511,10 +513,10 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 			memcpy (wrd_buf, buffer.data() + i + 2, word_len - 1);
 			wrd_buf[word_len - 1] = 0;
 
-			if(pos == 0)
-				word = encodeWithCurrentCodec (wrd_buf);
+			if ( pos == 0 )
+				word = wrd_buf;
 			else
-				word = word.mid (0, pos) + encodeWithCurrentCodec (wrd_buf);
+				word = word.mid (0, pos) + wrd_buf;
 
 			delete[] wrd_buf;
 
@@ -538,7 +540,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 			if ( !title && titlesOnly )
 				continue;
 
-			if ( wholeWords && text.lower() == word.lower() )
+			if ( wholeWords && searchword == word )
 				return ProcessWLC(wlc_count, wlc_size, 
 						  wlc_offset, doc_index_s, 
 						  doc_index_r,code_count_s, 
@@ -549,7 +551,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 
 			if ( !wholeWords )
 			{
-				if ( word.startsWith (text))
+				if ( word.startsWith (searchword))
 				{
 					partial = true;
 					
@@ -562,7 +564,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 						   &uiurlstr, results, maxresults);
 
 				}
-				else if ( QString::compare (text.lower(), word.mid(0, text.length())) < -1 )
+				else if ( QString::compare (searchword, word.mid(0, searchword.length())) < -1 )
 					break;
 			}
 
@@ -570,7 +572,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 				break;
 		}	
 	}
-	while ( !wholeWords && word.startsWith (text) && node_offset );
+	while ( !wholeWords && word.startsWith (searchword) && node_offset );
 	
 	return partial;
 }
@@ -627,13 +629,13 @@ inline u_int32_t CHMFile::GetLeafNodeOffset(const QString& text,
 			wrd_buf[word_len - 1] = 0;
 
 			if ( pos == 0 )
-				word = encodeWithCurrentCodec (wrd_buf);
+				word = wrd_buf;
 			else
-				word = word.mid(0, pos) + encodeWithCurrentCodec (wrd_buf);
+				word = word.mid(0, pos) + wrd_buf;
 
 			delete[] wrd_buf;
 
-			if ( text.lower() <= word.lower() )
+			if ( text <= word )
 			{
 				cursor32 = buffer.data() + i + word_len + 1;
 				initialOffset = UINT32ARRAY(cursor32);
@@ -1086,3 +1088,38 @@ bool CHMFile::enumerateArchive( QValueVector< QString > & files )
 	return chm_enumerate (m_chmFile, CHM_ENUMERATE_ALL, chm_enumerator_callback, &files);
 }
 
+QCString CHMFile::convertSearchWord( const QString & src )
+{
+	static const char * searchwordtable[128] =
+	{
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "s", 0, "oe", 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "s", 0, "oe", 0, 0, "y",
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		"a", "a", "a", "a", "a", "a", "ae", "c", "e", "e", "e", "e", "i", "i", "i", "i",
+		"d", "n", "o", "o", "o", "o", "o", 0, "o", "u", "u", "u", "u", "y", "\xDE", "ss",
+		"a", "a", "a", "a", "a", "a", "ae", "c", "e", "e", "e", "e", "i", "i", "i", "i",
+		"o", "n", "o", "o", "o", "o", "o", 0, "o", "u", "u", "u", "u", "y", "\xFE", "y"
+	};
+
+	if ( !m_textCodec )
+		return (QCString) src.lower();
+
+	QCString dest = m_textCodec->fromUnicode (src);
+
+	for ( unsigned int i = 0; i < dest.size(); i++ )
+	{
+		if ( dest[i] & 0x80 )
+		{
+			int index = dest[i] & 0x7F;
+			if ( searchwordtable[index] )
+				dest.replace (i, 1, searchwordtable[index]);
+			else
+				dest.remove (i, 1);
+		}
+	}
+
+	return dest.lower();
+}
+
+//TODO: Binary TOC parser

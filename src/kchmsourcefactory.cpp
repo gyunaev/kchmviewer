@@ -34,7 +34,6 @@ KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
 }
 
 
-//TODO: if an image or a CHM file is absent, generate an empty image/file
 const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 {
 	QString file, path;

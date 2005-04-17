@@ -1,7 +1,7 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="11" >
+ <DocsAndViews NumberOfDocuments="12" >
   <Doc0 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmconfig.cpp" >
    <View0 Type="Source" />
   </Doc0>
@@ -15,10 +15,10 @@
    <View0 line="61" Type="Source" />
   </Doc3>
   <Doc4 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchwindow.cpp" >
-   <View0 line="123" Type="Source" />
+   <View0 line="148" Type="Source" />
   </Doc4>
   <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.cpp" >
-   <View0 line="630" Type="Source" />
+   <View0 line="282" Type="Source" />
   </Doc5>
   <Doc6 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qwidget.html" >
    <View0 Type="Documentation" />
@@ -33,8 +33,11 @@
    <View0 line="223" Type="Source" />
   </Doc9>
   <Doc10 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmbookmarkwindow.cpp" >
-   <View0 line="76" Type="Source" />
+   <View0 line="74" Type="Source" />
   </Doc10>
+  <Doc11 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsourcefactory.cpp" >
+   <View0 line="83" Type="Source" />
+  </Doc11>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>

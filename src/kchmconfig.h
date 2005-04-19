@@ -23,8 +23,6 @@
 #include <qstring.h>
 #include <qpixmap.h>
 
-extern const char * APP_NAME;
-extern const char * APP_VERSION;
 extern const char * APP_PATHINUSERDIR;
 
 

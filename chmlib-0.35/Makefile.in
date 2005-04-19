@@ -16,26 +16,24 @@ top_builddir=@top_builddir@
 ifeq ($(top_builddir),)
 top_builddir=$(shell pwd)
 endif
-LIBTOOL=@LIBTOOL@
 EXAMPLES=@EXAMPLES@
 
-all: src/libchm.la
+all: src/libchm.a
 
 examples: ${EXAMPLES}
 
-%.lo: %.c
-	${LIBTOOL} --mode=compile ${CC} -c -o $@ $^ ${CFLAGS}
+%.o: %.c
+	${CC} -c -o $@ $^ ${CFLAGS}
 
-src/libchm.la: src/chm_lib.lo src/lzx.lo
-	${LIBTOOL} --mode=link ${CC} -o $@ $^ ${LDFLAGS} -rpath ${INSTALLPREFIX}/lib
-
-install: src/libchm.la
-	chmod a+r src/libchm.la
-	${LIBTOOL} --mode=install cp src/libchm.la ${INSTALLPREFIX}/lib
-	cp src/chm_lib.h ${INSTALLPREFIX}/include
+src/libchm.a: src/chm_lib.o src/lzx.o
+	@AR@ cr $@ $^
+	@RANLIB@ $@
 
 clean:
-	rm -fr src/libchm.la src/*.o src/*.lo .libs src/.libs src/${EXAMPLES}
+	rm -fr src/libchm.a src/*.o src/${EXAMPLES}
+
+distclean: clean
+	rm -rf Makefile src/Makefile
 
 test_chmLib: src/test_chmLib.c
 	${CC} -o $@ $^ -I${INSTALLPREFIX}/include -L${INSTALLPREFIX}/lib -lchm ${CFLAGS}

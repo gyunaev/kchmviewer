@@ -17,6 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#if !defined (FORWARD_DECLARATIONS_H)
+#define FORWARD_DECLARATIONS_H
 
 class QComboBox;
 class QListView;
@@ -36,3 +38,7 @@ class CHMFile;
 class KCHMSettings;
 
 class KCHMSearchAndViewToolbar;
+
+#include "config.h"
+
+#endif /* FORWARD_DECLARATIONS_H */

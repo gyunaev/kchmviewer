@@ -23,9 +23,7 @@
  ***************************************************************************/
 
 //FIXME: <A HREF="ms-its:file name.chm::/topic.htm">
-//FIXME: support for not only book and page icons 
 //FIXME: support for custom icons
-//FIXME: support for information types
 
 
 #include <qmessagebox.h> 
@@ -38,6 +36,7 @@
 #include "kchmconfig.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
+#include "iconstorage.h"
 
 #include "bitfiddle.h"
 
@@ -298,7 +297,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 	QRegExp pairregex ( "param\\s+name\\s*=\\s*[\"'](.+)[\"']\\s+value\\s*=\\s*[\"'](.+)[\"'][^\"']*" );
 	pairregex.setMinimal (TRUE);
 
-	int pos = 0, indent = 0;
+	int pos = 0, indent = 0, imagenum = KCHMImageType::IMAGE_AUTO;
 	bool in_object = false, root_created = false;
 	QString url, name;
 	KCHMMainTreeViewItem * rootentry[MAX_NEST_DEPTH];
@@ -353,14 +352,14 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 				// Should we add rootlevel?
 				if ( !indent || asIndex )
 				{
-					item = new KCHMMainTreeViewItem (tree, lastchild[indent], name, url, asIndex);
+					item = new KCHMMainTreeViewItem (tree, lastchild[indent], name, url, asIndex ? KCHMImageType::IMAGE_NONE : imagenum);
 				}
 				else
 				{
 					if ( !rootentry[indent-1] )
 						qFatal("CHMFile::ParseAndFillTopicsTree: child entry %d with no root entry!", indent-1);
 						
-					item = new KCHMMainTreeViewItem (rootentry[indent-1], lastchild[indent], name, url,  false);
+					item = new KCHMMainTreeViewItem (rootentry[indent-1], lastchild[indent], name, url,  imagenum);
 				}
 				
 				if ( indent == 0 || !rootentry[indent] )
@@ -384,7 +383,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 
 			name = url = QString::null;
 			in_object = false;
-			
+			imagenum = KCHMImageType::IMAGE_AUTO;
 		}
 		else if ( tagword == "param" && in_object )
 		{
@@ -400,6 +399,14 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 				name = decodeHTMLUnicodeEntity (pvalue);
 			else if ( pname == "local" )
 				url = KCHMViewWindow::makeURLabsoluteIfNeeded (pvalue);
+			else if ( pname == "imagenumber" )
+			{
+				bool bok;
+				int imgnum = pvalue.toInt (&bok);
+	
+				if ( bok && imgnum >= 0 && imgnum < MAX_BUILTIN_ICONS )
+					imagenum = imgnum;
+			}
 		}
 		else if ( tagword == "ul" ) // increase indent level
 		{

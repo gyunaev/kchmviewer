@@ -41,12 +41,12 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	int menuid;
 	setLabel( tr("Find in page") );
 
-    QPixmap iconPrev (kchmicons::xpm_icon_findprev);
-    QPixmap iconNext (kchmicons::xpm_icon_findnext);
-    QPixmap iconFontInc (kchmicons::xpm_icon_view_increase);
-    QPixmap iconFontDec (kchmicons::xpm_icon_view_decrease);
-    QPixmap iconViewSource (kchmicons::xpm_icon_viewsource);
-    QPixmap iconAddBookmark (kchmicons::xpm_icon_bookmark_add);
+    QPixmap iconPrev (*gIconStorage.getToolbarPixmap(KCHMIconStorage::findprev));
+    QPixmap iconNext (*gIconStorage.getToolbarPixmap(KCHMIconStorage::findnext));
+    QPixmap iconFontInc (*gIconStorage.getToolbarPixmap(KCHMIconStorage::view_increase));
+    QPixmap iconFontDec (*gIconStorage.getToolbarPixmap(KCHMIconStorage::view_decrease));
+    QPixmap iconViewSource (*gIconStorage.getToolbarPixmap(KCHMIconStorage::viewsource));
+    QPixmap iconAddBookmark (*gIconStorage.getToolbarPixmap(KCHMIconStorage::bookmark_add));
 	
 	m_findBox = new QComboBox (TRUE, this);
 	m_findBox->setMinimumWidth (200);

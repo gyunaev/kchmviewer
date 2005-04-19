@@ -17,21 +17,47 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#ifndef ICON_STORAGE_H
+#define ICON_STORAGE_H
 
-namespace kchmicons
+#include <qmap.h>
+#include <qpixmap.h>
+
+static const unsigned int MAX_BUILTIN_ICONS = 42;
+
+class KCHMIconStorage
 {
-extern const char * xpm_icon_back[];
-extern const char * xpm_icon_bookmark_add[];
-extern const char * xpm_icon_fileopen[];
-extern const char * xpm_icon_print[];
-extern const char * xpm_icon_findnext[];
-extern const char * xpm_icon_findprev[];
-extern const char * xpm_icon_folder_open[];
-extern const char * xpm_icon_folder[];
-extern const char * xpm_icon_forward[];
-extern const char * xpm_icon_gohome[];
-extern const char * xpm_icon_htmlfile[];
-extern const char * xpm_icon_viewsource[];
-extern const char * xpm_icon_view_decrease[];
-extern const char * xpm_icon_view_increase[];
+public:
+	typedef struct
+	{
+		unsigned int 	size;
+		const char * 	data;
+	} png_memory_image_t;
+
+	enum pixmap_index_t
+	{
+		back = 1000,
+		bookmark_add,
+		fileopen,
+		print,
+		findnext,
+		findprev,
+		forward,
+		gohome,
+		viewsource,
+		view_decrease,
+		view_increase
+	};
+
+	const QPixmap * getBookIconPixmap (unsigned int id);
+	const QPixmap * getToolbarPixmap (pixmap_index_t pix);
+
+private:
+	const QPixmap * returnOrLoadImage (unsigned int id, const png_memory_image_t * image);
+
+	QMap<unsigned int, QPixmap*>	m_iconMap;
 };
+
+extern KCHMIconStorage	gIconStorage;
+
+#endif /* ICON_STORAGE_H */

@@ -29,37 +29,29 @@ static QPixmap	* m_imageFolder;
 static QPixmap	* m_imageFolderOpened;
 static QPixmap	* m_imageHtmlPage;
 
-KCHMMainTreeViewItem::KCHMMainTreeViewItem( QListViewItem * parent, QListViewItem * after, QString name, QString aurl, bool hideimage) : QListViewItem(parent, after, name), url(aurl), do_not_show_image(hideimage)
+KCHMMainTreeViewItem::KCHMMainTreeViewItem( QListViewItem * parent, QListViewItem * after, QString name, QString aurl, int image) : QListViewItem(parent, after, name), url(aurl), image_number(image)
 {
-	if ( !m_imageFolder )
-		initImages();}
+}
 
-
-KCHMMainTreeViewItem::KCHMMainTreeViewItem( QListView * parent, QListViewItem * after, QString name, QString aurl, bool hideimage) : QListViewItem(parent, after, name), url(aurl), do_not_show_image(hideimage)
+KCHMMainTreeViewItem::KCHMMainTreeViewItem( QListView * parent, QListViewItem * after, QString name, QString aurl, int image) : QListViewItem(parent, after, name), url(aurl), image_number(image)
 {
-	if ( !m_imageFolder )
-		initImages();
 }
 
 const QPixmap * KCHMMainTreeViewItem::pixmap( int i ) const
 {
-    if ( i || do_not_show_image )
+    if ( i || image_number == KCHMImageType::IMAGE_NONE )
         return 0;
 
 	if ( firstChild () )
 	{
 		if ( isOpen() )
-			return m_imageFolderOpened;
+			return (image_number == KCHMImageType::IMAGE_AUTO) ? 
+				gIconStorage.getBookIconPixmap(1) : gIconStorage.getBookIconPixmap(image_number + 1);
 		else
-			return m_imageFolder;
+			return (image_number == KCHMImageType::IMAGE_AUTO) ? 
+				gIconStorage.getBookIconPixmap(0) : gIconStorage.getBookIconPixmap(image_number);
 	}
 	
-	return m_imageHtmlPage;
-}
-
-void KCHMMainTreeViewItem::initImages( )
-{
-	m_imageFolder = new QPixmap (kchmicons::xpm_icon_folder);
-	m_imageFolderOpened = new QPixmap (kchmicons::xpm_icon_folder_open);
-	m_imageHtmlPage = new QPixmap (kchmicons::xpm_icon_htmlfile);
+	return (image_number == KCHMImageType::IMAGE_AUTO) ? 
+		gIconStorage.getBookIconPixmap(10) : gIconStorage.getBookIconPixmap(image_number);
 }

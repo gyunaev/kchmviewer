@@ -409,7 +409,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
     QToolBar * toolbar = new QToolBar(this);
     toolbar->setLabel( tr("File Operations") );
 
-    QPixmap iconFileOpen (kchmicons::xpm_icon_fileopen);
+    QPixmap iconFileOpen (*gIconStorage.getToolbarPixmap(KCHMIconStorage::fileopen));
     QToolButton * fileOpen = new QToolButton (iconFileOpen, 
 				tr("Open File"), 
 				QString::null,
@@ -417,7 +417,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				SLOT(choose()), 
 				toolbar);
 
-    QPixmap iconFilePrint (kchmicons::xpm_icon_print);
+    QPixmap iconFilePrint (*gIconStorage.getToolbarPixmap(KCHMIconStorage::print));
     QToolButton * filePrint	= new QToolButton (iconFilePrint,
 				tr("Print File"),
 				QString::null,
@@ -428,7 +428,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
     QToolBar * navtoolbar = new QToolBar(this);
 	navtoolbar->setLabel( tr("Navigation") );
 	
-    QPixmap iconBackward (kchmicons::xpm_icon_back);
+    QPixmap iconBackward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::back));
     m_toolbarIconBackward	= new QToolButton (iconBackward,
 				tr("Move backward in history"),
 				QString::null,
@@ -436,7 +436,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				SLOT(backward()),
 				navtoolbar);
 
-    QPixmap iconForward (kchmicons::xpm_icon_forward);
+    QPixmap iconForward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::forward));
     m_toolbarIconForward	= new QToolButton (iconForward,
 				tr("Move forward in history"),
 				QString::null,
@@ -444,7 +444,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				SLOT(forward()),
 				navtoolbar);
 
-    QPixmap iconHome (kchmicons::xpm_icon_gohome);
+    QPixmap iconHome = (*gIconStorage.getToolbarPixmap(KCHMIconStorage::gohome));
     new QToolButton (iconHome,
 				tr("Go to the home page"),
 				QString::null,

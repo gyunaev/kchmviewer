@@ -1,3 +1,8 @@
+2005-04-19 tim <tim@krasnogorsk.ru>
+	- added support for built-in images, including custom images for folders;
+	- re-merged toolbar images into the executable as PNGs (uses less space);
+	- switched to autoconf/automake from qmake to simplify building and distribution, and to simplify KDEing;
+
 2005-04-05 tim <tim@krasnogorsk.ru>
 	- fixed slowdown on big files; 
 	 

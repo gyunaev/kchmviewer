@@ -9,7 +9,7 @@ INCLUDES = $(QT_INCLUDES) -I$(top_srcdir)/$(CHM_INCLUDES) $(KDE_INCLUDES)
 # $(all_includes)
 
 # the library search path.
-kchmviewer_LDFLAGS = $(QT_LIBS) $(KDE_LIBS)
+kchmviewer_LDFLAGS = $(QT_LIBS) $(KDE_LDFLAGS)
 #$(all_libraries)
 
 METASOURCES = AUTO

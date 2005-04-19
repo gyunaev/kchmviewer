@@ -448,7 +448,7 @@ AC_DEFUN([AC_PATH_KDE_LIBRARIES],
 
     AC_MSG_RESULT([$kde_libraries])
     AC_DEFINE(USE_KDE, 1, [use KDE support])
-    LIB_NAME="licq_kde-gui.la"
+	DEFS="-DUSE_KDE $DEFS"
 
     # KDE 2 or 3? (libkfile no longer exists in KDE3, so link with -lkio)
     if test -f $kde_libraries/libkfile.so ; then
@@ -461,13 +461,11 @@ AC_DEFUN([AC_PATH_KDE_LIBRARIES],
     have_kde=yes
     AC_SUBST(have_kde)
   else
-    LIB_NAME="licq_qt-gui.la"
     AC_MSG_RESULT([no])
     KDE_LDFLAGS=""
     KDE_LIBS=""
   fi
 
-  AC_SUBST(LIB_NAME)
   AC_SUBST(KDE_LDFLAGS)
   AC_SUBST(kde_libraries)
 ])

@@ -34,18 +34,16 @@ namespace KCHMImageType
 class KCHMMainTreeViewItem : public QListViewItem
 {
 public:
-    KCHMMainTreeViewItem(QListViewItem* parent, QListViewItem* after, QString name, QString aurl, bool hideimage);
-
-	KCHMMainTreeViewItem(QListView* parent, QListViewItem* after, QString name, QString url, bool hideimage);
+    KCHMMainTreeViewItem(QListViewItem* parent, QListViewItem* after, QString name, QString aurl, int image); 
+	KCHMMainTreeViewItem(QListView* parent, QListViewItem* after, QString name, QString url, int image);
 	
 	QString		getUrl()	{ return url; }
 	
 private:
 	const QPixmap * pixmap( int i ) const;
-	void	initImages();
 	
 	QString		url;
-	bool		do_not_show_image;
+	int 		image_number;
 };
 
 class KCMSearchTreeViewItem : public QListViewItem

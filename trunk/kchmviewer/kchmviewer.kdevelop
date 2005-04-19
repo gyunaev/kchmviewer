@@ -4,36 +4,78 @@
     <author>tim</author>
     <email>tim@krasnogorsk.ru</email>
     <version>0.1</version>
-    <projectmanagement>KDevTrollProject</projectmanagement>
+    <projectmanagement>KDevAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
-      <keyword>Qt</keyword>
+      <keyword>C++</keyword>
+      <keyword>Code</keyword>
     </keywords>
     <ignoreparts/>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
+    <versioncontrol/>
   </general>
-  <kdevfileview>
-    <groups>
-      <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
-      <group pattern="*.ui" name="User Interface" />
-      <group pattern="*.png" name="Icons" />
-      <group pattern="*" name="Others" />
-      <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidenonlocation>false</hidenonlocation>
-    </groups>
-    <tree>
-      <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
-      <showvcsfields>false</showvcsfields>
-    </tree>
-  </kdevfileview>
+  <kdevautoproject>
+    <general>
+      <activetarget>src/kchmviewer</activetarget>
+      <useconfiguration>debug</useconfiguration>
+    </general>
+    <run>
+      <mainprogram>src/kchmviewer</mainprogram>
+      <terminal>true</terminal>
+      <directoryradio>executable</directoryradio>
+      <runarguments>
+        <kchmviewer/>
+      </runarguments>
+      <customdirectory>/</customdirectory>
+      <programargs></programargs>
+      <autocompile>true</autocompile>
+      <envvars/>
+    </run>
+    <configurations>
+      <optimized>
+        <builddir>optimized</builddir>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
+        <cxxflags>-O2 -g0</cxxflags>
+      </optimized>
+      <debug>
+        <configargs>--enable-debug=full</configargs>
+        <builddir></builddir>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
+        <cxxflags>-O0 -g3</cxxflags>
+        <envvars/>
+        <topsourcedir></topsourcedir>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags></cflags>
+        <f77flags></f77flags>
+      </debug>
+    </configurations>
+    <make>
+      <envvars/>
+      <abortonerror>true</abortonerror>
+      <numberofjobs>1</numberofjobs>
+      <dontact>false</dontact>
+      <makebin></makebin>
+      <prio>0</prio>
+    </make>
+  </kdevautoproject>
   <kdevdoctreeview>
     <ignoretocs>
+      <toc>ada</toc>
+      <toc>ada_bugs_gcc</toc>
       <toc>bash</toc>
       <toc>bash_bugs</toc>
       <toc>clanlib</toc>
+      <toc>w3c-dom-level2-html</toc>
       <toc>fortran_bugs_gcc</toc>
       <toc>gnome1</toc>
       <toc>gnustep</toc>
@@ -56,75 +98,46 @@
       <toc>ruby</toc>
       <toc>ruby_bugs</toc>
       <toc>sdl</toc>
-      <toc>stl</toc>
-      <toc>sw</toc>
-      <toc>w3c-dom-level2-html</toc>
       <toc>w3c-svg</toc>
+      <toc>sw</toc>
       <toc>w3c-uaag10</toc>
       <toc>wxwidgets_bugs</toc>
     </ignoretocs>
+    <ignoreqt_xml>
+      <toc>Guide to the Qt Translation Tools</toc>
+      <toc>Qt Assistant Manual</toc>
+      <toc>Qt Designer Manual</toc>
+      <toc>Qt Reference Documentation</toc>
+      <toc>qmake User Guide</toc>
+    </ignoreqt_xml>
     <ignoredoxygen>
       <toc>KDE Libraries (Doxygen)</toc>
     </ignoredoxygen>
   </kdevdoctreeview>
-  <kdevdebugger>
-    <general>
-      <dbgshell/>
-      <breakpoints/>
-      <programargs/>
-      <gdbpath>/usr/bin/</gdbpath>
-      <breakonloadinglibs>true</breakonloadinglibs>
-      <separatetty>false</separatetty>
-      <floatingtoolbar>false</floatingtoolbar>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
-    </general>
-    <display>
-      <staticmembers>false</staticmembers>
-      <demanglenames>true</demanglenames>
-      <outputradix>10</outputradix>
-    </display>
-    <breakpoints/>
-  </kdevdebugger>
-  <kdevtrollproject>
-    <run>
-      <mainprogram>bin/kchmviewer</mainprogram>
-      <programargs/>
-      <directoryradio>executable</directoryradio>
-      <customdirectory>/</customdirectory>
-      <terminal>false</terminal>
-      <autocompile>true</autocompile>
-      <envvars/>
-    </run>
-    <general>
-      <activedir>src</activedir>
-    </general>
-    <make>
-      <abortonerror>true</abortonerror>
-      <numberofjobs>1</numberofjobs>
-      <dontact>false</dontact>
-      <makebin/>
-      <prio>0</prio>
-      <envvars/>
-    </make>
-    <subclassing/>
-  </kdevtrollproject>
-  <workspace>
-    <openfiles/>
-  </workspace>
   <kdevfilecreate>
+    <filetypes/>
     <useglobaltypes>
-      <type ext="ui" />
       <type ext="cpp" />
       <type ext="h" />
-      <type ext="ts" />
     </useglobaltypes>
   </kdevfilecreate>
+  <kdevfileview>
+    <groups>
+      <group pattern="*.h" name="Header files" />
+      <group pattern="*.cpp" name="Source files" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
+    </groups>
+    <tree>
+      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+    </tree>
+  </kdevfileview>
   <kdevdocumentation>
     <projectdoc>
       <docsystem>Doxygen Documentation Collection</docsystem>
       <docurl>kchmviewer.tag</docurl>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <substmap>
@@ -140,13 +153,11 @@
     <YEAR>2005</YEAR>
     <dest>/home/tim/work/kchmviewer</dest>
   </substmap>
-  <cppsupportpart>
-    <filetemplates>
-      <interfacesuffix>.h</interfacesuffix>
-      <implementationsuffix>.cpp</implementationsuffix>
-    </filetemplates>
-  </cppsupportpart>
   <kdevcppsupport>
+    <references>
+      <pcs>Qt</pcs>
+      <pcs>KDElibs</pcs>
+    </references>
     <codecompletion>
       <includeGlobalFunctions>true</includeGlobalFunctions>
       <includeTypes>true</includeTypes>
@@ -160,13 +171,40 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
-    <references/>
   </kdevcppsupport>
+  <cppsupportpart>
+    <filetemplates>
+      <interfacesuffix>.h</interfacesuffix>
+      <implementationsuffix>.cpp</implementationsuffix>
+    </filetemplates>
+  </cppsupportpart>
+  <kdevdebugger>
+    <general>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <dbgshell></dbgshell>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
+      <breakonloadinglibs>true</breakonloadinglibs>
+      <separatetty>false</separatetty>
+      <floatingtoolbar>false</floatingtoolbar>
+    </general>
+    <display>
+      <staticmembers>false</staticmembers>
+      <demanglenames>true</demanglenames>
+      <outputradix>10</outputradix>
+    </display>
+  </kdevdebugger>
+  <ctagspart>
+    <customArguments/>
+    <customTagfilePath/>
+  </ctagspart>
 </kdevelop>

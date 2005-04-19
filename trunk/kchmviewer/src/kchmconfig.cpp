@@ -23,8 +23,7 @@
 #include "kchmconfig.h"
 
 KCHMConfig * appConfig;
-const char * APP_NAME = "KchmViewer";
-const char * APP_VERSION = "0.1";
+
 const char * APP_PATHINUSERDIR = ".kchmviewer";
 
 

@@ -150,3 +150,4 @@ void KCHMBookmarkWindow::invalidate( )
 {
 	m_bookmarkList->clear();
 }
+

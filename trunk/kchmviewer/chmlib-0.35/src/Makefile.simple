@@ -15,20 +15,15 @@ LIBTOOL=libtool
 CP=/bin/cp
 EXAMPLES=test_chmLib enum_chmLib enumdir_chmLib chm_http extract_chmLib
 
-all: libchm.la
+all: libchm.a
 
 examples: ${EXAMPLES}
 
-%.lo: %.c
-	${LIBTOOL} --mode=compile ${CC} -c -o $@ $^ ${CFLAGS}
+%.o: %.c
+	${CC} -c -o $@ $^ ${CFLAGS}
 
-libchm.la: chm_lib.lo lzx.lo
-	${LIBTOOL} --mode=link ${LD} -o $@ $^ ${LDFLAGS} -rpath ${INSTALLPREFIX}/lib
-
-install: libchm.la
-	chmod a+r libchm.la
-	${LIBTOOL} --mode=install ${CP} libchm.la ${INSTALLPREFIX}/lib
-	${CP} chm_lib.h ${INSTALLPREFIX}/include
+libchm.a: chm_lib.o lzx.o
+	${LD} -o $@ $^ ${LDFLAGS} -rpath ${INSTALLPREFIX}/lib
 
 clean:
 	rm -fr libchm.la *.o *.lo .libs ${EXAMPLES}
@@ -47,4 +42,3 @@ extract_chmLib: extract_chmLib.c
 
 chm_http: chm_http.c
 	${CC} -o $@ $^ -I${INSTALLPREFIX}/include -L${INSTALLPREFIX}/lib .libs/libchm.a -lpthread ${CFLAGS}
-

@@ -4,6 +4,8 @@ AC_INIT
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
+AC_PROG_RANLIB
+AC_CHECK_PROG(AR,ar,ar,:)
 
 # Checks for header files.
 AC_CHECK_HEADERS(string.h strings.h unistd.h)
@@ -154,9 +156,6 @@ else
   dnl Make sure to strip symbols from non-developer object files.
   INSTALL_STRIP="-s"
 fi
-
-AC_PROG_LIBTOOL
-AC_SUBST(LIBTOOL)
 
 AC_PROG_LD
 AC_SUBST(LD)

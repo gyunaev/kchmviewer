@@ -47,11 +47,11 @@ static const KCHMTextEncoding::text_encoding_t text_encoding_table [] =
 	{	"Belarusian",	0,		0x0423,	1251,	0,		"CP1251"	},
 	{	"Bulgarian",	0,		0x0402,	1251,	0,		"CP1251"	},
 	{	"Catalan",	0,	0x0403,	1252,	0,	"CP1252"	},
-	{	"Chinese",	"China",	0x0804,	936,	134,	"GB2312"	},
+	{	"Chinese",	"China",	0x0804,	936,	134,	"GBK"		},
 	{	"Chinese",	"Hong Kong SAR",	0x0C04,	950,	136,	"Big5"	},
 	{	"Chinese",	"Macau SAR",	0x1404,	950,	136,	"Big5"	},
 	{	"Chinese",	"Singapore",	0x1004,	936,	134,	"GB2313"	},
-	{	"Chinese",	"Taiwan",	0x0404,	950,	136,	"Big5"	},
+	{	"Chinese",	"Taiwan",	0x0404,	950,	136,	"Big5"	}, // traditional
 	{	"Croatian",	0,	0x041A,	1250,	238,	"CP1250"	},
 	{	"Czech",	0,	0x0405,	1250,	238,	"CP1250"	},
 	{	"Danish",	0,	0x0406,	1252,	0,	"CP1252"	},

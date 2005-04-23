@@ -1,7 +1,7 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="10" >
+ <DocsAndViews NumberOfDocuments="12" >
   <Doc0 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmmainwindow.h" >
    <View0 Type="Source" />
   </Doc0>
@@ -17,21 +17,27 @@
   <Doc4 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qpixmap.html#QPixmap-2" >
    <View0 Type="Documentation" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/iconstorage.h" >
-   <View0 line="29" Type="Source" />
-  </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/iconstorage.cpp" >
-   <View0 line="2868" Type="Source" />
-  </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmmainwindow.cpp" >
-   <View0 line="430" Type="Source" />
-  </Doc7>
-  <Doc8 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchtoolbar.cpp" >
+  <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchtoolbar.cpp" >
    <View0 line="48" Type="Source" />
+  </Doc5>
+  <Doc6 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtreeviewitem.cpp" >
+   <View0 line="58" Type="Source" />
+  </Doc6>
+  <Doc7 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.cpp" >
+   <View0 line="350" Type="Source" />
+  </Doc7>
+  <Doc8 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtextencoding.cpp" >
+   <View0 line="53" Type="Source" />
   </Doc8>
-  <Doc9 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtreeviewitem.cpp" >
-   <View0 line="55" Type="Source" />
+  <Doc9 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qchar.html" >
+   <View0 Type="Documentation" />
   </Doc9>
+  <Doc10 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qstring.html#mid" >
+   <View0 Type="Documentation" />
+  </Doc10>
+  <Doc11 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.h" >
+   <View0 line="337" Type="Source" />
+  </Doc11>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>

@@ -1,9 +1,15 @@
+2005-04-23 tim <tim@krasnogorsk.ru>
+	- TOC parser rewritten, got about 30% speedup on TOC parsing. Note that TOC parser becomes stricter; please report any warnings.
+	- Fixed chinese encoding TOC bugs, chinese files are now also shown correctly.
+	- Added &rdquo; entity to the entities list.
+
 2005-04-19 tim <tim@krasnogorsk.ru>
 	- added support for built-in images, including custom images for folders;
 	- re-merged toolbar images into the executable as PNGs (uses less space);
 	- switched to autoconf/automake from qmake to simplify building and distribution, and to simplify KDEing;
 
 2005-04-05 tim <tim@krasnogorsk.ru>
+	- version 0.1alpha released
 	- fixed slowdown on big files; 
 	 
 2005-04-05 tim <tim@krasnogorsk.ru>

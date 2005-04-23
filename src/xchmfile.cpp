@@ -44,8 +44,6 @@
 #define BUF_SIZE 4096
 
 
-static QMap<QString, QString>	entityDecodeMap;
-
 // A little helper to show wait cursor
 #include <qcursor.h>
 #include <qapplication.h>
@@ -57,141 +55,176 @@ public:
 	~KCHMShowWaitCursor () { QApplication::restoreOverrideCursor(); }
 };
 
-//FIXME: this should be VERY slow...
-inline QString CHMFile::decodeHTMLUnicodeEntity (QString& source)
+
+inline int CHMFile::findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities)
 {
-	// Set up entityDecodeMap characters according to current textCodec
-	if ( entityDecodeMap.isEmpty() )
+	// Set up m_entityDecodeMap characters according to current textCodec
+	if ( m_entityDecodeMap.isEmpty() )
 	{
-		entityDecodeMap["AElig"]	= encodeWithCurrentCodec ("\306"); // capital AE diphthong (ligature)
-		entityDecodeMap["Aacute"]	= encodeWithCurrentCodec ("\301"); // capital A, acute accent
-		entityDecodeMap["Acirc"]	= encodeWithCurrentCodec ("\302"); // capital A, circumflex accent
-		entityDecodeMap["Agrave"]	= encodeWithCurrentCodec ("\300"); // capital A, grave accent
-		entityDecodeMap["Aring"]	= encodeWithCurrentCodec ("\305"); // capital A, ring
-		entityDecodeMap["Atilde"]	= encodeWithCurrentCodec ("\303"); // capital A, tilde
-		entityDecodeMap["Auml"]		= encodeWithCurrentCodec ("\304"); // capital A, dieresis or umlaut mark
-		entityDecodeMap["Ccedil"]	= encodeWithCurrentCodec ("\307"); // capital C, cedilla
-		entityDecodeMap["Dstrok"]	= encodeWithCurrentCodec ("\320"); // whatever
-		entityDecodeMap["ETH"]		= encodeWithCurrentCodec ("\320"); // capital Eth, Icelandic
-		entityDecodeMap["Eacute"]	= encodeWithCurrentCodec ("\311"); // capital E, acute accent
-		entityDecodeMap["Ecirc"]	= encodeWithCurrentCodec ("\312"); // capital E, circumflex accent
-		entityDecodeMap["Egrave"]	= encodeWithCurrentCodec ("\310"); // capital E, grave accent
-		entityDecodeMap["Euml"]		= encodeWithCurrentCodec ("\313"); // capital E, dieresis or umlaut mark
-		entityDecodeMap["Iacute"]	= encodeWithCurrentCodec ("\315"); // capital I, acute accent
-		entityDecodeMap["Icirc"]	= encodeWithCurrentCodec ("\316"); // capital I, circumflex accent
-		entityDecodeMap["Igrave"]	= encodeWithCurrentCodec ("\314"); // capital I, grave accent
-		entityDecodeMap["Iuml"]		= encodeWithCurrentCodec ("\317"); // capital I, dieresis or umlaut mark
-		entityDecodeMap["Ntilde"]	= encodeWithCurrentCodec ("\321"); // capital N, tilde
-		entityDecodeMap["Oacute"]	= encodeWithCurrentCodec ("\323"); // capital O, acute accent
-		entityDecodeMap["Ocirc"]	= encodeWithCurrentCodec ("\324"); // capital O, circumflex accent
-		entityDecodeMap["Ograve"]	= encodeWithCurrentCodec ("\322"); // capital O, grave accent
-		entityDecodeMap["Oslash"]	= encodeWithCurrentCodec ("\330"); // capital O, slash
-		entityDecodeMap["Otilde"]	= encodeWithCurrentCodec ("\325"); // capital O, tilde
-		entityDecodeMap["Ouml"]		= encodeWithCurrentCodec ("\326"); // capital O, dieresis or umlaut mark
-		entityDecodeMap["THORN"]	= encodeWithCurrentCodec ("\336"); // capital THORN, Icelandic
-		entityDecodeMap["Uacute"]	= encodeWithCurrentCodec ("\332"); // capital U, acute accent
-		entityDecodeMap["Ucirc"]	= encodeWithCurrentCodec ("\333"); // capital U, circumflex accent
-		entityDecodeMap["Ugrave"]	= encodeWithCurrentCodec ("\331"); // capital U, grave accent
-		entityDecodeMap["Uuml"]		= encodeWithCurrentCodec ("\334"); // capital U, dieresis or umlaut mark
-		entityDecodeMap["Yacute"]	= encodeWithCurrentCodec ("\335"); // capital Y, acute accent
+		m_entityDecodeMap["AElig"]	= encodeWithCurrentCodec ("\306"); // capital AE diphthong (ligature)
+		m_entityDecodeMap["Aacute"]	= encodeWithCurrentCodec ("\301"); // capital A, acute accent
+		m_entityDecodeMap["Acirc"]	= encodeWithCurrentCodec ("\302"); // capital A, circumflex accent
+		m_entityDecodeMap["Agrave"]	= encodeWithCurrentCodec ("\300"); // capital A, grave accent
+		m_entityDecodeMap["Aring"]	= encodeWithCurrentCodec ("\305"); // capital A, ring
+		m_entityDecodeMap["Atilde"]	= encodeWithCurrentCodec ("\303"); // capital A, tilde
+		m_entityDecodeMap["Auml"]	= encodeWithCurrentCodec ("\304"); // capital A, dieresis or umlaut mark
+		m_entityDecodeMap["Ccedil"]	= encodeWithCurrentCodec ("\307"); // capital C, cedilla
+		m_entityDecodeMap["Dstrok"]	= encodeWithCurrentCodec ("\320"); // whatever
+		m_entityDecodeMap["ETH"]	= encodeWithCurrentCodec ("\320"); // capital Eth, Icelandic
+		m_entityDecodeMap["Eacute"]	= encodeWithCurrentCodec ("\311"); // capital E, acute accent
+		m_entityDecodeMap["Ecirc"]	= encodeWithCurrentCodec ("\312"); // capital E, circumflex accent
+		m_entityDecodeMap["Egrave"]	= encodeWithCurrentCodec ("\310"); // capital E, grave accent
+		m_entityDecodeMap["Euml"]	= encodeWithCurrentCodec ("\313"); // capital E, dieresis or umlaut mark
+		m_entityDecodeMap["Iacute"]	= encodeWithCurrentCodec ("\315"); // capital I, acute accent
+		m_entityDecodeMap["Icirc"]	= encodeWithCurrentCodec ("\316"); // capital I, circumflex accent
+		m_entityDecodeMap["Igrave"]	= encodeWithCurrentCodec ("\314"); // capital I, grave accent
+		m_entityDecodeMap["Iuml"]	= encodeWithCurrentCodec ("\317"); // capital I, dieresis or umlaut mark
+		m_entityDecodeMap["Ntilde"]	= encodeWithCurrentCodec ("\321"); // capital N, tilde
+		m_entityDecodeMap["Oacute"]	= encodeWithCurrentCodec ("\323"); // capital O, acute accent
+		m_entityDecodeMap["Ocirc"]	= encodeWithCurrentCodec ("\324"); // capital O, circumflex accent
+		m_entityDecodeMap["Ograve"]	= encodeWithCurrentCodec ("\322"); // capital O, grave accent
+		m_entityDecodeMap["Oslash"]	= encodeWithCurrentCodec ("\330"); // capital O, slash
+		m_entityDecodeMap["Otilde"]	= encodeWithCurrentCodec ("\325"); // capital O, tilde
+		m_entityDecodeMap["Ouml"]	= encodeWithCurrentCodec ("\326"); // capital O, dieresis or umlaut mark
+		m_entityDecodeMap["THORN"]	= encodeWithCurrentCodec ("\336"); // capital THORN, Icelandic
+		m_entityDecodeMap["Uacute"]	= encodeWithCurrentCodec ("\332"); // capital U, acute accent
+		m_entityDecodeMap["Ucirc"]	= encodeWithCurrentCodec ("\333"); // capital U, circumflex accent
+		m_entityDecodeMap["Ugrave"]	= encodeWithCurrentCodec ("\331"); // capital U, grave accent
+		m_entityDecodeMap["Uuml"]	= encodeWithCurrentCodec ("\334"); // capital U, dieresis or umlaut mark
+		m_entityDecodeMap["Yacute"]	= encodeWithCurrentCodec ("\335"); // capital Y, acute accent
 		
-		entityDecodeMap["aacute"]	= encodeWithCurrentCodec ("\341"); // small a, acute accent
-		entityDecodeMap["acirc"]	= encodeWithCurrentCodec ("\342"); // small a, circumflex accent
-		entityDecodeMap["aelig"]	= encodeWithCurrentCodec ("\346"); // small ae diphthong (ligature)
-		entityDecodeMap["agrave"]	= encodeWithCurrentCodec ("\340"); // small a, grave accent
-		entityDecodeMap["aring"]	= encodeWithCurrentCodec ("\345"); // small a, ring
-		entityDecodeMap["atilde"]	= encodeWithCurrentCodec ("\343"); // small a, tilde
-		entityDecodeMap["auml"]		= encodeWithCurrentCodec ("\344"); // small a, dieresis or umlaut mark
-		entityDecodeMap["ccedil"]	= encodeWithCurrentCodec ("\347"); // small c, cedilla
-		entityDecodeMap["eacute"]	= encodeWithCurrentCodec ("\351"); // small e, acute accent
-		entityDecodeMap["ecirc"]	= encodeWithCurrentCodec ("\352"); // small e, circumflex accent
-		entityDecodeMap["egrave"]	= encodeWithCurrentCodec ("\350"); // small e, grave accent
-		entityDecodeMap["eth"]		= encodeWithCurrentCodec ("\360"); // small eth, Icelandic
-		entityDecodeMap["euml"]		= encodeWithCurrentCodec ("\353"); // small e, dieresis or umlaut mark
-		entityDecodeMap["iacute"]	= encodeWithCurrentCodec ("\355"); // small i, acute accent
-		entityDecodeMap["icirc"]	= encodeWithCurrentCodec ("\356"); // small i, circumflex accent
-		entityDecodeMap["igrave"]	= encodeWithCurrentCodec ("\354"); // small i, grave accent
-		entityDecodeMap["iuml"]		= encodeWithCurrentCodec ("\357"); // small i, dieresis or umlaut mark
-		entityDecodeMap["ntilde"]	= encodeWithCurrentCodec ("\361"); // small n, tilde
-		entityDecodeMap["oacute"]	= encodeWithCurrentCodec ("\363"); // small o, acute accent
-		entityDecodeMap["ocirc"]	= encodeWithCurrentCodec ("\364"); // small o, circumflex accent
-		entityDecodeMap["ograve"]	= encodeWithCurrentCodec ("\362"); // small o, grave accent
-		entityDecodeMap["oslash"]	= encodeWithCurrentCodec ("\370"); // small o, slash
-		entityDecodeMap["otilde"]	= encodeWithCurrentCodec ("\365"); // small o, tilde
-		entityDecodeMap["ouml"]		= encodeWithCurrentCodec ("\366"); // small o, dieresis or umlaut mark
-		entityDecodeMap["szlig"]	= encodeWithCurrentCodec ("\337"); // small sharp s, German (sz ligature)
-		entityDecodeMap["thorn"]	= encodeWithCurrentCodec ("\376"); // small thorn, Icelandic
-		entityDecodeMap["uacute"]	= encodeWithCurrentCodec ("\372"); // small u, acute accent
-		entityDecodeMap["ucirc"]	= encodeWithCurrentCodec ("\373"); // small u, circumflex accent
-		entityDecodeMap["ugrave"]	= encodeWithCurrentCodec ("\371"); // small u, grave accent
-		entityDecodeMap["uuml"]		= encodeWithCurrentCodec ("\374"); // small u, dieresis or umlaut mark
-		entityDecodeMap["yacute"]	= encodeWithCurrentCodec ("\375"); // small y, acute accent
-		entityDecodeMap["yuml"]		= encodeWithCurrentCodec ("\377"); // small y, dieresis or umlaut mark
+		m_entityDecodeMap["aacute"]	= encodeWithCurrentCodec ("\341"); // small a, acute accent
+		m_entityDecodeMap["acirc"]	= encodeWithCurrentCodec ("\342"); // small a, circumflex accent
+		m_entityDecodeMap["aelig"]	= encodeWithCurrentCodec ("\346"); // small ae diphthong (ligature)
+		m_entityDecodeMap["agrave"]	= encodeWithCurrentCodec ("\340"); // small a, grave accent
+		m_entityDecodeMap["aring"]	= encodeWithCurrentCodec ("\345"); // small a, ring
+		m_entityDecodeMap["atilde"]	= encodeWithCurrentCodec ("\343"); // small a, tilde
+		m_entityDecodeMap["auml"]	= encodeWithCurrentCodec ("\344"); // small a, dieresis or umlaut mark
+		m_entityDecodeMap["ccedil"]	= encodeWithCurrentCodec ("\347"); // small c, cedilla
+		m_entityDecodeMap["eacute"]	= encodeWithCurrentCodec ("\351"); // small e, acute accent
+		m_entityDecodeMap["ecirc"]	= encodeWithCurrentCodec ("\352"); // small e, circumflex accent
+		m_entityDecodeMap["egrave"]	= encodeWithCurrentCodec ("\350"); // small e, grave accent
+		m_entityDecodeMap["eth"]	= encodeWithCurrentCodec ("\360"); // small eth, Icelandic
+		m_entityDecodeMap["euml"]	= encodeWithCurrentCodec ("\353"); // small e, dieresis or umlaut mark
+		m_entityDecodeMap["iacute"]	= encodeWithCurrentCodec ("\355"); // small i, acute accent
+		m_entityDecodeMap["icirc"]	= encodeWithCurrentCodec ("\356"); // small i, circumflex accent
+		m_entityDecodeMap["igrave"]	= encodeWithCurrentCodec ("\354"); // small i, grave accent
+		m_entityDecodeMap["iuml"]	= encodeWithCurrentCodec ("\357"); // small i, dieresis or umlaut mark
+		m_entityDecodeMap["ntilde"]	= encodeWithCurrentCodec ("\361"); // small n, tilde
+		m_entityDecodeMap["oacute"]	= encodeWithCurrentCodec ("\363"); // small o, acute accent
+		m_entityDecodeMap["ocirc"]	= encodeWithCurrentCodec ("\364"); // small o, circumflex accent
+		m_entityDecodeMap["ograve"]	= encodeWithCurrentCodec ("\362"); // small o, grave accent
+		m_entityDecodeMap["oslash"]	= encodeWithCurrentCodec ("\370"); // small o, slash
+		m_entityDecodeMap["otilde"]	= encodeWithCurrentCodec ("\365"); // small o, tilde
+		m_entityDecodeMap["ouml"]	= encodeWithCurrentCodec ("\366"); // small o, dieresis or umlaut mark
+		m_entityDecodeMap["szlig"]	= encodeWithCurrentCodec ("\337"); // small sharp s, German (sz ligature)
+		m_entityDecodeMap["thorn"]	= encodeWithCurrentCodec ("\376"); // small thorn, Icelandic
+		m_entityDecodeMap["uacute"]	= encodeWithCurrentCodec ("\372"); // small u, acute accent
+		m_entityDecodeMap["ucirc"]	= encodeWithCurrentCodec ("\373"); // small u, circumflex accent
+		m_entityDecodeMap["ugrave"]	= encodeWithCurrentCodec ("\371"); // small u, grave accent
+		m_entityDecodeMap["uuml"]	= encodeWithCurrentCodec ("\374"); // small u, dieresis or umlaut mark
+		m_entityDecodeMap["yacute"]	= encodeWithCurrentCodec ("\375"); // small y, acute accent
+		m_entityDecodeMap["yuml"]	= encodeWithCurrentCodec ("\377"); // small y, dieresis or umlaut mark
 
-		entityDecodeMap["iexcl"]	= encodeWithCurrentCodec ("\241");
-		entityDecodeMap["cent"]		= encodeWithCurrentCodec ("\242");
-		entityDecodeMap["pound"]	= encodeWithCurrentCodec ("\243");
-		entityDecodeMap["curren"]	= encodeWithCurrentCodec ("\244");
-		entityDecodeMap["yen"]		= encodeWithCurrentCodec ("\245");
-		entityDecodeMap["brvbar"]	= encodeWithCurrentCodec ("\246");
-		entityDecodeMap["sect"]		= encodeWithCurrentCodec ("\247");
-		entityDecodeMap["uml"]		= encodeWithCurrentCodec ("\250");
-		entityDecodeMap["ordf"]		= encodeWithCurrentCodec ("\252");
-		entityDecodeMap["laquo"]	= encodeWithCurrentCodec ("\253");
-		entityDecodeMap["not"]		= encodeWithCurrentCodec ("\254");
-		entityDecodeMap["shy"]		= encodeWithCurrentCodec ("\255");
-		entityDecodeMap["macr"]		= encodeWithCurrentCodec ("\257");
-		entityDecodeMap["deg"]		= encodeWithCurrentCodec ("\260");
-		entityDecodeMap["plusmn"]	= encodeWithCurrentCodec ("\261");
-		entityDecodeMap["sup1"]		= encodeWithCurrentCodec ("\271");
-		entityDecodeMap["sup2"]		= encodeWithCurrentCodec ("\262");
-		entityDecodeMap["sup3"]		= encodeWithCurrentCodec ("\263");
-		entityDecodeMap["acute"]	= encodeWithCurrentCodec ("\264");
-		entityDecodeMap["micro"]	= encodeWithCurrentCodec ("\265");
-		entityDecodeMap["para"]		= encodeWithCurrentCodec ("\266");
-		entityDecodeMap["middot"]	= encodeWithCurrentCodec ("\267");
-		entityDecodeMap["cedil"]	= encodeWithCurrentCodec ("\270");
-		entityDecodeMap["ordm"]		= encodeWithCurrentCodec ("\272");
-		entityDecodeMap["raquo"]	= encodeWithCurrentCodec ("\273");
-		entityDecodeMap["frac14"]	= encodeWithCurrentCodec ("\274");
-		entityDecodeMap["frac12"]	= encodeWithCurrentCodec ("\275");
-		entityDecodeMap["frac34"]	= encodeWithCurrentCodec ("\276");
-		entityDecodeMap["iquest"]	= encodeWithCurrentCodec ("\277");
-		entityDecodeMap["times"]	= encodeWithCurrentCodec ("\327");
-		entityDecodeMap["divide"]	= encodeWithCurrentCodec ("\367");
+		m_entityDecodeMap["iexcl"]	= encodeWithCurrentCodec ("\241");
+		m_entityDecodeMap["cent"]	= encodeWithCurrentCodec ("\242");
+		m_entityDecodeMap["pound"]	= encodeWithCurrentCodec ("\243");
+		m_entityDecodeMap["curren"]	= encodeWithCurrentCodec ("\244");
+		m_entityDecodeMap["yen"]	= encodeWithCurrentCodec ("\245");
+		m_entityDecodeMap["brvbar"]	= encodeWithCurrentCodec ("\246");
+		m_entityDecodeMap["sect"]	= encodeWithCurrentCodec ("\247");
+		m_entityDecodeMap["uml"]	= encodeWithCurrentCodec ("\250");
+		m_entityDecodeMap["ordf"]	= encodeWithCurrentCodec ("\252");
+		m_entityDecodeMap["laquo"]	= encodeWithCurrentCodec ("\253");
+		m_entityDecodeMap["not"]	= encodeWithCurrentCodec ("\254");
+		m_entityDecodeMap["shy"]	= encodeWithCurrentCodec ("\255");
+		m_entityDecodeMap["macr"]	= encodeWithCurrentCodec ("\257");
+		m_entityDecodeMap["deg"]	= encodeWithCurrentCodec ("\260");
+		m_entityDecodeMap["plusmn"]	= encodeWithCurrentCodec ("\261");
+		m_entityDecodeMap["sup1"]	= encodeWithCurrentCodec ("\271");
+		m_entityDecodeMap["sup2"]	= encodeWithCurrentCodec ("\262");
+		m_entityDecodeMap["sup3"]	= encodeWithCurrentCodec ("\263");
+		m_entityDecodeMap["acute"]	= encodeWithCurrentCodec ("\264");
+		m_entityDecodeMap["micro"]	= encodeWithCurrentCodec ("\265");
+		m_entityDecodeMap["para"]	= encodeWithCurrentCodec ("\266");
+		m_entityDecodeMap["middot"]	= encodeWithCurrentCodec ("\267");
+		m_entityDecodeMap["cedil"]	= encodeWithCurrentCodec ("\270");
+		m_entityDecodeMap["ordm"]	= encodeWithCurrentCodec ("\272");
+		m_entityDecodeMap["raquo"]	= encodeWithCurrentCodec ("\273");
+		m_entityDecodeMap["frac14"]	= encodeWithCurrentCodec ("\274");
+		m_entityDecodeMap["frac12"]	= encodeWithCurrentCodec ("\275");
+		m_entityDecodeMap["frac34"]	= encodeWithCurrentCodec ("\276");
+		m_entityDecodeMap["iquest"]	= encodeWithCurrentCodec ("\277");
+		m_entityDecodeMap["times"]	= encodeWithCurrentCodec ("\327");
+		m_entityDecodeMap["divide"]	= encodeWithCurrentCodec ("\367");
 
- 		entityDecodeMap["copy"]		= encodeWithCurrentCodec ("\251"); // copyright sign
-		entityDecodeMap["reg"]		= encodeWithCurrentCodec ("\256"); // registered sign
-		entityDecodeMap["nbsp"]		= encodeWithCurrentCodec ("\240"); // non breaking space
+ 		m_entityDecodeMap["copy"]	= encodeWithCurrentCodec ("\251"); // copyright sign
+		m_entityDecodeMap["reg"]	= encodeWithCurrentCodec ("\256"); // registered sign
+		m_entityDecodeMap["nbsp"]	= encodeWithCurrentCodec ("\240"); // non breaking space
 
-		entityDecodeMap["rsquo"]	= QChar((unsigned short) 8217);
-		entityDecodeMap["trade"]    = QChar((unsigned short) 8482);
-		entityDecodeMap["ldquo"]    = QChar((unsigned short) 8220);
-		entityDecodeMap["mdash"]    = QChar((unsigned short) 8212);
+		m_entityDecodeMap["rsquo"]	= QChar((unsigned short) 8217);
+		m_entityDecodeMap["rdquo"]	= QChar((unsigned short) 8221);
+		m_entityDecodeMap["trade"]  = QChar((unsigned short) 8482);
+		m_entityDecodeMap["ldquo"]  = QChar((unsigned short) 8220);
+		m_entityDecodeMap["mdash"]  = QChar((unsigned short) 8212);
 				
-		entityDecodeMap["amp"]	= "&";	// ampersand
-		entityDecodeMap["gt"] = ">";	// greater than
-		entityDecodeMap["lt"] = "<"; 	// less than
-		entityDecodeMap["quot"] = "\""; // double quote
-		entityDecodeMap["apos"] = "'"; 	// single quote
+		m_entityDecodeMap["amp"]	= "&";	// ampersand
+		m_entityDecodeMap["gt"] = ">";	// greater than
+		m_entityDecodeMap["lt"] = "<"; 	// less than
+		m_entityDecodeMap["quot"] = "\""; // double quote
+		m_entityDecodeMap["apos"] = "'"; 	// single quote
 	}
-	
-	QRegExp r ("&(\\w+);");
-	
-	while ( r.search (source) != -1 )
+	int qbegin = tag.find ('"', offset);
+	if ( qbegin == -1 )
+		qFatal ("CHMFile::findStringInQuotes: cannot find first quote in <param> tag: '%s'", tag.ascii());
+
+	int qend = firstquote ? tag.find ('"', qbegin + 1) : tag.findRev ('"');
+
+	if ( qend == -1 || qend <= qbegin )
+		qFatal ("CHMFile::findStringInQuotes: cannot find last quote in <param> tag: '%s'", tag.ascii());
+
+	// If we do not need to decode HTML entities, just return.
+	if ( decodeentities )
 	{
-		QString ent = r.cap(1);
-		if ( entityDecodeMap.find (ent) == entityDecodeMap.end() )
-		{
-			qWarning ("CHMFile::DecodeHTMLUnicodeEntity: could not decode HTML entity '%s', abort decoding.", ent.ascii());
-			break;
-		}
-		
-		QString before = "&" + ent + ";";
-		source.replace (before, entityDecodeMap[ent]);
-	}
+		QString htmlentity = QString::null;
+		bool fill_entity = false;
 	
-	return source;
+		value.reserve (qend - qbegin); // to avoid multiple memory allocations
+	
+		for ( int i = qbegin + 1; i < qend; i++ )
+		{
+			if ( !fill_entity )
+			{
+				if ( tag[i] == '&' ) // HTML entity starts
+					fill_entity = true;
+				else
+					value.append (tag[i]);
+			}
+			else
+			{
+				if ( tag[i] == ';' ) // HTML entity ends
+				{
+					QMap<QString, QString>::const_iterator it = m_entityDecodeMap.find (htmlentity);
+					
+					if ( it == m_entityDecodeMap.end() )
+					{
+						qWarning ("CHMFile::DecodeHTMLUnicodeEntity: could not decode HTML entity '%s', abort decoding.", htmlentity.ascii());
+						break;
+					}
+	
+					value.append (it.data());
+					htmlentity = QString::null;
+					fill_entity = false;
+				}
+				else
+					htmlentity.append (tag[i]);
+			}
+		}
+	}
+	else
+		value = tag.mid (qbegin + 1, qend - qbegin - 1);
+
+	return qend + 1;
 }
 
 
@@ -266,7 +299,7 @@ void CHMFile::CloseCHM()
 	m_filename = m_home = m_topicsFile = m_indexFile = m_font = QString::null;
 	
 	m_treeUrlMap.clear();
-	entityDecodeMap.clear();
+	m_entityDecodeMap.clear();
 	m_textCodec = 0;
 	m_detectedLCID = 0;
 	m_currentEncoding = 0;
@@ -279,7 +312,6 @@ void CHMFile::CloseCHM()
  * FIXME: <OBJECT type="text/sitemap"><param name="Merge" value="hhaxref.chm::/HHOCX_c.hhc"></OBJECT>
  *  (from htmlhelp.chm)
  */
-//TODO: binary TOC parser
 bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool asIndex)
 {
 	chmUnitInfo ui;
@@ -293,9 +325,6 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 
 	if(src.isEmpty())
 		return false;
-
-	QRegExp pairregex ( "param\\s+name\\s*=\\s*[\"'](.+)[\"']\\s+value\\s*=\\s*[\"'](.+)[\"'][^\"']*" );
-	pairregex.setMinimal (TRUE);
 
 	int pos = 0, indent = 0, imagenum = KCHMImageType::IMAGE_AUTO;
 	bool in_object = false, root_created = false;
@@ -313,15 +342,23 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 	&& (pos = src.find ('<', pos)) != -1 )
 	{
 		int i, word_end = 0;
-		bool in_quotes = false, in_apostrofes = false;
 		
 		for ( i = ++pos; i < stringlen; i++ )
 		{
-			if ( src[i] == '"' && !in_apostrofes )
-				in_quotes = !in_quotes;
-			else if ( src[i] == '\'' && !in_quotes )
-				in_apostrofes = !in_apostrofes;
-			else if ( src[i] == '>' && !in_quotes && !in_apostrofes )
+			// If a " or ' is found, skip to the next one.
+			if ( (src[i] == '"' || src[i] == '\'') )
+			{
+				// find where quote ends, either by another quote, or by '>' symbol (some people don't know HTML)
+				int nextpos = src.find (src[i], i+1);
+				if ( nextpos == -1 	&& (nextpos = src.find ('>', i+1)) == -1 )
+				{
+					qWarning ("CHMFile::ParseHhcAndFillTree: corrupted TOC: %s", src.mid(i).ascii());
+					return false;
+				}
+
+				i =  nextpos;
+			}
+			else if ( src[i] == '>'  )
 				break;
 			else if ( !src[i].isLetterOrNumber() && src[i] != '/' && !word_end )
 				word_end = i;
@@ -334,7 +371,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 		else
 			tagword = tag.lower();
 
-//		qDebug ("tag: '%s', tagword: '%s'\n", tag.ascii(), tagword.ascii());
+//qDebug ("tag: '%s', tagword: '%s'\n", tag.ascii(), tagword.ascii());
 						
 		// <OBJECT type="text/sitemap"> - a topic entry
 		if ( tagword == "object" && tag.find ("text/sitemap", 0, false) != -1 )
@@ -387,16 +424,28 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 		}
 		else if ( tagword == "param" && in_object )
 		{
-			// we're interested in 3 types of tags:
 			// <param name="Name" value="First Page">
-			// <param name="Local" value="doc/uk.htm">
-			if ( pairregex.search (tag) == -1 )
-				qFatal ("Bad <PARAM> tag: %s", tag.ascii());
-				
-			QString pname = pairregex.cap(1).lower();
-			QString pvalue = pairregex.cap(2);
+			int offset; // strlen("param ")
+			QString name_pattern = "name=", value_pattern = "value=";
+			QString pname, pvalue;
+
+			if ( (offset = tag.find (name_pattern, 0, FALSE)) == -1 )
+				qFatal ("CHMFile::ParseAndFillTopicsTree: bad <param> tag '%s': no name=\n", tag.ascii());
+
+			// offset+5 skips 'name='
+			offset = findStringInQuotes (tag, offset + name_pattern.length(), pname, TRUE, FALSE);
+			pname = pname.lower();
+
+			if ( (offset = tag.find (value_pattern, offset, FALSE)) == -1 )
+				qFatal ("CHMFile::ParseAndFillTopicsTree: bad <param> tag '%s': no value=\n", tag.ascii());
+
+			// offset+6 skips 'value='
+			findStringInQuotes (tag, offset + value_pattern.length(), pvalue, FALSE, TRUE);
+
+//qDebug ("<param>: name '%s', value '%s'", pname.ascii(), pvalue.ascii());
+
 			if ( pname == "name" )
-				name = decodeHTMLUnicodeEntity (pvalue);
+				name = pvalue;
 			else if ( pname == "local" )
 				url = KCHMViewWindow::makeURLabsoluteIfNeeded (pvalue);
 			else if ( pname == "imagenumber" )
@@ -1003,7 +1052,7 @@ bool CHMFile::changeFileEncoding( const char * qtencoding )
 		return false;
 	}
 	
-	entityDecodeMap.clear();
+	m_entityDecodeMap.clear();
 	return true;
 }
 

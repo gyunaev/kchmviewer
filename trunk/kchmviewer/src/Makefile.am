@@ -1,8 +1,9 @@
 bin_PROGRAMS = kchmviewer
 kchmviewer_SOURCES = froglogic_getopt.cpp iconstorage.cpp \
-	kchmbookmarkwindow.cpp kchmconfig.cpp kchmindexwindow.cpp kchmmainwindow.cpp \
-	kchmsearchtoolbar.cpp kchmsearchwindow.cpp kchmsettings.cpp kchmsourcefactory.cpp \
-	kchmtextencoding.cpp kchmtreeviewitem.cpp kchmviewwindow.cpp main.cpp xchmfile.cpp
+		kchmbookmarkwindow.cpp kchmconfig.cpp kchmindexwindow.cpp kchmmainwindow.cpp \
+		kchmsearchtoolbar.cpp kchmsearchwindow.cpp kchmsettings.cpp kchmsourcefactory.cpp \
+		kchmtextencoding.cpp kchmtreeviewitem.cpp kchmviewwindow.cpp main.cpp xchmfile.cpp \
+	kchmdialogchooseurlfromlist.cpp
 
 # set the include path found by configure
 INCLUDES = $(QT_INCLUDES) -I$(top_srcdir)/$(CHM_INCLUDES) $(KDE_INCLUDES)
@@ -14,3 +15,4 @@ kchmviewer_LDFLAGS = $(QT_LIBS) $(KDE_LDFLAGS)
 
 METASOURCES = AUTO
 KDE_OPTIONS = qtonly nofinal
+noinst_HEADERS = kchmdialogchooseurlfromlist.h

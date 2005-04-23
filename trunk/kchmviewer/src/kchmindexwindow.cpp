@@ -37,7 +37,8 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f
 	m_indexList = new QListView (this);
 	m_indexList->addColumn( "idx" ); // it is hidden anyway
 	m_indexList->header()->hide();
-	
+	m_indexList->setTreeStepSize (10);
+
 	layout->addWidget (m_indexFinder);
 	layout->addSpacing (10);
 	layout->addWidget (m_indexList);
@@ -93,5 +94,20 @@ void KCHMIndexWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int 
 	
 	KCHMMainTreeViewItem * treeitem = (KCHMMainTreeViewItem*) item;
 	
-	::mainWindow->openPage (treeitem->getUrl(), true);
+	QString url = treeitem->getUrl();
+	
+	if ( !url )
+		return;
+
+	if ( url[0] == ':' ) // 'see also' link
+	{
+		m_lastSelectedItem = m_indexList->findItem (url.mid(1), 0);
+		if ( m_lastSelectedItem )
+		{
+			m_indexList->ensureItemVisible (m_lastSelectedItem);
+			m_indexList->setCurrentItem (m_lastSelectedItem);
+		}
+	}
+	else
+		::mainWindow->openPage (url, true);
 }

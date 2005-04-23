@@ -26,6 +26,7 @@ namespace KCHMImageType
 {
 	const int IMAGE_NONE = -1;
 	const int IMAGE_AUTO = -2;
+	const int IMAGE_INDEX = -3;
 };
 
 /**
@@ -37,14 +38,19 @@ public:
     KCHMMainTreeViewItem(QListViewItem* parent, QListViewItem* after, QString name, QString aurl, int image); 
 	KCHMMainTreeViewItem(QListView* parent, QListViewItem* after, QString name, QString url, int image);
 	
-	QString		getUrl()	{ return url; }
+	QString		getUrl() const;
+	virtual void setOpen ( bool open );
 	
 private:
-	const QPixmap * pixmap( int i ) const;
+//	virtual int width ( const QFontMetrics & fm, const QListView * lv, int c ) const;
+	virtual void paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h );
+	virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
+	virtual const QPixmap * pixmap( int i ) const;
 	
 	QString		url;
 	int 		image_number;
 };
+
 
 class KCMSearchTreeViewItem : public QListViewItem
 {
@@ -55,7 +61,23 @@ public:
 		this->url = url;
 	}
 
-	QString		getUrl()	{ return url; }
+	QString		getUrl() const	{ return url; }
+	
+private:
+	QString		url;
+};
+
+
+class KCHMSingleTreeViewItem : public QListViewItem
+{
+public:
+	KCHMSingleTreeViewItem (QListView* parent, QString name, QString url)
+		 : QListViewItem (parent, name)
+	{
+		this->url = url;
+	}
+
+	QString		getUrl() const	{ return url; }
 	
 private:
 	QString		url;

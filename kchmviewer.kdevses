@@ -1,56 +1,49 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="12" >
-  <Doc0 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmmainwindow.h" >
-   <View0 Type="Source" />
+ <DocsAndViews NumberOfDocuments="8" >
+  <Doc0 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qlistviewitem.html#setOpen" >
+   <View0 Type="Documentation" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmviewwindow.cpp" >
-   <View0 line="24" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmdialogchooseurlfromlist.h" >
+   <View0 line="36" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmbookmarkwindow.cpp" >
-   <View0 line="26" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmdialogchooseurlfromlist.cpp" >
+   <View0 line="51" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/forwarddeclarations.h" >
-   <View0 line="21" Type="Source" />
+  <Doc3 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtreeviewitem.cpp" >
+   <View0 line="132" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qpixmap.html#QPixmap-2" >
-   <View0 Type="Documentation" />
+  <Doc4 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtreeviewitem.h" >
+   <View0 line="41" Type="Source" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchtoolbar.cpp" >
-   <View0 line="48" Type="Source" />
+  <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmindexwindow.cpp" >
+   <View0 line="113" Type="Source" />
   </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtreeviewitem.cpp" >
-   <View0 line="58" Type="Source" />
+  <Doc6 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.cpp" >
+   <View0 line="470" Type="Source" />
   </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.cpp" >
-   <View0 line="350" Type="Source" />
+  <Doc7 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.h" >
+   <View0 line="234" Type="Source" />
   </Doc7>
-  <Doc8 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmtextencoding.cpp" >
-   <View0 line="53" Type="Source" />
-  </Doc8>
-  <Doc9 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qchar.html" >
-   <View0 Type="Documentation" />
-  </Doc9>
-  <Doc10 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qstring.html#mid" >
-   <View0 Type="Documentation" />
-  </Doc10>
-  <Doc11 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.h" >
-   <View0 line="337" Type="Source" />
-  </Doc11>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
    <breakpointList/>
   </kdevdebugger>
   <kdevbookmarks>
-   <bookmarks/>
+   <bookmarks>
+    <bookmark url="/home/tim/work/kchmviewer/src/xchmfile.cpp" >
+     <mark line="1212" />
+     <mark line="873" />
+    </bookmark>
+   </bookmarks>
   </kdevbookmarks>
   <kdevvalgrind>
-   <executable path="" params="" />
+   <executable path="/home/tim/work/kchmviewer/src/kchmviewer" params="" />
    <valgrind path="" params="" />
-   <calltree path="" params="" />
-   <kcachegrind path="" />
+   <calltree path="calltree" params="" />
+   <kcachegrind path="kcachegrind" />
   </kdevvalgrind>
  </pluginList>
 </KDevPrjSession>

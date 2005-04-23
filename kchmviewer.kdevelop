@@ -13,8 +13,8 @@
     <ignoreparts/>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
-    <versioncontrol/>
+    <description></description>
+    <versioncontrol></versioncontrol>
   </general>
   <kdevautoproject>
     <general>
@@ -23,13 +23,13 @@
     </general>
     <run>
       <mainprogram>src/kchmviewer</mainprogram>
-      <terminal>true</terminal>
+      <terminal>false</terminal>
       <directoryradio>executable</directoryradio>
       <runarguments>
         <kchmviewer/>
       </runarguments>
       <customdirectory>/</customdirectory>
-      <programargs/>
+      <programargs></programargs>
       <autocompile>true</autocompile>
       <envvars/>
     </run>
@@ -43,20 +43,20 @@
       </optimized>
       <debug>
         <configargs>--enable-debug=full</configargs>
-        <builddir/>
+        <builddir>debug</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O0 -g3</cxxflags>
         <envvars/>
-        <topsourcedir/>
-        <cppflags/>
-        <ldflags/>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
-        <cflags/>
-        <f77flags/>
+        <topsourcedir></topsourcedir>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags>-g</cflags>
+        <f77flags></f77flags>
       </debug>
     </configurations>
     <make>
@@ -137,7 +137,7 @@
     <projectdoc>
       <docsystem>Doxygen Documentation Collection</docsystem>
       <docurl>kchmviewer.tag</docurl>
-      <usermanualurl/>
+      <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
   <substmap>
@@ -171,7 +171,7 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -187,12 +187,12 @@
   </cppsupportpart>
   <kdevdebugger>
     <general>
-      <programargs/>
-      <gdbpath/>
-      <dbgshell/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <dbgshell></dbgshell>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>

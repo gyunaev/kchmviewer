@@ -216,7 +216,7 @@ public:
 	 * Find the tree item specified by URL.
 	 * Used to find the tree item related to the linked page.
 	 */
-	KCHMMainTreeViewItem * 	getTreeItem (const QString& str);
+	KCHMMainTreeViewItem * 	getTreeItem (const QString& url) const;
 	
 	//! Returns true if built-in search tree is present.
 	bool  isSearchAvailable () { return m_searchAvailable; }
@@ -229,7 +229,10 @@ public:
 
 	//! Gets the CHM file pointer. Used when more than one CHM file is loaded (i.e. cross-links in CHM files)
 	CHMFile * getCHMfilePointer ( const QString& filename );
-	
+
+	//! Returns the topic from #TOPICS
+	QString		getTopicByUrl ( const QString& url );
+
 private:
 	//! Parse the HHC or HHS file, and fill the context (asIndex is false) or index (asIndex is true) tree.
 	bool  ParseHhcAndFillTree (const QString& file, QListView *tree, bool asIndex);
@@ -335,7 +338,23 @@ private:
 	//! Loaded chm files
 	chm_loaded_files_t	m_chmLoadedFiles;
 
+	//! Map to decode HTML entitles like &acute; based on current encoding
 	QMap<QString, QString>					m_entityDecodeMap;
+
+	//! TRUE if /#TOPICS, /#STRINGS, /#URLTBL and  /#URLSTR are resolved, and the members below are valid
+	bool		m_lookupTablesValid;
+
+	//! pointer to /#TOPICS
+	chmUnitInfo	m_chmTOPICS;
+
+	//! pointer to /#STRINGS
+	chmUnitInfo	m_chmSTRINGS;
+
+	//! pointer to /#URLTBL
+	chmUnitInfo	m_chmURLTBL;
+
+	//! pointer to /#URLSTR
+	chmUnitInfo	m_chmURLSTR;
 	
 private:
 	//! No copy construction allowed.

@@ -43,6 +43,8 @@
 // Big-enough buffer size for use with various routines.
 #define BUF_SIZE 4096
 
+#define TOPICS_ENTRY_LEN 16
+#define URLTBL_ENTRY_LEN 12
 
 // A little helper to show wait cursor
 #include <qcursor.h>
@@ -234,6 +236,7 @@ CHMFile::CHMFile()
 	m_textCodec = 0;
 	m_currentEncoding = 0;
 	m_detectedLCID = 0;
+	m_lookupTablesValid = false;
 }
 
 
@@ -272,15 +275,19 @@ bool CHMFile::LoadCHM(const QString&  archiveName)
 	InfoFromSystem();
 
 	guessTextEncoding();
-	
-	if ( !ResolveObject ("/$FIftiMain", &ui)
-	|| !ResolveObject("/#TOPICS", &ui)
-	|| !ResolveObject("/#STRINGS", &ui)
-	|| !ResolveObject("/#URLTBL", &ui)
-	|| !ResolveObject("/#URLSTR", &ui) )
-		m_searchAvailable = false;
+
+	if ( ResolveObject("/#TOPICS", &m_chmTOPICS)
+	&& ResolveObject("/#STRINGS", &m_chmSTRINGS)
+	&& ResolveObject("/#URLTBL", &m_chmURLTBL)
+	&& ResolveObject("/#URLSTR", &m_chmURLSTR) )
+		m_lookupTablesValid = true;
 	else
+		m_lookupTablesValid = false;
+
+	if ( m_lookupTablesValid && ResolveObject ("/$FIftiMain", &ui) )
 		m_searchAvailable = true;
+	else
+		m_searchAvailable = false;
 	
 	return true;
 }
@@ -326,9 +333,12 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 	if(src.isEmpty())
 		return false;
 
-	int pos = 0, indent = 0, imagenum = KCHMImageType::IMAGE_AUTO;
+	int defaultimagenum = asIndex ? KCHMImageType::IMAGE_INDEX : KCHMImageType::IMAGE_AUTO;
+	int pos = 0, indent = 0, imagenum = defaultimagenum;
 	bool in_object = false, root_created = false;
-	QString url, name;
+	bool add2treemap = asIndex ? false : m_treeUrlMap.isEmpty(); // do not add to the map during index search
+	QString name;
+	QStringList urls;
 	KCHMMainTreeViewItem * rootentry[MAX_NEST_DEPTH];
 	KCHMMainTreeViewItem * lastchild[MAX_NEST_DEPTH];
 	
@@ -386,41 +396,51 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 				if ( !root_created )
 					indent = 0;
 
-				// Should we add rootlevel?
-				if ( !indent || asIndex )
+				QString url = urls.join ("|");
+
+				// Add item into the tree
+				if ( !indent )
 				{
-					item = new KCHMMainTreeViewItem (tree, lastchild[indent], name, url, asIndex ? KCHMImageType::IMAGE_NONE : imagenum);
+					item = new KCHMMainTreeViewItem (tree, lastchild[indent], name, url, imagenum);
 				}
 				else
 				{
 					if ( !rootentry[indent-1] )
 						qFatal("CHMFile::ParseAndFillTopicsTree: child entry %d with no root entry!", indent-1);
-						
+
 					item = new KCHMMainTreeViewItem (rootentry[indent-1], lastchild[indent], name, url,  imagenum);
 				}
-				
+
+				lastchild[indent] = item;
+
 				if ( indent == 0 || !rootentry[indent] )
 				{
 					rootentry[indent] = item;
 					root_created = true;
+
+					if ( asIndex  )
+						rootentry[indent]->setOpen(true);
 				}
-				
-				lastchild[indent] = item;
-				
-				if ( !asIndex )
-					m_treeUrlMap[url] = item;
+
+				// There are no 'titles' in index file
+				if ( add2treemap  )
+				{
+					for ( unsigned int li = 0; li < urls.size(); li++ )
+						m_treeUrlMap[urls[li]] = item;
+				}
 			}
 			else
 			{
-				if ( !url.isEmpty() )
-					qDebug ("CHMFile::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", url.ascii());
+				if ( !urls.isEmpty() )
+					qDebug ("CHMFile::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", urls[0].ascii());
 				else
 					qDebug ("CHMFile::ParseAndFillTopicsTree: <object> tag is parsed, but both name and url are empty.");	
 			}
 
-			name = url = QString::null;
+			name = QString::null;
+			urls.clear();
 			in_object = false;
-			imagenum = KCHMImageType::IMAGE_AUTO;
+			imagenum = defaultimagenum;
 		}
 		else if ( tagword == "param" && in_object )
 		{
@@ -447,7 +467,9 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 			if ( pname == "name" )
 				name = pvalue;
 			else if ( pname == "local" )
-				url = KCHMViewWindow::makeURLabsoluteIfNeeded (pvalue);
+				urls.push_back (KCHMViewWindow::makeURLabsoluteIfNeeded (pvalue));
+			else if ( pname == "see also" && asIndex && name != pvalue )
+				urls.push_back (":" + pvalue);
 			else if ( pname == "imagenumber" )
 			{
 				bool bok;
@@ -727,7 +749,6 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 	unsigned char *cursor32;
 	u_int32_t stroff, urloff;
 
-#define TOPICS_ENTRY_LEN 16
 	unsigned char entry[TOPICS_ENTRY_LEN];
 
 #define COMMON_BUF_LEN 1025
@@ -996,9 +1017,9 @@ inline bool CHMFile::InfoFromSystem()
 }
 
  
-KCHMMainTreeViewItem * CHMFile::getTreeItem( const QString & str )
+KCHMMainTreeViewItem * CHMFile::getTreeItem( const QString & str ) const
 {
-	KCHMTreeUrlMap_t::iterator it = m_treeUrlMap.find (str);
+	KCHMTreeUrlMap_t::const_iterator it = m_treeUrlMap.find (str);
 	if ( it == m_treeUrlMap.end() )
 		return 0;
 		
@@ -1178,4 +1199,53 @@ QCString CHMFile::convertSearchWord( const QString & src )
 	return dest.lower();
 }
 
-//TODO: Binary TOC parser
+
+
+QString CHMFile::getTopicByUrl( const QString & search_url )
+{
+	if ( !m_lookupTablesValid )
+		return QString::null;
+
+	unsigned char buf[COMMON_BUF_LEN];
+
+	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
+	{
+		if ( RetrieveObject ( &m_chmTOPICS, buf, i, TOPICS_ENTRY_LEN) == 0 )
+			return QString::null;
+
+		u_int32_t off_title = *(u_int32_t *)(buf + 4);
+		FIXENDIAN32(off_title);
+
+		u_int32_t off_url = *(u_int32_t *)(buf + 8);
+		FIXENDIAN32(url);
+
+		QString topic, url;
+
+		if ( RetrieveObject ( &m_chmURLTBL, buf, off_url, URLTBL_ENTRY_LEN) == 0 )
+			return QString::null;
+
+		off_url = *(u_int32_t *)(buf + 8);
+		FIXENDIAN32(off_url);
+
+		if ( RetrieveObject ( &m_chmURLSTR, buf, off_url + 8, sizeof(buf) - 1) == 0 )
+			return false;
+
+		buf[sizeof(buf) - 1] = '\0';
+		url = KCHMViewWindow::makeURLabsoluteIfNeeded ((const char*)buf);
+
+		if ( url != search_url )
+			continue;
+
+		if ( RetrieveObject ( &m_chmSTRINGS, buf, off_title, sizeof(buf) - 1) != 0 )
+		{
+			buf[sizeof(buf) - 1] = '\0';
+			topic = encodeWithCurrentCodec ((const char*)buf);
+		}
+		else
+			topic = "Untitled";
+
+		return topic;
+	}
+
+	return QString::null;
+}

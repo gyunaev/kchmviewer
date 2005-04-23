@@ -39,19 +39,20 @@ KCHMMainTreeViewItem::KCHMMainTreeViewItem( QListView * parent, QListViewItem * 
 
 const QPixmap * KCHMMainTreeViewItem::pixmap( int i ) const
 {
+	int imagenum;
+
     if ( i || image_number == KCHMImageType::IMAGE_NONE )
         return 0;
 
 	if ( firstChild () )
 	{
 		if ( isOpen() )
-			return (image_number == KCHMImageType::IMAGE_AUTO) ? 
-				gIconStorage.getBookIconPixmap(1) : gIconStorage.getBookIconPixmap(image_number + 1);
+			imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 1 : image_number + 1;
 		else
-			return (image_number == KCHMImageType::IMAGE_AUTO) ? 
-				gIconStorage.getBookIconPixmap(0) : gIconStorage.getBookIconPixmap(image_number);
+			imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 0 : image_number;
 	}
-	
-	return (image_number == KCHMImageType::IMAGE_AUTO) ? 
-		gIconStorage.getBookIconPixmap(10) : gIconStorage.getBookIconPixmap(image_number);
+	else
+		imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 10 : image_number;
+
+	return gIconStorage.getBookIconPixmap(imagenum);
 }

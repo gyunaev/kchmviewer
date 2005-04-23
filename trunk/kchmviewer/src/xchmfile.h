@@ -278,14 +278,17 @@ private:
 	//! Guess used text encoding, using m_detectedLCID and m_font. Set up m_textCodec
 	bool guessTextEncoding ();
 
-	//! Decode HTML unicode entities like &iacute;
-	inline QString decodeHTMLUnicodeEntity (QString& source);
-
 	//! Change the current CHM encoding
 	bool  changeFileEncoding (const char *qtencoding);
 
 	//! Convert the word, so it has an appropriate encoding
 	QCString convertSearchWord ( const QString &src );
+
+	/*!
+	 * Helper procedure in TOC parsing, decodes the string between the quotes (first or last) with decoding HTML
+	 * entities like &iacute;
+	 */
+	inline int findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities);
 
 private:
 	typedef QMap<QString, KCHMMainTreeViewItem*> KCHMTreeUrlMap_t;
@@ -331,6 +334,8 @@ private:
 
 	//! Loaded chm files
 	chm_loaded_files_t	m_chmLoadedFiles;
+
+	QMap<QString, QString>					m_entityDecodeMap;
 	
 private:
 	//! No copy construction allowed.

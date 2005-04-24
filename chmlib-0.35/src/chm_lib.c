@@ -1537,7 +1537,7 @@ static Int64 _chm_decompress_region(struct chmFile *h,
 
 /* retrieve (part of) an object */
 LONGINT64 chm_retrieve_object(struct chmFile *h,
-                               struct chmUnitInfo *ui,
+                               const struct chmUnitInfo *ui,
                                unsigned char *buf,
                                LONGUINT64 addr,
                                LONGINT64 len)

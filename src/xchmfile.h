@@ -193,10 +193,10 @@ public:
 	  \param bufferSize The size of the buffer.
 	  \return 0 on error, length of chunk retrieved otherwise.
 	 */
-	size_t RetrieveObject(chmUnitInfo *ui, unsigned char *buffer, off_t fileOffset, size_t bufferSize);
+	size_t RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer, off_t fileOffset, size_t bufferSize);
 
 	//! Puts in the str parameter the contents of the file referred by ui.
-	bool GetFileContentAsString (QString& str, chmUnitInfo *ui);
+	bool GetFileContentAsString (QString& str, const chmUnitInfo *ui);
 	
 	//! Puts in the str parameter the contents of the file referred by location.
 	bool GetFileContentAsString (QString& str, QString location);
@@ -256,18 +256,14 @@ private:
 	u_int32_t GetLeafNodeOffset(const QString& text,
 				    u_int32_t initalOffset,
 				    u_int32_t buffSize,
-				    u_int16_t treeDepth,
-				    chmUnitInfo *ui);
+				    u_int16_t treeDepth);
 
 	//! Helper. Processes the word location code entries while searching.
 	bool ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 			u_int32_t wlc_offset, unsigned char ds,
 			unsigned char dr, unsigned char cs,
 			unsigned char cr, unsigned char ls,
-			unsigned char lr, chmUnitInfo *uifmain,
-			chmUnitInfo* uitbl, chmUnitInfo *uistrings,
-			chmUnitInfo* topics, chmUnitInfo *urlstr,
-			KCHMSearchResults_t& results, unsigned int maxresults);
+			unsigned char lr, KCHMSearchResults_t& results, unsigned int maxresults);
 
 	//! Looks up as much information as possible from #WINDOWS/#STRINGS.
 	bool InfoFromWindows();
@@ -317,9 +313,6 @@ private:
 	//! Used by getTreeItem() to find the tree element quickly
 	KCHMTreeUrlMap_t	m_treeUrlMap;
 
-	//! Indicates whether the built-in search is available
-	bool			m_searchAvailable;
-		
 	// Localization stuff
 	//! LCID from CHM file, used in encoding detection
 	short			m_detectedLCID;
@@ -355,6 +348,13 @@ private:
 
 	//! pointer to /#URLSTR
 	chmUnitInfo	m_chmURLSTR;
+
+	//! Indicates whether the built-in search is available. This is true only when m_lookupTablesValid
+	//! is TRUE, and m_chmFIftiMain is resolved.
+	bool			m_searchAvailable;
+
+	//! pointer to /$FIftiMain
+	chmUnitInfo	m_chmFIftiMain;
 	
 private:
 	//! No copy construction allowed.

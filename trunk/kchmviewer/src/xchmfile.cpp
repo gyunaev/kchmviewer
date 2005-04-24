@@ -271,6 +271,7 @@ bool CHMFile::LoadCHM(const QString&  archiveName)
 	m_textCodec = 0;
 	m_currentEncoding = 0;
 	
+	// Get information from /#WINDOWS and /#SYSTEM files (encoding, title, context file and so)
 	InfoFromWindows();
 	InfoFromSystem();
 
@@ -284,7 +285,7 @@ bool CHMFile::LoadCHM(const QString&  archiveName)
 	else
 		m_lookupTablesValid = false;
 
-	if ( m_lookupTablesValid && ResolveObject ("/$FIftiMain", &ui) )
+	if ( m_lookupTablesValid && ResolveObject ("/$FIftiMain", &m_chmFIftiMain) )
 		m_searchAvailable = true;
 	else
 		m_searchAvailable = false;
@@ -517,25 +518,17 @@ bool CHMFile::ParseAndFillIndex(QListView *indexlist)
 
 bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly, KCHMSearchResults_t& results, unsigned int maxresults)
 {
-	chmUnitInfo ui, uitopics, uiurltbl, uistrings, uiurlstr;
 	bool partial = false;
 
-	if ( text.isEmpty() )
+	if ( text.isEmpty() || !m_searchAvailable )
 		return false;
 
 	QString searchword = (QString) convertSearchWord (text);
 
-	if ( !ResolveObject ("/$FIftiMain", &ui)
-	|| !ResolveObject("/#TOPICS", &uitopics)
-	|| !ResolveObject("/#STRINGS", &uistrings)
-	|| !ResolveObject("/#URLTBL", &uiurltbl)
-	|| !ResolveObject("/#URLSTR", &uiurlstr) )
-		return false;
-
 #define FTS_HEADER_LEN 0x32
 	unsigned char header[FTS_HEADER_LEN];
 
-	if ( RetrieveObject (&ui, header, 0, FTS_HEADER_LEN) == 0 )
+	if ( RetrieveObject (&m_chmFIftiMain, header, 0, FTS_HEADER_LEN) == 0 )
 		return false;
 	
 	unsigned char doc_index_s = header[0x1E], doc_index_r = header[0x1F];
@@ -564,7 +557,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 
 	QMemArray<unsigned char> buffer(node_len);
 
-	node_offset = GetLeafNodeOffset (searchword, node_offset, node_len, tree_depth, &ui);
+	node_offset = GetLeafNodeOffset (searchword, node_offset, node_len, tree_depth);
 
 	if ( !node_offset )
 		return false;
@@ -572,7 +565,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 	do
 	{
 		// got a leaf node here.
-		if ( RetrieveObject (&ui, buffer.data(), node_offset, node_len) == 0 )
+		if ( RetrieveObject (&m_chmFIftiMain, buffer.data(), node_offset, node_len) == 0 )
 			return false;
 
 		cursor16 = buffer.data() + 6;
@@ -623,9 +616,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 						  wlc_offset, doc_index_s, 
 						  doc_index_r,code_count_s, 
 						  code_count_r, loc_codes_s, 
-						  loc_codes_r, &ui, &uiurltbl,
-						  &uistrings, &uitopics,
-						  &uiurlstr, results, maxresults);
+						  loc_codes_r, results, maxresults);
 
 			if ( !wholeWords )
 			{
@@ -637,9 +628,7 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 						   wlc_offset, doc_index_s, 
 						   doc_index_r,code_count_s, 
 						   code_count_r, loc_codes_s, 
-						   loc_codes_r, &ui, &uiurltbl,
-						   &uistrings, &uitopics,
-						   &uiurlstr, results, maxresults);
+						   loc_codes_r, results, maxresults);
 
 				}
 				else if ( QString::compare (searchword, word.mid(0, searchword.length())) < -1 )
@@ -664,7 +653,7 @@ CHM_RESOLVE_SUCCESS;
 }
 
 
-size_t CHMFile::RetrieveObject(chmUnitInfo *ui, unsigned char *buffer,
+size_t CHMFile::RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer,
 							   off_t fileOffset, size_t bufferSize)
 {
 	return ::chm_retrieve_object(m_chmFile, ui, buffer, fileOffset,
@@ -675,8 +664,7 @@ size_t CHMFile::RetrieveObject(chmUnitInfo *ui, unsigned char *buffer,
 inline u_int32_t CHMFile::GetLeafNodeOffset(const QString& text,
 											 u_int32_t initialOffset,
 											 u_int32_t buffSize,
-											 u_int16_t treeDepth,
-											 chmUnitInfo *ui)
+											 u_int16_t treeDepth)
 {
 	u_int32_t test_offset = 0;
 	unsigned char* cursor16, *cursor32;
@@ -691,7 +679,7 @@ inline u_int32_t CHMFile::GetLeafNodeOffset(const QString& text,
 			return 0;
 
 		test_offset = initialOffset;
-		if ( RetrieveObject (ui, buffer.data(), initialOffset, buffSize) == 0 )
+		if ( RetrieveObject (&m_chmFIftiMain, buffer.data(), initialOffset, buffSize) == 0 )
 			return 0;
 
 		cursor16 = buffer.data();
@@ -736,9 +724,7 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 								u_int32_t wlc_offset, unsigned char ds,
 								unsigned char dr, unsigned char cs,
 								unsigned char cr, unsigned char ls,
-								unsigned char lr, chmUnitInfo *uimain,
-								chmUnitInfo* uitbl, chmUnitInfo *uistrings,
-								chmUnitInfo* topics, chmUnitInfo *urlstr,
+								unsigned char lr,
 								KCHMSearchResults_t& results,
 								unsigned int maxresults)
 {
@@ -754,7 +740,7 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 #define COMMON_BUF_LEN 1025
 	unsigned char combuf[COMMON_BUF_LEN];
 
-	if ( RetrieveObject (uimain, buffer.data(), wlc_offset, wlc_size) == 0 )
+	if ( RetrieveObject (&m_chmFIftiMain, buffer.data(), wlc_offset, wlc_size) == 0 )
 		return false;
 
 	for ( u_int64_t i = 0; i < wlc_count; ++i )
@@ -768,7 +754,7 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 		index += sr_int (buffer.data() + off, &wlc_bit, ds, dr, length);
 		off += length;
 
-		if ( RetrieveObject (topics, entry, index * 16, TOPICS_ENTRY_LEN) == 0 )
+		if ( RetrieveObject (&m_chmTOPICS, entry, index * 16, TOPICS_ENTRY_LEN) == 0 )
 			return false;
 
 		cursor32 = entry + 4;
@@ -777,8 +763,8 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 
 		QString topic;
 
-		if ( RetrieveObject (uistrings, combuf, stroff, COMMON_BUF_LEN - 1) == 0 )
-			topic = "Untitled in index";
+		if ( RetrieveObject (&m_chmSTRINGS, combuf, stroff, COMMON_BUF_LEN - 1) == 0 )
+			topic = "Untitled";
 		else
 		{
 			combuf[COMMON_BUF_LEN - 1] = 0;
@@ -788,13 +774,13 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 		cursor32 = entry + 8;
 		urloff = UINT32ARRAY(cursor32);
 
-		if ( RetrieveObject (uitbl, combuf, urloff, 12) == 0 )
+		if ( RetrieveObject (&m_chmURLTBL, combuf, urloff, 12) == 0 )
 			return false;
 
 		cursor32 = combuf + 8;
 		urloff = UINT32ARRAY (cursor32);
 
-		if ( RetrieveObject (urlstr, combuf, urloff + 8, COMMON_BUF_LEN - 1) == 0 )
+		if ( RetrieveObject (&m_chmURLSTR, combuf, urloff + 8, COMMON_BUF_LEN - 1) == 0 )
 			return false;
 	       
 		combuf[COMMON_BUF_LEN - 1] = 0;
@@ -1085,7 +1071,7 @@ bool CHMFile::setCurrentEncoding( const KCHMTextEncoding::text_encoding_t * enc 
 }
 
 
-bool CHMFile::GetFileContentAsString(QString& str, chmUnitInfo *ui)
+bool CHMFile::GetFileContentAsString(QString& str, const chmUnitInfo *ui)
 {
 	QByteArray buf (ui->length);
 			

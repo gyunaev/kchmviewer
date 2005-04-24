@@ -652,7 +652,7 @@ CHM_RESOLVE_SUCCESS;
 
 
 size_t CHMFile::RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer,
-							   off_t fileOffset, size_t bufferSize)
+							   LONGUINT64 fileOffset, LONGINT64 bufferSize)
 {
 	return ::chm_retrieve_object(m_chmFile, ui, buffer, fileOffset,
 								 bufferSize);

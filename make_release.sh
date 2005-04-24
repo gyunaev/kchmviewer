@@ -5,7 +5,5 @@ if [ -z "$1" ]; then
 	exit 1;
 fi
 
-make distclean
-(cd chmlib-0.35 && make distclean)
-tar zcf ../kchmviewer-$1.tar.gz .
+./configure && make distclean && make -f Makefile.cvs && tar zcf ../kchmviewer-$1.tar.gz ../kchmviewer
 

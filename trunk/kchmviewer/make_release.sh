@@ -5,5 +5,6 @@ if [ -z "$1" ]; then
 	exit 1;
 fi
 
-./configure && make distclean && make -f Makefile.cvs && tar zcf ../kchmviewer-$1.tar.gz ../kchmviewer
+make distclean
+make -f Makefile.cvs && tar zcf ../kchmviewer-$1.tar.gz ../kchmviewer
 

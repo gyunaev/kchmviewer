@@ -1,4 +1,7 @@
 2005-04-24 tim <tim@krasnogorsk.ru>
+	- version 0.2 released.
+
+2005-04-24 tim <tim@krasnogorsk.ru>
 	- added index fields identation according to .hhk file.
 	- index entries with multiple links are now supported. A dialog is opened when such a link is clicked.
 	- index "see also" links are now supported.

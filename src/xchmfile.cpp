@@ -783,7 +783,7 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 	       
 		combuf[COMMON_BUF_LEN - 1] = 0;
 
-		QString url = encodeWithCurrentCodec ((const char*) combuf);
+		QString url = KCHMViewWindow::makeURLabsoluteIfNeeded ((const char*) combuf);
 
 		if ( !url.isEmpty() && !topic.isEmpty() )
 		{
@@ -1071,10 +1071,11 @@ bool CHMFile::setCurrentEncoding( const KCHMTextEncoding::text_encoding_t * enc 
 
 bool CHMFile::GetFileContentAsString(QString& str, const chmUnitInfo *ui)
 {
-	QByteArray buf (ui->length);
+	QByteArray buf (ui->length + 1);
 			
 	if ( RetrieveObject (ui, (unsigned char*) buf.data(), 0, ui->length) )
 	{
+		buf [ui->length] = '\0';
 		str = encodeWithCurrentCodec((const char*) buf);
 		return true;
 	}

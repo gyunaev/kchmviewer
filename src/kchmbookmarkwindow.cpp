@@ -139,6 +139,8 @@ void KCHMBookmarkWindow::saveSettings( KCHMSettings::bookmark_saved_settings_t &
 {
     QListViewItemIterator it (m_bookmarkList);
 
+	settings.clear();
+
 	for ( ; it.current(); it++ )
 	{
 		KCMBookmarkTreeViewItem * treeitem = (KCMBookmarkTreeViewItem *) it.current();

@@ -193,7 +193,7 @@ public:
 	  \param bufferSize The size of the buffer.
 	  \return 0 on error, length of chunk retrieved otherwise.
 	 */
-	size_t RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer, off_t fileOffset, size_t bufferSize);
+	size_t RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize);
 
 	//! Puts in the str parameter the contents of the file referred by ui.
 	bool GetFileContentAsString (QString& str, const chmUnitInfo *ui);

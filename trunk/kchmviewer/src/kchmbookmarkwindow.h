@@ -21,7 +21,6 @@
 #define KCHMBOOKMARKWINDOW_H
 
 #include <qwidget.h>
-#include <qvector.h>
 #include "forwarddeclarations.h"
 
 #include "kchmsettings.h"

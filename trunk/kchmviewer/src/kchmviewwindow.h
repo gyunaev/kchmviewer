@@ -17,10 +17,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #ifndef KCHMVIEWWINDOW_H
 #define KCHMVIEWWINDOW_H
 
-#include <qtextbrowser.h>
+#include "kde-qt.h"
+
+#if defined (USE_KDE)
+	#include <khtmlview.h>
+	#include <khtml_part.h>
+#else
+	#include <qtextbrowser.h>
+#endif
 
 #include "xchmfile.h"
 #include "kchmsourcefactory.h"
@@ -28,7 +36,11 @@
 /**
 @author Georgy Yunaev
 */
+#if defined (USE_KDE)
+class KCHMViewWindow : public KHTMLPart
+#else
 class KCHMViewWindow : public QTextBrowser
+#endif
 {
 public:
     KCHMViewWindow( QWidget * parent = 0, bool resolve_images = true );
@@ -55,6 +67,14 @@ public:
 
 	QString		makeURLabsolute ( const QString &url, bool set_as_base = true );
 	bool		areImagesResolved() { return m_resolveImages; }
+
+	int		getScrollbarPosition();
+	void	setScrollbarPosition(int pos);
+
+	void	navBackward();
+	void	navForward();
+
+	void	clearWindow();
 
 private:
 	KCHMSourceFactory	*	m_sourcefactory;

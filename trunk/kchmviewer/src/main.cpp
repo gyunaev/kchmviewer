@@ -1,9 +1,6 @@
 
-#if defined (ENABLE_KDE)
 
-#else
-	#include <qapplication.h>
-#endif
+#include "kde-qt.h"
 
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
@@ -12,10 +9,11 @@ KCHMMainWindow * mainWindow;
 
 int main( int argc, char ** argv )
 {
-#if defined (ENABLE_KDE)
-	KApplication app();
+#if defined (USE_KDE)
+	KCmdLineArgs::init (argc, argv, argv[0], I18N_NOOP(APP_NAME), I18N_NOOP("CHM files viewer"), APP_VERSION);
+	KApplication app;
 #else
-	QApplication app( argc, argv );
+	KQApplication app( argc, argv );
 #endif
 
 	appConfig = new KCHMConfig();

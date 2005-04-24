@@ -1,4 +1,6 @@
 
+
+
 /***************************************************************************
  *   Copyright (C) 2005 by Georgy Yunaev                                   *
  *   tim@krasnogorsk.ru                                                    *
@@ -208,4 +210,42 @@ QString KCHMViewWindow::makeURLabsoluteIfNeeded ( const QString & url )
 
 //qDebug ("KCHMViewWindow::makeURLabsolute (%s) -> (%s)", url.ascii(), newurl.ascii());
 	return newurl;
+}
+
+
+int KCHMViewWindow::getScrollbarPosition( )
+{
+	return contentsY ();
+}
+
+void KCHMViewWindow::setScrollbarPosition( int pos )
+{
+	setContentsPos (0, pos);
+}
+
+void KCHMViewWindow::navBackward( )
+{
+#if defined (USE_KDE)
+
+#else
+	backward();
+#endif
+}
+
+void KCHMViewWindow::navForward( )
+{
+#if defined (USE_KDE)
+
+#else
+	forward();
+#endif
+}
+
+void KCHMViewWindow::clearWindow( )
+{
+#if defined (USE_KDE)
+
+#else
+	clear();
+#endif
 }

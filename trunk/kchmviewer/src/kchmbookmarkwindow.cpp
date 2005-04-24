@@ -64,17 +64,20 @@ KCHMBookmarkWindow::KCHMBookmarkWindow(QWidget *parent, const char *name)
 void KCHMBookmarkWindow::onAddBookmarkPressed( )
 {
     bool ok;
+	QString url = ::mainWindow->getViewWindow()->getOpenedPage();
+	QString title = ::mainWindow->getChmFile()->getTopicByUrl(url);
 	QString name = QInputDialog::getText ("KCHMViewer - add a bookmark",
 			"Enter the name for this bookmark:",
 			QLineEdit::Normal,
-			::mainWindow->getViewWindow()->documentTitle(), 
+			title,
 			&ok, 
 			this);
     
 	if ( !ok || name.isEmpty() )
 		return;
 
-	new KCMBookmarkTreeViewItem (m_bookmarkList, name, ::mainWindow->getViewWindow()->getOpenedPage(), ::mainWindow->getViewWindow()->contentsY ());
+	new KCMBookmarkTreeViewItem (m_bookmarkList, name, url, ::mainWindow->getViewWindow()->getScrollbarPosition()
+);
 	m_listChanged = true;
 }
 
@@ -124,7 +127,7 @@ void KCHMBookmarkWindow::onDoubleClicked( QListViewItem * item, const QPoint &, 
 	if ( ::mainWindow->getViewWindow()->getOpenedPage() != treeitem->m_url )
 		::mainWindow->openPage ( treeitem->m_url );
 	
-	::mainWindow->getViewWindow()->setContentsPos (0, treeitem->m_scroll_y);
+	::mainWindow->getViewWindow()->setScrollbarPosition(treeitem->m_scroll_y);
 }
 
 

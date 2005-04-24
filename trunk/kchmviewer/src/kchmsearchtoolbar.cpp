@@ -191,6 +191,7 @@ void KCHMSearchAndViewToolbar::cleanSearch( )
 
 void KCHMSearchAndViewToolbar::search( bool search_forward )
 {
+#if !defined (USE_KDE)
 	if ( m_searchexpr.isEmpty() )
 	{
 		m_searchexpr = m_findBox->lineEdit()->text();
@@ -208,6 +209,7 @@ void KCHMSearchAndViewToolbar::search( bool search_forward )
 	{
 		::mainWindow->showInStatusBar ( tr("Found at paragraph %1, offset %1") . arg(last_paragraph)  . arg(last_index) );
 	}
+#endif
 }
 
 void KCHMSearchAndViewToolbar::onTextChanged( const QString & )
@@ -228,9 +230,15 @@ void KCHMSearchAndViewToolbar::onBtnFontDec( )
 
 void KCHMSearchAndViewToolbar::onBtnViewSource( )
 {
-	QTextEdit * editor = new QTextEdit (0);
+	QTextEdit * editor = new QTextEdit (::mainWindow);
 	editor->setTextFormat ( Qt::PlainText );
-	editor->setText (::mainWindow->getViewWindow()->text());
+
+	QString text;
+
+	if ( !::mainWindow->getChmFile()->GetFileContentAsString (text, ::mainWindow->getViewWindow()->getOpenedPage()) )
+		return;
+
+	editor->setText (text);
 	editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->getViewWindow()->getOpenedPage() );
 	editor->resize (800, 600);
 	editor->show();

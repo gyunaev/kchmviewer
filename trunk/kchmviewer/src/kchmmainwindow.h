@@ -29,7 +29,7 @@
 
 #define ENABLE_AUTOTEST_SUPPORT
 
-class KCHMMainWindow : public KCHM_MAINWINDOW_CLASS
+class KCHMMainWindow : public KQMainWindow
 {
     Q_OBJECT
 
@@ -76,12 +76,12 @@ private:
 	
     QString 				filename;
 	
-	QListView			*	contentsWindow;
 	KCHMViewWindow		*	viewWindow;
 	KCHMIndexWindow		*	indexWindow;
 	KCHMSearchWindow	*	searchWindow;
 	KCHMBookmarkWindow	*	bookmarkWindow;
-	
+
+	KQListView			*	contentsWindow;	
 	QTabWidget			*	m_tabWidget;
 	QToolButton			*	m_toolbarIconBackward;
 	QToolButton			*	m_toolbarIconForward;

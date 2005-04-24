@@ -18,31 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qtoolbar.h>
-#include <qtoolbutton.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
-#include <qstring.h>
-#include <qtextedit.h>
-#include <qfile.h>
-#include <qregexp.h>
-#include <qfiledialog.h>
-#include <qstatusbar.h>
-#include <qmessagebox.h>
-#include <qprinter.h>
-#include <qapplication.h>
-#include <qaccel.h>
-#include <qtimer.h>
-#include <qheader.h>
-#include <qtextstream.h>
-#include <qsplitter.h>
-#include <qpainter.h>
-#include <qpaintdevicemetrics.h>
-#include <qwhatsthis.h>
-#include <qtabwidget.h>
-#include <qsimplerichtext.h>
+#include "kde-qt.h"
 
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
@@ -59,7 +35,7 @@
 
 
 KCHMMainWindow::KCHMMainWindow()
-    : QMainWindow( 0, "KCHMMainWindow", WDestructiveClose )
+    : KQMainWindow ( 0, "KCHMMainWindow", WDestructiveClose )
 {
 	const unsigned int WND_X_SIZE = 700;
 	const unsigned int WND_Y_SIZE = 500;
@@ -75,7 +51,7 @@ KCHMMainWindow::KCHMMainWindow()
 	QSplitter * splitter = new QSplitter(this);
 	m_tabWidget = new QTabWidget (splitter);
 	
-	contentsWindow = new QListView (m_tabWidget, "contents", 0);
+	contentsWindow = new KQListView (m_tabWidget, "contents", 0);
 	contentsWindow->addColumn( "Contents" );
 	contentsWindow->setSorting(-1);
 	contentsWindow->setFocus();
@@ -127,8 +103,14 @@ KCHMMainWindow::~KCHMMainWindow()
 
 void KCHMMainWindow::choose()
 {
+#if defined (USE_KDE)
+    QString fn = KFileDialog::getOpenFileName( QString::null, "*.chm|Compressed Help Manual (*.chm)",
+					       this);
+#else
     QString fn = QFileDialog::getOpenFileName( QString::null, "Compressed Help Manual (*.chm)",
 					       this);
+#endif
+
     if ( !fn.isEmpty() )
 		loadChmFile( fn );
     else
@@ -199,7 +181,7 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 			bookmarkWindow->restoreSettings (m_currentSettings->m_bookmarks);
 
 			openPage (m_currentSettings->m_activepage, true);
-			viewWindow->setContentsPos (0, m_currentSettings->m_scrollbarposition);
+			viewWindow->setScrollbarPosition(m_currentSettings->m_scrollbarposition);
 			viewWindow->setZoomFactor(m_currentSettings->m_chosenzoom);
 		}
 		else
@@ -228,7 +210,7 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 
 void KCHMMainWindow::print()
 {
-#ifndef QT_NO_PRINTER
+#if !defined (QT_NO_PRINTER) && !defined (USE_KDE)
     QPrinter printer( QPrinter::HighResolution );
     printer.setFullPage(TRUE);
 	
@@ -278,7 +260,7 @@ void KCHMMainWindow::print()
 	else
 		statusBar()->message( tr("Printing aborted"), 2000 );
 #else
-	QMessageBox (this, tr("%1 - could not print") . arg(APP_NAME), "Could not print.\nYour Qt library has been compiled without printing support");
+	QMessageBox::warning (this, tr("%1 - could not print") . arg(APP_NAME), "Could not print.\nYour Qt library has been compiled without printing support");
 #endif
 }
 
@@ -306,7 +288,7 @@ void KCHMMainWindow::updateView( )
 	setCaption (title);
 	
 	contentsWindow->clear();
-	viewWindow->clear();
+	viewWindow->clearWindow();
 	
 	chmfile->ParseAndFillTopicsTree(contentsWindow);
 	contentsWindow->triggerUpdate();
@@ -498,12 +480,12 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 
 void KCHMMainWindow::backward( )
 {
-	viewWindow->backward();
+	viewWindow->navBackward();
 }
 
 void KCHMMainWindow::forward( )
 {
-	viewWindow->forward();
+	viewWindow->navForward();
 }
 
 void KCHMMainWindow::gohome( )
@@ -546,7 +528,7 @@ void KCHMMainWindow::CloseChmFile( )
 	bookmarkWindow->saveSettings (m_currentSettings->m_bookmarks);
 
 	m_currentSettings->m_activepage = viewWindow->getOpenedPage();
-	m_currentSettings->m_scrollbarposition = viewWindow->contentsY();
+	m_currentSettings->m_scrollbarposition = viewWindow->getScrollbarPosition();
 
 	m_currentSettings->saveSettings( );
 }

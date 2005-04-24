@@ -42,8 +42,8 @@
         <cxxflags>-O2 -g0</cxxflags>
       </optimized>
       <debug>
-        <configargs>--enable-debug=full</configargs>
-        <builddir>debug</builddir>
+        <configargs>--enable-debug=full --with-kde</configargs>
+        <builddir/>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>

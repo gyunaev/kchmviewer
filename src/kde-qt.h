@@ -18,28 +18,75 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if !defined (KDE_QT_H)
+#ifndef KDE_QT_H
 #define KDE_QT_H
 
-#if defined (ENABLE_KDE)
+#include "config.h"
+
+#if defined (USE_KDE)
 	
-	#define KCHM_APPLICATION_CLASS		KApplication
-	#define KCHM_MAINWINDOW_CLASS		KMainWindow
+	#define KQ_CLASSNAME(name)			K##name
+	#define KQ_DECLARECLASS(name)		class KQ##name : public K##name
 
 	#include <kapplication.h>
+	#include <kmainwindow.h>
+	#include <kstatusbar.h>
+	#include <kmenubar.h>
+	#include <kcmdlineargs.h>
+	#include <klocale.h>
+	#include <klistview.h>
+	#include <kfiledialog.h>
 
-#else /* !ENABLE_KDE */
+#else /* !USE_KDE */
 
-	#define KCHM_APPLICATION_CLASS		QApplication
-	#define KCHM_MAINWINDOW_CLASS		QMainWindow
+	#define KQ_CLASSNAME(name)			Q##name
 
-#endif /* ENABLE_KDE */
+	#include <qmainwindow.h>
+	#include <qstring.h>
+	#include <qstatusbar.h>
+	#include <qlistview.h>
+	#include <qfiledialog.h>
 
+#endif /* USE_KDE */
 
-#include <qmainwindow.h>
+/* common non-wrapped UI classes */
+#include <qsplitter.h>
+#include <qtabwidget.h>
+#include <qtoolbutton.h>
+#include <qheader.h>
+
+/* common utility classes */
 #include <qstring.h>
-#include <qstatusbar.h>
-#include <qlistview.h>
+#include <qtextedit.h>
+#include <qfile.h>
+#include <qregexp.h>
+#include <qtimer.h>
 
+class KQMainWindow : public KQ_CLASSNAME(MainWindow)
+{
+public:
+	KQMainWindow ( QWidget * parent, const char * name, WFlags f )
+		: KQ_CLASSNAME(MainWindow) (parent, name, f) {};
+};
+
+
+class KQListView : public KQ_CLASSNAME(ListView)
+{
+public:
+	KQListView(QWidget *parent = 0, const char *name = 0, int f = 0);
+};
+
+class KQFileDialog
+{
+public:
+	static QString getOpenFileName ( const QString & startWith = QString::null, const QString & filter = QString::null, QWidget * parent = 0 );
+};
+
+#include <qmessagebox.h>
+#include <qprinter.h>
+#include <qpainter.h>
+#include <qsimplerichtext.h>
+#include <qpaintdevicemetrics.h>
+#include <qwhatsthis.h>
 
 #endif /* KDE_QT_H */

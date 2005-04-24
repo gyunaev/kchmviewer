@@ -44,6 +44,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_searchList = new QListView (this);
 	m_searchList->addColumn( "Title" );
 	m_searchList->addColumn( "Location" );
+	m_searchList->setShowToolTips(true);
 		
 	connect( (m_searchQuery->lineEdit()), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
 	connect( m_searchList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
@@ -76,6 +77,8 @@ void KCHMSearchWindow::onReturnPressed( )
 	
 	if ( text.isEmpty() )
 		return;
+
+	// If 
 
 	m_searchList->clear();
 	
@@ -114,6 +117,8 @@ void KCHMSearchWindow::restoreSettings( const KCHMSettings::search_saved_setting
 
 void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & settings )
 {
+	settings.clear();
+
 	for ( int i = 0; i < m_searchQuery->count(); i++ )
 		settings.push_back (m_searchQuery->text(i));
 }

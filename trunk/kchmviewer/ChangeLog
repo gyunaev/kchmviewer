@@ -3,6 +3,8 @@
 	- index entries with multiple links are now supported. A dialog is opened when such a link is clicked.
 	- index "see also" links are now supported.
 	- added red color for index entries with multiple links, and grey color for "see also" links.
+	- fixed bug when search history grows up every start.
+	- chmlib interface redesigned for a great code cleanup and a little speedup.
 
 2005-04-23 tim <tim@krasnogorsk.ru>
 	- TOC parser rewritten, got about 30% speedup on TOC parsing. Note that TOC parser becomes stricter; please report any warnings.

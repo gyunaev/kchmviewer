@@ -81,6 +81,7 @@ KCHMMainWindow::KCHMMainWindow()
 	contentsWindow->setFocus();
 	contentsWindow->setRootIsDecorated(true);
 	contentsWindow->header()->hide();
+	contentsWindow->setShowToolTips(true);
 
 	bookmarkWindow = new KCHMBookmarkWindow (m_tabWidget);
 	searchWindow = new KCHMSearchWindow (m_tabWidget);

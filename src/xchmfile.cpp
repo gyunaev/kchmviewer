@@ -255,8 +255,6 @@ CHMFile::~CHMFile()
 
 bool CHMFile::LoadCHM(const QString&  archiveName)
 {
-	chmUnitInfo ui;
-	
 	if(m_chmFile)
 		CloseCHM();
 

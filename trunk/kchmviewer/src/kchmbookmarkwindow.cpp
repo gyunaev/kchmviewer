@@ -28,7 +28,7 @@
 #include "kchmbookmarkwindow.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
-
+#include "xchmfile.h"
 
 KCHMBookmarkWindow::KCHMBookmarkWindow(QWidget *parent, const char *name)
  : QWidget(parent, name)

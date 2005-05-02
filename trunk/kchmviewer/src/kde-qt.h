@@ -54,6 +54,7 @@
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
 #include <qheader.h>
+#include <qtextbrowser.h>
 
 /* common utility classes */
 #include <qstring.h>

@@ -30,6 +30,7 @@
 #include "kchmviewwindow.h"
 #include "kchmconfig.h"
 #include "kchmsearchtoolbar.h"
+#include "xchmfile.h"
 
 #include "iconstorage.h"
 
@@ -220,12 +221,12 @@ void KCHMSearchAndViewToolbar::onTextChanged( const QString & )
 
 void KCHMSearchAndViewToolbar::onBtnFontInc( )
 {
-	emit ::mainWindow->getViewWindow()->zoomIn();
+	::mainWindow->getViewWindow()->addZoomFactor(1);
 }
 
 void KCHMSearchAndViewToolbar::onBtnFontDec( )
 {
-	emit ::mainWindow->getViewWindow()->zoomOut();
+	::mainWindow->getViewWindow()->addZoomFactor(-1);
 }
 
 void KCHMSearchAndViewToolbar::onBtnViewSource( )

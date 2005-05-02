@@ -29,7 +29,7 @@
 class KCHMSourceFactory : public QMimeSourceFactory
 {
 public:
-    KCHMSourceFactory (KCHMViewWindow * viewwindow);
+	KCHMSourceFactory (KCHMViewWindow * viewwindow);
 	
 	virtual const QMimeSource * data ( const QString & abs_name ) const;
 	virtual QString makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const;

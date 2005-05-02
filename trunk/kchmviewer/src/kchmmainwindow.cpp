@@ -22,7 +22,6 @@
 
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
-#include "kchmviewwindow.h"
 #include "kchmindexwindow.h"
 #include "kchmsearchwindow.h"
 #include "kchmbookmarkwindow.h"
@@ -32,6 +31,8 @@
 
 #include "iconstorage.h"
 #include "froglogic_getopt.h"
+
+#include "kchmviewwindow_qtextbrowser.h"
 
 
 KCHMMainWindow::KCHMMainWindow()
@@ -67,17 +68,16 @@ KCHMMainWindow::KCHMMainWindow()
 	m_tabWidget->addTab (searchWindow, "Search");
 	m_tabWidget->addTab (bookmarkWindow, "Bookmarks");
 
-	viewWindow = new KCHMViewWindow( splitter );
+	viewWindow = new KCHMViewWindow_QTextBrowser ( splitter );
 
 	// Handle clicking on contentsWindow element
 	connect( contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( onTreeClicked( QListViewItem* ) ) );
 
 	// Handle clicking on link in browser window
-	connect( viewWindow, SIGNAL( linkClicked (const QString &) ), this, SLOT( onLinkClicked(const QString &) ) );
+	connect( viewWindow->getQObject(), SIGNAL( signalLinkClicked (const QString &, bool &) ), this, SLOT( slotLinkClicked(const QString &, bool &) ) );
 
 	// Handle backward/forward buttons state change
-	connect( viewWindow, SIGNAL( backwardAvailable ( bool ) ), this, SLOT( onBackwardAvailable ( bool ) ) );
-	connect( viewWindow, SIGNAL( forwardAvailable ( bool ) ), this, SLOT( onForwardAvailable ( bool ) ) );
+	connect( viewWindow->getQObject(), SIGNAL( signalHistoryAvailabilityChanged (bool, bool) ), this, SLOT( slotHistoryAvailabilityChanged (bool, bool) ) );
 
 	setupToolbarsAndMenu();
 		
@@ -136,6 +136,10 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 		}
 	
 		chmfile = new_chmfile;
+
+		QDir qd;
+		qd.setPath (fileName);
+		m_chmFilename = qd.absPath();
 		
 		// Test whether to show/invalidate the index window
 		if ( chmfile->IndexFile().isEmpty() )
@@ -288,7 +292,7 @@ void KCHMMainWindow::updateView( )
 	setCaption (title);
 	
 	contentsWindow->clear();
-	viewWindow->clearWindow();
+	viewWindow->invalidate();
 	
 	chmfile->ParseAndFillTopicsTree(contentsWindow);
 	contentsWindow->triggerUpdate();
@@ -305,14 +309,10 @@ void KCHMMainWindow::onTreeClicked( QListViewItem * item )
 }
 
 
-void KCHMMainWindow::onLinkClicked ( const QString & link )
+void KCHMMainWindow::slotLinkClicked ( const QString & link, bool& follow_link )
 {
-//	printf ("onLinkClicked: %s\n", link.ascii());
-
-	// If the openPage failed, QTextBrowser will still try to follow the link (change the source).
-	// This hack prevents it to do so.	
-	if ( !openPage( link ) )
-		viewWindow->denyNextSourceChange();
+	// If the openPage failed, we do not need to follow the link.
+	follow_link = openPage( link );
 }
 
 bool KCHMMainWindow::openPage( const QString & url, bool set_in_tree )
@@ -354,7 +354,7 @@ bool KCHMMainWindow::openPage( const QString & url, bool set_in_tree )
 		return false;
 	}
 	
-	if ( viewWindow->LoadPage (url) )
+	if ( viewWindow->openUrl (url) )
 	{
 		// Open all the tree items to show current item (if needed)
 		KCHMMainTreeViewItem * treeitem;
@@ -461,9 +461,10 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 
 	QPopupMenu * menu_edit = new QPopupMenu( this );
 	menuBar()->insertItem( tr("&Edit"), menu_edit );
-
-    id = menu_edit->insertItem ( tr("&Copy"), viewWindow, SLOT(copy()), CTRL+Key_C );
-	id = menu_edit->insertItem ( tr("&Select all"), viewWindow, SLOT(selectAll()), CTRL+Key_A );
+#if defined (FIXME_KDE)
+//    id = menu_edit->insertItem ( tr("&Copy"), viewWindow, SLOT(copy()), CTRL+Key_C );
+//	id = menu_edit->insertItem ( tr("&Select all"), viewWindow, SLOT(selectAll()), CTRL+Key_A );
+#endif
     menu_edit->insertSeparator();
 	
 	// KCHMSearchToolbar also adds 'view' menu
@@ -480,27 +481,17 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 
 void KCHMMainWindow::backward( )
 {
-	viewWindow->navBackward();
+	viewWindow->navigateBack();
 }
 
 void KCHMMainWindow::forward( )
 {
-	viewWindow->navForward();
+	viewWindow->navigateForward();
 }
 
 void KCHMMainWindow::gohome( )
 {
 	openPage (chmfile->HomePage(), true);
-}
-
-void KCHMMainWindow::onBackwardAvailable( bool enabled )
-{
-	m_toolbarIconBackward->setEnabled (enabled);
-}
-
-void KCHMMainWindow::onForwardAvailable( bool enabled )
-{
-	m_toolbarIconForward->setEnabled (enabled);
 }
 
 void KCHMMainWindow::addBookmark( )
@@ -572,6 +563,12 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	}
 	
 	return false;
+}
+
+void KCHMMainWindow::slotHistoryAvailabilityChanged( bool enable_backward, bool enable_forward )
+{
+	m_toolbarIconBackward->setEnabled (enable_backward);
+	m_toolbarIconForward->setEnabled (enable_forward);
 }
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)

@@ -60,8 +60,7 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 		chmUnitInfo ui;
 		QImage img;
 		
-		if ( m_viewWindow->areImagesResolved()
-		&& chm->ResolveObject (abs_name, &ui) )
+		if ( chm->ResolveObject (abs_name, &ui) )
 		{
 			QByteArray buf (ui.length);
 			
@@ -76,9 +75,7 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 		else
 		{
 			((QMimeSourceFactory*)this)->setImage (abs_name, img);
-			
-			if ( m_viewWindow->areImagesResolved() )
-				fprintf (stderr, "Could not resolve %s\n", abs_name.ascii());
+			fprintf (stderr, "Could not resolve %s\n", abs_name.ascii());
 		}
 	}
 	

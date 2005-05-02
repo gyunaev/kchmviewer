@@ -1,6 +1,3 @@
-
-
-
 /***************************************************************************
  *   Copyright (C) 2005 by Georgy Yunaev                                   *
  *   tim@krasnogorsk.ru                                                    *
@@ -26,93 +23,26 @@
 #include <qdir.h>
 
 #include "kchmviewwindow.h"
-#include "kchmconfig.h"
+//#include "kchmconfig.h"
 
-/*
- * If defined, all the data viewed is kept in source factory. It increases the response time
- * when a user opens the page he has already seen, in cost of everything which has been opened 
- * is stored in memory, increasing memory usage.
- *
- * If not defined, on any page change the source factory cleans up, saving the memory, but 
- * increasing the page loading time in case the page has the same images, or the page is opened
- * second time.
- */
-#define KEEP_ALL_OPENED_DATA_IN_SOURCE_FACTORY
 
-KCHMViewWindow::KCHMViewWindow( QWidget * parent, bool resolve_images )
-	: QTextBrowser (parent)
+KCHMViewWindow::KCHMViewWindow( QWidget * parent )
 {
-	m_sourcefactory = 0;
-	m_resolveImages = resolve_images;
-	setTextFormat ( Qt::RichText );
-
+	m_historyMaxSize = 25;
 	invalidate();
 }
 
 KCHMViewWindow::~KCHMViewWindow()
 {
-	delete m_sourcefactory;
-}
-
-bool KCHMViewWindow::LoadPage( QString url )
-{
-	// If we're using a memory saving scheme, we destroy MimeSourceFactory (including all the stored data)
-	// when opening a new page. It saves some memory, but spends more time while looking for already loaded
-	// images and HTML pages
-#if !defined (KEEP_ALL_OPENED_DATA_IN_SOURCE_FACTORY)
-	delete m_sourcefactory;
-	m_sourcefactory = new KCHMSourceFactory;
-	setMimeSourceFactory (m_sourcefactory);
-#endif	
-
-	makeURLabsolute (url);
-	setSource (url);
-	return true;
-}
-
-void KCHMViewWindow::setSource( const QString & url )
-{
-	if ( !m_shouldSkipSourceChange )
-	{
-		QTextBrowser::setSource( url );
-		m_openedPage = url;
-	}
-	else
-		m_shouldSkipSourceChange = false;
-}
-
-void KCHMViewWindow::zoomIn( )
-{
-	m_zoomfactor++;
-	QTextBrowser::zoomIn( );
-}
-
-void KCHMViewWindow::zoomOut( )
-{
-	m_zoomfactor--;
-	QTextBrowser::zoomOut( );
-}
-
-void KCHMViewWindow::setZoomFactor( int zoom )
-{
-	m_zoomfactor = zoom;
-
-	if ( zoom < 0 )
-		QTextBrowser::zoomOut( -zoom );
-	else if ( zoom > 0 )
-		QTextBrowser::zoomIn( zoom);
 }
 
 void KCHMViewWindow::invalidate( )
 {
-	delete m_sourcefactory;
-	m_sourcefactory = new KCHMSourceFactory (this);
-	setMimeSourceFactory (m_sourcefactory);
-
-	m_zoomfactor = 0;
-	m_shouldSkipSourceChange = false;
 	m_base_url = "/";
 	m_openedPage = QString::null;
+	m_historyCurrentSize = 0;
+	m_historyTopOffset = 0;
+	m_history.clear();
 }
 
 
@@ -212,40 +142,62 @@ QString KCHMViewWindow::makeURLabsoluteIfNeeded ( const QString & url )
 	return newurl;
 }
 
-
-int KCHMViewWindow::getScrollbarPosition( )
+bool KCHMViewWindow::openUrl ( const QString& url, bool addHistory )
 {
-	return contentsY ();
+	makeURLabsolute (url);
+	
+	if ( openPage (url) )
+	{
+		if ( addHistory && url && m_openedPage != url )
+		{
+			// do not grow the history if already max size
+			if ( m_historyCurrentSize >= m_historyMaxSize )
+				m_history.pop_front();
+			else
+				m_historyCurrentSize++;
+
+			// shred the 'forward' history
+			if ( m_historyTopOffset != 0 )
+			{
+				m_history.erase (++m_historyIterator, m_history.end());
+				m_historyCurrentSize -= m_historyTopOffset;
+				m_historyTopOffset = 0;
+			}
+
+			m_history.push_back (url);
+			m_historyIterator = m_history.fromLast();
+		}
+
+		m_openedPage = url;
+		checkHistoryAvailability( );
+		return true;
+	}
+	
+	return false;
 }
 
-void KCHMViewWindow::setScrollbarPosition( int pos )
+void KCHMViewWindow::checkHistoryAvailability( )
 {
-	setContentsPos (0, pos);
+	bool enable_backward = m_historyCurrentSize && m_historyIterator != m_history.begin();
+	bool enable_forward = m_historyTopOffset != 0;
+
+	emitSignalHistoryAvailabilityChanged (enable_backward, enable_forward);
 }
 
-void KCHMViewWindow::navBackward( )
+void KCHMViewWindow::navigateBack( )
 {
-#if defined (USE_KDE)
-
-#else
-	backward();
-#endif
+	m_historyIterator--;
+	m_historyTopOffset++;
+	
+	openUrl ( *m_historyIterator, false );
+	checkHistoryAvailability();
 }
 
-void KCHMViewWindow::navForward( )
+void KCHMViewWindow::navigateForward( )
 {
-#if defined (USE_KDE)
-
-#else
-	forward();
-#endif
-}
-
-void KCHMViewWindow::clearWindow( )
-{
-#if defined (USE_KDE)
-
-#else
-	clear();
-#endif
+	m_historyIterator++;
+	m_historyTopOffset--;
+	
+	openUrl ( *m_historyIterator, false );
+	checkHistoryAvailability();
 }

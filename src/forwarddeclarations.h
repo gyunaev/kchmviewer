@@ -36,7 +36,6 @@ class KCHMSearchWindow;
 class KCHMBookmarkWindow;
 class CHMFile;
 class KCHMSettings;
-
 class KCHMSearchAndViewToolbar;
 
 #include "config.h"

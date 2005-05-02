@@ -40,6 +40,7 @@ public:
 	bool		openPage ( const QString &url, bool set_in_tree = true );
 	
 	CHMFile *	getChmFile() const	{ return chmfile; }
+	const QString&	getOpenedFileName () { return m_chmFilename; }
 	
 	KCHMViewWindow * getViewWindow() { return viewWindow; }
 
@@ -51,9 +52,8 @@ public slots:
 	void	addBookmark ( );
 			
 private slots:
-	void onLinkClicked ( const QString & link );
-	void onBackwardAvailable ( bool enabled );
-	void onForwardAvailable ( bool enabled );
+	void slotLinkClicked ( const QString & link, bool& follow_link );
+	void slotHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
 
     void choose();
     void print();
@@ -74,7 +74,7 @@ private:
 	void	CloseChmFile();	
 	void	updateView();
 	
-    QString 				filename;
+    QString 				m_chmFilename;
 	
 	KCHMViewWindow		*	viewWindow;
 	KCHMIndexWindow		*	indexWindow;

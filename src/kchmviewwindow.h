@@ -21,68 +21,99 @@
 #ifndef KCHMVIEWWINDOW_H
 #define KCHMVIEWWINDOW_H
 
+#include "forwarddeclarations.h"
 #include "kde-qt.h"
-
-#if defined (USE_KDE)
-	#include <khtmlview.h>
-	#include <khtml_part.h>
-#else
-	#include <qtextbrowser.h>
-#endif
-
-#include "xchmfile.h"
-#include "kchmsourcefactory.h"
 
 /**
 @author Georgy Yunaev
 */
-#if defined (USE_KDE)
-class KCHMViewWindow : public KHTMLPart
-#else
-class KCHMViewWindow : public QTextBrowser
-#endif
+class KCHMViewWindow
 {
 public:
-    KCHMViewWindow( QWidget * parent = 0, bool resolve_images = true );
+	KCHMViewWindow ( QWidget * parent );
     ~KCHMViewWindow();
 
-	bool	LoadPage (QString url);
-	void	setSource ( const QString & name );
-	void	denyNextSourceChange ()	{ m_shouldSkipSourceChange = true; }
-	void	invalidate();
-
-	int		getZoomFactor() const	{	return m_zoomfactor; }
-	void	setZoomFactor (int zoom);
-	void	zoomIn ();
-	void	zoomOut();
+	//! Open a page from current chm archive
+	bool	openUrl (const QString& url, bool addHistory = true);
 	
 	QString	getBaseUrl() const	{ return m_base_url; }
 	QString	getOpenedPage() const	{ return m_openedPage; }
 
+	//! true if url is remote (http/ftp/mailto/news etc.)
 	static bool	isRemoteURL (const QString& url, QString& protocol);
+	
+	//! true if url is javascript:// URL
 	static bool	isJavascriptURL (const QString& url);
+	
+	//! true if url is a different CHM url, return new chm file and the page.
 	static bool	isNewChmURL (const QString& url, QString& chmfile, QString& page);
 
+	//! Making URL absolute
 	static QString makeURLabsoluteIfNeeded ( const QString & url );
-
 	QString		makeURLabsolute ( const QString &url, bool set_as_base = true );
-	bool		areImagesResolved() { return m_resolveImages; }
+	
+	void		navigateBack();
+	void		navigateForward();
 
-	int		getScrollbarPosition();
-	void	setScrollbarPosition(int pos);
+	void		setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
 
-	void	navBackward();
-	void	navForward();
+public: 
+	// virtual members, which should be implemented by viewers
+	//! Invalidate current view, doing all the cleanups etc.
+	virtual void	invalidate();
 
-	void	clearWindow();
+	//! Return current ZoomFactor.
+	virtual int		getZoomFactor() const = 0;
+	
+	//! Sets ZoomFactor. The value returned by getZoomFactor(), given to this function, should give the same result.
+	virtual void	setZoomFactor (int zoom) = 0;
+	
+	//! Relatively changes ZoomFactor. Most common values are -1 and 1.
+	virtual void	addZoomFactor (int value) = 0;
 
-private:
-	KCHMSourceFactory	*	m_sourcefactory;
-	bool					m_shouldSkipSourceChange;	
-	int						m_zoomfactor;
-	QString					m_base_url;
+	virtual QObject *	getQObject() = 0;
+	
+	/*!
+	 * Return current scrollbar position in view window. Saved on program exit. 
+	 * There is no restriction on returned value, except that giving this value to 
+	 * setScrollbarPosition() should move the scrollbar in the same position.
+	 */
+	virtual int		getScrollbarPosition() = 0;
+	
+	//! Sets the scrollbar position.
+	virtual void	setScrollbarPosition(int pos) = 0;
+
+	//! Should emit this signal (because KCHMViewWindow is not QObject derived)
+	virtual void	emitSignalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward) = 0;
+
+protected: /* signals */
+	/*!
+	 * Emitted when the user clicked on the link, before the page changed.
+	 * If linkClicked() return false, the current page should NOT change.
+	 * Otherwise it should be changed to the new link value.
+	 */
+	virtual void	signalLinkClicked ( const QString & newlink, bool& follow_link ) = 0;
+
+	/*!
+	 * Emitted when the backward/forward button status changed. Can be connected to enable/disable
+	 * appropriate toolbar buttons and/or menu items.
+	 */
+	virtual void	signalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward) = 0;
+
+protected:
+	//! Sets the scrollbar position.
+	virtual bool	openPage ( const QString& url ) = 0;
+
+	virtual void	checkHistoryAvailability ();
+
 	QString 				m_openedPage;
-	bool					m_resolveImages;
+	QString					m_base_url;
+
+	unsigned int			m_historyMaxSize;
+	unsigned int			m_historyCurrentSize;
+	unsigned int			m_historyTopOffset;
+	QValueList<QString>		m_history;
+	QValueList<QString>::iterator m_historyIterator;
 };
 
 #endif

@@ -1192,6 +1192,8 @@ QString CHMFile::getTopicByUrl( const QString & search_url )
 		return QString::null;
 
 	unsigned char buf[COMMON_BUF_LEN];
+	int pos = search_url.find ('#');
+	QString fixedurl = pos == -1 ? search_url : search_url.left (pos);
 
 	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
 	{
@@ -1218,7 +1220,7 @@ QString CHMFile::getTopicByUrl( const QString & search_url )
 		buf[sizeof(buf) - 1] = '\0';
 		url = KCHMViewWindow::makeURLabsoluteIfNeeded ((const char*)buf);
 
-		if ( url != search_url )
+		if ( url != fixedurl )
 			continue;
 
 		if ( RetrieveObject ( &m_chmSTRINGS, buf, off_title, sizeof(buf) - 1) != 0 )

@@ -36,7 +36,7 @@ KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
 
 const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 {
-	QString file, path;
+	QString file, path = abs_name;
 	CHMFile * chm;
 
 	// Retreive the data from chm file
@@ -48,11 +48,15 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 	if ( !chm )
 		return 0;
 	
-	if ( abs_name.endsWith (".htm") || abs_name.endsWith (".html") )
+	int pos = path.find ('#');
+	if ( pos != -1 )
+		path = path.left (pos);
+	
+	if ( path.endsWith (".htm") || path.endsWith (".html") )
 	{
 		QString data;
-		chm->GetFileContentAsString (data, abs_name);
-		((QMimeSourceFactory*)this)->setText (abs_name, data);
+		chm->GetFileContentAsString (data, path);
+		((QMimeSourceFactory*)this)->setText (path, data);
 	}
 	else
 	{
@@ -60,26 +64,26 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 		chmUnitInfo ui;
 		QImage img;
 		
-		if ( chm->ResolveObject (abs_name, &ui) )
+		if ( chm->ResolveObject (path, &ui) )
 		{
 			QByteArray buf (ui.length);
 			
 			if ( chm->RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) )
 			{
 				if ( img.loadFromData ( (const uchar *) buf.data(), ui.length) )
-					((QMimeSourceFactory*)this)->setImage (abs_name, img);
+					((QMimeSourceFactory*)this)->setImage (path, img);
 			}
 			else
-				fprintf (stderr, "Could not retrieve %s\n", abs_name.ascii());
+				fprintf (stderr, "Could not retrieve %s\n", path.ascii());
 		}
 		else
 		{
-			((QMimeSourceFactory*)this)->setImage (abs_name, img);
-			fprintf (stderr, "Could not resolve %s\n", abs_name.ascii());
+			((QMimeSourceFactory*)this)->setImage (path, img);
+			fprintf (stderr, "Could not resolve %s\n", path.ascii());
 		}
 	}
 	
-	return QMimeSourceFactory::data (abs_name);
+	return QMimeSourceFactory::data (path);
 }
 
 QString KCHMSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QString & ) const

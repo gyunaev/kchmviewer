@@ -28,6 +28,13 @@ AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(no)
 AC_PATH_QT
 
+EXTRA_SUBDIRS=""
+CHMLIBDIR="chmlib-0.35"
+CHM_INCLUDES="\$(top_srcdir)/$CHMLIBDIR/"
+CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.a"
+
+LIBS="$LIBS $CHM_LIBS"
+
 AC_ARG_WITH(kde,    AC_HELP_STRING([--with-kde],[enable KDE support]))
 
 if test "x$with_kde" = "xyes"; then
@@ -43,12 +50,6 @@ if test "x$with_kde" = "x"; then
 	AC_PREFIX_DEFAULT(${prefix:-/usr/local})
 fi
 
-EXTRA_SUBDIRS=""
-CHMLIBDIR="chmlib-0.35"
-CHM_INCLUDES="\$(top_srcdir)/$CHMLIBDIR/"
-CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.a"
-
-LIBS="$LIBS $CHM_LIBS"
 AC_SUBST(EXTRA_SUBDIRS)
 AC_SUBST(CHM_INCLUDES)
 

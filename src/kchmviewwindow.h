@@ -62,6 +62,12 @@ public:
 	//! Invalidate current view, doing all the cleanups etc.
 	virtual void	invalidate();
 
+	//! Popups the print dialog, and prints the current page on the printer.
+	virtual bool	printCurrentPage() = 0;
+
+	//! Continues the find-in-page search forward or backward
+	virtual void	searchWord( const QString & word, bool forward = true, bool casesensitive = false ) = 0;
+
 	//! Return current ZoomFactor.
 	virtual int		getZoomFactor() const = 0;
 	
@@ -73,9 +79,6 @@ public:
 
 	virtual QObject *	getQObject() = 0;
 
-	//! Probably D.Knuth will kill me for this, but sometime we DO need direct access to QTextBrowser
-	virtual QTextBrowser *	getQTextBrowser() = 0;
-	
 	/*!
 	 * Return current scrollbar position in view window. Saved on program exit. 
 	 * There is no restriction on returned value, except that giving this value to 

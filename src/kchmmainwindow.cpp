@@ -48,6 +48,7 @@ KCHMMainWindow::KCHMMainWindow()
 	m_FirstTimeShow = true;
 	chmfile = 0;
 	indexWindow = 0;
+	viewWindow = 0;
 
 #if defined (USE_KDE)
 	m_useKHTMLPart = true;
@@ -57,7 +58,7 @@ KCHMMainWindow::KCHMMainWindow()
 		
 	// Create the initial layout - a splitter with tab window in left, and text browser in right
 	m_windowSplitter = new QSplitter(this);
-	m_tabWidget = new QTabWidget (m_windowSplitter);
+	m_tabWidget = new KQTabWidget (m_windowSplitter);
 	
 	contentsWindow = new KQListView (m_tabWidget, "contents", 0);
 	contentsWindow->addColumn( "Contents" );
@@ -214,63 +215,7 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 
 void KCHMMainWindow::print()
 {
-#if !defined (USE_KDE)
-
-#if !defined (QT_NO_PRINTER)
-    QPrinter printer( QPrinter::HighResolution );
-    printer.setFullPage(TRUE);
-	
-	QTextBrowser * browser = viewWindow->getQTextBrowser();
-
-	if ( printer.setup( this ) )
-	{
-		QPainter p( &printer );
-		
-		if( !p.isActive() ) // starting printing failed
-			return;
-		
-		QPaintDeviceMetrics metrics(p.device());
-		int dpiy = metrics.logicalDpiY();
-		int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
-		QRect body( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
-		QSimpleRichText richText( browser->text(),
-								  QFont(),
-								  browser->context(),
-								  browser->styleSheet(),
-								  browser->mimeSourceFactory(),
-								  body.height() );
-		richText.setWidth( &p, body.width() );
-		QRect view( body );
-		
-		int page = 1;
-		
-		do
-		{
-			richText.draw( &p, body.left(), body.top(), view, colorGroup() );
-			view.moveBy( 0, body.height() );
-			p.translate( 0 , -body.height() );
-			p.drawText( view.right() - p.fontMetrics().width( QString::number(page) ),
-						view.bottom() + p.fontMetrics().ascent() + 5, QString::number(page) );
-			
-			if ( view.top()  >= richText.height() )
-				break;
-			
-			QString msg = tr ("Printing (page ") + QString::number( page ) + tr (")...");
-			statusBar()->message( msg );
-			
-			printer.newPage();
-			page++;
-		}
-		while (TRUE);
-	
-		statusBar()->message( tr("Printing completed"), 2000 );
-	}
-	else
-		statusBar()->message( tr("Printing aborted"), 2000 );
-#else /* QT_NO_PRINTER */
-	QMessageBox::warning (this, tr("%1 - could not print") . arg(APP_NAME), "Could not print.\nYour Qt library has been compiled without printing support");
-#endif /* QT_NO_PRINTER */
-#endif /* USE_KDE */
+	viewWindow->printCurrentPage();
 }
 
 void KCHMMainWindow::about()

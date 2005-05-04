@@ -37,6 +37,7 @@
 	#include <klistview.h>
 	#include <kfiledialog.h>
 	#include <khtml_part.h>
+	#include <ktabwidget.h>
 
 #else /* !USE_KDE */
 
@@ -49,12 +50,12 @@
 	#include <qlistview.h>
 	#include <qfiledialog.h>
 	#include <qmenubar.h>
+	#include <qtabwidget.h>
 
 #endif /* USE_KDE */
 
 /* common non-wrapped UI classes */
 #include <qsplitter.h>
-#include <qtabwidget.h>
 #include <qtoolbutton.h>
 #include <qheader.h>
 #include <qtextbrowser.h>
@@ -63,6 +64,7 @@
 #include <qstring.h>
 #include <qtextedit.h>
 #include <qfile.h>
+#include <qdir.h>
 #include <qregexp.h>
 #include <qtimer.h>
 
@@ -86,11 +88,14 @@ public:
 	static QString getOpenFileName ( const QString & startWith = QString::null, const QString & filter = QString::null, QWidget * parent = 0 );
 };
 
+class KQTabWidget : public KQ_CLASSNAME(TabWidget)
+{
+public:
+	KQTabWidget (QWidget *parent = 0, const char *name = 0, int f = 0)
+		: KQ_CLASSNAME(TabWidget) (parent, name, f) {};
+};
+
 #include <qmessagebox.h>
-#include <qprinter.h>
-#include <qpainter.h>
-#include <qsimplerichtext.h>
-#include <qpaintdevicemetrics.h>
 #include <qwhatsthis.h>
 
 #endif /* KDE_QT_H */

@@ -52,7 +52,6 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	m_findBox = new QComboBox (TRUE, this);
 	m_findBox->setMinimumWidth (200);
 	connect( m_findBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
-	connect( m_findBox->lineEdit(), SIGNAL( textChanged (const QString &) ), this, SLOT( onTextChanged(const QString &) ) );
 	
 	m_buttonPrev = new QToolButton (iconPrev,
 				tr("Previous result"),
@@ -96,8 +95,6 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				SLOT(onBtnAddBookmark()),
 				this);
 
-	cleanSearch();
-	
     QPopupMenu * menu_view = new QPopupMenu( parent );
     parent->menuBar()->insertItem( tr("&View"), menu_view );
 
@@ -134,7 +131,6 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				}
 					
 				menuid = menu_sublang->insertItem( item->country, (int) item );
-//				m_mapMenuId2Encoding[menuid] = item;
 				continue;
 			}
 		}
@@ -150,8 +146,6 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 		}
 		else
 			menuid = menu_enclist->insertItem( item->charset, (int) item );
-			
-		//m_mapMenuId2Encoding[menuid] = item;
 	}
     
 	menu_view->insertItem( tr("&Set encoding"), menu_enclist );
@@ -184,41 +178,14 @@ void KCHMSearchAndViewToolbar::onBtnNext( )
 	search( true );
 }
 
-void KCHMSearchAndViewToolbar::cleanSearch( )
-{
-	last_index = 0;
-	last_paragraph = 0;
-}
-
 void KCHMSearchAndViewToolbar::search( bool search_forward )
 {
-#if !defined (USE_KDE)
-	QTextBrowser * browser = ::mainWindow->getViewWindow()->getQTextBrowser();
+	QString searchexpr = m_findBox->lineEdit()->text();
 
-	if ( m_searchexpr.isEmpty() )
-	{
-		m_searchexpr = m_findBox->lineEdit()->text();
+	if ( searchexpr.isEmpty() )
+		return;
 
-		if ( m_searchexpr.isEmpty() )
-			return;
-	}
-	
-	if ( search_forward && (last_index || last_paragraph) )
-		last_index += m_searchexpr.length();
-
-	if ( !browser->find (m_searchexpr, false, false, search_forward, &last_paragraph, &last_index) )
-		::mainWindow->showInStatusBar ( tr("Search failed"));
-	else
-	{
-		::mainWindow->showInStatusBar ( tr("Found at paragraph %1, offset %1") . arg(last_paragraph)  . arg(last_index) );
-	}
-#endif
-}
-
-void KCHMSearchAndViewToolbar::onTextChanged( const QString & )
-{
-	m_searchexpr = QString::null;
-	cleanSearch();
+	::mainWindow->getViewWindow()->searchWord( searchexpr, search_forward, false );
 }
 
 void KCHMSearchAndViewToolbar::onBtnFontInc( )

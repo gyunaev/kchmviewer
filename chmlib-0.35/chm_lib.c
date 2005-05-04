@@ -224,29 +224,6 @@ static int _unmarshal_uchar_array(unsigned char **pData,
     return 1;
 }
 
-static int _unmarshal_int16(unsigned char **pData,
-                            unsigned long *pLenRemain,
-                            Int16 *dest)
-{
-    if (2 > *pLenRemain)
-        return 0;
-    *dest = (*pData)[0] | (*pData)[1]<<8;
-    *pData += 2;
-    *pLenRemain -= 2;
-    return 1;
-}
-
-static int _unmarshal_uint16(unsigned char **pData,
-                             unsigned long *pLenRemain,
-                             UInt16 *dest)
-{
-    if (2 > *pLenRemain)
-        return 0;
-    *dest = (*pData)[0] | (*pData)[1]<<8;
-    *pData += 2;
-    *pLenRemain -= 2;
-    return 1;
-}
 
 static int _unmarshal_int32(unsigned char **pData,
                             unsigned long *pLenRemain,
@@ -665,7 +642,7 @@ struct chmFile
 
     /* decompressor state */
     struct LZXstate    *lzx_state;
-    int                 lzx_last_block;
+    unsigned int        lzx_last_block;
 
     /* cache for decompressed blocks */
     UChar             **cache_blocks;
@@ -753,7 +730,6 @@ struct chmFile *chm_open(const char *filename)
     struct chmFile             *newHandle=NULL;
     struct chmItsfHeader        itsfHeader;
     struct chmItspHeader        itspHeader;
-    struct chmUnitInfo          uiSpan;
     struct chmUnitInfo          uiLzxc;
     struct chmLzxcControlData   ctlData;
 
@@ -1434,7 +1410,7 @@ static Int64 _chm_decompress_block(struct chmFile *h,
                     return (Int64)0;
                 }
 
-                h->lzx_last_block = (int)curBlockIdx;
+                h->lzx_last_block = curBlockIdx;
             }
         }
     }
@@ -1547,7 +1523,7 @@ LONGINT64 chm_retrieve_object(struct chmFile *h,
         return (Int64)0;
 
     /* starting address must be in correct range */
-    if (addr < 0  ||  addr >= ui->length)
+    if ( addr >= ui->length)
         return (Int64)0;
 
     /* clip length */

@@ -34,6 +34,9 @@
 
 #include "kchmviewwindow_qtextbrowser.h"
 
+#if defined (USE_KDE)
+	#include "kchmviewwindow_khtmlpart.h"
+#endif
 
 KCHMMainWindow::KCHMMainWindow()
     : KQMainWindow ( 0, "KCHMMainWindow", WDestructiveClose )
@@ -46,11 +49,15 @@ KCHMMainWindow::KCHMMainWindow()
 	chmfile = 0;
 	indexWindow = 0;
 
+#if defined (USE_KDE)
+	m_useKHTMLPart = true;
+#endif
+
 	m_currentSettings = new KCHMSettings;
 		
 	// Create the initial layout - a splitter with tab window in left, and text browser in right
-	QSplitter * splitter = new QSplitter(this);
-	m_tabWidget = new QTabWidget (splitter);
+	m_windowSplitter = new QSplitter(this);
+	m_tabWidget = new QTabWidget (m_windowSplitter);
 	
 	contentsWindow = new KQListView (m_tabWidget, "contents", 0);
 	contentsWindow->addColumn( "Contents" );
@@ -60,6 +67,9 @@ KCHMMainWindow::KCHMMainWindow()
 	contentsWindow->header()->hide();
 	contentsWindow->setShowToolTips(true);
 
+	// Handle clicking on contentsWindow element
+	connect( contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( onTreeClicked( QListViewItem* ) ) );
+
 	bookmarkWindow = new KCHMBookmarkWindow (m_tabWidget);
 	searchWindow = new KCHMSearchWindow (m_tabWidget);
 
@@ -68,25 +78,15 @@ KCHMMainWindow::KCHMMainWindow()
 	m_tabWidget->addTab (searchWindow, "Search");
 	m_tabWidget->addTab (bookmarkWindow, "Bookmarks");
 
-	viewWindow = new KCHMViewWindow_QTextBrowser ( splitter );
-
-	// Handle clicking on contentsWindow element
-	connect( contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( onTreeClicked( QListViewItem* ) ) );
-
-	// Handle clicking on link in browser window
-	connect( viewWindow->getQObject(), SIGNAL( signalLinkClicked (const QString &, bool &) ), this, SLOT( slotLinkClicked(const QString &, bool &) ) );
-
-	// Handle backward/forward buttons state change
-	connect( viewWindow->getQObject(), SIGNAL( signalHistoryAvailabilityChanged (bool, bool) ), this, SLOT( slotHistoryAvailabilityChanged (bool, bool) ) );
-
+	createViewWindow();
 	setupToolbarsAndMenu();
 		
-	setCentralWidget( splitter );
+	setCentralWidget( m_windowSplitter );
 	
 	QValueList<int> sizes;
 	sizes.push_back (SPLT_X_SIZE);
 	sizes.push_back (WND_X_SIZE - SPLT_X_SIZE);
-	splitter->setSizes (sizes);
+	m_windowSplitter->setSizes (sizes);
 	
 	resize (WND_X_SIZE, WND_Y_SIZE);
 
@@ -214,10 +214,14 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 
 void KCHMMainWindow::print()
 {
-#if !defined (QT_NO_PRINTER) && !defined (USE_KDE)
+#if !defined (USE_KDE)
+
+#if !defined (QT_NO_PRINTER)
     QPrinter printer( QPrinter::HighResolution );
     printer.setFullPage(TRUE);
 	
+	QTextBrowser * browser = viewWindow->getQTextBrowser();
+
 	if ( printer.setup( this ) )
 	{
 		QPainter p( &printer );
@@ -229,11 +233,11 @@ void KCHMMainWindow::print()
 		int dpiy = metrics.logicalDpiY();
 		int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
 		QRect body( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
-		QSimpleRichText richText( viewWindow->text(),
+		QSimpleRichText richText( browser->text(),
 								  QFont(),
-								  viewWindow->context(),
-								  viewWindow->styleSheet(),
-								  viewWindow->mimeSourceFactory(),
+								  browser->context(),
+								  browser->styleSheet(),
+								  browser->mimeSourceFactory(),
 								  body.height() );
 		richText.setWidth( &p, body.width() );
 		QRect view( body );
@@ -263,9 +267,10 @@ void KCHMMainWindow::print()
 	}
 	else
 		statusBar()->message( tr("Printing aborted"), 2000 );
-#else
+#else /* QT_NO_PRINTER */
 	QMessageBox::warning (this, tr("%1 - could not print") . arg(APP_NAME), "Could not print.\nYour Qt library has been compiled without printing support");
-#endif
+#endif /* QT_NO_PRINTER */
+#endif /* USE_KDE */
 }
 
 void KCHMMainWindow::about()
@@ -569,6 +574,25 @@ void KCHMMainWindow::slotHistoryAvailabilityChanged( bool enable_backward, bool 
 {
 	m_toolbarIconBackward->setEnabled (enable_backward);
 	m_toolbarIconForward->setEnabled (enable_forward);
+}
+
+void KCHMMainWindow::createViewWindow( )
+{
+	if ( viewWindow )
+		delete viewWindow;
+
+#if defined (USE_KDE)
+	if ( m_useKHTMLPart )
+		viewWindow = new KCHMViewWindow_KHTMLPart ( m_windowSplitter );
+	else
+#endif
+		viewWindow = new KCHMViewWindow_QTextBrowser ( m_windowSplitter );
+	
+	// Handle clicking on link in browser window
+	connect( viewWindow->getQObject(), SIGNAL( signalLinkClicked (const QString &, bool &) ), this, SLOT( slotLinkClicked(const QString &, bool &) ) );
+
+	// Handle backward/forward buttons state change
+	connect( viewWindow->getQObject(), SIGNAL( signalHistoryAvailabilityChanged (bool, bool) ), this, SLOT( slotHistoryAvailabilityChanged (bool, bool) ) );
 }
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)

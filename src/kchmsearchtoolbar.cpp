@@ -193,6 +193,8 @@ void KCHMSearchAndViewToolbar::cleanSearch( )
 void KCHMSearchAndViewToolbar::search( bool search_forward )
 {
 #if !defined (USE_KDE)
+	QTextBrowser * browser = ::mainWindow->getViewWindow()->getQTextBrowser();
+
 	if ( m_searchexpr.isEmpty() )
 	{
 		m_searchexpr = m_findBox->lineEdit()->text();
@@ -204,7 +206,7 @@ void KCHMSearchAndViewToolbar::search( bool search_forward )
 	if ( search_forward && (last_index || last_paragraph) )
 		last_index += m_searchexpr.length();
 
-	if ( !::mainWindow->getViewWindow()->find (m_searchexpr, false, false, search_forward, &last_paragraph, &last_index) )
+	if ( !browser->find (m_searchexpr, false, false, search_forward, &last_paragraph, &last_index) )
 		::mainWindow->showInStatusBar ( tr("Search failed"));
 	else
 	{

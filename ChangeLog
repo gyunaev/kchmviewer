@@ -1,3 +1,13 @@
+2005-05-03 tim <tim@krasnogorsk.ru>
+	- KDE integration continues. Now we support KHTML.
+	- Added a KIO-slave to handle CHMs.
+	- Now it is possible to open files with non-latin filenames.
+	- Added support for CHM urls containing anchors.
+	- It is possible to use QTextBrowser even for a KDE application.
+
+2005-04-27 tim <tim@krasnogorsk.ru>
+	- KDE integration started. Now we support KApplication, KMainWindow and KFileDialog.
+
 2005-04-24 tim <tim@krasnogorsk.ru>
 	- version 0.2 released.
 

@@ -62,6 +62,8 @@ public:
 	virtual void	setScrollbarPosition(int pos);
 
 	virtual QObject *	getQObject() { return this; }
+
+	virtual QTextBrowser *	getQTextBrowser() { return this; }
 	
 	virtual void	emitSignalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
 

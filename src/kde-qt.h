@@ -36,16 +36,19 @@
 	#include <klocale.h>
 	#include <klistview.h>
 	#include <kfiledialog.h>
+	#include <khtml_part.h>
 
 #else /* !USE_KDE */
 
 	#define KQ_CLASSNAME(name)			Q##name
 
+	#include <qapplication.h>
 	#include <qmainwindow.h>
 	#include <qstring.h>
 	#include <qstatusbar.h>
 	#include <qlistview.h>
 	#include <qfiledialog.h>
+	#include <qmenubar.h>
 
 #endif /* USE_KDE */
 

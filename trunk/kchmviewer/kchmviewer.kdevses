@@ -1,7 +1,20 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="0" />
+ <DocsAndViews NumberOfDocuments="4" >
+  <Doc0 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmmainwindow.cpp" >
+   <View0 line="53" Type="Source" />
+  </Doc0>
+  <Doc1 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kde-qt.cpp" >
+   <View0 line="28" Type="Source" />
+  </Doc1>
+  <Doc2 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmviewwindow_khtmlpart.cpp" >
+   <View0 line="39" Type="Source" />
+  </Doc2>
+  <Doc3 NumberOfViews="1" URL="file:///opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kio/html/classKIO_1_1SlaveBase.html#a13" >
+   <View0 Type="Documentation" />
+  </Doc3>
+ </DocsAndViews>
  <pluginList>
   <kdevdebugger>
    <breakpointList/>
@@ -9,7 +22,7 @@
   <kdevbookmarks>
    <bookmarks>
     <bookmark url="/home/tim/work/kchmviewer/src/xchmfile.cpp" >
-     <mark line="785" />
+     <mark line="786" />
     </bookmark>
    </bookmarks>
   </kdevbookmarks>

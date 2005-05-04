@@ -38,12 +38,10 @@ public:
     KCHMSearchAndViewToolbar (KCHMMainWindow *parent);
 
 	void	setEnabled (bool enable);
-	void	cleanSearch ();
 	void	setChosenEncodingInMenu( const KCHMTextEncoding::text_encoding_t * enc );
 
 private slots:
 	void	onReturnPressed();
-	void	onTextChanged(const QString &);
 	void	onBtnPrev();
 	void	onBtnNext();
 
@@ -63,10 +61,6 @@ private:
 	QToolButton			*	m_buttonFontDec;
 	QToolButton			*	m_buttonViewSource;
 	QToolButton			*	m_buttonAddBookmark;
-	QString					m_searchexpr;
-	
-	int						last_index;
-	int						last_paragraph;
 	
 	const KCHMTextEncoding::text_encoding_t * m_checkedEncodingInMenu;
 };

@@ -56,7 +56,7 @@ private:
 	}
 
 	// Retrieve an object from the CHM file
-	size_t inline RetrieveObject (const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize)
+	inline size_t RetrieveObject (const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize)
 	{
 		return ::chm_retrieve_object(m_chmFile, ui, buffer, fileOffset, bufferSize);
 	}

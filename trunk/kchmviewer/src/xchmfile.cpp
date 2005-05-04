@@ -332,8 +332,9 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 	if(src.isEmpty())
 		return false;
 
-	int defaultimagenum = asIndex ? KCHMImageType::IMAGE_INDEX : KCHMImageType::IMAGE_AUTO;
-	int pos = 0, indent = 0, imagenum = defaultimagenum;
+	unsigned int defaultimagenum = asIndex ? KCHMImageType::IMAGE_INDEX : KCHMImageType::IMAGE_AUTO;
+	unsigned int imagenum = defaultimagenum;
+	int pos = 0, indent = 0;
 	bool in_object = false, root_created = false;
 	bool add2treemap = asIndex ? false : m_treeUrlMap.isEmpty(); // do not add to the map during index search
 	QString name;

@@ -1,3 +1,9 @@
+2005-05-04 tim <tim@krasnogorsk.ru>
+	- KDE integration continues. Now we support printing from KHTML.
+	- KIO-slave now works :)
+	- switched to KTabWidget for KDE
+	- fixed search/print for QTextBrowser.
+
 2005-05-03 tim <tim@krasnogorsk.ru>
 	- KDE integration continues. Now we support KHTML.
 	- Added a KIO-slave to handle CHMs.

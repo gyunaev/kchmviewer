@@ -83,7 +83,7 @@ private:
 	KCHMBookmarkWindow	*	bookmarkWindow;
 
 	KQListView			*	contentsWindow;	
-	QTabWidget			*	m_tabWidget;
+	KQTabWidget			*	m_tabWidget;
 	QToolButton			*	m_toolbarIconBackward;
 	QToolButton			*	m_toolbarIconForward;
 	QSplitter 			*	m_windowSplitter;

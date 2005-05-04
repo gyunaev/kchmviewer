@@ -25,7 +25,7 @@
 #include "kchmviewwindow.h"
 
 
-KCHMViewWindow::KCHMViewWindow( QWidget * parent )
+KCHMViewWindow::KCHMViewWindow( QWidget * )
 {
 	m_historyMaxSize = 25;
 	invalidate();

@@ -58,6 +58,12 @@ public:
 	//! Relatively changes ZoomFactor. Most common values are -1 and 1.
 	virtual void	addZoomFactor (int value);
 
+	//! Popups the print dialog, and prints the current page on the printer.
+	virtual bool	printCurrentPage();
+
+	//! Initiates the find-in-page search, if succeed, cursor moved to the first entry
+	virtual void	searchWord( const QString & word, bool forward = true, bool casesensitive = false );
+
 	/*!
 	 * Return current scrollbar position in view window. Saved on program exit. 
 	 * There is no restriction on returned value, except that giving this value to 
@@ -70,8 +76,6 @@ public:
 
 	virtual QObject *	getQObject() { return this; }
 
-	virtual QTextBrowser *	getQTextBrowser() { return 0; }
-	
 	virtual void	emitSignalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
 
 signals:

@@ -14,6 +14,7 @@
     Boston, MA 02111-1307, USA.
 */
 
+#include <stdio.h>
 #include <sys/stat.h>
 
 #include <kapplication.h>
@@ -41,7 +42,7 @@ extern "C"
 
         if ( argc != 4 )
 		{
-            kdDebug() << "Usage: kio_chm  protocol domain-socket1 domain-socket2" << endl;
+            kdDebug() << "Usage: kio_msits protocol domain-socket1 domain-socket2" << endl;
             exit (-1);
         }
 
@@ -68,19 +69,34 @@ ProtocolMSITS::~ProtocolMSITS()
 	m_chmFile = 0;
 }
 
+// A simple stat() wrapper
+static bool isDirectory ( const QString & filename )
+{
+	return filename[filename.length() - 1] == '/';
+}
+
 
 void ProtocolMSITS::get( const KURL& url )
 {
 	QString fileName;
 	chmUnitInfo ui;
 
-    kdDebug() << "kio_msits::get (const KURL& url) " << url.path() << endl;
+    kdDebug() << "kio_msits::get() " << url.path() << endl;
 
 	if ( !parseLoadAndLookup ( url, fileName ) )
 		return;	// error() has been called by parseLoadAndLookup
 
+	kdDebug() << "kio_msits::get: parseLoadAndLookup returned " << fileName << endl;
+
+	if ( isDirectory (fileName) )
+	{
+		error( KIO::ERR_IS_DIRECTORY, url.prettyURL() );
+		return;
+	}
+
 	if ( !ResolveObject ( fileName, &ui) )
 	{
+		kdDebug() << "kio_msits::get: could not resolve filename " << fileName << endl;
         error( KIO::ERR_DOES_NOT_EXIST, url.prettyURL() );
 		return;
 	}
@@ -89,6 +105,7 @@ void ProtocolMSITS::get( const KURL& url )
 
 	if ( RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) == 0 )
 	{
+		kdDebug() << "kio_msits::get: could not retrieve filename " << fileName << endl;
         error( KIO::ERR_NO_CONTENT, url.prettyURL() );
 		return;
 	}
@@ -118,7 +135,9 @@ bool ProtocolMSITS::parseLoadAndLookup ( const KURL& url, QString& abspath )
 	}
 
 	QString filename = url.path().left (pos);
-	abspath = url.path().mid (pos + 1);
+	abspath = url.path().mid (pos + 2); // skip ::
+
+	kdDebug() << "ProtocolMSITS::parseLoadAndLookup: filename " << filename << ", path " << abspath << endl;
 
     if ( filename.isEmpty() )
     {
@@ -147,16 +166,10 @@ bool ProtocolMSITS::parseLoadAndLookup ( const KURL& url, QString& abspath )
 	
 	m_chmFile = tmpchm;
 	m_openedFile = filename;
-
+    
+	kdDebug() << "A CHM file " << filename << " has beed opened successfully" << endl;
     return true;
 }
-
-// A simple stat() wrapper
-static bool isDirectory ( const QString & filename )
-{
-	return filename[filename.length() - 1] == '/';
-}
-
 
 /*
  * Shamelessly stolen from a KDE KIO tutorial
@@ -185,6 +198,7 @@ static void app_dir(UDSEntry& e, const QString & name)
 	e.clear();
 	app_entry(e, KIO::UDS_NAME, name);
 	app_entry(e, KIO::UDS_FILE_TYPE, S_IFDIR);
+	app_entry(e, KIO::UDS_SIZE, 1);
 }
 
 // internal function
@@ -213,6 +227,7 @@ void ProtocolMSITS::stat (const KURL & url)
 		return;
 	}
 
+	kdDebug() << "kio_msits::stat: adding an entry for " << fileName << endl;
 	UDSEntry entry;
 
 	if ( isDirectory ( fileName ) )
@@ -220,15 +235,14 @@ void ProtocolMSITS::stat (const KURL & url)
 	else
 		app_file(entry, fileName, ui.length);
  
-	listEntry(entry, false);
-	listEntry(entry, true);
+	statEntry (entry);
 
 	finished();
 }
 
 
 // A local CHMLIB enumerator
-static int chmlib_enumerator (struct chmFile *h, struct chmUnitInfo *ui, void *context)
+static int chmlib_enumerator (struct chmFile *, struct chmUnitInfo *ui, void *context)
 {
 	((QValueVector<QString> *) context)->push_back (QString::fromLocal8Bit (ui->path));
 	return CHM_ENUMERATOR_CONTINUE;
@@ -244,11 +258,15 @@ void ProtocolMSITS::listDir (const KURL & url)
 	if ( !parseLoadAndLookup ( url, filepath ) )
 		return;	// error() has been called by parseLoadAndLookup
 
+	filepath += "/";
+
 	if ( !isDirectory (filepath) )
 	{
 		error(KIO::ERR_CANNOT_ENTER_DIRECTORY, url.path());
 		return;
 	}
+
+    kdDebug() << "kio_msits::listDir: enumerating directory " << filepath << endl;
 
 	QValueVector<QString> listing;
 
@@ -263,14 +281,18 @@ void ProtocolMSITS::listDir (const KURL & url)
 	}
 
 //	totalFiles(listing.size());
-
 	UDSEntry entry;
+	unsigned int striplength = filepath.length();
+
 	for ( unsigned int i = 0; i < listing.size(); i++ )
 	{
-		if ( isDirectory ( listing[i] ) )
-			app_dir(entry, listing[i]);
+		// Strip the direcroty name
+		QString ename = listing[i].mid (striplength);
+
+		if ( isDirectory ( ename ) )
+			app_dir(entry, ename);
 		else
-			app_file(entry, listing[i], 0);
+			app_file(entry, ename, 0);
  
 		listEntry(entry, false);
 	}

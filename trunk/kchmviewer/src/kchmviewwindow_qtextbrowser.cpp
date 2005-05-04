@@ -18,10 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qregexp.h>
-#include <qstring.h>
-#include <qdir.h>
+#include <qprinter.h>
+#include <qpainter.h>
+#include <qsimplerichtext.h>
+#include <qpaintdevicemetrics.h>
 
+#include "kde-qt.h"
+#include "kchmmainwindow.h"
 #include "kchmviewwindow_qtextbrowser.h"
 
 /*
@@ -95,6 +98,9 @@ void KCHMViewWindow_QTextBrowser::invalidate( )
 	setMimeSourceFactory (m_sourcefactory);
 	m_zoomfactor = 0;
 	m_allowSourceChange = true;
+	m_searchLastIndex = 0;
+	m_searchLastParagraph = 0;
+	m_searchText = QString::null;
 	
 	KCHMViewWindow::invalidate( );
 }
@@ -122,4 +128,85 @@ void KCHMViewWindow_QTextBrowser::slotLinkClicked( const QString & newlink )
 void KCHMViewWindow_QTextBrowser::emitSignalHistoryAvailabilityChanged( bool enable_backward, bool enable_forward )
 {
 	emit signalHistoryAvailabilityChanged( enable_backward, enable_forward );
+}
+
+
+bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
+{
+#if !defined (QT_NO_PRINTER)
+    QPrinter printer( QPrinter::HighResolution );
+    printer.setFullPage(TRUE);
+	
+	if ( printer.setup( this ) )
+	{
+		QPainter p( &printer );
+		
+		if( !p.isActive() ) // starting printing failed
+			return false;
+		
+		QPaintDeviceMetrics metrics(p.device());
+		int dpiy = metrics.logicalDpiY();
+		int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
+		QRect body( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
+		QSimpleRichText richText( text(),
+								  QFont(),
+								  context(),
+								  styleSheet(),
+								  mimeSourceFactory(),
+								  body.height() );
+		richText.setWidth( &p, body.width() );
+		QRect view( body );
+		
+		int page = 1;
+		
+		do
+		{
+			richText.draw( &p, body.left(), body.top(), view, colorGroup() );
+			view.moveBy( 0, body.height() );
+			p.translate( 0 , -body.height() );
+			p.drawText( view.right() - p.fontMetrics().width( QString::number(page) ),
+						view.bottom() + p.fontMetrics().ascent() + 5, QString::number(page) );
+			
+			if ( view.top()  >= richText.height() )
+				break;
+			
+			QString msg = tr ("Printing (page ") + QString::number( page ) + tr (")...");
+			::mainWindow->showInStatusBar( msg );
+			
+			printer.newPage();
+			page++;
+		}
+		while (TRUE);
+	
+		::mainWindow->showInStatusBar( tr("Printing completed") );
+		return true;
+	}
+
+	::mainWindow->showInStatusBar( tr("Printing aborted") );
+	return false;
+
+#else /* QT_NO_PRINTER */
+
+	QMessageBox::warning (this, tr("%1 - could not print") . arg(APP_NAME), "Could not print.\nYour Qt library has been compiled without printing support");
+	return false;
+
+#endif /* QT_NO_PRINTER */
+}
+
+
+void KCHMViewWindow_QTextBrowser::searchWord( const QString & word, bool forward, bool )
+{
+	if ( m_searchText == word )
+	{
+		if ( forward && (m_searchLastIndex || m_searchLastParagraph) )
+			m_searchLastIndex += m_searchText.length();
+	}
+	else
+	{
+		m_searchLastParagraph = m_searchLastIndex = 0;
+		m_searchText = word;
+	}
+
+	if ( find (m_searchText, false, false, forward, &m_searchLastParagraph, &m_searchLastIndex) )
+		::mainWindow->showInStatusBar ( tr("Search failed"));
 }

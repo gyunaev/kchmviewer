@@ -18,21 +18,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qregexp.h>
-#include <qstring.h>
-#include <qdir.h>
-
 #include "kde-qt.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow_khtmlpart.h"
 
 #if defined (USE_KDE)
 
+#include <khtmlview.h>
+#include <kfinddialog.h>
+
 KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QWidget * parent )
 	: KHTMLPart ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 0;
 	invalidate();
+
+	setJScriptEnabled(false);
+ 	setJavaEnabled(false);
+ 	setMetaRefreshEnabled(false);
+ 	setPluginsEnabled(false);
 	
 //	connect( this, SIGNAL( linkClicked (const QString &) ), this, SLOT( slotLinkClicked(const QString &) ) );
 }
@@ -90,6 +94,17 @@ void KCHMViewWindow_KHTMLPart::slotLinkClicked( const QString & newlink )
 void KCHMViewWindow_KHTMLPart::emitSignalHistoryAvailabilityChanged( bool enable_backward, bool enable_forward )
 {
 	emit signalHistoryAvailabilityChanged( enable_backward, enable_forward );
+}
+
+bool KCHMViewWindow_KHTMLPart::printCurrentPage()
+{
+	view()->print();
+	return true;
+}
+
+void KCHMViewWindow_KHTMLPart::searchWord( const QString & word, bool forward, bool )
+{
+	findText ( word, forward ? 0 : KFindDialog::FindBackwards, ::mainWindow, 0 );
 }
 
 

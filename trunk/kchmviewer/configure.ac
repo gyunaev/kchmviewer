@@ -48,16 +48,6 @@ CHMLIBDIR="chmlib-0.35"
 CHM_INCLUDES="\$(top_srcdir)/$CHMLIBDIR/"
 CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.a"
 
-dnl configure chmlib, if not already configured
-if test ! -f "$chm_libs"; then
-	if test ! -f "$CHMLIBDIR/Makefile"; then
-		echo
-		echo "Configuring chmlib ..."
-		AC_CONFIG_SUBDIRS(chmlib-0.35)
-	fi
-	EXTRA_SUBDIRS="$CHMLIBDIR $EXTRA_SUBDIRS"
-fi
-
 LIBS="$LIBS $CHM_LIBS"
 AC_SUBST(EXTRA_SUBDIRS)
 AC_SUBST(CHM_INCLUDES)

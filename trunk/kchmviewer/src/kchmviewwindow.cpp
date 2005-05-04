@@ -23,7 +23,6 @@
 #include <qdir.h>
 
 #include "kchmviewwindow.h"
-//#include "kchmconfig.h"
 
 
 KCHMViewWindow::KCHMViewWindow( QWidget * parent )
@@ -144,6 +143,9 @@ QString KCHMViewWindow::makeURLabsoluteIfNeeded ( const QString & url )
 
 bool KCHMViewWindow::openUrl ( const QString& url, bool addHistory )
 {
+	if ( !url )
+		return true;
+
 	makeURLabsolute (url);
 	
 	if ( openPage (url) )

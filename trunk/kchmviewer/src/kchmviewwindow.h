@@ -31,7 +31,7 @@ class KCHMViewWindow
 {
 public:
 	KCHMViewWindow ( QWidget * parent );
-    ~KCHMViewWindow();
+    virtual ~KCHMViewWindow();
 
 	//! Open a page from current chm archive
 	bool	openUrl (const QString& url, bool addHistory = true);
@@ -72,6 +72,9 @@ public:
 	virtual void	addZoomFactor (int value) = 0;
 
 	virtual QObject *	getQObject() = 0;
+
+	//! Probably D.Knuth will kill me for this, but sometime we DO need direct access to QTextBrowser
+	virtual QTextBrowser *	getQTextBrowser() = 0;
 	
 	/*!
 	 * Return current scrollbar position in view window. Saved on program exit. 

@@ -258,7 +258,7 @@ bool CHMFile::LoadCHM(const QString&  archiveName)
 	if(m_chmFile)
 		CloseCHM();
 
-	m_chmFile = chm_open (archiveName.ascii());
+	m_chmFile = chm_open (QFile::encodeName(archiveName));
 	
 	if(m_chmFile == NULL)
 		return false;

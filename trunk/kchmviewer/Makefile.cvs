@@ -1,19 +1,10 @@
-default: all
+all: 
+	@echo "This Makefile is only for the CVS repository"
+	@echo "This will be deleted before making the distribution"
+	@echo ""
+	$(MAKE) -f admin/Makefile.common cvs
 
-all:
-	@echo "*** Retrieving configure tests needed by configure.in"
-	@aclocal
-	@echo "*** Scanning for include statements"
-	@autoheader
-	@echo "*** Building Makefile templates (step one)"
-	@automake
-	@echo "*** Scanning for moc files "
-	@perl am_edit
-	@echo "*** Building Makefile templates (step two)"
-	@autoconf
-	@if grep "ac_kw foo" configure &>/dev/null; then perl -p -i -e "s/ac_kw foo/ac_kw int foo/" configure; fi
-	@perl -pi -e 'if (/\[\/\$$\]\*. INSTALL=/) { print $$_ ; $$_ = "\"\") ;;\n"; }' configure
-	@-rm -f config.cache config.h
-	@echo "*** Create date/time stamp"
-	@touch stamp-h.in
-	@echo "*** Finished"
+dist:
+	$(MAKE) -f admin/Makefile.common dist
+
+.SILENT:

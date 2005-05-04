@@ -73,6 +73,7 @@ private:
 	void	loadChmFile ( const QString &fileName );
 	void	CloseChmFile();	
 	void	updateView();
+	void	createViewWindow();
 	
     QString 				m_chmFilename;
 	
@@ -85,13 +86,18 @@ private:
 	QTabWidget			*	m_tabWidget;
 	QToolButton			*	m_toolbarIconBackward;
 	QToolButton			*	m_toolbarIconForward;
-	
+	QSplitter 			*	m_windowSplitter;
+
 	KCHMSearchAndViewToolbar	*	m_searchToolbar;
 	
 	KCHMSettings		*	m_currentSettings;
 	
 	CHMFile				*	chmfile;
 	bool					m_FirstTimeShow;
+
+#if defined (USE_KDE)
+	bool					m_useKHTMLPart;
+#endif
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 	enum	auto_test_state_t

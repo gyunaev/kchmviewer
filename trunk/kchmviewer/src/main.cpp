@@ -13,7 +13,7 @@ int main( int argc, char ** argv )
 	KCmdLineArgs::init (argc, argv, argv[0], I18N_NOOP(APP_NAME), I18N_NOOP("CHM files viewer"), APP_VERSION);
 	KApplication app;
 #else
-	KQApplication app( argc, argv );
+	QApplication app( argc, argv );
 #endif
 
 	appConfig = new KCHMConfig();

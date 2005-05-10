@@ -93,7 +93,9 @@ private slots:
 private:
 	void setSource ( const QString & name );
 			
-	int						m_zoomfactor;
+	int			m_zoomfactor;
+	bool		m_searchForward;
+	QString		m_searchText;
 };
 
 #endif /* USE_KDE */

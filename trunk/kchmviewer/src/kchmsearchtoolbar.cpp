@@ -34,68 +34,89 @@
 
 #include "iconstorage.h"
 
-static QPopupMenu * menu_enclist;
+static KQPopupMenu * menu_enclist;
 
 KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	: QToolBar (parent)
 {
 	int menuid;
+	
+	// Toolbar label
 	setLabel( tr("Find in page") );
 
+	// Load the pixmaps
     QPixmap iconPrev (*gIconStorage.getToolbarPixmap(KCHMIconStorage::findprev));
     QPixmap iconNext (*gIconStorage.getToolbarPixmap(KCHMIconStorage::findnext));
     QPixmap iconFontInc (*gIconStorage.getToolbarPixmap(KCHMIconStorage::view_increase));
     QPixmap iconFontDec (*gIconStorage.getToolbarPixmap(KCHMIconStorage::view_decrease));
     QPixmap iconViewSource (*gIconStorage.getToolbarPixmap(KCHMIconStorage::viewsource));
     QPixmap iconAddBookmark (*gIconStorage.getToolbarPixmap(KCHMIconStorage::bookmark_add));
-	
+
+	QWhatsThis::whatsThisButton( this );
+
+	// Create the combobox to enter the find text
 	m_findBox = new QComboBox (TRUE, this);
 	m_findBox->setMinimumWidth (200);
 	connect( m_findBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
 	
+	QWhatsThis::add( m_findBox, tr("Enter here the text to search in the current page.") );	
+	
+	// Button 'prevous search result'
 	m_buttonPrev = new QToolButton (iconPrev,
-				tr("Previous result"),
+				tr("Previous search result"),
 				QString::null,
 				this,
 				SLOT(onBtnPrev()),
 				this);
+	QWhatsThis::add( m_buttonPrev, tr("Click this button to find previous search result.") );
 
+	// Button 'next search result'
 	m_buttonNext = new QToolButton (iconNext,
-				tr("Next result"),
+				tr("Next search result"),
 				QString::null,
 				this,
 				SLOT(onBtnNext()),
 				this);
-	
+	QWhatsThis::add( m_buttonNext, tr("Click this button to find next search result.") );
+
+	// Button 'increase font size'
 	m_buttonFontInc = new QToolButton (iconFontInc,
-				tr("Increase font"),
+				tr("Increase font size"),
 				QString::null,
 				this,
 				SLOT(onBtnFontInc()),
 				this);
+	QWhatsThis::add( m_buttonFontInc, tr("Click this button to increase the font size.") );
 
+	// Button 'decrease font size'
 	m_buttonFontDec = new QToolButton (iconFontDec,
-				tr("Decrease font"),
+				tr("Decrease font size"),
 				QString::null,
 				this,
 				SLOT(onBtnFontDec()),
 				this);
-
+	QWhatsThis::add( m_buttonFontDec, tr("Click this button to decrease the font size.") );
+	
+	// Button 'view HTML source'
 	m_buttonViewSource = new QToolButton (iconViewSource,
 				tr("View HTML source"),
 				QString::null,
 				this,
 				SLOT(onBtnViewSource()),
 				this);
-
+	QWhatsThis::add( m_buttonViewSource, tr("Click this button to open a separate window with the page HTML source.") );
+	
+	// Button 'add a bookmark'
 	m_buttonAddBookmark = new QToolButton (iconAddBookmark,
 				tr("Add to bookmarks"),
 				QString::null,
 				this,
 				SLOT(onBtnAddBookmark()),
 				this);
-
-    QPopupMenu * menu_view = new QPopupMenu( parent );
+	QWhatsThis::add( m_buttonAddBookmark, tr("Click this button to add the current page to the bookmarks list.") );
+	
+	// Create the approptiate menu entries in 'View' main menu
+	KQPopupMenu * menu_view = new KQPopupMenu( parent );
     parent->menuBar()->insertItem( tr("&View"), menu_view );
 
 	menu_view->insertItem( tr("&Increase font"), this, SLOT(onBtnFontInc()), Key_Plus );
@@ -106,12 +127,15 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	menu_view->insertItem( tr("&Bookmark this page"), this, SLOT(onBtnAddBookmark()) );
     menu_view->insertSeparator();
 	
-	// Prepare the encoding list
-    menu_enclist = new QPopupMenu( parent );
-	QPopupMenu * menu_sublang = 0;
-	
+	// Prepare the encodings menu.
+    menu_enclist = new KQPopupMenu( parent );
+	KQPopupMenu * menu_sublang = 0;
+
+	// Because the encoding menu is very large, it is not reasonable to have a slot for every item.
+	// It is simplier just to use a single slot for any menu item of this submenu.
 	connect (menu_enclist, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 	
+	// Add the language entries
 	for ( const KCHMTextEncoding::text_encoding_t * item = KCHMTextEncoding::getTextEncoding(); 
 			item->charset; item++ )
 	{
@@ -126,7 +150,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				// If the menu is already created, add to it
 				if ( !menu_sublang )
 				{
-					menu_sublang = new QPopupMenu( menu_enclist );
+					menu_sublang = new KQPopupMenu( menu_enclist );
 					connect (menu_sublang, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 				}
 					
@@ -147,7 +171,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 		else
 			menuid = menu_enclist->insertItem( item->charset, (int) item );
 	}
-    
+
 	menu_view->insertItem( tr("&Set encoding"), menu_enclist );
 	m_checkedEncodingInMenu = 0;
 }

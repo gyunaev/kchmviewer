@@ -31,9 +31,11 @@ KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QWidget * parent )
 	: KHTMLPart ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 0;
+	m_searchForward = true;
+
 	invalidate();
 
-	setJScriptEnabled(false);
+	setJScriptEnabled(true);
  	setJavaEnabled(false);
  	setMetaRefreshEnabled(false);
  	setPluginsEnabled(false);
@@ -50,6 +52,7 @@ bool KCHMViewWindow_KHTMLPart::openPage (const QString& url)
 {
 	QString fullurl = "ms-its:" + ::mainWindow->getOpenedFileName() + "::" + url;
 	openURL ( KURL(fullurl) );
+//	kdDebug ("encoding:") << encoding() << endl;
 	return true;
 }
 
@@ -67,7 +70,10 @@ void KCHMViewWindow_KHTMLPart::setZoomFactor( int zoom )
 void KCHMViewWindow_KHTMLPart::invalidate( )
 {
 	m_zoomfactor = 0;
-//	KCHMViewWindow::invalidate( );
+	m_searchForward = true;
+	m_searchText = QString::null;
+
+	KCHMViewWindow::invalidate( );
 }
 
 int KCHMViewWindow_KHTMLPart::getScrollbarPosition( )
@@ -104,10 +110,22 @@ bool KCHMViewWindow_KHTMLPart::printCurrentPage()
 
 void KCHMViewWindow_KHTMLPart::searchWord( const QString & word, bool forward, bool )
 {
-	findText ( word, forward ? 0 : KFindDialog::FindBackwards, ::mainWindow, 0 );
+	if ( word != m_searchText || forward != m_searchForward )
+	{
+		m_searchText = word;
+		m_searchForward = forward;
+		
+		findText ( word, forward ? 0 : KFindDialog::FindBackwards, ::mainWindow, 0 );
+	}
+	
+	findTextNext ();
 }
-
 
 #include "kchmviewwindow_khtmlpart.moc"
 
 #endif /* USE_KDE */
+
+//TODO: KDE: about box and "About KDE"
+//TODO: KDE: fix search in KHTMLPart
+//TODO: KDE: fix zooming in KHTMLPart
+//TODO: KDE: fix encoding in KHTMLPart

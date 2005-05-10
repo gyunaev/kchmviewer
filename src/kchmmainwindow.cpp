@@ -30,7 +30,6 @@
 #include "kchmsettings.h"
 
 #include "iconstorage.h"
-#include "froglogic_getopt.h"
 
 #include "kchmviewwindow_qtextbrowser.h"
 
@@ -94,6 +93,8 @@ KCHMMainWindow::KCHMMainWindow()
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 	m_autoteststate = STATE_OFF;
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
+
+	statusBar()->show();
 }
 
 
@@ -220,9 +221,16 @@ void KCHMMainWindow::print()
 
 void KCHMMainWindow::about()
 {
-    QMessageBox::about( this, APP_NAME,
-			tr("%1 version %2\n\nCopyright (C) Georgy Yunaev, tim@krasnogorsk.ru, 2005\n\n"
-				"Licensed under GNU GPL license.") . arg(APP_NAME) . arg(APP_VERSION));
+	QString caption = tr("About %1") . arg(APP_NAME);
+	QString text = tr("%1 version %2\n\nCopyright (C) Georgy Yunaev, tim@krasnogorsk.ru, 2005\n\n"
+			"Licensed under GNU GPL license.") . arg(APP_NAME) . arg(APP_VERSION);
+	
+	// It is quite funny that the argument order differs
+#if defined (USE_KDE)
+	KMessageBox::about( this, text, caption );
+#else
+    QMessageBox::about( this, caption, text );
+#endif
 }
 
 
@@ -273,7 +281,7 @@ bool KCHMMainWindow::openPage( const QString & url, bool set_in_tree )
 	{
    		if ( QMessageBox::question(this,
 			tr ("%1 - remote link clicked - %2") . arg(APP_NAME) . arg(p1),
-           	tr ("A remote link <a href=\"%1\"i>%2</a>\nwill start the external program to open it.\n\nDo you want to continue?").arg( url ).arg( url ),
+           	tr ("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
            	tr("&Yes"), tr("&No"),
            	QString::null, 0, 1 ) )
        			return false;
@@ -286,7 +294,7 @@ bool KCHMMainWindow::openPage( const QString & url, bool set_in_tree )
 	if ( viewWindow->isJavascriptURL (url) )
 	{
 		QMessageBox::information(this, tr ("%1 - JavsScript link clicked") . arg(APP_NAME),
-           	tr ("You have clicked a JavaScript link. Unfortunately, JavaScript links are not supported."));
+           	tr ("You have clicked a JavaScript link.\nBecause of security reasons, JavaScript links are disabled in CHM files."));
 		
 		return false;
 	}
@@ -334,13 +342,13 @@ void KCHMMainWindow::showEvent( QShowEvent * )
 		choose();
 }
 
-//FIXME: add whats'is to every menu
-//FIXME: fix Chineze encoding issues
 void KCHMMainWindow::setupToolbarsAndMenu( )
 {
 	// Create a 'file' toolbar
     QToolBar * toolbar = new QToolBar(this);
-    toolbar->setLabel( tr("File Operations") );
+	QWhatsThis::whatsThisButton( toolbar );
+	
+	toolbar->setLabel( tr("File Operations") );
 
     QPixmap iconFileOpen (*gIconStorage.getToolbarPixmap(KCHMIconStorage::fileopen));
     QToolButton * fileOpen = new QToolButton (iconFileOpen, 
@@ -349,6 +357,9 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				this, 
 				SLOT(choose()), 
 				toolbar);
+	
+	QString fileOpenText = tr("Click this button to open an existing chm file.");
+	QWhatsThis::add( fileOpen, fileOpenText );
 
     QPixmap iconFilePrint (*gIconStorage.getToolbarPixmap(KCHMIconStorage::print));
     QToolButton * filePrint	= new QToolButton (iconFilePrint,
@@ -358,16 +369,21 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				SLOT(print()),
 				toolbar);
 
+	QString filePrintText = tr("Click this button to print the current page");
+	QWhatsThis::add( filePrint, filePrintText );
+
     QToolBar * navtoolbar = new QToolBar(this);
+	QWhatsThis::whatsThisButton( navtoolbar );	
 	navtoolbar->setLabel( tr("Navigation") );
 	
     QPixmap iconBackward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::back));
-    m_toolbarIconBackward	= new QToolButton (iconBackward,
+    m_toolbarIconBackward = new QToolButton (iconBackward,
 				tr("Move backward in history"),
 				QString::null,
 				this,
 				SLOT(backward()),
 				navtoolbar);
+	QWhatsThis::add( m_toolbarIconBackward, tr("Click this button to move backward in browser history") );	
 
     QPixmap iconForward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::forward));
     m_toolbarIconForward	= new QToolButton (iconForward,
@@ -376,7 +392,8 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				this,
 				SLOT(forward()),
 				navtoolbar);
-
+	QWhatsThis::add( m_toolbarIconBackward, tr("Click this button to move forward in browser history") );	
+	
     QPixmap iconHome = (*gIconStorage.getToolbarPixmap(KCHMIconStorage::gohome));
     new QToolButton (iconHome,
 				tr("Go to the home page"),
@@ -384,18 +401,10 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				this,
 				SLOT(gohome()),
 				navtoolbar);
-
-	// And helpers
-    QWhatsThis::whatsThisButton( toolbar );
-    
-	QString fileOpenText = tr("Click this button to open a <em>chm file</em>.");
-    QWhatsThis::add( fileOpen, fileOpenText );
-
-    QString filePrintText = tr("Click this button to print the current page");
-    QWhatsThis::add( filePrint, filePrintText );
+	QWhatsThis::add( m_toolbarIconBackward, tr("Click this button to move to the home page") );	
 
 	// Setup the menu
-	QPopupMenu * file = new QPopupMenu( this );
+	KQPopupMenu * file = new KQPopupMenu( this );
 	menuBar()->insertItem( tr("&File"), file );
 
     int id;
@@ -409,18 +418,18 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 
     file->insertItem( tr("&Quit"), qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
-	QPopupMenu * menu_edit = new QPopupMenu( this );
+	KQPopupMenu * menu_edit = new KQPopupMenu( this );
 	menuBar()->insertItem( tr("&Edit"), menu_edit );
-#if defined (FIXME_KDE)
-//    id = menu_edit->insertItem ( tr("&Copy"), viewWindow, SLOT(copy()), CTRL+Key_C );
-//	id = menu_edit->insertItem ( tr("&Select all"), viewWindow, SLOT(selectAll()), CTRL+Key_A );
-#endif
+
+	id = menu_edit->insertItem ( tr("&Copy"), viewWindow->getQObject(), SLOT(copy()), CTRL+Key_C );
+	id = menu_edit->insertItem ( tr("&Select all"), viewWindow->getQObject(), SLOT(selectAll()), CTRL+Key_A );
+
     menu_edit->insertSeparator();
 	
 	// KCHMSearchToolbar also adds 'view' menu
 	m_searchToolbar = new KCHMSearchAndViewToolbar (this);
 		
-    QPopupMenu * help = new QPopupMenu( this );
+    KQPopupMenu * help = new KQPopupMenu( this );
     menuBar()->insertItem( tr("&Help"), help );
 
     help->insertItem( tr("&About"), this, SLOT(about()), Key_F1 );
@@ -486,29 +495,44 @@ void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 
 bool KCHMMainWindow::parseCmdLineArgs( )
 {
-	QString filename;
-
-	GetOpt opts(qApp->argc(), qApp->argv());
-	
-#if defined (ENABLE_AUTOTEST_SUPPORT)
+	QString filename = QString::null;
 	bool do_autotest = false;
-	opts.addSwitch("autotestmode", &do_autotest);
-#endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
-	opts.addOptionalArgument ("file", &filename);
-	
-	if ( opts.parse() && !filename.isEmpty() )
+#if defined (USE_KDE)
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+	if ( args->isSet("autotestmode") )
+		do_autotest = true;
+
+	if ( args->count() > 0 )
+		filename = args->arg(0);
+#else
+	// argv[0] in Qt is still a program name
+	for ( int i = 1; i < qApp->argc(); i++  )
+	{
+		if ( !strcmp (qApp->argv()[i], "--autotestmode") )
+			do_autotest = true;
+		else
+			filename = qApp->argv()[i];
+	}
+#endif
+
+	if ( do_autotest && !filename )
+		qFatal ("Could not use Auto Test mode without a chm file!");
+
+	if ( !filename.isEmpty() )
 	{
 		loadChmFile( filename );
 		
-#if defined (ENABLE_AUTOTEST_SUPPORT)
 		if ( do_autotest )
 		{
+#if defined (ENABLE_AUTOTEST_SUPPORT)
 			m_autoteststate = STATE_INITIAL;
 			runAutoTest();
-		}
+#else
+			qFatal ("Auto Test mode support is not compiled.");
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
-
+		}
 		return true;
 	}
 	

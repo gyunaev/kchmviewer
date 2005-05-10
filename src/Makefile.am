@@ -1,5 +1,5 @@
 bin_PROGRAMS = kchmviewer
-kchmviewer_SOURCES = froglogic_getopt.cpp iconstorage.cpp \
+kchmviewer_SOURCES = iconstorage.cpp \
 		kchmbookmarkwindow.cpp kchmconfig.cpp kchmindexwindow.cpp kchmmainwindow.cpp \
 		kchmsearchtoolbar.cpp kchmsearchwindow.cpp kchmsettings.cpp kchmsourcefactory.cpp \
 		kchmtextencoding.cpp kchmtreeviewitem.cpp kchmviewwindow.cpp main.cpp xchmfile.cpp \

@@ -1,10 +1,18 @@
+2005-05-10 tim <tim@krasnogorsk.ru>
+	- switched to KPopupMenu for KDE.
+	- fixed search/print for KHTMLPart.
+	- fixed status bar in KDE window.
+	- added QWhatsThis for every toolbar icon.
+	- fixed command-line parsing for KDE app, remove external GetOpt class.
+
 2005-05-04 tim <tim@krasnogorsk.ru>
 	- KDE integration continues. Now we support printing from KHTML.
-	- KIO-slave now works :)
-	- switched to KTabWidget for KDE
+	- KIO-slave now works.
+	- switched to KTabWidget for KDE.
 	- fixed search/print for QTextBrowser.
 
 2005-05-03 tim <tim@krasnogorsk.ru>
+	- Reimplemented browser history in a more convinient way.
 	- KDE integration continues. Now we support KHTML.
 	- Added a KIO-slave to handle CHMs.
 	- Now it is possible to open files with non-latin filenames.

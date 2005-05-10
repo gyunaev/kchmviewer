@@ -38,6 +38,8 @@
 	#include <kfiledialog.h>
 	#include <khtml_part.h>
 	#include <ktabwidget.h>
+	#include <kpopupmenu.h>
+	#include <kmessagebox.h>
 
 #else /* !USE_KDE */
 
@@ -51,6 +53,7 @@
 	#include <qfiledialog.h>
 	#include <qmenubar.h>
 	#include <qtabwidget.h>
+	#include <qmessagebox.h>
 
 #endif /* USE_KDE */
 
@@ -61,6 +64,7 @@
 #include <qtextbrowser.h>
 
 /* common utility classes */
+#include <qwhatsthis.h>
 #include <qstring.h>
 #include <qtextedit.h>
 #include <qfile.h>
@@ -95,7 +99,11 @@ public:
 		: KQ_CLASSNAME(TabWidget) (parent, name, f) {};
 };
 
-#include <qmessagebox.h>
-#include <qwhatsthis.h>
+class KQPopupMenu : public KQ_CLASSNAME(PopupMenu)
+{
+public:
+	KQPopupMenu (QWidget *parent = 0 )
+		: KQ_CLASSNAME(PopupMenu) (parent) {};
+};
 
 #endif /* KDE_QT_H */

@@ -1,9 +1,14 @@
+2005-06-01 tim <tim@krasnogorsk.ru>
+	- clicking on links (in-book navigation) now works for KHTML.
+	- full links (ms-its:) in chm files are now supported.
+
 2005-05-10 tim <tim@krasnogorsk.ru>
 	- switched to KPopupMenu for KDE.
 	- fixed search/print for KHTMLPart.
 	- fixed status bar in KDE window.
 	- added QWhatsThis for every toolbar icon.
 	- fixed command-line parsing for KDE app, remove external GetOpt class.
+	- fixed build outside the work directory.
 
 2005-05-04 tim <tim@krasnogorsk.ru>
 	- KDE integration continues. Now we support printing from KHTML.

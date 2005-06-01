@@ -57,7 +57,7 @@ KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList(const QStringList& urls
 	m_acceptedurl = QString::null;
 }
 
-void KCHMDialogChooseUrlFromList::onDoubleClicked( QListViewItem * item, const QPoint &, int )
+void KCHMDialogChooseUrlFromList::onDoubleClicked( QListViewItem * , const QPoint &, int )
 {
 	accept();
 }

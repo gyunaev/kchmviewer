@@ -22,10 +22,11 @@
 #include "kde-qt.h"
 
 //TODO: handle execute signal
-KQListView::KQListView( QWidget * parent, const char * name, int f )
 #if defined (USE_KDE)
+KQListView::KQListView( QWidget * parent, const char * name, int )
 	: KListView (parent, name)
 #else
+KQListView::KQListView( QWidget * parent, const char * name, int f )
 	: QListView (parent, name, f)
 #endif
 {

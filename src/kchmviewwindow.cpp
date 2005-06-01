@@ -141,16 +141,23 @@ QString KCHMViewWindow::makeURLabsoluteIfNeeded ( const QString & url )
 	return newurl;
 }
 
-bool KCHMViewWindow::openUrl ( const QString& url, bool addHistory )
+bool KCHMViewWindow::openUrl ( const QString& origurl, bool addHistory )
 {
-	if ( !url )
+	QString chmfile, page, newurl = origurl;
+
+	if ( !origurl )
 		return true;
 
-	makeURLabsolute (url);
+	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
+	// or will be loaded (for kio slave). We care only for path component.
+	if ( isNewChmURL( origurl, chmfile, page ) )
+		newurl = page;
+
+	makeURLabsolute (newurl);
 	
-	if ( openPage (url) )
+	if ( openPage (newurl) )
 	{
-		if ( addHistory && url && m_openedPage != url )
+		if ( addHistory && newurl && m_openedPage != newurl )
 		{
 			// do not grow the history if already max size
 			if ( m_historyCurrentSize >= m_historyMaxSize )
@@ -166,11 +173,11 @@ bool KCHMViewWindow::openUrl ( const QString& url, bool addHistory )
 				m_historyTopOffset = 0;
 			}
 
-			m_history.push_back (url);
+			m_history.push_back (newurl);
 			m_historyIterator = m_history.fromLast();
 		}
 
-		m_openedPage = url;
+		m_openedPage = newurl;
 		checkHistoryAvailability( );
 		return true;
 	}

@@ -299,7 +299,8 @@ bool KCHMMainWindow::openPage( const QString & url, bool set_in_tree )
 		return false;
 	}
 
-	if ( viewWindow->isNewChmURL (url, p1, p2) )
+	if ( viewWindow->isNewChmURL (url, p1, p2) 
+	&& p1 != m_chmFilename )
 	{
    		if ( QMessageBox::question(this,
 			tr ("%1 - link to a new CHM file clicked") . arg(APP_NAME),

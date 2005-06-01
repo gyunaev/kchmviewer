@@ -89,6 +89,7 @@ signals:
 
 private slots:
 	virtual void	slotLinkClicked (const QString & newlink);
+	virtual void	onOpenURLRequest( const KURL &, const KParts::URLArgs & );
 	
 private:
 	void setSource ( const QString & name );

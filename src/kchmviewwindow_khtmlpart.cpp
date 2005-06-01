@@ -39,8 +39,9 @@ KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QWidget * parent )
  	setJavaEnabled(false);
  	setMetaRefreshEnabled(false);
  	setPluginsEnabled(false);
-	
-//	connect( this, SIGNAL( linkClicked (const QString &) ), this, SLOT( slotLinkClicked(const QString &) ) );
+
+	connect( browserExtension(), SIGNAL( openURLRequest( const KURL &, const KParts::URLArgs & ) ),
+		this, SLOT ( onOpenURLRequest( const KURL &, const KParts::URLArgs & )) );
 }
 
 
@@ -129,3 +130,10 @@ void KCHMViewWindow_KHTMLPart::searchWord( const QString & word, bool forward, b
 //TODO: KDE: fix search in KHTMLPart
 //TODO: KDE: fix zooming in KHTMLPart
 //TODO: KDE: fix encoding in KHTMLPart
+//TODO: KDE: fix storing scrollbar position for KPHTML
+
+void KCHMViewWindow_KHTMLPart::onOpenURLRequest( const KURL & url, const KParts::URLArgs & )
+{
+	bool sourcechange = true;
+	emit signalLinkClicked ( url.prettyURL(), sourcechange );
+}

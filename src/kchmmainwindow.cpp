@@ -125,7 +125,7 @@ void KCHMMainWindow::choose()
 }
 
 
-void KCHMMainWindow::loadChmFile ( const QString &fileName )
+bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page )
 {
 	CHMFile * new_chmfile = new CHMFile (fileName);
 	
@@ -186,7 +186,9 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 				
 			bookmarkWindow->restoreSettings (m_currentSettings->m_bookmarks);
 
-			openPage (m_currentSettings->m_activepage, true);
+			if ( call_open_page )
+				openPage (m_currentSettings->m_activepage, true);
+
 			viewWindow->setScrollbarPosition(m_currentSettings->m_scrollbarposition);
 			viewWindow->setZoomFactor(m_currentSettings->m_chosenzoom);
 		}
@@ -194,10 +196,13 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 		{
 			m_tabWidget->setCurrentPage (0);
 			m_searchToolbar->setChosenEncodingInMenu (chmfile->getCurrentEncoding());
-			openPage (chmfile->HomePage(), true);
+			
+			if ( call_open_page )
+				openPage (chmfile->HomePage(), true);
 		}
 
 		m_searchToolbar->setEnabled (true);
+		return true;
 	}
 	else
 	{
@@ -210,6 +215,7 @@ void KCHMMainWindow::loadChmFile ( const QString &fileName )
 		
 		statusBar()->message( tr("Could not load file %1").arg(fileName), 2000 );
 		delete new_chmfile;	
+		return false;
 	}
 }
 
@@ -273,9 +279,9 @@ void KCHMMainWindow::slotLinkClicked ( const QString & link, bool& follow_link )
 	follow_link = openPage( link );
 }
 
-bool KCHMMainWindow::openPage( const QString & url, bool set_in_tree )
+bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 {
-	QString p1, p2;
+	QString p1, p2, url = srcurl;
 
 	if ( viewWindow->isRemoteURL (url, p1) )
 	{
@@ -308,9 +314,15 @@ bool KCHMMainWindow::openPage( const QString & url, bool set_in_tree )
            	tr("&Yes"), tr("&No"),
            	QString::null, 0, 1 ) )
        			return false;
-		
-		//FIXME: open new CHM file
-		return false;
+
+		// Because chm file always contain relative link, and current filename is not changed,
+		// we need to form a new path
+		QFileInfo qfi (m_chmFilename);
+
+		if ( !loadChmFile ( qfi.dirPath(true) + "/" + p1, false ) )
+			return false;
+
+		url = p2;
 	}
 	
 	if ( viewWindow->openUrl (url) )

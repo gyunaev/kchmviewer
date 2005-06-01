@@ -70,7 +70,7 @@ private:
 	void	closeEvent ( QCloseEvent * e );
 
 	void 	setupToolbarsAndMenu ( );
-	void	loadChmFile ( const QString &fileName );
+	bool	loadChmFile ( const QString &fileName,  bool call_open_page = true );
 	void	CloseChmFile();	
 	void	updateView();
 	void	createViewWindow();

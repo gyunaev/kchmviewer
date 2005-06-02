@@ -33,6 +33,7 @@ class KCHMBookmarkWindow : public QWidget
 Q_OBJECT
 public:
     KCHMBookmarkWindow(QWidget *parent = 0, const char *name = 0);
+	virtual ~KCHMBookmarkWindow() {};
 
 	void	restoreSettings (const KCHMSettings::bookmark_saved_settings_t& settings);
 	void	saveSettings (KCHMSettings::bookmark_saved_settings_t& settings);

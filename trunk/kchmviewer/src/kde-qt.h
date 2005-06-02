@@ -40,6 +40,7 @@
 	#include <ktabwidget.h>
 	#include <kpopupmenu.h>
 	#include <kmessagebox.h>
+	#include <krun.h>
 
 #else /* !USE_KDE */
 

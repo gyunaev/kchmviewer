@@ -295,6 +295,10 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
        			return false;
 		
 		//FIXME: run the browser/mailer/etc.
+#if defined (USE_KDE)
+		new KRun ( url );
+#else
+#endif
 		return false;
 	}
 		

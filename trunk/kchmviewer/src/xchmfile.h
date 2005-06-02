@@ -26,6 +26,8 @@
 #ifndef INCLUDE_CHMFILE_H
 #define INCLUDE_CHMFILE_H
 
+#include <sys/types.h>
+
 #include <qstring.h>
 #include <qcstring.h>
 #include <qlistview.h>

@@ -49,15 +49,8 @@ private slots:
 	void	onDoubleClicked ( QListViewItem *, const QPoint &, int);
 
 private:
-	enum SearchType_t
-	{
-		TYPE_ADD,		// just add
-		TYPE_REMOVE,	// remove others
-		TYPE_PHRASE		// a phrase
-	};
-
 	bool	searchQuery ( QString query, KCHMSearchResults_t& results, unsigned int limit_results = 100 );
-	bool	searchWord ( const QString& word, KCHMSearchProgressResults_t & results, SearchType_t type);
+	bool	searchWord ( const QString& word, KCHMSearchProgressResults_t & results );
 	bool	searchPhrase ( const QStringList& phrase, KCHMSearchProgressResults_t & results );
 
 	QString			m_lastQuery; // for 'Search in results' option

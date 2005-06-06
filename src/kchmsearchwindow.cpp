@@ -31,6 +31,9 @@
 #include "kchmconfig.h"
 #include "xchmfile.h"
 
+//#define DEBUG_SEARCH(A)	qDebug A
+#define DEBUG_SEARCH(A)
+
 KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags f )
 	: QWidget (parent, name, f)
 {
@@ -144,6 +147,38 @@ static inline void validateWords ( QStringList & wordlist, bool & query_valid )
 }
 
 
+inline static void mergeResults ( KCHMSearchProgressResults_t & results, const KCHMSearchProgressResults_t & src, bool add )
+{
+	if ( results.empty() && add )
+	{
+		results = src;
+		return;
+	}
+	
+	for ( unsigned int s1 = 0; s1 < results.size(); s1++ )
+	{
+		bool found = false;
+	
+		for ( unsigned int s2 = 0; s2 < src.size(); s2++ )
+		{
+			if ( results[s1].urloff == src[s2].urloff )
+			{
+				found = true;
+				break;
+			}
+		}
+
+		// If we're adding, we only add the items found (i.e. any item, which is not found, is removed.
+		// But if we're removing, we only remove the items found.
+		if ( (found && !add) || (!found && add) )
+		{
+			results.erase ( results.begin() + s1 );
+			s1--;
+		}
+	}
+}
+
+
 bool KCHMSearchWindow::searchQuery( QString query, KCHMSearchResults_t & searchresults, unsigned int limit_results )
 {
 	QStringList words_must_exist, words_must_not_exist;
@@ -226,57 +261,134 @@ bool KCHMSearchWindow::searchQuery( QString query, KCHMSearchResults_t & searchr
 	// First search for phrases
 	if ( phrases_must_exist.size() > 0 )
 	{
+		KCHMSearchProgressResults_t tempres;
+		
 		for ( i = 0; i < phrases_must_exist.size(); i++ )
-			if ( !searchPhrase ( phrases_must_exist[i], results ) )
+		{
+			if ( !searchPhrase ( phrases_must_exist[i], tempres ) )
 				return false;
+			
+			mergeResults ( results, tempres, true );
+		}
 	}
 
 	for ( i = 0; i < words_must_exist.size(); i++ )
-		if ( !searchWord ( words_must_exist[i], results, TYPE_ADD ) )
-			return false;
-		
-	for ( i = 0; i < words_must_not_exist.size(); i++ )
-		searchWord ( words_must_not_exist[i], results, TYPE_REMOVE );
-
-	return true;
-}
-
-
-bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchProgressResults_t & results, SearchType_t type )
-{
-/*	// OR is the simplest case - just fill the structure up.
-	if ( type == TYPE_OR )
-		return ::mainWindow->getChmFile()->SearchWord(word, true, false, results, limit_results);
-	
-	// For AND and PHRASE searches, we need to use temp object.
-	//TODO: move all result array manipulations to the CHMFile itself
-	KCHMSearchResults_t newresults;
-
-	if ( !::mainWindow->getChmFile()->SearchWord(word, true, false, newresults, limit_results) )
-		return false;
-
-	// Only AND is supported now.
-	//FIXME: this is probably the worst possible implementation.
-	unsigned int i, j;
-	for ( i = 0; i < results.size(); i++ )
 	{
-		for ( j = 0; j < newresults.size(); j++ )
-			if ( results[i].title == newresults[j].title )
-				break;
+		KCHMSearchProgressResults_t tempres;
+		
+		if ( !searchWord ( words_must_exist[i], tempres ) )
+			return false;
 
-		if ( j == newresults.size() )
-			results.erase (results.begin() + i--);
+		mergeResults ( results, tempres, true );
 	}
-*/
+
+	for ( i = 0; i < words_must_not_exist.size(); i++ )
+	{
+		KCHMSearchProgressResults_t tempres;
+		
+		searchWord ( words_must_not_exist[i], tempres );
+		mergeResults ( results, tempres, false );
+	}
+
+	::mainWindow->getChmFile()->GetSearchResults( results, searchresults );
 	return true;
 }
 
+
+static inline void findNextWords ( QValueVector<u_int64_t> & src, const QValueVector<u_int64_t> & needle )
+{
+	for ( unsigned int s1 = 0; s1 < src.size(); s1++ )
+	{
+		bool found = false;
+		u_int64_t target_offset = src[s1] + 1;
+		
+		DEBUG_SEARCH (("Offset loop: offset at %u is %u, target %u", (unsigned int) s1,
+					   (unsigned int) src[s1], (unsigned int) target_offset));
+		
+		// Search in the offsets list in attempt to find next word
+		for ( unsigned int s2 = 0; s2 < needle.size(); s2++ )
+		{
+			if ( needle[s2] == target_offset )
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if ( !found )
+		{
+			// Remove this offset, we don't need it anymore
+			DEBUG_SEARCH (("Offset loop failed: offset %u not found", (unsigned int) target_offset));
+			src.erase ( src.begin() + s1 );
+			s1--;
+		}
+		else
+		{
+			DEBUG_SEARCH (("Offset loop succeed: offset %u found", (unsigned int) target_offset));
+			src[s1]++;
+		}
+	}
+}
+
+//TODO: probably it's better to use list instead of vector
 bool KCHMSearchWindow::searchPhrase( const QStringList & phrase, KCHMSearchProgressResults_t & results )
 {
 	// Accumulate the phrase data here.
-	KCHMSearchProgressResults_t phrasechecker;
+	KCHMSearchProgressResults_t phrasekeeper;
+	CHMFile * chm = ::mainWindow->getChmFile();
 
-	for ( unsigned int 
+	// On the first word, just fill the phrasekeeper with every occupence of the first word
+	DEBUG_SEARCH (("Search word(0): '%s'", phrase[0].ascii()));
+	if ( !chm->SearchWord ( phrase[0], true, false, phrasekeeper, true ) )
+		return false; // the word not found, so the whole phrase is not found either.
 
-	return false;
+	for ( unsigned int i = 1; i < phrase.size(); i++ )
+	{
+		KCHMSearchProgressResults_t srchtmp;
+
+		DEBUG_SEARCH (("Search word(%d): '%s'", i, phrase[i].ascii()));
+		if ( !chm->SearchWord ( phrase[i], true, false, srchtmp, true ) )
+			return false; // the ith word not found, so the whole phrase is not found either.
+
+		// Iterate the both arrays, and remove every word in phrasekeeper, which is not found
+		// in the srchtmp, or is found on a different position.
+		for ( unsigned int p1 = 0; p1 < phrasekeeper.size(); p1++ )
+		{
+			bool found = false;
+			
+			DEBUG_SEARCH (("Ext loop (it %d): urloff %d", p1, phrasekeeper[p1].urloff));
+			
+			for ( unsigned int p2 = 0; p2 < srchtmp.size(); p2++ )
+			{
+				// look up for words on the the same page
+				if ( srchtmp[p2].urloff != phrasekeeper[p1].urloff )
+					continue;
+				
+				// Now check every offset to find the one which is 1 bigger than the 
+				findNextWords ( phrasekeeper[p1].offsets, srchtmp[p2].offsets );
+				
+				// If at least one next word is found, we leave the block intact, otherwise remove it.
+				if ( !phrasekeeper[p1].offsets.empty() )
+					found = true;
+			}
+			
+			if ( !found )
+			{
+				DEBUG_SEARCH (("Ext loop: this word not found on %d, remove it", phrasekeeper[p1].urloff));
+				phrasekeeper.erase ( phrasekeeper.begin() + p1 );
+				p1--;
+			}
+		}
+	}
+
+	for ( unsigned int o = 0; o < phrasekeeper.size(); o++ )
+		results.push_back ( KCHMSearchProgressResult (phrasekeeper[o].titleoff, phrasekeeper[o].urloff) );
+			
+	return !results.empty();
+}
+
+
+bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchProgressResults_t & results )
+{
+	return ::mainWindow->getChmFile()->SearchWord(word, true, false, results, false );
 }

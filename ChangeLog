@@ -1,3 +1,6 @@
+2005-06-07 tim <tim@krasnogorsk.ru>
+	- added a full-featured search engine with complex query support.
+
 2005-06-02 tim <tim@krasnogorsk.ru>
 	- added copy/selectall functionality to KHTML browser, including a popup menu.
 	- fixed storing scrollbar position for KHTML browser.

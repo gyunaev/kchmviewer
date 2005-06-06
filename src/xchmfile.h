@@ -55,6 +55,7 @@ class KCHMSearchProgressResult
 {
 	public:
 		inline KCHMSearchProgressResult() {}
+		inline KCHMSearchProgressResult( u_int32_t t, u_int32_t u ) : titleoff(t),urloff(u) {}
 		
 		QValueVector<u_int64_t>		offsets;
 		u_int32_t					titleoff;

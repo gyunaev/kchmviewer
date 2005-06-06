@@ -123,30 +123,128 @@ void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & set
 		settings.push_back (m_searchQuery->text(i));
 }
 
-bool KCHMSearchWindow::searchQuery( const QString & query, KCHMSearchResults_t & results, unsigned int limit_results )
+
+static inline void validateWord ( QString & word, bool & query_valid )
 {
-	// Parse the query
-	QStringList words = QStringList::split (' ', query);
+	QRegExp rxvalid ("[^\\d\\w_\\.]+");
+	
+	QString orig = word;
+	word.remove ( rxvalid );
+		
+	if ( word != orig )
+		query_valid = false;
+}
 
-	if ( words.size() < 1 )
-		return false;
+static inline void validateWords ( QStringList & wordlist, bool & query_valid )
+{
+	QRegExp rxvalid ("[^\\d\\w_\\.]+");
+	
+	for ( unsigned int i = 0; i < wordlist.size(); i++ )
+		validateWord ( wordlist[i], query_valid );
+}
 
-	if ( !searchWord (words[0], results, limit_results, TYPE_OR) )
-		return false;
 
-	// Simple 'AND' search
-	for ( unsigned int i = 1; i < words.size(); i++ )
+bool KCHMSearchWindow::searchQuery( QString query, KCHMSearchResults_t & searchresults, unsigned int limit_results )
+{
+	QStringList words_must_exist, words_must_not_exist;
+	QValueVector<QStringList> phrases_must_exist;
+	QStringList words_highlight;
+	bool query_valid = true;
+	KCHMSearchProgressResults_t results;
+	int pos;
+	unsigned int i;	
+		
+	/*
+	 * Parse the search query with a simple state machine.
+	 * Query should consist of one of more words separated by a space with a possible prefix.
+	 * A prefix may be:
+	 *   +   indicates that the word is required; any page without this word is excluded from the result.
+	 *   -   indicates that the word is required to be absent; any page with this word is excluded from
+	 *       the result.
+	 *   "." indicates a phrase. Anything between quotes indicates a phrase, which is set of space-separated
+	 *       words. Will be in result only if the words in phrase are in page in the same sequence, and
+	 *       follow each other.
+	 *   If there is no prefix, the word considered as required.
+	 */
+	
+	QRegExp rxphrase( "\"(.*)\"" );
+	QRegExp rxword( "([^\\s]+)" );
+	rxphrase.setMinimal( TRUE );
+
+	// First, get the phrase queries
+	while ( (pos = rxphrase.search (query, 0)) != -1 )
 	{
-		if ( !searchWord (words[i], results, limit_results, TYPE_AND) )
-			return false;
+		// A phrase query found. Locate its boundaries, and parse it.
+		QStringList plist = QStringList::split ( QRegExp ("\\s+"), rxphrase.cap ( 1 ));
+		
+		validateWords ( plist, query_valid );
+		
+		if ( plist.size() > 0 )
+			phrases_must_exist.push_back( plist );
+		
+		query.remove (pos, rxphrase.matchedLength());
 	}
+
+	// Then, parse the rest query
+	while ( (pos = rxword.search (query, 0)) != -1 )
+	{
+		// A phrase query found. Locate its boundaries, and parse it.
+		QString word = rxword.cap ( 1 );
+		QChar type = '+';
+		
+		if ( word[0] == '-' || word[0] == '+' )
+		{
+			type = word[0];
+			word.remove (0, 1);
+		}
+		
+		validateWord ( word, query_valid );
+				
+		if ( type == '-' )
+			words_must_not_exist.push_back ( word );
+		else
+			words_must_exist.push_back ( word );
+		
+		query.remove (pos, rxword.matchedLength());
+	}
+
+#if defined (DUMP_SEARCH_QUERY)
+	// Dump the search query
+	QString qdump;
+	for ( i = 0; i < phrases_must_exist.size(); i++ )
+		qdump += QString(" \"") + phrases_must_exist[i].join (" ") + QString ("\"");
+
+	for ( i = 0; i < words_must_not_exist.size(); i++ )
+		qdump += QString (" -") + words_must_not_exist[i];
+	
+	for ( i = 0; i < words_must_exist.size(); i++ )
+		qdump += QString (" +") + words_must_exist[i];
+
+	qDebug ("Search query dump: %s", qdump.ascii());
+#endif
+
+	// First search for phrases
+	if ( phrases_must_exist.size() > 0 )
+	{
+		for ( i = 0; i < phrases_must_exist.size(); i++ )
+			if ( !searchPhrase ( phrases_must_exist[i], results ) )
+				return false;
+	}
+
+	for ( i = 0; i < words_must_exist.size(); i++ )
+		if ( !searchWord ( words_must_exist[i], results, TYPE_ADD ) )
+			return false;
+		
+	for ( i = 0; i < words_must_not_exist.size(); i++ )
+		searchWord ( words_must_not_exist[i], results, TYPE_REMOVE );
 
 	return true;
 }
 
-bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchResults_t & results, unsigned int limit_results, SearchType_t type)
+
+bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchProgressResults_t & results, SearchType_t type )
 {
-	// OR is the simplest case - just fill the structure up.
+/*	// OR is the simplest case - just fill the structure up.
 	if ( type == TYPE_OR )
 		return ::mainWindow->getChmFile()->SearchWord(word, true, false, results, limit_results);
 	
@@ -169,6 +267,16 @@ bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchResults_t & r
 		if ( j == newresults.size() )
 			results.erase (results.begin() + i--);
 	}
-
+*/
 	return true;
+}
+
+bool KCHMSearchWindow::searchPhrase( const QStringList & phrase, KCHMSearchProgressResults_t & results )
+{
+	// Accumulate the phrase data here.
+	KCHMSearchProgressResults_t phrasechecker;
+
+	for ( unsigned int 
+
+	return false;
 }

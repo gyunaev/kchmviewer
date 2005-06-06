@@ -92,6 +92,12 @@ public:
 	//! Should emit this signal (because KCHMViewWindow is not QObject derived)
 	virtual void	emitSignalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward) = 0;
 
+	//! Select the content of the whole page
+	virtual void	clipSelectAll() = 0;
+
+	//! Copies the selected content to the clipboard
+	virtual void	clipCopy() = 0;
+
 protected: /* signals */
 	/*!
 	 * Emitted when the user clicked on the link, before the page changed.

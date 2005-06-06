@@ -176,7 +176,7 @@ bool KCHMViewWindow::openUrl ( const QString& origurl, bool addHistory )
 			m_history.push_back (newurl);
 			m_historyIterator = m_history.fromLast();
 		}
-
+		
 		m_openedPage = newurl;
 		checkHistoryAvailability( );
 		return true;

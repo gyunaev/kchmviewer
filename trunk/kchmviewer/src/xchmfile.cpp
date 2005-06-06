@@ -22,10 +22,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//FIXME: <A HREF="ms-its:file name.chm::/topic.htm">
-//FIXME: support for custom icons
-
-
 #include <qmessagebox.h> 
 #include <qstring.h>
 #include <qregexp.h>
@@ -42,6 +38,7 @@
 
 // Big-enough buffer size for use with various routines.
 #define BUF_SIZE 4096
+#define COMMON_BUF_LEN 1025
 
 #define TOPICS_ENTRY_LEN 16
 #define URLTBL_ENTRY_LEN 12
@@ -475,7 +472,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 				bool bok;
 				int imgnum = pvalue.toInt (&bok);
 	
-				if ( bok && imgnum >= 0 && imgnum < MAX_BUILTIN_ICONS )
+				if ( bok && imgnum >= 0 && (unsigned) imgnum < MAX_BUILTIN_ICONS )
 					imagenum = imgnum;
 			}
 		}
@@ -515,7 +512,7 @@ bool CHMFile::ParseAndFillIndex(QListView *indexlist)
 	return ParseHhcAndFillTree (m_indexFile, indexlist, true);
 }
 
-bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly, KCHMSearchResults_t& results, unsigned int maxresults)
+bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly, KCHMSearchProgressResults_t& results,  bool phrase_search)
 {
 	bool partial = false;
 
@@ -611,11 +608,11 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 				continue;
 
 			if ( wholeWords && searchword == word )
-				return ProcessWLC(wlc_count, wlc_size, 
-						  wlc_offset, doc_index_s, 
-						  doc_index_r,code_count_s, 
-						  code_count_r, loc_codes_s, 
-						  loc_codes_r, results, maxresults);
+				return ProcessWLC(wlc_count, wlc_size,
+						  wlc_offset, doc_index_s,
+						  doc_index_r,code_count_s,
+						  code_count_r, loc_codes_s,
+						  loc_codes_r, results, phrase_search);
 
 			if ( !wholeWords )
 			{
@@ -623,19 +620,16 @@ bool CHMFile::SearchWord (const QString& text, bool wholeWords, bool titlesOnly,
 				{
 					partial = true;
 					
-					ProcessWLC(wlc_count, wlc_size, 
-						   wlc_offset, doc_index_s, 
-						   doc_index_r,code_count_s, 
-						   code_count_r, loc_codes_s, 
-						   loc_codes_r, results, maxresults);
+					ProcessWLC(wlc_count, wlc_size,
+						   wlc_offset, doc_index_s,
+						   doc_index_r,code_count_s,
+						   code_count_r, loc_codes_s,
+						   loc_codes_r, results, phrase_search);
 
 				}
 				else if ( QString::compare (searchword, word.mid(0, searchword.length())) < -1 )
 					break;
 			}
-
-			if ( results.size() >= maxresults )
-				break;
 		}	
 	}
 	while ( !wholeWords && word.startsWith (searchword) && node_offset );
@@ -719,25 +713,22 @@ inline u_int32_t CHMFile::GetLeafNodeOffset(const QString& text,
 }
 
 
-inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
+inline bool CHMFile::ProcessWLC (u_int64_t wlc_count, u_int64_t wlc_size,
 								u_int32_t wlc_offset, unsigned char ds,
 								unsigned char dr, unsigned char cs,
 								unsigned char cr, unsigned char ls,
 								unsigned char lr,
-								KCHMSearchResults_t& results,
-								unsigned int maxresults)
+								KCHMSearchProgressResults_t& results,
+								bool phrase_search)
 {
 	int wlc_bit = 7;
 	u_int64_t index = 0, count;
 	size_t length, off = 0;
 	QMemArray<unsigned char> buffer (wlc_size);
 	unsigned char *cursor32;
-	u_int32_t stroff, urloff;
 
 	unsigned char entry[TOPICS_ENTRY_LEN];
-
-#define COMMON_BUF_LEN 1025
-	unsigned char combuf[COMMON_BUF_LEN];
+	unsigned char combuf[13];
 
 	if ( RetrieveObject (&m_chmFIftiMain, buffer.data(), wlc_offset, wlc_size) == 0 )
 		return false;
@@ -756,54 +747,36 @@ inline bool CHMFile::ProcessWLC(u_int64_t wlc_count, u_int64_t wlc_size,
 		if ( RetrieveObject (&m_chmTOPICS, entry, index * 16, TOPICS_ENTRY_LEN) == 0 )
 			return false;
 
+		KCHMSearchProgressResult progres;
+
 		cursor32 = entry + 4;
-		combuf[COMMON_BUF_LEN - 1] = 0;
-		stroff = UINT32ARRAY(cursor32);
+		progres.titleoff = UINT32ARRAY(cursor32);
 
-		QString topic;
-
-		if ( RetrieveObject (&m_chmSTRINGS, combuf, stroff, COMMON_BUF_LEN - 1) == 0 )
-			topic = "Untitled";
-		else
-		{
-			combuf[COMMON_BUF_LEN - 1] = 0;
-			topic = encodeWithCurrentCodec ((const char*)combuf);
-		}
-	      
 		cursor32 = entry + 8;
-		urloff = UINT32ARRAY(cursor32);
+		progres.urloff = UINT32ARRAY(cursor32);
 
-		if ( RetrieveObject (&m_chmURLTBL, combuf, urloff, 12) == 0 )
+		if ( RetrieveObject (&m_chmURLTBL, combuf, progres.urloff, 12) == 0 )
 			return false;
 
 		cursor32 = combuf + 8;
-		urloff = UINT32ARRAY (cursor32);
-
-		if ( RetrieveObject (&m_chmURLSTR, combuf, urloff + 8, COMMON_BUF_LEN - 1) == 0 )
-			return false;
-	       
-		combuf[COMMON_BUF_LEN - 1] = 0;
-
-		QString url = KCHMViewWindow::makeURLabsoluteIfNeeded ((const char*) combuf);
-
-		if ( !url.isEmpty() && !topic.isEmpty() )
-		{
-			if ( results.size() >= maxresults )
-				return true;
-				
-			results.push_back (KCHMSearchResult (0, topic, url));
-		}
+		progres.urloff = UINT32ARRAY (cursor32);
 
 		count = sr_int (buffer.data() + off, &wlc_bit, cs, cr, length);
 		off += length;
 
+		if ( phrase_search )
+			progres.offsets.reserve (count);
+		
 		for (u_int64_t j = 0; j < count; ++j)
 		{
 			u_int64_t lcode = sr_int (buffer.data() + off, &wlc_bit, ls, lr, length);
 			off += length;
-//TODO: phrase search
-//printf ("Location code: %d\n", (int) lcode);
+			
+			if ( phrase_search )
+				progres.offsets.push_back (lcode);
 		}
+		
+		results.push_back (progres);
 	}
 
 	return true;
@@ -1236,4 +1209,36 @@ QString CHMFile::getTopicByUrl( const QString & search_url )
 	}
 
 	return QString::null;
+}
+
+void CHMFile::GetSearchResults( const KCHMSearchProgressResults_t & tempres, KCHMSearchResults_t & results )
+{
+	unsigned char combuf [COMMON_BUF_LEN];
+	QMap<u_int32_t, u_int32_t> urlsmap;  // used to prevent duplicated urls
+	
+	for ( unsigned int i = 0; i < tempres.size(); i++ )
+	{
+		if ( urlsmap.find (tempres[i].urloff) != urlsmap.end() )
+			continue;
+		
+		urlsmap[tempres[i].urloff] = 1;
+		
+		KCHMSearchResult res;
+		
+		if ( RetrieveObject (&m_chmSTRINGS, combuf, tempres[i].titleoff, COMMON_BUF_LEN - 1) != 0 )
+		{
+			combuf[COMMON_BUF_LEN - 1] = 0;
+			res.title = encodeWithCurrentCodec ((const char*)combuf);
+		}
+		else
+			res.title = "Untitled";
+
+		if ( RetrieveObject (&m_chmURLSTR, combuf, tempres[i].urloff + 8, COMMON_BUF_LEN - 1) == 0 )
+			continue;
+
+		combuf[COMMON_BUF_LEN - 1] = 0;
+		res.url = KCHMViewWindow::makeURLabsoluteIfNeeded ((const char*) combuf);
+		
+		results.push_back (res);
+	}
 }

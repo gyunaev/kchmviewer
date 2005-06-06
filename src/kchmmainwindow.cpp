@@ -440,8 +440,8 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	KQPopupMenu * menu_edit = new KQPopupMenu( this );
 	menuBar()->insertItem( tr("&Edit"), menu_edit );
 
-	id = menu_edit->insertItem ( tr("&Copy"), viewWindow->getQObject(), SLOT(copy()), CTRL+Key_C );
-	id = menu_edit->insertItem ( tr("&Select all"), viewWindow->getQObject(), SLOT(selectAll()), CTRL+Key_A );
+	id = menu_edit->insertItem ( tr("&Copy"), this, SLOT(browserCopy()), CTRL+Key_C );
+	id = menu_edit->insertItem ( tr("&Select all"), this, SLOT(browserSelectAll()), CTRL+Key_A );
 
     menu_edit->insertSeparator();
 	
@@ -481,7 +481,13 @@ void KCHMMainWindow::setTextEncoding( const KCHMTextEncoding::text_encoding_t * 
 {
 	chmfile->setCurrentEncoding (enc);
 	m_searchToolbar->setChosenEncodingInMenu (enc);
+	
+	// Because updateView() will call view->invalidate(), which clears the view->getOpenedPage(),
+	// we have to make a copy of it.
+	QString url = viewWindow->getOpenedPage();
 	updateView();
+	
+	viewWindow->openUrl ( url );
 }
 
 void KCHMMainWindow::CloseChmFile( )
@@ -581,6 +587,16 @@ void KCHMMainWindow::createViewWindow( )
 
 	// Handle backward/forward buttons state change
 	connect( viewWindow->getQObject(), SIGNAL( signalHistoryAvailabilityChanged (bool, bool) ), this, SLOT( slotHistoryAvailabilityChanged (bool, bool) ) );
+}
+
+void KCHMMainWindow::browserSelectAll( )
+{
+	viewWindow->clipSelectAll();
+}
+
+void KCHMMainWindow::browserCopy( )
+{
+	viewWindow->clipCopy();
 }
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)

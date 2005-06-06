@@ -47,18 +47,18 @@ public:
 private slots:
 	void 	onReturnPressed ();
 	void	onDoubleClicked ( QListViewItem *, const QPoint &, int);
-//	void	onCurrentChanged ( QListBoxItem *);
 
 private:
 	enum SearchType_t
 	{
-		TYPE_OR,	// just add
-		TYPE_AND,	// remove others
-		TYPE_PHRASE	// not supported yet
+		TYPE_ADD,		// just add
+		TYPE_REMOVE,	// remove others
+		TYPE_PHRASE		// a phrase
 	};
 
-	bool	searchQuery (const QString& query, KCHMSearchResults_t& results, unsigned int limit_results = 100);
-	bool	searchWord (const QString& word, KCHMSearchResults_t& results, unsigned int limit_results, SearchType_t type);
+	bool	searchQuery ( QString query, KCHMSearchResults_t& results, unsigned int limit_results = 100 );
+	bool	searchWord ( const QString& word, KCHMSearchProgressResults_t & results, SearchType_t type);
+	bool	searchPhrase ( const QStringList& phrase, KCHMSearchProgressResults_t & results );
 
 	QString			m_lastQuery; // for 'Search in results' option
  	QComboBox 	*	m_searchQuery;

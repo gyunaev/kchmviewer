@@ -210,3 +210,13 @@ void KCHMViewWindow_QTextBrowser::searchWord( const QString & word, bool forward
 	if ( find (m_searchText, false, false, forward, &m_searchLastParagraph, &m_searchLastIndex) )
 		::mainWindow->showInStatusBar ( tr("Search failed"));
 }
+
+void KCHMViewWindow_QTextBrowser::clipSelectAll( )
+{
+	selectAll (TRUE);
+}
+
+void KCHMViewWindow_QTextBrowser::clipCopy( )
+{
+	copy ();
+}

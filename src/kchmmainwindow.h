@@ -63,6 +63,9 @@ private slots:
 
     void about();
     void aboutQt();
+	
+	void browserSelectAll();
+	void browserCopy();
 
 private:
 	bool	parseCmdLineArgs();

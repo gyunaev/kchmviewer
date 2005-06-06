@@ -1,5 +1,11 @@
+2005-06-02 tim <tim@krasnogorsk.ru>
+	- added copy/selectall functionality to KHTML browser, including a popup menu.
+	- fixed storing scrollbar position for KHTML browser.
+	- fixed window refresh on encoding change, encoding change now works for KHTML browser.
+	- zoom in/out buttons also work for KHTML browser.
+
 2005-06-01 tim <tim@krasnogorsk.ru>
-	- clicking on links (in-book navigation) now works for KHTML.
+	- clicking on links (in-book navigation) now works for KHTML browser.
 	- full links (ms-its:) in chm files are now supported.
 
 2005-05-10 tim <tim@krasnogorsk.ru>

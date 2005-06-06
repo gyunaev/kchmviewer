@@ -64,6 +64,12 @@ public:
 	//! Initiates the find-in-page search, if succeed, cursor moved to the first entry
 	virtual void	searchWord( const QString & word, bool forward = true, bool casesensitive = false );
 
+	//! Select the content of the whole page
+	virtual void	clipSelectAll();
+
+	//! Copies the selected content to the clipboard
+	virtual void	clipCopy();
+	
 	/*!
 	 * Return current scrollbar position in view window. Saved on program exit. 
 	 * There is no restriction on returned value, except that giving this value to 
@@ -88,8 +94,9 @@ signals:
 	void	signalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
 
 private slots:
-	virtual void	slotLinkClicked (const QString & newlink);
+	virtual void	slotLinkClicked ( const QString & newlink);
 	virtual void	onOpenURLRequest( const KURL &, const KParts::URLArgs & );
+	virtual void 	onPopupMenu   	( const QString & url, const QPoint & point );
 	
 private:
 	void setSource ( const QString & name );
@@ -97,6 +104,10 @@ private:
 	int			m_zoomfactor;
 	bool		m_searchForward;
 	QString		m_searchText;
+	
+	KPopupMenu *m_contextMenu;
+	
+	const KCHMTextEncoding::text_encoding_t *	m_currentEncoding;
 };
 
 #endif /* USE_KDE */

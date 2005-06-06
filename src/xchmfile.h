@@ -45,14 +45,24 @@ class KCHMSearchResult
 {
 	public:
 		inline KCHMSearchResult() {}
-		inline KCHMSearchResult (int o, const QString& t, const QString& u) :
-			offset(o), title(t), url(u) {};
-		int		offset;
+		inline KCHMSearchResult ( const QString& t, const QString& u ) :
+			title(t), url(u) {};
 		QString	title;
 		QString	url;
 };
 
-typedef QValueVector<KCHMSearchResult> KCHMSearchResults_t;
+class KCHMSearchProgressResult
+{
+	public:
+		inline KCHMSearchProgressResult() {}
+		
+		QValueVector<u_int64_t>		offsets;
+		u_int32_t					titleoff;
+		u_int32_t					urloff;
+};
+
+typedef QValueVector<KCHMSearchProgressResult>	KCHMSearchProgressResults_t;
+typedef QValueVector<KCHMSearchResult> 			KCHMSearchResults_t;
 
 
 //! Maximum allowed number of search-returned items.
@@ -170,9 +180,18 @@ public:
 	  \param results A string-string hashmap that will hold
 	  the results in case of successful search. The keys are
 	  the URLs and the values are the page titles.
-	  \return true if the search succeeded, false otherwise.
+	  \param phrase_search Indicates that word offset information should be kept.
+	  \return true if the search found something, false otherwise.
 	 */
-	bool SearchWord (const QString& word, bool wholeWords, bool titlesOnly, KCHMSearchResults_t& results, unsigned int maxresults = 200);
+	bool SearchWord (const QString& word, bool wholeWords, bool titlesOnly, KCHMSearchProgressResults_t& results, bool phrase_search);
+
+	/*!
+	\brief Finalize the search, resolves all the and generate the results.
+	\param tempres Temporary search results from SearchWord.
+	\param results A string-string hashmap that will hold the results in case of successful search.
+			The keys are the URLs and the values are the page titles.
+	*/
+	void GetSearchResults ( const KCHMSearchProgressResults_t& tempres, KCHMSearchResults_t& results );
 
 	/*!
 	  \brief Looks up fileName in the archive.
@@ -265,7 +284,8 @@ private:
 			u_int32_t wlc_offset, unsigned char ds,
 			unsigned char dr, unsigned char cs,
 			unsigned char cr, unsigned char ls,
-			unsigned char lr, KCHMSearchResults_t& results, unsigned int maxresults);
+			unsigned char lr, KCHMSearchProgressResults_t& results,
+			bool phrase_search);
 
 	//! Looks up as much information as possible from #WINDOWS/#STRINGS.
 	bool InfoFromWindows();

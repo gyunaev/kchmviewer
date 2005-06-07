@@ -192,7 +192,7 @@ public:
 	\param results A string-string hashmap that will hold the results in case of successful search.
 			The keys are the URLs and the values are the page titles.
 	*/
-	void GetSearchResults ( const KCHMSearchProgressResults_t& tempres, KCHMSearchResults_t& results );
+	void GetSearchResults ( const KCHMSearchProgressResults_t& tempres, KCHMSearchResults_t& results, unsigned int limit_results = 500 );
 
 	/*!
 	  \brief Looks up fileName in the archive.

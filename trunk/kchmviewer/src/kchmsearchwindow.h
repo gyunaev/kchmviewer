@@ -21,10 +21,7 @@
 #ifndef KCHMSEARCHWINDOW_H
 #define KCHMSEARCHWINDOW_H
 
-#include <qwidget.h>
-#include <qcombobox.h>
-#include <qlistview.h>
-#include <qcheckbox.h>
+#include "kde-qt.h"
 
 #include "kchmsettings.h"
 #include "forwarddeclarations.h"
@@ -45,6 +42,7 @@ public:
 	void	saveSettings (KCHMSettings::search_saved_settings_t& settings);
 
 private slots:
+	void	onHelpClicked();
 	void 	onReturnPressed ();
 	void	onDoubleClicked ( QListViewItem *, const QPoint &, int);
 
@@ -55,9 +53,10 @@ private:
 
 	QString			m_lastQuery; // for 'Search in results' option
  	QComboBox 	*	m_searchQuery;
-	QListView	*	m_searchList;
+	KQListView	*	m_searchList;
 	QCheckBox	*	m_matchSimilarWords;
 	QCheckBox	*	m_searchInResult;
+	QPushButton *	m_helpButton;
 };
 
 #endif

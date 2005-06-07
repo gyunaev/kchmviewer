@@ -18,13 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qheader.h>
-#include <qlistview.h>
-#include <qinputdialog.h>
-#include <qtextedit.h>
-
 #include "kchmbookmarkwindow.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"

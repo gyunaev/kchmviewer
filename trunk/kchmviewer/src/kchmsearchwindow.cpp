@@ -19,15 +19,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qstatusbar.h>
-#include <qmessagebox.h>
-#include <qregexp.h>
+#include "kchmsearchwindow.h"
 
 #include "kchmmainwindow.h"
-#include "kchmsearchwindow.h"
 #include "kchmconfig.h"
 #include "xchmfile.h"
 
@@ -39,17 +33,27 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 {
 	QVBoxLayout * layout = new QVBoxLayout (this);
 	layout->setMargin (5);
-
+	layout->addWidget (new QLabel (tr("Type in word(s) to search for:"), this));
+	
 	m_searchQuery = new QComboBox (TRUE, this);
 	m_searchQuery->setFocus();
 	m_searchQuery->setMaxCount (10);
+	m_searchQuery->setSizePolicy ( QSizePolicy ( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 	
-	m_searchList = new QListView (this);
+	m_helpButton = new QPushButton ( tr("?"), this);
+	m_helpButton->setSizePolicy ( QSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+	
+	QHBoxLayout * hlayout = new QHBoxLayout ( layout );
+	hlayout->addWidget ( m_searchQuery );
+	hlayout->addWidget ( m_helpButton );
+	
+	m_searchList = new KQListView (this);
 	m_searchList->addColumn( "Title" );
 	m_searchList->addColumn( "Location" );
 	m_searchList->setShowToolTips(true);
-		
-	connect( (m_searchQuery->lineEdit()), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
+
+	connect( m_helpButton, SIGNAL( clicked () ), this, SLOT( onHelpClicked() ) );
+	connect( m_searchQuery->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
 	connect( m_searchList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
 
 	m_matchSimilarWords = new QCheckBox (this);
@@ -58,8 +62,6 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_searchInResult = new QCheckBox (this);
 	m_searchInResult->setText (tr("Search in result"));
 	
-	layout->addWidget (new QLabel (tr("Type in word(s) to search for:"), this));
-	layout->addWidget (m_searchQuery);
 	layout->addSpacing (10);
 	layout->addWidget (m_searchList);
 	layout->addWidget (m_matchSimilarWords);
@@ -290,7 +292,7 @@ bool KCHMSearchWindow::searchQuery( QString query, KCHMSearchResults_t & searchr
 		mergeResults ( results, tempres, false );
 	}
 
-	::mainWindow->getChmFile()->GetSearchResults( results, searchresults );
+	::mainWindow->getChmFile()->GetSearchResults( results, searchresults, limit_results );
 	return true;
 }
 
@@ -391,4 +393,9 @@ bool KCHMSearchWindow::searchPhrase( const QStringList & phrase, KCHMSearchProgr
 bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchProgressResults_t & results )
 {
 	return ::mainWindow->getChmFile()->SearchWord(word, true, false, results, false );
+}
+
+void KCHMSearchWindow::onHelpClicked( )
+{
+	QMessageBox::information ( this, tr("How to use search"), tr("The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with <b>minus</b> sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed; you cannot search for symbols other than underscope, and these symbols will be removed from the search query. For example, search for 'C' will give the same result as searching for 'C++'.") );
 }

@@ -1211,7 +1211,7 @@ QString CHMFile::getTopicByUrl( const QString & search_url )
 	return QString::null;
 }
 
-void CHMFile::GetSearchResults( const KCHMSearchProgressResults_t & tempres, KCHMSearchResults_t & results )
+void CHMFile::GetSearchResults( const KCHMSearchProgressResults_t & tempres, KCHMSearchResults_t & results, unsigned int limit_results )
 {
 	unsigned char combuf [COMMON_BUF_LEN];
 	QMap<u_int32_t, u_int32_t> urlsmap;  // used to prevent duplicated urls
@@ -1240,5 +1240,8 @@ void CHMFile::GetSearchResults( const KCHMSearchProgressResults_t & tempres, KCH
 		res.url = KCHMViewWindow::makeURLabsoluteIfNeeded ((const char*) combuf);
 		
 		results.push_back (res);
+		
+		if ( --limit_results == 0 )
+			break;
 	}
 }

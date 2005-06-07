@@ -63,6 +63,10 @@
 #include <qtoolbutton.h>
 #include <qheader.h>
 #include <qtextbrowser.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qcombobox.h>
+#include <qpushbutton.h>
 
 /* common utility classes */
 #include <qwhatsthis.h>
@@ -106,5 +110,10 @@ public:
 	KQPopupMenu (QWidget *parent = 0 )
 		: KQ_CLASSNAME(PopupMenu) (parent) {};
 };
+
+#include <qinputdialog.h>
+#include <qcheckbox.h>
+#include <qtextedit.h>
+
 
 #endif /* KDE_QT_H */

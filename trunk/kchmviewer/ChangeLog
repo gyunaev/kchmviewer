@@ -1,5 +1,10 @@
+2005-06-11 Gregorio Guidi <greg_g@gentoo.org>
+	- fixed possible problem - linking static chmlib against non-static executable.
+	- added --without-kde option.
+
 2005-06-07 tim <tim@krasnogorsk.ru>
 	- preparing to release version 0.9beta.
+	- version 0.9beta released.
 
 2005-06-07 tim <tim@krasnogorsk.ru>
 	- added a full-featured search engine with complex query support.

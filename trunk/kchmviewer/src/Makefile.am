@@ -10,7 +10,8 @@ kchmviewer_SOURCES = iconstorage.cpp \
 INCLUDES = $(QT_INCLUDES) -I$(CHM_INCLUDES) $(KDE_INCLUDES)
 
 # the library search path.
-kchmviewer_LDFLAGS = $(QT_LDFLAGS) $(LIB_QT) $(KDE_LDFLAGS) $(LIB_KDEUI) $(LIB_KHTML)
+kchmviewer_LDADD = $(CHM_LIBS) $(LIB_QT) $(LIB_KDEUI) $(LIB_KHTML)
+kchmviewer_LDFLAGS = $(QT_LDFLAGS) $(KDE_LDFLAGS)
 
 #LIB_KDEPRINT = -lkdeprint
 #LIB_KDEUI = -lkdeui

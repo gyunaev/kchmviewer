@@ -31,9 +31,7 @@ AC_PATH_QT
 EXTRA_SUBDIRS=""
 CHMLIBDIR="chmlib-0.35"
 CHM_INCLUDES="\$(top_srcdir)/$CHMLIBDIR/"
-CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.a"
-
-LIBS="$LIBS $CHM_LIBS"
+CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.la"
 
 AC_ARG_WITH(kde,    AC_HELP_STRING([--with-kde],[enable KDE support]))
 
@@ -45,13 +43,14 @@ if test "x$with_kde" = "xyes"; then
 	EXTRA_SUBDIRS="$EXTRA_SUBDIRS kio-msits"
 fi
 
-if test "x$with_kde" = "x"; then
+if test "x$with_kde" != "xyes"; then
 	include_ARTS_FALSE="yes"
 	AC_PREFIX_DEFAULT(${prefix:-/usr/local})
 fi
 
 AC_SUBST(EXTRA_SUBDIRS)
 AC_SUBST(CHM_INCLUDES)
+AC_SUBST(CHM_LIBS)
 
 AC_OUTPUT(src/Makefile Makefile kio-msits/Makefile chmlib-0.35/Makefile)
 

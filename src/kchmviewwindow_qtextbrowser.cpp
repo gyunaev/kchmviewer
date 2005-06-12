@@ -73,10 +73,7 @@ bool KCHMViewWindow_QTextBrowser::openPage (const QString& url)
 void KCHMViewWindow_QTextBrowser::setSource ( const QString & name )
 {
 	if ( m_allowSourceChange )
-	{
-		clear();
 		QTextBrowser::setSource (name);
-	}
 	else
 		m_allowSourceChange = true;
 }

@@ -1,3 +1,6 @@
+2005-06-12 tim <tim@krasnogorsk.ru>
+	- fixed compilation on Slackware 10.
+
 2005-06-11 Gregorio Guidi <greg_g@gentoo.org>
 	- fixed possible problem - linking static chmlib against non-static executable.
 	- added --without-kde option.

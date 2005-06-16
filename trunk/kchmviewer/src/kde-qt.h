@@ -114,6 +114,10 @@ public:
 #include <qinputdialog.h>
 #include <qcheckbox.h>
 #include <qtextedit.h>
-
+#include <qradiobutton.h>
+#include <qspinbox.h>
+#include <qgroupbox.h>
+#include <qbuttongroup.h>
+#include <qtooltip.h>
 
 #endif /* KDE_QT_H */

@@ -1,10 +1,9 @@
 bin_PROGRAMS = kchmviewer
-kchmviewer_SOURCES = iconstorage.cpp \
-		kchmbookmarkwindow.cpp kchmconfig.cpp kchmindexwindow.cpp kchmmainwindow.cpp \
-		kchmsearchtoolbar.cpp kchmsearchwindow.cpp kchmsettings.cpp kchmsourcefactory.cpp \
-		kchmtextencoding.cpp kchmtreeviewitem.cpp kchmviewwindow.cpp main.cpp xchmfile.cpp \
-		kchmdialogchooseurlfromlist.cpp kde-qt.cpp kchmviewwindow_qtextbrowser.cpp \
-		kchmviewwindow_khtmlpart.cpp
+kchmviewer_SOURCES = iconstorage.cpp kchmbookmarkwindow.cpp kchmconfig.cpp \
+	kchmindexwindow.cpp kchmmainwindow.cpp kchmsearchtoolbar.cpp kchmsearchwindow.cpp \
+	kchmsettings.cpp kchmsourcefactory.cpp kchmtextencoding.cpp kchmtreeviewitem.cpp \
+	kchmviewwindow.cpp main.cpp xchmfile.cpp kchmdialogchooseurlfromlist.cpp kde-qt.cpp \
+	kchmviewwindow_qtextbrowser.cpp kchmviewwindow_khtmlpart.cpp kchmsetupdialog.ui
 
 # set the include path found by configure
 INCLUDES = $(QT_INCLUDES) -I$(CHM_INCLUDES) $(KDE_INCLUDES)

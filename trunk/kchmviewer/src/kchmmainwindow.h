@@ -67,6 +67,8 @@ private slots:
 	void browserSelectAll();
 	void browserCopy();
 
+	void change_settings();
+	
 private:
 	bool	parseCmdLineArgs();
 	void 	showEvent( QShowEvent * );

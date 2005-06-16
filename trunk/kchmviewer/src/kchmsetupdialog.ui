@@ -1,0 +1,529 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KCHMSetupDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>MyDialog1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>602</width>
+            <height>323</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>1</hsizetype>
+            <vsizetype>1</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>KchmViewer settings</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>false</bool>
+    </property>
+    <property name="modal">
+        <bool>true</bool>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <property name="resizeMode">
+            <enum>Minimum</enum>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>tabWidget</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>Widget8</cstring>
+                </property>
+                <attribute name="title">
+                    <string>General behavior</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout4</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>buttonGroup1</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>If no arguments given on load</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioOnBeginOpenDialog</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Open the 'open CHM file' dialog</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioOnBeginOpenLast</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Open the &amp;last used CHM file, if exist</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+L</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>buttonGroup2</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>History</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout3</cstring>
+                                        </property>
+                                        <hbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel1</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Store history information for</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QSpinBox">
+                                                <property name="name">
+                                                    <cstring>m_historySize</cstring>
+                                                </property>
+                                                <property name="prefix">
+                                                    <string></string>
+                                                </property>
+                                                <property name="value">
+                                                    <number>10</number>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>latest files</string>
+                                                </property>
+                                            </widget>
+                                        </hbox>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>m_rememberHistoryInfo</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>R&amp;emember extra information for history files</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+E</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Remembers the information about the files, which were opened. Remembers last opened page, search history, font size, bookmarks and so on.</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>groupBox1</cstring>
+                        </property>
+                        <property name="title">
+                            <string>CHM security settings</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>buttonGroup4</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>When external link clicked</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioExtLinkOpenAlways</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Always open it in external browser</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioExtLinkAsk</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Ask for confirmation</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioExtLinkOpenNever</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Do not open the link</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>buttonGroup5</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>When link pointed to a new CHM file clicked</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioNewChmOpenAlways</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Always open a new CHM file</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioNewChmAsk</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Ask for confirmation</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioNewChmOpenNever</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Do not open a new CHM file</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>Widget9</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Version-specific settings</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupQtsettings</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Qt version settings</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>7</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="lineWidth">
+                                    <number>1</number>
+                                </property>
+                                <property name="text">
+                                    <string>Enter the path to the program, which will be used as a browser for external links.  A &lt;i&gt;%s&lt;/i&gt; symbol will be replaced by the URL clicked.</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignVCenter</set>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>m_qtBrowserPath</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>m_groupKDEsettings</cstring>
+                        </property>
+                        <property name="title">
+                            <string>KDE version settings</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>buttonGroup5_2</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>To show HTML content, use</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioUseQtextBrowser</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;QTextBrowser-based widget</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+Q</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>m_radioUseKHTMLPart</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;KHTMLPart-based widget</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+K</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                            <widget class="QGroupBox">
+                                <property name="name">
+                                    <cstring>groupBox4</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>KHTMLPart security</string>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>m_enableJS</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Enable Java&amp;Script</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+S</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>m_enablePlugins</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Enable &amp;plugins</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+P</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox" row="1" column="0">
+                                        <property name="name">
+                                            <cstring>m_enableJava</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Enable &amp;Java</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+J</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox" row="1" column="1">
+                                        <property name="name">
+                                            <cstring>m_enableRefresh</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Enable &amp;refresh</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+R</string>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </vbox>
+            </widget>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonHelp</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Help</string>
+                    </property>
+                    <property name="accel">
+                        <string>F1</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>MyDialog1</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>MyDialog1</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">kchmsetupdialog.ui.h</include>
+</includes>
+<slots>
+    <slot>m_radioUseKHTMLPart_toggled( bool )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

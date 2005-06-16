@@ -36,6 +36,19 @@ KCHMConfig::KCHMConfig()
 	
 	if ( !dir.exists() && !dir.mkdir(m_datapath) )
 		qWarning ("Could not create directory %s", m_datapath.ascii());
+
+	m_LoadLatestFileOnStartup = false;
+	m_onNewChmClick = ACTION_ASK_USER;
+	m_onExternalLinkClick = ACTION_ASK_USER;
+	m_HistorySize = 10;
+	m_HistoryStoreExtra = true;
+	
+	m_QtBrowserPath = "viewurl-netscape.sh \"%s\"";
+	m_kdeUseQTextBrowser = false;
+	m_kdeEnableJS = false;
+	m_kdeEnableJava = false;
+	m_kdeEnablePlugins = true;
+	m_kdeEnableRefresh = false;
 }
 
 
@@ -45,5 +58,53 @@ KCHMConfig::~KCHMConfig()
 
 bool KCHMConfig::load()
 {
+	m_LoadLatestFileOnStartup = false;
+	m_onNewChmClick = ACTION_ASK_USER;
+	m_onExternalLinkClick = ACTION_ASK_USER;
+	m_HistorySize = 10;
+	m_HistoryStoreExtra = true;
+	
+	m_QtBrowserPath = "viewurl-netscape.sh \"%s\"";
+	m_kdeUseQTextBrowser = false;
+	m_kdeEnableJS = false;
+	m_kdeEnableJava = false;
+	m_kdeEnablePlugins = true;
+	m_kdeEnableRefresh = false;
+
+	return true;
+}
+
+bool KCHMConfig::save( )
+{
+	QFile file (appConfig->m_datapath + "/config");
+	if ( !file.open (IO_WriteOnly) )
+	{
+		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());
+		return false;
+	}
+	
+	QTextStream stream( &file );
+	stream << "[settings]\n";
+	stream << "LoadLatestFileOnStartup=" << m_LoadLatestFileOnStartup << "\n";
+
+	stream << "onNewChmClick=" << m_onNewChmClick << "\n";
+	stream << "onExternalLinkClick=" << m_onExternalLinkClick << "\n";
+	stream << "HistorySize=" << m_HistorySize << "\n";
+	stream << "HistoryStoreExtra=" << m_HistoryStoreExtra << "\n";
+
+	stream << "QtBrowserPath=" << m_QtBrowserPath << "\n";
+	stream << "kdeUseQTextBrowser=" << m_kdeUseQTextBrowser << "\n";
+	stream << "kdeEnableJS=" << m_kdeEnableJS << "\n";
+	stream << "kdeEnableJava=" << m_kdeEnableJava << "\n";
+	stream << "kdeEnablePlugins=" << m_kdeEnablePlugins << "\n";
+	stream << "kdeEnableRefresh=" << m_kdeEnableRefresh << "\n";
+
+	stream << "\n[history]\n";
+	
+	// Do not write all the history, but only the needed amount
+	for ( unsigned int i = 0; i < m_History.size(); i++ )
+		stream << m_History[m_History.size() - 1 - i] << "\n";
+	
+	//	m_History
 	return true;
 }

@@ -31,14 +31,39 @@ extern const char * APP_PATHINUSERDIR;
 */
 class KCHMConfig
 {
-
 public:
-    KCHMConfig();
-	bool	load();
-
-    ~KCHMConfig();
+	enum choose_action_t
+	{
+		ACTION_ALWAYS_OPEN,
+		ACTION_ASK_USER,
+		ACTION_DONT_OPEN
+	};
 	
-	QString		m_datapath;
+    KCHMConfig();
+	~KCHMConfig();
+	
+	bool	load();
+	bool	save();
+
+	void	addFileToHistory ( const QString& file );
+			
+public:
+	QString				m_datapath;
+	
+	bool				m_LoadLatestFileOnStartup;
+	choose_action_t		m_onNewChmClick;
+	choose_action_t		m_onExternalLinkClick;
+	unsigned int		m_HistorySize;
+	bool				m_HistoryStoreExtra;
+	
+	QString				m_QtBrowserPath;
+	bool				m_kdeUseQTextBrowser;
+	bool				m_kdeEnableJS;
+	bool				m_kdeEnableJava;
+	bool				m_kdeEnablePlugins;
+	bool				m_kdeEnableRefresh;
+	
+	QStringList			m_History;
 };
 
 extern KCHMConfig * appConfig;

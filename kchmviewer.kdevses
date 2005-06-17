@@ -1,50 +1,38 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="8" >
-  <Doc0 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchwindow.cpp" >
-   <View0 Type="Source" />
+ <DocsAndViews NumberOfDocuments="6" >
+  <Doc0 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmmainwindow.cpp" >
+   <View0 line="304" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsearchwindow.h" >
-   <View0 line="54" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmconfig.h" >
+   <View0 line="23" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.h" >
-   <View0 line="194" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmsettings.cpp" >
+   <View0 line="178" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qwidget.html#geometry" >
+  <Doc3 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qprocess.html#details" >
    <View0 Type="Documentation" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmbookmarkwindow.cpp" >
-   <View0 line="19" Type="Source" />
+  <Doc4 NumberOfViews="1" URL="file:///usr/lib/qt3/doc/html/qstring.html#stripWhiteSpace" >
+   <View0 Type="Documentation" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/xchmfile.cpp" >
-   <View0 line="1247" Type="Source" />
+  <Doc5 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/main.cpp" >
+   <View0 line="44" Type="Source" />
   </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kde-qt.h" >
-   <View0 line="112" Type="Source" />
-  </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/tim/work/kchmviewer/src/kchmbookmarkwindow.h" >
-   <View0 line="22" Type="Source" />
-  </Doc7>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
-   <breakpointList>
-    <breakpoint0 location="/home/tim/work/kchmviewer/src/kchmmainwindow.cpp:326" type="1" condition="" enabled="1" />
-   </breakpointList>
+   <breakpointList/>
   </kdevdebugger>
   <kdevbookmarks>
-   <bookmarks>
-    <bookmark url="/home/tim/work/kchmviewer/src/xchmfile.cpp" >
-     <mark line="786" />
-    </bookmark>
-   </bookmarks>
+   <bookmarks/>
   </kdevbookmarks>
   <kdevvalgrind>
    <executable path="" params="" />
    <valgrind path="" params="" />
-   <calltree path="calltree" params="" />
-   <kcachegrind path="kcachegrind" />
+   <calltree path="" params="" />
+   <kcachegrind path="" />
   </kdevvalgrind>
  </pluginList>
 </KDevPrjSession>

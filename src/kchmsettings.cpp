@@ -103,7 +103,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 					+ finfo.lastModified().toString (Qt::ISODate)
 					+ ".kchmviewer";
 
-	QFile file (appConfig->m_datapath + "/" + m_patternfile);
+	QFile file (appConfig.m_datapath + "/" + m_patternfile);
 
     if ( !file.open (IO_ReadOnly) )
 		return false; // it's ok, file may not exist
@@ -176,7 +176,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 
 bool KCHMSettings::saveSettings( )
 {
-    QFile file (appConfig->m_datapath + "/" + m_patternfile);
+    QFile file (appConfig.m_datapath + "/" + m_patternfile);
     if ( !file.open (IO_WriteOnly) )
 	{
 		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());

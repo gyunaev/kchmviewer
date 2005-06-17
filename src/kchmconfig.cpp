@@ -18,11 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qdir.h>
-
+#include "kde-qt.h"
 #include "kchmconfig.h"
 
-KCHMConfig * appConfig;
+KCHMConfig appConfig;
 
 const char * APP_PATHINUSERDIR = ".kchmviewer";
 
@@ -58,25 +57,79 @@ KCHMConfig::~KCHMConfig()
 
 bool KCHMConfig::load()
 {
-	m_LoadLatestFileOnStartup = false;
-	m_onNewChmClick = ACTION_ASK_USER;
-	m_onExternalLinkClick = ACTION_ASK_USER;
-	m_HistorySize = 10;
-	m_HistoryStoreExtra = true;
+	QFile file (m_datapath + "/config");
+	if ( !file.open (IO_ReadOnly) )
+		return false; // no error message - not actually a problem
 	
-	m_QtBrowserPath = "viewurl-netscape.sh \"%s\"";
-	m_kdeUseQTextBrowser = false;
-	m_kdeEnableJS = false;
-	m_kdeEnableJava = false;
-	m_kdeEnablePlugins = true;
-	m_kdeEnableRefresh = false;
+	QString line;
+	bool getting_history = false;
+	m_History.clear();
+	
+	while ( file.readLine ( line, 65535 ) > 0 )
+	{
+		line = line.stripWhiteSpace();
+		
+		// skip empty lines and comments
+		if ( line.isEmpty() || line[0] == '#' )
+			continue;
+		
+		QRegExp rxsection ("^\\[(\\w+)\\]$"), rxkeypair ("^(\\w+)\\s*=\\s*(.*)$");
+		
+		if ( rxsection.search ( line ) != -1 )
+		{
+			if ( rxsection.cap (1) == "settings" )
+				getting_history = false;
+			else if ( rxsection.cap (1) == "history" )
+				getting_history = true;
+			else
+				qWarning ("Unknown configuration section: %s", rxsection.cap (1).ascii());
+			
+			continue;
+		}
+		else if ( !getting_history && rxkeypair.search ( line ) != -1 )
+		{
+			QString key (rxkeypair.cap (1)), value (rxkeypair.cap(2));
+			
+			if ( key == "LoadLatestFileOnStartup" )
+				m_LoadLatestFileOnStartup = value.toInt() ? true : false;
+			else if ( key == "onNewChmClick" )
+				m_onNewChmClick = (choose_action_t) value.toInt();
+			else if ( key == "onExternalLinkClick" )
+				m_onExternalLinkClick = (choose_action_t) value.toInt();
+			else if ( key == "HistorySize" )
+				m_HistorySize = value.toInt();
+			else if ( key == "HistoryStoreExtra" )
+				m_HistoryStoreExtra = value.toInt() ? true : false;
+			else if ( key == "QtBrowserPath" )
+				m_QtBrowserPath = value;
+			else if ( key == "kdeUseQTextBrowser" )
+				m_kdeUseQTextBrowser = value.toInt() ? true : false;
+			else if ( key == "kdeEnableJS" )
+				m_kdeEnableJS = value.toInt() ? true : false;
+			else if ( key == "kdeEnableJava" )
+				m_kdeEnableJava = value.toInt() ? true : false;
+			else if ( key == "kdeEnablePlugins" )
+				m_kdeEnablePlugins = value.toInt() ? true : false;
+			else if ( key == "kdeEnableRefresh" )
+				m_kdeEnableRefresh = value.toInt() ? true : false;
+			else
+				qWarning ("Unknown key=value pair: %s", line.ascii());
+		}
+		else if ( getting_history )
+		{
+			if ( m_History.size() < m_HistorySize )
+				m_History.push_back (line);
+		}
+		else
+			qWarning ("Unknown line in configuration: %s", line.ascii());
+	}
 
 	return true;
 }
 
 bool KCHMConfig::save( )
 {
-	QFile file (appConfig->m_datapath + "/config");
+	QFile file (m_datapath + "/config");
 	if ( !file.open (IO_WriteOnly) )
 	{
 		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());

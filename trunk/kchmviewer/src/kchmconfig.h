@@ -21,7 +21,7 @@
 #define KCHMCONFIG_H
 
 #include <qstring.h>
-#include <qpixmap.h>
+#include <qstringlist.h>
 
 extern const char * APP_PATHINUSERDIR;
 
@@ -66,6 +66,6 @@ public:
 	QStringList			m_History;
 };
 
-extern KCHMConfig * appConfig;
+extern KCHMConfig appConfig;
 
 #endif

@@ -288,19 +288,33 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 
 	if ( viewWindow->isRemoteURL (url, p1) )
 	{
-   		if ( QMessageBox::question(this,
-			tr ("%1 - remote link clicked - %2") . arg(APP_NAME) . arg(p1),
-           	tr ("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
-           	tr("&Yes"), tr("&No"),
-           	QString::null, 0, 1 ) )
-       			return false;
-		
-		//FIXME: run the browser/mailer/etc.
+		switch ( appConfig.m_onExternalLinkClick )
+		{
+		case KCHMConfig::ACTION_DONT_OPEN:
+			break;
+
+		case KCHMConfig::ACTION_ASK_USER:
+	   		if ( QMessageBox::question(this,
+				tr ("%1 - remote link clicked - %2") . arg(APP_NAME) . arg(p1),
+           		tr ("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
+           		tr("&Yes"), tr("&No"),
+           		QString::null, 0, 1 ) )
+       				return false;
+				// no break!
+
+		case KCHMConfig::ACTION_ALWAYS_OPEN:
+		{
 #if defined (USE_KDE)
-		new KRun ( url );
+			new KRun ( url );
 #else
+			// Run the specified browser.
+			//QString 
 #endif
-		return false;
+		}
+		break;
+		}
+
+		return false; // do not change the current page.
 	}
 		
 	// Filter the URLs which do not need to be opened at all by Qt version
@@ -609,18 +623,18 @@ void KCHMMainWindow::change_settings( )
 	KCHMSetupDialog dlg ( this );
 	
 	// Set up the parameters
-	dlg.m_radioOnBeginOpenDialog->setChecked ( !appConfig->m_LoadLatestFileOnStartup );
-	dlg.m_radioOnBeginOpenLast->setChecked ( appConfig->m_LoadLatestFileOnStartup );
-	dlg.m_historySize->setValue ( appConfig->m_HistorySize );
-	dlg.m_rememberHistoryInfo->setChecked ( appConfig->m_HistoryStoreExtra );
+	dlg.m_radioOnBeginOpenDialog->setChecked ( !appConfig.m_LoadLatestFileOnStartup );
+	dlg.m_radioOnBeginOpenLast->setChecked ( appConfig.m_LoadLatestFileOnStartup );
+	dlg.m_historySize->setValue ( appConfig.m_HistorySize );
+	dlg.m_rememberHistoryInfo->setChecked ( appConfig.m_HistoryStoreExtra );
 	
-	dlg.m_radioExtLinkOpenAlways->setChecked ( appConfig->m_onExternalLinkClick == KCHMConfig::ACTION_ALWAYS_OPEN );
-	dlg.m_radioExtLinkAsk->setChecked ( appConfig->m_onExternalLinkClick == KCHMConfig::ACTION_ASK_USER );
-	dlg.m_radioExtLinkOpenNever->setChecked ( appConfig->m_onExternalLinkClick == KCHMConfig::ACTION_DONT_OPEN );
+	dlg.m_radioExtLinkOpenAlways->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_ALWAYS_OPEN );
+	dlg.m_radioExtLinkAsk->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_ASK_USER );
+	dlg.m_radioExtLinkOpenNever->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_DONT_OPEN );
 	
-	dlg.m_radioNewChmOpenAlways->setChecked ( appConfig->m_onNewChmClick == KCHMConfig::ACTION_ALWAYS_OPEN );
-	dlg.m_radioNewChmAsk->setChecked ( appConfig->m_onNewChmClick == KCHMConfig::ACTION_ASK_USER );
-	dlg.m_radioNewChmOpenNever->setChecked ( appConfig->m_onNewChmClick == KCHMConfig::ACTION_DONT_OPEN );
+	dlg.m_radioNewChmOpenAlways->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_ALWAYS_OPEN );
+	dlg.m_radioNewChmAsk->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_ASK_USER );
+	dlg.m_radioNewChmOpenNever->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_DONT_OPEN );
 
 #if defined (USE_KDE)
 	dlg.m_groupQtsettings->setEnabled ( false );
@@ -630,54 +644,54 @@ void KCHMMainWindow::change_settings( )
 	dlg.m_groupKDEsettings->setEnabled ( false );
 #endif
 
-	dlg.m_qtBrowserPath->setText ( appConfig->m_QtBrowserPath );
-	dlg.m_radioUseQtextBrowser->setChecked ( appConfig->m_kdeUseQTextBrowser );
-	dlg.m_radioUseKHTMLPart->setChecked ( !appConfig->m_kdeUseQTextBrowser );
+	dlg.m_qtBrowserPath->setText ( appConfig.m_QtBrowserPath );
+	dlg.m_radioUseQtextBrowser->setChecked ( appConfig.m_kdeUseQTextBrowser );
+	dlg.m_radioUseKHTMLPart->setChecked ( !appConfig.m_kdeUseQTextBrowser );
 	
-	dlg.m_enableJS->setChecked ( appConfig->m_kdeEnableJS );
-	dlg.m_enablePlugins->setChecked ( appConfig->m_kdeEnablePlugins );
-	dlg.m_enableJava->setChecked ( appConfig->m_kdeEnableJava );
-	dlg.m_enableRefresh->setChecked ( appConfig->m_kdeEnableRefresh );
+	dlg.m_enableJS->setChecked ( appConfig.m_kdeEnableJS );
+	dlg.m_enablePlugins->setChecked ( appConfig.m_kdeEnablePlugins );
+	dlg.m_enableJava->setChecked ( appConfig.m_kdeEnableJava );
+	dlg.m_enableRefresh->setChecked ( appConfig.m_kdeEnableRefresh );
 	
 	if ( dlg.exec() == QDialog::Accepted )
 	{
-		appConfig->m_LoadLatestFileOnStartup = dlg.m_radioOnBeginOpenLast->isChecked();
-		appConfig->m_HistorySize = dlg.m_historySize->value();
-		appConfig->m_HistoryStoreExtra = dlg.m_rememberHistoryInfo->isChecked();
+		appConfig.m_LoadLatestFileOnStartup = dlg.m_radioOnBeginOpenLast->isChecked();
+		appConfig.m_HistorySize = dlg.m_historySize->value();
+		appConfig.m_HistoryStoreExtra = dlg.m_rememberHistoryInfo->isChecked();
 
 		if ( dlg.m_radioExtLinkOpenAlways->isChecked () )
-			appConfig->m_onExternalLinkClick = KCHMConfig::ACTION_ALWAYS_OPEN;
+			appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_ALWAYS_OPEN;
 		else if ( dlg.m_radioExtLinkAsk->isChecked () )
-			appConfig->m_onExternalLinkClick = KCHMConfig::ACTION_ASK_USER;
+			appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_ASK_USER;
 		else
-			appConfig->m_onExternalLinkClick = KCHMConfig::ACTION_DONT_OPEN;
+			appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_DONT_OPEN;
 
 		if ( dlg.m_radioNewChmOpenAlways->isChecked () )
-			appConfig->m_onNewChmClick = KCHMConfig::ACTION_ALWAYS_OPEN;
+			appConfig.m_onNewChmClick = KCHMConfig::ACTION_ALWAYS_OPEN;
 		else if ( dlg.m_radioNewChmAsk->isChecked () )
-			appConfig->m_onNewChmClick = KCHMConfig::ACTION_ASK_USER;
+			appConfig.m_onNewChmClick = KCHMConfig::ACTION_ASK_USER;
 		else
-			appConfig->m_onNewChmClick = KCHMConfig::ACTION_DONT_OPEN;
+			appConfig.m_onNewChmClick = KCHMConfig::ACTION_DONT_OPEN;
 
-		appConfig->m_QtBrowserPath = dlg.m_qtBrowserPath->text();
+		appConfig.m_QtBrowserPath = dlg.m_qtBrowserPath->text();
 		
-		appConfig->m_kdeEnableJS = dlg.m_enableJS->isChecked();
-		appConfig->m_kdeEnablePlugins = dlg.m_enablePlugins->isChecked();
-		appConfig->m_kdeEnableJava = dlg.m_enableJava->isChecked();
-		appConfig->m_kdeEnableRefresh = dlg.m_enableRefresh->isChecked();
+		appConfig.m_kdeEnableJS = dlg.m_enableJS->isChecked();
+		appConfig.m_kdeEnablePlugins = dlg.m_enablePlugins->isChecked();
+		appConfig.m_kdeEnableJava = dlg.m_enableJava->isChecked();
+		appConfig.m_kdeEnableRefresh = dlg.m_enableRefresh->isChecked();
 
 		// If current browser changed - change it
-		if ( appConfig->m_kdeUseQTextBrowser != dlg.m_radioUseQtextBrowser->isChecked() )
+		if ( appConfig.m_kdeUseQTextBrowser != dlg.m_radioUseQtextBrowser->isChecked() )
 		{
 			QString url = viewWindow->getOpenedPage();
 
 			createViewWindow();
 			updateView();
 			viewWindow->openUrl ( url );
-			appConfig->m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
+			appConfig.m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
 		}
 		
-		appConfig->save();
+		appConfig.save();
 	}
 }
 

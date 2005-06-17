@@ -39,11 +39,9 @@ int main( int argc, char ** argv )
 	QApplication app( argc, argv );
 #endif
 
-	appConfig = new KCHMConfig();
-	appConfig->load();
+	appConfig.load();
 	
 	mainWindow = new KCHMMainWindow();
-	mainWindow->setCaption( "kchmview" );
 	mainWindow->show();
 	app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );
 	return app.exec();

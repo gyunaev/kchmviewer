@@ -1,3 +1,9 @@
+2005-06-17 tim <tim@krasnogorsk.ru>
+	- configuration settings are now used.
+
+2005-06-16 tim <tim@krasnogorsk.ru>
+	- added the configuration dialog, configuration settings are now saved and loaded.
+
 2005-06-12 tim <tim@krasnogorsk.ru>
 	- fixed compilation on Slackware 10.
 	- fixed internal links following for QTextBrowser.

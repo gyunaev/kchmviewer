@@ -20,6 +20,9 @@
 
 #include "kde-qt.h"
 #include "kchmconfig.h"
+#include "kchmsettings.h"
+#include "kchmmainwindow.h"
+
 
 KCHMConfig appConfig;
 
@@ -42,7 +45,7 @@ KCHMConfig::KCHMConfig()
 	m_HistorySize = 10;
 	m_HistoryStoreExtra = true;
 	
-	m_QtBrowserPath = "viewurl-netscape.sh \"%s\"";
+	m_QtBrowserPath = "viewurl-netscape.sh '%s'";
 	m_kdeUseQTextBrowser = false;
 	m_kdeEnableJS = false;
 	m_kdeEnableJava = false;
@@ -118,7 +121,7 @@ bool KCHMConfig::load()
 		else if ( getting_history )
 		{
 			if ( m_History.size() < m_HistorySize )
-				m_History.push_back (line);
+				addFileToHistory (line);
 		}
 		else
 			qWarning ("Unknown line in configuration: %s", line.ascii());
@@ -160,4 +163,21 @@ bool KCHMConfig::save( )
 	
 	//	m_History
 	return true;
+}
+
+void KCHMConfig::addFileToHistory( const QString & file )
+{
+	if ( m_History.size() < m_HistorySize )
+	{
+		m_History.push_back( file );
+		return;
+	}
+	
+	// Remove a file from the front
+	QString filetoremove = m_History[0];
+	m_History.erase( m_History.begin() );
+	m_History.push_back( file );
+	
+	// And remove the appropriate history file
+	mainWindow->getCurrentSettings()->removeSettings ( filetoremove );
 }

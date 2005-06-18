@@ -43,6 +43,7 @@ public:
 	const QString&	getOpenedFileName () { return m_chmFilename; }
 	
 	KCHMViewWindow * getViewWindow() { return viewWindow; }
+	KCHMSettings   * getCurrentSettings() const { return m_currentSettings; }
 
 	void		showInStatusBar (const QString& text)	{ statusBar()->message( text, 2000 ); }
 	void		setTextEncoding (const KCHMTextEncoding::text_encoding_t * enc);
@@ -55,29 +56,32 @@ private slots:
 	void slotLinkClicked ( const QString & link, bool& follow_link );
 	void slotHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
 
-    void choose();
-    void print();
-    void backward();
-    void forward();
-    void gohome();
+    void slotOpenMenuItemActivated();
+	void slotPrintMenuItemActivated();
+	void slotBackwardMenuItemActivated();
+	void slotForwardMenuItemActivated();
+	void slotHomeMenuItemActivated();
 
-    void about();
-    void aboutQt();
+	void slotAboutMenuItemActivated();
+	void slotAboutQtMenuItemActivated();
 	
-	void browserSelectAll();
-	void browserCopy();
+	void slotBrowserSelectAll();
+	void slotBrowserCopy();
 
-	void change_settings();
+	void slotChangeSettingsMenuItemActivated();
+	void slotHistoryMenuItemActivated ( int );
 	
 private:
 	bool	parseCmdLineArgs();
 	void 	showEvent( QShowEvent * );
 	void	closeEvent ( QCloseEvent * e );
-
+	void	setupSignals ();
+			
 	void 	setupToolbarsAndMenu ( );
 	bool	loadChmFile ( const QString &fileName,  bool call_open_page = true );
-	void	CloseChmFile();	
+	void	closeChmFile();	
 	void	updateView();
+	void	updateHistoryMenu();
 	void	createViewWindow();
 	
     QString 				m_chmFilename;
@@ -99,10 +103,8 @@ private:
 	
 	CHMFile				*	chmfile;
 	bool					m_FirstTimeShow;
-
-#if defined (USE_KDE)
-	bool					m_useKHTMLPart;
-#endif
+	
+	KQPopupMenu			*	m_menuHistory;
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 	enum	auto_test_state_t

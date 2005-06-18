@@ -21,6 +21,7 @@
 #include "kde-qt.h"
 #include "kchmmainwindow.h"
 #include "xchmfile.h"
+#include "kchmconfig.h"
 #include "kchmviewwindow_khtmlpart.h"
 
 #if defined (USE_KDE)
@@ -36,11 +37,6 @@ KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QWidget * parent )
 	m_searchForward = true;
 
 	invalidate();
-
-	setJScriptEnabled(true);
- 	setJavaEnabled(false);
- 	setMetaRefreshEnabled(false);
- 	setPluginsEnabled(false);
 
 	m_contextMenu = 0;
 
@@ -84,6 +80,11 @@ void KCHMViewWindow_KHTMLPart::invalidate( )
 	m_searchForward = true;
 	m_searchText = QString::null;
 
+	setJScriptEnabled ( appConfig.m_kdeEnableJS );
+	setJavaEnabled ( appConfig.m_kdeEnableJava );
+	setMetaRefreshEnabled ( appConfig.m_kdeEnableRefresh );
+	setPluginsEnabled ( appConfig.m_kdeEnablePlugins );
+	
 	KCHMViewWindow::invalidate( );
 }
 

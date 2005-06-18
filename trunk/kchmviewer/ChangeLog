@@ -1,5 +1,11 @@
+2005-06-18 tim <tim@krasnogorsk.ru>
+	- all configuration settings are now used.
+	- history is saved, loaded and cleaned up correctly.
+	- chm data (size/time) is now stored inside the history file, not in file name.
+
 2005-06-17 tim <tim@krasnogorsk.ru>
-	- configuration settings are now used.
+	- some of configuration settings are now used.
+	- new browser is now running on Qt version when external URL is opening.
 
 2005-06-16 tim <tim@krasnogorsk.ru>
 	- added the configuration dialog, configuration settings are now saved and loaded.

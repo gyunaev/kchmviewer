@@ -26,12 +26,8 @@
 #include "kchmsettings.h"
 #include "kchmconfig.h"
 
-#define STORE_CONTEXT_TREE
-//#define STORE_INDEX_TREE
-//#define STORE_SEARCH_DATABASE
-
 static Q_INT32 SETTINGS_MAGIC = 0x98AB4E7C;
-static Q_INT32 SETTINGS_VERSION = 2;
+static Q_INT32 SETTINGS_VERSION = 3;
 
 /*
  * The order is important!
@@ -39,16 +35,15 @@ static Q_INT32 SETTINGS_VERSION = 2;
  */
 enum marker_t
 {
-	MARKER_ACTIVEPAGE = 1,
+	MARKER_FILESIZE = 1,
+	MARKER_FILETIME,
+	MARKER_ACTIVEPAGE,
 	MARKER_SCROLLBARPOSITION,
 	MARKER_ACTIVETAB,
 	MARKER_ACTIVEENCODING,
 	MARKER_SEARCHHISTORY,
 	MARKER_BOOKMARKS,
 	MARKER_CHOSENZOOM,
-	MARKER_CONTEXTTREE,
-	MARKER_INDEXTREE,
-	MARKER_SEARCHDATABASE,
 
 	// This should be the last
 	MARKER_END = 0x7FFF
@@ -90,20 +85,17 @@ bool KCHMSettings::loadSettings( const QString & filename )
 	m_searchhistory.clear();
 	m_bookmarks.clear();
 
-	// Create a filename for help storage: name-size-lastmodified.kchmviewer
 	QFileInfo finfo ( filename );
 
 	if ( !finfo.size() )
 		return false;
+	
+	m_currentsettingsname = getSettingsFilename( filename );
+	
+	if ( m_currentsettingsname.isEmpty() )
+		return false;
 
-	m_patternfile = finfo.baseName() 
-					+ "-" 
-					+ QString::number (finfo.size())
-					+ "-"
-					+ finfo.lastModified().toString (Qt::ISODate)
-					+ ".kchmviewer";
-
-	QFile file (appConfig.m_datapath + "/" + m_patternfile);
+	QFile file( m_currentsettingsname );
 
     if ( !file.open (IO_ReadOnly) )
 		return false; // it's ok, file may not exist
@@ -140,6 +132,24 @@ bool KCHMSettings::loadSettings( const QString & filename )
 		
 		switch (data)
 		{
+		case MARKER_FILESIZE:
+			stream >> m_currentfilesize;
+			if ( m_currentfilesize != finfo.size() )
+			{
+				m_currentfilesize = finfo.size();
+				return false;
+			}
+			break;
+			
+		case MARKER_FILETIME:
+			stream >> m_currentfiledate;
+			if ( m_currentfiledate != finfo.lastModified().toTime_t() )
+			{
+				m_currentfiledate = finfo.lastModified().toTime_t();
+				return false;
+			}
+			break;
+			
 		case MARKER_ACTIVEPAGE:
 			stream >> m_activepage;
 			break;
@@ -176,7 +186,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 
 bool KCHMSettings::saveSettings( )
 {
-    QFile file (appConfig.m_datapath + "/" + m_patternfile);
+	QFile file( m_currentsettingsname );
     if ( !file.open (IO_WriteOnly) )
 	{
 		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());
@@ -189,6 +199,12 @@ bool KCHMSettings::saveSettings( )
 	stream << SETTINGS_MAGIC;
 	stream << SETTINGS_VERSION;
 
+	// Save size and last-modified
+	stream << MARKER_FILESIZE;
+	stream << m_currentfilesize;
+	stream << MARKER_FILETIME;
+	stream << m_currentfiledate;
+	
 	// Save generic settings
 	stream << MARKER_ACTIVEPAGE;
 	stream << m_activepage;
@@ -214,4 +230,20 @@ bool KCHMSettings::saveSettings( )
 	
 	stream << MARKER_END;
 	return true;
+}
+
+QString KCHMSettings::getSettingsFilename( const QString & filename )
+{
+	// Create a filename for help storage: name-size-lastmodified.kchmviewer
+	QFileInfo finfo ( filename );
+
+	if ( !finfo.size() )
+		return QString::null;
+		
+	return appConfig.m_datapath + "/" + finfo.baseName() + ".kchmviewer";
+}
+
+void KCHMSettings::removeSettings( const QString & filename )
+{
+	QFile::remove ( getSettingsFilename ( filename ) );
 }

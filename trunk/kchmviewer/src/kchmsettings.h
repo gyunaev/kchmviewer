@@ -28,6 +28,8 @@
 @author Georgy Yunaev
 */
 class SavedBookmark;
+class QFileInfo;
+
 
 class KCHMSettings
 {
@@ -36,6 +38,7 @@ public:
 	
 	bool	loadSettings (const QString& filename);
 	bool	saveSettings ( );
+	void 	removeSettings ( const QString& filename );
 	
 	class SavedBookmark
 	{
@@ -60,7 +63,12 @@ public:
 	bookmark_saved_settings_t	m_bookmarks;
 
 private:
-	QString						m_patternfile;
+	QString  getSettingsFilename ( const QString& filename );
+	
+	// params of current file
+	QString						m_currentsettingsname;
+	unsigned int				m_currentfiledate;
+	unsigned int				m_currentfilesize;
 };
 
 #endif

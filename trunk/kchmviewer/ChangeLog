@@ -1,4 +1,7 @@
 2005-06-18 tim <tim@krasnogorsk.ru>
+	- version 0.91 RELEASE CANDIDATE 1 released.
+
+2005-06-18 tim <tim@krasnogorsk.ru>
 	- all configuration settings are now used.
 	- history is saved, loaded and cleaned up correctly.
 	- chm data (size/time) is now stored inside the history file, not in file name.

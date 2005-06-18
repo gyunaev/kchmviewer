@@ -19,6 +19,9 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#include <errno.h>
 
 #include "kde-qt.h"
 
@@ -46,15 +49,13 @@ KCHMMainWindow::KCHMMainWindow()
 	const unsigned int WND_X_SIZE = 700;
 	const unsigned int WND_Y_SIZE = 500;
 	const unsigned int SPLT_X_SIZE = 200;
-	
+
 	m_FirstTimeShow = true;
 	chmfile = 0;
 	indexWindow = 0;
 	viewWindow = 0;
 
-#if defined (USE_KDE)
-	m_useKHTMLPart = true;
-#endif
+	setupSignals();
 
 	m_currentSettings = new KCHMSettings;
 		
@@ -106,7 +107,7 @@ KCHMMainWindow::~KCHMMainWindow()
 }
 
 
-void KCHMMainWindow::choose()
+void KCHMMainWindow::slotOpenMenuItemActivated()
 {
 #if defined (USE_KDE)
     QString fn = KFileDialog::getOpenFileName( QString::null, "*.chm|Compressed Help Manual (*.chm)",
@@ -136,7 +137,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 	{
 		if ( chmfile )
 		{
-			CloseChmFile( );
+			closeChmFile( );
 			delete chmfile;
 		}
 	
@@ -205,6 +206,8 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		}
 
 		m_searchToolbar->setEnabled (true);
+		appConfig.addFileToHistory( m_chmFilename );
+		updateHistoryMenu();
 		return true;
 	}
 	else
@@ -223,12 +226,12 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 }
 
 
-void KCHMMainWindow::print()
+void KCHMMainWindow::slotPrintMenuItemActivated()
 {
 	viewWindow->printCurrentPage();
 }
 
-void KCHMMainWindow::about()
+void KCHMMainWindow::slotAboutMenuItemActivated()
 {
 	QString caption = tr("About %1") . arg(APP_NAME);
 	QString text = tr("%1 version %2\n\nCopyright (C) Georgy Yunaev, tim@krasnogorsk.ru, 2005\n\n"
@@ -243,7 +246,7 @@ void KCHMMainWindow::about()
 }
 
 
-void KCHMMainWindow::aboutQt()
+void KCHMMainWindow::slotAboutQtMenuItemActivated()
 {
     QMessageBox::aboutQt( this, APP_NAME);
 }
@@ -307,8 +310,28 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 #if defined (USE_KDE)
 			new KRun ( url );
 #else
-			// Run the specified browser.
-			//QString 
+			// To be safe, URL should contain no quotes, apostrofes and \0 symbols
+			url.remove (QRegExp ("['\"\0]"));
+			QString command = appConfig.m_QtBrowserPath;
+			command.replace ("%s", url);
+			
+			// And run an external command with fork()s
+			switch ( fork() )
+			{
+			case -1:
+				qWarning ("Could not fork: %s", strerror(errno));
+				break;
+				
+			case 0: // child
+				if ( fork() != 0 )
+					exit(0); // exit immediately - our child is now has init as his parent
+				
+				system (command.ascii());
+				exit (0);
+				
+			default: // parent
+				break;
+			}
 #endif
 		}
 		break;
@@ -373,7 +396,15 @@ void KCHMMainWindow::showEvent( QShowEvent * )
 	m_FirstTimeShow = false;
 	
 	if ( !parseCmdLineArgs( ) )
-		choose();
+	{
+		if ( appConfig.m_LoadLatestFileOnStartup && appConfig.m_History.size() > 0 )
+		{
+			if ( loadChmFile ( appConfig.m_History[0] ) )
+				return;
+		}
+		
+		emit slotOpenMenuItemActivated();
+	}
 }
 
 void KCHMMainWindow::setupToolbarsAndMenu( )
@@ -389,7 +420,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				tr("Open File"), 
 				QString::null,
 				this, 
-				SLOT(choose()), 
+				SLOT( slotOpenMenuItemActivated() ),
 				toolbar);
 	
 	QString fileOpenText = tr("Click this button to open an existing chm file.");
@@ -400,7 +431,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				tr("Print File"),
 				QString::null,
 				this,
-				SLOT(print()),
+				SLOT( slotPrintMenuItemActivated() ),
 				toolbar);
 
 	QString filePrintText = tr("Click this button to print the current page");
@@ -415,16 +446,16 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				tr("Move backward in history"),
 				QString::null,
 				this,
-				SLOT(backward()),
+				SLOT( slotBackwardMenuItemActivated() ),
 				navtoolbar);
 	QWhatsThis::add( m_toolbarIconBackward, tr("Click this button to move backward in browser history") );	
 
     QPixmap iconForward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::forward));
-    m_toolbarIconForward	= new QToolButton (iconForward,
+    m_toolbarIconForward = new QToolButton (iconForward,
 				tr("Move forward in history"),
 				QString::null,
 				this,
-				SLOT(forward()),
+				SLOT( slotForwardMenuItemActivated() ),
 				navtoolbar);
 	QWhatsThis::add( m_toolbarIconBackward, tr("Click this button to move forward in browser history") );	
 	
@@ -433,7 +464,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				tr("Go to the home page"),
 				QString::null,
 				this,
-				SLOT(gohome()),
+				SLOT( slotHomeMenuItemActivated() ),
 				navtoolbar);
 	QWhatsThis::add( m_toolbarIconBackward, tr("Click this button to move to the home page") );	
 
@@ -442,21 +473,27 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	menuBar()->insertItem( tr("&File"), file );
 
     int id;
-    id = file->insertItem ( iconFileOpen, tr("&Open..."), this, SLOT(choose()), CTRL+Key_O );
+	id = file->insertItem ( iconFileOpen, tr("&Open..."), this, SLOT( slotOpenMenuItemActivated() ), CTRL+Key_O );
     file->setWhatsThis( id, fileOpenText );
 
-    id = file->insertItem( iconFilePrint, tr("&Print..."), this, SLOT(print()), CTRL+Key_P );
+	id = file->insertItem( iconFilePrint, tr("&Print..."), this, SLOT( slotPrintMenuItemActivated() ), CTRL+Key_P );
     file->setWhatsThis( id, filePrintText );
 
     file->insertSeparator();
 
+	m_menuHistory = new KQPopupMenu( file );
+	connect ( m_menuHistory, SIGNAL( activated(int) ), this, SLOT ( slotHistoryMenuItemActivated(int) ));
+	
+	file->insertItem( tr("&Recent files"), m_menuHistory );
+	
+	file->insertSeparator();
     file->insertItem( tr("&Quit"), qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
 	KQPopupMenu * menu_edit = new KQPopupMenu( this );
 	menuBar()->insertItem( tr("&Edit"), menu_edit );
 
-	id = menu_edit->insertItem ( tr("&Copy"), this, SLOT(browserCopy()), CTRL+Key_C );
-	id = menu_edit->insertItem ( tr("&Select all"), this, SLOT(browserSelectAll()), CTRL+Key_A );
+	id = menu_edit->insertItem ( tr("&Copy"), this, SLOT( slotBrowserCopy()), CTRL+Key_C );
+	id = menu_edit->insertItem ( tr("&Select all"), this, SLOT( slotBrowserSelectAll()), CTRL+Key_A );
 
     menu_edit->insertSeparator();
 	
@@ -465,28 +502,30 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 
 	KQPopupMenu * settings = new KQPopupMenu( this );
 	menuBar()->insertItem( tr("&Setup"), settings );
-	settings->insertItem( tr("&Change settings..."), this, SLOT(change_settings()) );
+	settings->insertItem( tr("&Change settings..."), this, SLOT( slotChangeSettingsMenuItemActivated() ));
 
     KQPopupMenu * help = new KQPopupMenu( this );
     menuBar()->insertItem( tr("&Help"), help );
 
-    help->insertItem( tr("&About"), this, SLOT(about()), Key_F1 );
-    help->insertItem( tr("About &Qt"), this, SLOT(aboutQt()) );
+	help->insertItem( tr("&About"), this, SLOT( slotAboutMenuItemActivated() ), Key_F1 );
+	help->insertItem( tr("About &Qt"), this, SLOT( slotAboutQtMenuItemActivated() ));
     help->insertSeparator();
     help->insertItem( tr("What's &This"), this, SLOT(whatsThis()), SHIFT+Key_F1 );
+	
+	updateHistoryMenu();
 }
 
-void KCHMMainWindow::backward( )
+void KCHMMainWindow::slotBackwardMenuItemActivated()
 {
 	viewWindow->navigateBack();
 }
 
-void KCHMMainWindow::forward( )
+void KCHMMainWindow::slotForwardMenuItemActivated()
 {
 	viewWindow->navigateForward();
 }
 
-void KCHMMainWindow::gohome( )
+void KCHMMainWindow::slotHomeMenuItemActivated()
 {
 	openPage (chmfile->HomePage(), true);
 }
@@ -509,22 +548,27 @@ void KCHMMainWindow::setTextEncoding( const KCHMTextEncoding::text_encoding_t * 
 	viewWindow->openUrl ( url );
 }
 
-void KCHMMainWindow::CloseChmFile( )
+void KCHMMainWindow::closeChmFile( )
 {
 	// Prepare the settings
-	m_currentSettings->m_activeencodinglcid = chmfile->getCurrentEncoding()->winlcid;
-	m_currentSettings->m_activetab = m_tabWidget->currentPageIndex( );
-	m_currentSettings->m_chosenzoom = viewWindow->getZoomFactor();
+	if ( appConfig.m_HistoryStoreExtra )
+	{
+		m_currentSettings->m_activeencodinglcid = chmfile->getCurrentEncoding()->winlcid;
+		m_currentSettings->m_activetab = m_tabWidget->currentPageIndex( );
+		m_currentSettings->m_chosenzoom = viewWindow->getZoomFactor();
 			
-	if ( searchWindow )
-		searchWindow->saveSettings (m_currentSettings->m_searchhistory);
+		if ( searchWindow )
+			searchWindow->saveSettings (m_currentSettings->m_searchhistory);
 				
-	bookmarkWindow->saveSettings (m_currentSettings->m_bookmarks);
+		bookmarkWindow->saveSettings (m_currentSettings->m_bookmarks);
 
-	m_currentSettings->m_activepage = viewWindow->getOpenedPage();
-	m_currentSettings->m_scrollbarposition = viewWindow->getScrollbarPosition();
+		m_currentSettings->m_activepage = viewWindow->getOpenedPage();
+		m_currentSettings->m_scrollbarposition = viewWindow->getScrollbarPosition();
 
-	m_currentSettings->saveSettings( );
+		m_currentSettings->saveSettings( );
+	}
+	
+	appConfig.save();
 }
 
 
@@ -532,7 +576,7 @@ void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 {
 	// Save the settings if we have something opened
 	if ( chmfile )
-		CloseChmFile( );
+		closeChmFile( );
 
 	QMainWindow::closeEvent ( e );
 }
@@ -595,7 +639,7 @@ void KCHMMainWindow::createViewWindow( )
 		delete viewWindow;
 
 #if defined (USE_KDE)
-	if ( m_useKHTMLPart )
+	if ( !appConfig.m_kdeUseQTextBrowser )
 		viewWindow = new KCHMViewWindow_KHTMLPart ( m_windowSplitter );
 	else
 #endif
@@ -608,17 +652,17 @@ void KCHMMainWindow::createViewWindow( )
 	connect( viewWindow->getQObject(), SIGNAL( signalHistoryAvailabilityChanged (bool, bool) ), this, SLOT( slotHistoryAvailabilityChanged (bool, bool) ) );
 }
 
-void KCHMMainWindow::browserSelectAll( )
+void KCHMMainWindow::slotBrowserSelectAll( )
 {
 	viewWindow->clipSelectAll();
 }
 
-void KCHMMainWindow::browserCopy( )
+void KCHMMainWindow::slotBrowserCopy( )
 {
 	viewWindow->clipCopy();
 }
 
-void KCHMMainWindow::change_settings( )
+void KCHMMainWindow::slotChangeSettingsMenuItemActivated()
 {
 	KCHMSetupDialog dlg ( this );
 	
@@ -679,21 +723,52 @@ void KCHMMainWindow::change_settings( )
 		appConfig.m_kdeEnablePlugins = dlg.m_enablePlugins->isChecked();
 		appConfig.m_kdeEnableJava = dlg.m_enableJava->isChecked();
 		appConfig.m_kdeEnableRefresh = dlg.m_enableRefresh->isChecked();
-
-		// If current browser changed - change it
-		if ( appConfig.m_kdeUseQTextBrowser != dlg.m_radioUseQtextBrowser->isChecked() )
-		{
-			QString url = viewWindow->getOpenedPage();
-
-			createViewWindow();
-			updateView();
-			viewWindow->openUrl ( url );
-			appConfig.m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
-		}
+		appConfig.m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
 		
 		appConfig.save();
 	}
 }
+
+
+void KCHMMainWindow::setupSignals( )
+{
+#if defined(HAVE_SIGACTION)
+	struct sigaction sa;
+    memset ((char *)&sa, 0, sizeof(sa));
+	sigemptyset (&sa.sa_mask);
+	sigaddset (&sa.sa_mask, SIGCHLD);
+
+#ifdef SA_RESTART
+	sa.sa_flags = SA_RESTART;
+#endif
+	
+	sa.sa_handler = SIG_IGN;
+	sigaction (SIGCHLD, &sa, (struct sigaction *)0);
+#else /* !HAVE_SIGACTION */
+	signal (SIGCHLD, SIG_IGN);
+#endif /* HAVE_SIGACTION */
+}
+
+void KCHMMainWindow::slotHistoryMenuItemActivated( int item )
+{
+	if ( item < 0 || item >= (signed) appConfig.m_History.size() )
+		qFatal ("KCHMMainWindow::slotHistoryMenuItemActivated: bad history menu id %d", item);
+	
+	QString filename = appConfig.m_History[item];
+	
+	// remove it, so it will be added again at the history top, and will not shitf anything.
+//	appConfig.m_History.remove ( appConfig.m_History.begin() + item);
+	loadChmFile ( filename );
+}
+
+void KCHMMainWindow::updateHistoryMenu()
+{
+	m_menuHistory->clear ();
+	
+	for ( int i = appConfig.m_History.size() - 1; i >= 0; i-- )
+		m_menuHistory->insertItem( appConfig.m_History[i], i );
+}
+
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 void KCHMMainWindow::runAutoTest()

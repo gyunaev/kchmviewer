@@ -1,3 +1,6 @@
+2005-06-20 Luca 'Ziabice' Gambetta <ziabice@ziabice.net>
+	- fix for AMD64 platform (confirmed to work)
+
 2005-06-18 tim <tim@krasnogorsk.ru>
 	- version 0.91 RELEASE CANDIDATE 1 released.
 

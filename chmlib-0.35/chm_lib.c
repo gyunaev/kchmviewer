@@ -160,14 +160,21 @@ typedef unsigned __int64        UInt64;
 /* Sparc        */
 /* MIPS         */
 /* PPC          */
-#elif __i386__ || __sun || __sgi || __ppc__
+#elif __i386__ || __sun || __sgi || __ppc__ || __x86_64__
 typedef unsigned char           UChar;
 typedef short                   Int16;
 typedef unsigned short          UInt16;
+#if __x86_64__
+typedef int                     Int32;
+typedef unsigned int            UInt32;
+typedef long	                Int64;
+typedef unsigned long           UInt64;
+#else /* !__x86_64__ */
 typedef long                    Int32;
 typedef unsigned long           UInt32;
 typedef long long               Int64;
 typedef unsigned long long      UInt64;
+#endif /* __x86_64__ */ 
 #else
 
 /* yielding an error is preferable to yielding incorrect behavior */

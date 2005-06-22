@@ -25,6 +25,8 @@
 
 #include "kde-qt.h"
 
+#include <qaccel.h>
+
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
 #include "kchmindexwindow.h"
@@ -55,6 +57,10 @@ KCHMMainWindow::KCHMMainWindow()
 	indexWindow = 0;
 	viewWindow = 0;
 
+	m_tabIndexPage = -1;
+	m_tabSearchPage = -1;
+	m_tabBookmarkPage = -1;
+	
 	setupSignals();
 
 	m_currentSettings = new KCHMSettings;
@@ -97,6 +103,12 @@ KCHMMainWindow::KCHMMainWindow()
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 	m_autoteststate = STATE_OFF;
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
+
+	QAccel * accel = new QAccel( this );
+	accel->connectItem ( accel->insertItem ( CTRL + Key_1), this, SLOT ( slotActivateContentTab() ) );
+	accel->connectItem ( accel->insertItem ( CTRL + Key_2), this, SLOT ( slotActivateIndexTab() ) );
+	accel->connectItem ( accel->insertItem ( CTRL + Key_3), this, SLOT ( slotActivateSearchTab() ) );
+	accel->connectItem ( accel->insertItem ( CTRL + Key_4), this, SLOT ( slotActivateBookmarkTab() ) );
 
 	statusBar()->show();
 }
@@ -146,7 +158,11 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		QDir qd;
 		qd.setPath (fileName);
 		m_chmFilename = qd.absPath();
-		
+
+		m_tabIndexPage = -1;
+		m_tabSearchPage = -1;
+		m_tabBookmarkPage = -1;
+
 		// Test whether to show/invalidate the index window
 		if ( chmfile->IndexFile().isEmpty() )
 		{
@@ -156,6 +172,9 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 				delete indexWindow;
 				indexWindow = 0;
 			}
+			
+			m_tabSearchPage = 1;
+			m_tabBookmarkPage = 2;
 		}
 		else
 		{
@@ -166,6 +185,10 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 			}
 			else
 				indexWindow->invalidate();
+		
+			m_tabIndexPage = 1;
+			m_tabSearchPage = 2;
+			m_tabBookmarkPage = 3;
 		}
 
 		searchWindow->invalidate();
@@ -411,7 +434,6 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 {
 	// Create a 'file' toolbar
     QToolBar * toolbar = new QToolBar(this);
-	QWhatsThis::whatsThisButton( toolbar );
 	
 	toolbar->setLabel( tr("File Operations") );
 
@@ -438,7 +460,6 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	QWhatsThis::add( filePrint, filePrintText );
 
     QToolBar * navtoolbar = new QToolBar(this);
-	QWhatsThis::whatsThisButton( navtoolbar );	
 	navtoolbar->setLabel( tr("Navigation") );
 	
     QPixmap iconBackward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::back));
@@ -583,7 +604,8 @@ void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 
 bool KCHMMainWindow::parseCmdLineArgs( )
 {
-	QString filename = QString::null;
+	QString filename = QString::null, search_query = QString::null;
+	QString search_index = QString::null, search_bookmark = QString::null;
 	bool do_autotest = false;
 
 #if defined (USE_KDE)
@@ -591,6 +613,10 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	if ( args->isSet("autotestmode") )
 		do_autotest = true;
+
+	search_query = args->getOption ("search");
+	search_index = args->getOption ("sindex");
+	search_bookmark = args->getOption ("sbook");
 
 	if ( args->count() > 0 )
 		filename = args->arg(0);
@@ -600,6 +626,12 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	{
 		if ( !strcmp (qApp->argv()[i], "--autotestmode") )
 			do_autotest = true;
+		else if ( !strcmp (qApp->argv()[i], "--search") )
+			search_query = qApp->argv()[++i];
+		else if ( !strcmp (qApp->argv()[i], "--sindex") )
+			search_index = qApp->argv()[++i];
+		else if ( !strcmp (qApp->argv()[i], "--sbook") )
+			search_bookmark = qApp->argv()[++i];
 		else
 			filename = qApp->argv()[i];
 	}
@@ -610,7 +642,16 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	if ( !filename.isEmpty() )
 	{
-		loadChmFile( filename );
+/*		if ( !loadChmFile( filename ) )
+			return false;
+
+		if ( search_index.isEmpty() )
+			
+			
+			search_query = args->getOption ("search");
+		
+		search_bookmark = args->getOption ("sbook");
+*/
 		
 		if ( do_autotest )
 		{
@@ -618,7 +659,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 			m_autoteststate = STATE_INITIAL;
 			runAutoTest();
 #else
-			qFatal ("Auto Test mode support is not compiled.");
+			qFatal ("Auto Test mode support is not compiled in.");
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 		}
 		return true;
@@ -767,6 +808,28 @@ void KCHMMainWindow::updateHistoryMenu()
 	
 	for ( int i = appConfig.m_History.size() - 1; i >= 0; i-- )
 		m_menuHistory->insertItem( appConfig.m_History[i], i );
+}
+
+void KCHMMainWindow::slotActivateContentTab( )
+{
+	m_tabWidget->setCurrentPage( 0 );
+}
+
+void KCHMMainWindow::slotActivateIndexTab( )
+{
+	if ( m_tabIndexPage != -1 ) 
+		m_tabWidget->setCurrentPage( m_tabIndexPage );
+}
+
+void KCHMMainWindow::slotActivateSearchTab( )
+{
+	if ( m_tabSearchPage != -1 ) 
+		m_tabWidget->setCurrentPage( m_tabSearchPage );
+}
+
+void KCHMMainWindow::slotActivateBookmarkTab( )
+{
+	m_tabWidget->setCurrentPage( m_tabBookmarkPage );
 }
 
 

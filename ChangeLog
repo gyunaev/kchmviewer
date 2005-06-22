@@ -1,3 +1,12 @@
+2005-06-21 tim <tim@krasnogorsk.ru>
+	- fixed 'View HTML source' bug.
+	- fixed "Select All/Copy" popup menu bugs.
+	- fixed bug with duplicated WhatsIs icon on every toolbar.
+	- added several keyboard shortcuts for menu commands.
+	- added extra shortcuts: Ctrl+1 opens the contents page, Ctrl+2 opens Index page,
+      Ctrl+3 opens the Search page, and Ctrl+4 opens the Bookmarks page.
+	- added command-line options to search in pages, in index and in bookmarks.
+
 2005-06-20 Luca 'Ziabice' Gambetta <ziabice@ziabice.net>
 	- fix for AMD64 platform (confirmed to work)
 

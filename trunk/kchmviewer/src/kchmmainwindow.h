@@ -64,6 +64,11 @@ private slots:
 
 	void slotAboutMenuItemActivated();
 	void slotAboutQtMenuItemActivated();
+
+	void slotActivateContentTab();
+	void slotActivateIndexTab();
+	void slotActivateSearchTab();
+	void slotActivateBookmarkTab();
 	
 	void slotBrowserSelectAll();
 	void slotBrowserCopy();
@@ -105,6 +110,10 @@ private:
 	bool					m_FirstTimeShow;
 	
 	KQPopupMenu			*	m_menuHistory;
+	
+	int						m_tabIndexPage;
+	int						m_tabSearchPage;
+	int						m_tabBookmarkPage;
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 	enum	auto_test_state_t

@@ -52,8 +52,6 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
     QPixmap iconViewSource (*gIconStorage.getToolbarPixmap(KCHMIconStorage::viewsource));
     QPixmap iconAddBookmark (*gIconStorage.getToolbarPixmap(KCHMIconStorage::bookmark_add));
 
-	QWhatsThis::whatsThisButton( this );
-
 	// Create the combobox to enter the find text
 	m_findBox = new QComboBox (TRUE, this);
 	m_findBox->setMinimumWidth (200);
@@ -119,12 +117,12 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	KQPopupMenu * menu_view = new KQPopupMenu( parent );
     parent->menuBar()->insertItem( tr("&View"), menu_view );
 
-	menu_view->insertItem( tr("&Increase font"), this, SLOT(onBtnFontInc()), Key_Plus );
-	menu_view->insertItem( tr("&Decrease font"), this, SLOT(onBtnFontDec()), Key_Minus );
-	menu_view->insertItem( tr("&View HTML source"), this, SLOT(onBtnViewSource()) );
+	menu_view->insertItem( tr("&Increase font"), this, SLOT(onBtnFontInc()), CTRL+Key_Plus );
+	menu_view->insertItem( tr("&Decrease font"), this, SLOT(onBtnFontDec()), CTRL+Key_Minus );
+	menu_view->insertItem( tr("&View HTML source"), this, SLOT(onBtnViewSource()), CTRL+Key_U );
 	
     menu_view->insertSeparator();
-	menu_view->insertItem( tr("&Bookmark this page"), this, SLOT(onBtnAddBookmark()) );
+	menu_view->insertItem( tr("&Bookmark this page"), this, SLOT(onBtnAddBookmark()), CTRL+Key_T  );
     menu_view->insertSeparator();
 	
 	// Prepare the encodings menu.
@@ -174,6 +172,8 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 
 	menu_view->insertItem( tr("&Set encoding"), menu_enclist );
 	m_checkedEncodingInMenu = 0;
+
+	QWhatsThis::whatsThisButton( this );
 }
 
 void KCHMSearchAndViewToolbar::setEnabled( bool enable )
@@ -224,7 +224,7 @@ void KCHMSearchAndViewToolbar::onBtnFontDec( )
 
 void KCHMSearchAndViewToolbar::onBtnViewSource( )
 {
-	QTextEdit * editor = new QTextEdit (::mainWindow);
+	QTextEdit * editor = new QTextEdit ( 0 );
 	editor->setTextFormat ( Qt::PlainText );
 
 	QString text;

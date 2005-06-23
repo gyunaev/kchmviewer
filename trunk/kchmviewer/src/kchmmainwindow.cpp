@@ -613,11 +613,11 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	if ( args->isSet("autotestmode") )
 		do_autotest = true;
-
+/*
 	search_query = args->getOption ("search");
 	search_index = args->getOption ("sindex");
 	search_bookmark = args->getOption ("sbook");
-
+*/
 	if ( args->count() > 0 )
 		filename = args->arg(0);
 #else

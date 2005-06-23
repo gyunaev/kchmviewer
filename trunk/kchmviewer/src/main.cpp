@@ -17,8 +17,8 @@ int main( int argc, char ** argv )
  	static KCmdLineOptions options[] =
  	{
     	{ "autotestmode", I18N_NOOP("Perform auto testing"), 0 },
-/*		{ "+[chmfile]", I18N_NOOP("A CHM file to show"), 0 },
-		{ "search <query>", I18N_NOOP("'--search <query>' specifies the search query to search, and activate the first entry if found"), 0 },
+		{ "+[chmfile]", I18N_NOOP("A CHM file to show"), 0 },
+/*		{ "search <query>", I18N_NOOP("'--search <query>' specifies the search query to search, and activate the first entry if found"), 0 },
 		{ "sindex <word>", I18N_NOOP("'--sindex <word>' specifies the word to find in index, and activate if found"), 0 },
 		{ "sbook <word>", I18N_NOOP("'--sbook <text>' specifies the word to find in bookmarks, and activate if found"), 0 },
 */		KCmdLineLastOption

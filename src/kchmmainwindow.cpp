@@ -637,9 +637,6 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	}
 #endif
 
-	if ( do_autotest && !filename )
-		qFatal ("Could not use Auto Test mode without a chm file!");
-
 	if ( !filename.isEmpty() )
 	{
 /*		if ( !loadChmFile( filename ) )
@@ -656,6 +653,9 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 		if ( do_autotest )
 		{
 #if defined (ENABLE_AUTOTEST_SUPPORT)
+			if ( !filename.isEmpty() )
+				qFatal ("Could not use Auto Test mode without a chm file!");
+
 			m_autoteststate = STATE_INITIAL;
 			runAutoTest();
 #else

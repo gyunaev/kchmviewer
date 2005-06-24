@@ -12,12 +12,11 @@ INCLUDES = $(QT_INCLUDES) -I$(CHM_INCLUDES) $(KDE_INCLUDES)
 kchmviewer_LDADD = $(CHM_LIBS) $(LIB_QT) $(LIB_KDEUI) $(LIB_KHTML)
 kchmviewer_LDFLAGS = $(QT_LDFLAGS) $(KDE_LDFLAGS)
 
-#LIB_KDEPRINT = -lkdeprint
-#LIB_KDEUI = -lkdeui
-#LIB_KFILE = -lkio
-#LIB_KHTML = -lkhtml
-
 METASOURCES = AUTO
 KDE_OPTIONS = qtonly
-noinst_HEADERS = kchmdialogchooseurlfromlist.h kchmviewwindow_qtextbrowser.h \
-	kchmviewwindow_khtmlpart.h
+noinst_HEADERS = bitfiddle.h kchmsettings.h forwarddeclarations.h \
+	kchmsourcefactory.h iconstorage.h kchmtextencoding.h kchmbookmarkwindow.h \
+	kchmtreectrl.h kchmconfig.h  kchmtreeviewitem.h kchmdialogchooseurlfromlist.h \
+	kchmviewwindow.h kchmindexwindow.h kchmviewwindow_khtmlpart.h kchmmainwindow.h \
+	kchmviewwindow_qtextbrowser.h kchmsearchtoolbar.h kde-qt.h kchmsearchwindow.h \
+	xchmfile.h

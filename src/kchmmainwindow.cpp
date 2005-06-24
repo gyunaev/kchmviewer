@@ -639,9 +639,9 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	if ( !filename.isEmpty() )
 	{
-/*		if ( !loadChmFile( filename ) )
+		if ( !loadChmFile( filename ) )
 			return false;
-
+/*
 		if ( search_index.isEmpty() )
 			
 			

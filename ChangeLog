@@ -1,3 +1,9 @@
+2005-06-25 tim <tim@krasnogorsk.ru>
+	- more namespace cleanups and bugfixes.
+	- context and search windows are not shown if the opened file doesn't have it.
+	- removed 'search in results' checkbox.
+	- the last used directory is also stored.
+
 2005-06-21 tim <tim@krasnogorsk.ru>
 	- fixed 'View HTML source' bug.
 	- fixed "Select All/Copy" popup menu bugs.

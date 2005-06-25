@@ -59,13 +59,9 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_matchSimilarWords = new QCheckBox (this);
 	m_matchSimilarWords->setText (tr("Match similar words"));
 
-	m_searchInResult = new QCheckBox (this);
-	m_searchInResult->setText (tr("Search in result"));
-	
 	layout->addSpacing (10);
 	layout->addWidget (m_searchList);
 	layout->addWidget (m_matchSimilarWords);
-	layout->addWidget (m_searchInResult);
 }
 
 void KCHMSearchWindow::invalidate( )
@@ -82,8 +78,6 @@ void KCHMSearchWindow::onReturnPressed( )
 	
 	if ( text.isEmpty() )
 		return;
-
-	// If 
 
 	m_searchList->clear();
 	

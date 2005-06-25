@@ -2866,12 +2866,12 @@ KCHMIconStorage	gIconStorage;
 
 const QPixmap * KCHMIconStorage::getToolbarPixmap( pixmap_index_t pix )
 {
-	returnOrLoadImage ( (unsigned int) pix, png_image_toolbakicons + (pix - KCHMIconStorage::back));
+	return returnOrLoadImage ( (unsigned int) pix, png_image_toolbakicons + (pix - KCHMIconStorage::back));
 }
 
 const QPixmap * KCHMIconStorage::getBookIconPixmap( unsigned int id )
 {
-	returnOrLoadImage ( id, png_image_bookarray + id );
+	return returnOrLoadImage ( id, png_image_bookarray + id );
 }
 
 const QPixmap * KCHMIconStorage::returnOrLoadImage( unsigned int id, const png_memory_image_t * image )
@@ -2882,7 +2882,7 @@ const QPixmap * KCHMIconStorage::returnOrLoadImage( unsigned int id, const png_m
 	{
 		m_iconMap[id] = new QPixmap ();
 		if ( !m_iconMap[id]->loadFromData ((const uchar*)image->data, image->size, "PNG") )
-			qFatal ("Could not load image " + QString::number(id));
+			qFatal ("Could not load image %d", id);
 	}
 
 	return m_iconMap[id];

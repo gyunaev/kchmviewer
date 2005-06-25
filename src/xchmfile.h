@@ -66,6 +66,22 @@ typedef QValueVector<KCHMSearchProgressResult>	KCHMSearchProgressResults_t;
 typedef QValueVector<KCHMSearchResult> 			KCHMSearchResults_t;
 
 
+class KCHMParsedIndexEntry
+{
+	public:
+		KCHMParsedIndexEntry () { m_imagenum = -1; }
+		KCHMParsedIndexEntry ( QString name, KCHMParsedIndexEntry * parent = 0, QString url = QString::null, int imagenum = -1 ) : m_parent(parent), m_name (name), m_url (url), m_imagenum (imagenum) {}
+		
+	public:
+		KCHMParsedIndexEntry	*	m_parent;
+		QString						m_name;
+		QString						m_url;
+		int							m_imagenum;
+};
+
+typedef QValueVector<KCHMParsedIndexEntry> 		KCHMParsedIndexEntry_t;
+
+
 //! Maximum allowed number of search-returned items.
 #define MAX_SEARCH_RESULTS 512
 
@@ -171,7 +187,7 @@ public:
 	  to this function.
 	  \return true if it's possible to build the tree, false otherwise.
 	 */
-	bool ParseAndFillIndex (QListView *ndexlist);
+	bool ParseAndFillIndex (QListView *indexlist);
 
 	/*!
 	  \brief Fast search using the $FIftiMain file in the .chm.
@@ -258,6 +274,9 @@ public:
 private:
 	//! Parse the HHC or HHS file, and fill the context (asIndex is false) or index (asIndex is true) tree.
 	bool  ParseHhcAndFillTree (const QString& file, QListView *tree, bool asIndex);
+
+	//! Parse the HHC or HHS file, and fill the data.
+	bool ParseChmIndexFile ( const QString& file, bool asIndex, KCHMParsedIndexEntry_t & cont );
 
 	//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
 	inline QString encodeWithCurrentCodec (const QString& str) const

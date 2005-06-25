@@ -55,7 +55,6 @@ private:
  	QComboBox 	*	m_searchQuery;
 	KQListView	*	m_searchList;
 	QCheckBox	*	m_matchSimilarWords;
-	QCheckBox	*	m_searchInResult;
 	QPushButton *	m_helpButton;
 };
 

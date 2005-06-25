@@ -39,10 +39,10 @@ public:
 
 	bool		openPage ( const QString &url, bool set_in_tree = true );
 	
-	CHMFile *	getChmFile() const	{ return chmfile; }
+	CHMFile *	getChmFile() const	{ return m_chmFile; }
 	const QString&	getOpenedFileName () { return m_chmFilename; }
 	
-	KCHMViewWindow * getViewWindow() { return viewWindow; }
+	KCHMViewWindow * getViewWindow() { return m_viewWindow; }
 	KCHMSettings   * getCurrentSettings() const { return m_currentSettings; }
 
 	void		showInStatusBar (const QString& text)	{ statusBar()->message( text, 2000 ); }
@@ -89,14 +89,18 @@ private:
 	void	updateHistoryMenu();
 	void	createViewWindow();
 	
+	void	showOrHideContextWindow( int tabindex );
+	void	showOrHideIndexWindow( int tabindex );
+	void	showOrHideSearchWindow( int tabindex );
+	
     QString 				m_chmFilename;
 	
-	KCHMViewWindow		*	viewWindow;
-	KCHMIndexWindow		*	indexWindow;
-	KCHMSearchWindow	*	searchWindow;
-	KCHMBookmarkWindow	*	bookmarkWindow;
+	KCHMViewWindow		*	m_viewWindow;
+	KCHMIndexWindow		*	m_indexWindow;
+	KCHMSearchWindow	*	m_searchWindow;
+	KCHMBookmarkWindow	*	m_bookmarkWindow;
+	KQListView			*	m_contentsWindow;
 
-	KQListView			*	contentsWindow;	
 	KQTabWidget			*	m_tabWidget;
 	QToolButton			*	m_toolbarIconBackward;
 	QToolButton			*	m_toolbarIconForward;
@@ -106,11 +110,12 @@ private:
 	
 	KCHMSettings		*	m_currentSettings;
 	
-	CHMFile				*	chmfile;
+	CHMFile				*	m_chmFile;
 	bool					m_FirstTimeShow;
 	
 	KQPopupMenu			*	m_menuHistory;
 	
+	int						m_tabContextPage;	
 	int						m_tabIndexPage;
 	int						m_tabSearchPage;
 	int						m_tabBookmarkPage;

@@ -49,6 +49,7 @@ public:
 			
 public:
 	QString				m_datapath;
+	QString				m_lastOpenedDir;
 	
 	bool				m_LoadLatestFileOnStartup;
 	choose_action_t		m_onNewChmClick;

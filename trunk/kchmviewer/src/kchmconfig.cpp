@@ -51,6 +51,8 @@ KCHMConfig::KCHMConfig()
 	m_kdeEnableJava = false;
 	m_kdeEnablePlugins = true;
 	m_kdeEnableRefresh = false;
+	
+	m_lastOpenedDir = "";
 }
 
 
@@ -115,6 +117,8 @@ bool KCHMConfig::load()
 				m_kdeEnablePlugins = value.toInt() ? true : false;
 			else if ( key == "kdeEnableRefresh" )
 				m_kdeEnableRefresh = value.toInt() ? true : false;
+			else if ( key == "LastOpenedDir" )
+				m_lastOpenedDir = value;
 			else
 				qWarning ("Unknown key=value pair: %s", line.ascii());
 		}
@@ -155,6 +159,8 @@ bool KCHMConfig::save( )
 	stream << "kdeEnablePlugins=" << m_kdeEnablePlugins << "\n";
 	stream << "kdeEnableRefresh=" << m_kdeEnableRefresh << "\n";
 
+	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
+	
 	stream << "\n[history]\n";
 	
 	// Do not write all the history, but only the needed amount

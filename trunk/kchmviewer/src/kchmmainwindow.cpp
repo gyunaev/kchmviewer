@@ -53,10 +53,14 @@ KCHMMainWindow::KCHMMainWindow()
 	const unsigned int SPLT_X_SIZE = 200;
 
 	m_FirstTimeShow = true;
-	chmfile = 0;
-	indexWindow = 0;
-	viewWindow = 0;
+	m_chmFile = 0;
+	
+	m_indexWindow = 0;
+	m_viewWindow = 0;
+	m_searchWindow = 0;
+	m_contentsWindow = 0;
 
+	m_tabContextPage = -1;
 	m_tabIndexPage = -1;
 	m_tabSearchPage = -1;
 	m_tabBookmarkPage = -1;
@@ -69,24 +73,10 @@ KCHMMainWindow::KCHMMainWindow()
 	m_windowSplitter = new QSplitter(this);
 	m_tabWidget = new KQTabWidget (m_windowSplitter);
 	
-	contentsWindow = new KQListView (m_tabWidget, "contents", 0);
-	contentsWindow->addColumn( "Contents" );
-	contentsWindow->setSorting(-1);
-	contentsWindow->setFocus();
-	contentsWindow->setRootIsDecorated(true);
-	contentsWindow->header()->hide();
-	contentsWindow->setShowToolTips(true);
-
-	// Handle clicking on contentsWindow element
-	connect( contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( onTreeClicked( QListViewItem* ) ) );
-
-	bookmarkWindow = new KCHMBookmarkWindow (m_tabWidget);
-	searchWindow = new KCHMSearchWindow (m_tabWidget);
+	m_bookmarkWindow = new KCHMBookmarkWindow (m_tabWidget);
 
 	// Add the tabs
-	m_tabWidget->addTab (contentsWindow, "Contents");
-	m_tabWidget->addTab (searchWindow, "Search");
-	m_tabWidget->addTab (bookmarkWindow, "Bookmarks");
+	m_tabWidget->addTab (m_bookmarkWindow, "Bookmarks");
 
 	createViewWindow();
 	setupToolbarsAndMenu();
@@ -122,18 +112,16 @@ KCHMMainWindow::~KCHMMainWindow()
 void KCHMMainWindow::slotOpenMenuItemActivated()
 {
 #if defined (USE_KDE)
-    QString fn = KFileDialog::getOpenFileName( QString::null, "*.chm|Compressed Help Manual (*.chm)",
-					       this);
+    QString fn = KFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, "*.chm|Compressed Help Manual (*.chm)", this);
 #else
-    QString fn = QFileDialog::getOpenFileName( QString::null, "Compressed Help Manual (*.chm)",
-					       this);
+    QString fn = QFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, "Compressed Help Manual (*.chm)", this);
 #endif
 
     if ( !fn.isEmpty() )
 		loadChmFile( fn );
     else
 	{
-		if ( !chmfile )
+		if ( !m_chmFile )
 			exit (1);
 			
 		statusBar()->message( tr("Loading aborted"), 2000 );
@@ -147,53 +135,48 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 	
 	if ( new_chmfile->IsOk() )
 	{
-		if ( chmfile )
+		if ( m_chmFile )
 		{
 			closeChmFile( );
-			delete chmfile;
+			delete m_chmFile;
 		}
 	
-		chmfile = new_chmfile;
+		m_chmFile = new_chmfile;
 
 		QDir qd;
 		qd.setPath (fileName);
 		m_chmFilename = qd.absPath();
-
-		m_tabIndexPage = -1;
-		m_tabSearchPage = -1;
-		m_tabBookmarkPage = -1;
-
-		// Test whether to show/invalidate the index window
-		if ( chmfile->IndexFile().isEmpty() )
-		{
-			if ( indexWindow )
-			{
-				m_tabWidget->removePage (indexWindow);
-				delete indexWindow;
-				indexWindow = 0;
-			}
-			
-			m_tabSearchPage = 1;
-			m_tabBookmarkPage = 2;
-		}
-		else
-		{
-			if ( !indexWindow )
-			{
-				indexWindow = new KCHMIndexWindow (m_tabWidget);
-				m_tabWidget->insertTab (indexWindow, "Index", 1);
-			}
-			else
-				indexWindow->invalidate();
 		
-			m_tabIndexPage = 1;
-			m_tabSearchPage = 2;
-			m_tabBookmarkPage = 3;
-		}
+		// Qt's 'dirname' does not work well
+		QFileInfo qf ( m_chmFilename );
+		appConfig.m_lastOpenedDir = qf.dirPath(true);
 
-		searchWindow->invalidate();
-		bookmarkWindow->invalidate();
-		viewWindow->invalidate();
+		// Order the tabulations
+		int number_of_pages = 0;
+		
+		if ( m_chmFile->TopicsFile() )
+			m_tabContextPage = number_of_pages++;
+		else
+			m_tabContextPage = -1;
+
+		if ( m_chmFile->IndexFile() )
+			m_tabIndexPage = number_of_pages++;
+		else
+			m_tabIndexPage = -1;
+
+		if ( m_chmFile->isSearchAvailable() )
+			m_tabSearchPage = number_of_pages++;
+		else
+			m_tabSearchPage = -1;
+
+		m_tabBookmarkPage = number_of_pages;
+
+		showOrHideContextWindow( m_tabContextPage );
+		showOrHideIndexWindow( m_tabIndexPage );
+		showOrHideSearchWindow( m_tabSearchPage );
+		
+		m_bookmarkWindow->invalidate();
+		m_viewWindow->invalidate();
 		updateView();
 
 		if ( m_currentSettings->loadSettings (fileName) )
@@ -204,28 +187,28 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 			
 			if ( enc )
 			{
-				chmfile->setCurrentEncoding (enc);
+				m_chmFile->setCurrentEncoding (enc);
 				m_searchToolbar->setChosenEncodingInMenu (enc);
 			}
 			
-			if ( searchWindow )
-				searchWindow->restoreSettings (m_currentSettings->m_searchhistory);
+			if ( m_searchWindow )
+				m_searchWindow->restoreSettings (m_currentSettings->m_searchhistory);
 				
-			bookmarkWindow->restoreSettings (m_currentSettings->m_bookmarks);
+			m_bookmarkWindow->restoreSettings (m_currentSettings->m_bookmarks);
 
 			if ( call_open_page )
 				openPage (m_currentSettings->m_activepage, true);
 
-			viewWindow->setScrollbarPosition(m_currentSettings->m_scrollbarposition);
-			viewWindow->setZoomFactor(m_currentSettings->m_chosenzoom);
+			m_viewWindow->setScrollbarPosition(m_currentSettings->m_scrollbarposition);
+			m_viewWindow->setZoomFactor(m_currentSettings->m_chosenzoom);
 		}
 		else
 		{
 			m_tabWidget->setCurrentPage (0);
-			m_searchToolbar->setChosenEncodingInMenu (chmfile->getCurrentEncoding());
+			m_searchToolbar->setChosenEncodingInMenu (m_chmFile->getCurrentEncoding());
 			
 			if ( call_open_page )
-				openPage (chmfile->HomePage(), true);
+				openPage (m_chmFile->HomePage(), true);
 		}
 
 		m_searchToolbar->setEnabled (true);
@@ -235,7 +218,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 	}
 	else
 	{
-		if ( !chmfile )
+		if ( !m_chmFile )
 		{
 			QMessageBox mbox (tr("%1 - failed to load the chm file"), tr("Unable to load the chm file %2") . arg(APP_NAME) . arg(fileName), QMessageBox::Critical, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
 			mbox.exec();
@@ -251,7 +234,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 
 void KCHMMainWindow::slotPrintMenuItemActivated()
 {
-	viewWindow->printCurrentPage();
+	m_viewWindow->printCurrentPage();
 }
 
 void KCHMMainWindow::slotAboutMenuItemActivated()
@@ -276,7 +259,7 @@ void KCHMMainWindow::slotAboutQtMenuItemActivated()
 
 void KCHMMainWindow::updateView( )
 {
-	QString title = chmfile->Title();
+	QString title = m_chmFile->Title();
 	if ( !title )
 		title = APP_NAME;
 	else
@@ -284,11 +267,14 @@ void KCHMMainWindow::updateView( )
 
 	setCaption (title);
 	
-	contentsWindow->clear();
-	viewWindow->invalidate();
+	m_viewWindow->invalidate();
 	
-	chmfile->ParseAndFillTopicsTree(contentsWindow);
-	contentsWindow->triggerUpdate();
+	if ( m_contentsWindow )
+	{
+		m_contentsWindow->clear();
+		m_chmFile->ParseAndFillTopicsTree(m_contentsWindow);
+		m_contentsWindow->triggerUpdate();
+	}
 }
 
 void KCHMMainWindow::onTreeClicked( QListViewItem * item )
@@ -312,7 +298,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 {
 	QString p1, p2, url = srcurl;
 
-	if ( viewWindow->isRemoteURL (url, p1) )
+	if ( m_viewWindow->isRemoteURL (url, p1) )
 	{
 		switch ( appConfig.m_onExternalLinkClick )
 		{
@@ -364,7 +350,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 	}
 		
 	// Filter the URLs which do not need to be opened at all by Qt version
-	if ( viewWindow->isJavascriptURL (url) )
+	if ( m_viewWindow->isJavascriptURL (url) )
 	{
 		QMessageBox::information(this, tr ("%1 - JavsScript link clicked") . arg(APP_NAME),
            	tr ("You have clicked a JavaScript link.\nBecause of security reasons, JavaScript links are disabled in CHM files."));
@@ -372,7 +358,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 		return false;
 	}
 
-	if ( viewWindow->isNewChmURL (url, p1, p2) 
+	if ( m_viewWindow->isNewChmURL (url, p1, p2) 
 	&& p1 != m_chmFilename )
 	{
    		if ( QMessageBox::question(this,
@@ -392,18 +378,21 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 		url = p2;
 	}
 	
-	if ( viewWindow->openUrl (url) )
+	if ( m_viewWindow->openUrl (url) )
 	{
 		// Open all the tree items to show current item (if needed)
 		KCHMMainTreeViewItem * treeitem;
-		if ( set_in_tree && (treeitem = chmfile->getTreeItem(viewWindow->getOpenedPage())) != 0 )
+		if ( set_in_tree && (treeitem = m_chmFile->getTreeItem(m_viewWindow->getOpenedPage())) != 0 )
 		{
 			KCHMMainTreeViewItem * itemparent = treeitem;
 			while ( (itemparent = (KCHMMainTreeViewItem*) itemparent->parent()) != 0 )
 				itemparent->setOpen(true);
 			
-			contentsWindow->setCurrentItem (treeitem);
-			contentsWindow->ensureItemVisible (treeitem);
+			if ( m_contentsWindow )
+			{
+				m_contentsWindow->setCurrentItem (treeitem);
+				m_contentsWindow->ensureItemVisible (treeitem);
+			}
 		}
 	}
 	
@@ -538,35 +527,35 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 
 void KCHMMainWindow::slotBackwardMenuItemActivated()
 {
-	viewWindow->navigateBack();
+	m_viewWindow->navigateBack();
 }
 
 void KCHMMainWindow::slotForwardMenuItemActivated()
 {
-	viewWindow->navigateForward();
+	m_viewWindow->navigateForward();
 }
 
 void KCHMMainWindow::slotHomeMenuItemActivated()
 {
-	openPage (chmfile->HomePage(), true);
+	openPage (m_chmFile->HomePage(), true);
 }
 
 void KCHMMainWindow::addBookmark( )
 {
-	emit bookmarkWindow->onAddBookmarkPressed ();
+	emit m_bookmarkWindow->onAddBookmarkPressed ();
 }
 
 void KCHMMainWindow::setTextEncoding( const KCHMTextEncoding::text_encoding_t * enc )
 {
-	chmfile->setCurrentEncoding (enc);
+	m_chmFile->setCurrentEncoding (enc);
 	m_searchToolbar->setChosenEncodingInMenu (enc);
 	
 	// Because updateView() will call view->invalidate(), which clears the view->getOpenedPage(),
 	// we have to make a copy of it.
-	QString url = viewWindow->getOpenedPage();
+	QString url = m_viewWindow->getOpenedPage();
 	updateView();
 	
-	viewWindow->openUrl ( url );
+	m_viewWindow->openUrl ( url );
 }
 
 void KCHMMainWindow::closeChmFile( )
@@ -574,17 +563,17 @@ void KCHMMainWindow::closeChmFile( )
 	// Prepare the settings
 	if ( appConfig.m_HistoryStoreExtra )
 	{
-		m_currentSettings->m_activeencodinglcid = chmfile->getCurrentEncoding()->winlcid;
+		m_currentSettings->m_activeencodinglcid = m_chmFile->getCurrentEncoding()->winlcid;
 		m_currentSettings->m_activetab = m_tabWidget->currentPageIndex( );
-		m_currentSettings->m_chosenzoom = viewWindow->getZoomFactor();
+		m_currentSettings->m_chosenzoom = m_viewWindow->getZoomFactor();
 			
-		if ( searchWindow )
-			searchWindow->saveSettings (m_currentSettings->m_searchhistory);
+		if ( m_searchWindow )
+			m_searchWindow->saveSettings (m_currentSettings->m_searchhistory);
 				
-		bookmarkWindow->saveSettings (m_currentSettings->m_bookmarks);
+		m_bookmarkWindow->saveSettings (m_currentSettings->m_bookmarks);
 
-		m_currentSettings->m_activepage = viewWindow->getOpenedPage();
-		m_currentSettings->m_scrollbarposition = viewWindow->getScrollbarPosition();
+		m_currentSettings->m_activepage = m_viewWindow->getOpenedPage();
+		m_currentSettings->m_scrollbarposition = m_viewWindow->getScrollbarPosition();
 
 		m_currentSettings->saveSettings( );
 	}
@@ -596,7 +585,7 @@ void KCHMMainWindow::closeChmFile( )
 void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 {
 	// Save the settings if we have something opened
-	if ( chmfile )
+	if ( m_chmFile )
 		closeChmFile( );
 
 	QMainWindow::closeEvent ( e );
@@ -676,31 +665,31 @@ void KCHMMainWindow::slotHistoryAvailabilityChanged( bool enable_backward, bool 
 
 void KCHMMainWindow::createViewWindow( )
 {
-	if ( viewWindow )
-		delete viewWindow;
+	if ( m_viewWindow )
+		delete m_viewWindow;
 
 #if defined (USE_KDE)
 	if ( !appConfig.m_kdeUseQTextBrowser )
-		viewWindow = new KCHMViewWindow_KHTMLPart ( m_windowSplitter );
+		m_viewWindow = new KCHMViewWindow_KHTMLPart ( m_windowSplitter );
 	else
 #endif
-		viewWindow = new KCHMViewWindow_QTextBrowser ( m_windowSplitter );
+		m_viewWindow = new KCHMViewWindow_QTextBrowser ( m_windowSplitter );
 	
 	// Handle clicking on link in browser window
-	connect( viewWindow->getQObject(), SIGNAL( signalLinkClicked (const QString &, bool &) ), this, SLOT( slotLinkClicked(const QString &, bool &) ) );
+	connect( m_viewWindow->getQObject(), SIGNAL( signalLinkClicked (const QString &, bool &) ), this, SLOT( slotLinkClicked(const QString &, bool &) ) );
 
 	// Handle backward/forward buttons state change
-	connect( viewWindow->getQObject(), SIGNAL( signalHistoryAvailabilityChanged (bool, bool) ), this, SLOT( slotHistoryAvailabilityChanged (bool, bool) ) );
+	connect( m_viewWindow->getQObject(), SIGNAL( signalHistoryAvailabilityChanged (bool, bool) ), this, SLOT( slotHistoryAvailabilityChanged (bool, bool) ) );
 }
 
 void KCHMMainWindow::slotBrowserSelectAll( )
 {
-	viewWindow->clipSelectAll();
+	m_viewWindow->clipSelectAll();
 }
 
 void KCHMMainWindow::slotBrowserCopy( )
 {
-	viewWindow->clipCopy();
+	m_viewWindow->clipCopy();
 }
 
 void KCHMMainWindow::slotChangeSettingsMenuItemActivated()
@@ -812,7 +801,8 @@ void KCHMMainWindow::updateHistoryMenu()
 
 void KCHMMainWindow::slotActivateContentTab( )
 {
-	m_tabWidget->setCurrentPage( 0 );
+	if ( m_tabContextPage != -1 ) 
+		m_tabWidget->setCurrentPage( m_tabContextPage );
 }
 
 void KCHMMainWindow::slotActivateIndexTab( )
@@ -832,6 +822,84 @@ void KCHMMainWindow::slotActivateBookmarkTab( )
 	m_tabWidget->setCurrentPage( m_tabBookmarkPage );
 }
 
+void KCHMMainWindow::showOrHideContextWindow( int tabindex )
+{
+	if ( tabindex == -1 )
+	{
+		if ( m_contentsWindow )
+		{
+			m_tabWidget->removePage (m_contentsWindow);
+			delete m_contentsWindow;
+			m_contentsWindow = 0;
+		}
+	}
+	else
+	{
+		if ( !m_contentsWindow )
+		{
+			m_contentsWindow = new KQListView (m_tabWidget);
+			m_contentsWindow->addColumn( "Contents" );
+			m_contentsWindow->setSorting(-1);
+			m_contentsWindow->setFocus();
+			m_contentsWindow->setRootIsDecorated(true);
+			m_contentsWindow->header()->hide();
+			m_contentsWindow->setShowToolTips(true);
+
+			// Handle clicking on m_contentsWindow element
+			connect( m_contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( onTreeClicked( QListViewItem* ) ) );
+			
+			m_tabWidget->insertTab (m_contentsWindow, tr("Contents"), tabindex);
+		}
+	}
+}
+
+void KCHMMainWindow::showOrHideIndexWindow( int tabindex )
+{
+	// Test whether to show/invalidate the index window
+	if ( tabindex == -1 )
+	{
+		if ( m_indexWindow )
+		{
+			m_tabWidget->removePage (m_indexWindow);
+			delete m_indexWindow;
+			m_indexWindow = 0;
+		}
+	}
+	else
+	{
+		if ( !m_indexWindow )
+		{
+			m_indexWindow = new KCHMIndexWindow (m_tabWidget);
+			m_tabWidget->insertTab (m_indexWindow, tr("Index"), tabindex);
+		}
+		else
+			m_indexWindow->invalidate();
+	}
+}
+
+void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
+{
+	if ( tabindex == -1 )
+	{
+		if ( m_searchWindow )
+		{
+			m_tabWidget->removePage (m_searchWindow);
+			delete m_searchWindow;
+			m_searchWindow = 0;
+		}
+	}
+	else
+	{
+		if ( !m_searchWindow )
+		{
+			m_searchWindow = new KCHMSearchWindow (m_tabWidget);
+			m_tabWidget->insertTab (m_searchWindow, tr("Search"), tabindex);
+		}
+		else
+			m_searchWindow->invalidate();
+	}
+}
+
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 void KCHMMainWindow::runAutoTest()
@@ -841,9 +909,14 @@ void KCHMMainWindow::runAutoTest()
 	switch (m_autoteststate)
 	{
 	case STATE_INITIAL:
-		m_autotestlistiterator = QListViewItemIterator (contentsWindow);
-		m_autoteststate = STATE_CONTENTS_OPENNEXTPAGE;
-		//m_autoteststate = STATE_OPEN_INDEX;
+		if ( m_contentsWindow )
+		{
+			m_autotestlistiterator = QListViewItemIterator (m_contentsWindow);
+			m_autoteststate = STATE_CONTENTS_OPENNEXTPAGE;
+		}
+		else
+			m_autoteststate = STATE_OPEN_INDEX;
+		
 		QTimer::singleShot (500, this, SLOT(runAutoTest()) );
 		break; // allow to finish the initialization sequence
 		
@@ -860,7 +933,7 @@ void KCHMMainWindow::runAutoTest()
 		break;
 
 	case STATE_OPEN_INDEX:
-		if ( indexWindow )
+		if ( m_indexWindow )
 			m_tabWidget->setCurrentPage (1);
 		
 		m_autoteststate = STATE_SHUTDOWN;

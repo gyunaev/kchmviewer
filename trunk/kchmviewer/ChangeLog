@@ -1,3 +1,7 @@
+2005-06-30 tim <tim@krasnogorsk.ru>
+	- version 0.92 RELEASE CANDIDATE 2 released.
+	- fixed Slackware 10 compilation (one more time) 
+
 2005-06-25 tim <tim@krasnogorsk.ru>
 	- more namespace cleanups and bugfixes.
 	- context and search windows are not shown if the opened file doesn't have it.

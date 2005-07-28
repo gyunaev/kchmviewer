@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
 
@@ -622,6 +623,11 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 			search_index = qApp->argv()[++i];
 		else if ( !strcmp (qApp->argv()[i], "--sbook") )
 			search_bookmark = qApp->argv()[++i];
+		else if ( !strcmp (qApp->argv()[i], "-h") || !strcmp (qApp->argv()[i], "--help") )
+		{
+			fprintf (stderr, "Usage: %s [chmfile]\n", qApp->argv()[0]);
+			exit (1);
+		}
 		else
 			filename = qApp->argv()[i];
 	}

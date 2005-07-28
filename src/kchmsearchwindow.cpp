@@ -391,5 +391,5 @@ bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchProgressResul
 
 void KCHMSearchWindow::onHelpClicked( )
 {
-	QMessageBox::information ( this, tr("How to use search"), tr("The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with <b>minus</b> sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed; you cannot search for symbols other than underscope, and these symbols will be removed from the search query. For example, search for 'C' will give the same result as searching for 'C++'.") );
+	QMessageBox::information ( this, tr("How to use search"), tr("The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for symbols other than underscope, and these symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
 }

@@ -1,3 +1,9 @@
+2005-07-28 tim <tim@krasnogorsk.ru>
+	- Version 1.0 RELEASE released.
+	- Fixed -h option for Qt version.
+	- Fixed search messagebox on '?' button.
+	- Added F3 shortcut for 'next search in page' action.
+
 2005-06-30 tim <tim@krasnogorsk.ru>
 	- version 0.92 RELEASE CANDIDATE 2 released.
 	- fixed Slackware 10 compilation (one more time) 

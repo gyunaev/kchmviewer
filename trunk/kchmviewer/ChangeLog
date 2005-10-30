@@ -1,20 +1,30 @@
-2005-07-28 tim <tim@krasnogorsk.ru>
+2005-10-30 tim <gyunaev@ulduzsoft.com>
+	- fixed security bug - chmlib-0.35 updated to 0.37
+	- version 1.1 RELEASE released.
+
+2005-09-27 tim <gyunaev@ulduzsoft.com>
+	- fixed bug with incorrect embedded image shown - thanks to XinWei Hu.
+	- fixed bug with non-working decrease font size - thanks to anonymous Sourceforge user.
+	- copy in KDE version worked through Ctrl-C or 'copy' in content menu.
+
+
+2005-07-28 tim <gyunaev@ulduzsoft.com>
 	- Version 1.0 RELEASE released.
 	- Fixed -h option for Qt version.
 	- Fixed search messagebox on '?' button.
 	- Added F3 shortcut for 'next search in page' action.
 
-2005-06-30 tim <tim@krasnogorsk.ru>
+2005-06-30 tim <gyunaev@ulduzsoft.com>
 	- version 0.92 RELEASE CANDIDATE 2 released.
 	- fixed Slackware 10 compilation (one more time) 
 
-2005-06-25 tim <tim@krasnogorsk.ru>
+2005-06-25 tim <gyunaev@ulduzsoft.com>
 	- more namespace cleanups and bugfixes.
 	- context and search windows are not shown if the opened file doesn't have it.
 	- removed 'search in results' checkbox.
 	- the last used directory is also stored.
 
-2005-06-21 tim <tim@krasnogorsk.ru>
+2005-06-21 tim <gyunaev@ulduzsoft.com>
 	- fixed 'View HTML source' bug.
 	- fixed "Select All/Copy" popup menu bugs.
 	- fixed bug with duplicated WhatsIs icon on every toolbar.
@@ -26,22 +36,22 @@
 2005-06-20 Luca 'Ziabice' Gambetta <ziabice@ziabice.net>
 	- fix for AMD64 platform (confirmed to work)
 
-2005-06-18 tim <tim@krasnogorsk.ru>
+2005-06-18 tim <gyunaev@ulduzsoft.com>
 	- version 0.91 RELEASE CANDIDATE 1 released.
 
-2005-06-18 tim <tim@krasnogorsk.ru>
+2005-06-18 tim <gyunaev@ulduzsoft.com>
 	- all configuration settings are now used.
 	- history is saved, loaded and cleaned up correctly.
 	- chm data (size/time) is now stored inside the history file, not in file name.
 
-2005-06-17 tim <tim@krasnogorsk.ru>
+2005-06-17 tim <gyunaev@ulduzsoft.com>
 	- some of configuration settings are now used.
 	- new browser is now running on Qt version when external URL is opening.
 
-2005-06-16 tim <tim@krasnogorsk.ru>
+2005-06-16 tim <gyunaev@ulduzsoft.com>
 	- added the configuration dialog, configuration settings are now saved and loaded.
 
-2005-06-12 tim <tim@krasnogorsk.ru>
+2005-06-12 tim <gyunaev@ulduzsoft.com>
 	- fixed compilation on Slackware 10.
 	- fixed internal links following for QTextBrowser.
 
@@ -49,24 +59,24 @@
 	- fixed possible problem - linking static chmlib against non-static executable.
 	- added --without-kde option.
 
-2005-06-07 tim <tim@krasnogorsk.ru>
+2005-06-07 tim <gyunaev@ulduzsoft.com>
 	- preparing to release version 0.9beta.
 	- version 0.9beta released.
 
-2005-06-07 tim <tim@krasnogorsk.ru>
+2005-06-07 tim <gyunaev@ulduzsoft.com>
 	- added a full-featured search engine with complex query support.
 
-2005-06-02 tim <tim@krasnogorsk.ru>
+2005-06-02 tim <gyunaev@ulduzsoft.com>
 	- added copy/selectall functionality to KHTML browser, including a popup menu.
 	- fixed storing scrollbar position for KHTML browser.
 	- fixed window refresh on encoding change, encoding change now works for KHTML browser.
 	- zoom in/out buttons also work for KHTML browser.
 
-2005-06-01 tim <tim@krasnogorsk.ru>
+2005-06-01 tim <gyunaev@ulduzsoft.com>
 	- clicking on links (in-book navigation) now works for KHTML browser.
 	- full links (ms-its:) in chm files are now supported.
 
-2005-05-10 tim <tim@krasnogorsk.ru>
+2005-05-10 tim <gyunaev@ulduzsoft.com>
 	- switched to KPopupMenu for KDE.
 	- fixed search/print for KHTMLPart.
 	- fixed status bar in KDE window.
@@ -74,13 +84,13 @@
 	- fixed command-line parsing for KDE app, remove external GetOpt class.
 	- fixed build outside the work directory.
 
-2005-05-04 tim <tim@krasnogorsk.ru>
+2005-05-04 tim <gyunaev@ulduzsoft.com>
 	- KDE integration continues. Now we support printing from KHTML.
 	- KIO-slave now works.
 	- switched to KTabWidget for KDE.
 	- fixed search/print for QTextBrowser.
 
-2005-05-03 tim <tim@krasnogorsk.ru>
+2005-05-03 tim <gyunaev@ulduzsoft.com>
 	- Reimplemented browser history in a more convinient way.
 	- KDE integration continues. Now we support KHTML.
 	- Added a KIO-slave to handle CHMs.
@@ -88,13 +98,13 @@
 	- Added support for CHM urls containing anchors.
 	- It is possible to use QTextBrowser even for a KDE application.
 
-2005-04-27 tim <tim@krasnogorsk.ru>
+2005-04-27 tim <gyunaev@ulduzsoft.com>
 	- KDE integration started. Now we support KApplication, KMainWindow and KFileDialog.
 
-2005-04-24 tim <tim@krasnogorsk.ru>
+2005-04-24 tim <gyunaev@ulduzsoft.com>
 	- version 0.2 released.
 
-2005-04-24 tim <tim@krasnogorsk.ru>
+2005-04-24 tim <gyunaev@ulduzsoft.com>
 	- added index fields identation according to .hhk file.
 	- index entries with multiple links are now supported. A dialog is opened when such a link is clicked.
 	- index "see also" links are now supported.
@@ -106,21 +116,21 @@
 	- fixed compilation on earlier Qt version (remove qvector.h dependency).
 	- fixed compilation on glibc without off_t.
 
-2005-04-23 tim <tim@krasnogorsk.ru>
+2005-04-23 tim <gyunaev@ulduzsoft.com>
 	- TOC parser rewritten, got about 30% speedup on TOC parsing. Note that TOC parser becomes stricter; please report any warnings.
 	- Fixed chinese encoding TOC bugs, chinese files are now also shown correctly.
 	- Added &rdquo; entity to the entities list.
 
-2005-04-19 tim <tim@krasnogorsk.ru>
+2005-04-19 tim <gyunaev@ulduzsoft.com>
 	- added support for built-in images, including custom images for folders;
 	- re-merged toolbar images into the executable as PNGs (uses less space);
 	- switched to autoconf/automake from qmake to simplify building and distribution, and to simplify KDEing;
 
-2005-04-05 tim <tim@krasnogorsk.ru>
+2005-04-05 tim <gyunaev@ulduzsoft.com>
 	- version 0.1alpha released
 	- fixed slowdown on big files; 
 	 
-2005-04-05 tim <tim@krasnogorsk.ru>
+2005-04-05 tim <gyunaev@ulduzsoft.com>
 	- images merged into the main executable 
 	 
 

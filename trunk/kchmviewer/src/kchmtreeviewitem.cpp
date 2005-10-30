@@ -49,9 +49,9 @@ const QPixmap * KCHMMainTreeViewItem::pixmap( int i ) const
 	if ( firstChild () )
 	{
 		if ( isOpen() )
-			imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 1 : image_number + 1;
+			imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 1 : image_number;
 		else
-			imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 0 : image_number;
+			imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 0 : image_number + 1;
 	}
 	else
 		imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 10 : image_number;

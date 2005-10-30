@@ -7,7 +7,7 @@ AC_ARG_PROGRAM
 
 dnl All versioning is done via the following line
 AM_CONFIG_HEADER(src/config.h)
-AM_INIT_AUTOMAKE(KchmViewer, 1.0)
+AM_INIT_AUTOMAKE(KchmViewer, 1.1)
 
 dnl Chuck #defines for PACKAGE and VERSION into config.h
 AC_DEFINE_UNQUOTED(APP_NAME, "$PACKAGE", [ Application name ] )
@@ -29,7 +29,7 @@ AC_ENABLE_STATIC(no)
 AC_PATH_QT
 
 EXTRA_SUBDIRS=""
-CHMLIBDIR="chmlib-0.35"
+CHMLIBDIR="chmlib"
 CHM_INCLUDES="\$(top_srcdir)/$CHMLIBDIR/"
 CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.la"
 
@@ -52,7 +52,7 @@ AC_SUBST(EXTRA_SUBDIRS)
 AC_SUBST(CHM_INCLUDES)
 AC_SUBST(CHM_LIBS)
 
-AC_OUTPUT(src/Makefile Makefile kio-msits/Makefile chmlib-0.35/Makefile)
+AC_OUTPUT(src/Makefile Makefile kio-msits/Makefile chmlib/Makefile)
 
 
 echo ""

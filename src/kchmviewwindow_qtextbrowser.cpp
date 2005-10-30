@@ -114,7 +114,7 @@ void KCHMViewWindow_QTextBrowser::setScrollbarPosition( int pos )
 
 void KCHMViewWindow_QTextBrowser::addZoomFactor( int value )
 {
-	setZoomFactor( m_zoomfactor + value);
+	setZoomFactor( value);
 }
 
 void KCHMViewWindow_QTextBrowser::slotLinkClicked( const QString & newlink )

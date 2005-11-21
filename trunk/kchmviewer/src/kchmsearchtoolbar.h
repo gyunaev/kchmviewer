@@ -67,8 +67,8 @@ private:
 	QToolButton			*	m_buttonNextPageInTOC;
 	QToolButton			*	m_buttonPrevPageInTOC;
 	
-	const KCHMTextEncoding::text_encoding_t * m_checkedLanguageInMenu;
-	const KCHMTextEncoding::text_encoding_t * m_checkedEncodingInMenu;
+	int						m_checkedLanguageInMenu;
+	int						m_checkedEncodingInMenu;
 };
 
 #endif

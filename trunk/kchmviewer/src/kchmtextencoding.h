@@ -43,6 +43,7 @@ public:
 	text_encoding_t;
 
 	static const text_encoding_t * getTextEncoding();
+	static int					   lookupByIndex (const text_encoding_t * enc);
 	static const text_encoding_t * lookupByLCID (short lcid);
 	static const text_encoding_t * lookupByWinCharset (int charset);
 	

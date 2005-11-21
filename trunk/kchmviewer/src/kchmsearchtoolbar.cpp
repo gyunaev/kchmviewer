@@ -51,6 +51,8 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
     QPixmap iconFontDec (*gIconStorage.getToolbarPixmap(KCHMIconStorage::view_decrease));
     QPixmap iconViewSource (*gIconStorage.getToolbarPixmap(KCHMIconStorage::viewsource));
     QPixmap iconAddBookmark (*gIconStorage.getToolbarPixmap(KCHMIconStorage::bookmark_add));
+	QPixmap iconNextPage (*gIconStorage.getToolbarPixmap(KCHMIconStorage::next_page));
+	QPixmap iconPrevPage (*gIconStorage.getToolbarPixmap(KCHMIconStorage::prev_page));
 
 	// Create the combobox to enter the find text
 	m_findBox = new QComboBox (TRUE, this);
@@ -64,7 +66,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				tr("Previous search result"),
 				QString::null,
 				this,
-				SLOT(onBtnPrev()),
+				SLOT(onBtnPrevSearchResult()),
 				this);
 	QWhatsThis::add( m_buttonPrev, tr("Click this button to find previous search result.") );
 
@@ -73,7 +75,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				tr("Next search result"),
 				QString::null,
 				this,
-				SLOT(onBtnNext()),
+				SLOT(onBtnNextSearchResult()),
 				this);
 	QWhatsThis::add( m_buttonNext, tr("Click this button to find next search result.") );
 
@@ -112,6 +114,22 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				SLOT(onBtnAddBookmark()),
 				this);
 	QWhatsThis::add( m_buttonAddBookmark, tr("Click this button to add the current page to the bookmarks list.") );
+	
+	m_buttonPrevPageInTOC = new QToolButton( iconPrevPage,
+											 tr("Prev page in TOC"),
+											 QString::null,
+											 this,
+											 SLOT(onBtnPrevPageInToc()),
+											 this);
+	QWhatsThis::add( m_buttonAddBookmark, tr("Click this button to go to previous page in Table Of Content.") );
+	
+	m_buttonNextPageInTOC = new QToolButton (iconNextPage,
+										   tr("Next page in TOC"),
+										   QString::null,
+										   this,
+										   SLOT(onBtnNextPageInToc()),
+										   this);
+	QWhatsThis::add( m_buttonAddBookmark, tr("Click this button to go to next page in Table of Content.") );
 	
 	// Create the approptiate menu entries in 'View' main menu
 	KQPopupMenu * menu_view = new KQPopupMenu( parent );
@@ -185,6 +203,10 @@ void KCHMSearchAndViewToolbar::setEnabled( bool enable )
 	m_buttonFontDec->setEnabled (enable);
 	m_buttonViewSource->setEnabled (enable);
 	m_buttonAddBookmark->setEnabled (enable);
+
+	bool enable_toc_nav_buttons = ::mainWindow->getContentsWindow() && enable;
+	m_buttonNextPageInTOC->setEnabled( enable_toc_nav_buttons );
+	m_buttonPrevPageInTOC->setEnabled( enable_toc_nav_buttons );
 }
 
 void KCHMSearchAndViewToolbar::onReturnPressed( )
@@ -192,12 +214,12 @@ void KCHMSearchAndViewToolbar::onReturnPressed( )
 	search( true );
 }
 
-void KCHMSearchAndViewToolbar::onBtnPrev( )
+void KCHMSearchAndViewToolbar::onBtnPrevSearchResult( )
 {
 	search( false );
 }
 
-void KCHMSearchAndViewToolbar::onBtnNext( )
+void KCHMSearchAndViewToolbar::onBtnNextSearchResult( )
 {
 	search( true );
 }
@@ -257,3 +279,34 @@ void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const KCHMTextEncoding::
 	menu_enclist->setItemChecked ((int)enc, true);
 	m_checkedEncodingInMenu = enc;
 }
+
+void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
+{
+	// Try to find current list item
+	KCHMMainTreeViewItem *current = ::mainWindow->getChmFile()->getTreeItem( ::mainWindow->getViewWindow()->getOpenedPage() );
+
+	if ( !current )
+		return;
+	
+	QListViewItemIterator lit( current );
+	lit++;
+	
+	if ( lit.current() )
+		::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
+}
+
+void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
+{
+	// Try to find current list item
+	KCHMMainTreeViewItem *current = ::mainWindow->getChmFile()->getTreeItem( ::mainWindow->getViewWindow()->getOpenedPage() );
+	
+	if ( !current )
+		return;
+	
+	QListViewItemIterator lit( current );
+	lit--;
+	
+	if ( lit.current() )
+	::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
+}
+

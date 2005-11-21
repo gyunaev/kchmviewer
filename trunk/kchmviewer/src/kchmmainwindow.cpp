@@ -101,7 +101,7 @@ KCHMMainWindow::KCHMMainWindow()
 	accel->connectItem ( accel->insertItem ( CTRL + Key_2), this, SLOT ( slotActivateIndexTab() ) );
 	accel->connectItem ( accel->insertItem ( CTRL + Key_3), this, SLOT ( slotActivateSearchTab() ) );
 	accel->connectItem ( accel->insertItem ( CTRL + Key_4), this, SLOT ( slotActivateBookmarkTab() ) );
-	accel->connectItem ( accel->insertItem ( Key_F3 ), m_searchToolbar, SLOT ( onBtnNext() ) );
+	accel->connectItem ( accel->insertItem ( Key_F3 ), m_searchToolbar, SLOT ( onBtnNextSearchResult() ) );
 
 	statusBar()->show();
 }

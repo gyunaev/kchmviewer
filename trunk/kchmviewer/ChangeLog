@@ -1,6 +1,7 @@
 2005-11-21 tim <gyunaev@ulduzsoft.com>
         - Fixed browser page update for QTextBrowser when current encoding changes.
-        - Changed encoding selector to compile on x64 architecture.
+        - Changed encoding selectore. Now it compiles on x86_64.
+	- version 1.2 RELEASE
 
 2005-11-20 tim <gyunaev@ulduzsoft.com>
         - Added 'next page' and 'prev page' buttons.

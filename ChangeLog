@@ -6,7 +6,8 @@
         - Fixed language selection bug - application crashed when you select the last language in any submenu.
         - 'Set encoding' menu renamed to 'Set Language'.
         - Added a new 'Set codepage' menu, which allows experienced people to send needed text code page directly.
-
+	- Added Ctrl-F shortcut to move cursor focus onto the search input combo box.
+	- Fixed navigation in some CHM files, which have spaces in filenames.
 
 2005-10-30 tim <gyunaev@ulduzsoft.com>
 	- fixed security bug - chmlib-0.35 updated to 0.37

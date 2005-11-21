@@ -91,6 +91,7 @@ private slots:
 	
 private:
 	void setSource ( const QString & name );
+	static QString decodeUrl( const QString &url );
 			
 	int						m_zoomfactor;
 	bool					m_allowSourceChange;

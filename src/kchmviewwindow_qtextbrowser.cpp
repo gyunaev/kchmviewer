@@ -102,6 +102,7 @@ void KCHMViewWindow_QTextBrowser::invalidate( )
 	m_searchLastIndex = 0;
 	m_searchLastParagraph = 0;
 	m_searchText = QString::null;
+	reload();
 	
 	KCHMViewWindow::invalidate( );
 }

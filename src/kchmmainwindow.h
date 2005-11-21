@@ -43,6 +43,7 @@ public:
 	const QString&	getOpenedFileName () { return m_chmFilename; }
 	
 	KCHMViewWindow * getViewWindow() { return m_viewWindow; }
+	KQListView	   * getContentsWindow() { return m_contentsWindow; }
 	KCHMSettings   * getCurrentSettings() const { return m_currentSettings; }
 
 	void		showInStatusBar (const QString& text)	{ statusBar()->message( text, 2000 ); }

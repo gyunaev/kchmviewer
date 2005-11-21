@@ -46,7 +46,9 @@ public:
 		gohome,
 		viewsource,
 		view_decrease,
-		view_increase
+		view_increase,
+		next_page,
+		prev_page
 	};
 
 	const QPixmap * getBookIconPixmap (unsigned int id);

@@ -42,13 +42,15 @@ public:
 
 private slots:
 	void	onReturnPressed();
-	void	onBtnPrev();
-	void	onBtnNext();
+	void	onBtnPrevSearchResult();
+	void	onBtnNextSearchResult();
 
 	void	onBtnFontInc();
 	void	onBtnFontDec();
 	void	onBtnViewSource();
 	void	onBtnAddBookmark();
+	void	onBtnNextPageInToc();
+	void	onBtnPrevPageInToc();
 	void	onMenuActivated ( int id );
 	
 private:
@@ -61,6 +63,8 @@ private:
 	QToolButton			*	m_buttonFontDec;
 	QToolButton			*	m_buttonViewSource;
 	QToolButton			*	m_buttonAddBookmark;
+	QToolButton			*	m_buttonNextPageInTOC;
+	QToolButton			*	m_buttonPrevPageInTOC;
 	
 	const KCHMTextEncoding::text_encoding_t * m_checkedEncodingInMenu;
 };

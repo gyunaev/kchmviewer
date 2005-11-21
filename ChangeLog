@@ -1,3 +1,6 @@
+2005-11-20 tim <gyunaev@ulduzsoft.com>
+	- Added 'next page' and 'prev page' buttons
+
 2005-10-30 tim <gyunaev@ulduzsoft.com>
 	- fixed security bug - chmlib-0.35 updated to 0.37
 	- version 1.1 RELEASE released.

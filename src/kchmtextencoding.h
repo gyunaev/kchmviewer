@@ -20,6 +20,11 @@
 #ifndef KCHMTEXTENCODING_H
 #define KCHMTEXTENCODING_H
 
+/*
+ * Some languages require special handling, which is detected by wincharset param.
+ */
+const int KCHM_TEXTENCODING_KOI8 = 9871234;  // Use KOI8 for text encoding, but CP1251 for browser encoding
+
 /**
 @author Georgy Yunaev
 */

@@ -185,7 +185,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		if ( m_currentSettings->loadSettings (fileName) )
 		{
 			const KCHMTextEncoding::text_encoding_t * enc = KCHMTextEncoding::lookupByLCID (m_currentSettings->m_activeencodinglcid);
-			
+
 			m_tabWidget->setCurrentPage (m_currentSettings->m_activetab);
 			
 			if ( enc )

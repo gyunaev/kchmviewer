@@ -231,6 +231,7 @@ CHMFile::CHMFile()
 	: m_chmFile(NULL), m_home("/")
 {
 	m_textCodec = 0;
+	m_textCodecForSpecialFiles = 0;
 	m_currentEncoding = 0;
 	m_detectedLCID = 0;
 	m_lookupTablesValid = false;
@@ -264,6 +265,7 @@ bool CHMFile::LoadCHM(const QString&  archiveName)
 	
 	// Every CHM has its own encoding
 	m_textCodec = 0;
+	m_textCodecForSpecialFiles = 0;
 	m_currentEncoding = 0;
 	
 	// Get information from /#WINDOWS and /#SYSTEM files (encoding, title, context file and so)
@@ -304,6 +306,7 @@ void CHMFile::CloseCHM()
 	m_treeUrlMap.clear();
 	m_entityDecodeMap.clear();
 	m_textCodec = 0;
+	m_textCodecForSpecialFiles = 0;
 	m_detectedLCID = 0;
 	m_currentEncoding = 0;
 
@@ -324,7 +327,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 		return false;
 
 	QString src;
-	GetFileContentAsString(src, &ui);
+	GetFileContentAsString(src, &ui, true);
 
 	if(src.isEmpty())
 		return false;
@@ -1020,15 +1023,42 @@ bool CHMFile::guessTextEncoding( )
 	return false;
 }
 
-bool CHMFile::changeFileEncoding( const char * qtencoding )
+bool CHMFile::changeFileEncoding( const char *qtencoding  )
 {
-	// Set up encoding
-	m_textCodec = QTextCodec::codecForName (qtencoding);
-	
-	if ( !m_textCodec )
+	// Encoding could be either simple Qt codepage, or set like CP1251/KOI8, which allows to
+	// set up encodings separately for text (first) and internal files (second)
+	const char * p = strchr( qtencoding, '/' );
+	if ( p )
 	{
-		qWarning ("Could not set up Text Codec for encoding '%s'", qtencoding);
-		return false;
+		char buf[128]; // much bigger that any encoding possible. No DoS; all encodings are hardcoded.
+		strcpy( buf, qtencoding );
+		buf[p - qtencoding] = '\0';
+		
+		m_textCodec = QTextCodec::codecForName( buf );
+	
+		if ( !m_textCodec )
+		{
+			qWarning( "Could not set up Text Codec for encoding '%s'", buf );
+			return false;
+		}
+		
+		m_textCodecForSpecialFiles = QTextCodec::codecForName( p + 1 );
+	
+		if ( !m_textCodecForSpecialFiles )
+		{
+			qWarning( "Could not set up Text Codec for encoding '%s'", p + 1 );
+			return false;
+		}
+	}
+	else
+	{
+		m_textCodecForSpecialFiles = m_textCodec = QTextCodec::codecForName (qtencoding);
+	
+		if ( !m_textCodec )
+		{
+			qWarning( "Could not set up Text Codec for encoding '%s'", qtencoding );
+			return false;
+		}
 	}
 	
 	m_entityDecodeMap.clear();
@@ -1043,14 +1073,14 @@ bool CHMFile::setCurrentEncoding( const KCHMTextEncoding::text_encoding_t * enc 
 }
 
 
-bool CHMFile::GetFileContentAsString(QString& str, const chmUnitInfo *ui)
+bool CHMFile::GetFileContentAsString(QString& str, const chmUnitInfo *ui, bool internal_encoding )
 {
 	QByteArray buf (ui->length + 1);
 			
 	if ( RetrieveObject (ui, (unsigned char*) buf.data(), 0, ui->length) )
 	{
 		buf [ui->length] = '\0';
-		str = encodeWithCurrentCodec((const char*) buf);
+		str = internal_encoding ? encodeInternalWithCurrentCodec((const char*) buf) :  encodeWithCurrentCodec((const char*) buf);
 		return true;
 	}
 	else
@@ -1078,14 +1108,14 @@ bool CHMFile::GetFileContentAsString( QString & str, QString filename, QString l
 }
 
 
-bool CHMFile::GetFileContentAsString (QString& str, QString location)
+bool CHMFile::GetFileContentAsString (QString& str, QString location, bool internal_encoding )
 {
 	chmUnitInfo ui;
 
 	if( !ResolveObject(location, &ui) )
 		return false;
 		
-	return GetFileContentAsString(str, &ui);
+	return GetFileContentAsString(str, &ui, internal_encoding);
 }
 
 

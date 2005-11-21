@@ -183,4 +183,12 @@ const KCHMTextEncoding::text_encoding_t * KCHMTextEncoding::lookupByWinCharset( 
 	return 0;
 }
 
+int KCHMTextEncoding::lookupByIndex (const KCHMTextEncoding::text_encoding_t * enc)
+{
+	for ( int i = 0; text_encoding_table[i].charset; i++ )
+		if ( (text_encoding_table + i) == enc )
+			return i;
+			
+	return -1;
+}
 

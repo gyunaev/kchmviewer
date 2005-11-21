@@ -73,7 +73,11 @@ bool KCHMViewWindow_QTextBrowser::openPage (const QString& url)
 void KCHMViewWindow_QTextBrowser::setSource ( const QString & name )
 {
 	if ( m_allowSourceChange )
-		QTextBrowser::setSource (name);
+	{
+		// Do URI decoding, qtextbrowser does stupid job.
+		QString fixedname = decodeUrl( name );
+		QTextBrowser::setSource (fixedname);
+	}
 	else
 		m_allowSourceChange = true;
 }
@@ -216,4 +220,43 @@ void KCHMViewWindow_QTextBrowser::clipSelectAll( )
 void KCHMViewWindow_QTextBrowser::clipCopy( )
 {
 	copy ();
+}
+
+
+// Shamelessly stolen from Qt
+QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
+{
+	QString temp;
+
+    int i = 0;
+	int len = input.length();
+	int a, b;
+	QChar c;
+	while (i < len)
+	{
+		c = input[i];
+		if (c == '%' && i + 2 < len)
+		{
+			a = input[++i];
+			b = input[++i];
+
+			if (a >= '0' && a <= '9') a -= '0';
+			else if (a >= 'a' && a <= 'f') a = a - 'a' + 10;
+			else if (a >= 'A' && a <= 'F') a = a - 'A' + 10;
+
+			if (b >= '0' && b <= '9') b -= '0';
+			else if (b >= 'a' && b <= 'f') b  = b - 'a' + 10;
+			else if (b >= 'A' && b <= 'F') b  = b - 'A' + 10;
+
+			temp.append( (QChar)((a << 4) | b ) );
+		}
+		else
+		{
+			temp.append( c );
+		}
+
+		++i;
+	}
+
+    return temp;
 }

@@ -34,13 +34,11 @@
 
 #include "iconstorage.h"
 
-static KQPopupMenu * menu_enclist;
+static KQPopupMenu *menu_langlist, *menu_enclist;
 
 KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	: QToolBar (parent)
 {
-	int menuid;
-	
 	// Toolbar label
 	setLabel( tr("Find in page") );
 
@@ -143,13 +141,13 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	menu_view->insertItem( tr("&Bookmark this page"), this, SLOT(onBtnAddBookmark()), CTRL+Key_T  );
     menu_view->insertSeparator();
 	
-	// Prepare the encodings menu.
-    menu_enclist = new KQPopupMenu( parent );
+	// Create the language selection menu.
+    menu_langlist = new KQPopupMenu( parent );
 	KQPopupMenu * menu_sublang = 0;
 
 	// Because the encoding menu is very large, it is not reasonable to have a slot for every item.
 	// It is simplier just to use a single slot for any menu item of this submenu.
-	connect (menu_enclist, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
+	connect (menu_langlist, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 	
 	// Add the language entries
 	for ( const KCHMTextEncoding::text_encoding_t * item = KCHMTextEncoding::getTextEncoding(); 
@@ -158,21 +156,19 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 		// See the next item; does is have the same charset as current?
 		const KCHMTextEncoding::text_encoding_t * nextitem = item  + 1;
 		
-		if ( nextitem->charset )
+		if ( nextitem->charset
+		&& !strcmp (item->charset, nextitem->charset) )
 		{
-			if ( !strcmp (item->charset, nextitem->charset) )
-			{
 				// If charset is the same as next one, create a new popup menu.
 				// If the menu is already created, add to it
 				if ( !menu_sublang )
 				{
-					menu_sublang = new KQPopupMenu( menu_enclist );
+					menu_sublang = new KQPopupMenu( menu_langlist );
 					connect (menu_sublang, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 				}
 					
-				menuid = menu_sublang->insertItem( item->country, (int) item );
+				menu_sublang->insertItem( item->country, (int) item );
 				continue;
-			}
 		}
 		
 		// If the next charset differs from this one,
@@ -180,17 +176,38 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 		// otherwise, just add an item
 		if ( menu_sublang )
 		{
-			menu_sublang->insertItem( item->country );
-			menuid = menu_enclist->insertItem( item->charset, menu_sublang, (int) item );
+			menu_sublang->insertItem( item->country, (int) item );
+			menu_langlist->insertItem( item->charset, menu_sublang );
 			menu_sublang = 0;
 		}
 		else
-			menuid = menu_enclist->insertItem( item->charset, (int) item );
+			menu_langlist->insertItem( item->charset, (int) item );
 	}
 
-	menu_view->insertItem( tr("&Set encoding"), menu_enclist );
+	menu_view->insertItem( tr("&Set language"), menu_langlist );
 	m_checkedEncodingInMenu = 0;
+	m_checkedLanguageInMenu = 0;
 
+	// Special menu for very smart people just to select codepage
+	QMap<QString,bool> addedCharsets;
+	menu_enclist = new KQPopupMenu( parent );
+
+	connect (menu_enclist, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
+	
+	// Add the codepage entries
+	for ( const KCHMTextEncoding::text_encoding_t * item = KCHMTextEncoding::getTextEncoding(); 
+			 item->charset; item++ )
+	{
+		// This menu is only for charsets, so we won't add duplicate charset twice
+		if ( addedCharsets.find( item->qtcodec ) != addedCharsets.end() )
+			continue;
+		
+		addedCharsets[ item->qtcodec ] = true;
+		menu_enclist->insertItem( item->qtcodec, (int) item );
+	}
+
+	menu_view->insertItem( tr("&Set codepage"), menu_enclist );
+	
 	QWhatsThis::whatsThisButton( this );
 }
 
@@ -274,10 +291,26 @@ void KCHMSearchAndViewToolbar::onMenuActivated( int id )
 void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const KCHMTextEncoding::text_encoding_t * enc)
 {
 	if ( m_checkedEncodingInMenu )
+		menu_langlist->setItemChecked ((int)m_checkedEncodingInMenu, false);
+	
+	if ( m_checkedLanguageInMenu )
 		menu_enclist->setItemChecked ((int)m_checkedEncodingInMenu, false);
 	
-	menu_enclist->setItemChecked ((int)enc, true);
-	m_checkedEncodingInMenu = enc;
+	menu_langlist->setItemChecked ((int)enc, true);
+	m_checkedLanguageInMenu = enc;
+	
+	// For encoding, we need to set up charset!
+	for ( const KCHMTextEncoding::text_encoding_t * item = KCHMTextEncoding::getTextEncoding(); 
+			 item->charset; item++ )
+	{
+		// This menu is only for charsets, so we won't add duplicate charset twice
+		if ( !strcmp( item->qtcodec, enc->qtcodec ) )
+		{
+			menu_enclist->setItemChecked ((int)item, true);
+			m_checkedEncodingInMenu = item;
+			break;
+		}
+	}
 }
 
 void KCHMSearchAndViewToolbar::onBtnNextPageInToc()

@@ -234,10 +234,10 @@ public:
 	size_t RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize);
 
 	//! Puts in the str parameter the contents of the file referred by ui.
-	bool GetFileContentAsString (QString& str, const chmUnitInfo *ui);
+	bool GetFileContentAsString (QString& str, const chmUnitInfo *ui, bool internal_encoding = false );
 	
 	//! Puts in the str parameter the contents of the file referred by location.
-	bool GetFileContentAsString (QString& str, QString location);
+	bool GetFileContentAsString (QString& str, QString location, bool internal_encoding = false);
 
 	/*! 
 	 * Puts in the str parameter the contents of the file filename referred by location.
@@ -290,6 +290,20 @@ private:
 		return (m_textCodec ? m_textCodec->toUnicode (str) : (QString) str);
 	}
 	
+	//! Encode the string from internal files with the currently selected text codec, if possible. 
+	//! Or return as-is, if not.	
+	inline QString encodeInternalWithCurrentCodec (const QString& str) const
+	{
+		return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode (str) : str);
+	}
+	
+	//! Encode the string from internal files with the currently selected text codec, if possible. 
+	//! Or return as-is, if not.	
+	inline QString encodeInternalWithCurrentCodec (const char * str) const
+	{
+		return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode (str) : (QString) str);
+	}
+	
 	//! Helper. Translates from Win32 encodings to generic wxWidgets ones.
 	const char * CHMFile::GetFontEncFromCharSet (const QString& font) const;
 
@@ -319,8 +333,10 @@ private:
 	//! Guess used text encoding, using m_detectedLCID and m_font. Set up m_textCodec
 	bool guessTextEncoding ();
 
-	//! Change the current CHM encoding
-	bool  changeFileEncoding (const char *qtencoding);
+	//! Change the current CHM encoding for internal files and texts.
+	//! Encoding could be either simple Qt codepage, or set like CP1251/KOI8, which allows to
+	//! set up encodings separately for text (first) and internal files (second)
+	bool  changeFileEncoding( const char *qtencoding );
 
 	//! Convert the word, so it has an appropriate encoding
 	QCString convertSearchWord ( const QString &src );
@@ -364,6 +380,7 @@ private:
 
 	//! Chosen text codec
 	QTextCodec	*	m_textCodec;
+	QTextCodec	*	m_textCodecForSpecialFiles;
 
 	//! Current encoding
 	const KCHMTextEncoding::text_encoding_t * m_currentEncoding;

@@ -23,6 +23,7 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qtextedit.h>
+#include <qaccel.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
  
@@ -56,8 +57,10 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	m_findBox = new QComboBox (TRUE, this);
 	m_findBox->setMinimumWidth (200);
 	connect( m_findBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
-	
 	QWhatsThis::add( m_findBox, tr("Enter here the text to search in the current page.") );	
+	
+	QAccel *acc = new QAccel( this );
+	acc->connectItem( acc->insertItem(Key_F+CTRL), this, SLOT( onAccelFocusSearchField() ) );
 	
 	// Button 'prevous search result'
 	m_buttonPrev = new QToolButton (iconPrev,
@@ -341,5 +344,10 @@ void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
 	
 	if ( lit.current() )
 	::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
+}
+
+void KCHMSearchAndViewToolbar::onAccelFocusSearchField( )
+{
+	m_findBox->setFocus();
 }
 

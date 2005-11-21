@@ -44,7 +44,8 @@ private slots:
 	void	onReturnPressed();
 	void	onBtnPrevSearchResult();
 	void	onBtnNextSearchResult();
-
+	void	onAccelFocusSearchField();
+	
 	void	onBtnFontInc();
 	void	onBtnFontDec();
 	void	onBtnViewSource();

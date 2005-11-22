@@ -636,7 +636,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	if ( !filename.isEmpty() )
 	{
-		if ( !loadChmFile( filename ) )
+		if ( !loadChmFile( QString::fromLocal8Bit( filename )) )
 			return false;
 /*
 		if ( search_index.isEmpty() )

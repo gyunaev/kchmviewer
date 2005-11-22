@@ -1,4 +1,7 @@
 2005-11-21 tim <gyunaev@ulduzsoft.com>
+        - File names containing non-English characters now open correctly.
+
+2005-11-21 tim <gyunaev@ulduzsoft.com>
         - Fixed browser page update for QTextBrowser when current encoding changes.
         - Changed encoding selectore. Now it compiles on x86_64.
 	- version 1.2 RELEASE

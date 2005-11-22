@@ -67,12 +67,13 @@ bool KCHMConfig::load()
 		return false; // no error message - not actually a problem
 	
 	QString line;
+	char readbuf[4096];
 	bool getting_history = false;
 	m_History.clear();
 	
-	while ( file.readLine ( line, 65535 ) > 0 )
+	while ( file.readLine( readbuf, sizeof(readbuf) - 1 ) > 0 )
 	{
-		line = line.stripWhiteSpace();
+		line = QString::fromUtf8( readbuf ).stripWhiteSpace();
 		
 		// skip empty lines and comments
 		if ( line.isEmpty() || line[0] == '#' )
@@ -125,7 +126,7 @@ bool KCHMConfig::load()
 		else if ( getting_history )
 		{
 			if ( m_History.size() < m_HistorySize )
-				addFileToHistory (line);
+				addFileToHistory( line );
 		}
 		else
 			qWarning ("Unknown line in configuration: %s", line.ascii());
@@ -144,6 +145,7 @@ bool KCHMConfig::save( )
 	}
 	
 	QTextStream stream( &file );
+	stream.setEncoding( QTextStream::UnicodeUTF8 );
 	stream << "[settings]\n";
 	stream << "LoadLatestFileOnStartup=" << m_LoadLatestFileOnStartup << "\n";
 

@@ -32,6 +32,7 @@
 #include "kchmconfig.h"
 #include "kchmsearchtoolbar.h"
 #include "xchmfile.h"
+#include "kqrunprocess.h"
 
 #include "iconstorage.h"
 
@@ -270,18 +271,28 @@ void KCHMSearchAndViewToolbar::onBtnFontDec( )
 
 void KCHMSearchAndViewToolbar::onBtnViewSource( )
 {
-	QTextEdit * editor = new QTextEdit ( 0 );
-	editor->setTextFormat ( Qt::PlainText );
-
 	QString text;
 
 	if ( !::mainWindow->getChmFile()->GetFileContentAsString (text, ::mainWindow->getViewWindow()->getOpenedPage()) )
 		return;
 
-	editor->setText (text);
-	editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->getViewWindow()->getOpenedPage() );
-	editor->resize (800, 600);
-	editor->show();
+	if ( appConfig.m_advUseInternalEditor )
+	{
+		QTextEdit * editor = new QTextEdit ( 0 );
+		editor->setTextFormat ( Qt::PlainText );
+		editor->setText (text);
+		editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->getViewWindow()->getOpenedPage() );
+		editor->resize (800, 600);
+		editor->show();
+	}
+	else
+	{
+		QFile file;
+		m_tempFileKeeper.generateTempFile( file );
+		
+		file.writeBlock( text.utf8() );
+		run_process( appConfig.m_advExternalEditorPath, file.name() );
+	}
 }
 
 void KCHMSearchAndViewToolbar::onBtnAddBookmark( )

@@ -39,9 +39,8 @@
 #include "kchmsearchtoolbar.h"
 #include "kchmsettings.h"
 #include "kchmsetupdialog.h"
-
+#include "kqrunprocess.h"
 #include "iconstorage.h"
-
 #include "kchmviewwindow_qtextbrowser.h"
 
 #if defined (USE_KDE)
@@ -323,28 +322,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 #if defined (USE_KDE)
 			new KRun ( url );
 #else
-			// To be safe, URL should contain no quotes, apostrofes and \0 symbols
-			url.remove (QRegExp ("['\"\0]"));
-			QString command = appConfig.m_QtBrowserPath;
-			command.replace ("%s", url);
-			
-			// And run an external command with fork()s
-			switch ( fork() )
-			{
-			case -1:
-				qWarning ("Could not fork: %s", strerror(errno));
-				break;
-				
-			case 0: // child
-				if ( fork() != 0 )
-					exit(0); // exit immediately - our child is now has init as his parent
-				
-				system (command.ascii());
-				exit (0);
-				
-			default: // parent
-				break;
-			}
+			run_process( appConfig.m_QtBrowserPath, url );
 #endif
 		}
 		break;

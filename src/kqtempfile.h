@@ -18,62 +18,36 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef KCHMSEARCHTOOLBAR_H
-#define KCHMSEARCHTOOLBAR_H
 
-#include <qtoolbar.h>
-#include <qstring.h>
-#include <qmap.h>
+#ifndef KQTEMPFILE_H
+#define KQTEMPFILE_H
 
-#include "forwarddeclarations.h"
+#include <qvaluevector.h>
+#include <qfile.h>
 
-#include "kchmtextencoding.h"
-#include "kqtempfile.h"
+/*
+ * This class generates temp file names in race condition-safe way,
+ * returns QFile and filename pairs, keeps the track of opened temp files,
+ * and deletes them when program exist.
+ */
 
-/**
-@author Georgy Yunaev
-*/
-class KCHMSearchAndViewToolbar : public QToolBar
+class KQTempFileKeeper
 {
-Q_OBJECT
-public:
-    KCHMSearchAndViewToolbar (KCHMMainWindow *parent);
-
-	void	setEnabled (bool enable);
-	void	setChosenEncodingInMenu( const KCHMTextEncoding::text_encoding_t * enc );
-
-private slots:
-	void	onReturnPressed();
-	void	onBtnPrevSearchResult();
-	void	onBtnNextSearchResult();
-	void	onAccelFocusSearchField();
-	
-	void	onBtnFontInc();
-	void	onBtnFontDec();
-	void	onBtnViewSource();
-	void	onBtnAddBookmark();
-	void	onBtnNextPageInToc();
-	void	onBtnPrevPageInToc();
-	void	onMenuActivated ( int id );
-	
-private:
-	void	search (bool forward);
-	
-	QComboBox			*	m_findBox;
-	QToolButton			*	m_buttonPrev;
-	QToolButton			*	m_buttonNext;
-	QToolButton			*	m_buttonFontInc;
-	QToolButton			*	m_buttonFontDec;
-	QToolButton			*	m_buttonViewSource;
-	QToolButton			*	m_buttonAddBookmark;
-	QToolButton			*	m_buttonNextPageInTOC;
-	QToolButton			*	m_buttonPrevPageInTOC;
-	
-	int						m_checkedLanguageInMenu;
-	int						m_checkedEncodingInMenu;
-	
-	KQTempFileKeeper		m_tempFileKeeper;
-	
+	public:
+		KQTempFileKeeper();
+		~KQTempFileKeeper();
+		
+		//! Generates a temporary file name, and creates it on disk at the same time.
+		//! Returns the file. If tempdir is not empty, it is used as temp directory.
+		bool	generateTempFile( QFile& file, const QString& tempdir = QString::null );
+		
+		//! Closes and removes all the files from disk
+		void	destroyTempFiles();
+		
+	private:
+		QValueVector<QString>	m_tempFiles;
+		QString					m_tempDir;
+		unsigned int			m_fileNumber;
 };
 
-#endif
+#endif /* KQTEMPFILE_H */

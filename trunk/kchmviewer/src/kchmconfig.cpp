@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Georgy Yunaev                                   *
- *   tim@krasnogorsk.ru                                                    *
+ *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Please do not use email address above for bug reports; see            *
+ *   the README file                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,6 +52,9 @@ KCHMConfig::KCHMConfig()
 	m_kdeEnableJava = false;
 	m_kdeEnablePlugins = true;
 	m_kdeEnableRefresh = false;
+	
+	m_advUseInternalEditor = true;
+	m_advExternalEditorPath = "kate %1";
 	
 	m_lastOpenedDir = "";
 }
@@ -120,6 +124,10 @@ bool KCHMConfig::load()
 				m_kdeEnableRefresh = value.toInt() ? true : false;
 			else if ( key == "LastOpenedDir" )
 				m_lastOpenedDir = value;
+			else if ( key == "advUseInternalEditor" )
+				m_advUseInternalEditor = value.toInt() ? true : false;
+			else if ( key == "advExternalEditorPath" )
+				m_advExternalEditorPath = value;
 			else
 				qWarning ("Unknown key=value pair: %s", line.ascii());
 		}
@@ -160,6 +168,8 @@ bool KCHMConfig::save( )
 	stream << "kdeEnableJava=" << m_kdeEnableJava << "\n";
 	stream << "kdeEnablePlugins=" << m_kdeEnablePlugins << "\n";
 	stream << "kdeEnableRefresh=" << m_kdeEnableRefresh << "\n";
+	stream << "advUseInternalEditor=" << m_advUseInternalEditor << "\n";
+	stream << "advExternalEditorPath=" << m_advExternalEditorPath << "\n";
 
 	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
 	

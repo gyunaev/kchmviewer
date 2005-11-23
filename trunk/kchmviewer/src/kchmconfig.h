@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Georgy Yunaev                                   *
- *   tim@krasnogorsk.ru                                                    *
+ *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Please do not use email address above for bug reports; see            *
+ *   the README file                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,6 +64,9 @@ public:
 	bool				m_kdeEnableJava;
 	bool				m_kdeEnablePlugins;
 	bool				m_kdeEnableRefresh;
+	
+	bool				m_advUseInternalEditor;
+	QString				m_advExternalEditorPath;
 	
 	QStringList			m_History;
 };

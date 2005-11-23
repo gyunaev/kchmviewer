@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Georgy Yunaev                                   *
- *   tim@krasnogorsk.ru                                                    *
+ *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Please do not use email address above for bug reports; see            *
+ *   the README file                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -735,6 +736,10 @@ void KCHMMainWindow::slotChangeSettingsMenuItemActivated()
 	dlg.m_enableJava->setChecked ( appConfig.m_kdeEnableJava );
 	dlg.m_enableRefresh->setChecked ( appConfig.m_kdeEnableRefresh );
 	
+	dlg.m_advExternalProgramName->setText( appConfig.m_advExternalEditorPath );
+	dlg.m_advViewSourceExternal->setChecked ( !appConfig.m_advUseInternalEditor );
+	dlg.m_advViewSourceInternal->setChecked ( appConfig.m_advUseInternalEditor );
+	
 	if ( dlg.exec() == QDialog::Accepted )
 	{
 		appConfig.m_LoadLatestFileOnStartup = dlg.m_radioOnBeginOpenLast->isChecked();
@@ -762,6 +767,10 @@ void KCHMMainWindow::slotChangeSettingsMenuItemActivated()
 		appConfig.m_kdeEnableJava = dlg.m_enableJava->isChecked();
 		appConfig.m_kdeEnableRefresh = dlg.m_enableRefresh->isChecked();
 		appConfig.m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
+		
+		appConfig.m_advExternalEditorPath = dlg.m_advExternalProgramName->text();
+		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceExternal->isChecked();
+		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceInternal->isChecked();
 		
 		appConfig.save();
 	}

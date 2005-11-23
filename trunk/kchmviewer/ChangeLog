@@ -1,19 +1,22 @@
 2005-11-21 tim <gyunaev@ulduzsoft.com>
-        - File names containing non-English characters now open correctly.
+    - File names containing non-English characters now open correctly.
+    - Changed copyright notices.
 
 2005-11-21 tim <gyunaev@ulduzsoft.com>
-        - Fixed browser page update for QTextBrowser when current encoding changes.
-        - Changed encoding selectore. Now it compiles on x86_64.
-	- version 1.2 RELEASE
+    - Fixed browser page update for QTextBrowser when current encoding changes.
+    - Changed encoding selectore. Now it compiles on x86_64.
+    - version 1.2 RELEASE
 
 2005-11-20 tim <gyunaev@ulduzsoft.com>
-        - Added 'next page' and 'prev page' buttons.
-        - Added extra charset encodings for Japanese, Chinese, Russian and Ukrainian languages.
-        - Added UTF-8 and UTF-16 encodings to country 'Unicode' :)
-        - Added special KOI8 encoding to Russian and Ukrainian languages. 'Special' means that TOC is in CP1251 encoding,          while content is in KOI8 encoding. There were some CHM files with such weird encoding, so it is kinda hack.
-        - Fixed language selection bug - application crashed when you select the last language in any submenu.
-        - 'Set encoding' menu renamed to 'Set Language'.
-        - Added a new 'Set codepage' menu, which allows experienced people to send needed text code page directly.
+    - Added 'next page' and 'prev page' buttons.
+    - Added extra charset encodings for Japanese, Chinese, Russian and Ukrainian languages.
+    - Added UTF-8 and UTF-16 encodings to country 'Unicode' :)
+    - Added special KOI8 encoding to Russian and Ukrainian languages. 'Special' means that 
+      TOC is in CP1251 encoding, while content is in KOI8 encoding. There were some CHM files 
+      with such weird encoding, so it is kinda hack.
+    - Fixed language selection bug - application crashed when you select the last language in any submenu.
+    - 'Set encoding' menu renamed to 'Set Language'.
+    - Added a new 'Set codepage' menu, which allows experienced people to send needed text code page directly.
 	- Added Ctrl-F shortcut to move cursor focus onto the search input combo box.
 	- Fixed navigation in some CHM files, which have spaces in filenames.
 

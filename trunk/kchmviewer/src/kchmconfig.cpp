@@ -54,7 +54,7 @@ KCHMConfig::KCHMConfig()
 	m_kdeEnableRefresh = false;
 	
 	m_advUseInternalEditor = true;
-	m_advExternalEditorPath = "kate %1";
+	m_advExternalEditorPath = "kate '%s'";
 	
 	m_lastOpenedDir = "";
 }

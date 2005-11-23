@@ -18,62 +18,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef KCHMSEARCHTOOLBAR_H
-#define KCHMSEARCHTOOLBAR_H
 
-#include <qtoolbar.h>
-#include <qstring.h>
-#include <qmap.h>
 
-#include "forwarddeclarations.h"
-
-#include "kchmtextencoding.h"
-#include "kqtempfile.h"
-
-/**
-@author Georgy Yunaev
-*/
-class KCHMSearchAndViewToolbar : public QToolBar
+static bool run_process( const QString& command, const QString& filename )
 {
-Q_OBJECT
-public:
-    KCHMSearchAndViewToolbar (KCHMMainWindow *parent);
+	QString safefilename = filename;
+	QString preparedcommand = command;
+	
+	// To be safe, URL should contain no quotes, apostrofes and \0 symbols
+	safefilename.remove (QRegExp ("['\"\0]"));
+	preparedcommand.replace( "%s", safefilename );
 
-	void	setEnabled (bool enable);
-	void	setChosenEncodingInMenu( const KCHMTextEncoding::text_encoding_t * enc );
-
-private slots:
-	void	onReturnPressed();
-	void	onBtnPrevSearchResult();
-	void	onBtnNextSearchResult();
-	void	onAccelFocusSearchField();
+	// And run an external command with fork()s
+	switch ( fork() )
+	{
+	case -1:
+		return false;
+				
+	case 0: // child
+		if ( fork() != 0 )
+			exit(0); // exit immediately - our child is now has init as his parent
+				
+		system( preparedcommand.ascii() );
+		exit (0);
+				
+	default: // parent
+		break;
+	}
 	
-	void	onBtnFontInc();
-	void	onBtnFontDec();
-	void	onBtnViewSource();
-	void	onBtnAddBookmark();
-	void	onBtnNextPageInToc();
-	void	onBtnPrevPageInToc();
-	void	onMenuActivated ( int id );
-	
-private:
-	void	search (bool forward);
-	
-	QComboBox			*	m_findBox;
-	QToolButton			*	m_buttonPrev;
-	QToolButton			*	m_buttonNext;
-	QToolButton			*	m_buttonFontInc;
-	QToolButton			*	m_buttonFontDec;
-	QToolButton			*	m_buttonViewSource;
-	QToolButton			*	m_buttonAddBookmark;
-	QToolButton			*	m_buttonNextPageInTOC;
-	QToolButton			*	m_buttonPrevPageInTOC;
-	
-	int						m_checkedLanguageInMenu;
-	int						m_checkedEncodingInMenu;
-	
-	KQTempFileKeeper		m_tempFileKeeper;
-	
-};
-
-#endif
+	return true;
+}

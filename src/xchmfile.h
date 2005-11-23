@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Georgy Yunaev                                   *
- *   tim@krasnogorsk.ru                                                    *
+ *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Please do not use email address above for bug reports; see            *
+ *   the README file                                                       *
  *                                                                         *
  *   Copyright (C) 2003  Razvan Cojocaru <razvanco@gmx.net>                *
  *   XML-RPC/Context ID code contributed by Eamon Millman / PCI Geomatics  *

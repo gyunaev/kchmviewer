@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>602</width>
-            <height>323</height>
+            <width>605</width>
+            <height>324</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -190,10 +190,10 @@
                                             <cstring>m_radioExtLinkOpenAlways</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Always open it in external browser</string>
+                                            <string>Alwa&amp;ys open it in external browser</string>
                                         </property>
                                         <property name="accel">
-                                            <string></string>
+                                            <string>Alt+Y</string>
                                         </property>
                                     </widget>
                                     <widget class="QRadioButton">
@@ -365,7 +365,7 @@
                             </widget>
                             <widget class="QGroupBox">
                                 <property name="name">
-                                    <cstring>groupBox4</cstring>
+                                    <cstring>groupKhtmlSecurity</cstring>
                                 </property>
                                 <property name="title">
                                     <string>KHTMLPart security</string>
@@ -421,6 +421,77 @@
                                 </grid>
                             </widget>
                         </hbox>
+                    </widget>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Advanced</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>buttonGroup7</cstring>
+                        </property>
+                        <property name="title">
+                            <string>View HTML source command uses</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_advViewSourceInternal</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Built-in HTML source viewer</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>m_advViewSourceExternal</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>E&amp;xternal program, specified below</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+X</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout4</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>External program:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLineEdit">
+                                        <property name="name">
+                                            <cstring>m_advExternalProgramName</cstring>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </vbox>
                     </widget>
                 </vbox>
             </widget>
@@ -518,10 +589,19 @@
         <receiver>MyDialog1</receiver>
         <slot>reject()</slot>
     </connection>
+    <connection>
+        <sender>m_radioUseKHTMLPart</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>groupKhtmlSecurity</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_advViewSourceExternal</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_advExternalProgramName</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
-<includes>
-    <include location="local" impldecl="in implementation">kchmsetupdialog.ui.h</include>
-</includes>
 <slots>
     <slot>m_radioUseKHTMLPart_toggled( bool )</slot>
 </slots>

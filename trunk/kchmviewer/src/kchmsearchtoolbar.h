@@ -21,9 +21,7 @@
 #ifndef KCHMSEARCHTOOLBAR_H
 #define KCHMSEARCHTOOLBAR_H
 
-#include <qtoolbar.h>
-#include <qstring.h>
-#include <qmap.h>
+#include "kde-qt.h"
 
 #include "forwarddeclarations.h"
 
@@ -55,10 +53,16 @@ private slots:
 	void	onBtnNextPageInToc();
 	void	onBtnPrevPageInToc();
 	void	onMenuActivated ( int id );
+	void	onBtnFullScreen();
+	void	onBtnToggleContentWindow();
+	
+	void	setFullScreen( bool enable );
+	void	showContentsWindow( bool enable );
 	
 private:
 	void	search (bool forward);
 	
+	KQPopupMenu 		*	m_MenuView;
 	QComboBox			*	m_findBox;
 	QToolButton			*	m_buttonPrev;
 	QToolButton			*	m_buttonNext;
@@ -71,6 +75,9 @@ private:
 	
 	int						m_checkedLanguageInMenu;
 	int						m_checkedEncodingInMenu;
+	
+	int						m_menuShowFullscreenMenuID;
+	int						m_menuShowContentWindowMenuID;
 	
 	KQTempFileKeeper		m_tempFileKeeper;
 	

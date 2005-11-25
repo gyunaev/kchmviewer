@@ -134,17 +134,21 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	QWhatsThis::add( m_buttonAddBookmark, tr("Click this button to go to next page in Table of Content.") );
 	
 	// Create the approptiate menu entries in 'View' main menu
-	KQPopupMenu * menu_view = new KQPopupMenu( parent );
-    parent->menuBar()->insertItem( tr("&View"), menu_view );
+	m_MenuView = new KQPopupMenu( parent );
+    parent->menuBar()->insertItem( tr("&View"), m_MenuView );
 
-	menu_view->insertItem( tr("&Increase font"), this, SLOT(onBtnFontInc()), CTRL+Key_Plus );
-	menu_view->insertItem( tr("&Decrease font"), this, SLOT(onBtnFontDec()), CTRL+Key_Minus );
-	menu_view->insertItem( tr("&View HTML source"), this, SLOT(onBtnViewSource()), CTRL+Key_U );
+	m_MenuView->insertItem( tr("&Increase font"), this, SLOT(onBtnFontInc()), CTRL+Key_Plus );
+	m_MenuView->insertItem( tr("&Decrease font"), this, SLOT(onBtnFontDec()), CTRL+Key_Minus );
+	m_MenuView->insertItem( tr("&View HTML source"), this, SLOT(onBtnViewSource()), CTRL+Key_U );
 	
-    menu_view->insertSeparator();
-	menu_view->insertItem( tr("&Bookmark this page"), this, SLOT(onBtnAddBookmark()), CTRL+Key_T  );
-    menu_view->insertSeparator();
+    m_MenuView->insertSeparator();
+	m_MenuView->insertItem( tr("&Bookmark this page"), this, SLOT(onBtnAddBookmark()), CTRL+Key_T  );
+    m_MenuView->insertSeparator();
 	
+	m_menuShowFullscreenMenuID = m_MenuView->insertItem( tr("&Full screen"), this, SLOT(onBtnFullScreen()), Key_F11  );
+	m_menuShowContentWindowMenuID = m_MenuView->insertItem( tr("&Show contents window"), this, SLOT(onBtnToggleContentWindow()), Key_F9 );
+	m_MenuView->insertSeparator();
+		
 	// Create the language selection menu.
     menu_langlist = new KQPopupMenu( parent );
 	KQPopupMenu * menu_sublang = 0;
@@ -191,7 +195,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 			menu_langlist->insertItem( item->charset, idx );
 	}
 
-	menu_view->insertItem( tr("&Set language"), menu_langlist );
+	m_MenuView->insertItem( tr("&Set language"), menu_langlist );
 	m_checkedEncodingInMenu = -1;
 	m_checkedLanguageInMenu = -1;
 
@@ -214,7 +218,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 		menu_enclist->insertItem( item->qtcodec, idx );
 	}
 
-	menu_view->insertItem( tr("&Set codepage"), menu_enclist );
+	m_MenuView->insertItem( tr("&Set codepage"), menu_enclist );
 	
 	QWhatsThis::whatsThisButton( this );
 }
@@ -297,7 +301,7 @@ void KCHMSearchAndViewToolbar::onBtnViewSource( )
 
 void KCHMSearchAndViewToolbar::onBtnAddBookmark( )
 {
-	emit ::mainWindow->addBookmark();
+	emit ::mainWindow->slotAddBookmark();
 }
 
 void KCHMSearchAndViewToolbar::onMenuActivated( int id )
@@ -373,3 +377,24 @@ void KCHMSearchAndViewToolbar::onAccelFocusSearchField( )
 	m_findBox->setFocus();
 }
 
+void KCHMSearchAndViewToolbar::onBtnToggleContentWindow( )
+{
+	showContentsWindow( !m_MenuView->isItemChecked( m_menuShowContentWindowMenuID ) );
+}
+
+void KCHMSearchAndViewToolbar::onBtnFullScreen( )
+{
+	setFullScreen( !m_MenuView->isItemChecked( m_menuShowFullscreenMenuID ) );
+}
+
+void KCHMSearchAndViewToolbar::setFullScreen( bool enable )
+{
+	::mainWindow->slotEnableFullScreenMode( enable );
+	m_MenuView->setItemChecked( m_menuShowFullscreenMenuID, enable ); 
+}
+
+void KCHMSearchAndViewToolbar::showContentsWindow( bool enable )
+{
+	::mainWindow->slotShowContentsWindow( enable );
+	m_MenuView->setItemChecked( m_menuShowContentWindowMenuID, enable ); 
+}

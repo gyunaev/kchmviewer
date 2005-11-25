@@ -51,8 +51,10 @@ public:
 	void		setTextEncoding (const KCHMTextEncoding::text_encoding_t * enc);
 	
 public slots:
-	void 	onTreeClicked( QListViewItem *item );
-	void	addBookmark ( );
+	void 	slotOnTreeClicked( QListViewItem *item );
+	void	slotAddBookmark ( );
+	void	slotEnableFullScreenMode( bool enable );
+	void	slotShowContentsWindow( bool show );
 			
 private slots:
 	void slotLinkClicked ( const QString & link, bool& follow_link );

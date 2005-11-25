@@ -39,12 +39,13 @@
 #include "kchmsearchtoolbar.h"
 #include "kchmsettings.h"
 #include "kchmsetupdialog.h"
-#include "kqrunprocess.h"
 #include "iconstorage.h"
 #include "kchmviewwindow_qtextbrowser.h"
 
 #if defined (USE_KDE)
 	#include "kchmviewwindow_khtmlpart.h"
+#else
+	#include "kqrunprocess.h"
 #endif
 
 KCHMMainWindow::KCHMMainWindow()
@@ -223,7 +224,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 	{
 		if ( !m_chmFile )
 		{
-			QMessageBox mbox (tr("%1 - failed to load the chm file"), tr("Unable to load the chm file %2") . arg(APP_NAME) . arg(fileName), QMessageBox::Critical, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+			QMessageBox mbox (tr("%1 - failed to load the chm file") . arg(APP_NAME), tr("Unable to load the chm file %1") . arg(fileName), QMessageBox::Critical, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
 			mbox.exec();
 			exit (1);
 		}

@@ -79,7 +79,7 @@ void KCHMIndexWindow::showEvent( QShowEvent * )
 
 void KCHMIndexWindow::onReturnPressed( )
 {
-	emit ::mainWindow->onTreeClicked ( m_lastSelectedItem );
+	emit ::mainWindow->slotOnTreeClicked ( m_lastSelectedItem );
 }
 
 

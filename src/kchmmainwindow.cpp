@@ -281,7 +281,7 @@ void KCHMMainWindow::updateView( )
 	}
 }
 
-void KCHMMainWindow::onTreeClicked( QListViewItem * item )
+void KCHMMainWindow::slotOnTreeClicked( QListViewItem * item )
 {
 	if ( !item )
 		return;
@@ -523,7 +523,7 @@ void KCHMMainWindow::slotHomeMenuItemActivated()
 	openPage (m_chmFile->HomePage(), true);
 }
 
-void KCHMMainWindow::addBookmark( )
+void KCHMMainWindow::slotAddBookmark( )
 {
 	emit m_bookmarkWindow->onAddBookmarkPressed ();
 }
@@ -842,7 +842,7 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 			m_contentsWindow->setShowToolTips(true);
 
 			// Handle clicking on m_contentsWindow element
-			connect( m_contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( onTreeClicked( QListViewItem* ) ) );
+			connect( m_contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotOnTreeClicked( QListViewItem* ) ) );
 			
 			m_tabWidget->insertTab (m_contentsWindow, tr("Contents"), tabindex);
 		}
@@ -894,6 +894,28 @@ void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
 		else
 			m_searchWindow->invalidate();
 	}
+}
+
+void KCHMMainWindow::slotEnableFullScreenMode( bool enable )
+{
+	if ( enable )
+	{
+		if ( !isFullScreen() )
+			showFullScreen ();
+	}
+	else
+	{
+		if ( isFullScreen() )
+			showNormal ();
+	}
+}
+
+void KCHMMainWindow::slotShowContentsWindow( bool show )
+{
+	if ( show )
+		m_tabWidget->show();
+	else
+		m_tabWidget->hide();
 }
 
 

@@ -1,3 +1,7 @@
+2005-11-25 tim <gyunaev@ulduzsoft.com>
+    - Fixed error message when CHM file cannot be opened.
+    - Added Fullscreen mode (shortcut F11), and option to show/hide contents window (F9).
+
 2005-11-22 tim <gyunaev@ulduzsoft.com>
     - Added possibility to view HTML source in external viewer/editor
 

@@ -147,6 +147,8 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	
 	m_menuShowFullscreenMenuID = m_MenuView->insertItem( tr("&Full screen"), this, SLOT(onBtnFullScreen()), Key_F11  );
 	m_menuShowContentWindowMenuID = m_MenuView->insertItem( tr("&Show contents window"), this, SLOT(onBtnToggleContentWindow()), Key_F9 );
+	m_MenuView->setItemChecked( m_menuShowFullscreenMenuID, false ); 
+	m_MenuView->setItemChecked( m_menuShowContentWindowMenuID, true ); 
 	m_MenuView->insertSeparator();
 		
 	// Create the language selection menu.

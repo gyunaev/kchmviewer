@@ -7,7 +7,7 @@ AC_ARG_PROGRAM
 
 dnl All versioning is done via the following line
 AM_CONFIG_HEADER(src/config.h)
-AM_INIT_AUTOMAKE(KchmViewer, 1.3)
+AM_INIT_AUTOMAKE(KchmViewer, 1.4)
 
 dnl Chuck #defines for PACKAGE and VERSION into config.h
 AC_DEFINE_UNQUOTED(APP_NAME, "$PACKAGE", [ Application name ] )

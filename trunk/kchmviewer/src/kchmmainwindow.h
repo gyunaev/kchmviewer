@@ -55,6 +55,7 @@ public slots:
 	void	slotAddBookmark ( );
 	void	slotEnableFullScreenMode( bool enable );
 	void	slotShowContentsWindow( bool show );
+	void	slotLocateInContentWindow( );
 			
 private slots:
 	void slotLinkClicked ( const QString & link, bool& follow_link );

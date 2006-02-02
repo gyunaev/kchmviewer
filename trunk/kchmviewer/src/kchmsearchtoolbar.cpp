@@ -53,6 +53,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
     QPixmap iconAddBookmark (*gIconStorage.getToolbarPixmap(KCHMIconStorage::bookmark_add));
 	QPixmap iconNextPage (*gIconStorage.getToolbarPixmap(KCHMIconStorage::next_page));
 	QPixmap iconPrevPage (*gIconStorage.getToolbarPixmap(KCHMIconStorage::prev_page));
+	QPixmap iconLocateInContent (*gIconStorage.getToolbarPixmap(KCHMIconStorage::locate_in_content));
 
 	// Create the combobox to enter the find text
 	m_findBox = new QComboBox (TRUE, this);
@@ -81,6 +82,15 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this);
 	QWhatsThis::add( m_buttonNext, tr("Click this button to find next search result.") );
 
+	// Button 'locate in content'
+	m_buttonLocateInContent = new QToolButton( iconLocateInContent,
+											   tr("Locate this topic in content window"),
+											   QString::null,
+											   this,
+											   SLOT( onBtnLocateInContentWindow() ),
+											   this );
+	QWhatsThis::add( m_buttonLocateInContent, tr("Click this button to find current topic in the content window, and open it.") );
+	
 	// Button 'increase font size'
 	m_buttonFontInc = new QToolButton (iconFontInc,
 				tr("Increase font size"),
@@ -145,8 +155,13 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	m_MenuView->insertItem( tr("&Bookmark this page"), this, SLOT(onBtnAddBookmark()), CTRL+Key_T  );
     m_MenuView->insertSeparator();
 	
-	m_menuShowFullscreenMenuID = m_MenuView->insertItem( tr("&Full screen"), this, SLOT(onBtnFullScreen()), Key_F11  );
-	m_menuShowContentWindowMenuID = m_MenuView->insertItem( tr("&Show contents window"), this, SLOT(onBtnToggleContentWindow()), Key_F9 );
+	m_menuShowFullscreenMenuID = m_MenuView->insertItem( tr("&Full screen"), this,
+			 SLOT(onBtnFullScreen()), Key_F11  );
+	m_menuShowContentWindowMenuID = m_MenuView->insertItem( tr("&Show contents window"), this,
+			 SLOT(onBtnToggleContentWindow()), Key_F9 );
+	m_MenuView->insertItem( tr("&Locate in contents window"), this,
+			 SLOT(onBtnLocateInContentWindow()), CTRL+Key_L  );
+	
 	m_MenuView->setItemChecked( m_menuShowFullscreenMenuID, false ); 
 	m_MenuView->setItemChecked( m_menuShowContentWindowMenuID, true ); 
 	m_MenuView->insertSeparator();
@@ -399,4 +414,9 @@ void KCHMSearchAndViewToolbar::showContentsWindow( bool enable )
 {
 	::mainWindow->slotShowContentsWindow( enable );
 	m_MenuView->setItemChecked( m_menuShowContentWindowMenuID, enable ); 
+}
+
+void KCHMSearchAndViewToolbar::onBtnLocateInContentWindow( )
+{
+	::mainWindow->slotLocateInContentWindow( );
 }

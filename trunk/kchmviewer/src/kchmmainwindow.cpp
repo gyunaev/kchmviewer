@@ -105,6 +105,7 @@ KCHMMainWindow::KCHMMainWindow()
 	accel->connectItem ( accel->insertItem ( Key_F3 ), m_searchToolbar, SLOT ( onBtnNextSearchResult() ) );
 
 	statusBar()->show();
+	setIcon( *gIconStorage.getApplicationIcon() );
 }
 
 

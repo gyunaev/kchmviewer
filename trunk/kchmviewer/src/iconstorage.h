@@ -52,13 +52,16 @@ public:
 		prev_page
 	};
 
+	KCHMIconStorage();
 	const QPixmap * getBookIconPixmap (unsigned int id);
 	const QPixmap * getToolbarPixmap (pixmap_index_t pix);
+	const QPixmap * getApplicationIcon();
 
 private:
 	const QPixmap * returnOrLoadImage (unsigned int id, const png_memory_image_t * image);
 
 	QMap<unsigned int, QPixmap*>	m_iconMap;
+	QPixmap *						m_iconApplication;
 };
 
 extern KCHMIconStorage	gIconStorage;

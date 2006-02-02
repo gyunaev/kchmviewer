@@ -333,15 +333,16 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 
 	QString src;
 	GetFileContentAsString(src, &ui, true);
-
+	qDebug( "%s", src.ascii() );
 	if(src.isEmpty())
 		return false;
 
 	unsigned int defaultimagenum = asIndex ? KCHMImageType::IMAGE_INDEX : KCHMImageType::IMAGE_AUTO;
 	unsigned int imagenum = defaultimagenum;
-	int pos = 0, indent = 0;
-	bool in_object = false, root_created = false;
+	int pos = 0, indent = 0, root_indent_offset = 0;
+	bool in_object = false, root_indent_offset_set = false;
 	bool add2treemap = asIndex ? false : m_treeUrlMap.isEmpty(); // do not add to the map during index search
+	
 	QString name;
 	QStringList urls;
 	KCHMMainTreeViewItem * rootentry[MAX_NEST_DEPTH];
@@ -398,33 +399,39 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 			{
 				KCHMMainTreeViewItem * item;
 
-				if ( !root_created )
-					indent = 0;
+				if ( !root_indent_offset_set )
+				{
+					root_indent_offset_set = true;
+					root_indent_offset = indent;
+					
+					if ( root_indent_offset )
+						qWarning("CHM has improper index; root indent offset is %d", root_indent_offset);
+				}
 
+				int real_indent = indent - root_indent_offset;
 				QString url = urls.join ("|");
 
 				// Add item into the tree
-				if ( !indent )
+				if ( !real_indent )
 				{
-					item = new KCHMMainTreeViewItem (tree, lastchild[indent], name, url, imagenum);
+					item = new KCHMMainTreeViewItem (tree, lastchild[real_indent], name, url, imagenum);
 				}
 				else
 				{
-					if ( !rootentry[indent-1] )
-						qFatal("CHMFile::ParseAndFillTopicsTree: child entry %d with no root entry!", indent-1);
+					if ( !rootentry[real_indent-1] )
+						qFatal("CHMFile::ParseAndFillTopicsTree: child entry %d with no root entry!", real_indent-1);
 
-					item = new KCHMMainTreeViewItem (rootentry[indent-1], lastchild[indent], name, url,  imagenum);
+					item = new KCHMMainTreeViewItem (rootentry[real_indent-1], lastchild[real_indent], name, url,  imagenum);
 				}
 
-				lastchild[indent] = item;
+				lastchild[real_indent] = item;
 
-				if ( indent == 0 || !rootentry[indent] )
+				if ( real_indent == 0 || !rootentry[real_indent] )
 				{
-					rootentry[indent] = item;
-					root_created = true;
+					rootentry[real_indent] = item;
 
 					if ( asIndex  )
-						rootentry[indent]->setOpen(true);
+						rootentry[real_indent]->setOpen(true);
 				}
 
 				// There are no 'titles' in index file
@@ -495,8 +502,8 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 		}
 		else if ( tagword == "/ul" ) // decrease indent level
 		{
-			if ( --indent < 0 )
-				indent = 0;
+			if ( --indent < root_indent_offset )
+				indent = root_indent_offset;
 				
 			rootentry[indent] = 0;
 		}

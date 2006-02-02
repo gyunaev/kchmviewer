@@ -49,7 +49,8 @@ public:
 		view_decrease,
 		view_increase,
 		next_page,
-		prev_page
+		prev_page,
+		locate_in_content
 	};
 
 	KCHMIconStorage();

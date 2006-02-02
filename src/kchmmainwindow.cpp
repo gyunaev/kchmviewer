@@ -933,6 +933,23 @@ void KCHMMainWindow::slotToggleFullScreenMode( )
 	slotEnableFullScreenMode( !isFullScreen() );
 }
 
+void KCHMMainWindow::slotLocateInContentWindow( )
+{
+	// Open all the tree items to show current item (if needed)
+	KCHMMainTreeViewItem * treeitem = m_chmFile->getTreeItem( m_viewWindow->getOpenedPage() );
+	if ( m_contentsWindow && treeitem )
+	{
+		KCHMMainTreeViewItem * itemparent = treeitem;
+		while ( (itemparent = (KCHMMainTreeViewItem*) itemparent->parent()) != 0 )
+			itemparent->setOpen(true);
+			
+		m_contentsWindow->setCurrentItem (treeitem);
+		m_contentsWindow->ensureItemVisible (treeitem);
+	}
+	else
+		statusBar()->message( tr("Could not locate opened topic in content window"), 2000 );
+}
+
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 void KCHMMainWindow::runAutoTest()

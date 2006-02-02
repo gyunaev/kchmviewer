@@ -54,6 +54,7 @@ private slots:
 	void	onBtnPrevPageInToc();
 	void	onMenuActivated ( int id );
 	void	onBtnFullScreen();
+	void	onBtnLocateInContentWindow();
 	void	onBtnToggleContentWindow();
 	
 	void	setFullScreen( bool enable );
@@ -72,6 +73,7 @@ private:
 	QToolButton			*	m_buttonAddBookmark;
 	QToolButton			*	m_buttonNextPageInTOC;
 	QToolButton			*	m_buttonPrevPageInTOC;
+	QToolButton			*	m_buttonLocateInContent;
 	
 	int						m_checkedLanguageInMenu;
 	int						m_checkedEncodingInMenu;

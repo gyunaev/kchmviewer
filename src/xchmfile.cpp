@@ -169,12 +169,16 @@ inline int CHMFile::findStringInQuotes (const QString& tag, int offset, QString&
 		m_entityDecodeMap["mdash"]  = QChar((unsigned short) 8212);
 				
 		m_entityDecodeMap["amp"]	= "&";	// ampersand
+		m_entityDecodeMap["#38"]	= "&";	// ampersand
 		m_entityDecodeMap["gt"] = ">";	// greater than
+		m_entityDecodeMap["#62"] = ">";	// greater than		
 		m_entityDecodeMap["lt"] = "<"; 	// less than
 		m_entityDecodeMap["quot"] = "\""; // double quote
 		m_entityDecodeMap["apos"] = "'"; 	// single quote
 	}
+	
 	int qbegin = tag.find ('"', offset);
+	
 	if ( qbegin == -1 )
 		qFatal ("CHMFile::findStringInQuotes: cannot find first quote in <param> tag: '%s'", tag.ascii());
 

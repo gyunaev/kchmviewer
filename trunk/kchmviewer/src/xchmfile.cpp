@@ -333,7 +333,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 
 	QString src;
 	GetFileContentAsString(src, &ui, true);
-	qDebug( "%s", src.ascii() );
+
 	if(src.isEmpty())
 		return false;
 

@@ -26,6 +26,7 @@
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
 #include "kchmsourcefactory.h"
+#include "filetype_handler.h"
 #include "xchmfile.h"
 
 KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
@@ -37,7 +38,7 @@ KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
 
 const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 {
-	QString file, path = abs_name;
+	QString data, file, path = abs_name;
 	CHMFile * chm;
 
 	// Retreive the data from chm file
@@ -53,9 +54,15 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 	if ( pos != -1 )
 		path = path.left (pos);
 	
-	if ( path.endsWith (".htm") || path.endsWith (".html") )
+	// To handle a single-image pages, we need to generate the HTML page to show 
+	// this image. We did it in KCHMViewWindow::handleStartPageAsImage; now we need
+	// to generate the HTML page, and set it.
+	if ( handleFileType( path, data ) )
 	{
-		QString data;
+		((QMimeSourceFactory*)this)->setText (path, data);
+	}
+	else if ( path.endsWith (".htm") || path.endsWith (".html") )
+	{
 		chm->GetFileContentAsString (data, path);
 		((QMimeSourceFactory*)this)->setText (path, data);
 	}

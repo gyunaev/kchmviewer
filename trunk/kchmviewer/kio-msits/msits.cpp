@@ -34,7 +34,7 @@
 #include <qvaluevector.h>
 
 #include "msits.h"
-
+#include "../src/filetype_handler.h"
 
 using namespace KIO;
 
@@ -84,8 +84,9 @@ static bool isDirectory ( const QString & filename )
 
 void ProtocolMSITS::get( const KURL& url )
 {
-	QString fileName;
+	QString htmdata, fileName;
 	chmUnitInfo ui;
+	QByteArray buf;
 
     kdDebug() << "kio_msits::get() " << url.path() << endl;
 
@@ -94,35 +95,43 @@ void ProtocolMSITS::get( const KURL& url )
 
 	kdDebug() << "kio_msits::get: parseLoadAndLookup returned " << fileName << endl;
 
-	if ( isDirectory (fileName) )
+	if ( handleFileType( url.path(), htmdata ) )
 	{
-		error( KIO::ERR_IS_DIRECTORY, url.prettyURL() );
-		return;
+		buf = htmdata.utf8();
+		kdDebug() << "Using special handling for image pages: " << htmdata << endl;
+	}
+	else
+	{
+		if ( isDirectory (fileName) )
+		{
+			error( KIO::ERR_IS_DIRECTORY, url.prettyURL() );
+			return;
+		}
+
+		if ( !ResolveObject ( fileName, &ui) )
+		{
+			kdDebug() << "kio_msits::get: could not resolve filename " << fileName << endl;
+        	error( KIO::ERR_DOES_NOT_EXIST, url.prettyURL() );
+			return;
+		}
+
+    	buf.resize( ui.length );
+
+		if ( RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) == 0 )
+		{
+			kdDebug() << "kio_msits::get: could not retrieve filename " << fileName << endl;
+        	error( KIO::ERR_NO_CONTENT, url.prettyURL() );
+			return;
+		}
 	}
 
-	if ( !ResolveObject ( fileName, &ui) )
-	{
-		kdDebug() << "kio_msits::get: could not resolve filename " << fileName << endl;
-        error( KIO::ERR_DOES_NOT_EXIST, url.prettyURL() );
-		return;
-	}
-
-    QByteArray buf (ui.length);
-
-	if ( RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) == 0 )
-	{
-		kdDebug() << "kio_msits::get: could not retrieve filename " << fileName << endl;
-        error( KIO::ERR_NO_CONTENT, url.prettyURL() );
-		return;
-	}
-
-    totalSize( ui.length );
+    totalSize( buf.size() );
     KMimeMagicResult * result = KMimeMagic::self()->findBufferFileType( buf, fileName );
     kdDebug() << "Emitting mimetype " << result->mimeType() << endl;
 
 	mimeType( result->mimeType() );
     data( buf );
-	processedSize( ui.length );
+	processedSize( buf.size() );
 
     finished();
 }

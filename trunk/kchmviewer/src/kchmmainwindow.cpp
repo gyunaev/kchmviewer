@@ -997,7 +997,6 @@ void KCHMMainWindow::runAutoTest()
 		break;
 
 	case STATE_SHUTDOWN:
-		qDebug ("Autotest succeed");
 		qApp->quit();
 		break;
 		

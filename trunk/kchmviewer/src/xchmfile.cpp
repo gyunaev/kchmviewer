@@ -169,9 +169,7 @@ inline int CHMFile::findStringInQuotes (const QString& tag, int offset, QString&
 		m_entityDecodeMap["mdash"]  = QChar((unsigned short) 8212);
 				
 		m_entityDecodeMap["amp"]	= "&";	// ampersand
-		m_entityDecodeMap["#38"]	= "&";	// ampersand
 		m_entityDecodeMap["gt"] = ">";	// greater than
-		m_entityDecodeMap["#62"] = ">";	// greater than		
 		m_entityDecodeMap["lt"] = "<"; 	// less than
 		m_entityDecodeMap["quot"] = "\""; // double quote
 		m_entityDecodeMap["apos"] = "'"; 	// single quote
@@ -208,15 +206,33 @@ inline int CHMFile::findStringInQuotes (const QString& tag, int offset, QString&
 			{
 				if ( tag[i] == ';' ) // HTML entity ends
 				{
-					QMap<QString, QString>::const_iterator it = m_entityDecodeMap.find (htmlentity);
-					
-					if ( it == m_entityDecodeMap.end() )
+					// If entity is an ASCII code, just decode it
+					if ( htmlentity[0] == '#' )
 					{
-						qWarning ("CHMFile::DecodeHTMLUnicodeEntity: could not decode HTML entity '%s', abort decoding.", htmlentity.ascii());
-						break;
+						bool valid;
+						unsigned int ascode = htmlentity.mid(1).toUInt( &valid );
+						
+						if ( !valid )
+						{
+							qWarning ("CHMFile::DecodeHTMLUnicodeEntity: could not decode HTML entity '%s', abort decoding.", htmlentity.ascii());
+							break;
+						}
+
+						value.append ( QChar( ascode ) );
 					}
-	
-					value.append (it.data());
+					else
+					{
+						QMap<QString, QString>::const_iterator it = m_entityDecodeMap.find (htmlentity);
+					
+						if ( it == m_entityDecodeMap.end() )
+						{
+							qWarning ("CHMFile::DecodeHTMLUnicodeEntity: could not decode HTML entity '%s', abort decoding.", htmlentity.ascii());
+							break;
+						}
+						
+						value.append (it.data());
+					}
+
 					htmlentity = QString::null;
 					fill_entity = false;
 				}

@@ -1,3 +1,10 @@
+2006-02-01 tim <gyunaev@ulduzsoft.com>
+    - Now kchmviewer uses system libchm if found, and no --with-builtin-chmlib configure switch defined.
+    - Made configure more compatible with newest autoconf and Debian - thanks to Jose Luis Tallon. 
+
+2005-12-30 tim <gyunaev@ulduzsoft.com>
+    - Fixed kqrunprocess.h compilation bug on some platforms.
+
 2005-11-27 tim <gyunaev@ulduzsoft.com>
     - Version 1.3 RELEASE
 

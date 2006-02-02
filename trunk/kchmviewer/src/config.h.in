@@ -138,6 +138,9 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* use builtin chmlib */
+#undef USE_BUILTIN_CHMLIB
+
 /* use KDE support */
 #undef USE_KDE
 

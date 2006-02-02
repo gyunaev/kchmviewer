@@ -23,13 +23,13 @@
 #define MSITS_H
 
 
-//#include <kio/global.h>
 #include <kio/slavebase.h>
 #include <kurl.h>
 
 #include <qstring.h>
 #include <qcstring.h>
 
+#include "config.h"
 #include "chm_lib.h"
 
 
@@ -59,7 +59,13 @@ private:
 	// Retrieve an object from the CHM file
 	inline size_t RetrieveObject (const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize)
 	{
-		return ::chm_retrieve_object(m_chmFile, ui, buffer, fileOffset, bufferSize);
+#if USE_BUILTIN_CHMLIB
+		return ::chm_retrieve_object(m_chmFile, ui, buffer, 
+			fileOffset, bufferSize);
+#else
+		return ::chm_retrieve_object(m_chmFile, const_cast<chmUnitInfo*>(ui),
+			buffer, fileOffset, bufferSize);
+#endif
 	}
 
 	// An opened file name, if presend

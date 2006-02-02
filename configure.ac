@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl Most of this file was shamelessly stolen from Licq Qt plugin, which has similar configuration options
-AC_INIT(src/main.cpp)
+AC_INIT
+AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR(admin)
 AC_CANONICAL_SYSTEM
 AC_ARG_PROGRAM
@@ -28,10 +29,8 @@ AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(no)
 AC_PATH_QT
 
-EXTRA_SUBDIRS=""
+TARGETSUBDIRS="src"
 CHMLIBDIR="chmlib"
-CHM_INCLUDES="\$(top_srcdir)/$CHMLIBDIR/"
-CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.la"
 
 AC_ARG_WITH(kde,    AC_HELP_STRING([--with-kde],[enable KDE support]))
 
@@ -40,7 +39,7 @@ if test "x$with_kde" = "xyes"; then
 	AC_PATH_KDE
 	AM_KDE_WITH_NLS
 	AC_DEFINE(USE_KDE, 1, [use KDE support])
-	EXTRA_SUBDIRS="$EXTRA_SUBDIRS kio-msits"
+	TARGETSUBDIRS="$TARGETSUBDIRS kio-msits"
 fi
 
 if test "x$with_kde" != "xyes"; then
@@ -48,11 +47,35 @@ if test "x$with_kde" != "xyes"; then
 	AC_PREFIX_DEFAULT(${prefix:-/usr/local})
 fi
 
-AC_SUBST(EXTRA_SUBDIRS)
+dnl Checking whether to use built-in, or system-wide chmlib
+dnl First check for --with-builtin-chmlib configure option - no more checks needed
+USE_BUILTIN_CHMLIB="0"
+AC_ARG_WITH(builtin-chmlib,  
+       AC_HELP_STRING([--with-builtin-chmlib],[link with built-in chmlib]), 
+       [ USE_BUILTIN_CHMLIB="1" ])
+
+dnl Check for the libchm in system
+if test "$USE_BUILTIN_CHMLIB" = "0"; then
+	AC_CHECK_LIB(chm, chm_open, [USE_BUILTIN_CHMLIB="0"], [USE_BUILTIN_CHMLIB="1"])
+fi
+
+if test "$USE_BUILTIN_CHMLIB" = "1"; then
+	TARGETSUBDIRS="$CHMLIBDIR $TARGETSUBDIRS"
+	CHM_INCLUDES="-I\$(top_srcdir)/$CHMLIBDIR/"
+	CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.la"
+	USE_LIB_CHM="internal"
+    AC_DEFINE(USE_BUILTIN_CHMLIB, 1, [use builtin chmlib])
+else
+	CHM_LIBS="-lchm"
+    USE_LIB_CHM="system"
+	AC_DEFINE(USE_BUILTIN_CHMLIB, 0, [use builtin chmlib])
+fi
+
+AC_SUBST(TARGETSUBDIRS)
 AC_SUBST(CHM_INCLUDES)
 AC_SUBST(CHM_LIBS)
 
-AC_OUTPUT(src/Makefile Makefile kio-msits/Makefile chmlib/Makefile)
+AC_OUTPUT(Makefile src/Makefile kio-msits/Makefile chmlib/Makefile)
 
 
 echo ""
@@ -66,4 +89,4 @@ else
 fi
 echo "Qt includes    : $QT_INCLUDES"
 echo "Qt libraries   : $LIB_QT"
-echo ""
+echo "chmlib to link : $USE_LIB_CHM"

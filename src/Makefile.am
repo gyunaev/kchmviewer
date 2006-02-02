@@ -6,7 +6,7 @@ kchmviewer_SOURCES = iconstorage.cpp kchmbookmarkwindow.cpp kchmconfig.cpp \
 		kchmviewwindow_qtextbrowser.cpp kchmviewwindow_khtmlpart.cpp kchmsetupdialog.ui kqtempfile.cpp
 
 # set the include path found by configure
-INCLUDES = $(QT_INCLUDES) -I$(CHM_INCLUDES) $(KDE_INCLUDES)
+INCLUDES = $(QT_INCLUDES) $(CHM_INCLUDES) $(KDE_INCLUDES)
 
 # the library search path.
 kchmviewer_LDADD = $(CHM_LIBS) $(LIB_QT) $(LIB_KDEUI) $(LIB_KHTML)

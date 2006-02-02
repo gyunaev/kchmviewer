@@ -306,7 +306,7 @@ private:
 	}
 	
 	//! Helper. Translates from Win32 encodings to generic wxWidgets ones.
-	const char * CHMFile::GetFontEncFromCharSet (const QString& font) const;
+	const char * GetFontEncFromCharSet (const QString& font) const;
 
 	//! Helper. Returns the $FIftiMain offset of leaf node or 0.
 	u_int32_t GetLeafNodeOffset(const QString& text,

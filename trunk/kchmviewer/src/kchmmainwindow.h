@@ -137,6 +137,7 @@ private:
 		STATE_SHUTDOWN
 	};
 	
+	bool					m_useShortAutotest;
 	auto_test_state_t		m_autoteststate;
 	QListViewItemIterator	m_autotestlistiterator;
 

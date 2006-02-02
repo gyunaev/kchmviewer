@@ -98,6 +98,7 @@ KCHMMainWindow::KCHMMainWindow()
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
 	QAccel * accel = new QAccel( this );
+	accel->connectItem ( accel->insertItem ( Key_F11 ), this, SLOT ( slotToggleFullScreenMode() ) );
 	accel->connectItem ( accel->insertItem ( CTRL + Key_1), this, SLOT ( slotActivateContentTab() ) );
 	accel->connectItem ( accel->insertItem ( CTRL + Key_2), this, SLOT ( slotActivateIndexTab() ) );
 	accel->connectItem ( accel->insertItem ( CTRL + Key_3), this, SLOT ( slotActivateSearchTab() ) );
@@ -902,12 +903,20 @@ void KCHMMainWindow::slotEnableFullScreenMode( bool enable )
 	if ( enable )
 	{
 		if ( !isFullScreen() )
+		{
 			showFullScreen ();
+			menuBar()->hide();
+			statusBar()->hide();
+		}
 	}
 	else
 	{
 		if ( isFullScreen() )
+		{
 			showNormal ();
+			menuBar()->show();
+			statusBar()->show();
+		}
 	}
 }
 
@@ -917,6 +926,11 @@ void KCHMMainWindow::slotShowContentsWindow( bool show )
 		m_tabWidget->show();
 	else
 		m_tabWidget->hide();
+}
+
+void KCHMMainWindow::slotToggleFullScreenMode( )
+{
+	slotEnableFullScreenMode( !isFullScreen() );
 }
 
 

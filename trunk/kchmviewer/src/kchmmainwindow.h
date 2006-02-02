@@ -80,6 +80,8 @@ private slots:
 	void slotChangeSettingsMenuItemActivated();
 	void slotHistoryMenuItemActivated ( int );
 	
+	void slotToggleFullScreenMode( );
+	
 private:
 	bool	parseCmdLineArgs();
 	void 	showEvent( QShowEvent * );

@@ -24,6 +24,7 @@
 #include <qdir.h>
 
 #include "kchmviewwindow.h"
+#include "filetype_handler.h"
 
 
 KCHMViewWindow::KCHMViewWindow( QWidget * )
@@ -155,6 +156,7 @@ bool KCHMViewWindow::openUrl ( const QString& origurl, bool addHistory )
 		newurl = page;
 
 	makeURLabsolute (newurl);
+	handleStartPageAsImage( newurl );
 	
 	if ( openPage (newurl) )
 	{
@@ -210,4 +212,15 @@ void KCHMViewWindow::navigateForward( )
 	
 	openUrl ( *m_historyIterator, false );
 	checkHistoryAvailability();
+}
+
+void KCHMViewWindow::handleStartPageAsImage( QString & link )
+{
+	// Handle pics
+	if ( link.endsWith( ".jpg", false )
+	|| link.endsWith( ".jpeg", false )
+	|| link.endsWith( ".gif", false )
+	|| link.endsWith( ".png", false )
+	|| link.endsWith( ".bmp", false ) )
+		link += FILE_HANDLER_EXT;
 }

@@ -118,6 +118,7 @@ protected:
 	virtual bool	openPage ( const QString& url ) = 0;
 
 	virtual void	checkHistoryAvailability ();
+	virtual void	handleStartPageAsImage( QString& link );
 
 	QString 				m_openedPage;
 	QString					m_base_url;

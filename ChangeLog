@@ -8,6 +8,7 @@
     - Fixed compilation with gcc 4.1 - thanks to Jan Jitse Venselaar.
     - The algorithm to detect the valid root offset in contents page is changed. Now there should be less
       "CHMFile::ParseAndFillTopicsTree: child entry 1 with no root entry!" errors.
+    - Pages with images only are now shown correctly.
 
 2005-12-30 tim <gyunaev@ulduzsoft.com>
     - Fixed kqrunprocess.h compilation bug on some platforms.

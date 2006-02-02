@@ -404,7 +404,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 					root_indent_offset_set = true;
 					root_indent_offset = indent;
 					
-					if ( root_indent_offset )
+					if ( root_indent_offset > 1 )
 						qWarning("CHM has improper index; root indent offset is %d", root_indent_offset);
 				}
 

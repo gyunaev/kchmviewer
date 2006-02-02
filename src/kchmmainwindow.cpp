@@ -95,6 +95,7 @@ KCHMMainWindow::KCHMMainWindow()
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 	m_autoteststate = STATE_OFF;
+	m_useShortAutotest = false;
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
 	QAccel * accel = new QAccel( this );
@@ -587,6 +588,9 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	if ( args->isSet("autotestmode") )
 		do_autotest = true;
+	
+	if ( args->isSet("shortautotestmode") )
+		do_autotest = m_useShortAutotest = true;
 /*
 	search_query = args->getOption ("search");
 	search_index = args->getOption ("sindex");
@@ -599,6 +603,8 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	for ( int i = 1; i < qApp->argc(); i++  )
 	{
 		if ( !strcmp (qApp->argv()[i], "--autotestmode") )
+			do_autotest = m_useShortAutotest = true;
+		else if ( !strcmp (qApp->argv()[i], "--shortautotestmode") )
 			do_autotest = true;
 		else if ( !strcmp (qApp->argv()[i], "--search") )
 			search_query = qApp->argv()[++i];
@@ -632,7 +638,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 		if ( do_autotest )
 		{
 #if defined (ENABLE_AUTOTEST_SUPPORT)
-			if ( !filename.isEmpty() )
+			if ( filename.isEmpty() )
 				qFatal ("Could not use Auto Test mode without a chm file!");
 
 			m_autoteststate = STATE_INITIAL;
@@ -959,7 +965,7 @@ void KCHMMainWindow::runAutoTest()
 	switch (m_autoteststate)
 	{
 	case STATE_INITIAL:
-		if ( m_contentsWindow )
+		if ( m_contentsWindow && !m_useShortAutotest )
 		{
 			m_autotestlistiterator = QListViewItemIterator (m_contentsWindow);
 			m_autoteststate = STATE_CONTENTS_OPENNEXTPAGE;

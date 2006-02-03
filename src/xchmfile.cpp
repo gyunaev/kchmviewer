@@ -1298,7 +1298,7 @@ QString CHMFile::getTopicByUrl( const QString & search_url )
 			topic = encodeWithCurrentCodec ((const char*)buf);
 		}
 		else
-			topic = i18n( "tab label", "Untitled" );
+			topic = i18n( "Untitled" );
 
 		return topic;
 	}
@@ -1326,7 +1326,7 @@ void CHMFile::GetSearchResults( const KCHMSearchProgressResults_t & tempres, KCH
 			res.title = encodeWithCurrentCodec ((const char*)combuf);
 		}
 		else
-			res.title = i18n( "tab label", "Untitled" );
+			res.title = i18n( "Untitled" );
 
 		if ( RetrieveObject (&m_chmURLSTR, combuf, tempres[i].urloff + 8, COMMON_BUF_LEN - 1) == 0 )
 			continue;

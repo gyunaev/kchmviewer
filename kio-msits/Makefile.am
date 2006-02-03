@@ -12,7 +12,3 @@ protocoldir = $(kde_servicesdir)
 
 # Put it here to avoid creating another directory
 kde_apps_DATA = kchmviewer.desktop
-
-messages: rc.cpp
-	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/kio_testkio.pot

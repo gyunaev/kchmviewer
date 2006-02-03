@@ -158,9 +158,9 @@ void  KCHMViewWindow_KHTMLPart::onPopupMenu ( const QString &, const QPoint & po
 	if ( !m_contextMenu )
 	{
 		m_contextMenu = new KPopupMenu( view() );
-		m_contextMenu->insertTitle ( i18n( "menu item", "Editor" ) );
-		m_contextMenu->insertItem ( i18n( "menu item", "&Copy"), ::mainWindow, SLOT(slotBrowserCopy()) );
-		m_contextMenu->insertItem ( i18n( "menu item", "&Select all"), ::mainWindow, SLOT(slotBrowserSelectAll()) );
+		m_contextMenu->insertTitle ( i18n( "Editor" ) );
+		m_contextMenu->insertItem ( i18n( "&Copy"), ::mainWindow, SLOT(slotBrowserCopy()) );
+		m_contextMenu->insertItem ( i18n( "&Select all"), ::mainWindow, SLOT(slotBrowserSelectAll()) );
 	}
 	
 	m_contextMenu->exec( point );

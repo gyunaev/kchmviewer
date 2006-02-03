@@ -1,4 +1,4 @@
-messages:
+messages: rc.cpp
 		$(EXTRACTRC) *.rc > rc.cpp
 		$(EXTRACTRC) *.ui >> rc.cpp
 		$(XGETTEXT) rc.cpp *.h *.cpp -o $(podir)/kchmviewer.pot

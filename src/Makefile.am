@@ -1,3 +1,10 @@
+messages:
+		$(EXTRACTRC) *.rc > rc.cpp
+		$(EXTRACTRC) *.ui >> rc.cpp
+		$(XGETTEXT) rc.cpp *.h *.cpp -o $(podir)/kchmviewer.pot
+
+SUBDIRS = . pics
+
 bin_PROGRAMS = kchmviewer
 kchmviewer_SOURCES = iconstorage.cpp kchmbookmarkwindow.cpp kchmconfig.cpp \
 		kchmindexwindow.cpp kchmmainwindow.cpp kchmsearchtoolbar.cpp kchmsearchwindow.cpp \
@@ -14,9 +21,10 @@ kchmviewer_LDFLAGS = $(QT_LDFLAGS) $(KDE_LDFLAGS)
 
 METASOURCES = AUTO
 KDE_OPTIONS = qtonly
+KDE_ICON = AUTO
 noinst_HEADERS = bitfiddle.h kchmsettings.h forwarddeclarations.h \
 		kchmsourcefactory.h iconstorage.h kchmtextencoding.h kchmbookmarkwindow.h kchmconfig.h \
 		kchmtreeviewitem.h kchmdialogchooseurlfromlist.h kchmviewwindow.h kchmindexwindow.h \
 		kchmviewwindow_khtmlpart.h kchmmainwindow.h kchmviewwindow_qtextbrowser.h kchmsearchtoolbar.h \
 		kde-qt.h kchmsearchwindow.h xchmfile.h kqtempfile.h kqrunprocess.h \
-	filetype_handler.h
+		filetype_handler.h

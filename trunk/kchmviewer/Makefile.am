@@ -10,7 +10,6 @@ if BUILD_KIOMSITS
 endif
 
 SUBDIRS = $(DIR_CHMLIB) src $(DIR_KIOMSITS)
-DIST_SUBDIRS = $(DIR_CHMLIB) src $(DIR_KIOMSITS)
 
 package-messages:
 	$(MAKE) -f admin/Makefile.common package-messages

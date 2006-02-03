@@ -1,13 +1,13 @@
-# KchmViewer is a chm (MS HTML help file format) viewer, written in C++.
-# (C) George Yunaev <gyunaev@ulduzsoft.com>, 2005-2006.
-# Licensed under GNU GPL license.
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.4\n"
-"Report-Msgid-Bugs-To: gyunaev@ulduzsoft.com\n"
-"POT-Creation-Date: 2006-02-02 21:55-0800\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-02-03 02:45-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -406,7 +406,7 @@ msgid ""
 msgstr ""
 
 #: kchmmainwindow.cpp:424
-msgid "toolbar label"
+msgid "File Operations"
 msgstr ""
 
 #: kchmmainwindow.cpp:428

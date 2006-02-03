@@ -1,9 +1,17 @@
+2006-02-02 tim <gyunaev@ulduzsoft.com>
+    - Added i18n calls for complete internationalization. pot file created.
+    - Switched to a new, correct automake file structure.
+    - Fixed autotest.
+    - Version changed to 2.0.
+
 2006-02-01 tim <gyunaev@ulduzsoft.com>
     - Now kchmviewer uses system libchm if found, and no --with-builtin-chmlib configure switch defined.
     - Made configure more compatible with newest autoconf and Debian - thanks to Jose Luis Tallon. 
     - Added an application icon - thanks to Jose Luis Tallon. 
     - Fixed index parser for PHP manual - thanks to Dmitry Bakshaev.
     - In full screen mode the menu bar and status bar are now hidden.
+
+2006-01-30 tim <gyunaev@ulduzsoft.com>
     - Added 'locate in content window' button to open currently opened topic in the content window.
     - Fixed compilation with gcc 4.1 - thanks to Jan Jitse Venselaar.
     - The algorithm to detect the valid root offset in contents page is changed. Now there should be less

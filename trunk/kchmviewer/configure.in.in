@@ -8,7 +8,7 @@ AC_ARG_PROGRAM
 
 dnl All versioning is done via the following line
 AM_CONFIG_HEADER(src/config.h)
-AM_INIT_AUTOMAKE(KchmViewer, 1.4)
+AM_INIT_AUTOMAKE(KchmViewer, 2.0)
 
 dnl Chuck #defines for PACKAGE and VERSION into config.h
 AC_DEFINE_UNQUOTED(APP_NAME, "$PACKAGE", [ Application name ] )
@@ -68,9 +68,8 @@ else
 	AC_DEFINE(USE_BUILTIN_CHMLIB, 0, [use builtin chmlib])
 fi
 
-AM_CONDITIONAL([FALSE_CONDITION_TO_FAKE_KDEVELOP], [test "no" = "yes" ])
 AM_CONDITIONAL([BUILD_KIOMSITS], [test "$have_kde" = yes ])
-AM_CONDITIONAL([BUILD_CHMLIB], [test "$USE_BUILTIN_CHMLIB" = 1 ])
+AM_CONDITIONAL([BUILD_CHMLIB], [test "$USE_BUILTIN_CHMLIB" = "1" ])
 
 AC_SUBST(CHM_INCLUDES)
 AC_SUBST(CHM_LIBS)

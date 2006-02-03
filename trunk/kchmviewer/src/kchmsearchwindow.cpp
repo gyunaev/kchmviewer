@@ -90,7 +90,7 @@ void KCHMSearchWindow::onReturnPressed( )
 				new KCMSearchTreeViewItem (m_searchList, results[i].title, results[i].url, results[i].url);
 			}
 
-			::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" . arg(results.size()) ) );
+				::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" ) . arg(results.size()) );
 		}
 		else
 			::mainWindow->showInStatusBar( i18n( "Search returned no results") );

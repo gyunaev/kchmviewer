@@ -79,7 +79,7 @@ AC_SUBST(TARGETSUBDIRS)
 AC_SUBST(CHM_INCLUDES)
 AC_SUBST(CHM_LIBS)
 
-AC_OUTPUT(Makefile src/Makefile kio-msits/Makefile chmlib/Makefile)
+#AC_OUTPUT(Makefile src/Makefile src/pics/Makefile kio-msits/Makefile chmlib/Makefile)
 
 
 echo ""

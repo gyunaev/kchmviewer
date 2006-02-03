@@ -19,11 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qheader.h>
-#include <qlistview.h>
+#include "kde-qt.h"
 
 #include "kchmdialogchooseurlfromlist.h"
 #include "kchmtreeviewitem.h"
@@ -35,17 +31,17 @@ KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList(const QStringList& urls
 	layout->setMargin (5);
 
 	QListView * m_urlsList = new QListView (this);
-	m_urlsList->addColumn( "Topics" );
+	m_urlsList->addColumn( i18n( "tab label", "Topics" ) );
 	
 	for ( unsigned int i = 0; i < urls.size(); i++ )
 		new KCHMSingleTreeViewItem (m_urlsList, titles[i], urls[i]);
 
-	layout->addWidget ( new QLabel (tr("Please select one of the topics below:"), this) );
+	layout->addWidget ( new QLabel( i18n( "dialog text", "Please select one of the topics below:"), this) );
 	layout->addWidget ( m_urlsList );
 
 	QHBoxLayout * hlayout = new QHBoxLayout (layout);
-	QPushButton * bok = new QPushButton ("&Ok", this);
-	QPushButton * bcancel = new QPushButton ("&Cancel", this);
+	QPushButton * bok = new QPushButton( i18n( "button label", "&Ok" ), this);
+	QPushButton * bcancel = new QPushButton( i18n( "button label", "&Cancel" ), this);
 
 	hlayout->addWidget (bok);
 	hlayout->addWidget (bcancel);

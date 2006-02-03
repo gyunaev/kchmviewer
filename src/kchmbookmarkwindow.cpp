@@ -31,14 +31,14 @@ KCHMBookmarkWindow::KCHMBookmarkWindow(QWidget *parent, const char *name)
 	layout->setMargin (5);
 
 	m_bookmarkList = new QListView (this);
-	m_bookmarkList->addColumn( "bookmark" );
+	m_bookmarkList->addColumn( "bookmark" ); // no need to i18n - the column is hidden
 	m_bookmarkList->header()->hide();
 	layout->addWidget (m_bookmarkList);
 
 	QHBoxLayout * hlayout = new QHBoxLayout (layout);
-	QPushButton * add = new QPushButton ("&Add", this);
-	QPushButton * edit = new QPushButton ("&Edit", this);
-	QPushButton * del = new QPushButton ("&Del", this);
+	QPushButton * add = new QPushButton ( i18n( "button label", "&Add" ), this);
+	QPushButton * edit = new QPushButton ( i18n( "button label", "&Edit" ), this);
+	QPushButton * del = new QPushButton ( i18n( "button label", "&Del" ), this);
 	
 	hlayout->addWidget (add);
 	hlayout->addWidget (edit);
@@ -60,8 +60,9 @@ void KCHMBookmarkWindow::onAddBookmarkPressed( )
     bool ok;
 	QString url = ::mainWindow->getViewWindow()->getOpenedPage();
 	QString title = ::mainWindow->getChmFile()->getTopicByUrl(url);
-	QString name = QInputDialog::getText ("KCHMViewer - add a bookmark",
-			"Enter the name for this bookmark:",
+	QString name = QInputDialog::getText( 
+			i18n( "dialog title, %1 is appname", "%1 - add a bookmark") . arg(APP_NAME),
+			i18n( "dialog body", "Enter the name for this bookmark:" ),
 			QLineEdit::Normal,
 			title,
 			&ok, 
@@ -95,8 +96,9 @@ void KCHMBookmarkWindow::onEditBookmarkPressed( )
 	if ( item )
 	{
 	    bool ok;
-		QString name = QInputDialog::getText ("KCHMViewer - edit a bookmark name",
-			"Enter the name for this bookmark:",
+		QString name = QInputDialog::getText( 
+			i18n( "dialog title, %1 is appname", "%1 - edit the bookmark name") . arg(APP_NAME),
+			i18n( "dialog body", "Enter the name for this bookmark:" ),
 			QLineEdit::Normal,
 			item->m_name, 
 			&ok, 

@@ -57,6 +57,9 @@
 	#include <qtabwidget.h>
 	#include <qmessagebox.h>
 
+	#define i18n(A)		tr(A)
+	#define i18n(A,B)	tr(B)
+
 #endif /* USE_KDE */
 
 /* common non-wrapped UI classes */

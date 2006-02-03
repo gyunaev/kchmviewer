@@ -33,7 +33,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 {
 	QVBoxLayout * layout = new QVBoxLayout (this);
 	layout->setMargin (5);
-	layout->addWidget (new QLabel (tr("Type in word(s) to search for:"), this));
+	layout->addWidget (new QLabel (i18n( "dialog text", "Type in word(s) to search for:"), this));
 	
 	m_searchQuery = new QComboBox (TRUE, this);
 	m_searchQuery->setFocus();
@@ -48,8 +48,8 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	hlayout->addWidget ( m_helpButton );
 	
 	m_searchList = new KQListView (this);
-	m_searchList->addColumn( "Title" );
-	m_searchList->addColumn( "Location" );
+	m_searchList->addColumn( i18n( "tab label", "Title" ) );
+	m_searchList->addColumn( i18n( "tab label", "Location" ) );
 	m_searchList->setShowToolTips(true);
 
 	connect( m_helpButton, SIGNAL( clicked () ), this, SLOT( onHelpClicked() ) );
@@ -57,7 +57,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	connect( m_searchList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
 
 	m_matchSimilarWords = new QCheckBox (this);
-	m_matchSimilarWords->setText (tr("Match similar words"));
+	m_matchSimilarWords->setText( i18n( "dialog text", "Match similar words") );
 
 	layout->addSpacing (10);
 	layout->addWidget (m_searchList);
@@ -90,13 +90,13 @@ void KCHMSearchWindow::onReturnPressed( )
 				new KCMSearchTreeViewItem (m_searchList, results[i].title, results[i].url, results[i].url);
 			}
 
-			::mainWindow->showInStatusBar( tr("Search returned %1 results") . arg(results.size()) );
+				::mainWindow->showInStatusBar( i18n( "Search returned 1 result", "Search returned %n results", results.size() ) );
 		}
 		else
-			::mainWindow->showInStatusBar( tr("Search returned no results") );
+			::mainWindow->showInStatusBar( i18n( "statusbar line", "Search returned no results") );
 	}
 	else
-		::mainWindow->showInStatusBar( tr("Search failed") );
+		::mainWindow->showInStatusBar( i18n( "statusbar line", "Search failed") );
 }
 
 void KCHMSearchWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int)
@@ -391,5 +391,7 @@ bool KCHMSearchWindow::searchWord( const QString & word, KCHMSearchProgressResul
 
 void KCHMSearchWindow::onHelpClicked( )
 {
-	QMessageBox::information ( this, tr("How to use search"), tr("The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for symbols other than underscope, and these symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
+	QMessageBox::information ( this, 
+		i18n( "dialog title", "How to use search"), 
+		i18n( "dialog body", "The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for symbols other than underscope, and these symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
 }

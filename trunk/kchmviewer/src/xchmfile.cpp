@@ -48,6 +48,9 @@
 #include <qcursor.h>
 #include <qapplication.h>
 
+//#define DEBUGPARSER(A)	qDebug A
+#define DEBUGPARSER(A)	;
+
 class KCHMShowWaitCursor
 {
 public:
@@ -353,6 +356,17 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 	if(src.isEmpty())
 		return false;
 
+#if 0
+	// Save the index for debugging purposes
+	QFile outfile( "parsed.htm" );
+	if ( outfile.open( IO_WriteOnly ) )
+	{
+		QTextStream textstream( &outfile );
+		textstream << src;
+		outfile.close();
+	}
+#endif
+	
 	unsigned int defaultimagenum = asIndex ? KCHMImageType::IMAGE_INDEX : KCHMImageType::IMAGE_AUTO;
 	unsigned int imagenum = defaultimagenum;
 	int pos = 0, indent = 0, root_indent_offset = 0;
@@ -427,15 +441,19 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 				int real_indent = indent - root_indent_offset;
 				QString url = urls.join ("|");
 
-				// Add item into the tree
-				if ( !real_indent )
+				if ( real_indent == 0 )
 				{
+					// New root entry
 					item = new KCHMMainTreeViewItem (tree, lastchild[real_indent], name, url, imagenum);
+					DEBUGPARSER(("<root object>: '%s', new rootentry %08X\n", name.ascii(), item));
 				}
 				else
 				{
+					// New non-root entry
+					DEBUGPARSER(("<object>: '%s', indent %d, rootentry %08X\n", name.ascii(), real_indent, rootentry[real_indent-1]));
+					
 					if ( !rootentry[real_indent-1] )
-						qFatal("CHMFile::ParseAndFillTopicsTree: child entry %d with no root entry!", real_indent-1);
+						qFatal("CHMFile::ParseAndFillTopicsTree: child entry \"%s\" indented as %d with no root entry!", name.ascii(), real_indent);
 
 					item = new KCHMMainTreeViewItem (rootentry[real_indent-1], lastchild[real_indent], name, url,  imagenum);
 				}
@@ -512,16 +530,30 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 			// Fix for buggy help files		
 			if ( ++indent >= MAX_NEST_DEPTH )
 				qFatal("CHMFile::ParseAndFillTopicsTree: max nest depth (%d) is reached, error in help file", MAX_NEST_DEPTH);
-				
+
 			lastchild[indent] = 0;
 			rootentry[indent] = 0;
+			
+			// This intended to fix <ul><ul>, which was seen in some buggy chm files,
+			// and brokes rootentry[indent-1] check
+			int real_indent = indent - root_indent_offset;
+			if ( real_indent > 1
+			&& rootentry[real_indent - 1] == 0
+			&& rootentry[real_indent - 2] != 0 )
+			{
+				rootentry[real_indent - 1] = rootentry[real_indent - 2];
+				qWarning("Broken CHM index/content: tree autocorrection enabled.");
+			}
+						  
+			DEBUGPARSER(("<ul>: new indent is %d, last rootentry was %08X\n", indent - root_indent_offset, rootentry[indent-1]));
 		}
 		else if ( tagword == "/ul" ) // decrease indent level
 		{
 			if ( --indent < root_indent_offset )
 				indent = root_indent_offset;
-				
+
 			rootentry[indent] = 0;
+			DEBUGPARSER(("</ul>: new intent is %d\n", indent - root_indent_offset));
 		}
 
 		pos = i;	

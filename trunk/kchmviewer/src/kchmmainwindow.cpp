@@ -642,6 +642,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 				qFatal ("Could not use Auto Test mode without a chm file!");
 
 			m_autoteststate = STATE_INITIAL;
+			showMinimized ();
 			runAutoTest();
 #else
 			qFatal ("Auto Test mode support is not compiled in.");

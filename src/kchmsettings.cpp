@@ -245,5 +245,8 @@ QString KCHMSettings::getSettingsFilename( const QString & filename )
 
 void KCHMSettings::removeSettings( const QString & filename )
 {
-	QFile::remove ( getSettingsFilename ( filename ) );
+	QString rmfile = getSettingsFilename ( filename );
+	
+	if ( !rmfile.isNull() )
+		QFile::remove ( getSettingsFilename ( filename ) );
 }

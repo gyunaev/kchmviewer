@@ -173,7 +173,7 @@ bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 			if ( view.top()  >= richText.height() )
 				break;
 			
-			QString msg = i18n( "statusbar line", "Printing (page %1)...") .arg(page);
+			QString msg = i18n( "Printing (page %1)...") .arg(page);
 			::mainWindow->showInStatusBar( msg );
 			
 			printer.newPage();
@@ -181,18 +181,18 @@ bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 		}
 		while (TRUE);
 	
-		::mainWindow->showInStatusBar( i18n( "statusbar line", "Printing completed") );
+		::mainWindow->showInStatusBar( i18n( "Printing completed") );
 		return true;
 	}
 
-	::mainWindow->showInStatusBar( i18n( "statusbar line", "Printing aborted") );
+	::mainWindow->showInStatusBar( i18n( "Printing aborted") );
 	return false;
 
 #else /* QT_NO_PRINTER */
 
 	QMessageBox::warning( this, 
-		i18n( "dialog title, %1 is appname", "%1 - could not print") . arg(APP_NAME),
-		i18n( "dialog body", "Could not print.\nYour Qt library has been compiled without printing support");
+		i18n( "%1 - could not print") . arg(APP_NAME),
+		i18n( "Could not print.\nYour Qt library has been compiled without printing support");
 	return false;
 
 #endif /* QT_NO_PRINTER */
@@ -213,7 +213,7 @@ void KCHMViewWindow_QTextBrowser::searchWord( const QString & word, bool forward
 	}
 
 	if ( find (m_searchText, false, false, forward, &m_searchLastParagraph, &m_searchLastIndex) )
-		::mainWindow->showInStatusBar( i18n( "statusbar line", "Search failed") );
+		::mainWindow->showInStatusBar( i18n( "Search failed") );
 }
 
 void KCHMViewWindow_QTextBrowser::clipSelectAll( )

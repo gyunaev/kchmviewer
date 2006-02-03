@@ -18,4 +18,3 @@ package-messages:
 
 # Uncomment this line before opening the project in kdevelop for the first time!
 #SUBDIRS = chmlib src kio-msits
-

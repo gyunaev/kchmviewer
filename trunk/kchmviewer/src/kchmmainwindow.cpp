@@ -79,7 +79,7 @@ KCHMMainWindow::KCHMMainWindow()
 	m_bookmarkWindow = new KCHMBookmarkWindow (m_tabWidget);
 
 	// Add the tabs
-	m_tabWidget->addTab( m_bookmarkWindow, i18n("noun, tab name", "Bookmarks") );
+	m_tabWidget->addTab( m_bookmarkWindow, i18n("Bookmarks") );
 
 	createViewWindow();
 	setupToolbarsAndMenu();
@@ -119,9 +119,9 @@ KCHMMainWindow::~KCHMMainWindow()
 void KCHMMainWindow::slotOpenMenuItemActivated()
 {
 #if defined (USE_KDE)
-    QString fn = KFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("open file dialog entry", "*.chm|Compressed Help Manual (*.chm)"), this);
+    QString fn = KFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("*.chm|Compressed Help Manual (*.chm)"), this);
 #else
-    QString fn = QFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("open file dialog entry", "Compressed Help Manual (*.chm)"), this);
+    QString fn = QFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("Compressed Help Manual (*.chm)"), this);
 #endif
 
     if ( !fn.isEmpty() )
@@ -131,7 +131,7 @@ void KCHMMainWindow::slotOpenMenuItemActivated()
 		if ( !m_chmFile )
 			exit (1);
 			
-		statusBar()->message( i18n("statusbar message", "Loading aborted"), 2000 );
+		statusBar()->message( i18n("Loading aborted"), 2000 );
 	}
 }
 
@@ -228,8 +228,8 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		if ( !m_chmFile )
 		{
 			QMessageBox mbox(
-					i18n("messagebox title, %1 is appname", "%1 - failed to load the chm file") . arg(APP_NAME),
-					i18n("messagebox, %1 is filename", "Unable to load the chm file %1") . arg(fileName), 
+					i18n("%1 - failed to load the chm file") . arg(APP_NAME),
+					i18n("Unable to load the chm file %1") . arg(fileName), 
 					QMessageBox::Critical, 
 					QMessageBox::Ok, 
 					QMessageBox::NoButton, 
@@ -239,7 +239,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		}
 		
 		statusBar()->message( 
-				i18n("statusbar message, %1 is filename", "Could not load file %1").arg(fileName),
+				i18n("Could not load file %1").arg(fileName),
 				2000 );
 		delete new_chmfile;	
 		return false;
@@ -323,8 +323,8 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 
 		case KCHMConfig::ACTION_ASK_USER:
 	   		if ( QMessageBox::question(this,
-				 i18n("dialog title, %1 is appname, %2 is protocol name", "%1 - remote link clicked - %2") . arg(APP_NAME) . arg(p1),
-				 i18n("dialog body, %1 is link", "A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
+				 i18n("%1 - remote link clicked - %2") . arg(APP_NAME) . arg(p1),
+				 i18n("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
 				 i18n("&Yes"), i18n("&No"),
 				 QString::null, 0, 1 ) )
 					return false;
@@ -349,8 +349,8 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 	if ( m_viewWindow->isJavascriptURL (url) )
 	{
 		QMessageBox::information( this, 
-			i18n( "dialog title, %1 is appname", "%1 - JavsScript link clicked") . arg(APP_NAME),
-			i18n( "dialog body", "You have clicked a JavaScript link.\nTo prevent security-related issues JavaScript URLs are disabled in CHM files.") );
+			i18n( "%1 - JavsScript link clicked") . arg(APP_NAME),
+			i18n( "You have clicked a JavaScript link.\nTo prevent security-related issues JavaScript URLs are disabled in CHM files.") );
 		
 		return false;
 	}
@@ -359,8 +359,8 @@ bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
 	&& p1 != m_chmFilename )
 	{
    		if ( QMessageBox::question( this,
-			i18n( "dialog title, %1 is appname", "%1 - link to a new CHM file clicked"). arg(APP_NAME),
-			i18n( "dialog body, %1 is filename", "You have clicked a link, which leads to a new CHM file %1.\nThe current file will be closed.\n\nDo you want to continue?").arg( p1 ),
+			i18n( "%1 - link to a new CHM file clicked"). arg(APP_NAME),
+			i18n( "You have clicked a link, which leads to a new CHM file %1.\nThe current file will be closed.\n\nDo you want to continue?").arg( p1 ),
 			i18n( "&Yes" ), i18n( "&No" ),
 			QString::null, 0, 1 ) )
 				return false;
@@ -425,65 +425,65 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 
     QPixmap iconFileOpen (*gIconStorage.getToolbarPixmap(KCHMIconStorage::fileopen));
     QToolButton * fileOpen = new QToolButton (iconFileOpen, 
-				i18n( "menu item", "Open File" ), 
+				i18n( "Open File" ), 
 				QString::null,
 				this, 
 				SLOT( slotOpenMenuItemActivated() ),
 				toolbar);
 	
-	QString fileOpenText = i18n( "whatsis text", "Click this button to open an existing chm file." );
+	QString fileOpenText = i18n( "Click this button to open an existing chm file." );
 	QWhatsThis::add( fileOpen, fileOpenText );
 
     QPixmap iconFilePrint (*gIconStorage.getToolbarPixmap(KCHMIconStorage::print));
     QToolButton * filePrint	= new QToolButton (iconFilePrint,
-				i18n( "menu item", "Print File" ),
+				i18n( "Print File" ),
 				QString::null,
 				this,
 				SLOT( slotPrintMenuItemActivated() ),
 				toolbar);
 
-	QString filePrintText = i18n( "whatsis text", "Click this button to print the current page");
+	QString filePrintText = i18n( "Click this button to print the current page");
 	QWhatsThis::add( filePrint, filePrintText );
 
     QToolBar * navtoolbar = new QToolBar(this);
-	navtoolbar->setLabel( i18n( "toolbar label", "Navigation") );
+	navtoolbar->setLabel( i18n( "Navigation") );
 	
     QPixmap iconBackward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::back));
     m_toolbarIconBackward = new QToolButton (iconBackward,
-				i18n( "menu item", "Move backward in history"),
+				i18n( "Move backward in history"),
 				QString::null,
 				this,
 				SLOT( slotBackwardMenuItemActivated() ),
 				navtoolbar);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "whatsis text", "Click this button to move backward in browser history") );	
+	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move backward in browser history") );	
 
     QPixmap iconForward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::forward));
     m_toolbarIconForward = new QToolButton (iconForward,
-				i18n( "menu item", "Move forward in history"),
+				i18n( "Move forward in history"),
 				QString::null,
 				this,
 				SLOT( slotForwardMenuItemActivated() ),
 				navtoolbar);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "whatsis text", "Click this button to move forward in browser history") );	
+	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move forward in browser history") );	
 	
     QPixmap iconHome = (*gIconStorage.getToolbarPixmap(KCHMIconStorage::gohome));
     new QToolButton (iconHome,
-				i18n( "menu item", "Go to the home page"),
+				i18n( "Go to the home page"),
 				QString::null,
 				this,
 				SLOT( slotHomeMenuItemActivated() ),
 				navtoolbar);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "whatsis text", "Click this button to move to the home page") );	
+	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move to the home page") );	
 
 	// Setup the menu
 	KQPopupMenu * file = new KQPopupMenu( this );
-	menuBar()->insertItem( i18n( "menu item", "&File"), file );
+	menuBar()->insertItem( i18n( "&File"), file );
 
     int id;
-	id = file->insertItem ( iconFileOpen, i18n( "menu item", "&Open..."), this, SLOT( slotOpenMenuItemActivated() ), CTRL+Key_O );
+	id = file->insertItem ( iconFileOpen, i18n( "&Open..."), this, SLOT( slotOpenMenuItemActivated() ), CTRL+Key_O );
     file->setWhatsThis( id, fileOpenText );
 
-	id = file->insertItem( iconFilePrint, i18n( "menu item", "&Print..."), this, SLOT( slotPrintMenuItemActivated() ), CTRL+Key_P );
+	id = file->insertItem( iconFilePrint, i18n( "&Print..."), this, SLOT( slotPrintMenuItemActivated() ), CTRL+Key_P );
     file->setWhatsThis( id, filePrintText );
 
     file->insertSeparator();
@@ -491,16 +491,16 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	m_menuHistory = new KQPopupMenu( file );
 	connect ( m_menuHistory, SIGNAL( activated(int) ), this, SLOT ( slotHistoryMenuItemActivated(int) ));
 	
-	file->insertItem( i18n( "menu item", "&Recent files"), m_menuHistory );
+	file->insertItem( i18n( "&Recent files"), m_menuHistory );
 	
 	file->insertSeparator();
-	file->insertItem( i18n( "menu item", "&Quit"), qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
+	file->insertItem( i18n( "&Quit"), qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
 	KQPopupMenu * menu_edit = new KQPopupMenu( this );
-	menuBar()->insertItem( i18n( "menu item", "&Edit"), menu_edit );
+	menuBar()->insertItem( i18n( "&Edit"), menu_edit );
 
-	id = menu_edit->insertItem ( i18n( "menu item", "&Copy"), this, SLOT( slotBrowserCopy()), CTRL+Key_C );
-	id = menu_edit->insertItem ( i18n( "menu item", "&Select all"), this, SLOT( slotBrowserSelectAll()), CTRL+Key_A );
+	id = menu_edit->insertItem ( i18n( "&Copy"), this, SLOT( slotBrowserCopy()), CTRL+Key_C );
+	id = menu_edit->insertItem ( i18n( "&Select all"), this, SLOT( slotBrowserSelectAll()), CTRL+Key_A );
 
     menu_edit->insertSeparator();
 	
@@ -508,16 +508,16 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	m_searchToolbar = new KCHMSearchAndViewToolbar (this);
 
 	KQPopupMenu * settings = new KQPopupMenu( this );
-	menuBar()->insertItem( i18n( "menu item", "&Setup"), settings );
-	settings->insertItem( i18n( "menu item", "&Change settings..."), this, SLOT( slotChangeSettingsMenuItemActivated() ));
+	menuBar()->insertItem( i18n( "&Setup"), settings );
+	settings->insertItem( i18n( "&Change settings..."), this, SLOT( slotChangeSettingsMenuItemActivated() ));
 
     KQPopupMenu * help = new KQPopupMenu( this );
-	menuBar()->insertItem( i18n( "menu item", "&Help"), help );
+	menuBar()->insertItem( i18n( "&Help"), help );
 
-	help->insertItem( i18n( "menu item", "&About"), this, SLOT( slotAboutMenuItemActivated() ), Key_F1 );
-	help->insertItem( i18n( "menu item", "About &Qt"), this, SLOT( slotAboutQtMenuItemActivated() ));
+	help->insertItem( i18n( "&About"), this, SLOT( slotAboutMenuItemActivated() ), Key_F1 );
+	help->insertItem( i18n( "About &Qt"), this, SLOT( slotAboutQtMenuItemActivated() ));
     help->insertSeparator();
-	help->insertItem( i18n( "menu item", "What's &This"), this, SLOT(whatsThis()), SHIFT+Key_F1 );
+	help->insertItem( i18n( "What's &This"), this, SLOT(whatsThis()), SHIFT+Key_F1 );
 	
 	updateHistoryMenu();
 }
@@ -625,7 +625,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 			search_bookmark = qApp->argv()[++i];
 		else if ( !strcmp (qApp->argv()[i], "-h") || !strcmp (qApp->argv()[i], "--help") )
 		{
-			fprintf (stderr, i18n( "command-line output", "Usage: %s [chmfile]\n" ).ascii(), qApp->argv()[0]);
+			fprintf (stderr, "command-line output", "Usage: %s [chmfile]\n", qApp->argv()[0]);
 			exit (1);
 		}
 		else
@@ -864,7 +864,7 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 			// Handle clicking on m_contentsWindow element
 			connect( m_contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotOnTreeClicked( QListViewItem* ) ) );
 			
-			m_tabWidget->insertTab (m_contentsWindow, i18n( "tab label", "Contents" ), tabindex);
+			m_tabWidget->insertTab (m_contentsWindow, i18n( "Contents" ), tabindex);
 		}
 	}
 }
@@ -886,7 +886,7 @@ void KCHMMainWindow::showOrHideIndexWindow( int tabindex )
 		if ( !m_indexWindow )
 		{
 			m_indexWindow = new KCHMIndexWindow (m_tabWidget);
-			m_tabWidget->insertTab (m_indexWindow, i18n( "tab label", "Index" ), tabindex);
+			m_tabWidget->insertTab (m_indexWindow, i18n( "Index" ), tabindex);
 		}
 		else
 			m_indexWindow->invalidate();
@@ -909,7 +909,7 @@ void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
 		if ( !m_searchWindow )
 		{
 			m_searchWindow = new KCHMSearchWindow (m_tabWidget);
-			m_tabWidget->insertTab (m_searchWindow, i18n( "tab label", "Search" ), tabindex);
+			m_tabWidget->insertTab (m_searchWindow, i18n( "Search" ), tabindex);
 		}
 		else
 			m_searchWindow->invalidate();
@@ -965,7 +965,7 @@ void KCHMMainWindow::slotLocateInContentWindow( )
 		m_contentsWindow->ensureItemVisible (treeitem);
 	}
 	else
-		statusBar()->message( i18n( "statusbar line" ,"Could not locate opened topic in content window"), 2000 );
+		statusBar()->message( i18n( "Could not locate opened topic in content window"), 2000 );
 }
 
 

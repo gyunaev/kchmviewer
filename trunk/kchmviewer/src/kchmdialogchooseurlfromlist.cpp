@@ -31,17 +31,17 @@ KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList(const QStringList& urls
 	layout->setMargin (5);
 
 	QListView * m_urlsList = new QListView (this);
-	m_urlsList->addColumn( i18n( "tab label", "Topics" ) );
+	m_urlsList->addColumn( i18n( "Topics" ) );
 	
 	for ( unsigned int i = 0; i < urls.size(); i++ )
 		new KCHMSingleTreeViewItem (m_urlsList, titles[i], urls[i]);
 
-	layout->addWidget ( new QLabel( i18n( "dialog text", "Please select one of the topics below:"), this) );
+	layout->addWidget ( new QLabel( i18n( "Please select one of the topics below:"), this) );
 	layout->addWidget ( m_urlsList );
 
 	QHBoxLayout * hlayout = new QHBoxLayout (layout);
-	QPushButton * bok = new QPushButton( i18n( "button label", "&Ok" ), this);
-	QPushButton * bcancel = new QPushButton( i18n( "button label", "&Cancel" ), this);
+	QPushButton * bok = new QPushButton( i18n( "&Ok" ), this);
+	QPushButton * bcancel = new QPushButton( i18n( "&Cancel" ), this);
 
 	hlayout->addWidget (bok);
 	hlayout->addWidget (bcancel);

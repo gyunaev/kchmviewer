@@ -82,12 +82,12 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 					((QMimeSourceFactory*)this)->setImage (path, img);
 			}
 			else
-				fprintf (stderr, "Could not retrieve %s\n", path.ascii());
+				qWarning( "Could not retrieve file %s\n", path.ascii() );
 		}
 		else
 		{
 			((QMimeSourceFactory*)this)->setImage (path, img);
-			fprintf (stderr, "Could not resolve %s\n", path.ascii());
+			qWarning( "Could not resolve file %s\n", path.ascii() );
 		}
 	}
 	

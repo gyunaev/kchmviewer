@@ -42,7 +42,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	: QToolBar (parent)
 {
 	// Toolbar label
-	setLabel( tr("Find in page") );
+	setLabel( i18n( "toolbar label", "Find in page") );
 
 	// Load the pixmaps
     QPixmap iconPrev (*gIconStorage.getToolbarPixmap(KCHMIconStorage::findprev));
@@ -59,107 +59,107 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	m_findBox = new QComboBox (TRUE, this);
 	m_findBox->setMinimumWidth (200);
 	connect( m_findBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
-	QWhatsThis::add( m_findBox, tr("Enter here the text to search in the current page.") );	
+	QWhatsThis::add( m_findBox, i18n( "whatsis text", "Enter here the text to search in the current page.") );	
 	
 	QAccel *acc = new QAccel( this );
 	acc->connectItem( acc->insertItem(Key_F+CTRL), this, SLOT( onAccelFocusSearchField() ) );
 	
 	// Button 'prevous search result'
 	m_buttonPrev = new QToolButton (iconPrev,
-				tr("Previous search result"),
+				i18n( "tooltip", "Previous search result"),
 				QString::null,
 				this,
 				SLOT(onBtnPrevSearchResult()),
 				this);
-	QWhatsThis::add( m_buttonPrev, tr("Click this button to find previous search result.") );
+	QWhatsThis::add( m_buttonPrev, i18n( "whatsis text", "Click this button to find previous search result.") );
 
 	// Button 'next search result'
 	m_buttonNext = new QToolButton (iconNext,
-				tr("Next search result"),
+				i18n( "tooltip", "Next search result"),
 				QString::null,
 				this,
 				SLOT(onBtnNextSearchResult()),
 				this);
-	QWhatsThis::add( m_buttonNext, tr("Click this button to find next search result.") );
+	QWhatsThis::add( m_buttonNext, i18n( "whatsis text", "Click this button to find next search result.") );
 
 	// Button 'locate in content'
 	m_buttonLocateInContent = new QToolButton( iconLocateInContent,
-											   tr("Locate this topic in content window"),
-											   QString::null,
-											   this,
-											   SLOT( onBtnLocateInContentWindow() ),
-											   this );
-	QWhatsThis::add( m_buttonLocateInContent, tr("Click this button to find current topic in the content window, and open it.") );
+				i18n( "tooltip", "Locate this topic in content window"),
+				QString::null,
+				this,
+				SLOT( onBtnLocateInContentWindow() ),
+				this );
+	QWhatsThis::add( m_buttonLocateInContent, i18n( "whatsis text", "Click this button to find current topic in the content window, and open it.") );
 	
 	// Button 'increase font size'
 	m_buttonFontInc = new QToolButton (iconFontInc,
-				tr("Increase font size"),
+				i18n( "tooltip", "Increase font size"),
 				QString::null,
 				this,
 				SLOT(onBtnFontInc()),
 				this);
-	QWhatsThis::add( m_buttonFontInc, tr("Click this button to increase the font size.") );
+	QWhatsThis::add( m_buttonFontInc, i18n( "whatsis text", "Click this button to increase the font size.") );
 
 	// Button 'decrease font size'
 	m_buttonFontDec = new QToolButton (iconFontDec,
-				tr("Decrease font size"),
+				i18n( "tooltip", "Decrease font size"),
 				QString::null,
 				this,
 				SLOT(onBtnFontDec()),
 				this);
-	QWhatsThis::add( m_buttonFontDec, tr("Click this button to decrease the font size.") );
+	QWhatsThis::add( m_buttonFontDec, i18n( "whatsis text", "Click this button to decrease the font size.") );
 	
 	// Button 'view HTML source'
 	m_buttonViewSource = new QToolButton (iconViewSource,
-				tr("View HTML source"),
+				i18n( "tooltip", "View HTML source"),
 				QString::null,
 				this,
 				SLOT(onBtnViewSource()),
 				this);
-	QWhatsThis::add( m_buttonViewSource, tr("Click this button to open a separate window with the page HTML source.") );
+	QWhatsThis::add( m_buttonViewSource, i18n( "whatsis text", "Click this button to open a separate window with the page HTML source.") );
 	
 	// Button 'add a bookmark'
 	m_buttonAddBookmark = new QToolButton (iconAddBookmark,
-				tr("Add to bookmarks"),
+				i18n( "tooltip", "Add to bookmarks"),
 				QString::null,
 				this,
 				SLOT(onBtnAddBookmark()),
 				this);
-	QWhatsThis::add( m_buttonAddBookmark, tr("Click this button to add the current page to the bookmarks list.") );
+	QWhatsThis::add( m_buttonAddBookmark, i18n( "whatsis text", "Click this button to add the current page to the bookmarks list.") );
 	
 	m_buttonPrevPageInTOC = new QToolButton( iconPrevPage,
-											 tr("Prev page in TOC"),
-											 QString::null,
-											 this,
-											 SLOT(onBtnPrevPageInToc()),
-											 this);
-	QWhatsThis::add( m_buttonAddBookmark, tr("Click this button to go to previous page in Table Of Content.") );
+				i18n( "tooltip", "Prev page in TOC"),
+				QString::null,
+				this,
+				SLOT(onBtnPrevPageInToc()),
+				this);
+	QWhatsThis::add( m_buttonAddBookmark, i18n( "whatsis text", "Click this button to go to previous page in Table Of Content.") );
 	
 	m_buttonNextPageInTOC = new QToolButton (iconNextPage,
-										   tr("Next page in TOC"),
-										   QString::null,
-										   this,
-										   SLOT(onBtnNextPageInToc()),
-										   this);
-	QWhatsThis::add( m_buttonAddBookmark, tr("Click this button to go to next page in Table of Content.") );
+				i18n( "tooltip", "Next page in TOC"),
+				QString::null,
+				this,
+				SLOT(onBtnNextPageInToc()),
+				this);
+	QWhatsThis::add( m_buttonAddBookmark, i18n( "whatsis text", "Click this button to go to next page in Table of Content.") );
 	
 	// Create the approptiate menu entries in 'View' main menu
 	m_MenuView = new KQPopupMenu( parent );
-    parent->menuBar()->insertItem( tr("&View"), m_MenuView );
+	parent->menuBar()->insertItem( i18n( "menu item", "&View"), m_MenuView );
 
-	m_MenuView->insertItem( tr("&Increase font"), this, SLOT(onBtnFontInc()), CTRL+Key_Plus );
-	m_MenuView->insertItem( tr("&Decrease font"), this, SLOT(onBtnFontDec()), CTRL+Key_Minus );
-	m_MenuView->insertItem( tr("&View HTML source"), this, SLOT(onBtnViewSource()), CTRL+Key_U );
+	m_MenuView->insertItem( i18n( "menu item", "&Increase font"), this, SLOT(onBtnFontInc()), CTRL+Key_Plus );
+	m_MenuView->insertItem( i18n( "menu item", "&Decrease font"), this, SLOT(onBtnFontDec()), CTRL+Key_Minus );
+	m_MenuView->insertItem( i18n( "menu item", "&View HTML source"), this, SLOT(onBtnViewSource()), CTRL+Key_U );
 	
     m_MenuView->insertSeparator();
-	m_MenuView->insertItem( tr("&Bookmark this page"), this, SLOT(onBtnAddBookmark()), CTRL+Key_T  );
+	m_MenuView->insertItem( i18n( "menu item", "&Bookmark this page"), this, SLOT(onBtnAddBookmark()), CTRL+Key_T  );
     m_MenuView->insertSeparator();
 	
-	m_menuShowFullscreenMenuID = m_MenuView->insertItem( tr("&Full screen"), this,
+	m_menuShowFullscreenMenuID = m_MenuView->insertItem( i18n( "menu item", "&Full screen"), this,
 			 SLOT(onBtnFullScreen()), Key_F11  );
-	m_menuShowContentWindowMenuID = m_MenuView->insertItem( tr("&Show contents window"), this,
+	m_menuShowContentWindowMenuID = m_MenuView->insertItem( i18n( "menu item", "&Show contents window"), this,
 			 SLOT(onBtnToggleContentWindow()), Key_F9 );
-	m_MenuView->insertItem( tr("&Locate in contents window"), this,
+	m_MenuView->insertItem( i18n( "menu item", "&Locate in contents window"), this,
 			 SLOT(onBtnLocateInContentWindow()), CTRL+Key_L  );
 	
 	m_MenuView->setItemChecked( m_menuShowFullscreenMenuID, false ); 
@@ -212,7 +212,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 			menu_langlist->insertItem( item->charset, idx );
 	}
 
-	m_MenuView->insertItem( tr("&Set language"), menu_langlist );
+	m_MenuView->insertItem( i18n( "menu item", "&Set language"), menu_langlist );
 	m_checkedEncodingInMenu = -1;
 	m_checkedLanguageInMenu = -1;
 
@@ -235,7 +235,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 		menu_enclist->insertItem( item->qtcodec, idx );
 	}
 
-	m_MenuView->insertItem( tr("&Set codepage"), menu_enclist );
+	m_MenuView->insertItem( i18n( "menu item", "&Set codepage"), menu_enclist );
 	
 	QWhatsThis::whatsThisButton( this );
 }

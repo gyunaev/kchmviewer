@@ -49,7 +49,7 @@ int main( int argc, char ** argv )
 				APP_VERSION,
 				I18N_NOOP("CHM file viewer"),
 				KAboutData::License_GPL,
-				"(c) 2005 Georgy Yunaev, gyunaev@sourceforge.net",
+				"(c) 2005 George Yunaev, gyunaev@sourceforge.net",
 				0,
 				"http://kchmviewer.sourceforge.net",
 				"gyunaev@sourceforge.net");

@@ -23,11 +23,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qmessagebox.h> 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qmap.h>
-#include <qeventloop.h>
+#include "kde-qt.h"
 
 #include "xchmfile.h"
 #include "kchmconfig.h"
@@ -1298,7 +1294,7 @@ QString CHMFile::getTopicByUrl( const QString & search_url )
 			topic = encodeWithCurrentCodec ((const char*)buf);
 		}
 		else
-			topic = i18n( "Untitled" );
+			topic = "Untitled";
 
 		return topic;
 	}
@@ -1326,7 +1322,7 @@ void CHMFile::GetSearchResults( const KCHMSearchProgressResults_t & tempres, KCH
 			res.title = encodeWithCurrentCodec ((const char*)combuf);
 		}
 		else
-			res.title = i18n( "Untitled" );
+			res.title = "Untitled";
 
 		if ( RetrieveObject (&m_chmURLSTR, combuf, tempres[i].urloff + 8, COMMON_BUF_LEN - 1) == 0 )
 			continue;

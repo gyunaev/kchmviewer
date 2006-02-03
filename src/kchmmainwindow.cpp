@@ -421,7 +421,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	// Create a 'file' toolbar
     QToolBar * toolbar = new QToolBar(this);
 	
-	toolbar->setLabel( i18n( "toolbar label", "File Operations") );
+	toolbar->setLabel( i18n( "File Operations") );
 
     QPixmap iconFileOpen (*gIconStorage.getToolbarPixmap(KCHMIconStorage::fileopen));
     QToolButton * fileOpen = new QToolButton (iconFileOpen, 
@@ -625,7 +625,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 			search_bookmark = qApp->argv()[++i];
 		else if ( !strcmp (qApp->argv()[i], "-h") || !strcmp (qApp->argv()[i], "--help") )
 		{
-			fprintf (stderr, "command-line output", "Usage: %s [chmfile]\n", qApp->argv()[0]);
+			fprintf (stderr, "Usage: %s [chmfile]\n", qApp->argv()[0]);
 			exit (1);
 		}
 		else

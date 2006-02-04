@@ -1,0 +1,37 @@
+Changes from 0.32 to 0.35
+    - UTF-8 filenames, while still not handled correctly, are handled a little
+      more gracefully.  That is to say, the library doesn't fail to open files
+      with filenames using characters outside the ASCII subset.  I'm very
+      interested in any information as to the "right" way to handle filenames
+      of this sort.
+    - Files not containing a compressed section are handled properly, such as
+      .chw files.  These files seem to contain information about compression,
+      but the information is invalid or empty.  The library deals gracefully
+      with this now.
+    - Files compressed with different options were not being decompressed
+      properly.  In particular, if the "reset interval" for the compressed
+      section was other than 2 block sizes, it could fail to read some of the
+      files.
+    - The caching system was improved slightly, in conjunction with this
+      previous bugfix.
+
+Changes from 0.3 to 0.32:
+    - [Rich Erwin] Minor portability fixes for Windows CE.
+    - [Pabs] Minor bugfix regarding detecting directory entries versus empty files.
+    - [Antony Dovgal] autoconf-based build process
+    - [Ragnar Hojland Espinosa] Feature additions for chm_http:
+        * Use SO_REUSEADDR
+        * Allow --bind= and --port= command line arguments
+    - Simple makefile has been fixed (finally) to use gcc instead of gcc-3.2.  (Sorry, everybody!)
+
+Changes from 0.2 to 0.3:
+
+    - initial attempt at portability to Win32.
+    - bugfixes from Stan Tobias:
+        * memory corruption error with caching system
+        * case insensitivity, to match with the Windows semantics
+    - modification to chm_http by Stan Tobias:
+        * when the user requests the page '/', they get a page with links to
+          all of the files in the archive
+    - Andrew Hodgetts has ported the library to Solaris and Irix.  See README for details.
+    - Stuart Caie has granted permission to relicense under the LGPL.

@@ -252,12 +252,16 @@ void KCHMMainWindow::slotPrintMenuItemActivated()
 	m_viewWindow->printCurrentPage();
 }
 
-//!FIXME!!!
+
 void KCHMMainWindow::slotAboutMenuItemActivated()
 {
-	QString caption = tr("About %1") . arg(APP_NAME);
-	QString text = tr("%1 version %2\n\nCopyright (C) Georgy Yunaev, tim@krasnogorsk.ru, 2005\n\n"
-			"Licensed under GNU GPL license.") . arg(APP_NAME) . arg(APP_VERSION);
+	QString caption = i18n( "About %1" ) . arg(APP_NAME);
+	QString text = i18n( "%1 version %2\n\nCopyright (C) George Yunaev,"
+		"gyunaev@ulduzsoft.com, 2005-2006\nwww.kchmviewer.net\n\n"
+		"Licensed under GNU GPL license.\n\n"
+		"Please try our another project, www.transientmail.com - temporary "
+		"e-mail address, which expires automatically." )
+			. arg(APP_NAME) . arg(APP_VERSION);
 	
 	// It is quite funny that the argument order differs
 #if defined (USE_KDE)

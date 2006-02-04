@@ -79,6 +79,8 @@
 #include <qdir.h>
 #include <qregexp.h>
 #include <qtimer.h>
+#include <qmap.h>
+#include <qeventloop.h>
 
 class KQMainWindow : public KQ_CLASSNAME(MainWindow)
 {

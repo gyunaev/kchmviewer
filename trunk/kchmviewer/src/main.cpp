@@ -44,7 +44,7 @@ int main( int argc, char ** argv )
 */		KCmdLineLastOption
  	};
 
-	KAboutData aboutdata ( APP_NAME,
+	KAboutData aboutdata ( "kchmviewer",
 				APP_NAME,
 				APP_VERSION,
 				I18N_NOOP("CHM file viewer"),

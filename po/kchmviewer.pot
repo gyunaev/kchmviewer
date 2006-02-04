@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-03 02:45-0800\n"
+"POT-Creation-Date: 2006-02-04 02:25-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -364,40 +364,57 @@ msgstr ""
 msgid "Could not load file %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:326
+#: kchmmainwindow.cpp:258
+msgid "About %1"
+msgstr ""
+
+#: kchmmainwindow.cpp:259
+msgid ""
+"%1 version %2\n"
+"\n"
+"Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
+"www.kchmviewer.net\n"
+"\n"
+"Licensed under GNU GPL license.\n"
+"\n"
+"Please try our another project, www.transientmail.com - temporary e-mail "
+"address, which expires automatically."
+msgstr ""
+
+#: kchmmainwindow.cpp:330
 msgid "%1 - remote link clicked - %2"
 msgstr ""
 
-#: kchmmainwindow.cpp:327
+#: kchmmainwindow.cpp:331
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: kchmmainwindow.cpp:328 kchmmainwindow.cpp:364
+#: kchmmainwindow.cpp:332 kchmmainwindow.cpp:368
 msgid "&Yes"
 msgstr ""
 
-#: kchmmainwindow.cpp:328 kchmmainwindow.cpp:364
+#: kchmmainwindow.cpp:332 kchmmainwindow.cpp:368
 msgid "&No"
 msgstr ""
 
-#: kchmmainwindow.cpp:352
+#: kchmmainwindow.cpp:356
 msgid "%1 - JavsScript link clicked"
 msgstr ""
 
-#: kchmmainwindow.cpp:353
+#: kchmmainwindow.cpp:357
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
 msgstr ""
 
-#: kchmmainwindow.cpp:362
+#: kchmmainwindow.cpp:366
 msgid "%1 - link to a new CHM file clicked"
 msgstr ""
 
-#: kchmmainwindow.cpp:363
+#: kchmmainwindow.cpp:367
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -405,87 +422,87 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: kchmmainwindow.cpp:424
+#: kchmmainwindow.cpp:428
 msgid "File Operations"
 msgstr ""
 
-#: kchmmainwindow.cpp:428
+#: kchmmainwindow.cpp:432
 msgid "Open File"
 msgstr ""
 
-#: kchmmainwindow.cpp:434
+#: kchmmainwindow.cpp:438
 msgid "Click this button to open an existing chm file."
 msgstr ""
 
-#: kchmmainwindow.cpp:439
+#: kchmmainwindow.cpp:443
 msgid "Print File"
 msgstr ""
 
-#: kchmmainwindow.cpp:445
+#: kchmmainwindow.cpp:449
 msgid "Click this button to print the current page"
 msgstr ""
 
-#: kchmmainwindow.cpp:449
+#: kchmmainwindow.cpp:453
 msgid "Navigation"
 msgstr ""
 
-#: kchmmainwindow.cpp:453
+#: kchmmainwindow.cpp:457
 msgid "Move backward in history"
 msgstr ""
 
-#: kchmmainwindow.cpp:458
+#: kchmmainwindow.cpp:462
 msgid "Click this button to move backward in browser history"
 msgstr ""
 
-#: kchmmainwindow.cpp:462
+#: kchmmainwindow.cpp:466
 msgid "Move forward in history"
 msgstr ""
 
-#: kchmmainwindow.cpp:467
+#: kchmmainwindow.cpp:471
 msgid "Click this button to move forward in browser history"
 msgstr ""
 
-#: kchmmainwindow.cpp:471
+#: kchmmainwindow.cpp:475
 msgid "Go to the home page"
 msgstr ""
 
-#: kchmmainwindow.cpp:476
+#: kchmmainwindow.cpp:480
 msgid "Click this button to move to the home page"
 msgstr ""
 
-#: kchmmainwindow.cpp:494
+#: kchmmainwindow.cpp:498
 msgid "&Recent files"
 msgstr ""
 
-#: kchmmainwindow.cpp:503 kchmviewwindow_khtmlpart.cpp:163
+#: kchmmainwindow.cpp:507 kchmviewwindow_khtmlpart.cpp:163
 msgid "&Select all"
 msgstr ""
 
-#: kchmmainwindow.cpp:511
+#: kchmmainwindow.cpp:515
 msgid "&Setup"
 msgstr ""
 
-#: kchmmainwindow.cpp:512
+#: kchmmainwindow.cpp:516
 msgid "&Change settings..."
 msgstr ""
 
-#: kchmmainwindow.cpp:518
+#: kchmmainwindow.cpp:522
 msgid "About &Qt"
 msgstr ""
 
-#: kchmmainwindow.cpp:520
+#: kchmmainwindow.cpp:524
 msgid "What's &This"
 msgstr ""
 
-#: kchmmainwindow.cpp:889
+#: kchmmainwindow.cpp:893
 msgid "Index"
 msgstr ""
 
-#: kchmmainwindow.cpp:912
+#: kchmmainwindow.cpp:916
 msgid "Search"
 msgstr ""
 
-#: kchmmainwindow.cpp:968
+#: kchmmainwindow.cpp:972
 msgid "Could not locate opened topic in content window"
 msgstr ""
 

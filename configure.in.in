@@ -30,6 +30,7 @@ AC_ENABLE_STATIC(no)
 AC_PATH_QT
 
 CHMLIBDIR="chmlib"
+EXTRA_SUBDIRS=""
 
 AC_ARG_WITH(kde,    AC_HELP_STRING([--with-kde],[enable KDE support]))
 
@@ -38,6 +39,7 @@ if test "x$with_kde" = "xyes"; then
 	AC_PATH_KDE
 	AM_KDE_WITH_NLS
 	AC_DEFINE(USE_KDE, 1, [use KDE support])
+	EXTRA_SUBDIRS="$EXTRA_SUBDIRS kio-msits"
 fi
 
 if test "x$with_kde" != "xyes"; then
@@ -61,6 +63,7 @@ if test "$USE_BUILTIN_CHMLIB" = "1"; then
 	CHM_INCLUDES="-I\$(top_srcdir)/$CHMLIBDIR/"
 	CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.la"
 	USE_LIB_CHM="internal"
+	EXTRA_SUBDIRS="chmlib $EXTRA_SUBDIRS"
     AC_DEFINE(USE_BUILTIN_CHMLIB, 1, [use builtin chmlib])
 else
 	CHM_LIBS="-lchm"
@@ -71,6 +74,7 @@ fi
 AM_CONDITIONAL([BUILD_KIOMSITS], [test "$have_kde" = yes ])
 AM_CONDITIONAL([BUILD_CHMLIB], [test "$USE_BUILTIN_CHMLIB" = "1" ])
 
+AC_SUBST([EXTRA_SUBDIRS])
 AC_SUBST(CHM_INCLUDES)
 AC_SUBST(CHM_LIBS)
 

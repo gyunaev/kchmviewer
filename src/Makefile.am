@@ -20,7 +20,7 @@ noinst_HEADERS = bitfiddle.h kchmsettings.h forwarddeclarations.h \
 			kchmtreeviewitem.h kchmdialogchooseurlfromlist.h kchmviewwindow.h kchmindexwindow.h \
 			kchmviewwindow_khtmlpart.h kchmmainwindow.h kchmviewwindow_qtextbrowser.h kchmsearchtoolbar.h \
 			kde-qt.h kchmsearchwindow.h xchmfile.h kqtempfile.h kqrunprocess.h \
-		filetype_handler.h kchmaboutdlg.h
+		filetype_handler.h 
 
 messages: rc.cpp
 		$(EXTRACTRC) *.rc > rc.cpp

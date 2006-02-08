@@ -371,7 +371,7 @@ void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
 	lit++;
 	
 	if ( lit.current() )
-		::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
+	::mainWindow->openPageWithHistory( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
 }
 
 void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
@@ -386,7 +386,7 @@ void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
 	lit--;
 	
 	if ( lit.current() )
-	::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
+	::mainWindow->openPageWithHistory( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
 }
 
 void KCHMSearchAndViewToolbar::onAccelFocusSearchField( )
@@ -420,3 +420,5 @@ void KCHMSearchAndViewToolbar::onBtnLocateInContentWindow( )
 {
 	::mainWindow->slotLocateInContentWindow( );
 }
+
+#include "kchmsearchtoolbar.moc"

@@ -66,3 +66,5 @@ void KCHMDialogChooseUrlFromList::onCurrentChanged( QListViewItem * item )
 	else
 		m_acceptedurl = QString::null;
 }
+
+#include "kchmdialogchooseurlfromlist.moc"

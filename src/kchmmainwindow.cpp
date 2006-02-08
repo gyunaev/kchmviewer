@@ -41,6 +41,7 @@
 #include "kchmsetupdialog.h"
 #include "iconstorage.h"
 #include "kchmviewwindow_qtextbrowser.h"
+#include "kchmnavtoolbar.h"
 
 #if defined (USE_KDE)
 	#include "kchmviewwindow_khtmlpart.h"
@@ -184,6 +185,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		
 		m_bookmarkWindow->invalidate();
 		m_viewWindow->invalidate();
+		m_navToolbar->invalidate();
 		updateView();
 
 		if ( m_currentSettings->loadSettings (fileName) )
@@ -304,14 +306,30 @@ void KCHMMainWindow::slotOnTreeClicked( QListViewItem * item )
 	
 	KCHMMainTreeViewItem * treeitem = (KCHMMainTreeViewItem*) item;
 	
-	openPage(treeitem->getUrl(), false);
+	openPageWithHistory( treeitem->getUrl(), false );
 }
 
 
 void KCHMMainWindow::slotLinkClicked ( const QString & link, bool& follow_link )
 {
 	// If the openPage failed, we do not need to follow the link.
-	follow_link = openPage( link );
+	follow_link = openPageWithHistory( link );
+}
+
+
+bool KCHMMainWindow::openPageWithHistory( const QString & srcurl, bool set_in_tree )
+{
+	// Store current page and position to add it to history if we change it
+	int scrollpos = m_viewWindow->getScrollbarPosition();
+	QString url = m_viewWindow->getOpenedPage();
+
+	if ( openPage( srcurl, set_in_tree ) )
+	{
+		m_navToolbar->addNavigationHistory( url, scrollpos );
+		return true;
+	}
+	
+	return false;
 }
 
 bool KCHMMainWindow::openPage( const QString & srcurl, bool set_in_tree )
@@ -449,36 +467,6 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	QString filePrintText = i18n( "Click this button to print the current page");
 	QWhatsThis::add( filePrint, filePrintText );
 
-    QToolBar * navtoolbar = new QToolBar(this);
-	navtoolbar->setLabel( i18n( "Navigation") );
-	
-    QPixmap iconBackward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::back));
-    m_toolbarIconBackward = new QToolButton (iconBackward,
-				i18n( "Move backward in history"),
-				QString::null,
-				this,
-				SLOT( slotBackwardMenuItemActivated() ),
-				navtoolbar);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move backward in browser history") );	
-
-    QPixmap iconForward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::forward));
-    m_toolbarIconForward = new QToolButton (iconForward,
-				i18n( "Move forward in history"),
-				QString::null,
-				this,
-				SLOT( slotForwardMenuItemActivated() ),
-				navtoolbar);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move forward in browser history") );	
-	
-    QPixmap iconHome = (*gIconStorage.getToolbarPixmap(KCHMIconStorage::gohome));
-    new QToolButton (iconHome,
-				i18n( "Go to the home page"),
-				QString::null,
-				this,
-				SLOT( slotHomeMenuItemActivated() ),
-				navtoolbar);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move to the home page") );	
-
 	// Setup the menu
 	KQPopupMenu * file = new KQPopupMenu( this );
 	menuBar()->insertItem( i18n( "&File"), file );
@@ -491,7 +479,10 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
     file->setWhatsThis( id, filePrintText );
 
     file->insertSeparator();
-
+	id = file->insertItem ( i18n( "E&xtract CHM content..."), this, SLOT( slotExtractCHM() ) );
+	file->setWhatsThis( id, i18n( "Click this button to extract the whole CHM file content into a specific directory") );
+	file->insertSeparator();
+	
 	m_menuHistory = new KQPopupMenu( file );
 	connect ( m_menuHistory, SIGNAL( activated(int) ), this, SLOT ( slotHistoryMenuItemActivated(int) ));
 	
@@ -503,10 +494,13 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	KQPopupMenu * menu_edit = new KQPopupMenu( this );
 	menuBar()->insertItem( i18n( "&Edit"), menu_edit );
 
-	id = menu_edit->insertItem ( i18n( "&Copy"), this, SLOT( slotBrowserCopy()), CTRL+Key_C );
-	id = menu_edit->insertItem ( i18n( "&Select all"), this, SLOT( slotBrowserSelectAll()), CTRL+Key_A );
+	menu_edit->insertItem ( i18n( "&Copy"), this, SLOT( slotBrowserCopy()), CTRL+Key_C );
+	menu_edit->insertItem ( i18n( "&Select all"), this, SLOT( slotBrowserSelectAll()), CTRL+Key_A );
 
     menu_edit->insertSeparator();
+	
+	// KCHMNavToolbar
+	m_navToolbar = new KCHMNavToolbar( this );
 	
 	// KCHMSearchToolbar also adds 'view' menu
 	m_searchToolbar = new KCHMSearchAndViewToolbar (this);
@@ -524,21 +518,6 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	help->insertItem( i18n( "What's &This"), this, SLOT(whatsThis()), SHIFT+Key_F1 );
 	
 	updateHistoryMenu();
-}
-
-void KCHMMainWindow::slotBackwardMenuItemActivated()
-{
-	m_viewWindow->navigateBack();
-}
-
-void KCHMMainWindow::slotForwardMenuItemActivated()
-{
-	m_viewWindow->navigateForward();
-}
-
-void KCHMMainWindow::slotHomeMenuItemActivated()
-{
-	openPage (m_chmFile->HomePage(), true);
 }
 
 void KCHMMainWindow::slotAddBookmark( )
@@ -669,12 +648,6 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	return false;
 }
 
-void KCHMMainWindow::slotHistoryAvailabilityChanged( bool enable_backward, bool enable_forward )
-{
-	m_toolbarIconBackward->setEnabled (enable_backward);
-	m_toolbarIconForward->setEnabled (enable_forward);
-}
-
 void KCHMMainWindow::createViewWindow( )
 {
 	if ( m_viewWindow )
@@ -689,9 +662,6 @@ void KCHMMainWindow::createViewWindow( )
 	
 	// Handle clicking on link in browser window
 	connect( m_viewWindow->getQObject(), SIGNAL( signalLinkClicked (const QString &, bool &) ), this, SLOT( slotLinkClicked(const QString &, bool &) ) );
-
-	// Handle backward/forward buttons state change
-	connect( m_viewWindow->getQObject(), SIGNAL( signalHistoryAvailabilityChanged (bool, bool) ), this, SLOT( slotHistoryAvailabilityChanged (bool, bool) ) );
 }
 
 void KCHMMainWindow::slotBrowserSelectAll( )
@@ -972,6 +942,107 @@ void KCHMMainWindow::slotLocateInContentWindow( )
 		statusBar()->message( i18n( "Could not locate opened topic in content window"), 2000 );
 }
 
+void KCHMMainWindow::slotExtractCHM( )
+{
+	QValueVector<QString> files;
+	
+#if defined (USE_KDE)
+	QString outdir = KFileDialog::getExistingDirectory (
+			QString::null,
+			this,
+			i18n("Choose a directory to store CHM content") );
+#else
+	QString outdir = QFileDialog::getExistingDirectory (
+			QString::null,
+			this,
+			0,
+			i18n("Choose a directory to store CHM content"),
+			TRUE );
+#endif
+	
+	if ( outdir.isEmpty() )
+		return;
+	
+	outdir += "/";
+	
+	// Enumerate all the files in archive
+	if ( !m_chmFile || !m_chmFile->enumerateArchive (files) )
+		return;
+
+	KQProgressModalDialog progress( i18n("Extracting CHM content"), i18n("Extracting files..."), i18n("Abort"), files.size(), this );
+	
+	for ( unsigned int i = 0; i < files.size(); i++ )
+	{
+		progress.setProgress( i );
+		
+		if ( (i % 3) == 0 )
+		{
+			qApp->processEvents();
+
+			if ( progress.wasCancelled() )
+				break;
+		}
+
+		// Extract the file
+		chmUnitInfo ui;	
+		if ( m_chmFile->ResolveObject( files[i], &ui ) )
+		{
+			QByteArray buf( ui.length );
+			
+			if ( m_chmFile->RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) )
+			{
+				// Split filename to get the list of subdirectories
+				QStringList dirs = QStringList::split( '/', files[i] );
+
+				// Walk through the list of subdirectories, and create them if needed
+				// dirlevel is used to detect extra .. and prevent overwriting files
+				// outside the directory (like creating the file images/../../../../../etc/passwd
+				unsigned int i, dirlevel = 0;
+				QStringList dirlist;
+				
+				for ( i = 0; i < dirs.size() - 1; i++ )
+				{
+					// Skip .. which lead too far above
+					if ( dirs[i] == ".." )
+					{
+						if ( dirlevel > 0 )
+						{
+							dirlevel--;
+							dirlist.pop_back();
+						}
+					}
+					else
+					{
+						dirlist.push_back( dirs[i] );
+						
+						QDir dir ( outdir + dirlist.join( "/" ) );
+						if ( !dir.exists() )
+						{
+							if ( !dir.mkdir( dir.path() ) )
+								qWarning( "Could not create subdir %s\n", dir.path().ascii() );
+						}
+					}
+				}
+				
+				QString filename = outdir + dirlist.join( "/" ) + "/" + dirs[i];
+				QFile wf( filename );
+				if ( !wf.open( IO_WriteOnly ) )
+				{
+					 qWarning( "Could not write file %s\n", filename.ascii() );
+					 continue;
+				}
+				
+				wf. writeBlock( buf );
+				wf.close();
+			}
+		}
+		else
+			qWarning( "Could not resolve file %s\n", files[i].ascii() );
+	}
+	
+	progress.setProgress( files.size() );
+}
+
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 void KCHMMainWindow::runAutoTest()
@@ -995,7 +1066,7 @@ void KCHMMainWindow::runAutoTest()
 	case STATE_CONTENTS_OPENNEXTPAGE:
 		if ( (item = (KCHMMainTreeViewItem *) m_autotestlistiterator.current()) != 0 )
 		{
-			openPage (item->getUrl(), true);
+			openPageWithHistory (item->getUrl(), true);
 			m_autotestlistiterator++;
 		}
 		else
@@ -1021,3 +1092,6 @@ void KCHMMainWindow::runAutoTest()
 	}
 }
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
+
+
+#include "kchmmainwindow.moc"

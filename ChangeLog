@@ -1,3 +1,10 @@
+2006-02-07 tim <gyunaev@ulduzsoft.com>
+    - Navigation history rewritten, now it stores text position too.
+    - Version changed to 2.1.
+
+2006-02-06 tim <gyunaev@ulduzsoft.com>
+    - Added 'Extract CHM content' menu item to extract the whole CHM file into a directory.
+
 2006-02-02 tim <gyunaev@ulduzsoft.com>
     - Added i18n calls for complete internationalization. pot file created.
     - Switched to a new, correct automake file structure.

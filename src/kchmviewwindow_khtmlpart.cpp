@@ -64,6 +64,7 @@ bool KCHMViewWindow_KHTMLPart::openPage (const QString& url)
 	
 	QString fullurl = "ms-its:" + ::mainWindow->getOpenedFileName() + "::" + url;
 	openURL ( KURL(fullurl) );
+	
 	return true;
 }
 
@@ -104,12 +105,6 @@ void KCHMViewWindow_KHTMLPart::addZoomFactor( int value )
 	setZoomFactor( m_zoomfactor + value);
 }
 
-void KCHMViewWindow_KHTMLPart::slotLinkClicked( const QString & newlink )
-{
-	bool notused;
-	emit signalLinkClicked (newlink, notused);
-}
-
 void KCHMViewWindow_KHTMLPart::emitSignalHistoryAvailabilityChanged( bool enable_backward, bool enable_forward )
 {
 	emit signalHistoryAvailabilityChanged( enable_backward, enable_forward );
@@ -138,6 +133,12 @@ void KCHMViewWindow_KHTMLPart::onOpenURLRequest( const KURL & url, const KParts:
 {
 	bool sourcechange = true;
 	emit signalLinkClicked ( url.prettyURL(), sourcechange );
+}
+
+void KCHMViewWindow_KHTMLPart::slotLinkClicked( const QString & newlink )
+{
+	bool notused;
+	emit signalLinkClicked (newlink, notused);
 }
 
 

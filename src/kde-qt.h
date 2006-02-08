@@ -41,6 +41,7 @@
 	#include <ktabwidget.h>
 	#include <kpopupmenu.h>
 	#include <kmessagebox.h>
+	#include <kprogress.h>
 	#include <krun.h>
 
 #else /* !USE_KDE */
@@ -56,6 +57,7 @@
 	#include <qmenubar.h>
 	#include <qtabwidget.h>
 	#include <qmessagebox.h>
+	#include <qprogressdialog.h>
 
 	#define i18n(A)		tr(A)
 
@@ -96,10 +98,19 @@ public:
 	KQListView(QWidget *parent = 0, const char *name = 0, int f = 0);
 };
 
-class KQFileDialog
+
+class KQProgressModalDialog : public KQ_CLASSNAME(ProgressDialog)
 {
-public:
-	static QString getOpenFileName ( const QString & startWith = QString::null, const QString & filter = QString::null, QWidget * parent = 0 );
+	public:
+		KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator = 0 );
+		
+		// Seems like people have fun making classes incompatible
+#if defined (USE_KDE)		
+		void   setTotalSteps( int totalSteps ) { progressBar ()->setTotalSteps( totalSteps ); }
+		void   setProgress( int progress ) { progressBar ()->setProgress( progress ); }
+#else
+		bool   wasCancelled() { return wasCanceled(); }
+#endif
 };
 
 class KQTabWidget : public KQ_CLASSNAME(TabWidget)

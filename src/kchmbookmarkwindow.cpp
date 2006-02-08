@@ -121,7 +121,7 @@ void KCHMBookmarkWindow::onDoubleClicked( QListViewItem * item, const QPoint &, 
 	KCMBookmarkTreeViewItem * treeitem = (KCMBookmarkTreeViewItem *) item;
 	
 	if ( ::mainWindow->getViewWindow()->getOpenedPage() != treeitem->m_url )
-		::mainWindow->openPage ( treeitem->m_url );
+		::mainWindow->openPageWithHistory ( treeitem->m_url );
 	
 	::mainWindow->getViewWindow()->setScrollbarPosition(treeitem->m_scroll_y);
 }
@@ -152,3 +152,4 @@ void KCHMBookmarkWindow::invalidate( )
 	m_bookmarkList->clear();
 }
 
+#include "kchmbookmarkwindow.moc"

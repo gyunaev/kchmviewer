@@ -264,3 +264,5 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
 
     return temp;
 }
+
+#include "kchmviewwindow_qtextbrowser.moc"

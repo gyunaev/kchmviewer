@@ -105,7 +105,7 @@ void KCHMSearchWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int
 		return;
 	
 	KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) item;
-	::mainWindow->openPage(treeitem->getUrl(), false);
+	::mainWindow->openPageWithHistory( treeitem->getUrl(), false );
 }
 
 void KCHMSearchWindow::restoreSettings( const KCHMSettings::search_saved_settings_t & settings )
@@ -395,3 +395,5 @@ void KCHMSearchWindow::onHelpClicked( )
 		i18n( "How to use search"), 
 		i18n( "The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for symbols other than underscope, and these symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
 }
+
+#include "kchmsearchwindow.moc"

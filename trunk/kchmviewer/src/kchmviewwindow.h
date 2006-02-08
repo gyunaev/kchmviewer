@@ -35,7 +35,7 @@ public:
     virtual ~KCHMViewWindow();
 
 	//! Open a page from current chm archive
-	bool	openUrl (const QString& url, bool addHistory = true);
+	bool	openUrl (const QString& url );
 	
 	QString	getBaseUrl() const	{ return m_base_url; }
 	QString	getOpenedPage() const	{ return m_openedPage; }
@@ -53,11 +53,6 @@ public:
 	static QString makeURLabsoluteIfNeeded ( const QString & url );
 	QString		makeURLabsolute ( const QString &url, bool set_as_base = true );
 	
-	void		navigateBack();
-	void		navigateForward();
-
-	void		setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
-
 public: 
 	// virtual members, which should be implemented by viewers
 	//! Invalidate current view, doing all the cleanups etc.
@@ -90,9 +85,6 @@ public:
 	//! Sets the scrollbar position.
 	virtual void	setScrollbarPosition(int pos) = 0;
 
-	//! Should emit this signal (because KCHMViewWindow is not QObject derived)
-	virtual void	emitSignalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward) = 0;
-
 	//! Select the content of the whole page
 	virtual void	clipSelectAll() = 0;
 
@@ -107,27 +99,12 @@ protected: /* signals */
 	 */
 	virtual void	signalLinkClicked ( const QString & newlink, bool& follow_link ) = 0;
 
-	/*!
-	 * Emitted when the backward/forward button status changed. Can be connected to enable/disable
-	 * appropriate toolbar buttons and/or menu items.
-	 */
-	virtual void	signalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward) = 0;
-
 protected:
-	//! Sets the scrollbar position.
 	virtual bool	openPage ( const QString& url ) = 0;
-
-	virtual void	checkHistoryAvailability ();
 	virtual void	handleStartPageAsImage( QString& link );
 
-	QString 				m_openedPage;
-	QString					m_base_url;
-
-	unsigned int			m_historyMaxSize;
-	unsigned int			m_historyCurrentSize;
-	unsigned int			m_historyTopOffset;
-	QValueList<QString>		m_history;
-	QValueList<QString>::iterator m_historyIterator;
+	QString 		m_openedPage;
+	QString			m_base_url;
 };
 
 #endif

@@ -38,6 +38,7 @@ public:
     KCHMMainWindow();
     ~KCHMMainWindow();
 
+	bool		openPageWithHistory ( const QString &url, bool set_in_tree = true );
 	bool		openPage ( const QString &url, bool set_in_tree = true );
 	
 	CHMFile *	getChmFile() const	{ return m_chmFile; }
@@ -59,13 +60,9 @@ public slots:
 			
 private slots:
 	void slotLinkClicked ( const QString & link, bool& follow_link );
-	void slotHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
 
     void slotOpenMenuItemActivated();
 	void slotPrintMenuItemActivated();
-	void slotBackwardMenuItemActivated();
-	void slotForwardMenuItemActivated();
-	void slotHomeMenuItemActivated();
 
 	void slotAboutMenuItemActivated();
 	void slotAboutQtMenuItemActivated();
@@ -77,6 +74,7 @@ private slots:
 	
 	void slotBrowserSelectAll();
 	void slotBrowserCopy();
+	void slotExtractCHM();
 
 	void slotChangeSettingsMenuItemActivated();
 	void slotHistoryMenuItemActivated ( int );
@@ -109,11 +107,10 @@ private:
 	KQListView			*	m_contentsWindow;
 
 	KQTabWidget			*	m_tabWidget;
-	QToolButton			*	m_toolbarIconBackward;
-	QToolButton			*	m_toolbarIconForward;
 	QSplitter 			*	m_windowSplitter;
 
 	KCHMSearchAndViewToolbar	*	m_searchToolbar;
+	KCHMNavToolbar		*	m_navToolbar;
 	
 	KCHMSettings		*	m_currentSettings;
 	

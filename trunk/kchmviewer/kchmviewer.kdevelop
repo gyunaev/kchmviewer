@@ -35,15 +35,25 @@
     </run>
     <configurations>
       <optimized>
-        <builddir>optimized</builddir>
+        <builddir>build</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O2 -g0</cxxflags>
+        <envvars/>
+        <configargs/>
+        <topsourcedir/>
+        <cppflags/>
+        <ldflags/>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <f77flags/>
       </optimized>
       <debug>
         <configargs>--enable-debug=full --with-kde</configargs>
-        <builddir/>
+        <builddir>build</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
@@ -58,6 +68,23 @@
         <cflags>-g</cflags>
         <f77flags/>
       </debug>
+      <default>
+        <envvars/>
+        <configargs/>
+        <builddir>build</builddir>
+        <topsourcedir/>
+        <cppflags/>
+        <ldflags/>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevg77options</f77compiler>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <cxxflags/>
+        <f77flags/>
+      </default>
     </configurations>
     <make>
       <envvars/>

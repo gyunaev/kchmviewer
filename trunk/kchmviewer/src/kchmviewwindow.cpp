@@ -24,12 +24,12 @@
 #include <qdir.h>
 
 #include "kchmviewwindow.h"
+#include "kchmmainwindow.h"
 #include "filetype_handler.h"
 
 
 KCHMViewWindow::KCHMViewWindow( QWidget * )
 {
-	m_historyMaxSize = 25;
 	invalidate();
 }
 
@@ -41,9 +41,6 @@ void KCHMViewWindow::invalidate( )
 {
 	m_base_url = "/";
 	m_openedPage = QString::null;
-	m_historyCurrentSize = 0;
-	m_historyTopOffset = 0;
-	m_history.clear();
 }
 
 
@@ -143,7 +140,7 @@ QString KCHMViewWindow::makeURLabsoluteIfNeeded ( const QString & url )
 	return newurl;
 }
 
-bool KCHMViewWindow::openUrl ( const QString& origurl, bool addHistory )
+bool KCHMViewWindow::openUrl ( const QString& origurl )
 {
 	QString chmfile, page, newurl = origurl;
 
@@ -160,58 +157,11 @@ bool KCHMViewWindow::openUrl ( const QString& origurl, bool addHistory )
 	
 	if ( openPage (newurl) )
 	{
-		if ( addHistory && newurl && m_openedPage != newurl )
-		{
-			// do not grow the history if already max size
-			if ( m_historyCurrentSize >= m_historyMaxSize )
-				m_history.pop_front();
-			else
-				m_historyCurrentSize++;
-
-			// shred the 'forward' history
-			if ( m_historyTopOffset != 0 )
-			{
-				m_history.erase (++m_historyIterator, m_history.end());
-				m_historyCurrentSize -= m_historyTopOffset;
-				m_historyTopOffset = 0;
-			}
-
-			m_history.push_back (newurl);
-			m_historyIterator = m_history.fromLast();
-		}
-		
 		m_openedPage = newurl;
-		checkHistoryAvailability( );
 		return true;
 	}
 	
 	return false;
-}
-
-void KCHMViewWindow::checkHistoryAvailability( )
-{
-	bool enable_backward = m_historyCurrentSize && m_historyIterator != m_history.begin();
-	bool enable_forward = m_historyTopOffset != 0;
-
-	emitSignalHistoryAvailabilityChanged (enable_backward, enable_forward);
-}
-
-void KCHMViewWindow::navigateBack( )
-{
-	m_historyIterator--;
-	m_historyTopOffset++;
-	
-	openUrl ( *m_historyIterator, false );
-	checkHistoryAvailability();
-}
-
-void KCHMViewWindow::navigateForward( )
-{
-	m_historyIterator++;
-	m_historyTopOffset--;
-	
-	openUrl ( *m_historyIterator, false );
-	checkHistoryAvailability();
 }
 
 void KCHMViewWindow::handleStartPageAsImage( QString & link )

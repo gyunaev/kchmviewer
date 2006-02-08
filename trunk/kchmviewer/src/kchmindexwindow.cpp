@@ -111,5 +111,7 @@ void KCHMIndexWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int 
 		}
 	}
 	else
-		::mainWindow->openPage (url, true);
+	::mainWindow->openPageWithHistory( url, true );
 }
+
+#include "kchmindexwindow.moc"

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Copyright (C) 2004-2006 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
@@ -18,28 +18,55 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef FORWARD_DECLARATIONS_H
-#define FORWARD_DECLARATIONS_H
 
-class QComboBox;
-class QListView;
-class QListBox;
-class QListViewItem;
-class QListViewItemIterator;
-class QLineEdit;
-class QTabWidget;
-class QToolButton;
- 
-class KCHMMainWindow;
-class KCHMViewWindow;
-class KCHMIndexWindow;
-class KCHMSearchWindow;
-class KCHMBookmarkWindow;
-class CHMFile;
-class KCHMSettings;
-class KCHMSearchAndViewToolbar;
-class KCHMNavToolbar;
+#ifndef INCLUDE_KCHMNAVHISTORY_H
+#define INCLUDE_KCHMNAVHISTORY_H
 
-#include "config.h"
+#include "forwarddeclarations.h"
 
-#endif /* FORWARD_DECLARATIONS_H */
+class KCHMNavToolbar : public QToolBar
+{
+Q_OBJECT
+public:
+	KCHMNavToolbar( KCHMMainWindow *parent );
+	~KCHMNavToolbar();
+
+	void	invalidate();
+	
+	void	setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
+	void	addNavigationHistory( const QString & url, int scrollpos );
+
+public slots:
+	void	navigateBack();
+	void	navigateHome();
+	void	navigateForward();
+
+private:
+	void	updateIconStatus();
+	
+	QToolButton	*	m_toolbarIconBackward;
+	QToolButton	*	m_toolbarIconForward;
+
+	//! History
+	class KCHMUrlHistory
+	{
+		public:
+			KCHMUrlHistory() { scrollbarpos = 0; }
+			KCHMUrlHistory( const QString& _url, int _scrollbarpos )
+			: url(_url), scrollbarpos(_scrollbarpos) {};
+		
+			const QString&  getUrl() const { return url; }
+			int 			getScrollPosition() const { return scrollbarpos; }
+			
+		private:
+			QString  	url;
+			int 		scrollbarpos;
+	};
+
+	unsigned int	m_historyMaxSize;
+	unsigned int	m_historyCurrentPos;
+	
+	QValueList<KCHMUrlHistory>				m_history;
+};
+
+#endif /* INCLUDE_KCHMNAVHISTORY_H */

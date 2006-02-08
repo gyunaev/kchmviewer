@@ -31,3 +31,23 @@ KQListView::KQListView( QWidget * parent, const char * name, int f )
 #endif
 {
 }
+
+#if defined (USE_KDE)
+KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
+	: KProgressDialog( creator, 0, captionText, labelText, true )
+{
+	setAllowCancel( true );
+	showCancelButton( true );
+	setAutoClose( true );
+	setButtonText( cancelButtonText );
+	setTotalSteps( totalSteps );
+	setMinimumDuration( 1 );
+}
+#else
+KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
+	: QProgressDialog( labelText, cancelButtonText, totalSteps, creator, name, modal )
+{
+	setCaption( captionText );
+	setMinimumDuration( 1 );
+}
+#endif

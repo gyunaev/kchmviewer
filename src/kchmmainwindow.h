@@ -26,9 +26,22 @@
 
 #include "forwarddeclarations.h"
 #include "kchmtextencoding.h"
+#include "kchmviewwindow.h"
 
 
 #define ENABLE_AUTOTEST_SUPPORT
+
+//! OpenPage extra flags, specifying extra behavior
+
+//! Locate this page in the content tree, and move the cursor there
+static const unsigned int OPF_CONTENT_TREE	= 1 << 0;
+//! Add the previous page into the history
+static const unsigned int OPF_ADD2HISTORY	= 1 << 1;
+//! Open the page in a new tab
+static const unsigned int OPF_NEW_TAB 		= 1 << 2;
+//! Open the page in a new tab in background
+static const unsigned int OPF_BACKGROUND 	= 1 << 3;
+
 
 class KCHMMainWindow : public KQMainWindow
 {
@@ -38,26 +51,30 @@ public:
     KCHMMainWindow();
     ~KCHMMainWindow();
 
-	bool		openPageWithHistory ( const QString &url, bool set_in_tree = true );
-	bool		openPage ( const QString &url, bool set_in_tree = true );
+	bool		openPage ( const QString &url, unsigned int flags = OPF_CONTENT_TREE );
 	
 	CHMFile *	getChmFile() const	{ return m_chmFile; }
 	const QString&	getOpenedFileName () { return m_chmFilename; }
 	
-	KCHMViewWindow * getViewWindow() { return m_viewWindow; }
-	KQListView	   * getContentsWindow() { return m_contentsWindow; }
+	KCHMViewWindow * getCurrentBrowser() const;
+	KQListView	   * getContentsWindow() const { return m_contentsWindow; }
 	KCHMSettings   * getCurrentSettings() const { return m_currentSettings; }
-
+	KCHMViewWindowMgr*	getViewWindowMgr() const { return m_viewWindowMgr; }
+	KCHMNavToolbar * getNavigationToolbar() const { return m_navToolbar; };
+	
 	void		showInStatusBar (const QString& text)	{ statusBar()->message( text, 2000 ); }
 	void		setTextEncoding (const KCHMTextEncoding::text_encoding_t * enc);
-	
+		
 public slots:
-	void 	slotOnTreeClicked( QListViewItem *item );
-	void	slotAddBookmark ( );
-	void	slotEnableFullScreenMode( bool enable );
-	void	slotShowContentsWindow( bool show );
-	void	slotLocateInContentWindow( );
-			
+	void slotOnTreeClicked( QListViewItem *item );
+	void slotAddBookmark ( );
+	void slotOpenPageInNewTab( );
+	void slotOpenPageInNewBackgroundTab( );
+	void slotEnableFullScreenMode( bool enable );
+	void slotShowContentsWindow( bool show );
+	void slotLocateInContentWindow( );
+	void slotBrowserChanged( KCHMViewWindow * newbrowser );
+				
 private slots:
 	void slotLinkClicked ( const QString & link, bool& follow_link );
 
@@ -81,26 +98,31 @@ private slots:
 	
 	void slotToggleFullScreenMode( );
 	
+	void slotNavigateBack()	{	getCurrentBrowser()->navigateBack(); }
+	void slotNavigateHome()	{	getCurrentBrowser()->navigateHome(); }
+	void slotNavigateForward(){	getCurrentBrowser()->navigateForward(); }
+	
 private:
 	bool	parseCmdLineArgs();
 	void 	showEvent( QShowEvent * );
 	void	closeEvent ( QCloseEvent * e );
 	void	setupSignals ();
-			
+
 	void 	setupToolbarsAndMenu ( );
 	bool	loadChmFile ( const QString &fileName,  bool call_open_page = true );
 	void	closeChmFile();	
-	void	updateView();
+	void	refreshCurrentBrowser();
 	void	updateHistoryMenu();
-	void	createViewWindow();
 	
 	void	showOrHideContextWindow( int tabindex );
 	void	showOrHideIndexWindow( int tabindex );
 	void	showOrHideSearchWindow( int tabindex );
 	
+	void	locateInContentTree( const QString& url );
+	
     QString 				m_chmFilename;
 	
-	KCHMViewWindow		*	m_viewWindow;
+	KCHMViewWindowMgr	*	m_viewWindowMgr;
 	KCHMIndexWindow		*	m_indexWindow;
 	KCHMSearchWindow	*	m_searchWindow;
 	KCHMBookmarkWindow	*	m_bookmarkWindow;

@@ -1041,7 +1041,9 @@ inline bool CHMFile::InfoFromSystem()
  
 KCHMMainTreeViewItem * CHMFile::getTreeItem( const QString & str ) const
 {
-	KCHMTreeUrlMap_t::const_iterator it = m_treeUrlMap.find (str);
+	QString fixedstr = normalizePath( str );
+
+	KCHMTreeUrlMap_t::const_iterator it = m_treeUrlMap.find( fixedstr );
 	if ( it == m_treeUrlMap.end() )
 		return 0;
 		
@@ -1253,12 +1255,12 @@ QCString CHMFile::convertSearchWord( const QString & src )
 
 QString CHMFile::getTopicByUrl( const QString & search_url )
 {
+	unsigned char buf[COMMON_BUF_LEN];
+	
 	if ( !m_lookupTablesValid )
 		return QString::null;
 
-	unsigned char buf[COMMON_BUF_LEN];
-	int pos = search_url.find ('#');
-	QString fixedurl = pos == -1 ? search_url : search_url.left (pos);
+	QString fixedurl = normalizePath( search_url );
 
 	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
 	{
@@ -1337,3 +1339,11 @@ void CHMFile::GetSearchResults( const KCHMSearchProgressResults_t & tempres, KCH
 	}
 }
 
+
+QString CHMFile::normalizePath( const QString & path ) const
+{
+	int pos = path.find ('#');
+	QString fixedpath = pos == -1 ? path : path.left (pos);
+	
+	return KCHMViewWindow::makeURLabsoluteIfNeeded( fixedpath );
+}

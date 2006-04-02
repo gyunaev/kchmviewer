@@ -348,6 +348,11 @@ private:
 	 */
 	inline int findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities);
 
+	/*!
+	 * Normalizes path to search in internal arrays
+	 */
+	inline QString normalizePath (const QString& path ) const;
+
 private:
 	typedef QMap<QString, KCHMMainTreeViewItem*> KCHMTreeUrlMap_t;
 

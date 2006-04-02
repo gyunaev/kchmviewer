@@ -31,7 +31,7 @@
 class KCHMViewWindow
 {
 public:
-	KCHMViewWindow ( QWidget * parent );
+	KCHMViewWindow ( QTabWidget * parent );
     virtual ~KCHMViewWindow();
 
 	//! Open a page from current chm archive
@@ -39,7 +39,8 @@ public:
 	
 	QString	getBaseUrl() const	{ return m_base_url; }
 	QString	getOpenedPage() const	{ return m_openedPage; }
-
+	QString	getNewTabLink() const	{ return m_newTabLinkKeeper; }
+	
 	//! true if url is remote (http/ftp/mailto/news etc.)
 	static bool	isRemoteURL (const QString& url, QString& protocol);
 	
@@ -74,6 +75,7 @@ public:
 	virtual void	addZoomFactor (int value) = 0;
 
 	virtual QObject *	getQObject() = 0;
+	virtual QWidget *	getQWidget() = 0;
 
 	/*!
 	 * Return current scrollbar position in view window. Saved on program exit. 
@@ -91,6 +93,19 @@ public:
 	//! Copies the selected content to the clipboard
 	virtual void	clipCopy() = 0;
 
+	//! Returns the window title
+	virtual QString	getTitle() const;
+	
+	//! Navigation stuff
+	virtual void	navigateBack();
+	virtual void	navigateHome();
+	virtual void	navigateForward();
+	
+	//! Navigation auxiliary stuff
+	virtual void	setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
+	virtual void	addNavigationHistory( const QString & url, int scrollpos );
+	virtual void 	updateNavigationToolbar();
+		
 protected: /* signals */
 	/*!
 	 * Emitted when the user clicked on the link, before the page changed.
@@ -102,9 +117,43 @@ protected: /* signals */
 protected:
 	virtual bool	openPage ( const QString& url ) = 0;
 	virtual void	handleStartPageAsImage( QString& link );
+	
+	KQPopupMenu * 	getContextMenu( const QString& link, QWidget * parent );
+	KQPopupMenu * 	createStandardContextMenu( QWidget * parent );
+	
+	//! History
+	class KCHMUrlHistory
+	{
+		public:
+			KCHMUrlHistory() { scrollbarpos = 0; }
+			KCHMUrlHistory( const QString& _url, int _scrollbarpos )
+			: url(_url), scrollbarpos(_scrollbarpos) {};
+		
+			const QString&  getUrl() const { return url; }
+			int 			getScrollPosition() const { return scrollbarpos; }
+			
+		private:
+			QString  	url;
+			int 		scrollbarpos;
+	};
+
+	unsigned int	m_historyMaxSize;
+	unsigned int	m_historyCurrentPos;
+	
+	QValueList<KCHMUrlHistory>		m_history;
+	
+	KQPopupMenu *	m_contextMenu;
+	KQPopupMenu *	m_contextMenuLink;
+	
+	// This member keeps a "open new tab" link between getContextMenu() call and appropriate
+	// slot call
+	QString			m_newTabLinkKeeper;
 
 	QString 		m_openedPage;
+	QString 		m_lastOpenedPage;
 	QString			m_base_url;
+
+	QTabWidget	*	m_parentTabWidget;
 };
 
 #endif

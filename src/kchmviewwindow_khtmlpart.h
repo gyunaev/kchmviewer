@@ -41,7 +41,7 @@ class KCHMViewWindow_KHTMLPart : public KHTMLPart, public KCHMViewWindow
 {
 Q_OBJECT
 public:
-	KCHMViewWindow_KHTMLPart( QWidget * parent );
+	KCHMViewWindow_KHTMLPart( QTabWidget * parent );
 	~KCHMViewWindow_KHTMLPart();
 
 	//! Open a page from current chm archive
@@ -82,8 +82,7 @@ public:
 	virtual void	setScrollbarPosition(int pos);
 
 	virtual QObject *	getQObject() { return this; }
-
-	virtual void	emitSignalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
+	virtual QWidget *	getQWidget();
 
 signals:
 	/*!
@@ -92,7 +91,6 @@ signals:
 	 * Otherwise it should be changed to the new link value.
 	 */
 	void	signalLinkClicked ( const QString & newlink, bool& follow_link );
-	void	signalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
 
 private slots:
 	virtual void	slotLinkClicked ( const QString & newlink);
@@ -105,9 +103,7 @@ private:
 	int			m_zoomfactor;
 	bool		m_searchForward;
 	QString		m_searchText;
-	
-	KPopupMenu *m_contextMenu;
-	
+		
 	const KCHMTextEncoding::text_encoding_t *	m_currentEncoding;
 };
 

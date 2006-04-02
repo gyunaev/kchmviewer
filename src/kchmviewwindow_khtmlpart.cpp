@@ -30,7 +30,12 @@
 #include <khtmlview.h>
 #include <kfinddialog.h>
 
-KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QWidget * parent )
+QWidget * KCHMViewWindow_KHTMLPart::getQWidget()
+{
+	 return view();
+}
+
+KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QTabWidget * parent )
 	: KHTMLPart ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 0;
@@ -38,8 +43,6 @@ KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QWidget * parent )
 	m_searchForward = true;
 
 	invalidate();
-
-	m_contextMenu = 0;
 
 	connect( browserExtension(), SIGNAL( openURLRequest( const KURL &, const KParts::URLArgs & ) ),
 		this, SLOT ( onOpenURLRequest( const KURL &, const KParts::URLArgs & )) );
@@ -105,11 +108,6 @@ void KCHMViewWindow_KHTMLPart::addZoomFactor( int value )
 	setZoomFactor( m_zoomfactor + value);
 }
 
-void KCHMViewWindow_KHTMLPart::emitSignalHistoryAvailabilityChanged( bool enable_backward, bool enable_forward )
-{
-	emit signalHistoryAvailabilityChanged( enable_backward, enable_forward );
-}
-
 bool KCHMViewWindow_KHTMLPart::printCurrentPage()
 {
 	view()->print();
@@ -152,20 +150,12 @@ void KCHMViewWindow_KHTMLPart::clipCopy()
 	kapp->copy();
 }
 
-void  KCHMViewWindow_KHTMLPart::onPopupMenu ( const QString &, const QPoint & point )
+void  KCHMViewWindow_KHTMLPart::onPopupMenu ( const QString &url, const QPoint & point )
 {
-	// we create the menu object here, because ::mainWindow is not defined in 
-	// KCHMViewWindow_KHTMLPart constructor
-	if ( !m_contextMenu )
-	{
-		m_contextMenu = new KPopupMenu( view() );
-		m_contextMenu->insertTitle ( i18n( "Editor" ) );
-		m_contextMenu->insertItem ( i18n( "&Copy"), ::mainWindow, SLOT(slotBrowserCopy()) );
-		m_contextMenu->insertItem ( i18n( "&Select all"), ::mainWindow, SLOT(slotBrowserSelectAll()) );
-	}
-	
-	m_contextMenu->exec( point );
+	KQPopupMenu * menu = getContextMenu( url, view() );
+	menu->exec( point );
 }
+
 
 #include "kchmviewwindow_khtmlpart.moc"
 

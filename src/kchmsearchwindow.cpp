@@ -105,7 +105,7 @@ void KCHMSearchWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int
 		return;
 	
 	KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) item;
-	::mainWindow->openPageWithHistory( treeitem->getUrl(), false );
+	::mainWindow->openPage( treeitem->getUrl(), OPF_ADD2HISTORY );
 }
 
 void KCHMSearchWindow::restoreSettings( const KCHMSettings::search_saved_settings_t & settings )

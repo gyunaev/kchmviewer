@@ -39,7 +39,7 @@
  */
 #define KEEP_ALL_OPENED_DATA_IN_SOURCE_FACTORY
 
-KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QWidget * parent )
+KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
 	: QTextBrowser ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 0;
@@ -126,11 +126,6 @@ void KCHMViewWindow_QTextBrowser::addZoomFactor( int value )
 void KCHMViewWindow_QTextBrowser::slotLinkClicked( const QString & newlink )
 {
 	emit signalLinkClicked (newlink, m_allowSourceChange);
-}
-
-void KCHMViewWindow_QTextBrowser::emitSignalHistoryAvailabilityChanged( bool enable_backward, bool enable_forward )
-{
-	emit signalHistoryAvailabilityChanged( enable_backward, enable_forward );
 }
 
 
@@ -263,6 +258,13 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
 	}
 
     return temp;
+}
+
+QPopupMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
+{
+	KQPopupMenu * menu = getContextMenu( anchorAt( pos ), this );
+	menu->exec( mapToGlobal( pos ) );
+	return 0;
 }
 
 #include "kchmviewwindow_qtextbrowser.moc"

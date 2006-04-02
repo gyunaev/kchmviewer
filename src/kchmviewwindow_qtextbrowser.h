@@ -34,7 +34,7 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 {
 Q_OBJECT
 public:
-	KCHMViewWindow_QTextBrowser( QWidget * parent );
+	KCHMViewWindow_QTextBrowser( QTabWidget * parent );
 	~KCHMViewWindow_QTextBrowser();
 
 	//! Open a page from current chm archive
@@ -75,8 +75,7 @@ public:
 	virtual void	setScrollbarPosition(int pos);
 
 	virtual QObject *	getQObject() { return this; }
-
-	virtual void	emitSignalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
+	virtual QWidget *	getQWidget() { return this; }
 
 signals:
 	/*!
@@ -85,14 +84,14 @@ signals:
 	 * Otherwise it should be changed to the new link value.
 	 */
 	void	signalLinkClicked ( const QString & newlink, bool& follow_link );
-	void	signalHistoryAvailabilityChanged (bool enable_backward, bool enable_forward);
 
 private slots:
 	virtual void	slotLinkClicked (const QString & newlink);
 	
 private:
-	void setSource ( const QString & name );
-	static QString decodeUrl( const QString &url );
+	QPopupMenu * 	createPopupMenu ( const QPoint & pos );
+	void	setSource ( const QString & name );
+	static	QString decodeUrl( const QString &url );
 			
 	int						m_zoomfactor;
 	bool					m_allowSourceChange;

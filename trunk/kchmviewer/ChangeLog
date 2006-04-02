@@ -1,3 +1,8 @@
+2006-03-31 tim <gyunaev@ulduzsoft.com>
+    - 'Setup' menu renamed to 'Settings'
+    - Fixed various navigation errors when 'Locate' button didn't locate the appropriate topic.
+    - Fixed forward navigation, and saved scroll position.
+
 2006-02-07 tim <gyunaev@ulduzsoft.com>
     - Navigation history rewritten, now it stores text position too.
     - Version changed to 2.1.

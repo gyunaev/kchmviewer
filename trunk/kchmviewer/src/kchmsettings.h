@@ -52,16 +52,27 @@ public:
 		int			scroll_y;
 	};
 
+	class SavedViewWindow
+	{
+		public:
+			SavedViewWindow() { scroll_y = 0; zoom = 0; }
+			SavedViewWindow (QString u, int y, int z) : url(u), scroll_y(y), zoom(z) {};
+		
+			QString		url;
+			int			scroll_y;
+			int			zoom;
+	};
+	
 	typedef 	QValueList<QString>			search_saved_settings_t;
 	typedef 	QValueList<SavedBookmark>	bookmark_saved_settings_t;
+	typedef 	QValueList<SavedViewWindow>	viewindow_saved_settings_t;
 	
-	QString						m_activepage;
-	int							m_scrollbarposition;
-	int							m_activetab;
+	int							m_activetabsystem;
+	int							m_activetabwindow;
 	int							m_activeencodinglcid;
-	int							m_chosenzoom;
 	search_saved_settings_t		m_searchhistory;
 	bookmark_saved_settings_t	m_bookmarks;
+	viewindow_saved_settings_t	m_viewwindows;
 
 private:
 	QString  getSettingsFilename ( const QString& filename );

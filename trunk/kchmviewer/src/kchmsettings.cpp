@@ -26,8 +26,8 @@
 #include "kchmsettings.h"
 #include "kchmconfig.h"
 
-static Q_INT32 SETTINGS_MAGIC = 0x98AB4E7C;
-static Q_INT32 SETTINGS_VERSION = 3;
+static Q_INT32 SETTINGS_MAGIC = 0xD8AB4E76;
+static Q_INT32 SETTINGS_VERSION = 4;
 
 /*
  * The order is important!
@@ -37,13 +37,14 @@ enum marker_t
 {
 	MARKER_FILESIZE = 1,
 	MARKER_FILETIME,
-	MARKER_ACTIVEPAGE,
-	MARKER_SCROLLBARPOSITION,
-	MARKER_ACTIVETAB,
+	
+	MARKER_ACTIVETABSYSTEM,
+	MARKER_ACTIVETABWINDOW,
 	MARKER_ACTIVEENCODING,
 	MARKER_SEARCHHISTORY,
+	
 	MARKER_BOOKMARKS,
-	MARKER_CHOSENZOOM,
+	MARKER_VIEWINDOWS,
 
 	// This should be the last
 	MARKER_END = 0x7FFF
@@ -52,7 +53,7 @@ enum marker_t
 // Helpers for serialization of SavedBookmark through QDataStream
 static inline QDataStream& operator<< ( QDataStream& s, const KCHMSettings::SavedBookmark& b )
 {
-	s << b.name;
+	s << b.name;	
 	s << b.url;
 	s << b.scroll_y;
 	return s;
@@ -66,24 +67,46 @@ static inline QDataStream& operator>> ( QDataStream& s, KCHMSettings::SavedBookm
 	return s;
 }
 
+// Helpers for serialization of SavedViewWindow through QDataStream
+static inline QDataStream& operator<< ( QDataStream& s, const KCHMSettings::SavedViewWindow& b )
+{
+	// Store the version first. Later we can increase it when adding new members.
+	s << 1;
+	s << b.url;
+	s << b.scroll_y;
+	s << b.zoom;
+	return s;
+}
+
+static inline QDataStream& operator>> ( QDataStream& s, KCHMSettings::SavedViewWindow& b )
+{
+	Q_INT32 version;
+	
+	s >> version; 
+	s >> b.url;
+	s >> b.scroll_y;
+	s >> b.zoom;
+	return s;
+}
+
 
 KCHMSettings::KCHMSettings( )
 {
-	m_scrollbarposition = 0;
-	m_activetab = 0;
+	m_activetabsystem = 0;
+	m_activetabwindow = 0;
 	m_activeencodinglcid = 0;
-	m_chosenzoom = 0;
 }
 
 
 bool KCHMSettings::loadSettings( const QString & filename )
 {
-	m_activepage = QString::null;
-	m_scrollbarposition = 0;
-	m_activetab = 0;
+	m_activetabsystem = 0;
+	m_activetabwindow = 0;
 	m_activeencodinglcid = 0;
+	
 	m_searchhistory.clear();
 	m_bookmarks.clear();
+	m_viewwindows.clear();
 
 	QFileInfo finfo ( filename );
 
@@ -150,18 +173,14 @@ bool KCHMSettings::loadSettings( const QString & filename )
 			}
 			break;
 			
-		case MARKER_ACTIVEPAGE:
-			stream >> m_activepage;
+		case MARKER_ACTIVETABSYSTEM:
+			stream >> m_activetabsystem;
 			break;
 	
-		case MARKER_SCROLLBARPOSITION:
-			stream >> m_scrollbarposition;
+		case MARKER_ACTIVETABWINDOW:
+			stream >> m_activetabwindow;
 			break;
 			
-		case MARKER_ACTIVETAB:
-			stream >> m_activetab;
-			break;
-	
 		case MARKER_ACTIVEENCODING:
 			stream >> m_activeencodinglcid;
 			break;
@@ -174,8 +193,8 @@ bool KCHMSettings::loadSettings( const QString & filename )
 			stream >> m_bookmarks;
 			break;
 
-		case MARKER_CHOSENZOOM:
-			stream >> m_chosenzoom;
+		case MARKER_VIEWINDOWS:
+			stream >> m_viewwindows;
 			break;
 		}
 	}
@@ -206,14 +225,12 @@ bool KCHMSettings::saveSettings( )
 	stream << m_currentfiledate;
 	
 	// Save generic settings
-	stream << MARKER_ACTIVEPAGE;
-	stream << m_activepage;
+	stream << MARKER_ACTIVETABSYSTEM;
+	stream << m_activetabsystem;
 	
-	stream << MARKER_SCROLLBARPOSITION;
-	stream << m_scrollbarposition;
-	
-	stream << MARKER_ACTIVETAB;
-	stream << m_activetab;
+	// Save generic settings
+	stream << MARKER_ACTIVETABWINDOW;
+	stream << m_activetabwindow;
 	
 	stream << MARKER_ACTIVEENCODING;
 	stream << m_activeencodinglcid;
@@ -225,8 +242,8 @@ bool KCHMSettings::saveSettings( )
 	stream << MARKER_BOOKMARKS;
 	stream << m_bookmarks;
 
-	stream << MARKER_CHOSENZOOM;
-	stream << m_chosenzoom;
+	stream << MARKER_VIEWINDOWS;
+	stream << m_viewwindows;
 	
 	stream << MARKER_END;
 	return true;

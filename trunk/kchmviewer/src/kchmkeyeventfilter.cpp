@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
@@ -18,25 +18,35 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include "kchmkeyeventfilter.h"
 
-#ifndef INCLUDE_KCHMNAVHISTORY_H
-#define INCLUDE_KCHMNAVHISTORY_H
+KCHMKeyEventFilter	gKeyEventFilter;
 
-#include "forwarddeclarations.h"
-
-class KCHMNavToolbar : public QToolBar
+KCHMKeyEventFilter::KCHMKeyEventFilter()
+ : QObject()
 {
-Q_OBJECT
-public:
-	KCHMNavToolbar( KCHMMainWindow *parent );
-	~KCHMNavToolbar();
+	m_shiftPressed = false;
+	m_ctrlPressed = false;
+}
 
-public slots:
-	void	updateIconStatus( bool enable_backward, bool enable_forward );	
+bool KCHMKeyEventFilter::eventFilter( QObject *, QEvent *e )
+{
+	// Handle KeyPress and KeyRelease events
+	if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
+	{
+		bool * ptr = 0;
+		QKeyEvent *k = (QKeyEvent *) e;
+		
+		// We're interested only in Shift and Control
+		if ( k->key() == Qt::Key_Shift )
+			ptr = &m_shiftPressed;
+		else if ( k->key() == Qt::Key_Control )
+			ptr = &m_ctrlPressed;
+		
+		// Set it
+		if ( ptr )
+			*ptr = e->type() == QEvent::KeyPress ? true : false;
+	}
 
-private:
-	QToolButton	*	m_toolbarIconBackward;
-	QToolButton	*	m_toolbarIconForward;
-};
-
-#endif /* INCLUDE_KCHMNAVHISTORY_H */
+	return FALSE;	// Standard event processing
+}

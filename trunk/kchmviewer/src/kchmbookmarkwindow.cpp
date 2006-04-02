@@ -58,7 +58,7 @@ KCHMBookmarkWindow::KCHMBookmarkWindow(QWidget *parent, const char *name)
 void KCHMBookmarkWindow::onAddBookmarkPressed( )
 {
     bool ok;
-	QString url = ::mainWindow->getViewWindow()->getOpenedPage();
+	QString url = ::mainWindow->getCurrentBrowser()->getOpenedPage();
 	QString title = ::mainWindow->getChmFile()->getTopicByUrl(url);
 	QString name = QInputDialog::getText( 
 			i18n( "%1 - add a bookmark") . arg(APP_NAME),
@@ -71,7 +71,7 @@ void KCHMBookmarkWindow::onAddBookmarkPressed( )
 	if ( !ok || name.isEmpty() )
 		return;
 
-	new KCMBookmarkTreeViewItem (m_bookmarkList, name, url, ::mainWindow->getViewWindow()->getScrollbarPosition()
+	new KCMBookmarkTreeViewItem (m_bookmarkList, name, url, ::mainWindow->getCurrentBrowser()->getScrollbarPosition()
 );
 	m_listChanged = true;
 }
@@ -120,10 +120,10 @@ void KCHMBookmarkWindow::onDoubleClicked( QListViewItem * item, const QPoint &, 
 	
 	KCMBookmarkTreeViewItem * treeitem = (KCMBookmarkTreeViewItem *) item;
 	
-	if ( ::mainWindow->getViewWindow()->getOpenedPage() != treeitem->m_url )
-		::mainWindow->openPageWithHistory ( treeitem->m_url );
+	if ( ::mainWindow->getCurrentBrowser()->getOpenedPage() != treeitem->m_url )
+		::mainWindow->openPage( treeitem->m_url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 	
-	::mainWindow->getViewWindow()->setScrollbarPosition(treeitem->m_scroll_y);
+	::mainWindow->getCurrentBrowser()->setScrollbarPosition(treeitem->m_scroll_y);
 }
 
 

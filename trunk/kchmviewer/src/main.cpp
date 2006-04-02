@@ -23,12 +23,14 @@
 
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
+#include "kchmkeyeventfilter.h"
 
 #if defined (USE_KDE)
 	#include <kaboutdata.h>
 #endif
 
 KCHMMainWindow * mainWindow;
+
 
 int main( int argc, char ** argv )
 {
@@ -64,6 +66,7 @@ int main( int argc, char ** argv )
 #endif
 	
 	appConfig.load();
+	app.installEventFilter( &gKeyEventFilter );
 	
 	mainWindow = new KCHMMainWindow();
 	mainWindow->show();

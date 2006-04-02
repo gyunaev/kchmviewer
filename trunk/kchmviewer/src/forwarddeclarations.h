@@ -39,6 +39,8 @@ class CHMFile;
 class KCHMSettings;
 class KCHMSearchAndViewToolbar;
 class KCHMNavToolbar;
+class KCHMViewWindow;
+class KCHMViewWindowMgr;
 
 #include "config.h"
 

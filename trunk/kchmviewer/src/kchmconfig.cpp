@@ -170,7 +170,7 @@ bool KCHMConfig::save( )
 	stream << "kdeEnableRefresh=" << m_kdeEnableRefresh << "\n";
 	stream << "advUseInternalEditor=" << m_advUseInternalEditor << "\n";
 	stream << "advExternalEditorPath=" << m_advExternalEditorPath << "\n";
-
+	
 	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
 	
 	stream << "\n[history]\n";

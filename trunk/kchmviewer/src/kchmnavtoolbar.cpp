@@ -37,8 +37,8 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 	m_toolbarIconBackward = new QToolButton (iconBackward,
 											 i18n( "Move backward in history"),
 											 QString::null,
-											 this,
-											 SLOT( navigateBack() ),
+											 parent,
+											 SLOT( slotNavigateBack() ),
 											 this);
 	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move backward in browser history") );	
 
@@ -46,8 +46,8 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 	m_toolbarIconForward = new QToolButton (iconForward,
 											i18n( "Move forward in history"),
 											QString::null,
-											this,
-											SLOT( navigateForward() ),
+											parent,
+											SLOT( slotNavigateForward() ),
 											this);
 	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move forward in browser history") );	
 	
@@ -55,14 +55,10 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 	new QToolButton (iconHome,
 					 i18n( "Go to the home page"),
 					 QString::null,
-					 this,
-					 SLOT( navigateHome() ),
+					 parent,
+					 SLOT( slotNavigateHome() ),
 					 this);
 	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move to the home page") );	
-
-	// Initialize history storage
-	m_historyMaxSize = 25;
-	invalidate();
 }
 
 
@@ -70,74 +66,10 @@ KCHMNavToolbar::~KCHMNavToolbar()
 {
 }
 
-void KCHMNavToolbar::navigateForward( )
+void KCHMNavToolbar::updateIconStatus( bool enable_backward, bool enable_forward )
 {
-	if ( m_historyCurrentPos <  m_history.size() )
-	{
-		m_historyCurrentPos++;
-	
-		::mainWindow->openPage( m_history[m_historyCurrentPos].getUrl() );
-		::mainWindow->getViewWindow()->setScrollbarPosition( (
-				m_history[m_historyCurrentPos].getScrollPosition() ) );
-	}
-	
-	updateIconStatus();
-}
-
-void KCHMNavToolbar::navigateBack( )
-{
-	if ( m_historyCurrentPos > 0 )
-	{
-		m_historyCurrentPos--;
-	
-		::mainWindow->openPage( m_history[m_historyCurrentPos].getUrl() );
-		::mainWindow->getViewWindow()->setScrollbarPosition( (
-				m_history[m_historyCurrentPos].getScrollPosition() ) );
-	}
-	
-	updateIconStatus();
-}
-
-void KCHMNavToolbar::navigateHome( )
-{
-	::mainWindow->openPage( ::mainWindow->getChmFile()->HomePage(), true );
-}
-
-void KCHMNavToolbar::invalidate( )
-{
-	m_historyCurrentPos = 0;
-	m_history.clear();
-	
-	updateIconStatus();
-}
-
-void KCHMNavToolbar::addNavigationHistory( const QString & url, int scrollpos )
-{
-	// shred the 'forward' history
-	if ( m_historyCurrentPos < m_history.size() )
-		m_history.erase( m_history.at( m_historyCurrentPos ), m_history.end());
-
-	// do not grow the history if already max size
-	if ( m_history.size() >= m_historyMaxSize )
-		m_history.pop_front();
-
-	m_history.push_back( KCHMUrlHistory( url, scrollpos ) );
-	m_historyCurrentPos = m_history.size();
-			
-	updateIconStatus();
-		
-	// Dump history
-#if 0
-	qDebug("History dump (%d entries)", m_history.size() );
-	for ( unsigned int i = 0; i < m_history.size(); i++ )
-		qDebug("[%02d]: %s [%d]", i, m_history[i].getUrl().ascii(),  m_history[i].getScrollPosition());
-#endif
-}
-
-void KCHMNavToolbar::updateIconStatus( )
-{
-	m_toolbarIconBackward->setEnabled( m_historyCurrentPos > 0 );
-	m_toolbarIconForward->setEnabled ( m_historyCurrentPos < m_history.size() );
+	m_toolbarIconBackward->setEnabled( enable_backward );
+	m_toolbarIconForward->setEnabled ( enable_forward );
 }
 
 

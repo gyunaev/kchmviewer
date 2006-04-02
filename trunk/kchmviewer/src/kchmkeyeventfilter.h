@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004-2006 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
@@ -18,25 +18,31 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#ifndef INCLUDE_KCHMKEYEVENTFILTER_H
+#define INCLUDE_KCHMKEYEVENTFILTER_H
 
-#ifndef INCLUDE_KCHMNAVHISTORY_H
-#define INCLUDE_KCHMNAVHISTORY_H
+#include <qobject.h>
 
-#include "forwarddeclarations.h"
-
-class KCHMNavToolbar : public QToolBar
+/*!*
+ * This class must be installed as a global event handler. Its responsibility
+ * is to intercept keyboard events, and store the Shift and Ctrl keys state information.
+ * Unfortunately it seems to be the only way to do it in Qt.
+ */
+class KCHMKeyEventFilter : public QObject
 {
-Q_OBJECT
-public:
-	KCHMNavToolbar( KCHMMainWindow *parent );
-	~KCHMNavToolbar();
+	public:
+    	KCHMKeyEventFilter();
 
-public slots:
-	void	updateIconStatus( bool enable_backward, bool enable_forward );	
-
-private:
-	QToolButton	*	m_toolbarIconBackward;
-	QToolButton	*	m_toolbarIconForward;
+		bool	isShiftPressed() const	{	return m_shiftPressed;	}
+		bool	isCtrlPressed() const	{	return m_ctrlPressed;	}
+		
+	private:
+		bool	eventFilter( QObject *, QEvent *e );
+		
+		bool	m_shiftPressed;
+		bool	m_ctrlPressed;
 };
 
-#endif /* INCLUDE_KCHMNAVHISTORY_H */
+extern KCHMKeyEventFilter	gKeyEventFilter;
+
+#endif /* INCLUDE_KCHMKEYEVENTFILTER_H */

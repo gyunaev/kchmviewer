@@ -277,24 +277,24 @@ void KCHMSearchAndViewToolbar::search( bool search_forward )
 	if ( searchexpr.isEmpty() )
 		return;
 
-	::mainWindow->getViewWindow()->searchWord( searchexpr, search_forward, false );
+	::mainWindow->getCurrentBrowser()->searchWord( searchexpr, search_forward, false );
 }
 
 void KCHMSearchAndViewToolbar::onBtnFontInc( )
 {
-	::mainWindow->getViewWindow()->addZoomFactor(1);
+	::mainWindow->getCurrentBrowser()->addZoomFactor(1);
 }
 
 void KCHMSearchAndViewToolbar::onBtnFontDec( )
 {
-	::mainWindow->getViewWindow()->addZoomFactor(-1);
+	::mainWindow->getCurrentBrowser()->addZoomFactor(-1);
 }
 
 void KCHMSearchAndViewToolbar::onBtnViewSource( )
 {
 	QString text;
 
-	if ( !::mainWindow->getChmFile()->GetFileContentAsString (text, ::mainWindow->getViewWindow()->getOpenedPage()) )
+	if ( !::mainWindow->getChmFile()->GetFileContentAsString (text, ::mainWindow->getCurrentBrowser()->getOpenedPage()) )
 		return;
 
 	if ( appConfig.m_advUseInternalEditor )
@@ -302,7 +302,7 @@ void KCHMSearchAndViewToolbar::onBtnViewSource( )
 		QTextEdit * editor = new QTextEdit ( 0 );
 		editor->setTextFormat ( Qt::PlainText );
 		editor->setText (text);
-		editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->getViewWindow()->getOpenedPage() );
+		editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->getCurrentBrowser()->getOpenedPage() );
 		editor->resize (800, 600);
 		editor->show();
 	}
@@ -362,7 +362,7 @@ void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const KCHMTextEncoding::
 void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
 {
 	// Try to find current list item
-	KCHMMainTreeViewItem *current = ::mainWindow->getChmFile()->getTreeItem( ::mainWindow->getViewWindow()->getOpenedPage() );
+	KCHMMainTreeViewItem *current = ::mainWindow->getChmFile()->getTreeItem( ::mainWindow->getCurrentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
@@ -371,13 +371,13 @@ void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
 	lit++;
 	
 	if ( lit.current() )
-	::mainWindow->openPageWithHistory( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
+		::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
 void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
 {
 	// Try to find current list item
-	KCHMMainTreeViewItem *current = ::mainWindow->getChmFile()->getTreeItem( ::mainWindow->getViewWindow()->getOpenedPage() );
+	KCHMMainTreeViewItem *current = ::mainWindow->getChmFile()->getTreeItem( ::mainWindow->getCurrentBrowser()->getOpenedPage() );
 	
 	if ( !current )
 		return;
@@ -386,7 +386,7 @@ void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
 	lit--;
 	
 	if ( lit.current() )
-	::mainWindow->openPageWithHistory( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), true );
+		::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
 void KCHMSearchAndViewToolbar::onAccelFocusSearchField( )

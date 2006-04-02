@@ -25,12 +25,20 @@
 
 #include "kchmviewwindow.h"
 #include "kchmmainwindow.h"
+#include "kchmviewwindowmgr.h"
+#include "xchmfile.h"
+#include "kchmnavtoolbar.h"
 #include "filetype_handler.h"
 
 
-KCHMViewWindow::KCHMViewWindow( QWidget * )
+KCHMViewWindow::KCHMViewWindow( QTabWidget * parent )
 {
 	invalidate();
+	m_contextMenu = 0;
+	m_contextMenuLink = 0;
+	m_historyMaxSize = 25;
+	
+	m_parentTabWidget = parent;
 }
 
 KCHMViewWindow::~KCHMViewWindow()
@@ -41,6 +49,12 @@ void KCHMViewWindow::invalidate( )
 {
 	m_base_url = "/";
 	m_openedPage = QString::null;
+	m_newTabLinkKeeper = QString::null;
+
+	m_historyCurrentPos = 0;
+	m_history.clear();
+	
+	updateNavigationToolbar();
 }
 
 
@@ -149,7 +163,7 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 
 	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
 	// or will be loaded (for kio slave). We care only for path component.
-	if ( isNewChmURL( origurl, chmfile, page ) )
+	if ( isNewChmURL( newurl, chmfile, page ) )
 		newurl = page;
 
 	makeURLabsolute (newurl);
@@ -157,7 +171,10 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 	
 	if ( openPage (newurl) )
 	{
+		m_newTabLinkKeeper = QString::null;
 		m_openedPage = newurl;
+		
+		mainWindow->getViewWindowMgr()->setTabName( this );
 		return true;
 	}
 	
@@ -173,4 +190,135 @@ void KCHMViewWindow::handleStartPageAsImage( QString & link )
 	|| link.endsWith( ".png", false )
 	|| link.endsWith( ".bmp", false ) )
 		link += FILE_HANDLER_EXT;
+}
+
+
+KQPopupMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
+{
+	KQPopupMenu * contextMenu = new KQPopupMenu( parent );
+	
+	contextMenu->insertItem ( i18n( "&Copy"), ::mainWindow, SLOT(slotBrowserCopy()) );
+	contextMenu->insertItem ( i18n( "&Select all"), ::mainWindow, SLOT(slotBrowserSelectAll()) );
+		
+	return contextMenu;
+}
+
+
+KQPopupMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
+{
+	if ( link.isNull() )
+	{
+		// standard context menu
+		if ( !m_contextMenu )
+			m_contextMenu = createStandardContextMenu( parent );
+		
+		return m_contextMenu;
+	}
+	else
+	{
+		// Open in New Tab context menu
+		// standard context menu
+		if ( !m_contextMenuLink )
+		{
+			m_contextMenuLink = createStandardContextMenu( parent );
+			m_contextMenuLink->insertSeparator();
+			
+			m_contextMenuLink->insertItem ( i18n( "&Open this link in a new tab"), ::mainWindow, SLOT(slotOpenPageInNewTab()) );
+			
+			m_contextMenuLink->insertItem ( i18n( "&Open this link in a new background tab"), ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()) );
+		}
+		
+		// If we clicked on relative link, make sure we convert it to absolute right now,
+		// because later we will not have access to this view window variables
+		m_newTabLinkKeeper = link;
+		if ( m_newTabLinkKeeper[0] == '#' && !m_openedPage.isEmpty() )
+		{
+			// Clean up opened page URL
+			int pos = m_openedPage.find ('#');
+			QString fixedpath = pos == -1 ? m_openedPage : m_openedPage.left (pos);
+			m_newTabLinkKeeper = fixedpath + m_newTabLinkKeeper;
+		}
+		
+		m_newTabLinkKeeper = makeURLabsolute( m_newTabLinkKeeper, false );
+		return m_contextMenuLink;
+	}
+}
+
+QString KCHMViewWindow::getTitle() const
+{
+	QString title = ::mainWindow->getChmFile()->getTopicByUrl( m_openedPage );
+	
+	if ( title.isEmpty() )
+		title = m_openedPage;
+	
+	return title;
+}
+
+
+void KCHMViewWindow::navigateForward( )
+{
+	if ( m_historyCurrentPos <  (m_history.size() - 1) )
+	{
+		m_historyCurrentPos++;		
+		openPage( m_history[m_historyCurrentPos].getUrl() );
+		setScrollbarPosition( m_history[m_historyCurrentPos].getScrollPosition() );
+	}
+	
+	updateNavigationToolbar();
+}
+
+void KCHMViewWindow::navigateBack( )
+{
+	if ( m_historyCurrentPos > 0 )
+	{
+		// If we're on top of list, and pressing Back, the last page is still
+		// not in list - so add it.
+		if ( m_historyCurrentPos == m_history.size() )
+			m_history.push_back( KCHMUrlHistory( m_openedPage, getScrollbarPosition() ) );
+
+		m_historyCurrentPos--;
+	
+		openPage( m_history[m_historyCurrentPos].getUrl() );
+		setScrollbarPosition( m_history[m_historyCurrentPos].getScrollPosition() );
+	}
+	
+	updateNavigationToolbar();
+}
+
+void KCHMViewWindow::navigateHome( )
+{
+	openPage( ::mainWindow->getChmFile()->HomePage() );
+}
+
+void KCHMViewWindow::addNavigationHistory( const QString & url, int scrollpos )
+{
+	// shred the 'forward' history
+	if ( m_historyCurrentPos < m_history.size() )
+		m_history.erase( m_history.at( m_historyCurrentPos ), m_history.end());
+
+	// do not grow the history if already max size
+	if ( m_history.size() >= m_historyMaxSize )
+		m_history.pop_front();
+
+	m_history.push_back( KCHMUrlHistory( url, scrollpos ) );
+	m_historyCurrentPos = m_history.size();
+			
+	updateNavigationToolbar();
+}
+
+void KCHMViewWindow::updateNavigationToolbar( )
+{
+	// Dump navigation for debugging
+#if 0
+	qDebug("Navigation dump (%d entries, current pos %d)", m_history.size(), m_historyCurrentPos );
+	for ( unsigned int i = 0; i < m_history.size(); i++ )
+		qDebug("[%02d]: %s [%d]", i, m_history[i].getUrl().ascii(),  m_history[i].getScrollPosition());
+#endif
+	
+	if ( mainWindow )
+	{
+		mainWindow->getNavigationToolbar()->updateIconStatus( 
+					m_historyCurrentPos > 0,
+					m_historyCurrentPos < (m_history.size() - 1) );
+	}
 }

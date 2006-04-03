@@ -1,7 +1,8 @@
 #!/bin/sh
 
 CHMDIR="/home/tim/Distro/Ebooks/ /mnt/disk_d/Docs"
-KCHMVIEWER="../src/kchmviewer"
+#KCHMVIEWER="../src/kchmviewer"
+KCHMVIEWER="../build/src/kchmviewer"
 COMMONLOG="autotest.log"
 FATALLOG="fatal.log"
 CMDOPTIONS="--nocrashhandler"

@@ -197,8 +197,8 @@ KQPopupMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
 {
 	KQPopupMenu * contextMenu = new KQPopupMenu( parent );
 	
-	contextMenu->insertItem ( i18n( "&Copy"), ::mainWindow, SLOT(slotBrowserCopy()) );
-	contextMenu->insertItem ( i18n( "&Select all"), ::mainWindow, SLOT(slotBrowserSelectAll()) );
+	contextMenu->insertItem ( "&Copy", ::mainWindow, SLOT(slotBrowserCopy()) );
+	contextMenu->insertItem ( "&Select all", ::mainWindow, SLOT(slotBrowserSelectAll()) );
 		
 	return contextMenu;
 }
@@ -223,9 +223,9 @@ KQPopupMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * pa
 			m_contextMenuLink = createStandardContextMenu( parent );
 			m_contextMenuLink->insertSeparator();
 			
-			m_contextMenuLink->insertItem ( i18n( "&Open this link in a new tab"), ::mainWindow, SLOT(slotOpenPageInNewTab()) );
+			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()) );
 			
-			m_contextMenuLink->insertItem ( i18n( "&Open this link in a new background tab"), ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()) );
+			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()) );
 		}
 		
 		// If we clicked on relative link, make sure we convert it to absolute right now,

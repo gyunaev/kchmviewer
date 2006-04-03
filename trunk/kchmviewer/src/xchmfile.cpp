@@ -446,23 +446,18 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 				else
 				{
 					// New non-root entry
-					DEBUGPARSER(("<object>: '%s', indent %d, rootentry %08X\n", name.ascii(), real_indent, rootentry[real_indent-1]));
-					
 					if ( !rootentry[real_indent-1] )
 						qFatal("CHMFile::ParseAndFillTopicsTree: child entry \"%s\" indented as %d with no root entry!", name.ascii(), real_indent);
 
 					item = new KCHMMainTreeViewItem (rootentry[real_indent-1], lastchild[real_indent], name, url,  imagenum);
+					DEBUGPARSER(("<object>: '%s', indent %d, rootentry %08X, item %08X\n", name.ascii(), real_indent, rootentry[real_indent-1], item));
 				}
 
 				lastchild[real_indent] = item;
+				rootentry[real_indent] = item;
 
-				if ( real_indent == 0 || !rootentry[real_indent] )
-				{
-					rootentry[real_indent] = item;
-
-					if ( asIndex  )
-						rootentry[real_indent]->setOpen(true);
-				}
+				if ( asIndex  )
+					rootentry[real_indent]->setOpen(true);
 
 				// There are no 'titles' in index file
 				if ( add2treemap  )
@@ -561,6 +556,7 @@ bool CHMFile::ParseHhcAndFillTree (const QString& file, QListView *tree, bool as
 bool CHMFile::ParseAndFillTopicsTree(QListView *tree)
 {
 	KCHMShowWaitCursor wc;
+	m_treeUrlMap.clear();
 	return ParseHhcAndFillTree (m_topicsFile, tree, false);
 }
 

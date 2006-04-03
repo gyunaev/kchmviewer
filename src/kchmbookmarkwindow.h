@@ -35,6 +35,8 @@ public:
     KCHMBookmarkWindow(QWidget *parent = 0, const char *name = 0);
 	virtual ~KCHMBookmarkWindow() {};
 
+	void 	createMenu( KCHMMainWindow * parent );
+	
 	void	restoreSettings (const KCHMSettings::bookmark_saved_settings_t& settings);
 	void	saveSettings (KCHMSettings::bookmark_saved_settings_t& settings);
 	void	invalidate();
@@ -43,11 +45,13 @@ public slots:
 	void 	onAddBookmarkPressed ();
 	
 private slots:
+	void	onBookmarkSelected( int );
 	void	onDelBookmarkPressed( );
 	void	onEditBookmarkPressed( );
 	void	onDoubleClicked ( QListViewItem *, const QPoint &, int );
 
 private:
+	KQPopupMenu 			*	m_menuBookmarks;
 	KQListView				*	m_bookmarkList;
 	QString						m_bookmarkFileName;
 	bool						m_listChanged;

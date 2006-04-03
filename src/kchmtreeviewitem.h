@@ -88,12 +88,13 @@ private:
 class KCMBookmarkTreeViewItem : public QListViewItem
 {
 public:
-	KCMBookmarkTreeViewItem (QListView* parent, QString name, QString url, int scroll_y)
-		 : QListViewItem (parent, name), m_url(url), m_name(name), m_scroll_y(scroll_y) {};
+	KCMBookmarkTreeViewItem (QListView* parent, QString n, QString u, int s)
+		: QListViewItem (parent, n), url(u), name(n), scroll_y(s) {	menuid = 0; }
 
-	QString		m_url;
-	QString		m_name;
-	int			m_scroll_y;
+	QString		url;
+	QString		name;
+	int			scroll_y;
+	int			menuid;
 };
 
 #endif

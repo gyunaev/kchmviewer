@@ -45,7 +45,7 @@ KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, cons
 }
 #else
 KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
-	: QProgressDialog( labelText, cancelButtonText, totalSteps, creator, name, modal )
+	: QProgressDialog( labelText, cancelButtonText, totalSteps, creator, 0, false )
 {
 	setCaption( captionText );
 	setMinimumDuration( 1 );

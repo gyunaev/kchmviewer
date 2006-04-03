@@ -1,0 +1,727 @@
+# translation of kchmview.pot to Turkish
+# This file is put in the public domain.
+#
+# Furkan Duman <coderlord@gmail.com>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: tr\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-02-04 02:25-0800\n"
+"PO-Revision-Date: 2006-02-07 17:03+0200\n"
+"Last-Translator: Furkan Duman <coderlord@gmail.com>\n"
+"Language-Team: Turkish <tr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11\n"
+
+#. i18n: file kchmsetupdialog.ui line 24
+#: rc.cpp:3
+#, no-c-format
+msgid "KchmViewer settings"
+msgstr "KchmViewer ayarları"
+
+#. i18n: file kchmsetupdialog.ui line 54
+#: rc.cpp:6
+#, no-c-format
+msgid "General behavior"
+msgstr "Genel davranış"
+
+#. i18n: file kchmsetupdialog.ui line 73
+#: rc.cpp:9
+#, no-c-format
+msgid "If no arguments given on load"
+msgstr "Yüklemede hiçbir argüman verilmemişse"
+
+#. i18n: file kchmsetupdialog.ui line 84
+#: rc.cpp:12
+#, no-c-format
+msgid "Open the 'open CHM file' dialog"
+msgstr "'CHM dosyası aç' penceresini aç"
+
+#. i18n: file kchmsetupdialog.ui line 92
+#: rc.cpp:15
+#, no-c-format
+msgid "Open the &last used CHM file, if exist"
+msgstr "&Son kullanılan CHM dosyasını, dosya varsa aç"
+
+#. i18n: file kchmsetupdialog.ui line 95
+#: rc.cpp:18
+#, no-c-format
+msgid "Alt+L"
+msgstr "Alt+L"
+
+#. i18n: file kchmsetupdialog.ui line 105
+#: rc.cpp:21
+#, no-c-format
+msgid "History"
+msgstr "Geçmiş"
+
+#. i18n: file kchmsetupdialog.ui line 124
+#: rc.cpp:24
+#, no-c-format
+msgid "Store history information for"
+msgstr "Geçmiş bilgisini"
+
+#. i18n: file kchmsetupdialog.ui line 143
+#: rc.cpp:28
+#, no-c-format
+msgid "latest files"
+msgstr "dosya için sakla"
+
+#. i18n: file kchmsetupdialog.ui line 153
+#: rc.cpp:31
+#, no-c-format
+msgid "R&emember extra information for history files"
+msgstr "Geçmiş dosyaları için fazladan bilgiyi &hatırla"
+
+#. i18n: file kchmsetupdialog.ui line 156
+#: rc.cpp:34
+#, no-c-format
+msgid "Alt+E"
+msgstr "Alt+E"
+
+#. i18n: file kchmsetupdialog.ui line 159
+#: rc.cpp:37
+#, no-c-format
+msgid ""
+"Remembers the information about the files, which were opened. Remembers last "
+"opened page, search history, font size, bookmarks and so on."
+msgstr "Açılmış olan dosyalar hakkındaki bilgileri hatırlar. son açılan sayfa, arama geçmişi, yazı tipi büyüklüğü, yer imleri gibi bilgileri hatırlar."
+
+#. i18n: file kchmsetupdialog.ui line 171
+#: rc.cpp:40
+#, no-c-format
+msgid "CHM security settings"
+msgstr "CHM güvenlik seçenekleri"
+
+#. i18n: file kchmsetupdialog.ui line 182
+#: rc.cpp:43
+#, no-c-format
+msgid "When external link clicked"
+msgstr "Harici bağlantı tıklandığında"
+
+#. i18n: file kchmsetupdialog.ui line 193
+#: rc.cpp:46
+#, no-c-format
+msgid "Alwa&ys open it in external browser"
+msgstr "&Herzaman harici tarayıcıda aç"
+
+#. i18n: file kchmsetupdialog.ui line 196
+#: rc.cpp:49
+#, no-c-format
+msgid "Alt+Y"
+msgstr "Alt+Y"
+
+#. i18n: file kchmsetupdialog.ui line 204
+#. i18n: file kchmsetupdialog.ui line 244
+#: rc.cpp:52 rc.cpp:65
+#, no-c-format
+msgid "Ask for confirmation"
+msgstr "Onay bekle"
+
+#. i18n: file kchmsetupdialog.ui line 212
+#: rc.cpp:55
+#, no-c-format
+msgid "Do not open the link"
+msgstr "Bağlantıyı açma"
+
+#. i18n: file kchmsetupdialog.ui line 225
+#: rc.cpp:59
+#, no-c-format
+msgid "When link pointed to a new CHM file clicked"
+msgstr "Bağlantı, yeni tıklanan CHM dosyasını gösterdiğinde"
+
+#. i18n: file kchmsetupdialog.ui line 236
+#: rc.cpp:62
+#, no-c-format
+msgid "Always open a new CHM file"
+msgstr "Herzaman yeni bir CHM dosyası aç"
+
+#. i18n: file kchmsetupdialog.ui line 252
+#: rc.cpp:68
+#, no-c-format
+msgid "Do not open a new CHM file"
+msgstr "Yeni bir CHM dosyası açma"
+
+#. i18n: file kchmsetupdialog.ui line 266
+#: rc.cpp:71
+#, no-c-format
+msgid "Version-specific settings"
+msgstr "Sürüme özel seçenekler"
+
+#. i18n: file kchmsetupdialog.ui line 277
+#: rc.cpp:74
+#, no-c-format
+msgid "Qt version settings"
+msgstr "Qt sürüm seçenekleri"
+
+#. i18n: file kchmsetupdialog.ui line 299
+#: rc.cpp:77
+#, no-c-format
+msgid ""
+"Enter the path to the program, which will be used as a browser for external "
+"links.  A <i>%s</i> symbol will be replaced by the URL clicked."
+msgstr "Harici bağlantılarda tarayıcı olarak kullanılacak olan programın yolunu girin. Bir <i>%s</i> sembolü, tıklanan URL yerine geçecektir."
+
+#. i18n: file kchmsetupdialog.ui line 325
+#: rc.cpp:80
+#, no-c-format
+msgid "KDE version settings"
+msgstr "KDE sürüm seçenekleri"
+
+#. i18n: file kchmsetupdialog.ui line 336
+#: rc.cpp:83
+#, no-c-format
+msgid "To show HTML content, use"
+msgstr "HTML içeriği göstermek için kullanılan"
+
+#. i18n: file kchmsetupdialog.ui line 347
+#: rc.cpp:86
+#, no-c-format
+msgid "&QTextBrowser-based widget"
+msgstr "&QTextBrowser-tabanlı bileşen"
+
+#. i18n: file kchmsetupdialog.ui line 350
+#: rc.cpp:89
+#, no-c-format
+msgid "Alt+Q"
+msgstr "Alt+Q"
+
+#. i18n: file kchmsetupdialog.ui line 358
+#: rc.cpp:92
+#, no-c-format
+msgid "&KHTMLPart-based widget"
+msgstr "&KHTMLPart-tabanlı bileşen"
+
+#. i18n: file kchmsetupdialog.ui line 361
+#: rc.cpp:95
+#, no-c-format
+msgid "Alt+K"
+msgstr "Alt+K"
+
+#. i18n: file kchmsetupdialog.ui line 371
+#: rc.cpp:98
+#, no-c-format
+msgid "KHTMLPart security"
+msgstr "KHTMLPart güvenliği"
+
+#. i18n: file kchmsetupdialog.ui line 382
+#: rc.cpp:101
+#, no-c-format
+msgid "Enable Java&Script"
+msgstr "Java&Script'i etkinleştir"
+
+#. i18n: file kchmsetupdialog.ui line 385
+#: rc.cpp:104
+#, no-c-format
+msgid "Alt+S"
+msgstr "Alt+S"
+
+#. i18n: file kchmsetupdialog.ui line 393
+#: rc.cpp:107
+#, no-c-format
+msgid "Enable &plugins"
+msgstr "&Eklentileri etkinleştir"
+
+#. i18n: file kchmsetupdialog.ui line 396
+#: rc.cpp:110
+#, no-c-format
+msgid "Alt+P"
+msgstr "Alt+P"
+
+#. i18n: file kchmsetupdialog.ui line 404
+#: rc.cpp:113
+#, no-c-format
+msgid "Enable &Java"
+msgstr "&Java'yı etkinleştir"
+
+#. i18n: file kchmsetupdialog.ui line 407
+#: rc.cpp:116
+#, no-c-format
+msgid "Alt+J"
+msgstr "Alt+J"
+
+#. i18n: file kchmsetupdialog.ui line 415
+#: rc.cpp:119
+#, no-c-format
+msgid "Enable &refresh"
+msgstr "&Tazelemeyi etkinleştir"
+
+#. i18n: file kchmsetupdialog.ui line 418
+#: rc.cpp:122
+#, no-c-format
+msgid "Alt+R"
+msgstr "Alt+R"
+
+#. i18n: file kchmsetupdialog.ui line 432
+#: rc.cpp:125
+#, no-c-format
+msgid "Advanced"
+msgstr "Gelişmiş"
+
+#. i18n: file kchmsetupdialog.ui line 443
+#: rc.cpp:128
+#, no-c-format
+msgid "View HTML source command uses"
+msgstr "HTML kaynağını görüntüle komutu için kullanılan"
+
+#. i18n: file kchmsetupdialog.ui line 454
+#: rc.cpp:131
+#, no-c-format
+msgid "Built-in HTML source viewer"
+msgstr "İçsel HTML kaynak görüntüleyici"
+
+#. i18n: file kchmsetupdialog.ui line 465
+#: rc.cpp:135
+#, no-c-format
+msgid "E&xternal program, specified below"
+msgstr "Aşağıda tanımlanan, &harici program"
+
+#. i18n: file kchmsetupdialog.ui line 468
+#: rc.cpp:138
+#, no-c-format
+msgid "Alt+X"
+msgstr "Alt+X"
+
+#. i18n: file kchmsetupdialog.ui line 484
+#: rc.cpp:141
+#, no-c-format
+msgid "External program:"
+msgstr "Harici program:"
+
+#. i18n: file kchmsetupdialog.ui line 521
+#: rc.cpp:147
+#, no-c-format
+msgid "F1"
+msgstr "F1"
+
+#: _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr "Furkan Duman"
+
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr "coderlord@gmail.com"
+
+#: kchmbookmarkwindow.cpp:39
+msgid "&Add"
+msgstr "&Ekle"
+
+#: kchmbookmarkwindow.cpp:41
+msgid "&Del"
+msgstr "&Sil"
+
+#: kchmbookmarkwindow.cpp:64
+msgid "%1 - add a bookmark"
+msgstr "%1 - bir yer imi ekle"
+
+#: kchmbookmarkwindow.cpp:65 kchmbookmarkwindow.cpp:101
+msgid "Enter the name for this bookmark:"
+msgstr "Bu yer imi için isim girin:"
+
+#: kchmbookmarkwindow.cpp:100
+msgid "%1 - edit the bookmark name"
+msgstr "%1 - yer imi adını düzenle"
+
+#: kchmdialogchooseurlfromlist.cpp:34
+msgid "Topics"
+msgstr "Başlıklar"
+
+#: kchmdialogchooseurlfromlist.cpp:39
+msgid "Please select one of the topics below:"
+msgstr "Lütfen aşağıdaki başlıklardan birini seçin:"
+
+#: kchmdialogchooseurlfromlist.cpp:43
+msgid "&Ok"
+msgstr "&Tamam"
+
+#: kchmmainwindow.cpp:122
+msgid "*.chm|Compressed Help Manual (*.chm)"
+msgstr "*.chm|Sıkıştırılmış Yardım El Kitabı (*.chm)"
+
+#: kchmmainwindow.cpp:124
+msgid "Compressed Help Manual (*.chm)"
+msgstr "Sıkıştırılmış Yardım El Kitabı (*.chm)"
+
+#: kchmmainwindow.cpp:134
+msgid "Loading aborted"
+msgstr "Yükleme iptal edildi"
+
+#: kchmmainwindow.cpp:231
+msgid "%1 - failed to load the chm file"
+msgstr "%1 - chm dosyası yüklemesi başarısız"
+
+#: kchmmainwindow.cpp:232
+msgid "Unable to load the chm file %1"
+msgstr "%1 chm dosyası yüklenemiyor"
+
+#: kchmmainwindow.cpp:242
+msgid "Could not load file %1"
+msgstr "%1 dosyası yüklenemedi"
+
+#: kchmmainwindow.cpp:258
+msgid "About %1"
+msgstr "%1 hakkında"
+
+#: kchmmainwindow.cpp:259
+msgid ""
+"%1 version %2\n"
+"\n"
+"Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
+"www.kchmviewer.net\n"
+"\n"
+"Licensed under GNU GPL license.\n"
+"\n"
+"Please try our another project, www.transientmail.com - temporary e-mail "
+"address, which expires automatically."
+msgstr ""
+"%1 version %2\n"
+"\n"
+"Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
+"www.kchmviewer.net\n"
+"\n"
+"GNU GPL lisansı ile lisanslanmıştır.\n"
+"\n"
+"Lütfen, www.transientmail.com da, otomatik olarak kullanımı biten, geçici e-posta projemizi de deneyin."
+
+#: kchmmainwindow.cpp:330
+msgid "%1 - remote link clicked - %2"
+msgstr "%1 - uzak bağlantı tıklandı - %2"
+
+#: kchmmainwindow.cpp:331
+msgid ""
+"A remote link %1 will start the external program to open it.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"%1 uzak bağlantısı açmak için harici programı başlatacak.\n"
+"\n"
+"Devam etmek istiyor musunuz?"
+
+#: kchmmainwindow.cpp:332 kchmmainwindow.cpp:368
+msgid "&Yes"
+msgstr "&Evet"
+
+#: kchmmainwindow.cpp:332 kchmmainwindow.cpp:368
+msgid "&No"
+msgstr "&Hayır"
+
+#: kchmmainwindow.cpp:356
+msgid "%1 - JavsScript link clicked"
+msgstr "%1 - JavaScript bağlantısı tıklandı"
+
+#: kchmmainwindow.cpp:357
+msgid ""
+"You have clicked a JavaScript link.\n"
+"To prevent security-related issues JavaScript URLs are disabled in CHM files."
+msgstr ""
+"Bir JavaScript bağlantısına tıkladınız.\n"
+"Güvenlik sorunlarını önlemek için CHM dosyalarındaki JavaScript URL'leri etkisizleştirilmiştir."
+
+#: kchmmainwindow.cpp:366
+msgid "%1 - link to a new CHM file clicked"
+msgstr "%1 - tıklanan yeni bir CHM dosyasına bağlantı"
+
+#: kchmmainwindow.cpp:367
+msgid ""
+"You have clicked a link, which leads to a new CHM file %1.\n"
+"The current file will be closed.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Yeni bir %1 CHM dosyasını gösteren bir bağlantıya tıkladınız.\n"
+"Şimdiki dosya kapatılacaktır.\n"
+"\n"
+"Devam etmek istiyor musunuz?"
+
+#: kchmmainwindow.cpp:428
+msgid "File Operations"
+msgstr "Dosya İşlemleri"
+
+#: kchmmainwindow.cpp:432
+msgid "Open File"
+msgstr "Dosya Aç"
+
+#: kchmmainwindow.cpp:438
+msgid "Click this button to open an existing chm file."
+msgstr "Varolan bir chm dosyasını açmak için bu düğmeye tıklayın."
+
+#: kchmmainwindow.cpp:443
+msgid "Print File"
+msgstr "Dosyayı Yazdır"
+
+#: kchmmainwindow.cpp:449
+msgid "Click this button to print the current page"
+msgstr "Şimdiki sayfayı yazdırmak için bu düğmeyi tıklayın"
+
+#: kchmmainwindow.cpp:453
+msgid "Navigation"
+msgstr "Dolaşma"
+
+#: kchmmainwindow.cpp:457
+msgid "Move backward in history"
+msgstr "Geçmişte geriye git"
+
+#: kchmmainwindow.cpp:462
+msgid "Click this button to move backward in browser history"
+msgstr "Tarayıcı geçmişinde geriye gitmek için bu düğmeye tıklayın"
+
+#: kchmmainwindow.cpp:466
+msgid "Move forward in history"
+msgstr "Geçmişte ileriye git"
+
+#: kchmmainwindow.cpp:471
+msgid "Click this button to move forward in browser history"
+msgstr "Tarayıcı geçmişinde ileriye gitmek için bu düğmeye tıklayın"
+
+#: kchmmainwindow.cpp:475
+msgid "Go to the home page"
+msgstr "Ana sayfaya git"
+
+#: kchmmainwindow.cpp:480
+msgid "Click this button to move to the home page"
+msgstr "Ana sayfaya gitmek için bu düğmeye tıklayın"
+
+#: kchmmainwindow.cpp:498
+msgid "&Recent files"
+msgstr "&Sık kullanılan dosyalar"
+
+#: kchmmainwindow.cpp:507 kchmviewwindow_khtmlpart.cpp:163
+msgid "&Select all"
+msgstr "&Hepsini seç"
+
+#: kchmmainwindow.cpp:515
+msgid "&Setup"
+msgstr "&Ayarlar"
+
+#: kchmmainwindow.cpp:516
+msgid "&Change settings..."
+msgstr "Ayarları &değiştir..."
+
+#: kchmmainwindow.cpp:522
+msgid "About &Qt"
+msgstr "Q&t hakkında"
+
+#: kchmmainwindow.cpp:524
+msgid "What's &This"
+msgstr "Bu &Nedir?"
+
+#: kchmmainwindow.cpp:893
+msgid "Index"
+msgstr "Fihrist"
+
+#: kchmmainwindow.cpp:916
+msgid "Search"
+msgstr "Arama"
+
+#: kchmmainwindow.cpp:972
+msgid "Could not locate opened topic in content window"
+msgstr "İçerik penceresinde açılan başlığa konumlanamadı"
+
+#: kchmsearchtoolbar.cpp:45
+msgid "Find in page"
+msgstr "Sayfada bul"
+
+#: kchmsearchtoolbar.cpp:62
+msgid "Enter here the text to search in the current page."
+msgstr "Şimdiki sayfada aranacak metni buraya girin."
+
+#: kchmsearchtoolbar.cpp:69
+msgid "Previous search result"
+msgstr "Önceki arama sonucu"
+
+#: kchmsearchtoolbar.cpp:74
+msgid "Click this button to find previous search result."
+msgstr "Önceki arama sonucunu bulmak için buraya tıklayın."
+
+#: kchmsearchtoolbar.cpp:78
+msgid "Next search result"
+msgstr "Sonraki arama sonucu"
+
+#: kchmsearchtoolbar.cpp:83
+msgid "Click this button to find next search result."
+msgstr "Sonraki arama sonucunu bulmak için buraya tıklayın."
+
+#: kchmsearchtoolbar.cpp:87
+msgid "Locate this topic in content window"
+msgstr "İçerik penceresinde bu başlığa konumlan"
+
+#: kchmsearchtoolbar.cpp:92
+msgid "Click this button to find current topic in the content window, and open it."
+msgstr "İçerik penceresindeki şimdiki başlığı bulmak ve açmak için bu düğmeye tıklayın."
+
+#: kchmsearchtoolbar.cpp:96
+msgid "Increase font size"
+msgstr "Yazı tipi boyutunu artır"
+
+#: kchmsearchtoolbar.cpp:101
+msgid "Click this button to increase the font size."
+msgstr "Yazi tipi boyutunu artır için bu düğmeye tıklayın."
+
+#: kchmsearchtoolbar.cpp:105
+msgid "Decrease font size"
+msgstr "Yazı tipi boyutunu azalt"
+
+#: kchmsearchtoolbar.cpp:110
+msgid "Click this button to decrease the font size."
+msgstr "Yazı tipi boyutunu azaltmak için bu düğmeye tıklayın."
+
+#: kchmsearchtoolbar.cpp:114
+msgid "View HTML source"
+msgstr "HTML kaynağını görüntüle"
+
+#: kchmsearchtoolbar.cpp:119
+msgid "Click this button to open a separate window with the page HTML source."
+msgstr "Ayrı bir pencerede sayfanın HTML kaynağını açmak için bu düğmeye tıklayın."
+
+#: kchmsearchtoolbar.cpp:123
+msgid "Add to bookmarks"
+msgstr "Yer imlerine ekle"
+
+#: kchmsearchtoolbar.cpp:128
+msgid "Click this button to add the current page to the bookmarks list."
+msgstr "Şimdiki sayfayı yer imleri listesine eklemek için bu düğmeye tıklayın."
+
+#: kchmsearchtoolbar.cpp:131
+msgid "Prev page in TOC"
+msgstr "İçerik tablosunda önceki sayfa"
+
+#: kchmsearchtoolbar.cpp:136
+msgid "Click this button to go to previous page in Table Of Content."
+msgstr "İçerik tablosunda önceki sayfaya gitmek için bu düğmeye tıklayın."
+
+#: kchmsearchtoolbar.cpp:139
+msgid "Next page in TOC"
+msgstr "İçerik tablosunda sonraki sayfa"
+
+#: kchmsearchtoolbar.cpp:144
+msgid "Click this button to go to next page in Table of Content."
+msgstr "İçerik tablosunda sonraki sayfaya gitmek için bu düğmeye tıklayın."
+
+#: kchmsearchtoolbar.cpp:150
+msgid "&Increase font"
+msgstr "Yazı tipini &büyüt"
+
+#: kchmsearchtoolbar.cpp:151
+msgid "&Decrease font"
+msgstr "Yazı tipini &küçült"
+
+#: kchmsearchtoolbar.cpp:152
+msgid "&View HTML source"
+msgstr "HTML kaynağını &görüntüle"
+
+#: kchmsearchtoolbar.cpp:155
+msgid "&Bookmark this page"
+msgstr "Bu sayfayı &yer imlerine ekle"
+
+#: kchmsearchtoolbar.cpp:158
+msgid "&Full screen"
+msgstr "&Tam ekran"
+
+#: kchmsearchtoolbar.cpp:160
+msgid "&Show contents window"
+msgstr "İçerik penceresini &göster"
+
+#: kchmsearchtoolbar.cpp:162
+msgid "&Locate in contents window"
+msgstr "İçerik penceresinde &konumlan"
+
+#: kchmsearchtoolbar.cpp:215
+msgid "&Set language"
+msgstr "Dili &ayarla"
+
+#: kchmsearchtoolbar.cpp:238
+msgid "&Set codepage"
+msgstr "Kod sayfasını &ayarla"
+
+#: kchmsearchwindow.cpp:36
+msgid "Type in word(s) to search for:"
+msgstr "Arama yapılacak kelimeleri yazın:"
+
+#: kchmsearchwindow.cpp:51
+msgid "Title"
+msgstr "Başlık"
+
+#: kchmsearchwindow.cpp:52
+msgid "Location"
+msgstr "Konum"
+
+#: kchmsearchwindow.cpp:60
+msgid "Match similar words"
+msgstr "Benzer kelimeleri eşleştir"
+
+#: kchmsearchwindow.cpp:93
+msgid "Search returned %1 result(s)"
+msgstr "Arama %1 sonuç döndürdü"
+
+#: kchmsearchwindow.cpp:96
+msgid "Search returned no results"
+msgstr "Arama sonuç döndürmedi"
+
+#: kchmsearchwindow.cpp:99 kchmviewwindow_qtextbrowser.cpp:216
+msgid "Search failed"
+msgstr "Arama başarısız"
+
+#: kchmsearchwindow.cpp:395
+msgid "How to use search"
+msgstr "Arama nasıl kullanılır?"
+
+#: kchmsearchwindow.cpp:396
+msgid ""
+"The search query can contain a few prefixes.\n"
+"A set of words inside the quote marks mean that you are searching for exact "
+"phrase.\n"
+"A word with minus sign means that it should be absent in the search result.\n"
+"A word with plus mark or without any mark means that it must be present in "
+"the search result.\n"
+"\n"
+"Note that only letters and digits are indexed.\n"
+"You cannot search for symbols other than underscope, and these symbols will "
+"be removed from the search query.\n"
+"For example, search for 'C' will give the same result as searching for 'C++'."
+msgstr ""
+"Arama sorgusu bir kaç ön ek içerebilir.\n"
+"Alıntı işaretlerinin içindeki kelime grubu, tam olarak yazdığınız şeyi aradığınız anlamındadır.\n"
+"Önünde eksi işareti olan bir kelime, arama sonuçları içinde bu kelimenin olmamasını istediğiniz anlamındadır.\n"
+"\n"
+"Sadece harfler ve sayılar indekslenir.\n"
+"Bunların dışındaki sembolleri arayamazsınız ve bu gibi semboller arama sonucundan çıkarılacaktır.\n"
+"Örnek olarak, 'C' için yapılan bir arama 'C++' için yapılan bir arama ile aynı sonucu verecektir."
+
+#: kchmviewwindow_khtmlpart.cpp:161
+msgid "Editor"
+msgstr "Düzen"
+
+#: kchmviewwindow_qtextbrowser.cpp:176
+msgid "Printing (page %1)..."
+msgstr "Yazdırılıyor (%1. sayfa)..."
+
+#: kchmviewwindow_qtextbrowser.cpp:184
+msgid "Printing completed"
+msgstr "Yazdırma tamamlandı"
+
+#: kchmviewwindow_qtextbrowser.cpp:188
+msgid "Printing aborted"
+msgstr "Yazdırma iptal edildi"
+
+#: kchmviewwindow_qtextbrowser.cpp:194
+msgid "%1 - could not print"
+msgstr "%1 - yazdırılamadı"
+
+#: kchmviewwindow_qtextbrowser.cpp:195
+msgid ""
+"Could not print.\n"
+"Your Qt library has been compiled without printing support"
+msgstr ""
+"Yazdırılamadı.\n"
+"Qt kütüphaneniz yazdırma desteği ile derlenmemiş"
+
+#: main.cpp:50
+msgid "CHM file viewer"
+msgstr "CHM dosya görüntüleyici"
+

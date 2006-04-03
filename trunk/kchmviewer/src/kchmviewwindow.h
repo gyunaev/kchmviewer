@@ -131,6 +131,7 @@ protected:
 		
 			const QString&  getUrl() const { return url; }
 			int 			getScrollPosition() const { return scrollbarpos; }
+			void			setScrollPosition( int pos ) { scrollbarpos = pos; }
 			
 		private:
 			QString  	url;

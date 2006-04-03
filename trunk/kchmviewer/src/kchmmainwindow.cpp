@@ -507,7 +507,10 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	// KCHMSearchToolbar also adds 'view' menu
 	m_searchToolbar = new KCHMSearchAndViewToolbar (this);
 	
-	// ViewWindowMgr also adds 'Window' menu
+	// m_bookmarkWindow adds 'Bookmarks' menu
+	m_bookmarkWindow->createMenu( this );
+	
+	// m_viewWindowMgr creates 'Window' menu
 	m_viewWindowMgr->createMenu( this );
 	
 	KQPopupMenu * settings = new KQPopupMenu( this );

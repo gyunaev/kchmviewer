@@ -255,13 +255,24 @@ QString KCHMViewWindow::getTitle() const
 }
 
 
-void KCHMViewWindow::navigateForward( )
+void KCHMViewWindow::navigateForward()
 {
-	if ( m_historyCurrentPos <  (m_history.size() - 1) )
+	if ( m_historyCurrentPos < m_history.size() )
 	{
 		m_historyCurrentPos++;		
-		openPage( m_history[m_historyCurrentPos].getUrl() );
+		::mainWindow->openPage( m_history[m_historyCurrentPos].getUrl() );
 		setScrollbarPosition( m_history[m_historyCurrentPos].getScrollPosition() );
+		
+		// By default navigation starts with empty array, and a new entry is added when
+		// you change the current page (or it may not be added). So to have the whole system
+		// worked, the m_historyCurrentPos should never be m_history.size() - 1, it should be
+		// either greater or lesser.
+		// 
+		// This is a dirty hack - but the whole navigation system now looks to me like
+		// it was written by some drunk monkey - which is probably not far from The Real Truth.
+		// Shame on me - Tim.
+		if ( m_historyCurrentPos == (m_history.size() - 1) )
+			m_historyCurrentPos++;
 	}
 	
 	updateNavigationToolbar();
@@ -272,13 +283,22 @@ void KCHMViewWindow::navigateBack( )
 	if ( m_historyCurrentPos > 0 )
 	{
 		// If we're on top of list, and pressing Back, the last page is still
-		// not in list - so add it.
+		// not in list - so add it, if it is not still here
 		if ( m_historyCurrentPos == m_history.size() )
-			m_history.push_back( KCHMUrlHistory( m_openedPage, getScrollbarPosition() ) );
+		{
+			if ( m_history[m_historyCurrentPos-1].getUrl() != m_openedPage )
+				m_history.push_back( KCHMUrlHistory( m_openedPage, getScrollbarPosition() ) );
+			else
+			{
+				// part 2 of the navigation hack - see navigateForward() comment
+				m_history[m_historyCurrentPos-1].setScrollPosition( getScrollbarPosition() );
+				m_historyCurrentPos--;
+			}
+		}
 
 		m_historyCurrentPos--;
 	
-		openPage( m_history[m_historyCurrentPos].getUrl() );
+		::mainWindow->openPage( m_history[m_historyCurrentPos].getUrl() );
 		setScrollbarPosition( m_history[m_historyCurrentPos].getScrollPosition() );
 	}
 	
@@ -287,7 +307,7 @@ void KCHMViewWindow::navigateBack( )
 
 void KCHMViewWindow::navigateHome( )
 {
-	openPage( ::mainWindow->getChmFile()->HomePage() );
+	::mainWindow->openPage( ::mainWindow->getChmFile()->HomePage() );
 }
 
 void KCHMViewWindow::addNavigationHistory( const QString & url, int scrollpos )
@@ -310,7 +330,7 @@ void KCHMViewWindow::updateNavigationToolbar( )
 {
 	// Dump navigation for debugging
 #if 0
-	qDebug("Navigation dump (%d entries, current pos %d)", m_history.size(), m_historyCurrentPos );
+	qDebug("\nNavigation dump (%d entries, current pos %d)", m_history.size(), m_historyCurrentPos );
 	for ( unsigned int i = 0; i < m_history.size(); i++ )
 		qDebug("[%02d]: %s [%d]", i, m_history[i].getUrl().ascii(),  m_history[i].getScrollPosition());
 #endif

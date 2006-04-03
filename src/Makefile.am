@@ -9,6 +9,8 @@ kchmviewer_SOURCES = iconstorage.cpp kchmbookmarkwindow.cpp kchmconfig.cpp \
 # set the include path found by configure
 INCLUDES = $(QT_INCLUDES) $(CHM_INCLUDES) $(KDE_INCLUDES)
 
+SUBDIRS = pics
+
 # the library search path.
 kchmviewer_LDADD = $(CHM_LIBS) $(LIB_QT) $(LIB_KDEUI) $(LIB_KHTML)
 kchmviewer_LDFLAGS = $(QT_LDFLAGS) $(KDE_LDFLAGS) -L../chmlib/ -L../kio-msits

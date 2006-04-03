@@ -23,6 +23,7 @@
 
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
+#include "kchmlistitemtooltip.h"
 #include "xchmfile.h"
 
 //#define DEBUG_SEARCH(A)	qDebug A
@@ -62,6 +63,8 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	layout->addSpacing (10);
 	layout->addWidget (m_searchList);
 	layout->addWidget (m_matchSimilarWords);
+	
+	new KCHMListItemTooltip( m_searchList );
 }
 
 void KCHMSearchWindow::invalidate( )

@@ -18,31 +18,30 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef FORWARD_DECLARATIONS_H
-#define FORWARD_DECLARATIONS_H
 
-class QComboBox;
-class QListView;
-class QListBox;
-class QListViewItem;
-class QListViewItemIterator;
-class QLineEdit;
-class QTabWidget;
-class QToolButton;
- 
-class KCHMMainWindow;
-class KCHMViewWindow;
-class KCHMIndexWindow;
-class KCHMSearchWindow;
-class KCHMBookmarkWindow;
-class CHMFile;
-class KCHMSettings;
-class KCHMSearchAndViewToolbar;
-class KCHMNavToolbar;
-class KCHMViewWindow;
-class KCHMViewWindowMgr;
-class KCHMContentsWindow;
+#include "kde-qt.h"
+#include "kchmcontentswindow.h"
+#include "kchmlistitemtooltip.h"
 
-#include "config.h"
 
-#endif /* FORWARD_DECLARATIONS_H */
+KCHMContentsWindow::KCHMContentsWindow(QWidget *parent, const char *name)
+ : KQListView(parent, name)
+{
+	addColumn( "Contents" ); // no i18n - this column is hidden
+	setSorting(-1);
+	setFocus();
+	setRootIsDecorated(true);
+	header()->hide();
+	setShowToolTips( false );
+	
+	//new KCHMContentsWindowToolTip( this );
+	connect( this, SIGNAL( onItem ( QListViewItem * ) ), this, SLOT( slotOnItem( QListViewItem * ) ) );
+	
+	new KCHMListItemTooltip( this );
+}
+
+KCHMContentsWindow::~KCHMContentsWindow()
+{
+}
+
+#include "kchmcontentswindow.moc"

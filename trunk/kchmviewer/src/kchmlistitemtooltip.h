@@ -18,31 +18,54 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef FORWARD_DECLARATIONS_H
-#define FORWARD_DECLARATIONS_H
+#ifndef INCLUDE_KCHMLISTITEMTOOLTIP_H
+#define INCLUDE_KCHMLISTITEMTOOLTIP_H
 
-class QComboBox;
-class QListView;
-class QListBox;
-class QListViewItem;
-class QListViewItemIterator;
-class QLineEdit;
-class QTabWidget;
-class QToolButton;
- 
-class KCHMMainWindow;
-class KCHMViewWindow;
-class KCHMIndexWindow;
-class KCHMSearchWindow;
-class KCHMBookmarkWindow;
-class CHMFile;
-class KCHMSettings;
-class KCHMSearchAndViewToolbar;
-class KCHMNavToolbar;
-class KCHMViewWindow;
-class KCHMViewWindowMgr;
-class KCHMContentsWindow;
+#include "kde-qt.h"
+#include "forwarddeclarations.h"
 
-#include "config.h"
+/**
+@author tim
+*/
+class KCHMListItemTooltip : public QToolTip
+{
+	public:
+    	KCHMListItemTooltip( KQListView *parent )
+			: QToolTip( parent->viewport() ) { m_pParent = parent; }
+		
+		virtual ~KCHMListItemTooltip()	{};
 
-#endif /* FORWARD_DECLARATIONS_H */
+		void maybeTip ( const QPoint & pos )
+		{
+			QListViewItem *it = m_pParent->itemAt( pos );
+
+			if ( !it )
+				return;
+			
+      		// Get the section the mouse is in
+			int section = m_pParent->header()->sectionAt (pos.x ());
+			
+			// Get the rect of the whole item (the row for the tip)
+			QRect itemRect = m_pParent->itemRect( it );
+
+			// Get the rect of the whole section (the column for the tip)
+			QRect headerRect = m_pParent->header ()->sectionRect (section);
+				
+      		// "Intersect" row and column to get exact rect for the tip
+			QRect destRect( headerRect.left (), itemRect.top(), headerRect.width(), itemRect.height() );
+
+			int item_width = it->width( m_pParent->fontMetrics(), m_pParent, 0 )
+					+ it->depth() * m_pParent->treeStepSize();
+			
+			if ( m_pParent->rootIsDecorated() )
+				item_width += m_pParent->treeStepSize();
+			
+			if ( item_width > m_pParent->viewport()->width() )
+				tip( destRect, it->text(0) );
+		}
+	
+	private:
+		KQListView *	m_pParent;
+};
+
+#endif /* INCLUDE_KCHMLISTITEMTOOLTIP_H */

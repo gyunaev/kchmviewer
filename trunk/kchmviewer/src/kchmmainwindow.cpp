@@ -44,6 +44,8 @@
 #include "kchmviewwindow.h"
 #include "kchmviewwindowmgr.h"
 #include "kchmkeyeventfilter.h"
+#include "kchmcontentswindow.h"
+
 
 #if !defined (USE_KDE)
 	#include "kqrunprocess.h"
@@ -813,14 +815,8 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 	{
 		if ( !m_contentsWindow )
 		{
-			m_contentsWindow = new KQListView (m_tabWidget);
-			m_contentsWindow->addColumn( "Contents" ); // no i18n - this column is hidden
-			m_contentsWindow->setSorting(-1);
-			m_contentsWindow->setFocus();
-			m_contentsWindow->setRootIsDecorated(true);
-			m_contentsWindow->header()->hide();
-			m_contentsWindow->setShowToolTips(true);
-
+			m_contentsWindow = new KCHMContentsWindow( m_tabWidget );
+			
 			// Handle clicking on m_contentsWindow element
 			connect( m_contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotOnTreeClicked( QListViewItem* ) ) );
 			

@@ -46,7 +46,7 @@ private:
 	virtual void showEvent ( QShowEvent * );
 	
 	QLineEdit 	*	m_indexFinder;
-	QListView	*	m_indexList;
+	KQListView	*	m_indexList;
 	QListViewItem * m_lastSelectedItem;
 	bool			m_indexListFilled;
 };

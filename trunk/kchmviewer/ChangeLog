@@ -1,3 +1,6 @@
+2006-04-02 tim <gyunaev@ulduzsoft.com>
+    - A tooltip is now shows the full text in all the tree and list views if truncated on screen.
+    
 2006-04-01 tim <gyunaev@ulduzsoft.com>
     - Added tab browsing.
 	- Added right-click content menu to open pages in a new tab.

@@ -540,6 +540,8 @@ void KCHMMainWindow::setTextEncoding( const KCHMTextEncoding::text_encoding_t * 
 	QString url = getCurrentBrowser()->getOpenedPage();
 	refreshCurrentBrowser();
 	
+	// Regenerate the content and index trees
+	
 	getCurrentBrowser()->openUrl ( url );
 }
 

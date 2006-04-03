@@ -22,6 +22,7 @@
 #include "kchmbookmarkwindow.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
+#include "kchmlistitemtooltip.h"
 #include "xchmfile.h"
 
 KCHMBookmarkWindow::KCHMBookmarkWindow(QWidget *parent, const char *name)
@@ -30,11 +31,13 @@ KCHMBookmarkWindow::KCHMBookmarkWindow(QWidget *parent, const char *name)
 	QVBoxLayout * layout = new QVBoxLayout (this);
 	layout->setMargin (5);
 
-	m_bookmarkList = new QListView (this);
+	m_bookmarkList = new KQListView (this);
 	m_bookmarkList->addColumn( "bookmark" ); // no need to i18n - the column is hidden
 	m_bookmarkList->header()->hide();
 	layout->addWidget (m_bookmarkList);
 
+	new KCHMListItemTooltip( m_bookmarkList );
+	
 	QHBoxLayout * hlayout = new QHBoxLayout (layout);
 	QPushButton * add = new QPushButton ( i18n( "&Add" ), this);
 	QPushButton * edit = new QPushButton ( i18n( "&Edit" ), this);
@@ -44,8 +47,6 @@ KCHMBookmarkWindow::KCHMBookmarkWindow(QWidget *parent, const char *name)
 	hlayout->addWidget (edit);
 	hlayout->addWidget (del);
 	
-	//layout->addLayout (hlayout);
-
 	connect( m_bookmarkList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
 	
 	connect( add, SIGNAL( clicked () ), this, SLOT( onAddBookmarkPressed( ) ) );

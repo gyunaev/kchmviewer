@@ -1,7 +1,14 @@
+2006-04-01 tim <gyunaev@ulduzsoft.com>
+    - Added tab browsing.
+	- Added right-click content menu to open pages in a new tab.
+	- Control-click on link or table of contents opens a page in a new tab in background.
+	- Shift-click on link or table of contents opens a page in a new tab in foreground.
+
 2006-03-31 tim <gyunaev@ulduzsoft.com>
     - 'Setup' menu renamed to 'Settings'
     - Fixed various navigation errors when 'Locate' button didn't locate the appropriate topic.
     - Fixed forward navigation, and saved scroll position.
+    - Added tab browsing.
 
 2006-02-07 tim <gyunaev@ulduzsoft.com>
     - Navigation history rewritten, now it stores text position too.

@@ -18,31 +18,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef FORWARD_DECLARATIONS_H
-#define FORWARD_DECLARATIONS_H
+#ifndef INCLUDE_KCHMCONTENTSWINDOW_H
+#define INCLUDE_KCHMCONTENTSWINDOW_H
 
-class QComboBox;
-class QListView;
-class QListBox;
-class QListViewItem;
-class QListViewItemIterator;
-class QLineEdit;
-class QTabWidget;
-class QToolButton;
- 
-class KCHMMainWindow;
-class KCHMViewWindow;
-class KCHMIndexWindow;
-class KCHMSearchWindow;
-class KCHMBookmarkWindow;
-class CHMFile;
-class KCHMSettings;
-class KCHMSearchAndViewToolbar;
-class KCHMNavToolbar;
-class KCHMViewWindow;
-class KCHMViewWindowMgr;
-class KCHMContentsWindow;
+#include "kde-qt.h"
 
-#include "config.h"
+/**
+@author tim
+*/
+class KCHMContentsWindow : public KQListView
+{
+	Q_OBJECT
+	public:
+    	KCHMContentsWindow( QWidget *parent = 0, const char *name = 0 );
+		~KCHMContentsWindow();
+		
+		QRect	tip( const QPoint & p );
+};
 
-#endif /* FORWARD_DECLARATIONS_H */
+#endif /* INCLUDE_KCHMCONTENTSWINDOW_H */

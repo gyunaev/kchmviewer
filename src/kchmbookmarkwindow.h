@@ -21,9 +21,8 @@
 #ifndef KCHMBOOKMARKWINDOW_H
 #define KCHMBOOKMARKWINDOW_H
 
-#include <qwidget.h>
+#include "kde-qt.h"
 #include "forwarddeclarations.h"
-
 #include "kchmsettings.h"
 
 /**
@@ -49,7 +48,7 @@ private slots:
 	void	onDoubleClicked ( QListViewItem *, const QPoint &, int );
 
 private:
-	QListView				*	m_bookmarkList;
+	KQListView				*	m_bookmarkList;
 	QString						m_bookmarkFileName;
 	bool						m_listChanged;
 };

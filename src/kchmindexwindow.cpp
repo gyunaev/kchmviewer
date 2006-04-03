@@ -24,7 +24,9 @@
 
 #include "kchmmainwindow.h"
 #include "kchmindexwindow.h"
+#include "kchmlistitemtooltip.h"
 #include "xchmfile.h"
+
 
 KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f )
 	: QWidget (parent, name, f)
@@ -35,7 +37,7 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f
 	m_indexFinder = new QLineEdit (this);
 	m_indexFinder->setFocus();
 	
-	m_indexList = new QListView (this);
+	m_indexList = new KQListView (this);
 	m_indexList->addColumn( "idx" ); // it is hidden anyway
 	m_indexList->header()->hide();
 	m_indexList->setTreeStepSize (10);
@@ -52,6 +54,8 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f
 	
 	m_indexListFilled = false;
 	m_lastSelectedItem = 0;
+	
+	new KCHMListItemTooltip( m_indexList );
 }
 
 void KCHMIndexWindow::onTextChanged ( const QString & newvalue)

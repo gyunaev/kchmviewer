@@ -57,7 +57,7 @@ public:
 	const QString&	getOpenedFileName () { return m_chmFilename; }
 	
 	KCHMViewWindow * getCurrentBrowser() const;
-	KQListView	   * getContentsWindow() const { return m_contentsWindow; }
+	KCHMContentsWindow  * getContentsWindow() const { return m_contentsWindow; }
 	KCHMSettings   * getCurrentSettings() const { return m_currentSettings; }
 	KCHMViewWindowMgr*	getViewWindowMgr() const { return m_viewWindowMgr; }
 	KCHMNavToolbar * getNavigationToolbar() const { return m_navToolbar; };
@@ -126,7 +126,7 @@ private:
 	KCHMIndexWindow		*	m_indexWindow;
 	KCHMSearchWindow	*	m_searchWindow;
 	KCHMBookmarkWindow	*	m_bookmarkWindow;
-	KQListView			*	m_contentsWindow;
+	KCHMContentsWindow	*	m_contentsWindow;
 
 	KQTabWidget			*	m_tabWidget;
 	QSplitter 			*	m_windowSplitter;

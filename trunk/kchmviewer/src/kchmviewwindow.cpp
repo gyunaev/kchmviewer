@@ -62,8 +62,15 @@ bool KCHMViewWindow::isRemoteURL( const QString & url, QString & protocol )
 {
 	// Check whether the URL is external
 	QRegExp uriregex ( "^(\\w+):\\/\\/" );
+	QRegExp mailtoregex ( "^(mailto):" );
 
-	if ( uriregex.search ( url ) != -1 )
+	// mailto: can also have different format, so handle it
+	if ( url.startsWith( "mailto:" ) )
+	{
+		protocol = "mailto";
+		return true;
+	}
+	else if ( uriregex.search ( url ) != -1 )
 	{
 		QString proto = uriregex.cap ( 1 ).lower();
 		

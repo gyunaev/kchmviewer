@@ -1,3 +1,9 @@
+2006-04-05 tim <gyunaev@ulduzsoft.com>
+    - Application icon should now be correctly installed.
+    - Fixed handling of mailto: urls.
+    - 'Locate in content' button now opens a Contents tab, if hidden.
+    - Version 2.5 release.
+    
 2006-04-02 tim <gyunaev@ulduzsoft.com>
     - A tooltip is now shows the full text in all the tree and list views if truncated on screen.
     - Fixed content tree parser, now the content table should be parsed correctly.
@@ -5,7 +11,7 @@
     - Added a bookmark menu. Ctrl-B is a shortcut to add a bookmark.
     
 2006-04-01 tim <gyunaev@ulduzsoft.com>
-    - Added tab browsing.
+    - Added tab browsing. Use right-click and 'Open in new tab'.
 	- Added right-click content menu to open pages in a new tab.
 	- Control-click on link or table of contents opens a page in a new tab in background.
 	- Shift-click on link or table of contents opens a page in a new tab in foreground.

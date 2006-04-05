@@ -914,6 +914,13 @@ void KCHMMainWindow::slotToggleFullScreenMode( )
 
 void KCHMMainWindow::slotLocateInContentWindow( )
 {
+	// There may be no content tab at all
+	if ( !m_contentsWindow  || m_tabContextPage == -1 )
+		return;
+	
+	// Activate a content tab
+	m_tabWidget->setCurrentPage( m_tabContextPage );
+	
 	// Open all the tree items to show current item (if needed)
 	KCHMMainTreeViewItem * treeitem = m_chmFile->getTreeItem( getCurrentBrowser()->getOpenedPage() );
 	if ( m_contentsWindow && treeitem )

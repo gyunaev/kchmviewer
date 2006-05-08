@@ -1,0 +1,771 @@
+# translation of zh_CN.po to
+# translation of kchmviewer.po to
+# This file is put in the public domain.
+#
+# 林俊 <demonlinjun@163.com>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: zh_CN\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-04-01 01:46-0800\n"
+"PO-Revision-Date: 2006-05-07 20:30-0400\n"
+"Last-Translator: 林俊 <demonlinjun@163.com>\n"
+"Language-Team:  <zh@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.2\n"
+
+#. i18n: file kchmsetupdialog.ui line 24
+#: rc.cpp:3
+#, no-c-format
+msgid "KchmViewer settings"
+msgstr "KchmViewer设置"
+
+#. i18n: file kchmsetupdialog.ui line 54
+#: rc.cpp:6
+#, no-c-format
+msgid "General behavior"
+msgstr "通用行为"
+
+#. i18n: file kchmsetupdialog.ui line 73
+#: rc.cpp:9
+#, no-c-format
+msgid "If no arguments given on load"
+msgstr "如果载入时没有参数"
+
+#. i18n: file kchmsetupdialog.ui line 84
+#: rc.cpp:12
+#, no-c-format
+msgid "Open the 'open CHM file' dialog"
+msgstr "打开'打开CHM文件'对话框"
+
+#. i18n: file kchmsetupdialog.ui line 92
+#: rc.cpp:15
+#, no-c-format
+msgid "Open the &last used CHM file, if exist"
+msgstr "如果存在,打开最后使用的CHM文件(&L)"
+
+#. i18n: file kchmsetupdialog.ui line 95
+#: rc.cpp:18
+#, no-c-format
+msgid "Alt+L"
+msgstr "Alt+L"
+
+#. i18n: file kchmsetupdialog.ui line 105
+#: rc.cpp:21
+#, no-c-format
+msgid "History"
+msgstr "历史"
+
+#. i18n: file kchmsetupdialog.ui line 124
+#: rc.cpp:24
+#, no-c-format
+msgid "Store history information for"
+msgstr "保存历史信息"
+
+#. i18n: file kchmsetupdialog.ui line 143
+#: rc.cpp:28
+#, no-c-format
+msgid "latest files"
+msgstr "最近使用的文件"
+
+#. i18n: file kchmsetupdialog.ui line 153
+#: rc.cpp:31
+#, no-c-format
+msgid "R&emember extra information for history files"
+msgstr "记录历史文件额外信息(&E)"
+
+#. i18n: file kchmsetupdialog.ui line 156
+#: rc.cpp:34
+#, no-c-format
+msgid "Alt+E"
+msgstr "Alt+E"
+
+#. i18n: file kchmsetupdialog.ui line 159
+#: rc.cpp:37
+#, no-c-format
+msgid ""
+"Remembers the information about the files, which were opened. Remembers last "
+"opened page, search history, font size, bookmarks and so on."
+msgstr ""
+"记录已经打开的文件的相关信息。 "
+"记录最后打开的页面，搜索记录，字体大小，书签等信息。"
+
+#. i18n: file kchmsetupdialog.ui line 171
+#: rc.cpp:40
+#, no-c-format
+msgid "CHM security settings"
+msgstr "CHM 安全设置"
+
+#. i18n: file kchmsetupdialog.ui line 182
+#: rc.cpp:43
+#, no-c-format
+msgid "When external link clicked"
+msgstr "当点击外部链接时"
+
+#. i18n: file kchmsetupdialog.ui line 193
+#: rc.cpp:46
+#, no-c-format
+msgid "Alwa&ys open it in external browser"
+msgstr "总在外部浏览器中打开(&Y)"
+
+#. i18n: file kchmsetupdialog.ui line 196
+#: rc.cpp:49
+#, no-c-format
+msgid "Alt+Y"
+msgstr "Alt+Y"
+
+#. i18n: file kchmsetupdialog.ui line 204
+#. i18n: file kchmsetupdialog.ui line 244
+#: rc.cpp:52 rc.cpp:65
+#, no-c-format
+msgid "Ask for confirmation"
+msgstr "请求确认"
+
+#. i18n: file kchmsetupdialog.ui line 212
+#: rc.cpp:55
+#, no-c-format
+msgid "Do not open the link"
+msgstr "不打开链接"
+
+#. i18n: file kchmsetupdialog.ui line 225
+#: rc.cpp:59
+#, no-c-format
+msgid "When link pointed to a new CHM file clicked"
+msgstr "当点击指向新的CHM文件的链接时"
+
+#. i18n: file kchmsetupdialog.ui line 236
+#: rc.cpp:62
+#, no-c-format
+msgid "Always open a new CHM file"
+msgstr "总打开新的CHM文件"
+
+#. i18n: file kchmsetupdialog.ui line 252
+#: rc.cpp:68
+#, no-c-format
+msgid "Do not open a new CHM file"
+msgstr "不打开新的CHM文件"
+
+#. i18n: file kchmsetupdialog.ui line 266
+#: rc.cpp:71
+#, no-c-format
+msgid "Version-specific settings"
+msgstr "版本指定设置"
+
+#. i18n: file kchmsetupdialog.ui line 277
+#: rc.cpp:74
+#, no-c-format
+msgid "Qt version settings"
+msgstr "QT 版本设置"
+
+#. i18n: file kchmsetupdialog.ui line 299
+#: rc.cpp:77
+#, no-c-format
+msgid ""
+"Enter the path to the program, which will be used as a browser for external "
+"links.  A <i>%s</i> symbol will be replaced by the URL clicked."
+msgstr ""
+"输入打开外部链接的浏览器程序的路径。"
+"<i>%s</i> 符号将被点击的URL替换。"
+
+#. i18n: file kchmsetupdialog.ui line 325
+#: rc.cpp:80
+#, no-c-format
+msgid "KDE version settings"
+msgstr "KDE 版本设置"
+
+#. i18n: file kchmsetupdialog.ui line 336
+#: rc.cpp:83
+#, no-c-format
+msgid "To show HTML content, use"
+msgstr "要显示HTML目录，使用"
+
+#. i18n: file kchmsetupdialog.ui line 347
+#: rc.cpp:86
+#, no-c-format
+msgid "&QTextBrowser-based widget"
+msgstr "基于QTextBrowser的组件(&Q)"
+
+#. i18n: file kchmsetupdialog.ui line 350
+#: rc.cpp:89
+#, no-c-format
+msgid "Alt+Q"
+msgstr "Alt+Q"
+
+#. i18n: file kchmsetupdialog.ui line 358
+#: rc.cpp:92
+#, no-c-format
+msgid "&KHTMLPart-based widget"
+msgstr "基于KHTMLPart的组件(&K)"
+
+#. i18n: file kchmsetupdialog.ui line 361
+#: rc.cpp:95
+#, no-c-format
+msgid "Alt+K"
+msgstr "Alt+K"
+
+#. i18n: file kchmsetupdialog.ui line 371
+#: rc.cpp:98
+#, no-c-format
+msgid "KHTMLPart security"
+msgstr "KHTMLPart 安全性"
+
+#. i18n: file kchmsetupdialog.ui line 382
+#: rc.cpp:101
+#, no-c-format
+msgid "Enable Java&Script"
+msgstr "启用JavaScript(&S)"
+
+#. i18n: file kchmsetupdialog.ui line 385
+#: rc.cpp:104
+#, no-c-format
+msgid "Alt+S"
+msgstr "Alt+S"
+
+#. i18n: file kchmsetupdialog.ui line 393
+#: rc.cpp:107
+#, no-c-format
+msgid "Enable &plugins"
+msgstr "启用插件(&P)"
+
+#. i18n: file kchmsetupdialog.ui line 396
+#: rc.cpp:110
+#, no-c-format
+msgid "Alt+P"
+msgstr "Alt+P"
+
+#. i18n: file kchmsetupdialog.ui line 404
+#: rc.cpp:113
+#, no-c-format
+msgid "Enable &Java"
+msgstr "启用Java(&J)"
+
+#. i18n: file kchmsetupdialog.ui line 407
+#: rc.cpp:116
+#, no-c-format
+msgid "Alt+J"
+msgstr "Alt+J"
+
+#. i18n: file kchmsetupdialog.ui line 415
+#: rc.cpp:119
+#, no-c-format
+msgid "Enable &refresh"
+msgstr "启用刷新(&R)"
+
+#. i18n: file kchmsetupdialog.ui line 418
+#: rc.cpp:122
+#, no-c-format
+msgid "Alt+R"
+msgstr "Alt+R"
+
+#. i18n: file kchmsetupdialog.ui line 432
+#: rc.cpp:125
+#, no-c-format
+msgid "Advanced"
+msgstr "高级"
+
+#. i18n: file kchmsetupdialog.ui line 443
+#: rc.cpp:128
+#, no-c-format
+msgid "View HTML source command uses"
+msgstr "查看HTML源码使用"
+
+#. i18n: file kchmsetupdialog.ui line 454
+#: rc.cpp:131
+#, no-c-format
+msgid "Built-in HTML source viewer"
+msgstr "内建HTML源码查看器"
+
+#. i18n: file kchmsetupdialog.ui line 465
+#: rc.cpp:135
+#, no-c-format
+msgid "E&xternal program, specified below"
+msgstr "外部程序，在下面特别指定(&X)"
+
+#. i18n: file kchmsetupdialog.ui line 468
+#: rc.cpp:138
+#, no-c-format
+msgid "Alt+X"
+msgstr "Alt+x"
+
+#. i18n: file kchmsetupdialog.ui line 484
+#: rc.cpp:141
+#, no-c-format
+msgid "External program:"
+msgstr "外部程序"
+
+#. i18n: file kchmsetupdialog.ui line 521
+#: rc.cpp:147
+#, no-c-format
+msgid "F1"
+msgstr "F1"
+
+#: _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr "林俊"
+
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr "demonlinjun@163.com"
+
+#: kchmbookmarkwindow.cpp:39
+msgid "&Add"
+msgstr "添加(&A)"
+
+#: kchmbookmarkwindow.cpp:41
+msgid "&Del"
+msgstr "删除(&D)"
+
+#: kchmbookmarkwindow.cpp:64
+msgid "%1 - add a bookmark"
+msgstr "%1 - 添加书签"
+
+#: kchmbookmarkwindow.cpp:65 kchmbookmarkwindow.cpp:101
+msgid "Enter the name for this bookmark:"
+msgstr "输入书签的名称"
+
+#: kchmbookmarkwindow.cpp:100
+msgid "%1 - edit the bookmark name"
+msgstr "%1 - 编辑书签名称"
+
+#: kchmbookmarkwindow.cpp:179
+msgid "&Add bookmark"
+msgstr "添加书签(&A)"
+
+#: kchmdialogchooseurlfromlist.cpp:34
+msgid "Topics"
+msgstr "主题"
+
+#: kchmdialogchooseurlfromlist.cpp:39
+msgid "Please select one of the topics below:"
+msgstr "请在下面选取一个主题"
+
+#: kchmdialogchooseurlfromlist.cpp:43
+msgid "&Ok"
+msgstr "确定(&O)"
+
+#: kchmmainwindow.cpp:124
+msgid "*.chm|Compressed Help Manual (*.chm)"
+msgstr "*.chm|压缩的帮助手册 (*.chm)"
+
+#: kchmmainwindow.cpp:126
+msgid "Compressed Help Manual (*.chm)"
+msgstr "压缩的帮助手册 (*.chm)"
+
+#: kchmmainwindow.cpp:136
+msgid "Loading aborted"
+msgstr "取消载入"
+
+#: kchmmainwindow.cpp:237
+msgid "%1 - failed to load the chm file"
+msgstr "%1 - 载入CHM文件失败"
+
+#: kchmmainwindow.cpp:238
+msgid "Unable to load the chm file %1"
+msgstr "无法载入CHM文件%1"
+
+#: kchmmainwindow.cpp:248
+msgid "Could not load file %1"
+msgstr "无法载入文件%1"
+
+#: kchmmainwindow.cpp:264
+msgid "About %1"
+msgstr "关于%1"
+
+#: kchmmainwindow.cpp:265
+msgid ""
+"%1 version %2\n"
+"\n"
+"Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
+"www.kchmviewer.net\n"
+"\n"
+"Licensed under GNU GPL license.\n"
+"\n"
+"Please try our another project, www.transientmail.com - temporary e-mail "
+"address, which expires automatically."
+msgstr ""
+"%1 版本 %2\n"
+"\n"
+"版权所有 (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
+"www.kchmviewer.net\n"
+"\n"
+"在GNU GPL授权方式下发行。\n"
+"\n"
+"请尝试我们的另一个项目，www.transientmail.com - 临时 E-Mail地址。"
+
+#: kchmmainwindow.cpp:348
+msgid "%1 - remote link clicked - %2"
+msgstr "%1 - 点击远程链接 - %2"
+
+#: kchmmainwindow.cpp:349
+msgid ""
+"A remote link %1 will start the external program to open it.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"%1将使用外部程序来打开远程链接。 "
+"\n"
+"\n"
+"你要继续吗？"
+
+#: kchmmainwindow.cpp:350 kchmmainwindow.cpp:386
+msgid "&Yes"
+msgstr "是(&Y)"
+
+#: kchmmainwindow.cpp:350 kchmmainwindow.cpp:386
+msgid "&No"
+msgstr "否(&N)"
+
+#: kchmmainwindow.cpp:374
+msgid "%1 - JavsScript link clicked"
+msgstr "%1 - 点击JavaScript链接"
+
+#: kchmmainwindow.cpp:375
+msgid ""
+"You have clicked a JavaScript link.\n"
+"To prevent security-related issues JavaScript URLs are disabled in CHM files."
+msgstr ""
+"你点击了JavaScript链接。\n"
+"为了避免安全问题，在CHM文件中不启用JavaScript URLs支持。"
+
+#: kchmmainwindow.cpp:384
+msgid "%1 - link to a new CHM file clicked"
+msgstr "%1 - 点击指向新的CHM文件的链接。"
+
+#: kchmmainwindow.cpp:385
+msgid ""
+"You have clicked a link, which leads to a new CHM file %1.\n"
+"The current file will be closed.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"你点击了指向新的CHM文件的链接%1。\n"
+"现在打开的文件将被关闭。\n"
+"\n"
+"你要继续吗？"
+
+#: kchmmainwindow.cpp:446
+msgid "File Operations"
+msgstr "文件操作"
+
+#: kchmmainwindow.cpp:450
+msgid "Open File"
+msgstr "打开文件"
+
+#: kchmmainwindow.cpp:456
+msgid "Click this button to open an existing chm file."
+msgstr "点击此按钮打开存在的CHM文件"
+
+#: kchmmainwindow.cpp:461
+msgid "Print File"
+msgstr "打印文件"
+
+#: kchmmainwindow.cpp:467
+msgid "Click this button to print the current page"
+msgstr "点击此按钮打印当前页面"
+
+#: kchmmainwindow.cpp:482
+msgid "E&xtract CHM content..."
+msgstr "提取CHM目录(&X)"
+
+#: kchmmainwindow.cpp:483
+msgid ""
+"Click this button to extract the whole CHM file content into a specific "
+"directory"
+msgstr "点击此按钮提取整个CHM文件的目录到指定的目录。"
+
+#: kchmmainwindow.cpp:489
+msgid "&Recent files"
+msgstr "最近打开的文件(&R)"
+
+#: kchmmainwindow.cpp:498 kchmviewwindow.cpp:201
+msgid "&Select all"
+msgstr "选择全部(&S)"
+
+#: kchmmainwindow.cpp:513
+msgid "&Change settings..."
+msgstr "更改设置(&C)"
+
+#: kchmmainwindow.cpp:519
+msgid "About &Qt"
+msgstr "关于QT(&Q)"
+
+#: kchmmainwindow.cpp:521
+msgid "What's &This"
+msgstr "这是什么(&T)"
+
+#: kchmmainwindow.cpp:849
+msgid "Index"
+msgstr "索引"
+
+#: kchmmainwindow.cpp:872
+msgid "Search"
+msgstr "搜索"
+
+#: kchmmainwindow.cpp:928
+msgid "Could not locate opened topic in content window"
+msgstr "无法在目录窗口定位打开的主题"
+
+#: kchmmainwindow.cpp:939 kchmmainwindow.cpp:945
+msgid "Choose a directory to store CHM content"
+msgstr "选择目录来保存CHM目录"
+
+#: kchmmainwindow.cpp:958
+msgid "Extracting CHM content"
+msgstr "提取CHM目录"
+
+#: kchmmainwindow.cpp:958
+msgid "Extracting files..."
+msgstr "提取文件..."
+
+#: kchmmainwindow.cpp:958
+msgid "Abort"
+msgstr "取消"
+
+#: kchmnavtoolbar.cpp:34
+msgid "Navigation"
+msgstr "导航"
+
+#: kchmnavtoolbar.cpp:38
+msgid "Move backward in history"
+msgstr "在历史中后退"
+
+#: kchmnavtoolbar.cpp:43
+msgid "Click this button to move backward in browser history"
+msgstr "点击此按钮在浏览历史中后退"
+
+#: kchmnavtoolbar.cpp:47
+msgid "Move forward in history"
+msgstr "在历史中前进"
+
+#: kchmnavtoolbar.cpp:52
+msgid "Click this button to move forward in browser history"
+msgstr "点击此按钮在浏览历史中前进"
+
+#: kchmnavtoolbar.cpp:56
+msgid "Go to the home page"
+msgstr "回到首页"
+
+#: kchmnavtoolbar.cpp:61
+msgid "Click this button to move to the home page"
+msgstr "点击此按钮回到主页"
+
+#: kchmsearchtoolbar.cpp:45
+msgid "Find in page"
+msgstr "在页面中搜索"
+
+#: kchmsearchtoolbar.cpp:62
+msgid "Enter here the text to search in the current page."
+msgstr "输入要在当前页面搜索的内容"
+
+#: kchmsearchtoolbar.cpp:69
+msgid "Previous search result"
+msgstr "前一个搜索的结果"
+
+#: kchmsearchtoolbar.cpp:74
+msgid "Click this button to find previous search result."
+msgstr "点击此按钮查看前一个搜索的结果"
+
+#: kchmsearchtoolbar.cpp:78
+msgid "Next search result"
+msgstr "下一个搜索的结果"
+
+#: kchmsearchtoolbar.cpp:83
+msgid "Click this button to find next search result."
+msgstr "点击此按钮查看下一个搜索的结果"
+
+#: kchmsearchtoolbar.cpp:87
+msgid "Locate this topic in content window"
+msgstr "在目录窗口定位主题"
+
+#: kchmsearchtoolbar.cpp:92
+msgid "Click this button to find current topic in the content window, and open it."
+msgstr "点击此按钮在目录窗口定位当前主题"
+
+#: kchmsearchtoolbar.cpp:96
+msgid "Increase font size"
+msgstr "增大字体大小"
+
+#: kchmsearchtoolbar.cpp:101
+msgid "Click this button to increase the font size."
+msgstr "点击此按钮增加字体大小"
+
+#: kchmsearchtoolbar.cpp:105
+msgid "Decrease font size"
+msgstr "缩小字体大小"
+
+#: kchmsearchtoolbar.cpp:110
+msgid "Click this button to decrease the font size."
+msgstr "点击此按钮缩小字体大小"
+
+#: kchmsearchtoolbar.cpp:114
+msgid "View HTML source"
+msgstr "查看HTML源码"
+
+#: kchmsearchtoolbar.cpp:119
+msgid "Click this button to open a separate window with the page HTML source."
+msgstr "点击此按钮在独立窗口查看当前页面的HTML源码"
+
+#: kchmsearchtoolbar.cpp:123
+msgid "Add to bookmarks"
+msgstr "添加到书签"
+
+#: kchmsearchtoolbar.cpp:128
+msgid "Click this button to add the current page to the bookmarks list."
+msgstr "点击此按钮添加当前页面到书签列表"
+
+#: kchmsearchtoolbar.cpp:131
+msgid "Prev page in TOC"
+msgstr "目录表格的前一页"
+
+#: kchmsearchtoolbar.cpp:136
+msgid "Click this button to go to previous page in Table Of Content."
+msgstr "点击此按钮前往目录表格中的前一页"
+
+#: kchmsearchtoolbar.cpp:139
+msgid "Next page in TOC"
+msgstr "目录表格的后一页"
+
+#: kchmsearchtoolbar.cpp:144
+msgid "Click this button to go to next page in Table of Content."
+msgstr "点击此按钮前往目录表格的后一页"
+
+#: kchmsearchtoolbar.cpp:150
+msgid "&Increase font"
+msgstr "增大字体(&I)"
+
+#: kchmsearchtoolbar.cpp:151
+msgid "&Decrease font"
+msgstr "缩小字体(&D)"
+
+#: kchmsearchtoolbar.cpp:152
+msgid "&View HTML source"
+msgstr "查看HTML源码(&V)"
+
+#: kchmsearchtoolbar.cpp:155
+msgid "&Bookmark this page"
+msgstr "添加当前页面为书签(&B)"
+
+#: kchmsearchtoolbar.cpp:158
+msgid "&Full screen"
+msgstr "全屏(&F)"
+
+#: kchmsearchtoolbar.cpp:160
+msgid "&Show contents window"
+msgstr "显示目录窗口(&S)"
+
+#: kchmsearchtoolbar.cpp:162
+msgid "&Locate in contents window"
+msgstr "目录窗口&定位(&L)"
+
+#: kchmsearchtoolbar.cpp:215
+msgid "&Set language"
+msgstr "设置语言(&S)"
+
+#: kchmsearchtoolbar.cpp:238
+msgid "&Set codepage"
+msgstr "设置编码(&S)"
+
+#: kchmsearchwindow.cpp:36
+msgid "Type in word(s) to search for:"
+msgstr "输入要搜索的词"
+
+#: kchmsearchwindow.cpp:51
+msgid "Title"
+msgstr "标题"
+
+#: kchmsearchwindow.cpp:52
+msgid "Location"
+msgstr "位置"
+
+#: kchmsearchwindow.cpp:60
+msgid "Match similar words"
+msgstr "匹配相似词"
+
+#: kchmsearchwindow.cpp:93
+msgid "Search returned %1 result(s)"
+msgstr "搜索返回 %1 个结果"
+
+#: kchmsearchwindow.cpp:96
+msgid "Search returned no results"
+msgstr "搜索没有返回结果"
+
+#: kchmsearchwindow.cpp:99 kchmviewwindow_qtextbrowser.cpp:211
+msgid "Search failed"
+msgstr "搜索失败"
+
+#: kchmsearchwindow.cpp:395
+msgid "How to use search"
+msgstr "如何使用搜索"
+
+#: kchmsearchwindow.cpp:396
+msgid ""
+"The search query can contain a few prefixes.\n"
+"A set of words inside the quote marks mean that you are searching for exact "
+"phrase.\n"
+"A word with minus sign means that it should be absent in the search result.\n"
+"A word with plus mark or without any mark means that it must be present in "
+"the search result.\n"
+"\n"
+"Note that only letters and digits are indexed.\n"
+"You cannot search for symbols other than underscope, and these symbols will "
+"be removed from the search query.\n"
+"For example, search for 'C' will give the same result as searching for 'C++'."
+msgstr ""
+"搜索查询可以包含一些技巧。\n"
+"在引号中包含的内容意味着你要精确的"
+"搜索。\n"
+"带有减号的字表示在搜索结果中不应包含这个内容。\n"
+"带有加号或什么也不带表示在搜索结果中应当包含"
+"这个内容。\n"
+"\n"
+"注意只有字母和数字被索引。\n"
+"你不能搜索符号，这些符号将在搜索"
+"查询中被移除。\n"
+"例如，搜索 'C' 和搜索 'C++' ，将返回同样的结果."
+
+#: kchmviewwindow.cpp:226
+msgid "&Open this link in a new tab"
+msgstr "在新的标签页打开此链接(&O)"
+
+#: kchmviewwindow.cpp:228
+msgid "&Open this link in a new background tab"
+msgstr "在后台标签也打开此链接(&O)"
+
+#: kchmviewwindow_qtextbrowser.cpp:171
+msgid "Printing (page %1)..."
+msgstr "正在打印 (第 %1 页)"
+
+#: kchmviewwindow_qtextbrowser.cpp:179
+msgid "Printing completed"
+msgstr "打印成功"
+
+#: kchmviewwindow_qtextbrowser.cpp:183
+msgid "Printing aborted"
+msgstr "打印被取消"
+
+#: kchmviewwindow_qtextbrowser.cpp:189
+msgid "%1 - could not print"
+msgstr "%1 - 不能打印"
+
+#: kchmviewwindow_qtextbrowser.cpp:190
+msgid ""
+"Could not print.\n"
+"Your Qt library has been compiled without printing support"
+msgstr ""
+"不能打印。\n"
+"你编译QT没有加入打印支持"
+
+#: kchmviewwindowmgr.cpp:63
+msgid "&Window"
+msgstr "窗口(&W)"
+
+#: main.cpp:52
+msgid "CHM file viewer"
+msgstr "CHM文件查看器"
+

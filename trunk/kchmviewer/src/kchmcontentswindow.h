@@ -34,6 +34,12 @@ class KCHMContentsWindow : public KQListView
 		~KCHMContentsWindow();
 		
 		QRect	tip( const QPoint & p );
+		
+	public slots:
+		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+		
+	private:
+		KQPopupMenu * m_contextMenu;
 };
 
 #endif /* INCLUDE_KCHMCONTENTSWINDOW_H */

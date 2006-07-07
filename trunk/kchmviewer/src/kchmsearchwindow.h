@@ -42,6 +42,9 @@ public:
 	void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
 	void	saveSettings (KCHMSettings::search_saved_settings_t& settings);
 
+public slots:
+	void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+	
 private slots:
 	void	onHelpClicked();
 	void 	onReturnPressed ();
@@ -57,6 +60,7 @@ private:
 	KQListView	*	m_searchList;
 	QCheckBox	*	m_matchSimilarWords;
 	QPushButton *	m_helpButton;
+	KQPopupMenu * 	m_contextMenu;		
 };
 
 #endif

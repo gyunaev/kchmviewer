@@ -37,6 +37,9 @@ public:
 
 	void	invalidate();
 	
+public slots:
+	void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+		
 private slots:
 	void 	onTextChanged ( const QString & newvalue);
 	void 	onReturnPressed ();
@@ -47,6 +50,7 @@ private:
 	
 	QLineEdit 	*	m_indexFinder;
 	KQListView	*	m_indexList;
+	KQPopupMenu * 	m_contextMenu;	
 	QListViewItem * m_lastSelectedItem;
 	bool			m_indexListFilled;
 };

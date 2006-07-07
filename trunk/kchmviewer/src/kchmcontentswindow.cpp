@@ -22,11 +22,14 @@
 #include "kde-qt.h"
 #include "kchmcontentswindow.h"
 #include "kchmlistitemtooltip.h"
-
+#include "kchmmainwindow.h"
+#include "kchmtreeviewitem.h"
 
 KCHMContentsWindow::KCHMContentsWindow(QWidget *parent, const char *name)
  : KQListView(parent, name)
 {
+	m_contextMenu = 0;
+	
 	addColumn( "Contents" ); // no i18n - this column is hidden
 	setSorting(-1);
 	setFocus();
@@ -34,14 +37,31 @@ KCHMContentsWindow::KCHMContentsWindow(QWidget *parent, const char *name)
 	header()->hide();
 	setShowToolTips( false );
 	
-	//new KCHMContentsWindowToolTip( this );
 	connect( this, SIGNAL( onItem ( QListViewItem * ) ), this, SLOT( slotOnItem( QListViewItem * ) ) );
+	connect( this, 
+			 SIGNAL( contextMenuRequested( QListViewItem *, const QPoint& , int ) ),
+			 this, 
+			 SLOT( slotContextMenuRequested ( QListViewItem *, const QPoint &, int ) ) );
+
 	
 	new KCHMListItemTooltip( this );
 }
 
 KCHMContentsWindow::~KCHMContentsWindow()
 {
+}
+
+void KCHMContentsWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
+{
+	if ( !m_contextMenu )
+		m_contextMenu = ::mainWindow->getCurrentBrowser()->createListItemContextMenu( this );
+		
+	if( item )
+	{
+		KCHMMainTreeViewItem * treeitem = (KCHMMainTreeViewItem*) item;
+		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->getUrl() );
+		m_contextMenu->popup( point );
+	}
 }
 
 #include "kchmcontentswindow.moc"

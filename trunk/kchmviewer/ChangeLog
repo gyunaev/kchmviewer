@@ -1,5 +1,8 @@
 2006-04-05 tim <gyunaev@ulduzsoft.com>
     - Version changed to 2.6
+    - Fixed gcc 4.x compilation.
+    - Added shortcut help in context menus.
+    - Right-click menu is now available in Contents, Search, Index and Favorites windows.
 
 2006-04-05 tim <gyunaev@ulduzsoft.com>
     - Application icon should now be correctly installed.

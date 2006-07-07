@@ -823,7 +823,10 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 			m_contentsWindow = new KCHMContentsWindow( m_tabWidget );
 			
 			// Handle clicking on m_contentsWindow element
-			connect( m_contentsWindow, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( slotOnTreeClicked( QListViewItem* ) ) );
+			connect( m_contentsWindow, 
+					 SIGNAL( clicked( QListViewItem* ) ), 
+					 this, 
+					 SLOT( slotOnTreeClicked( QListViewItem* ) ) );
 			
 			m_tabWidget->insertTab (m_contentsWindow, i18n( "Contents" ), tabindex);
 		}

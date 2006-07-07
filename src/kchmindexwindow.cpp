@@ -47,13 +47,29 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f
 	layout->addSpacing (10);
 	layout->addWidget (m_indexList);
 	
-	connect( m_indexFinder, SIGNAL( textChanged (const QString &) ), this, SLOT( onTextChanged(const QString &) ) );
+	connect( m_indexFinder, 
+			 SIGNAL( textChanged (const QString &) ), 
+			 this, 
+			 SLOT( onTextChanged(const QString &) ) );
 	
-	connect( m_indexFinder, SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
-	connect( m_indexList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
+	connect( m_indexFinder, 
+			 SIGNAL( returnPressed() ), 
+			 this, 
+			 SLOT( onReturnPressed() ) );
 	
+	connect( m_indexList, 
+			 SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), 
+			 this, 
+			 SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
+	
+	connect( m_indexList,
+			 SIGNAL( contextMenuRequested( QListViewItem *, const QPoint& , int ) ),
+			 this, 
+			 SLOT( slotContextMenuRequested ( QListViewItem *, const QPoint &, int ) ) );
+
 	m_indexListFilled = false;
 	m_lastSelectedItem = 0;
+	m_contextMenu = 0;
 	
 	new KCHMListItemTooltip( m_indexList );
 }
@@ -116,6 +132,20 @@ void KCHMIndexWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int 
 	}
 	else
 		::mainWindow->openPage( url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+}
+
+void KCHMIndexWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
+{
+	if ( !m_contextMenu )
+		m_contextMenu = ::mainWindow->getCurrentBrowser()->createListItemContextMenu( this );
+		
+	if( item )
+	{
+		KCHMMainTreeViewItem * treeitem = (KCHMMainTreeViewItem*) item;
+		
+		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->getUrl() );
+		m_contextMenu->popup( point );
+	}
 }
 
 #include "kchmindexwindow.moc"

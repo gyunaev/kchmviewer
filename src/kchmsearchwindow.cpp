@@ -53,10 +53,26 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_searchList->addColumn( i18n( "Location" ) );
 	m_searchList->setShowToolTips(true);
 
-	connect( m_helpButton, SIGNAL( clicked () ), this, SLOT( onHelpClicked() ) );
-	connect( m_searchQuery->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
-	connect( m_searchList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
+	connect( m_helpButton, 
+			 SIGNAL( clicked () ), 
+			 this, 
+			 SLOT( onHelpClicked() ) );
 
+	connect( m_searchQuery->lineEdit(), 
+			 SIGNAL( returnPressed() ), 
+			 this, 
+			 SLOT( onReturnPressed() ) );
+	
+	connect( m_searchList, 
+			 SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), 
+			 this, 
+			 SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
+
+	connect( m_searchList, 
+			 SIGNAL( contextMenuRequested( QListViewItem *, const QPoint& , int ) ),
+			 this, 
+			 SLOT( slotContextMenuRequested ( QListViewItem *, const QPoint &, int ) ) );
+	
 	m_matchSimilarWords = new QCheckBox (this);
 	m_matchSimilarWords->setText( i18n( "Match similar words") );
 
@@ -65,6 +81,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	layout->addWidget (m_matchSimilarWords);
 	
 	new KCHMListItemTooltip( m_searchList );
+	m_contextMenu = 0;
 }
 
 void KCHMSearchWindow::invalidate( )
@@ -396,7 +413,21 @@ void KCHMSearchWindow::onHelpClicked( )
 {
 	QMessageBox::information ( this, 
 		i18n( "How to use search"), 
-		i18n( "The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for symbols other than underscope, and these symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
+		i18n( "The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for non-character symbols other than underscope, and those symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
+}
+
+void KCHMSearchWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
+{
+	if ( !m_contextMenu )
+		m_contextMenu = ::mainWindow->getCurrentBrowser()->createListItemContextMenu( this );
+		
+	if( item )
+	{
+		KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) item;
+		
+		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->getUrl() );
+		m_contextMenu->popup( point );
+	}
 }
 
 #include "kchmsearchwindow.moc"

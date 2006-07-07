@@ -235,18 +235,7 @@ KQPopupMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * pa
 			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), i18n("Ctrl+Enter") );
 		}
 		
-		// If we clicked on relative link, make sure we convert it to absolute right now,
-		// because later we will not have access to this view window variables
-		m_newTabLinkKeeper = link;
-		if ( m_newTabLinkKeeper[0] == '#' && !m_openedPage.isEmpty() )
-		{
-			// Clean up opened page URL
-			int pos = m_openedPage.find ('#');
-			QString fixedpath = pos == -1 ? m_openedPage : m_openedPage.left (pos);
-			m_newTabLinkKeeper = fixedpath + m_newTabLinkKeeper;
-		}
-		
-		m_newTabLinkKeeper = makeURLabsolute( m_newTabLinkKeeper, false );
+		setTabKeeper( link );
 		return m_contextMenuLink;
 	}
 }
@@ -348,4 +337,31 @@ void KCHMViewWindow::updateNavigationToolbar( )
 					m_historyCurrentPos > 0,
 					m_historyCurrentPos < (m_history.size() - 1) );
 	}
+}
+
+KQPopupMenu * KCHMViewWindow::createListItemContextMenu( QWidget * w )
+{
+	KQPopupMenu * contextMenu = new KQPopupMenu( w );
+		
+	contextMenu->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), i18n("Shift+Enter") );
+			
+	contextMenu->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), i18n("Ctrl+Enter") );
+
+	return contextMenu;
+}
+
+void KCHMViewWindow::setTabKeeper( const QString & link )
+{
+	// If we clicked on relative link, make sure we convert it to absolute right now,
+	// because later we will not have access to this view window variables
+	m_newTabLinkKeeper = link;
+	if ( m_newTabLinkKeeper[0] == '#' && !m_openedPage.isEmpty() )
+	{
+			// Clean up opened page URL
+		int pos = m_openedPage.find ('#');
+		QString fixedpath = pos == -1 ? m_openedPage : m_openedPage.left (pos);
+		m_newTabLinkKeeper = fixedpath + m_newTabLinkKeeper;
+	}
+		
+	m_newTabLinkKeeper = makeURLabsolute( m_newTabLinkKeeper, false );
 }

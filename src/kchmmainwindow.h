@@ -77,7 +77,7 @@ public slots:
 				
 private slots:
 	void slotLinkClicked ( const QString & link, bool& follow_link );
-
+			
     void slotOpenMenuItemActivated();
 	void slotPrintMenuItemActivated();
 

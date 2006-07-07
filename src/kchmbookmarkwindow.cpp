@@ -47,13 +47,33 @@ KCHMBookmarkWindow::KCHMBookmarkWindow(QWidget *parent, const char *name)
 	hlayout->addWidget (edit);
 	hlayout->addWidget (del);
 	
-	connect( m_bookmarkList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
+	connect( m_bookmarkList, 
+			 SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), 
+			 this, 
+			 SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
 	
-	connect( add, SIGNAL( clicked () ), this, SLOT( onAddBookmarkPressed( ) ) );
-	connect( del, SIGNAL( clicked () ), this, SLOT( onDelBookmarkPressed( ) ) );
-	connect( edit, SIGNAL( clicked () ), this, SLOT( onEditBookmarkPressed( ) ) );
+	connect( add, 
+			 SIGNAL( clicked () ), 
+			 this, 
+			 SLOT( onAddBookmarkPressed( ) ) );
+	
+	connect( del, 
+			 SIGNAL( clicked () ), 
+			 this, 
+			 SLOT( onDelBookmarkPressed( ) ) );
+	
+	connect( edit, 
+			 SIGNAL( clicked () ), 
+			 this, 
+			 SLOT( onEditBookmarkPressed( ) ) );
+	
+	connect( m_bookmarkList, 
+			 SIGNAL( contextMenuRequested( QListViewItem *, const QPoint& , int ) ),
+			 this, 
+			 SLOT( slotContextMenuRequested ( QListViewItem *, const QPoint &, int ) ) );
 
 	m_menuBookmarks = 0;
+	m_contextMenu = 0;
 	m_listChanged = false;
 }
 
@@ -198,6 +218,20 @@ void KCHMBookmarkWindow::onBookmarkSelected( int bookmark )
 			::mainWindow->getCurrentBrowser()->setScrollbarPosition(treeitem->scroll_y);
 			break;
 		}
+	}
+}
+
+void KCHMBookmarkWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
+{
+	if ( !m_contextMenu )
+		m_contextMenu = ::mainWindow->getCurrentBrowser()->createListItemContextMenu( this );
+		
+	if( item )
+	{
+		KCMBookmarkTreeViewItem * treeitem = (KCMBookmarkTreeViewItem *) item;
+		
+		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->url );
+		m_contextMenu->popup( point );
 	}
 }
 

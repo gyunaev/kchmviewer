@@ -43,7 +43,8 @@ public:
 	
 public slots:
 	void 	onAddBookmarkPressed ();
-	
+	void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+		
 private slots:
 	void	onBookmarkSelected( int );
 	void	onDelBookmarkPressed( );
@@ -51,10 +52,11 @@ private slots:
 	void	onDoubleClicked ( QListViewItem *, const QPoint &, int );
 
 private:
-	KQPopupMenu 			*	m_menuBookmarks;
-	KQListView				*	m_bookmarkList;
-	QString						m_bookmarkFileName;
-	bool						m_listChanged;
+	KQPopupMenu *	m_menuBookmarks;
+	KQListView	*	m_bookmarkList;
+	QString			m_bookmarkFileName;
+	bool			m_listChanged;
+	KQPopupMenu * 	m_contextMenu;		
 };
 
 #endif

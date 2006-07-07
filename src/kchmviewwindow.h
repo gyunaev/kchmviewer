@@ -105,6 +105,14 @@ public:
 	virtual void	setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
 	virtual void	addNavigationHistory( const QString & url, int scrollpos );
 	virtual void 	updateNavigationToolbar();
+	
+	/*! 
+	 * Used by contents window (and probably by other windows in future) to show
+	 * context menu in listviews. Put here to futher reuse code in index and search windows.
+	 */
+	KQPopupMenu *	createListItemContextMenu ( QWidget * w );
+	void			setTabKeeper ( const QString& link );
+	
 		
 protected: /* signals */
 	/*!

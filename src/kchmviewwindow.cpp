@@ -230,9 +230,9 @@ KQPopupMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * pa
 			m_contextMenuLink = createStandardContextMenu( parent );
 			m_contextMenuLink->insertSeparator();
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()) );
+			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), i18n("Shift+Enter") );
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()) );
+			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), i18n("Ctrl+Enter") );
 		}
 		
 		// If we clicked on relative link, make sure we convert it to absolute right now,

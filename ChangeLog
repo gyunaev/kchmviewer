@@ -1,4 +1,7 @@
 2006-04-05 tim <gyunaev@ulduzsoft.com>
+    - Version changed to 2.6
+
+2006-04-05 tim <gyunaev@ulduzsoft.com>
     - Application icon should now be correctly installed.
     - Fixed handling of mailto: urls.
     - 'Locate in content' button now opens a Contents tab, if hidden.

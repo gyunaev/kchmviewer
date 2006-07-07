@@ -230,9 +230,9 @@ KQPopupMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * pa
 			m_contextMenuLink = createStandardContextMenu( parent );
 			m_contextMenuLink->insertSeparator();
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), i18n("Shift+Enter") );
+			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), "Shift+Enter" );
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), i18n("Ctrl+Enter") );
+			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), "Ctrl+Enter" );
 		}
 		
 		setTabKeeper( link );
@@ -343,9 +343,9 @@ KQPopupMenu * KCHMViewWindow::createListItemContextMenu( QWidget * w )
 {
 	KQPopupMenu * contextMenu = new KQPopupMenu( w );
 		
-	contextMenu->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), i18n("Shift+Enter") );
+	contextMenu->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), "Shift+Enter" );
 			
-	contextMenu->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), i18n("Ctrl+Enter") );
+	contextMenu->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), "Ctrl+Enter" );
 
 	return contextMenu;
 }

@@ -49,16 +49,16 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 											parent,
 											SLOT( slotNavigateForward() ),
 											this);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move forward in browser history") );	
+	QWhatsThis::add( m_toolbarIconForward, i18n( "Click this button to move forward in browser history") );	
 	
 	QPixmap iconHome = (*gIconStorage.getToolbarPixmap(KCHMIconStorage::gohome));
-	new QToolButton (iconHome,
+	QToolButton	* hb = new QToolButton (iconHome,
 					 i18n( "Go to the home page"),
 					 QString::null,
 					 parent,
 					 SLOT( slotNavigateHome() ),
 					 this);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move to the home page") );	
+	QWhatsThis::add( hb, i18n( "Click this button to move to the home page") );	
 }
 
 

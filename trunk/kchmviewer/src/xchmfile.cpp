@@ -856,10 +856,8 @@ inline bool CHMFile::InfoFromWindows()
 		if ( !RetrieveObject(&ui, buffer, 0, WIN_HEADER_LEN) )
 			return false;
 
-		u_int32_t entries = *(u_int32_t *)(buffer);
-		FIXENDIAN32(entries);
-		u_int32_t entry_size = *(u_int32_t *)(buffer + 0x04);
-		FIXENDIAN32(entry_size);
+		u_int32_t entries = get_int32_le( (u_int32_t *)(buffer) );
+		u_int32_t entry_size = get_int32_le( (u_int32_t *)(buffer + 0x04) );
 		
 		QByteArray uptr(entries * entry_size);
 		unsigned char* raw = (unsigned char*) uptr.data();
@@ -874,17 +872,10 @@ inline bool CHMFile::InfoFromWindows()
 		{
 			u_int32_t offset = i * entry_size;
 			
-			u_int32_t off_title = *(u_int32_t *)(raw + offset + 0x14);
-			FIXENDIAN32(off_title);
-
-			u_int32_t off_home = *(u_int32_t *)(raw + offset + 0x68);
-			FIXENDIAN32(off_home);
-
-			u_int32_t off_hhc = *(u_int32_t *)(raw + offset + 0x60);
-			FIXENDIAN32(off_hhc);
-			
-			u_int32_t off_hhk = *(u_int32_t *)(raw + offset + 0x64);
-			FIXENDIAN32(off_hhk);
+			u_int32_t off_title = get_int32_le( (u_int32_t *)(raw + offset + 0x14) );
+			u_int32_t off_home = get_int32_le( (u_int32_t *)(raw + offset + 0x68) );
+			u_int32_t off_hhc = get_int32_le( (u_int32_t *)(raw + offset + 0x60) );
+			u_int32_t off_hhk = get_int32_le( (u_int32_t *)(raw + offset + 0x64) );
 
 			factor = off_title / 4096;
 
@@ -1264,19 +1255,15 @@ QString CHMFile::getTopicByUrl( const QString & search_url )
 		if ( RetrieveObject ( &m_chmTOPICS, buf, i, TOPICS_ENTRY_LEN) == 0 )
 			return QString::null;
 
-		u_int32_t off_title = *(u_int32_t *)(buf + 4);
-		FIXENDIAN32(off_title);
-
-		u_int32_t off_url = *(u_int32_t *)(buf + 8);
-		FIXENDIAN32(url);
+		u_int32_t off_title = get_int32_le( (u_int32_t *)(buf + 4) );
+		u_int32_t off_url = get_int32_le( (u_int32_t *)(buf + 8) );
 
 		QString topic, url;
 
 		if ( RetrieveObject ( &m_chmURLTBL, buf, off_url, URLTBL_ENTRY_LEN) == 0 )
 			return QString::null;
 
-		off_url = *(u_int32_t *)(buf + 8);
-		FIXENDIAN32(off_url);
+		off_url = get_int32_le( (u_int32_t *)(buf + 8) );
 
 		if ( RetrieveObject ( &m_chmURLSTR, buf, off_url + 8, sizeof(buf) - 1) == 0 )
 			return false;

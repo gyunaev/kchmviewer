@@ -185,6 +185,16 @@ bool KCHMConfig::save( )
 
 void KCHMConfig::addFileToHistory( const QString & file )
 {
+	QStringList::Iterator itr = m_History.find( file );
+	
+	// check whether file already exists in history - more it forward
+	if ( itr != m_History.end() )
+	{
+		m_History.erase( itr );
+		m_History.push_back(file);
+		return;
+	}
+
 	if ( m_History.size() < m_HistorySize )
 	{
 		m_History.push_back( file );

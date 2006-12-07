@@ -6,6 +6,7 @@
     - TOC directory entries now could be opened/closed with double-click on the entry name/icon, 
       not just +/- icons. Credits to Ludo for the ideas.
     - Kchmviewer should now work correctly on non-x86 platforms, including the codepage autodetection.
+    - No more duplicate entries in previous file history.
     - Czech translation added, thanks Hynek Fabian.
     - Dutch translation updated, thanks Rinse de Vries.
 

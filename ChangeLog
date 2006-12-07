@@ -5,7 +5,7 @@
     - If the TOC directory entry did not have an associated page, it was not possible to select it.
     - TOC directory entries now could be opened/closed with double-click on the entry name/icon, 
       not just +/- icons.
-    - Codepage autodetection now works correctly on non-x86 platforms.
+    - kchmviewer should now work correctly on non-x86 platforms, including the codepage autodetection.
 
 2006-04-05 tim <gyunaev@ulduzsoft.com>
     - Version changed to 2.6

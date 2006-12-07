@@ -154,9 +154,6 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 	
 		m_chmFile = new_chmfile;
 
-//		delete m_viewWindowMgr;
-		//m_viewWindowMgr = new KCHMViewWindowMgr( m_windowSplitter );
-		
 		QDir qd;
 		qd.setPath (fileName);
 		m_chmFilename = qd.absPath();

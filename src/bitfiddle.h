@@ -21,13 +21,15 @@
 */
 
 
-//#define FIXENDIAN16(x) (x = wxUINT16_SWAP_ON_BE(x))
-//#define FIXENDIAN32(x) (x = wxUINT32_SWAP_ON_BE(x))
-#define FIXENDIAN16(x)
-#define FIXENDIAN32(x)
 #define UINT16ARRAY(x) ((unsigned char)(x)[0] | ((u_int16_t)(x)[1] << 8))
 #define UINT32ARRAY(x) (UINT16ARRAY(x) | ((u_int32_t)(x)[2] << 16) \
 		| ((u_int32_t)(x)[3] << 24))
+
+inline unsigned int get_int32_le( void *addr)
+{
+	unsigned char *p = (unsigned char*) addr;
+	return (unsigned int) ( p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24) );
+}
 
 
 inline u_int64_t be_encint(unsigned char* buffer, size_t& length)

@@ -67,6 +67,8 @@ public:
 		
 public slots:
 	void slotOnTreeClicked( QListViewItem *item );
+	void slotOnTreeDoubleClicked( QListViewItem *item, const QPoint &, int );
+	
 	void slotAddBookmark ( );
 	void slotOpenPageInNewTab( );
 	void slotOpenPageInNewBackgroundTab( );

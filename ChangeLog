@@ -1,3 +1,11 @@
+2006-12-01 tim <gyunaev@ulduzsoft.com>
+    - Added a warning when the browser or browser settings are changed that the application 
+      restart is required for changes to take effect.
+    - Fixed the i18n compilation problem in kchmviewwindow.cpp.
+    - If the TOC directory entry did not have an associated page, it was not possible to select it.
+    - TOC directory entries now could be opened/closed with double-click on the entry name/icon, 
+      not just +/- icons.
+
 2006-04-05 tim <gyunaev@ulduzsoft.com>
     - Version changed to 2.6
     - Fixed gcc 4.x compilation.

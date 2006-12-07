@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-04 02:25-0800\n"
+"POT-Creation-Date: 2006-07-06 20:02-0700\n"
 "PO-Revision-Date: 2006-02-04 15:29-0800\n"
 "Last-Translator: George Yunaev <gyunaev@ulduzsoft.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -89,7 +89,9 @@ msgstr ""
 msgid ""
 "Remembers the information about the files, which were opened. Remembers last "
 "opened page, search history, font size, bookmarks and so on."
-msgstr "Запомнить информацию о файлах, которые были открыты. запоминать последнюю открытую страницу, историю поиска, размер шрифта, закладки..."
+msgstr ""
+"Запомнить информацию о файлах, которые были открыты. запоминать последнюю "
+"открытую страницу, историю поиска, размер шрифта, закладки..."
 
 #. i18n: file kchmsetupdialog.ui line 171
 #: rc.cpp:40
@@ -164,7 +166,9 @@ msgstr "Настройки QT"
 msgid ""
 "Enter the path to the program, which will be used as a browser for external "
 "links.  A <i>%s</i> symbol will be replaced by the URL clicked."
-msgstr "Ввести путь к программе, которая будет использована как браузер для внешних ссылок. <i>%s</i> будет замененен ссылкой"
+msgstr ""
+"Ввести путь к программе, которая будет использована как браузер для внешних "
+"ссылок. <i>%s</i> будет замененен ссылкой"
 
 #. i18n: file kchmsetupdialog.ui line 325
 #: rc.cpp:80
@@ -314,25 +318,30 @@ msgstr ""
 "_: EMAIL OF TRANSLATORS\n"
 "ibobrik@gmail.com"
 
-#: kchmbookmarkwindow.cpp:39
+#: kchmbookmarkwindow.cpp:42
 msgid "&Add"
 msgstr "Добавить"
 
-#: kchmbookmarkwindow.cpp:41
+#: kchmbookmarkwindow.cpp:44
 msgid "&Del"
 msgstr "Удалить"
 
-#: kchmbookmarkwindow.cpp:64
+#: kchmbookmarkwindow.cpp:86
 msgid "%1 - add a bookmark"
 msgstr "%1 - добавить закладку"
 
-#: kchmbookmarkwindow.cpp:65 kchmbookmarkwindow.cpp:101
+#: kchmbookmarkwindow.cpp:87 kchmbookmarkwindow.cpp:129
 msgid "Enter the name for this bookmark:"
 msgstr "Введите имя для этой закладки"
 
-#: kchmbookmarkwindow.cpp:100
+#: kchmbookmarkwindow.cpp:128
 msgid "%1 - edit the bookmark name"
 msgstr "%1 - редактировать имя закладки"
+
+#: kchmbookmarkwindow.cpp:199
+#, fuzzy
+msgid "&Add bookmark"
+msgstr "Добавить в избранное"
 
 #: kchmdialogchooseurlfromlist.cpp:34
 msgid "Topics"
@@ -346,35 +355,35 @@ msgstr "Выберите одну из тем из списка ниже"
 msgid "&Ok"
 msgstr "Ок"
 
-#: kchmmainwindow.cpp:122
+#: kchmmainwindow.cpp:126
 msgid "*.chm|Compressed Help Manual (*.chm)"
 msgstr ""
 
-#: kchmmainwindow.cpp:124
+#: kchmmainwindow.cpp:128
 msgid "Compressed Help Manual (*.chm)"
 msgstr ""
 
-#: kchmmainwindow.cpp:134
+#: kchmmainwindow.cpp:138
 msgid "Loading aborted"
 msgstr "Загрузка отменена"
 
-#: kchmmainwindow.cpp:231
+#: kchmmainwindow.cpp:239
 msgid "%1 - failed to load the chm file"
 msgstr "%1 - невозможно открыть CHM файл"
 
-#: kchmmainwindow.cpp:232
+#: kchmmainwindow.cpp:240
 msgid "Unable to load the chm file %1"
 msgstr "Невозможно загрузить CHM файл %1"
 
-#: kchmmainwindow.cpp:242
+#: kchmmainwindow.cpp:250
 msgid "Could not load file %1"
 msgstr "Нельзя открыть CHM файл %1"
 
-#: kchmmainwindow.cpp:258
+#: kchmmainwindow.cpp:266
 msgid "About %1"
 msgstr "О программе %1"
 
-#: kchmmainwindow.cpp:259
+#: kchmmainwindow.cpp:267
 msgid ""
 "%1 version %2\n"
 "\n"
@@ -393,13 +402,14 @@ msgstr ""
 "\n"
 "Лицензировано в соответствии с GNU GPL\n"
 "\n"
-"Попробуйте наш другой проект, www.transientmail.com - e-mail адрес, который уничтожается самостоятельно."
+"Попробуйте наш другой проект, www.transientmail.com - e-mail адрес, который "
+"уничтожается самостоятельно."
 
-#: kchmmainwindow.cpp:330
+#: kchmmainwindow.cpp:350
 msgid "%1 - remote link clicked - %2"
 msgstr "%1 - нажата внешняя ссылка - %2"
 
-#: kchmmainwindow.cpp:331
+#: kchmmainwindow.cpp:351
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
@@ -409,19 +419,19 @@ msgstr ""
 "\n"
 "Продолжить?"
 
-#: kchmmainwindow.cpp:332 kchmmainwindow.cpp:368
+#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
 msgid "&Yes"
 msgstr "Да"
 
-#: kchmmainwindow.cpp:332 kchmmainwindow.cpp:368
+#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
 msgid "&No"
 msgstr "Нет"
 
-#: kchmmainwindow.cpp:356
+#: kchmmainwindow.cpp:376
 msgid "%1 - JavsScript link clicked"
 msgstr "%1 - нажата ссылка на JavaScript"
 
-#: kchmmainwindow.cpp:357
+#: kchmmainwindow.cpp:377
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
@@ -429,11 +439,11 @@ msgstr ""
 "Вы нажали ссылку на код JavaScript.\n"
 "Для обеспечения безопасности все ссылки на JavaScript отключены."
 
-#: kchmmainwindow.cpp:366
+#: kchmmainwindow.cpp:386
 msgid "%1 - link to a new CHM file clicked"
 msgstr "%1 - нажата ссылка на новый CHM файл"
 
-#: kchmmainwindow.cpp:367
+#: kchmmainwindow.cpp:387
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -445,89 +455,115 @@ msgstr ""
 "\n"
 "Продолжить??"
 
-#: kchmmainwindow.cpp:428
+#: kchmmainwindow.cpp:448
 msgid "File Operations"
 msgstr "Файловые операции"
 
-#: kchmmainwindow.cpp:432
+#: kchmmainwindow.cpp:452
 msgid "Open File"
 msgstr "Открыть файл"
 
-#: kchmmainwindow.cpp:438
+#: kchmmainwindow.cpp:458
 msgid "Click this button to open an existing chm file."
 msgstr "Нажмите на эту кнопку для открытия существующего CHM файла"
 
-#: kchmmainwindow.cpp:443
+#: kchmmainwindow.cpp:463
 msgid "Print File"
 msgstr "Печать"
 
-#: kchmmainwindow.cpp:449
+#: kchmmainwindow.cpp:469
 msgid "Click this button to print the current page"
 msgstr "Нажмите на эту кнопку для печати текущей страницы"
 
-#: kchmmainwindow.cpp:453
-msgid "Navigation"
-msgstr "Навигация"
+#: kchmmainwindow.cpp:484
+msgid "E&xtract CHM content..."
+msgstr ""
 
-#: kchmmainwindow.cpp:457
-msgid "Move backward in history"
-msgstr "Вернуться назад в историю"
+#: kchmmainwindow.cpp:485
+#, fuzzy
+msgid ""
+"Click this button to extract the whole CHM file content into a specific "
+"directory"
+msgstr "Нажмите на эту кнопку для поиска данной темы в окне содержания"
 
-#: kchmmainwindow.cpp:462
-msgid "Click this button to move backward in browser history"
-msgstr "Нажмите на эту кнопку для возвращения назад в истории сохраненных страниц"
-
-#: kchmmainwindow.cpp:466
-msgid "Move forward in history"
-msgstr "Переместится вперед в историю"
-
-#: kchmmainwindow.cpp:471
-msgid "Click this button to move forward in browser history"
-msgstr "Нажмите на эту кнопку для перемещения вперед в истории сохраненных страниц"
-
-#: kchmmainwindow.cpp:475
-msgid "Go to the home page"
-msgstr "Перейти на домашнюю страницу"
-
-#: kchmmainwindow.cpp:480
-msgid "Click this button to move to the home page"
-msgstr "Нажмите на эту кнопку для перемещения на домашнюю страницу"
-
-#: kchmmainwindow.cpp:498
+#: kchmmainwindow.cpp:491
 msgid "&Recent files"
 msgstr "Последние файлы"
 
-#: kchmmainwindow.cpp:507 kchmviewwindow_khtmlpart.cpp:163
+#: kchmmainwindow.cpp:500
 msgid "&Select all"
 msgstr "Выбрать все"
 
-#: kchmmainwindow.cpp:515
-msgid "&Setup"
-msgstr "Настройка"
-
-#: kchmmainwindow.cpp:516
+#: kchmmainwindow.cpp:518
 msgid "&Change settings..."
 msgstr "Изменить настройки"
 
-#: kchmmainwindow.cpp:522
+#: kchmmainwindow.cpp:524
 msgid "About &Qt"
 msgstr "О библиотеке Qt..."
 
-#: kchmmainwindow.cpp:524
+#: kchmmainwindow.cpp:526
 msgid "What's &This"
 msgstr "Что это"
 
-#: kchmmainwindow.cpp:893
+#: kchmmainwindow.cpp:853
 msgid "Index"
 msgstr "Индекс"
 
-#: kchmmainwindow.cpp:916
+#: kchmmainwindow.cpp:876
 msgid "Search"
 msgstr "Поиск"
 
-#: kchmmainwindow.cpp:972
+#: kchmmainwindow.cpp:939
 msgid "Could not locate opened topic in content window"
 msgstr "Невозможно найти открытую тему в окне контента"
+
+#: kchmmainwindow.cpp:950 kchmmainwindow.cpp:956
+msgid "Choose a directory to store CHM content"
+msgstr ""
+
+#: kchmmainwindow.cpp:969
+msgid "Extracting CHM content"
+msgstr ""
+
+#: kchmmainwindow.cpp:969
+msgid "Extracting files..."
+msgstr ""
+
+#: kchmmainwindow.cpp:969
+#, fuzzy
+msgid "Abort"
+msgstr "О программе %1"
+
+#: kchmnavtoolbar.cpp:34
+msgid "Navigation"
+msgstr "Навигация"
+
+#: kchmnavtoolbar.cpp:38
+msgid "Move backward in history"
+msgstr "Вернуться назад в историю"
+
+#: kchmnavtoolbar.cpp:43
+msgid "Click this button to move backward in browser history"
+msgstr ""
+"Нажмите на эту кнопку для возвращения назад в истории сохраненных страниц"
+
+#: kchmnavtoolbar.cpp:47
+msgid "Move forward in history"
+msgstr "Переместится вперед в историю"
+
+#: kchmnavtoolbar.cpp:52
+msgid "Click this button to move forward in browser history"
+msgstr ""
+"Нажмите на эту кнопку для перемещения вперед в истории сохраненных страниц"
+
+#: kchmnavtoolbar.cpp:56
+msgid "Go to the home page"
+msgstr "Перейти на домашнюю страницу"
+
+#: kchmnavtoolbar.cpp:61
+msgid "Click this button to move to the home page"
+msgstr "Нажмите на эту кнопку для перемещения на домашнюю страницу"
 
 #: kchmsearchtoolbar.cpp:45
 msgid "Find in page"
@@ -558,7 +594,8 @@ msgid "Locate this topic in content window"
 msgstr "Найти тему в данном окне"
 
 #: kchmsearchtoolbar.cpp:92
-msgid "Click this button to find current topic in the content window, and open it."
+msgid ""
+"Click this button to find current topic in the content window, and open it."
 msgstr "Нажмите на эту кнопку для поиска данной темы в окне содержания"
 
 #: kchmsearchtoolbar.cpp:96
@@ -583,7 +620,8 @@ msgstr "Просмотреть исходный код HTML"
 
 #: kchmsearchtoolbar.cpp:119
 msgid "Click this button to open a separate window with the page HTML source."
-msgstr "Нажмите на эту кнопку для открытия отдельного окна с исходным кодом HTML"
+msgstr ""
+"Нажмите на эту кнопку для открытия отдельного окна с исходным кодом HTML"
 
 #: kchmsearchtoolbar.cpp:123
 msgid "Add to bookmarks"
@@ -645,39 +683,40 @@ msgstr "Установить язык"
 msgid "&Set codepage"
 msgstr "Установить кодировку"
 
-#: kchmsearchwindow.cpp:36
+#: kchmsearchwindow.cpp:37
 msgid "Type in word(s) to search for:"
 msgstr "Введите слова для поиска:"
 
-#: kchmsearchwindow.cpp:51
+#: kchmsearchwindow.cpp:52
 msgid "Title"
 msgstr "Заголовок"
 
-#: kchmsearchwindow.cpp:52
+#: kchmsearchwindow.cpp:53
 msgid "Location"
 msgstr "Местонахождение"
 
-#: kchmsearchwindow.cpp:60
+#: kchmsearchwindow.cpp:77
 msgid "Match similar words"
 msgstr "Искать похожие слова"
 
-#: kchmsearchwindow.cpp:93
+#: kchmsearchwindow.cpp:113
 msgid "Search returned %1 result(s)"
 msgstr "Поиск вернул %1 результат(ов)"
 
-#: kchmsearchwindow.cpp:96
+#: kchmsearchwindow.cpp:116
 msgid "Search returned no results"
 msgstr "Поиск не нашел ничего"
 
-#: kchmsearchwindow.cpp:99 kchmviewwindow_qtextbrowser.cpp:216
+#: kchmsearchwindow.cpp:119 kchmviewwindow_qtextbrowser.cpp:211
 msgid "Search failed"
 msgstr "Поиск не удался"
 
-#: kchmsearchwindow.cpp:395
+#: kchmsearchwindow.cpp:415
 msgid "How to use search"
 msgstr "Как использовать поиск"
 
-#: kchmsearchwindow.cpp:396
+#: kchmsearchwindow.cpp:416
+#, fuzzy
 msgid ""
 "The search query can contain a few prefixes.\n"
 "A set of words inside the quote marks mean that you are searching for exact "
@@ -687,39 +726,47 @@ msgid ""
 "the search result.\n"
 "\n"
 "Note that only letters and digits are indexed.\n"
-"You cannot search for symbols other than underscope, and these symbols will "
-"be removed from the search query.\n"
+"You cannot search for non-character symbols other than underscope, and those "
+"symbols will be removed from the search query.\n"
 "For example, search for 'C' will give the same result as searching for 'C++'."
 msgstr ""
 "Запрос поиска может содержать несколько префиксов.\n"
 "Набор слов в кавычках обозначает точное совпадение фразы.\n"
 "Слово с минусом спереди должно отсутствовать в результатах поиска.\n"
-"Слово с плюсом, или без какого-либо префикса обозначает, что слово должно присутствовать в результатах поиска.\n"
+"Слово с плюсом, или без какого-либо префикса обозначает, что слово должно "
+"присутствовать в результатах поиска.\n"
 "\n"
-"Имейте ввиду, что в CHM файле индексированы для поиска только буквы и цифры. Вы не можете делать поиск по другим символам, кроме подчеркивания - они будут удалены из запроса\n"
-"К примеру, запрос 'C' вернет тот же результат поиска, что и запрос, содержащий 'C++'"
+"Имейте ввиду, что в CHM файле индексированы для поиска только буквы и цифры. "
+"Вы не можете делать поиск по другим символам, кроме подчеркивания - они "
+"будут удалены из запроса\n"
+"К примеру, запрос 'C' вернет тот же результат поиска, что и запрос, "
+"содержащий 'C++'"
 
-#: kchmviewwindow_khtmlpart.cpp:161
-msgid "Editor"
-msgstr "Редактор"
+#: kchmviewwindow.cpp:233 kchmviewwindow.cpp:346
+msgid "Shift+Enter"
+msgstr ""
 
-#: kchmviewwindow_qtextbrowser.cpp:176
+#: kchmviewwindow.cpp:235 kchmviewwindow.cpp:348
+msgid "Ctrl+Enter"
+msgstr ""
+
+#: kchmviewwindow_qtextbrowser.cpp:171
 msgid "Printing (page %1)..."
 msgstr "Печать страницы № %1..."
 
-#: kchmviewwindow_qtextbrowser.cpp:184
+#: kchmviewwindow_qtextbrowser.cpp:179
 msgid "Printing completed"
 msgstr "Печать завершена"
 
-#: kchmviewwindow_qtextbrowser.cpp:188
+#: kchmviewwindow_qtextbrowser.cpp:183
 msgid "Printing aborted"
 msgstr "Печать отменена"
 
-#: kchmviewwindow_qtextbrowser.cpp:194
+#: kchmviewwindow_qtextbrowser.cpp:189
 msgid "%1 - could not print"
 msgstr "%1 - печать невозможна"
 
-#: kchmviewwindow_qtextbrowser.cpp:195
+#: kchmviewwindow_qtextbrowser.cpp:190
 msgid ""
 "Could not print.\n"
 "Your Qt library has been compiled without printing support"
@@ -727,7 +774,16 @@ msgstr ""
 "Печать невозможна.\n"
 "Ваша библиотека QT была собрана без поддержки печати."
 
-#: main.cpp:50
+#: kchmviewwindowmgr.cpp:63
+msgid "&Window"
+msgstr ""
+
+#: main.cpp:52
 msgid "CHM file viewer"
 msgstr "Просмотрщик CHM файлов"
 
+#~ msgid "&Setup"
+#~ msgstr "Настройка"
+
+#~ msgid "Editor"
+#~ msgstr "Редактор"

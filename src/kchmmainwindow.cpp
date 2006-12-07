@@ -318,6 +318,9 @@ void KCHMMainWindow::slotOnTreeClicked( QListViewItem * item )
 
 void KCHMMainWindow::slotLinkClicked ( const QString & link, bool& follow_link )
 {
+	if ( link.isEmpty() )
+		return;
+	
 	if ( gKeyEventFilter.isShiftPressed() )
 	{
 		openPage( link, OPF_NEW_TAB | OPF_CONTENT_TREE );
@@ -728,17 +731,51 @@ void KCHMMainWindow::slotChangeSettingsMenuItemActivated()
 
 		appConfig.m_QtBrowserPath = dlg.m_qtBrowserPath->text();
 		
-		appConfig.m_kdeEnableJS = dlg.m_enableJS->isChecked();
-		appConfig.m_kdeEnablePlugins = dlg.m_enablePlugins->isChecked();
-		appConfig.m_kdeEnableJava = dlg.m_enableJava->isChecked();
-		appConfig.m_kdeEnableRefresh = dlg.m_enableRefresh->isChecked();
-		appConfig.m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
+		// Check the changes
+		bool need_restart = false;
+		
+		if ( appConfig.m_kdeEnableJS != dlg.m_enableJS->isChecked() )
+		{
+			need_restart = true;
+			appConfig.m_kdeEnableJS = dlg.m_enableJS->isChecked();
+		}
+		
+		if ( appConfig.m_kdeEnablePlugins != dlg.m_enablePlugins->isChecked() )
+		{
+			need_restart = true;
+			appConfig.m_kdeEnablePlugins = dlg.m_enablePlugins->isChecked();
+		}
+		
+		if ( appConfig.m_kdeEnableJava != dlg.m_enableJava->isChecked() )
+		{
+			need_restart = true;
+			appConfig.m_kdeEnableJava = dlg.m_enableJava->isChecked();
+		}
+		
+		if ( appConfig.m_kdeEnableRefresh != dlg.m_enableRefresh->isChecked() )
+		{
+			need_restart = true;
+			appConfig.m_kdeEnableRefresh = dlg.m_enableRefresh->isChecked();
+		}
+		
+		if ( appConfig.m_kdeUseQTextBrowser != dlg.m_radioUseQtextBrowser->isChecked() )
+		{
+			need_restart = true;
+			appConfig.m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
+		}
 		
 		appConfig.m_advExternalEditorPath = dlg.m_advExternalProgramName->text();
 		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceExternal->isChecked();
 		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceInternal->isChecked();
 		
 		appConfig.save();
+		
+		if ( need_restart )
+			QMessageBox::information( 
+					this,
+					APP_NAME,
+					i18n( "Changing browser view options require\nrestarting the application to take effect." )
+									);
 	}
 }
 
@@ -827,6 +864,11 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 					 SIGNAL( clicked( QListViewItem* ) ), 
 					 this, 
 					 SLOT( slotOnTreeClicked( QListViewItem* ) ) );
+			
+			connect( m_contentsWindow, 
+					 SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int ) ), 
+					 this, 
+					 SLOT( slotOnTreeDoubleClicked ( QListViewItem *, const QPoint &, int ) ) );
 			
 			m_tabWidget->insertTab (m_contentsWindow, i18n( "Contents" ), tabindex);
 		}
@@ -1073,6 +1115,16 @@ void KCHMMainWindow::locateInContentTree( const QString & url )
 		m_contentsWindow->setCurrentItem (treeitem);
 		m_contentsWindow->ensureItemVisible (treeitem);
 	}
+}
+
+void KCHMMainWindow::slotOnTreeDoubleClicked( QListViewItem * item, const QPoint &, int )
+{
+	// Open/close only existing item which have children
+	if ( !item || item->childCount() == 0 )
+		return;
+	
+	item->setOpen( !item->isOpen() );
+	item->repaint();
 }
 
 

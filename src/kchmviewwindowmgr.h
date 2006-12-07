@@ -59,6 +59,7 @@ class KCHMViewWindowMgr : public QTabWidget
 	protected slots:
 		void	onTabChanged( QWidget * newtab );
 		void	onCloseWindow( int id );
+		void	onActiveWindow( int id );
 		void	updateCloseButtons();
 		
 	private:
@@ -71,9 +72,14 @@ class KCHMViewWindowMgr : public QTabWidget
 		
 		void	closeWindow( const tab_window_t& tab );
 		void	deleteAllWindows();
+		void    updateTabAccel();
+		QKeySequence key(int);
 		
 		QMap<QWidget*,tab_window_t>	m_Windows;
 		typedef QMap<QWidget*,tab_window_t>::iterator WindowsIterator;
+		
+        QValueList<int>         m_idSlot;
+        typedef QValueList<int>::iterator IdIterator;
 		
 		QPushButton			*	m_closeButton;
 		KQPopupMenu 		*	m_MenuWindow;

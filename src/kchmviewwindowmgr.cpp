@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <qaccel.h>
+
 #include "kchmconfig.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
@@ -49,7 +51,7 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	m_closeButton->setEnabled( false );
 	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( closeCurrentWindow() ) );
 	
-	setCornerWidget( m_closeButton );
+	setCornerWidget( m_closeButton, TopRight);
 }
 
 KCHMViewWindowMgr::~KCHMViewWindowMgr( )
@@ -65,7 +67,8 @@ void KCHMViewWindowMgr::createMenu( KCHMMainWindow * parent )
 	m_menuIdClose = m_MenuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()), CTRL+Key_W );
 	m_MenuWindow->insertSeparator();
 
-	connect( m_MenuWindow, SIGNAL( activated(int) ), this, SLOT ( onCloseWindow(int) ));
+	//connect( m_MenuWindow, SIGNAL( activated(int) ), this, SLOT ( onCloseWindow(int) ));
+	connect( m_MenuWindow, SIGNAL( activated(int) ), this, SLOT ( onActiveWindow(int) ));
 }
 
 void KCHMViewWindowMgr::invalidate()
@@ -131,13 +134,30 @@ void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 		qFatal( "KCHMViewWindowMgr::setTabName called with unknown window!" );
 	
 	QString title = window->getTitle();
+	
+	// Trim too long string
+	if ( title.length() > 25 )
+		title = title.left( 22 ) + "...";
+
 	setTabLabel( window->getQWidget(), title );
 	
 	if ( it.data().menuitem == 0 )
 	{
-		int menuid = m_Windows.size();
+		// find the empty menuid
+		int menuid;
+		
+		if ( !m_idSlot.empty() )
+		{
+			menuid = *m_idSlot.begin();
+			m_idSlot.erase( m_idSlot.begin() );
+		}
+		else
+			menuid = m_Windows.size();
+
 		QString menutitle = "&" + QString::number(menuid) + " " + title;
-		it.data().menuitem = m_MenuWindow->insertItem( menutitle, menuid );
+		it.data().menuitem = menuid;
+		m_MenuWindow->insertItem(menutitle, menuid);
+		updateTabAccel();
 	}
 	else
 	{
@@ -171,13 +191,17 @@ void KCHMViewWindowMgr::closeWindow( const tab_window_t & tab )
 		qFatal( "KCHMViewWindowMgr::closeWindow called with unknown widget!" );
 
 	if ( tab.menuitem != 0 )
+	{
 		m_MenuWindow->removeItem( tab.menuitem );
-
+		m_idSlot.push_back( tab.menuitem );
+	}
+	
 	removePage( tab.widget );
 	delete tab.window;
 	
 	m_Windows.remove( it );
 	updateCloseButtons();
+	updateTabAccel();
 }
 
 void KCHMViewWindowMgr::onCloseWindow( int id )
@@ -188,6 +212,20 @@ void KCHMViewWindowMgr::onCloseWindow( int id )
 			continue;
 		
 		closeWindow( it.data() );
+		break;
+	}
+}
+
+
+void KCHMViewWindowMgr::onActiveWindow(int id)
+{
+	for (WindowsIterator it = m_Windows.begin(); it != m_Windows.end(); ++it)
+	{
+		if ( it.data().menuitem != id )
+			continue;
+		
+		QWidget *widget = it.data().widget;
+		showPage(widget);
 		break;
 	}
 }
@@ -244,5 +282,63 @@ void KCHMViewWindowMgr::onTabChanged( QWidget * newtab )
 	it.data().window->updateNavigationToolbar();
 	mainWindow->slotBrowserChanged( it.data().window );
 }
+
+
+void KCHMViewWindowMgr::updateTabAccel()
+{
+	WindowsIterator it;
+    for ( it = m_Windows.begin(); it != m_Windows.end(); ++it )
+	{
+		int menuid = it.data().menuitem;
+		int index = indexOf(it.data().widget);
+		
+		if ( index <= 9 )
+		{
+			if ( index < 9 )
+				index++;
+			else
+				index = 0;
+			
+			m_MenuWindow->setAccel(ALT + key(index), menuid);
+		}
+	}
+}
+
+QKeySequence KCHMViewWindowMgr::key(int i)
+{
+	switch (i)
+	{
+		case 0:
+			return Key_0;
+			
+		case 1:
+			return Key_1;
+			
+		case 2:
+			return Key_2;
+			
+		case 3:
+			return Key_3;
+			
+		case 4:
+			return Key_4;
+			
+		case 5:
+			return Key_5;
+			
+		case 6:
+			return Key_6;
+			
+		case 7:
+			return Key_7;
+			
+		case 8:
+			return Key_8;
+			
+		default:
+			return Key_9;
+	}
+}
+
 
 #include "kchmviewwindowmgr.moc"

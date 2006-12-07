@@ -933,9 +933,8 @@ inline bool CHMFile::InfoFromSystem()
 	chmUnitInfo ui;
 	
 	int index = 0;
-	unsigned char* cursor = NULL;
+	unsigned char* cursor = NULL, *p;
 	u_int16_t value = 0;
-
 	long size = 0;
 
 	// Run the first loop to detect the encoding. We need this, because title could be
@@ -992,7 +991,9 @@ inline bool CHMFile::InfoFromSystem()
 			index += 2;
 			cursor = buffer + index;
 
-			m_detectedLCID = (short) *((unsigned int*) (buffer + index + 2));
+			p = buffer + index + 2;
+			m_detectedLCID = (short) (p[0] | (p[1]<<8));
+			
 			break;
 
 		case 6:

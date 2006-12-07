@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+// Do not use tr() or i18n() in this file - this class is not derived from QObject.
+
 #include <qregexp.h>
 #include <qstring.h>
 #include <qdir.h>
@@ -169,7 +171,7 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 		return true;
 
 	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
-	// or will be loaded (for kio slave). We care only for path component.
+	// or will be loaded (for kio slave). We care only about the path component.
 	if ( isNewChmURL( newurl, chmfile, page ) )
 		newurl = page;
 
@@ -184,7 +186,7 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 		mainWindow->getViewWindowMgr()->setTabName( this );
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -230,9 +232,9 @@ KQPopupMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * pa
 			m_contextMenuLink = createStandardContextMenu( parent );
 			m_contextMenuLink->insertSeparator();
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), "Shift+Enter" );
+			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), QKeySequence("Shift+Enter") );
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), "Ctrl+Enter" );
+			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), QKeySequence("Ctrl+Enter") );
 		}
 		
 		setTabKeeper( link );
@@ -343,9 +345,15 @@ KQPopupMenu * KCHMViewWindow::createListItemContextMenu( QWidget * w )
 {
 	KQPopupMenu * contextMenu = new KQPopupMenu( w );
 		
-	contextMenu->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), "Shift+Enter" );
+	contextMenu->insertItem ( "&Open this link in a new tab",
+							  ::mainWindow, 
+							  SLOT( slotOpenPageInNewTab() ), 
+							  QKeySequence( "Shift+Enter" ) );
 			
-	contextMenu->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), "Ctrl+Enter" );
+	contextMenu->insertItem ( "&Open this link in a new background tab", 
+							  ::mainWindow, 
+							  SLOT( slotOpenPageInNewBackgroundTab() ),
+							  QKeySequence( "Ctrl+Enter" ) );
 
 	return contextMenu;
 }

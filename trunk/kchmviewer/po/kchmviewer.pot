@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-01 01:46-0800\n"
+"POT-Creation-Date: 2006-07-06 20:02-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -308,24 +308,28 @@ msgid ""
 "Your emails"
 msgstr ""
 
-#: kchmbookmarkwindow.cpp:39
+#: kchmbookmarkwindow.cpp:42
 msgid "&Add"
 msgstr ""
 
-#: kchmbookmarkwindow.cpp:41
+#: kchmbookmarkwindow.cpp:44
 msgid "&Del"
 msgstr ""
 
-#: kchmbookmarkwindow.cpp:64
+#: kchmbookmarkwindow.cpp:86
 msgid "%1 - add a bookmark"
 msgstr ""
 
-#: kchmbookmarkwindow.cpp:65 kchmbookmarkwindow.cpp:101
+#: kchmbookmarkwindow.cpp:87 kchmbookmarkwindow.cpp:129
 msgid "Enter the name for this bookmark:"
 msgstr ""
 
-#: kchmbookmarkwindow.cpp:100
+#: kchmbookmarkwindow.cpp:128
 msgid "%1 - edit the bookmark name"
+msgstr ""
+
+#: kchmbookmarkwindow.cpp:199
+msgid "&Add bookmark"
 msgstr ""
 
 #: kchmdialogchooseurlfromlist.cpp:34
@@ -340,35 +344,35 @@ msgstr ""
 msgid "&Ok"
 msgstr ""
 
-#: kchmmainwindow.cpp:124
+#: kchmmainwindow.cpp:126
 msgid "*.chm|Compressed Help Manual (*.chm)"
 msgstr ""
 
-#: kchmmainwindow.cpp:126
+#: kchmmainwindow.cpp:128
 msgid "Compressed Help Manual (*.chm)"
 msgstr ""
 
-#: kchmmainwindow.cpp:136
+#: kchmmainwindow.cpp:138
 msgid "Loading aborted"
 msgstr ""
 
-#: kchmmainwindow.cpp:237
+#: kchmmainwindow.cpp:239
 msgid "%1 - failed to load the chm file"
 msgstr ""
 
-#: kchmmainwindow.cpp:238
+#: kchmmainwindow.cpp:240
 msgid "Unable to load the chm file %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:248
+#: kchmmainwindow.cpp:250
 msgid "Could not load file %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:264
+#: kchmmainwindow.cpp:266
 msgid "About %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:265
+#: kchmmainwindow.cpp:267
 msgid ""
 "%1 version %2\n"
 "\n"
@@ -381,40 +385,40 @@ msgid ""
 "address, which expires automatically."
 msgstr ""
 
-#: kchmmainwindow.cpp:348
+#: kchmmainwindow.cpp:350
 msgid "%1 - remote link clicked - %2"
 msgstr ""
 
-#: kchmmainwindow.cpp:349
+#: kchmmainwindow.cpp:351
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: kchmmainwindow.cpp:350 kchmmainwindow.cpp:386
+#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
 msgid "&Yes"
 msgstr ""
 
-#: kchmmainwindow.cpp:350 kchmmainwindow.cpp:386
+#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
 msgid "&No"
 msgstr ""
 
-#: kchmmainwindow.cpp:374
+#: kchmmainwindow.cpp:376
 msgid "%1 - JavsScript link clicked"
 msgstr ""
 
-#: kchmmainwindow.cpp:375
+#: kchmmainwindow.cpp:377
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
 msgstr ""
 
-#: kchmmainwindow.cpp:384
+#: kchmmainwindow.cpp:386
 msgid "%1 - link to a new CHM file clicked"
 msgstr ""
 
-#: kchmmainwindow.cpp:385
+#: kchmmainwindow.cpp:387
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -422,81 +426,81 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: kchmmainwindow.cpp:446
+#: kchmmainwindow.cpp:448
 msgid "File Operations"
 msgstr ""
 
-#: kchmmainwindow.cpp:450
+#: kchmmainwindow.cpp:452
 msgid "Open File"
 msgstr ""
 
-#: kchmmainwindow.cpp:456
+#: kchmmainwindow.cpp:458
 msgid "Click this button to open an existing chm file."
 msgstr ""
 
-#: kchmmainwindow.cpp:461
+#: kchmmainwindow.cpp:463
 msgid "Print File"
 msgstr ""
 
-#: kchmmainwindow.cpp:467
+#: kchmmainwindow.cpp:469
 msgid "Click this button to print the current page"
 msgstr ""
 
-#: kchmmainwindow.cpp:482
+#: kchmmainwindow.cpp:484
 msgid "E&xtract CHM content..."
 msgstr ""
 
-#: kchmmainwindow.cpp:483
+#: kchmmainwindow.cpp:485
 msgid ""
 "Click this button to extract the whole CHM file content into a specific "
 "directory"
 msgstr ""
 
-#: kchmmainwindow.cpp:489
+#: kchmmainwindow.cpp:491
 msgid "&Recent files"
 msgstr ""
 
-#: kchmmainwindow.cpp:498 kchmviewwindow.cpp:201
+#: kchmmainwindow.cpp:500
 msgid "&Select all"
 msgstr ""
 
-#: kchmmainwindow.cpp:513
+#: kchmmainwindow.cpp:518
 msgid "&Change settings..."
 msgstr ""
 
-#: kchmmainwindow.cpp:519
+#: kchmmainwindow.cpp:524
 msgid "About &Qt"
 msgstr ""
 
-#: kchmmainwindow.cpp:521
+#: kchmmainwindow.cpp:526
 msgid "What's &This"
 msgstr ""
 
-#: kchmmainwindow.cpp:849
+#: kchmmainwindow.cpp:853
 msgid "Index"
 msgstr ""
 
-#: kchmmainwindow.cpp:872
+#: kchmmainwindow.cpp:876
 msgid "Search"
 msgstr ""
 
-#: kchmmainwindow.cpp:928
+#: kchmmainwindow.cpp:939
 msgid "Could not locate opened topic in content window"
 msgstr ""
 
-#: kchmmainwindow.cpp:939 kchmmainwindow.cpp:945
+#: kchmmainwindow.cpp:950 kchmmainwindow.cpp:956
 msgid "Choose a directory to store CHM content"
 msgstr ""
 
-#: kchmmainwindow.cpp:958
+#: kchmmainwindow.cpp:969
 msgid "Extracting CHM content"
 msgstr ""
 
-#: kchmmainwindow.cpp:958
+#: kchmmainwindow.cpp:969
 msgid "Extracting files..."
 msgstr ""
 
-#: kchmmainwindow.cpp:958
+#: kchmmainwindow.cpp:969
 msgid "Abort"
 msgstr ""
 
@@ -645,39 +649,39 @@ msgstr ""
 msgid "&Set codepage"
 msgstr ""
 
-#: kchmsearchwindow.cpp:36
+#: kchmsearchwindow.cpp:37
 msgid "Type in word(s) to search for:"
 msgstr ""
 
-#: kchmsearchwindow.cpp:51
+#: kchmsearchwindow.cpp:52
 msgid "Title"
 msgstr ""
 
-#: kchmsearchwindow.cpp:52
+#: kchmsearchwindow.cpp:53
 msgid "Location"
 msgstr ""
 
-#: kchmsearchwindow.cpp:60
+#: kchmsearchwindow.cpp:77
 msgid "Match similar words"
 msgstr ""
 
-#: kchmsearchwindow.cpp:93
+#: kchmsearchwindow.cpp:113
 msgid "Search returned %1 result(s)"
 msgstr ""
 
-#: kchmsearchwindow.cpp:96
+#: kchmsearchwindow.cpp:116
 msgid "Search returned no results"
 msgstr ""
 
-#: kchmsearchwindow.cpp:99 kchmviewwindow_qtextbrowser.cpp:211
+#: kchmsearchwindow.cpp:119 kchmviewwindow_qtextbrowser.cpp:211
 msgid "Search failed"
 msgstr ""
 
-#: kchmsearchwindow.cpp:395
+#: kchmsearchwindow.cpp:415
 msgid "How to use search"
 msgstr ""
 
-#: kchmsearchwindow.cpp:396
+#: kchmsearchwindow.cpp:416
 msgid ""
 "The search query can contain a few prefixes.\n"
 "A set of words inside the quote marks mean that you are searching for exact "
@@ -687,17 +691,17 @@ msgid ""
 "the search result.\n"
 "\n"
 "Note that only letters and digits are indexed.\n"
-"You cannot search for symbols other than underscope, and these symbols will "
-"be removed from the search query.\n"
+"You cannot search for non-character symbols other than underscope, and those "
+"symbols will be removed from the search query.\n"
 "For example, search for 'C' will give the same result as searching for 'C++'."
 msgstr ""
 
-#: kchmviewwindow.cpp:226
-msgid "&Open this link in a new tab"
+#: kchmviewwindow.cpp:233 kchmviewwindow.cpp:346
+msgid "Shift+Enter"
 msgstr ""
 
-#: kchmviewwindow.cpp:228
-msgid "&Open this link in a new background tab"
+#: kchmviewwindow.cpp:235 kchmviewwindow.cpp:348
+msgid "Ctrl+Enter"
 msgstr ""
 
 #: kchmviewwindow_qtextbrowser.cpp:171

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-01 01:46-0800\n"
+"POT-Creation-Date: 2006-07-06 20:02-0700\n"
 "PO-Revision-Date: 2006-05-07 20:30-0400\n"
 "Last-Translator: 林俊 <demonlinjun@163.com>\n"
 "Language-Team:  <zh@li.org>\n"
@@ -89,8 +89,8 @@ msgid ""
 "Remembers the information about the files, which were opened. Remembers last "
 "opened page, search history, font size, bookmarks and so on."
 msgstr ""
-"记录已经打开的文件的相关信息。 "
-"记录最后打开的页面，搜索记录，字体大小，书签等信息。"
+"记录已经打开的文件的相关信息。 记录最后打开的页面，搜索记录，字体大小，书签等"
+"信息。"
 
 #. i18n: file kchmsetupdialog.ui line 171
 #: rc.cpp:40
@@ -165,9 +165,7 @@ msgstr "QT 版本设置"
 msgid ""
 "Enter the path to the program, which will be used as a browser for external "
 "links.  A <i>%s</i> symbol will be replaced by the URL clicked."
-msgstr ""
-"输入打开外部链接的浏览器程序的路径。"
-"<i>%s</i> 符号将被点击的URL替换。"
+msgstr "输入打开外部链接的浏览器程序的路径。<i>%s</i> 符号将被点击的URL替换。"
 
 #. i18n: file kchmsetupdialog.ui line 325
 #: rc.cpp:80
@@ -313,27 +311,27 @@ msgid ""
 "Your emails"
 msgstr "demonlinjun@163.com"
 
-#: kchmbookmarkwindow.cpp:39
+#: kchmbookmarkwindow.cpp:42
 msgid "&Add"
 msgstr "添加(&A)"
 
-#: kchmbookmarkwindow.cpp:41
+#: kchmbookmarkwindow.cpp:44
 msgid "&Del"
 msgstr "删除(&D)"
 
-#: kchmbookmarkwindow.cpp:64
+#: kchmbookmarkwindow.cpp:86
 msgid "%1 - add a bookmark"
 msgstr "%1 - 添加书签"
 
-#: kchmbookmarkwindow.cpp:65 kchmbookmarkwindow.cpp:101
+#: kchmbookmarkwindow.cpp:87 kchmbookmarkwindow.cpp:129
 msgid "Enter the name for this bookmark:"
 msgstr "输入书签的名称"
 
-#: kchmbookmarkwindow.cpp:100
+#: kchmbookmarkwindow.cpp:128
 msgid "%1 - edit the bookmark name"
 msgstr "%1 - 编辑书签名称"
 
-#: kchmbookmarkwindow.cpp:179
+#: kchmbookmarkwindow.cpp:199
 msgid "&Add bookmark"
 msgstr "添加书签(&A)"
 
@@ -349,35 +347,35 @@ msgstr "请在下面选取一个主题"
 msgid "&Ok"
 msgstr "确定(&O)"
 
-#: kchmmainwindow.cpp:124
+#: kchmmainwindow.cpp:126
 msgid "*.chm|Compressed Help Manual (*.chm)"
 msgstr "*.chm|压缩的帮助手册 (*.chm)"
 
-#: kchmmainwindow.cpp:126
+#: kchmmainwindow.cpp:128
 msgid "Compressed Help Manual (*.chm)"
 msgstr "压缩的帮助手册 (*.chm)"
 
-#: kchmmainwindow.cpp:136
+#: kchmmainwindow.cpp:138
 msgid "Loading aborted"
 msgstr "取消载入"
 
-#: kchmmainwindow.cpp:237
+#: kchmmainwindow.cpp:239
 msgid "%1 - failed to load the chm file"
 msgstr "%1 - 载入CHM文件失败"
 
-#: kchmmainwindow.cpp:238
+#: kchmmainwindow.cpp:240
 msgid "Unable to load the chm file %1"
 msgstr "无法载入CHM文件%1"
 
-#: kchmmainwindow.cpp:248
+#: kchmmainwindow.cpp:250
 msgid "Could not load file %1"
 msgstr "无法载入文件%1"
 
-#: kchmmainwindow.cpp:264
+#: kchmmainwindow.cpp:266
 msgid "About %1"
 msgstr "关于%1"
 
-#: kchmmainwindow.cpp:265
+#: kchmmainwindow.cpp:267
 msgid ""
 "%1 version %2\n"
 "\n"
@@ -398,34 +396,33 @@ msgstr ""
 "\n"
 "请尝试我们的另一个项目，www.transientmail.com - 临时 E-Mail地址。"
 
-#: kchmmainwindow.cpp:348
+#: kchmmainwindow.cpp:350
 msgid "%1 - remote link clicked - %2"
 msgstr "%1 - 点击远程链接 - %2"
 
-#: kchmmainwindow.cpp:349
+#: kchmmainwindow.cpp:351
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"%1将使用外部程序来打开远程链接。 "
-"\n"
+"%1将使用外部程序来打开远程链接。 \n"
 "\n"
 "你要继续吗？"
 
-#: kchmmainwindow.cpp:350 kchmmainwindow.cpp:386
+#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
 msgid "&Yes"
 msgstr "是(&Y)"
 
-#: kchmmainwindow.cpp:350 kchmmainwindow.cpp:386
+#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
 msgid "&No"
 msgstr "否(&N)"
 
-#: kchmmainwindow.cpp:374
+#: kchmmainwindow.cpp:376
 msgid "%1 - JavsScript link clicked"
 msgstr "%1 - 点击JavaScript链接"
 
-#: kchmmainwindow.cpp:375
+#: kchmmainwindow.cpp:377
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
@@ -433,11 +430,11 @@ msgstr ""
 "你点击了JavaScript链接。\n"
 "为了避免安全问题，在CHM文件中不启用JavaScript URLs支持。"
 
-#: kchmmainwindow.cpp:384
+#: kchmmainwindow.cpp:386
 msgid "%1 - link to a new CHM file clicked"
 msgstr "%1 - 点击指向新的CHM文件的链接。"
 
-#: kchmmainwindow.cpp:385
+#: kchmmainwindow.cpp:387
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -449,81 +446,81 @@ msgstr ""
 "\n"
 "你要继续吗？"
 
-#: kchmmainwindow.cpp:446
+#: kchmmainwindow.cpp:448
 msgid "File Operations"
 msgstr "文件操作"
 
-#: kchmmainwindow.cpp:450
+#: kchmmainwindow.cpp:452
 msgid "Open File"
 msgstr "打开文件"
 
-#: kchmmainwindow.cpp:456
+#: kchmmainwindow.cpp:458
 msgid "Click this button to open an existing chm file."
 msgstr "点击此按钮打开存在的CHM文件"
 
-#: kchmmainwindow.cpp:461
+#: kchmmainwindow.cpp:463
 msgid "Print File"
 msgstr "打印文件"
 
-#: kchmmainwindow.cpp:467
+#: kchmmainwindow.cpp:469
 msgid "Click this button to print the current page"
 msgstr "点击此按钮打印当前页面"
 
-#: kchmmainwindow.cpp:482
+#: kchmmainwindow.cpp:484
 msgid "E&xtract CHM content..."
 msgstr "提取CHM目录(&X)"
 
-#: kchmmainwindow.cpp:483
+#: kchmmainwindow.cpp:485
 msgid ""
 "Click this button to extract the whole CHM file content into a specific "
 "directory"
 msgstr "点击此按钮提取整个CHM文件的目录到指定的目录。"
 
-#: kchmmainwindow.cpp:489
+#: kchmmainwindow.cpp:491
 msgid "&Recent files"
 msgstr "最近打开的文件(&R)"
 
-#: kchmmainwindow.cpp:498 kchmviewwindow.cpp:201
+#: kchmmainwindow.cpp:500
 msgid "&Select all"
 msgstr "选择全部(&S)"
 
-#: kchmmainwindow.cpp:513
+#: kchmmainwindow.cpp:518
 msgid "&Change settings..."
 msgstr "更改设置(&C)"
 
-#: kchmmainwindow.cpp:519
+#: kchmmainwindow.cpp:524
 msgid "About &Qt"
 msgstr "关于QT(&Q)"
 
-#: kchmmainwindow.cpp:521
+#: kchmmainwindow.cpp:526
 msgid "What's &This"
 msgstr "这是什么(&T)"
 
-#: kchmmainwindow.cpp:849
+#: kchmmainwindow.cpp:853
 msgid "Index"
 msgstr "索引"
 
-#: kchmmainwindow.cpp:872
+#: kchmmainwindow.cpp:876
 msgid "Search"
 msgstr "搜索"
 
-#: kchmmainwindow.cpp:928
+#: kchmmainwindow.cpp:939
 msgid "Could not locate opened topic in content window"
 msgstr "无法在目录窗口定位打开的主题"
 
-#: kchmmainwindow.cpp:939 kchmmainwindow.cpp:945
+#: kchmmainwindow.cpp:950 kchmmainwindow.cpp:956
 msgid "Choose a directory to store CHM content"
 msgstr "选择目录来保存CHM目录"
 
-#: kchmmainwindow.cpp:958
+#: kchmmainwindow.cpp:969
 msgid "Extracting CHM content"
 msgstr "提取CHM目录"
 
-#: kchmmainwindow.cpp:958
+#: kchmmainwindow.cpp:969
 msgid "Extracting files..."
 msgstr "提取文件..."
 
-#: kchmmainwindow.cpp:958
+#: kchmmainwindow.cpp:969
 msgid "Abort"
 msgstr "取消"
 
@@ -584,7 +581,8 @@ msgid "Locate this topic in content window"
 msgstr "在目录窗口定位主题"
 
 #: kchmsearchtoolbar.cpp:92
-msgid "Click this button to find current topic in the content window, and open it."
+msgid ""
+"Click this button to find current topic in the content window, and open it."
 msgstr "点击此按钮在目录窗口定位当前主题"
 
 #: kchmsearchtoolbar.cpp:96
@@ -671,39 +669,40 @@ msgstr "设置语言(&S)"
 msgid "&Set codepage"
 msgstr "设置编码(&S)"
 
-#: kchmsearchwindow.cpp:36
+#: kchmsearchwindow.cpp:37
 msgid "Type in word(s) to search for:"
 msgstr "输入要搜索的词"
 
-#: kchmsearchwindow.cpp:51
+#: kchmsearchwindow.cpp:52
 msgid "Title"
 msgstr "标题"
 
-#: kchmsearchwindow.cpp:52
+#: kchmsearchwindow.cpp:53
 msgid "Location"
 msgstr "位置"
 
-#: kchmsearchwindow.cpp:60
+#: kchmsearchwindow.cpp:77
 msgid "Match similar words"
 msgstr "匹配相似词"
 
-#: kchmsearchwindow.cpp:93
+#: kchmsearchwindow.cpp:113
 msgid "Search returned %1 result(s)"
 msgstr "搜索返回 %1 个结果"
 
-#: kchmsearchwindow.cpp:96
+#: kchmsearchwindow.cpp:116
 msgid "Search returned no results"
 msgstr "搜索没有返回结果"
 
-#: kchmsearchwindow.cpp:99 kchmviewwindow_qtextbrowser.cpp:211
+#: kchmsearchwindow.cpp:119 kchmviewwindow_qtextbrowser.cpp:211
 msgid "Search failed"
 msgstr "搜索失败"
 
-#: kchmsearchwindow.cpp:395
+#: kchmsearchwindow.cpp:415
 msgid "How to use search"
 msgstr "如何使用搜索"
 
-#: kchmsearchwindow.cpp:396
+#: kchmsearchwindow.cpp:416
+#, fuzzy
 msgid ""
 "The search query can contain a few prefixes.\n"
 "A set of words inside the quote marks mean that you are searching for exact "
@@ -713,29 +712,26 @@ msgid ""
 "the search result.\n"
 "\n"
 "Note that only letters and digits are indexed.\n"
-"You cannot search for symbols other than underscope, and these symbols will "
-"be removed from the search query.\n"
+"You cannot search for non-character symbols other than underscope, and those "
+"symbols will be removed from the search query.\n"
 "For example, search for 'C' will give the same result as searching for 'C++'."
 msgstr ""
 "搜索查询可以包含一些技巧。\n"
-"在引号中包含的内容意味着你要精确的"
-"搜索。\n"
+"在引号中包含的内容意味着你要精确的搜索。\n"
 "带有减号的字表示在搜索结果中不应包含这个内容。\n"
-"带有加号或什么也不带表示在搜索结果中应当包含"
-"这个内容。\n"
+"带有加号或什么也不带表示在搜索结果中应当包含这个内容。\n"
 "\n"
 "注意只有字母和数字被索引。\n"
-"你不能搜索符号，这些符号将在搜索"
-"查询中被移除。\n"
+"你不能搜索符号，这些符号将在搜索查询中被移除。\n"
 "例如，搜索 'C' 和搜索 'C++' ，将返回同样的结果."
 
-#: kchmviewwindow.cpp:226
-msgid "&Open this link in a new tab"
-msgstr "在新的标签页打开此链接(&O)"
+#: kchmviewwindow.cpp:233 kchmviewwindow.cpp:346
+msgid "Shift+Enter"
+msgstr ""
 
-#: kchmviewwindow.cpp:228
-msgid "&Open this link in a new background tab"
-msgstr "在后台标签也打开此链接(&O)"
+#: kchmviewwindow.cpp:235 kchmviewwindow.cpp:348
+msgid "Ctrl+Enter"
+msgstr ""
 
 #: kchmviewwindow_qtextbrowser.cpp:171
 msgid "Printing (page %1)..."
@@ -769,3 +765,8 @@ msgstr "窗口(&W)"
 msgid "CHM file viewer"
 msgstr "CHM文件查看器"
 
+#~ msgid "&Open this link in a new tab"
+#~ msgstr "在新的标签页打开此链接(&O)"
+
+#~ msgid "&Open this link in a new background tab"
+#~ msgstr "在后台标签也打开此链接(&O)"

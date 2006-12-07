@@ -4,8 +4,9 @@
     - Fixed the i18n compilation problem in kchmviewwindow.cpp.
     - If the TOC directory entry did not have an associated page, it was not possible to select it.
     - TOC directory entries now could be opened/closed with double-click on the entry name/icon, 
-      not just +/- icons.
+      not just +/- icons. Credits to Ludo for the ideas.
     - kchmviewer should now work correctly on non-x86 platforms, including the codepage autodetection.
+    - czech translation added, thanks Hynek Fabian.
 
 2006-04-05 tim <gyunaev@ulduzsoft.com>
     - Version changed to 2.6

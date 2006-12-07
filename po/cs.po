@@ -1,0 +1,762 @@
+# translation of kchmviewer.po to
+# This file is put in the public domain.
+#
+# Hynek Fabian <hynek.fabian@mobilbonus.cz>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: kchmviewer\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-07-06 20:02-0700\n"
+"PO-Revision-Date: 2006-08-31 20:54+0200\n"
+"Last-Translator: Hynek Fabian <hynek.fabian@mobilbonus.cz>\n"
+"Language-Team:  <cs@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.2\n"
+
+#. i18n: file kchmsetupdialog.ui line 24
+#: rc.cpp:3
+#, no-c-format
+msgid "KchmViewer settings"
+msgstr "Nastavení KchmViewer"
+
+#. i18n: file kchmsetupdialog.ui line 54
+#: rc.cpp:6
+#, no-c-format
+msgid "General behavior"
+msgstr "Běžné chovaní"
+
+#. i18n: file kchmsetupdialog.ui line 73
+#: rc.cpp:9
+#, no-c-format
+msgid "If no arguments given on load"
+msgstr "Bez parametrů při spučtení"
+
+#. i18n: file kchmsetupdialog.ui line 84
+#: rc.cpp:12
+#, no-c-format
+msgid "Open the 'open CHM file' dialog"
+msgstr "Ukaž dialog 'Výběr CHM souboru'"
+
+#. i18n: file kchmsetupdialog.ui line 92
+#: rc.cpp:15
+#, no-c-format
+msgid "Open the &last used CHM file, if exist"
+msgstr "Otevři pos&lední používaný CHM soubor"
+
+#. i18n: file kchmsetupdialog.ui line 95
+#: rc.cpp:18
+#, no-c-format
+msgid "Alt+L"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 105
+#: rc.cpp:21
+#, no-c-format
+msgid "History"
+msgstr "Historie"
+
+#. i18n: file kchmsetupdialog.ui line 124
+#: rc.cpp:24
+#, no-c-format
+msgid "Store history information for"
+msgstr "Uschovat informace o historii posledních"
+
+#. i18n: file kchmsetupdialog.ui line 143
+#: rc.cpp:28
+#, no-c-format
+msgid "latest files"
+msgstr "souborů"
+
+#. i18n: file kchmsetupdialog.ui line 153
+#: rc.cpp:31
+#, no-c-format
+msgid "R&emember extra information for history files"
+msgstr "Pamatovat si &extra informace souborů historie"
+
+#. i18n: file kchmsetupdialog.ui line 156
+#: rc.cpp:34
+#, no-c-format
+msgid "Alt+E"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 159
+#: rc.cpp:37
+#, no-c-format
+msgid ""
+"Remembers the information about the files, which were opened. Remembers last "
+"opened page, search history, font size, bookmarks and so on."
+msgstr "Pamatuje si poslední otevřenou stránku, historii hledání, velikost písma, záložky a podobné informace o prohlížených souborech."
+
+#. i18n: file kchmsetupdialog.ui line 171
+#: rc.cpp:40
+#, no-c-format
+msgid "CHM security settings"
+msgstr "Bezpečnostní volby"
+
+#. i18n: file kchmsetupdialog.ui line 182
+#: rc.cpp:43
+#, no-c-format
+msgid "When external link clicked"
+msgstr "Při kliknutí na externí odkaz"
+
+#. i18n: file kchmsetupdialog.ui line 193
+#: rc.cpp:46
+#, no-c-format
+msgid "Alwa&ys open it in external browser"
+msgstr "Vžd&y otevřít v externím prohlížeči"
+
+#. i18n: file kchmsetupdialog.ui line 196
+#: rc.cpp:49
+#, no-c-format
+msgid "Alt+Y"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 204
+#. i18n: file kchmsetupdialog.ui line 244
+#: rc.cpp:52 rc.cpp:65
+#, no-c-format
+msgid "Ask for confirmation"
+msgstr "Vyžádat si potvrzení"
+
+#. i18n: file kchmsetupdialog.ui line 212
+#: rc.cpp:55
+#, no-c-format
+msgid "Do not open the link"
+msgstr "Neotevírat odkaz"
+
+#. i18n: file kchmsetupdialog.ui line 225
+#: rc.cpp:59
+#, no-c-format
+msgid "When link pointed to a new CHM file clicked"
+msgstr "Při kliknutí na odkaz na jiný CHM soubor"
+
+#. i18n: file kchmsetupdialog.ui line 236
+#: rc.cpp:62
+#, no-c-format
+msgid "Always open a new CHM file"
+msgstr "Otevřít odkazovaný CHM soubor"
+
+#. i18n: file kchmsetupdialog.ui line 252
+#: rc.cpp:68
+#, no-c-format
+msgid "Do not open a new CHM file"
+msgstr "Neotvírat odkazovaný soubor"
+
+#. i18n: file kchmsetupdialog.ui line 266
+#: rc.cpp:71
+#, no-c-format
+msgid "Version-specific settings"
+msgstr "Zvláštní nastavení verzí"
+
+#. i18n: file kchmsetupdialog.ui line 277
+#: rc.cpp:74
+#, no-c-format
+msgid "Qt version settings"
+msgstr "Nastavení Qt verze"
+
+#. i18n: file kchmsetupdialog.ui line 299
+#: rc.cpp:77
+#, no-c-format
+msgid ""
+"Enter the path to the program, which will be used as a browser for external "
+"links.  A <i>%s</i> symbol will be replaced by the URL clicked."
+msgstr "Cesta k externímu prohlížeči. Symbol <i>%s</i> bude nahrazen volanou URL."
+
+#. i18n: file kchmsetupdialog.ui line 325
+#: rc.cpp:80
+#, no-c-format
+msgid "KDE version settings"
+msgstr "Nastavení KDE verze"
+
+#. i18n: file kchmsetupdialog.ui line 336
+#: rc.cpp:83
+#, no-c-format
+msgid "To show HTML content, use"
+msgstr "HTML obsah zobrazit pomocí"
+
+#. i18n: file kchmsetupdialog.ui line 347
+#: rc.cpp:86
+#, no-c-format
+msgid "&QTextBrowser-based widget"
+msgstr "&QTextBrowser prvku"
+
+#. i18n: file kchmsetupdialog.ui line 350
+#: rc.cpp:89
+#, no-c-format
+msgid "Alt+Q"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 358
+#: rc.cpp:92
+#, no-c-format
+msgid "&KHTMLPart-based widget"
+msgstr "&KHTMLPart prvku"
+
+#. i18n: file kchmsetupdialog.ui line 361
+#: rc.cpp:95
+#, no-c-format
+msgid "Alt+K"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 371
+#: rc.cpp:98
+#, no-c-format
+msgid "KHTMLPart security"
+msgstr "Zabezpečení KHTMLPart"
+
+#. i18n: file kchmsetupdialog.ui line 382
+#: rc.cpp:101
+#, no-c-format
+msgid "Enable Java&Script"
+msgstr "Povolit Java&Script"
+
+#. i18n: file kchmsetupdialog.ui line 385
+#: rc.cpp:104
+#, no-c-format
+msgid "Alt+S"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 393
+#: rc.cpp:107
+#, no-c-format
+msgid "Enable &plugins"
+msgstr "&Povolit moduly"
+
+#. i18n: file kchmsetupdialog.ui line 396
+#: rc.cpp:110
+#, no-c-format
+msgid "Alt+P"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 404
+#: rc.cpp:113
+#, no-c-format
+msgid "Enable &Java"
+msgstr "Povolit &Javu"
+
+#. i18n: file kchmsetupdialog.ui line 407
+#: rc.cpp:116
+#, no-c-format
+msgid "Alt+J"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 415
+#: rc.cpp:119
+#, no-c-format
+msgid "Enable &refresh"
+msgstr "Povolit obnovení"
+
+#. i18n: file kchmsetupdialog.ui line 418
+#: rc.cpp:122
+#, no-c-format
+msgid "Alt+R"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 432
+#: rc.cpp:125
+#, no-c-format
+msgid "Advanced"
+msgstr "Rozšířené nastavení"
+
+#. i18n: file kchmsetupdialog.ui line 443
+#: rc.cpp:128
+#, no-c-format
+msgid "View HTML source command uses"
+msgstr "Prohlížeč zdrojového kódu HTML"
+
+#. i18n: file kchmsetupdialog.ui line 454
+#: rc.cpp:131
+#, no-c-format
+msgid "Built-in HTML source viewer"
+msgstr "Zabudovaný prohlížeč zdrojového kódu"
+
+#. i18n: file kchmsetupdialog.ui line 465
+#: rc.cpp:135
+#, no-c-format
+msgid "E&xternal program, specified below"
+msgstr "E&xterní program uvedený níže"
+
+#. i18n: file kchmsetupdialog.ui line 468
+#: rc.cpp:138
+#, no-c-format
+msgid "Alt+X"
+msgstr ""
+
+#. i18n: file kchmsetupdialog.ui line 484
+#: rc.cpp:141
+#, no-c-format
+msgid "External program:"
+msgstr "Externí prohlížeč:"
+
+#. i18n: file kchmsetupdialog.ui line 521
+#: rc.cpp:147
+#, no-c-format
+msgid "F1"
+msgstr ""
+
+#: _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr "Hynek Fabian"
+
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr "radonek@gmail.com"
+
+#: kchmbookmarkwindow.cpp:42
+msgid "&Add"
+msgstr "Přid&at"
+
+#: kchmbookmarkwindow.cpp:44
+msgid "&Del"
+msgstr "O&dstranit"
+
+#: kchmbookmarkwindow.cpp:86
+msgid "%1 - add a bookmark"
+msgstr "%1 - vložení záložky"
+
+#: kchmbookmarkwindow.cpp:87 kchmbookmarkwindow.cpp:129
+msgid "Enter the name for this bookmark:"
+msgstr "Zadejte jméno záložky"
+
+#: kchmbookmarkwindow.cpp:128
+msgid "%1 - edit the bookmark name"
+msgstr "%1 - změna názvu záložky"
+
+#: kchmbookmarkwindow.cpp:199
+msgid "&Add bookmark"
+msgstr "Přid&at záložku"
+
+#: kchmdialogchooseurlfromlist.cpp:34
+msgid "Topics"
+msgstr "Témata"
+
+#: kchmdialogchooseurlfromlist.cpp:39
+msgid "Please select one of the topics below:"
+msgstr "Zvolte si jedno z níže uvedených témat:"
+
+#: kchmdialogchooseurlfromlist.cpp:43
+msgid "&Ok"
+msgstr ""
+
+#: kchmmainwindow.cpp:126
+msgid "*.chm|Compressed Help Manual (*.chm)"
+msgstr "*.chm|Soubory nápovědy (*.chm)"
+
+#: kchmmainwindow.cpp:128
+msgid "Compressed Help Manual (*.chm)"
+msgstr "Soubory nápovědy (*.chm)"
+
+#: kchmmainwindow.cpp:138
+msgid "Loading aborted"
+msgstr "Načítaní přerušeno"
+
+#: kchmmainwindow.cpp:239
+msgid "%1 - failed to load the chm file"
+msgstr "%1 - načtení souboru s nápovědou se nezdařilo"
+
+#: kchmmainwindow.cpp:240
+msgid "Unable to load the chm file %1"
+msgstr "Nepovedlo se načíst soubor nápovědy %1"
+
+#: kchmmainwindow.cpp:250
+msgid "Could not load file %1"
+msgstr "Nelze číst soubor %1"
+
+#: kchmmainwindow.cpp:266
+msgid "About %1"
+msgstr "O aplikaci %1"
+
+#: kchmmainwindow.cpp:267
+msgid ""
+"%1 version %2\n"
+"\n"
+"Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
+"www.kchmviewer.net\n"
+"\n"
+"Licensed under GNU GPL license.\n"
+"\n"
+"Please try our another project, www.transientmail.com - temporary e-mail "
+"address, which expires automatically."
+msgstr ""
+"%1 verze %2\n"
+"\n"
+"Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
+"www.kchmviewer.net\n"
+"\n"
+"Licencováno GNU GPL.\n"
+"\n"
+"Zkuste náš další projekt, www.transientmail.com - dočasná adresa elektronické pošty která časem sama zaniká."
+
+#: kchmmainwindow.cpp:350
+msgid "%1 - remote link clicked - %2"
+msgstr "%1 - aktivován externí odkaz - %2"
+
+#: kchmmainwindow.cpp:351
+msgid ""
+"A remote link %1 will start the external program to open it.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Odkaz %1 bude otevřen v externím prohlížeči.\n"
+"\n"
+"Přejete si pokračovat?"
+
+#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
+msgid "&Yes"
+msgstr "&Ano"
+
+#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
+msgid "&No"
+msgstr "&Ne"
+
+#: kchmmainwindow.cpp:376
+msgid "%1 - JavsScript link clicked"
+msgstr "%1 - aktivován JavaScript odkaz"
+
+#: kchmmainwindow.cpp:377
+msgid ""
+"You have clicked a JavaScript link.\n"
+"To prevent security-related issues JavaScript URLs are disabled in CHM files."
+msgstr ""
+"Kliknuli jste na JavaScriptový odkaz\n"
+"Z bezpečnostních důvodů je použití JavaScriptových adres v souborech nápovědy potlačeno."
+
+#: kchmmainwindow.cpp:386
+msgid "%1 - link to a new CHM file clicked"
+msgstr "%1 - aktivován odkaz na CHM soubor"
+
+#: kchmmainwindow.cpp:387
+msgid ""
+"You have clicked a link, which leads to a new CHM file %1.\n"
+"The current file will be closed.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Kliknuli jste na odkaz ukazující na soubor nápovědy %1.\n"
+"Aktuální soubor bude uzavřen.\n"
+"\n"
+"Přejete si pokračovat ?"
+
+#: kchmmainwindow.cpp:448
+msgid "File Operations"
+msgstr "Práce se soubory"
+
+#: kchmmainwindow.cpp:452
+msgid "Open File"
+msgstr "Otevřít"
+
+#: kchmmainwindow.cpp:458
+msgid "Click this button to open an existing chm file."
+msgstr "Výběr existujícího souboru nápovědy k prohlížení"
+
+#: kchmmainwindow.cpp:463
+msgid "Print File"
+msgstr "Tisk"
+
+#: kchmmainwindow.cpp:469
+msgid "Click this button to print the current page"
+msgstr "Stiskem toho tlačítka vytisknete současnou stránku"
+
+#: kchmmainwindow.cpp:484
+msgid "E&xtract CHM content..."
+msgstr "Ro&zbalit..."
+
+#: kchmmainwindow.cpp:485
+msgid ""
+"Click this button to extract the whole CHM file content into a specific "
+"directory"
+msgstr "Tímto tlačítkem extrahujete obsah souboru nápovědy do zadaného adresáře"
+
+#: kchmmainwindow.cpp:491
+msgid "&Recent files"
+msgstr "Ot&evřít nedávný"
+
+#: kchmmainwindow.cpp:500
+msgid "&Select all"
+msgstr "&Vybrat vše"
+
+#: kchmmainwindow.cpp:518
+msgid "&Change settings..."
+msgstr "&Změnit nastavení"
+
+#: kchmmainwindow.cpp:524
+msgid "About &Qt"
+msgstr "O &Qt"
+
+#: kchmmainwindow.cpp:526
+msgid "What's &This"
+msgstr "Co je &tohle ?"
+
+#: kchmmainwindow.cpp:853
+msgid "Index"
+msgstr "Obsah"
+
+#: kchmmainwindow.cpp:876
+msgid "Search"
+msgstr "Hledání"
+
+#: kchmmainwindow.cpp:939
+msgid "Could not locate opened topic in content window"
+msgstr "Téma nebylo nalezeno"
+
+#: kchmmainwindow.cpp:950 kchmmainwindow.cpp:956
+msgid "Choose a directory to store CHM content"
+msgstr "Zvolte cílový adresář"
+
+#: kchmmainwindow.cpp:969
+msgid "Extracting CHM content"
+msgstr "Rozbaluji soubor nápovědy"
+
+#: kchmmainwindow.cpp:969
+msgid "Extracting files..."
+msgstr "Extrakce souborů..."
+
+#: kchmmainwindow.cpp:969
+msgid "Abort"
+msgstr "Přerušit"
+
+#: kchmnavtoolbar.cpp:34
+msgid "Navigation"
+msgstr "Navigace"
+
+#: kchmnavtoolbar.cpp:38
+msgid "Move backward in history"
+msgstr "Předchozí"
+
+#: kchmnavtoolbar.cpp:43
+msgid "Click this button to move backward in browser history"
+msgstr "Přesun v historii o krok zpět"
+
+#: kchmnavtoolbar.cpp:47
+msgid "Move forward in history"
+msgstr "Vpřed"
+
+#: kchmnavtoolbar.cpp:52
+msgid "Click this button to move forward in browser history"
+msgstr "Přesun v historii o krok vpřed"
+
+#: kchmnavtoolbar.cpp:56
+msgid "Go to the home page"
+msgstr "Úvodní stránka"
+
+#: kchmnavtoolbar.cpp:61
+msgid "Click this button to move to the home page"
+msgstr "Přesun na úvodní stranu"
+
+#: kchmsearchtoolbar.cpp:45
+msgid "Find in page"
+msgstr "Hledání na stránce"
+
+#: kchmsearchtoolbar.cpp:62
+msgid "Enter here the text to search in the current page."
+msgstr "Zde zadaný text bude vyhledán na aktuální stránce"
+
+#: kchmsearchtoolbar.cpp:69
+msgid "Previous search result"
+msgstr "Předešlý výsledek hledání"
+
+#: kchmsearchtoolbar.cpp:74
+msgid "Click this button to find previous search result."
+msgstr "Stiskem toho tlačítka se vrátíte předešlý nalezený výraz"
+
+#: kchmsearchtoolbar.cpp:78
+msgid "Next search result"
+msgstr "Další výsledek hledání"
+
+#: kchmsearchtoolbar.cpp:83
+msgid "Click this button to find next search result."
+msgstr "Stiskem tohoto tlačítka se přesunete na další výskyt hledaného výrazu"
+
+#: kchmsearchtoolbar.cpp:87
+msgid "Locate this topic in content window"
+msgstr "Vyhledej toto téma"
+
+#: kchmsearchtoolbar.cpp:92
+msgid "Click this button to find current topic in the content window, and open it."
+msgstr "Stiskem tohoto tlačítka otevřete okno s obsahem na aktuálním tématu"
+
+#: kchmsearchtoolbar.cpp:96
+msgid "Increase font size"
+msgstr "Zvětšit písmo"
+
+#: kchmsearchtoolbar.cpp:101
+msgid "Click this button to increase the font size."
+msgstr "Toto tlačítko zvětší velikost použitého písma"
+
+#: kchmsearchtoolbar.cpp:105
+msgid "Decrease font size"
+msgstr "Zmenšit písmo"
+
+#: kchmsearchtoolbar.cpp:110
+msgid "Click this button to decrease the font size."
+msgstr "Toto tlačítko zmenší velikost použítého písma"
+
+#: kchmsearchtoolbar.cpp:114
+msgid "View HTML source"
+msgstr "Zobrazit zdrojový kód"
+
+#: kchmsearchtoolbar.cpp:119
+msgid "Click this button to open a separate window with the page HTML source."
+msgstr "Stisknutím tohoto tlačítka otevřete okno s HTML zdrojovým kódem stránky"
+
+#: kchmsearchtoolbar.cpp:123
+msgid "Add to bookmarks"
+msgstr "Přidat k záložkám"
+
+#: kchmsearchtoolbar.cpp:128
+msgid "Click this button to add the current page to the bookmarks list."
+msgstr "Tímto čudlíkem přidáte aktuální stránku mezi záložky"
+
+#: kchmsearchtoolbar.cpp:131
+msgid "Prev page in TOC"
+msgstr "Předchozí stránka"
+
+#: kchmsearchtoolbar.cpp:136
+msgid "Click this button to go to previous page in Table Of Content."
+msgstr "Přesun na obsahově předcházející stránku"
+
+#: kchmsearchtoolbar.cpp:139
+msgid "Next page in TOC"
+msgstr "Následující stránka"
+
+#: kchmsearchtoolbar.cpp:144
+msgid "Click this button to go to next page in Table of Content."
+msgstr "Přesun na obsahově následující stránku"
+
+#: kchmsearchtoolbar.cpp:150
+msgid "&Increase font"
+msgstr "Z&většit písmo"
+
+#: kchmsearchtoolbar.cpp:151
+msgid "&Decrease font"
+msgstr "Z&menšit písmo"
+
+#: kchmsearchtoolbar.cpp:152
+msgid "&View HTML source"
+msgstr "&Zobrazit zdroj"
+
+#: kchmsearchtoolbar.cpp:155
+msgid "&Bookmark this page"
+msgstr "&Přidat záložku"
+
+#: kchmsearchtoolbar.cpp:158
+msgid "&Full screen"
+msgstr "&Celá obrazovka"
+
+#: kchmsearchtoolbar.cpp:160
+msgid "&Show contents window"
+msgstr "&Okno obsahu"
+
+#: kchmsearchtoolbar.cpp:162
+msgid "&Locate in contents window"
+msgstr "&Najít v obsahu"
+
+#: kchmsearchtoolbar.cpp:215
+msgid "&Set language"
+msgstr "Vybrat &jazyk"
+
+#: kchmsearchtoolbar.cpp:238
+msgid "&Set codepage"
+msgstr "Vybrat &kódování"
+
+#: kchmsearchwindow.cpp:37
+msgid "Type in word(s) to search for:"
+msgstr "Zadejte hledaná slova:"
+
+#: kchmsearchwindow.cpp:52
+msgid "Title"
+msgstr "Titul"
+
+#: kchmsearchwindow.cpp:53
+msgid "Location"
+msgstr "Umístění"
+
+#: kchmsearchwindow.cpp:77
+msgid "Match similar words"
+msgstr "Podobná slova"
+
+#: kchmsearchwindow.cpp:113
+msgid "Search returned %1 result(s)"
+msgstr "Nalezeno %1 výsledků"
+
+#: kchmsearchwindow.cpp:116
+msgid "Search returned no results"
+msgstr "Hledání nevedlo k žádnému výsledku"
+
+#: kchmsearchwindow.cpp:119 kchmviewwindow_qtextbrowser.cpp:211
+msgid "Search failed"
+msgstr "Hledání se nezdařilo"
+
+#: kchmsearchwindow.cpp:415
+msgid "How to use search"
+msgstr "Jak používat vyhledávání"
+
+#: kchmsearchwindow.cpp:416
+msgid ""
+"The search query can contain a few prefixes.\n"
+"A set of words inside the quote marks mean that you are searching for exact "
+"phrase.\n"
+"A word with minus sign means that it should be absent in the search result.\n"
+"A word with plus mark or without any mark means that it must be present in "
+"the search result.\n"
+"\n"
+"Note that only letters and digits are indexed.\n"
+"You cannot search for non-character symbols other than underscope, and those "
+"symbols will be removed from the search query.\n"
+"For example, search for 'C' will give the same result as searching for 'C++'."
+msgstr ""
+"Hledaný výraz může obsahovat několik prefixů.\n"
+"Vložení několika slov do uvozovek značí že chcete najít přesnou frázi.\n"
+"Slovo se znaménkem minus se ve výsledku nebude vyskytovat.\n"
+"Slovo se znaménkem plus nebo bez znaménka musí být ve výsledku přítomno.\n"
+"\n"
+"Hledání bere v úvahu pouze písmena, číslice a znak podtržítka.\n"
+"Ostatní znaky budou z hledaného výrazu odstraněny.\n"
+"Například hledání 'C' povede ke stejným výsledkům jako hledaní 'C++'."
+
+#: kchmviewwindow.cpp:233 kchmviewwindow.cpp:346
+msgid "Shift+Enter"
+msgstr ""
+
+#: kchmviewwindow.cpp:235 kchmviewwindow.cpp:348
+msgid "Ctrl+Enter"
+msgstr ""
+
+#: kchmviewwindow_qtextbrowser.cpp:171
+msgid "Printing (page %1)..."
+msgstr "Probíhá tisk strany %1 ..."
+
+#: kchmviewwindow_qtextbrowser.cpp:179
+msgid "Printing completed"
+msgstr "Tisk dokončen"
+
+#: kchmviewwindow_qtextbrowser.cpp:183
+msgid "Printing aborted"
+msgstr "Tisk přerušen"
+
+#: kchmviewwindow_qtextbrowser.cpp:189
+msgid "%1 - could not print"
+msgstr "%1 - nelze tisknout"
+
+#: kchmviewwindow_qtextbrowser.cpp:190
+msgid ""
+"Could not print.\n"
+"Your Qt library has been compiled without printing support"
+msgstr ""
+"Není možné tisknout.\n"
+"Vaše knihovna Qt byla přeložena bez podpory tisku."
+
+#: kchmviewwindowmgr.cpp:63
+msgid "&Window"
+msgstr "&Okno"
+
+#: main.cpp:52
+msgid "CHM file viewer"
+msgstr "Prohlížeč CHM souborů"
+

@@ -42,6 +42,7 @@ enum marker_t
 	MARKER_ACTIVETABWINDOW,
 	MARKER_ACTIVEENCODING,
 	MARKER_SEARCHHISTORY,
+	MARKER_WINDOW_SIZE,
 	
 	MARKER_BOOKMARKS,
 	MARKER_VIEWINDOWS,
@@ -95,6 +96,10 @@ KCHMSettings::KCHMSettings( )
 	m_activetabsystem = 0;
 	m_activetabwindow = 0;
 	m_activeencodinglcid = 0;
+	
+	m_window_size_x = 700;
+	m_window_size_y = 500;
+	m_window_size_splitter = 200;
 }
 
 
@@ -185,6 +190,12 @@ bool KCHMSettings::loadSettings( const QString & filename )
 			stream >> m_activeencodinglcid;
 			break;
 	
+		case MARKER_WINDOW_SIZE:
+			stream >> m_window_size_x;
+			stream >> m_window_size_y;
+			stream >> m_window_size_splitter;
+			break;
+			
 		case MARKER_SEARCHHISTORY:
 			stream >> m_searchhistory;
 			break;
@@ -238,6 +249,12 @@ bool KCHMSettings::saveSettings( )
 	// Save search history vector
 	stream << MARKER_SEARCHHISTORY;
 	stream << m_searchhistory;
+	
+	// Save window size and splitter position
+	stream << MARKER_WINDOW_SIZE;
+	stream << m_window_size_x;
+	stream << m_window_size_y;
+	stream << m_window_size_splitter;
 	
 	stream << MARKER_BOOKMARKS;
 	stream << m_bookmarks;

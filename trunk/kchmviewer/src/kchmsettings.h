@@ -67,6 +67,9 @@ public:
 	typedef 	QValueList<SavedBookmark>	bookmark_saved_settings_t;
 	typedef 	QValueList<SavedViewWindow>	viewindow_saved_settings_t;
 	
+	int							m_window_size_x;
+	int							m_window_size_y;
+	int							m_window_size_splitter;
 	int							m_activetabsystem;
 	int							m_activetabwindow;
 	int							m_activeencodinglcid;

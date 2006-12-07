@@ -213,6 +213,14 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 				m_viewWindowMgr->restoreSettings( m_currentSettings->m_viewwindows );
 				m_viewWindowMgr->setCurrentPage( m_currentSettings->m_activetabwindow );
 			}
+			
+			// Restore the main window size
+			QValueList<int> sizes;
+			sizes.push_back( m_currentSettings->m_window_size_splitter );
+			sizes.push_back( m_currentSettings->m_window_size_x - m_currentSettings->m_window_size_splitter );
+			
+			m_windowSplitter->setSizes( sizes );
+			resize( m_currentSettings->m_window_size_x, m_currentSettings->m_window_size_y );
 		}
 		else
 		{
@@ -556,7 +564,11 @@ void KCHMMainWindow::closeChmFile( )
 		m_currentSettings->m_activeencodinglcid = m_chmFile->getCurrentEncoding()->winlcid;
 		m_currentSettings->m_activetabsystem = m_tabWidget->currentPageIndex( );
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
-			
+		
+		m_currentSettings->m_window_size_x = width();
+		m_currentSettings->m_window_size_y = height();
+		m_currentSettings->m_window_size_splitter = m_windowSplitter->sizes()[0];
+		
 		if ( m_searchWindow )
 			m_searchWindow->saveSettings (m_currentSettings->m_searchhistory);
 				

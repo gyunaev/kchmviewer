@@ -1,3 +1,34 @@
+Changes from 0.37 to 0.38
+    - Fix for reading some chm files.  Running over a large directory of chm
+      files, about 1% of them turned out to be unreadable.  This resulted from
+      an incomplete understanding of one of the header fields (index_root).
+      Apparently, this can take negative values other than -1.
+
+    - Security fix for extract_chmLib.  Pathnames containing a ".." element
+      will not be extracted.  There doesn't seem to be a legitimate reason to
+      use ".." as a path element in a chm file.
+
+Changes from 0.36 to 0.37
+    - Major security fix for stack overflow vulnerability:
+        http://www.sven-tantau.de/public_files/chmlib/chmlib_20051126.txt
+    - Corrected the broken Makefile.in.
+
+Changes from 0.35 to 0.36
+    - Major security fix (iDEFENSE Security Advisory IDEF1099 - Stack Overflow
+      Vulnerability)
+    - Major security fix from Palasik Sandor (LZX decompression buffer overrun)
+    - Bugfix/enhancement from David Huseby to make the "what" flags to
+      chm_enumerate work correctly, and to pass the flags along to the callback
+      function (via the chmUnitInfo structure) so that the callback doesn't
+      need to re-parse the filename.
+    - Compilation fixes for x86-64 from Vitaly V. Bursov.
+    - Miscellaneous fixes to the configure script, including some significant
+      cleanup by Vadim Zeitlin.  The changes from Vadim should also allow the
+      configure script to correctly configure the build on OS X, where it was
+      previously failing to note that pread64 doesn't work.
+    - Minor update to the Makefile.in to do a mkdir before the install, in case
+      the specified INSTALLPREFIX directory is non-existent
+
 Changes from 0.32 to 0.35
     - UTF-8 filenames, while still not handled correctly, are handled a little
       more gracefully.  That is to say, the library doesn't fail to open files

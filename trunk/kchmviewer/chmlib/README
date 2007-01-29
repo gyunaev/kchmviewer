@@ -1,4 +1,4 @@
-CHMLIB 0.35
+CHMLIB 0.38
 ===========
 
 -------
@@ -90,22 +90,52 @@ CREDITS
 * Stuart Caie: the LZX decompression code, and for granting permission to
   re-license under the LGPL.
 
+* Sven Tantau: identification of a stack-overflow security flaw and a quick fix
+  for the problem; identification of a possible security danger in the example
+  program "extract_chmLib"
+
+* iDEFENSE Labs: identification of a nasty stack-overflow security flaw
+
+* Palasik Sandor: identification of a potential security flaw in lzx.c as well
+  as a quick fix for the problem
+
+* David Huseby: An excellent patch to the chm_enumerate functionality, relating
+  to the "what" flags, which didn't work entirely correctly before
+
+* Vadim Zeitlin: Configure script cleanup, including an important update to
+  allow detection of platforms where pread64 doesn't work.  (OS X)
+
+* Vitaly V. Bursov: Compilation on x86-64.
+
+* mc: A suggestion to add a "mkdir" to the install step.
+
 * Stan Tobias: bugfixes and the added 'index page' feature of chm_http.
 
 * Andrew Hodgetts: porting to Solaris and IRIX, as well as fixing some
   little-endian biases in the code.
 
-*  Rich Erwin: Windows CE support.
+* Rich Erwin: Windows CE support.
 
-*  Pabs: bug fixes and suggestions.
+* Pabs: bug fixes and suggestions.
 
-*  Antony Dovgal: setting up autoconf/automake based build process.
+* Antony Dovgal: setting up autoconf/automake based build process.
 
-*  Ragnar Hojland Espinosa: patches to make chm_http more useful.
+* Ragnar Hojland Espinosa: patches to make chm_http more useful.
 
-*  Razvan Cojocaru: forwarding along information regarding building on OS X.
+* Razvan Cojocaru: forwarding along information regarding building on OS X.
 
 * Julien Lemoine: creating and maintaining the Debian package of chmlib.
 
-*  Anyone else I've forgotten. (?)
+* Prarit Bhargava: Compilation on ia64
+
+* Jean-Marc Vanel: elimination of compilation warnings in extract_chmLib
+
+* Sisyphus & Matej Spiller-Muys: Compilation under MinGW32
+
+* Kyle Davenport: helper script for using chm_http with mozilla
+
+* Matthew Daniel & Mark Rosenstand: help to sort out issues with the build
+  system.
+
+* Anyone else I've forgotten. (?)
 

@@ -52,6 +52,9 @@ extern "C" {
 #endif
 
 #ifdef WIN32
+#ifdef __MINGW32__
+#define __int64 long long
+#endif
 typedef unsigned __int64 LONGUINT64;
 typedef __int64          LONGINT64;
 #else
@@ -105,7 +108,7 @@ int chm_resolve_object(struct chmFile *h,
 
 /* retrieve part of an object from the archive */
 LONGINT64 chm_retrieve_object(struct chmFile *h,
-                              const struct chmUnitInfo *ui,
+                              struct chmUnitInfo *ui,
                               unsigned char *buf,
                               LONGUINT64 addr,
                               LONGINT64 len);

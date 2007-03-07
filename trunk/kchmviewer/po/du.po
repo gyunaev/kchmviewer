@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: du\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-06 20:02-0700\n"
+"POT-Creation-Date: 2006-12-06 18:36-0800\n"
 "PO-Revision-Date: 2006-09-09 22:48+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@home.nl>\n"
 "Language-Team:  <nl@li.org>\n"
@@ -134,7 +134,8 @@ msgstr "Koppeling niet volgen"
 #: rc.cpp:59
 #, no-c-format
 msgid "When link pointed to a new CHM file clicked"
-msgstr "Als een koppeling die naar een nieuw CHM-bestand verwijst wordt aangeklikt"
+msgstr ""
+"Als een koppeling die naar een nieuw CHM-bestand verwijst wordt aangeklikt"
 
 #. i18n: file kchmsetupdialog.ui line 236
 #: rc.cpp:62
@@ -363,23 +364,23 @@ msgstr "Compressed Help Manual (*.chm)"
 msgid "Loading aborted"
 msgstr "Laden afgebroken"
 
-#: kchmmainwindow.cpp:239
+#: kchmmainwindow.cpp:244
 msgid "%1 - failed to load the chm file"
 msgstr "%1 - laden van chm-bestand is mislukt"
 
-#: kchmmainwindow.cpp:240
+#: kchmmainwindow.cpp:245
 msgid "Unable to load the chm file %1"
 msgstr "chm-bestand %1 kon niet worden geladen"
 
-#: kchmmainwindow.cpp:250
+#: kchmmainwindow.cpp:255
 msgid "Could not load file %1"
 msgstr "Kon het bestand %1 niet laden."
 
-#: kchmmainwindow.cpp:266
+#: kchmmainwindow.cpp:271
 msgid "About %1"
 msgstr "Info over %1"
 
-#: kchmmainwindow.cpp:267
+#: kchmmainwindow.cpp:272
 msgid ""
 "%1 version %2\n"
 "\n"
@@ -401,11 +402,11 @@ msgstr ""
 "Probeer ook ons andere project, www.transientmail.com - tijdelijk e-"
 "mailadres dat automatisch verloopt."
 
-#: kchmmainwindow.cpp:350
+#: kchmmainwindow.cpp:358
 msgid "%1 - remote link clicked - %2"
 msgstr "%1 - externe koppeling aangeklikt %2"
 
-#: kchmmainwindow.cpp:351
+#: kchmmainwindow.cpp:359
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
@@ -416,19 +417,19 @@ msgstr ""
 "\n"
 "Wilt u doorgaan?"
 
-#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
+#: kchmmainwindow.cpp:360 kchmmainwindow.cpp:396
 msgid "&Yes"
 msgstr "&Ja"
 
-#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
+#: kchmmainwindow.cpp:360 kchmmainwindow.cpp:396
 msgid "&No"
 msgstr "&Nee"
 
-#: kchmmainwindow.cpp:376
+#: kchmmainwindow.cpp:384
 msgid "%1 - JavsScript link clicked"
 msgstr "%1 - JavaScript-koppeling aangeklikt"
 
-#: kchmmainwindow.cpp:377
+#: kchmmainwindow.cpp:385
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
@@ -437,11 +438,11 @@ msgstr ""
 "Om veiligheidgerelateerde problemen te voorkomen zijn JavaScript-koppelingen "
 "uitgeschakeld in CHM-bestanden."
 
-#: kchmmainwindow.cpp:386
+#: kchmmainwindow.cpp:394
 msgid "%1 - link to a new CHM file clicked"
 msgstr "%1 - koppeling naar nieuw CHM-bestand aangeklikt"
 
-#: kchmmainwindow.cpp:387
+#: kchmmainwindow.cpp:395
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -453,81 +454,89 @@ msgstr ""
 "\n"
 "Wilt u doorgaan?"
 
-#: kchmmainwindow.cpp:448
+#: kchmmainwindow.cpp:456
 msgid "File Operations"
 msgstr "Bestandsoperaties"
 
-#: kchmmainwindow.cpp:452
+#: kchmmainwindow.cpp:460
 msgid "Open File"
 msgstr "Bestand openen"
 
-#: kchmmainwindow.cpp:458
+#: kchmmainwindow.cpp:466
 msgid "Click this button to open an existing chm file."
 msgstr "Klik op deze knop om een bestaand CHM-bestand te openen."
 
-#: kchmmainwindow.cpp:463
+#: kchmmainwindow.cpp:471
 msgid "Print File"
 msgstr "Bestand afdrukken"
 
-#: kchmmainwindow.cpp:469
+#: kchmmainwindow.cpp:477
 msgid "Click this button to print the current page"
 msgstr "Klik op deze knop om de huidige pagina af te drukken"
 
-#: kchmmainwindow.cpp:484
+#: kchmmainwindow.cpp:492
 msgid "E&xtract CHM content..."
 msgstr "CHM-inhoud &uitpakken..."
 
-#: kchmmainwindow.cpp:485
+#: kchmmainwindow.cpp:493
 msgid ""
 "Click this button to extract the whole CHM file content into a specific "
 "directory"
-msgstr "Klik op deze knop om het hele CHM-bestand uit te pakken naar een specifieke map"
+msgstr ""
+"Klik op deze knop om het hele CHM-bestand uit te pakken naar een specifieke "
+"map"
 
-#: kchmmainwindow.cpp:491
+#: kchmmainwindow.cpp:499
 msgid "&Recent files"
 msgstr "&Recente bestanden"
 
-#: kchmmainwindow.cpp:500
+#: kchmmainwindow.cpp:508
 msgid "&Select all"
 msgstr "Alles &selecteren"
 
-#: kchmmainwindow.cpp:518
+#: kchmmainwindow.cpp:526
 msgid "&Change settings..."
 msgstr "Instellingen wij&zigen..."
 
-#: kchmmainwindow.cpp:524
+#: kchmmainwindow.cpp:532
 msgid "About &Qt"
 msgstr "Over &Qt"
 
-#: kchmmainwindow.cpp:526
+#: kchmmainwindow.cpp:534
 msgid "What's &This"
 msgstr "Wat is di&t"
 
-#: kchmmainwindow.cpp:853
+#: kchmmainwindow.cpp:786
+msgid ""
+"Changing browser view options require\n"
+"restarting the application to take effect."
+msgstr ""
+
+#: kchmmainwindow.cpp:904
 msgid "Index"
 msgstr "Index"
 
-#: kchmmainwindow.cpp:876
+#: kchmmainwindow.cpp:927
 msgid "Search"
 msgstr "Zoeken"
 
-#: kchmmainwindow.cpp:939
+#: kchmmainwindow.cpp:990
 msgid "Could not locate opened topic in content window"
 msgstr "Het geopende onderwerp kon niet in het tekstvender gevonden worden"
 
-#: kchmmainwindow.cpp:950 kchmmainwindow.cpp:956
+#: kchmmainwindow.cpp:1001 kchmmainwindow.cpp:1007
 msgid "Choose a directory to store CHM content"
 msgstr "Kies een map om de CHM-inhoud in op te slaan"
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 msgid "Extracting CHM content"
 msgstr "CHM-inhoud uitpakken"
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 msgid "Extracting files..."
 msgstr "Bestanden uitpakken..."
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 msgid "Abort"
 msgstr "Afbreken"
 
@@ -588,7 +597,8 @@ msgid "Locate this topic in content window"
 msgstr "Zoek dit onderwerp op in het tekstvenster"
 
 #: kchmsearchtoolbar.cpp:92
-msgid "Click this button to find current topic in the content window, and open it."
+msgid ""
+"Click this button to find current topic in the content window, and open it."
 msgstr ""
 "Klik op deze knop om het huidige onderwerp op te zoeken in het tekstvenster "
 "en te openen."
@@ -635,7 +645,8 @@ msgstr "Vorige pagina in inhoudsopgave"
 
 #: kchmsearchtoolbar.cpp:136
 msgid "Click this button to go to previous page in Table Of Content."
-msgstr "Klik op deze knop om naar de vorige pagina in de inhoudsopgave te gaan."
+msgstr ""
+"Klik op deze knop om naar de vorige pagina in de inhoudsopgave te gaan."
 
 #: kchmsearchtoolbar.cpp:139
 msgid "Next page in TOC"
@@ -643,7 +654,8 @@ msgstr "Volgende pagina in inhoudsopgave"
 
 #: kchmsearchtoolbar.cpp:144
 msgid "Click this button to go to next page in Table of Content."
-msgstr "Klik op deze knop om naar de volgende pagina in de inhoudsopgave te gaan."
+msgstr ""
+"Klik op deze knop om naar de volgende pagina in de inhoudsopgave te gaan."
 
 #: kchmsearchtoolbar.cpp:150
 msgid "&Increase font"
@@ -741,14 +753,6 @@ msgstr ""
 "Bijvoorbeeld, zoeken naar 'C' zal dezelfde resultaten geven als zoeken naar "
 "'C++'."
 
-#: kchmviewwindow.cpp:233 kchmviewwindow.cpp:346
-msgid "Shift+Enter"
-msgstr "Shift+Enter"
-
-#: kchmviewwindow.cpp:235 kchmviewwindow.cpp:348
-msgid "Ctrl+Enter"
-msgstr "Ctrl+Enter"
-
 #: kchmviewwindow_qtextbrowser.cpp:171
 msgid "Printing (page %1)..."
 msgstr "Afdrukken (pagina %1)..."
@@ -773,7 +777,7 @@ msgstr ""
 "Kon niet afdrukken.\n"
 "Uw Qt-bibliotheek is gecompileerd zonder ondersteuning voor afdrukken"
 
-#: kchmviewwindowmgr.cpp:63
+#: kchmviewwindowmgr.cpp:65
 msgid "&Window"
 msgstr "&Venster"
 
@@ -781,3 +785,8 @@ msgstr "&Venster"
 msgid "CHM file viewer"
 msgstr "CHM-bestandsviewer"
 
+#~ msgid "Shift+Enter"
+#~ msgstr "Shift+Enter"
+
+#~ msgid "Ctrl+Enter"
+#~ msgstr "Ctrl+Enter"

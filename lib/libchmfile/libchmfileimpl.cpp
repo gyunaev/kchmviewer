@@ -857,7 +857,7 @@ void LCHMFileImpl::getSearchResults( const LCHMSearchProgressResults& tempres,
 }
 
 
-QString LCHMFileImpl::normalizePath( const QString & path ) const
+QString LCHMFileImpl::normalizeUrl( const QString & path ) const
 {
 	int pos = path.find ('#');
 	QString fixedpath = pos == -1 ? path : path.left (pos);
@@ -1077,7 +1077,7 @@ QString LCHMFileImpl::getTopicByUrl( const QString & url ) const
 	if ( !m_lookupTablesValid )
 		return QString::null;
 
-	QString fixedurl = normalizePath( url );
+	QString fixedurl = normalizeUrl( url );
 
 	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
 	{

@@ -54,17 +54,18 @@ QString LCHMFile::title( ) const
 
 QString LCHMFile::homeUrl( ) const
 {
-	return m_impl->homeUrl().isNull() ? "/" : m_impl->homeUrl();
+	QString url = m_impl->homeUrl();
+	return url.isNull() ? "/" : url;
 }
 
 bool LCHMFile::hasTableOfContents( ) const
 {
-	return m_impl->m_topicsFile.isNull();
+	return !m_impl->m_topicsFile.isNull();
 }
 
 bool LCHMFile::hasIndexTable( ) const
 {
-	return m_impl->m_indexFile.isNull();
+	return !m_impl->m_indexFile.isNull();
 }
 
 bool LCHMFile::hasSearchTable( ) const
@@ -115,4 +116,9 @@ const LCHMTextEncoding * LCHMFile::currentEncoding( ) const
 bool LCHMFile::setCurrentEncoding( const LCHMTextEncoding * encoding )
 {
 	return m_impl->setCurrentEncoding( encoding );
+}
+
+QString LCHMFile::normalizeUrl( const QString & url ) const
+{
+	return m_impl->normalizeUrl( url );
 }

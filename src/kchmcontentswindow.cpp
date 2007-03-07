@@ -80,15 +80,16 @@ void KCHMContentsWindow::refillTableOfContents( )
 		return;
 	}
 			   
-	clear();
-//	m_chmFile->ParseAndFillTopicsTree(m_contentsWindow);
-	triggerUpdate();
-
-	
-	//FIXME: no TOC add!		
+	kchmFillListViewWithParsedData( this, data, &m_urlListMap );
 }
 
 KCHMIndTocItem * KCHMContentsWindow::getTreeItem( const QString & url )
 {
-	//FIXME! code!
+	QString fixedstr = ::mainWindow->chmFile()->normalizeUrl( url );
+	QMap<QString, KCHMIndTocItem*>::const_iterator it = m_urlListMap.find( fixedstr );
+	
+	if ( it == m_urlListMap.end() )
+		return 0;
+		
+	return *it;
 }

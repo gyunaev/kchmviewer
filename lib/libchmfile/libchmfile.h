@@ -27,8 +27,6 @@
 #ifndef INCLUDE_LIBCHMFILE_H
 #define INCLUDE_LIBCHMFILE_H
 
-//#include <sys/types.h>
-
 #include <qstring.h>
 #include <qcstring.h>
 #include <qlistview.h>
@@ -38,12 +36,6 @@
 #include <qtextcodec.h> 
 
 #include "libchmtextencoding.h"
-/*
-#include "kchmtreeviewitem.h"
-#include "kchmtextencoding.h"
-
-#include "chm_lib.h"
-*/
 
 // Qt3/Qt4 compatibility: in Qt3 QVector stores pointers, not values - so QValueVector should be used. 
 // In Qt4 QVector stores values, so we can use QVector
@@ -239,6 +231,15 @@ class LCHMFile
 		 * \ingroup dataretrieve
 		 */
 		const QPixmap * getBookIconPixmap( unsigned int imagenum );
+		
+		/*!
+		 * \brief Normalizes the URL, converting relatives, adding "/" in front and removing ..
+		 * \param url The URL to normalize.
+		 * \return The normalized, cleaned up URL.
+		 *
+		 * \ingroup dataretrieve
+		 */
+		QString normalizeUrl( const QString& url ) const;
 		
 		/*!
 		 * \brief Gets the current CHM archive encoding (set or autodetected)

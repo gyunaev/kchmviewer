@@ -1,3 +1,3 @@
-lib_LTLIBRARIES=libchm.la
-libchm_la_SOURCES=chm_lib.c lzx.c
-include_HEADERS=chm_lib.h lzx.h
+lib_LIBRARIES=libchm.a
+libchm_a_SOURCES=chm_lib.c lzx.c
+noinst_HEADERS=chm_lib.h lzx.h

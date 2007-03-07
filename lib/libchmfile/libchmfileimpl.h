@@ -51,8 +51,8 @@ class LCHMFileImpl
 		bool 		loadFile( const QString& archiveName );
 		void		closeAll();
 		
-		QString 	title() const	{ return encodeWithCurrentCodec( m_home ); }
-		QString 	homeUrl() const	{ return encodeWithCurrentCodec( m_title ); }
+		QString 	title() const	{ return encodeWithCurrentCodec( m_title ); }
+		QString 	homeUrl() const	{ return encodeWithCurrentCodec( m_home ); }
 		
 		bool 		getFileContentAsString( QString * str, const QString& url, bool internal_encoding = false );
 		bool 		getFileContentAsBinary( QByteArray * data, const QString& url ) const;
@@ -205,7 +205,7 @@ class LCHMFileImpl
 		/*!
 		 * Normalizes path to search in internal arrays
 		 */
-		inline QString normalizePath (const QString& path ) const;
+		QString normalizeUrl (const QString& path ) const;
 
 		
 	// Members		

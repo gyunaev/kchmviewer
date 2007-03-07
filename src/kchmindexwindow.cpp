@@ -158,9 +158,6 @@ void KCHMIndexWindow::refillIndex( )
 		qWarning ("CHM index present but is empty; wrong parsing?");
 		return;
 	}
-			   
-	m_indexList->clear();
-	//FIXME: no index add!		
 	
-	m_indexList->triggerUpdate();
+	kchmFillListViewWithParsedData( m_indexList, data, 0 );
 }

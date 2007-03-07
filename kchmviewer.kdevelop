@@ -24,9 +24,9 @@
     <run>
       <mainprogram>src/kchmviewer</mainprogram>
       <terminal>false</terminal>
-      <directoryradio>executable</directoryradio>
+      <directoryradio>build</directoryradio>
       <runarguments>
-        <kchmviewer/>
+        <kchmviewer></kchmviewer>
       </runarguments>
       <customdirectory>/</customdirectory>
       <programargs/>
@@ -93,6 +93,7 @@
       <dontact>false</dontact>
       <makebin/>
       <prio>0</prio>
+      <runmultiplejobs>false</runmultiplejobs>
     </make>
   </kdevautoproject>
   <kdevdoctreeview>
@@ -222,14 +223,14 @@
       <configGdbScript/>
       <runShellScript/>
       <runGdbScript/>
-      <breakonloadinglibs>true</breakonloadinglibs>
+      <breakonloadinglibs>false</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
     </general>
     <display>
       <staticmembers>false</staticmembers>
       <demanglenames>true</demanglenames>
-      <outputradix>10</outputradix>
+      <outputradix>16</outputradix>
     </display>
   </kdevdebugger>
   <ctagspart>

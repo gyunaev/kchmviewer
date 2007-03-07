@@ -134,3 +134,153 @@ void KCHMIndTocItem::setOpen( bool open )
 	if ( image_number != LCHMBookIcons::IMAGE_INDEX || open )
 		QListViewItem::setOpen (open);
 }
+
+void kchmFillListViewWithParsedData( QListView * list, const QValueVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
+{
+	QValueVector< KCHMIndTocItem *> lastchild;
+	QValueVector< KCHMIndTocItem *> rootentry;	
+
+	if ( map )
+		map->clear();
+	
+	list->clear();	
+	
+	for ( unsigned int i = 0; i < data.size(); i++ )
+	{
+		unsigned int indent = data[i].indent;
+
+		// Do we need to add another indent?
+		if ( indent >= lastchild.size() )
+		{
+			lastchild.resize( indent + 1 );
+			lastchild[indent] = 0;
+		
+			rootentry.resize( indent + 1 );
+			rootentry[indent] = 0;
+		}
+	
+		// Create the node
+		KCHMIndTocItem * item;
+		QString url = data[i].urls.join ("|");
+		
+		if ( indent == 0 )
+			item = new KCHMIndTocItem( list, lastchild[indent], data[i].name, url, data[i].imageid );
+		else
+		{
+			// New non-root entry. It is possible (for some buggy CHMs) that there is no previous entry: previoous entry had indent 1,
+			// and next entry has indent 3. Backtracking it up, creating missing entries.
+			if ( rootentry[indent-1] == 0 )
+				qFatal("Child entry indented as %d with no root entry!", indent);
+
+			item = new KCHMIndTocItem( rootentry[indent-1], lastchild[indent], data[i].name, url, data[i].imageid );
+		}
+
+		// Hack: if map is 0, we have index, so make it open
+		if ( map )
+		{
+			for ( unsigned int li = 0; li < data[i].urls.size(); li++ )
+				map->insert( data[i].urls[li], item );
+		}
+		else
+			item->setOpen( true );
+
+		lastchild[indent] = item;
+		rootentry[indent] = item;
+	}		
+
+	list->triggerUpdate();
+/*	
+	KCHMMainTreeViewItem * item;
+
+				if ( !root_indent_offset_set )
+				{
+					root_indent_offset_set = true;
+					root_indent_offset = indent;
+					
+					if ( root_indent_offset > 1 )
+						qWarning("CHM has improper index; root indent offset is %d", root_indent_offset);
+				}
+
+				int real_indent = indent - root_indent_offset;
+				QString url = urls.join ("|");
+
+				if ( real_indent == 0 )
+				{
+					// New root entry
+					item = new KCHMMainTreeViewItem (tree, lastchild[real_indent], name, url, imagenum);
+					DEBUGPARSER(("<root object>: '%s', new rootentry %08X\n", name.ascii(), item));
+				}
+				else
+				{
+					// New non-root entry
+					if ( !rootentry[real_indent-1] )
+						qFatal("CHMFile::ParseAndFillTopicsTree: child entry \"%s\" indented as %d with no root entry!", name.ascii(), real_indent);
+
+					item = new KCHMMainTreeViewItem (rootentry[real_indent-1], lastchild[real_indent], name, url,  imagenum);
+					DEBUGPARSER(("<object>: '%s', indent %d, rootentry %08X, item %08X\n", name.ascii(), real_indent, rootentry[real_indent-1], item));
+				}
+
+				lastchild[real_indent] = item;
+				rootentry[real_indent] = item;
+
+				if ( asIndex  )
+					rootentry[real_indent]->setOpen(true);
+
+				// There are no 'titles' in index file
+				if ( add2treemap  )
+				{
+					for ( unsigned int li = 0; li < urls.size(); li++ )
+						m_treeUrlMap[urls[li]] = item;
+				}
+			}
+			else
+			{
+				if ( !urls.isEmpty() )
+					qDebug ("CHMFile::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", urls[0].ascii());
+				else
+					qDebug ("CHMFile::ParseAndFillTopicsTree: <object> tag is parsed, but both name and url are empty.");	
+			}
+
+			name = QString::null;
+			urls.clear();
+			in_object = false;
+			imagenum = defaultimagenum;
+		}
+		}
+		else if ( tagword == "ul" ) // increase indent level
+		{
+			// Fix for buggy help files		
+			if ( ++indent >= MAX_NEST_DEPTH )
+				qFatal("CHMFile::ParseAndFillTopicsTree: max nest depth (%d) is reached, error in help file", MAX_NEST_DEPTH);
+
+			lastchild[indent] = 0;
+			rootentry[indent] = 0;
+			
+			// This intended to fix <ul><ul>, which was seen in some buggy chm files,
+			// and brokes rootentry[indent-1] check
+			int real_indent = indent - root_indent_offset;
+			if ( real_indent > 1
+						  && rootentry[real_indent - 1] == 0
+						  && rootentry[real_indent - 2] != 0 )
+			{
+				rootentry[real_indent - 1] = rootentry[real_indent - 2];
+				qWarning("Broken CHM index/content: tree autocorrection enabled.");
+			}
+						  
+			DEBUGPARSER(("<ul>: new indent is %d, last rootentry was %08X\n", indent - root_indent_offset, rootentry[indent-1]));
+		}
+		else if ( tagword == "/ul" ) // decrease indent level
+		{
+			if ( --indent < root_indent_offset )
+				indent = root_indent_offset;
+
+			rootentry[indent] = 0;
+			DEBUGPARSER(("</ul>: new intent is %d\n", indent - root_indent_offset));
+		}
+
+		pos = i;	
+	}
+	
+	return true;
+*/
+}

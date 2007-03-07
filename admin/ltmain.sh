@@ -17,7 +17,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 # As a special exception to the GNU General Public License, if you
 # distribute this file as part of a program that contains a
@@ -1276,9 +1276,6 @@ EOF
 	    # These systems don't actually have a C or math library (as such)
 	    continue
 	    ;;
-	  *-*-freebsd*-gnu*)
-	    # prevent being parsed by the freebsd regexp below
-	    ;;
 	  *-*-mingw* | *-*-os2*)
 	    # These systems don't actually have a C library (as such)
 	    test "X$arg" = "X-lc" && continue
@@ -1294,9 +1291,6 @@ EOF
 	  esac
 	elif test "X$arg" = "X-lc_r"; then
 	 case $host in
-	 *-*-freebsd*-gnu*)
-	   # prevent being parsed by the freebsd regexp below
-	   ;;
 	 *-*-openbsd*)
 	   # Do not include libc_r directly, use -pthread flag.
 	   continue
@@ -3104,7 +3098,7 @@ EOF
 	tempremovelist=`$echo "$output_objdir/*"`
 	for p in $tempremovelist; do
 	  case $p in
-	    *.$objext)
+	    *.$objext | *$exeext)
 	       ;;
 	    $output_objdir/$outputname | $output_objdir/$libname.* | $output_objdir/${libname}${release}.*)
 	       removelist="$removelist $p"
@@ -3180,12 +3174,6 @@ EOF
 	    ;;
 	  *-*-netbsd*)
 	    # Don't link with libc until the a.out ld.so is fixed.
-	    ;;
-	  *-*-freebsd*-gnu*)
-	    # Prevent $arg from being parsed by the freebsd regexp below.
-	    if test "$build_libtool_need_lc" = "yes"; then
-	      deplibs="$deplibs -lc"
-	    fi
 	    ;;
 	  *-*-openbsd* | *-*-freebsd*)
 	    # Do not include libc due to us having libc/libc_r.
@@ -4585,8 +4573,8 @@ static const void *lt_preloaded_setup() {
 	  *) exeext= ;;
 	esac
 	case $host in
-	  *cygwin* | *mingw* )
-	    cwrappersource=`$echo ${objdir}/lt-${output}.c`
+	  *mingw* )
+	    cwrappersource=`$echo ${output_objdir}/lt-${outputname}.c`
 	    cwrapper=`$echo ${output}.exe`
 	    $rm $cwrappersource $cwrapper
 	    trap "$rm $cwrappersource $cwrapper; exit 1" 1 2 15

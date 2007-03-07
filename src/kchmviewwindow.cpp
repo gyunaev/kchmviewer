@@ -184,7 +184,7 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 		m_newTabLinkKeeper = QString::null;
 		m_openedPage = newurl;
 		
-		mainWindow->getViewWindowMgr()->setTabName( this );
+		mainWindow->viewWindowMgr()->setTabName( this );
 		return true;
 	}
 
@@ -245,7 +245,7 @@ KQPopupMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * pa
 
 QString KCHMViewWindow::getTitle() const
 {
-	QString title = ::mainWindow->getChmFile()->getTopicByUrl( m_openedPage );
+	QString title = ::mainWindow->chmFile()->getTopicByUrl( m_openedPage );
 	
 	if ( title.isEmpty() )
 		title = m_openedPage;
@@ -306,7 +306,7 @@ void KCHMViewWindow::navigateBack( )
 
 void KCHMViewWindow::navigateHome( )
 {
-	::mainWindow->openPage( ::mainWindow->getChmFile()->homeUrl() );
+	::mainWindow->openPage( ::mainWindow->chmFile()->homeUrl() );
 }
 
 void KCHMViewWindow::addNavigationHistory( const QString & url, int scrollpos )
@@ -336,7 +336,7 @@ void KCHMViewWindow::updateNavigationToolbar( )
 	
 	if ( mainWindow )
 	{
-		mainWindow->getNavigationToolbar()->updateIconStatus( 
+		mainWindow->navigationToolbar()->updateIconStatus( 
 					m_historyCurrentPos > 0,
 					m_historyCurrentPos < (m_history.size() - 1) );
 	}

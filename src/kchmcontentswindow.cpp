@@ -59,12 +59,12 @@ KCHMContentsWindow::~KCHMContentsWindow()
 void KCHMContentsWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
-		m_contextMenu = ::mainWindow->getCurrentBrowser()->createListItemContextMenu( this );
+		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
 		
 	if( item )
 	{
 		KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
-		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->getUrl() );
+		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
 		m_contextMenu->popup( point );
 	}
 }
@@ -73,7 +73,7 @@ void KCHMContentsWindow::refillTableOfContents( )
 {
 	QValueVector< LCHMParsedEntry > data;
 	
-	if ( !::mainWindow->getChmFile()->parseTableOfContents( &data )
+	if ( !::mainWindow->chmFile()->parseTableOfContents( &data )
 	|| data.size() == 0 )
 	{
 		qWarning ("CHM toc present but is empty; wrong parsing?");

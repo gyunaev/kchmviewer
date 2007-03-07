@@ -77,6 +77,7 @@ AM_CONDITIONAL([BUILD_CHMLIB], [test "$USE_BUILTIN_CHMLIB" = "1" ])
 
 # libchmfile is built unconditionally
 LIBCHMFILE_INCLUDES="-I\$(top_srcdir)/lib/libchmfile"
+LIBCHMFILE_LIBS="\$(top_builddir)/lib/libchmfile/libchmfile.la"
 
 AC_SUBST([EXTRA_SUBDIRS])
 AC_SUBST(CHM_INCLUDES)

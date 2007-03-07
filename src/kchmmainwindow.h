@@ -54,14 +54,14 @@ public:
 
 	bool		openPage ( const QString &url, unsigned int flags = OPF_CONTENT_TREE );
 	
-	LCHMFile *	getChmFile() const	{ return m_chmFile; }
+	LCHMFile *	chmFile() const	{ return m_chmFile; }
 	const QString&	getOpenedFileName () { return m_chmFilename; }
 	
-	KCHMViewWindow * getCurrentBrowser() const;
-	KCHMContentsWindow  * getContentsWindow() const { return m_contentsWindow; }
-	KCHMSettings   * getCurrentSettings() const { return m_currentSettings; }
-	KCHMViewWindowMgr*	getViewWindowMgr() const { return m_viewWindowMgr; }
-	KCHMNavToolbar * getNavigationToolbar() const { return m_navToolbar; };
+	KCHMViewWindow * currentBrowser() const;
+	KCHMContentsWindow  * contentsWindow() const { return m_contentsWindow; }
+	KCHMSettings   * currentSettings() const { return m_currentSettings; }
+	KCHMViewWindowMgr*	viewWindowMgr() const { return m_viewWindowMgr; }
+	KCHMNavToolbar * navigationToolbar() const { return m_navToolbar; };
 	
 	void		showInStatusBar (const QString& text)	{ statusBar()->message( text, 2000 ); }
 	void		setTextEncoding (const LCHMTextEncoding * enc);
@@ -101,9 +101,9 @@ private slots:
 	
 	void slotToggleFullScreenMode( );
 	
-	void slotNavigateBack()	{	getCurrentBrowser()->navigateBack(); }
-	void slotNavigateHome()	{	getCurrentBrowser()->navigateHome(); }
-	void slotNavigateForward(){	getCurrentBrowser()->navigateForward(); }
+	void slotNavigateBack()	{	currentBrowser()->navigateBack(); }
+	void slotNavigateHome()	{	currentBrowser()->navigateHome(); }
+	void slotNavigateForward(){	currentBrowser()->navigateForward(); }
 	
 private:
 	bool	parseCmdLineArgs();

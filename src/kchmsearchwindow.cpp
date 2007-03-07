@@ -102,7 +102,7 @@ void KCHMSearchWindow::onReturnPressed( )
 
 	m_searchList->clear();
 	
-	if ( ::mainWindow->getChmFile()->searchQuery( text, &results ) )
+	if ( ::mainWindow->chmFile()->searchQuery( text, &results ) )
 	{
 		if ( !results.empty() )
 		{
@@ -154,13 +154,13 @@ void KCHMSearchWindow::onHelpClicked( )
 void KCHMSearchWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
-		m_contextMenu = ::mainWindow->getCurrentBrowser()->createListItemContextMenu( this );
+		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
 		
 	if( item )
 	{
 		KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) item;
 		
-		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->getUrl() );
+		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
 		m_contextMenu->popup( point );
 	}
 }

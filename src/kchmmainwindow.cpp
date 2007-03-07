@@ -271,7 +271,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 
 void KCHMMainWindow::slotPrintMenuItemActivated()
 {
-	getCurrentBrowser()->printCurrentPage();
+	currentBrowser()->printCurrentPage();
 }
 
 
@@ -308,7 +308,7 @@ void KCHMMainWindow::refreshCurrentBrowser( )
 		title = (QString) APP_NAME + " - " + title;
 	setCaption ( title );
 	
-	getCurrentBrowser()->invalidate();
+	currentBrowser()->invalidate();
 	
 	if ( m_contentsWindow )
 		m_contentsWindow->refillTableOfContents();
@@ -351,7 +351,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 {
 	QString p1, p2, url = srcurl;
 
-	if ( getCurrentBrowser()->isRemoteURL (url, p1) )
+	if ( currentBrowser()->isRemoteURL (url, p1) )
 	{
 		switch ( appConfig.m_onExternalLinkClick )
 		{
@@ -383,7 +383,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 	}
 		
 	// Filter the URLs which do not need to be opened at all by Qt version
-	if ( getCurrentBrowser()->isJavascriptURL (url) )
+	if ( currentBrowser()->isJavascriptURL (url) )
 	{
 		QMessageBox::information( this, 
 			i18n( "%1 - JavsScript link clicked") . arg(APP_NAME),
@@ -392,7 +392,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 		return false;
 	}
 
-	if ( getCurrentBrowser()->isNewChmURL (url, p1, p2) 
+	if ( currentBrowser()->isNewChmURL (url, p1, p2) 
 	&& p1 != m_chmFilename )
 	{
    		if ( QMessageBox::question( this,
@@ -412,13 +412,13 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 		url = p2;
 	}
 	
-	KCHMViewWindow * vwnd = getCurrentBrowser();
+	KCHMViewWindow * vwnd = currentBrowser();
 	if ( flags & OPF_NEW_TAB )
 		vwnd = m_viewWindowMgr->addNewTab( !(flags & OPF_BACKGROUND) );
 	
 	// Store current page and position to add it to history if we change it
-	int hist_scrollpos = getCurrentBrowser()->getScrollbarPosition();
-	QString hist_url = getCurrentBrowser()->getOpenedPage();
+	int hist_scrollpos = currentBrowser()->getScrollbarPosition();
+	QString hist_url = currentBrowser()->getOpenedPage();
 	
 	if ( vwnd->openUrl (url) )
 	{
@@ -427,7 +427,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 			locateInContentTree( vwnd->getOpenedPage() );
 		
 		if ( flags & OPF_ADD2HISTORY )
-			getCurrentBrowser()->addNavigationHistory( hist_url, hist_scrollpos );
+			currentBrowser()->addNavigationHistory( hist_url, hist_scrollpos );
 	}
 	
 	return true;
@@ -553,12 +553,12 @@ void KCHMMainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
 	
 	// Because updateView() will call view->invalidate(), which clears the view->getOpenedPage(),
 	// we have to make a copy of it.
-	QString url = getCurrentBrowser()->getOpenedPage();
+	QString url = currentBrowser()->getOpenedPage();
 	
 	// Regenerate the content and index trees	
 	refreshCurrentBrowser();
 	
-	getCurrentBrowser()->openUrl( url );
+	currentBrowser()->openUrl( url );
 }
 
 void KCHMMainWindow::closeChmFile( )
@@ -676,12 +676,12 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 void KCHMMainWindow::slotBrowserSelectAll( )
 {
-	getCurrentBrowser()->clipSelectAll();
+	currentBrowser()->clipSelectAll();
 }
 
 void KCHMMainWindow::slotBrowserCopy( )
 {
-	getCurrentBrowser()->clipCopy();
+	currentBrowser()->clipCopy();
 }
 
 void KCHMMainWindow::slotChangeSettingsMenuItemActivated()
@@ -983,7 +983,7 @@ void KCHMMainWindow::slotLocateInContentWindow( )
 	if ( m_contentsWindow )
 	{
 		// Open all the tree items to show current item (if needed)
-		KCHMIndTocItem * treeitem = m_contentsWindow->getTreeItem( getCurrentBrowser()->getOpenedPage() );
+		KCHMIndTocItem * treeitem = m_contentsWindow->getTreeItem( currentBrowser()->getOpenedPage() );
 	
 		if ( treeitem )
 		{
@@ -1097,19 +1097,19 @@ void KCHMMainWindow::slotExtractCHM( )
 	progress.setProgress( files.size() );
 }
 
-KCHMViewWindow * KCHMMainWindow::getCurrentBrowser( ) const
+KCHMViewWindow * KCHMMainWindow::currentBrowser( ) const
 {
 	return m_viewWindowMgr->current();
 }
 
 void KCHMMainWindow::slotOpenPageInNewTab( )
 {
-	openPage( getCurrentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_CONTENT_TREE );
+	openPage( currentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_CONTENT_TREE );
 }
 
 void KCHMMainWindow::slotOpenPageInNewBackgroundTab( )
 {
-	openPage( getCurrentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_BACKGROUND );
+	openPage( currentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_BACKGROUND );
 }
 
 void KCHMMainWindow::slotBrowserChanged( KCHMViewWindow * newbrowser )

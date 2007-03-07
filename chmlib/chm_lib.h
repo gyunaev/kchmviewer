@@ -108,7 +108,7 @@ int chm_resolve_object(struct chmFile *h,
 
 /* retrieve part of an object from the archive */
 LONGINT64 chm_retrieve_object(struct chmFile *h,
-                              struct chmUnitInfo *ui,
+                              const struct chmUnitInfo *ui,
                               unsigned char *buf,
                               LONGUINT64 addr,
                               LONGINT64 len);

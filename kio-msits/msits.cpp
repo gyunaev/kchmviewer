@@ -34,7 +34,7 @@
 #include <qvaluevector.h>
 
 #include "msits.h"
-#include "../src/filetype_handler.h"
+#include "../libchmfile/filetype_handler.h"
 
 using namespace KIO;
 

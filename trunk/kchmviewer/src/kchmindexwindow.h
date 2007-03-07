@@ -31,28 +31,30 @@
 */
 class KCHMIndexWindow : public QWidget
 {
-Q_OBJECT
-public:
-    KCHMIndexWindow ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
-
-	void	invalidate();
+	Q_OBJECT
+	public:
+		KCHMIndexWindow ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
 	
-public slots:
-	void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+		void	invalidate();
 		
-private slots:
-	void 	onTextChanged ( const QString & newvalue);
-	void 	onReturnPressed ();
-	void	onDoubleClicked ( QListViewItem *, const QPoint &, int);
-
-private:
-	virtual void showEvent ( QShowEvent * );
+	public slots:
+		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+			
+	private slots:
+		void 	onTextChanged ( const QString & newvalue);
+		void 	onReturnPressed ();
+		void	onDoubleClicked ( QListViewItem *, const QPoint &, int);
 	
-	QLineEdit 	*	m_indexFinder;
-	KQListView	*	m_indexList;
-	KQPopupMenu * 	m_contextMenu;	
-	QListViewItem * m_lastSelectedItem;
-	bool			m_indexListFilled;
+	private:
+		virtual void showEvent ( QShowEvent * );
+		
+		void	refillIndex();
+		
+		QLineEdit 	*	m_indexFinder;
+		KQListView	*	m_indexList;
+		KQPopupMenu * 	m_contextMenu;	
+		QListViewItem * m_lastSelectedItem;
+		bool			m_indexListFilled;
 };
 
 #endif

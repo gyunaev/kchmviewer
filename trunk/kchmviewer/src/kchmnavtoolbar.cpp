@@ -24,7 +24,6 @@
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
 #include "iconstorage.h"
-#include "xchmfile.h"
 
 
 KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )

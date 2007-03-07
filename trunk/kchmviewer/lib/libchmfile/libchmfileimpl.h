@@ -182,7 +182,7 @@ class LCHMFileImpl
 		 *
 		 * \ingroup encoding
 		 */
-		const LCHMTextEncoding	* 	getTextEncodingTable();
+		static const LCHMTextEncoding	* 	getTextEncodingTable();
 
 		/*!
 		 * \brief Looks up for encoding by LCID
@@ -191,7 +191,7 @@ class LCHMFileImpl
 		 *
 		 * \ingroup encoding
 		 */
-		const LCHMTextEncoding * lookupByLCID( short lcid );
+		static const LCHMTextEncoding * lookupByLCID( short lcid );
 		
 		/*!
 		 * \brief Get the encoding index
@@ -200,7 +200,7 @@ class LCHMFileImpl
 		 *
 		 * \ingroup encoding
 		 */
-		int getEncodingIndex( const LCHMTextEncoding * enc);
+		static int getEncodingIndex( const LCHMTextEncoding * enc);
 		
 		/*!
 		 * Normalizes path to search in internal arrays

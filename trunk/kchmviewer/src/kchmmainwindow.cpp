@@ -30,6 +30,9 @@
 
 #include <qaccel.h>
 
+#include "libchmfile.h"
+#include "libchmfileimpl.h"
+
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
 #include "kchmindexwindow.h"
@@ -142,10 +145,11 @@ void KCHMMainWindow::slotOpenMenuItemActivated()
 
 bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page )
 {
-	CHMFile * new_chmfile = new CHMFile (fileName);
+	LCHMFile * new_chmfile = new LCHMFile();
 	
-	if ( new_chmfile->IsOk() )
+	if ( new_chmfile->loadFile( fileName ) )
 	{
+		// The new file is opened, so we can close the old one
 		if ( m_chmFile )
 		{
 			closeChmFile( );
@@ -153,7 +157,11 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		}
 	
 		m_chmFile = new_chmfile;
+		
+		// Show current encoding in status bar
+		showInStatusBar( tr("Detected chm file charset: %1") . arg(m_chmFile->currentEncoding()->language) );
 
+		// Make the file name absolute; we'll need it later
 		QDir qd;
 		qd.setPath (fileName);
 		m_chmFilename = qd.absPath();
@@ -165,17 +173,17 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		// Order the tabulations
 		int number_of_pages = 0;
 		
-		if ( m_chmFile->TopicsFile() )
+		if ( m_chmFile->hasTableOfContents() )
 			m_tabContextPage = number_of_pages++;
 		else
 			m_tabContextPage = -1;
 
-		if ( m_chmFile->IndexFile() )
+		if ( m_chmFile->hasIndexTable() )
 			m_tabIndexPage = number_of_pages++;
 		else
 			m_tabIndexPage = -1;
 
-		if ( m_chmFile->isSearchAvailable() )
+		if ( m_chmFile->hasSearchTable() )
 			m_tabSearchPage = number_of_pages++;
 		else
 			m_tabSearchPage = -1;
@@ -193,14 +201,15 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 
 		if ( m_currentSettings->loadSettings (fileName) )
 		{
-			const KCHMTextEncoding::text_encoding_t * enc = KCHMTextEncoding::lookupByLCID (m_currentSettings->m_activeencodinglcid);
+			const LCHMTextEncoding * encoding = 
+					m_chmFile->impl()->lookupByLCID(  m_currentSettings->m_activeencodinglcid );
 
 			m_tabWidget->setCurrentPage( m_currentSettings->m_activetabsystem );
 			
-			if ( enc )
+			if ( encoding )
 			{
-				m_chmFile->setCurrentEncoding (enc);
-				m_searchToolbar->setChosenEncodingInMenu (enc);
+				m_chmFile->setCurrentEncoding( encoding );
+				m_searchToolbar->setChosenEncodingInMenu( encoding );
 			}
 			
 			if ( m_searchWindow )
@@ -225,10 +234,10 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		else
 		{
 			m_tabWidget->setCurrentPage (0);
-			m_searchToolbar->setChosenEncodingInMenu (m_chmFile->getCurrentEncoding());
+			m_searchToolbar->setChosenEncodingInMenu( m_chmFile->currentEncoding() );
 			
 			if ( call_open_page )
-				openPage( m_chmFile->HomePage() );
+				openPage( m_chmFile->homeUrl().isNull() ? "/" : m_chmFile->homeUrl() );
 		}
 
 		m_searchToolbar->setEnabled (true);
@@ -292,7 +301,7 @@ void KCHMMainWindow::slotAboutQtMenuItemActivated()
 
 void KCHMMainWindow::refreshCurrentBrowser( )
 {
-	QString title = m_chmFile->Title();
+	QString title = m_chmFile->title();
 	if ( !title )
 		title = APP_NAME;
 	else
@@ -302,11 +311,7 @@ void KCHMMainWindow::refreshCurrentBrowser( )
 	getCurrentBrowser()->invalidate();
 	
 	if ( m_contentsWindow )
-	{
-		m_contentsWindow->clear();
-		m_chmFile->ParseAndFillTopicsTree(m_contentsWindow);
-		m_contentsWindow->triggerUpdate();
-	}
+		m_contentsWindow->refillTableOfContents();
 }
 
 void KCHMMainWindow::slotOnTreeClicked( QListViewItem * item )
@@ -316,7 +321,7 @@ void KCHMMainWindow::slotOnTreeClicked( QListViewItem * item )
 	if ( !item )
 		return;
 	
-	KCHMMainTreeViewItem * treeitem = (KCHMMainTreeViewItem*) item;
+	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
 	slotLinkClicked( treeitem->getUrl(), unused );
 }
 
@@ -541,19 +546,19 @@ void KCHMMainWindow::slotAddBookmark( )
 	emit m_bookmarkWindow->onAddBookmarkPressed ();
 }
 
-void KCHMMainWindow::setTextEncoding( const KCHMTextEncoding::text_encoding_t * enc )
+void KCHMMainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
 {
-	m_chmFile->setCurrentEncoding (enc);
-	m_searchToolbar->setChosenEncodingInMenu (enc);
+	m_chmFile->setCurrentEncoding( encoding );
+	m_searchToolbar->setChosenEncodingInMenu( encoding );
 	
 	// Because updateView() will call view->invalidate(), which clears the view->getOpenedPage(),
 	// we have to make a copy of it.
 	QString url = getCurrentBrowser()->getOpenedPage();
+	
+	// Regenerate the content and index trees	
 	refreshCurrentBrowser();
 	
-	// Regenerate the content and index trees
-	
-	getCurrentBrowser()->openUrl ( url );
+	getCurrentBrowser()->openUrl( url );
 }
 
 void KCHMMainWindow::closeChmFile( )
@@ -561,7 +566,7 @@ void KCHMMainWindow::closeChmFile( )
 	// Prepare the settings
 	if ( appConfig.m_HistoryStoreExtra )
 	{
-		m_currentSettings->m_activeencodinglcid = m_chmFile->getCurrentEncoding()->winlcid;
+		m_currentSettings->m_activeencodinglcid = m_chmFile->currentEncoding()->winlcid;
 		m_currentSettings->m_activetabsystem = m_tabWidget->currentPageIndex( );
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
 		
@@ -975,19 +980,24 @@ void KCHMMainWindow::slotLocateInContentWindow( )
 	// Activate a content tab
 	m_tabWidget->setCurrentPage( m_tabContextPage );
 	
-	// Open all the tree items to show current item (if needed)
-	KCHMMainTreeViewItem * treeitem = m_chmFile->getTreeItem( getCurrentBrowser()->getOpenedPage() );
-	if ( m_contentsWindow && treeitem )
+	if ( m_contentsWindow )
 	{
-		KCHMMainTreeViewItem * itemparent = treeitem;
-		while ( (itemparent = (KCHMMainTreeViewItem*) itemparent->parent()) != 0 )
-			itemparent->setOpen(true);
+		// Open all the tree items to show current item (if needed)
+		KCHMIndTocItem * treeitem = m_contentsWindow->getTreeItem( getCurrentBrowser()->getOpenedPage() );
+	
+		if ( treeitem )
+		{
+			KCHMIndTocItem * itemparent = treeitem;
 			
-		m_contentsWindow->setCurrentItem (treeitem);
-		m_contentsWindow->ensureItemVisible (treeitem);
+			while ( (itemparent = (KCHMIndTocItem*) itemparent->parent()) != 0 )
+				itemparent->setOpen(true);
+			
+			m_contentsWindow->setCurrentItem (treeitem);
+			m_contentsWindow->ensureItemVisible (treeitem);
+		}
+		else
+			statusBar()->message( i18n( "Could not locate opened topic in content window"), 2000 );
 	}
-	else
-		statusBar()->message( i18n( "Could not locate opened topic in content window"), 2000 );
 }
 
 void KCHMMainWindow::slotExtractCHM( )
@@ -1014,7 +1024,7 @@ void KCHMMainWindow::slotExtractCHM( )
 	outdir += "/";
 	
 	// Enumerate all the files in archive
-	if ( !m_chmFile || !m_chmFile->enumerateArchive (files) )
+	if ( !m_chmFile || !m_chmFile->enumerateFiles( &files ) )
 		return;
 
 	KQProgressModalDialog progress( i18n("Extracting CHM content"), i18n("Extracting files..."), i18n("Abort"), files.size(), this );
@@ -1032,60 +1042,56 @@ void KCHMMainWindow::slotExtractCHM( )
 		}
 
 		// Extract the file
-		chmUnitInfo ui;	
-		if ( m_chmFile->ResolveObject( files[i], &ui ) )
+		QByteArray buf;
+		
+		if ( m_chmFile->getFileContentAsBinary( &buf, files[i] ) )
 		{
-			QByteArray buf( ui.length );
-			
-			if ( m_chmFile->RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) )
-			{
-				// Split filename to get the list of subdirectories
-				QStringList dirs = QStringList::split( '/', files[i] );
+			// Split filename to get the list of subdirectories
+			QStringList dirs = QStringList::split( '/', files[i] );
 
-				// Walk through the list of subdirectories, and create them if needed
-				// dirlevel is used to detect extra .. and prevent overwriting files
-				// outside the directory (like creating the file images/../../../../../etc/passwd
-				unsigned int i, dirlevel = 0;
-				QStringList dirlist;
+			// Walk through the list of subdirectories, and create them if needed
+			// dirlevel is used to detect extra .. and prevent overwriting files
+			// outside the directory (like creating the file images/../../../../../etc/passwd
+			unsigned int i, dirlevel = 0;
+			QStringList dirlist;
 				
-				for ( i = 0; i < dirs.size() - 1; i++ )
+			for ( i = 0; i < dirs.size() - 1; i++ )
+			{
+				// Skip .. which lead too far above
+				if ( dirs[i] == ".." )
 				{
-					// Skip .. which lead too far above
-					if ( dirs[i] == ".." )
+					if ( dirlevel > 0 )
 					{
-						if ( dirlevel > 0 )
-						{
-							dirlevel--;
-							dirlist.pop_back();
-						}
-					}
-					else
-					{
-						dirlist.push_back( dirs[i] );
-						
-						QDir dir ( outdir + dirlist.join( "/" ) );
-						if ( !dir.exists() )
-						{
-							if ( !dir.mkdir( dir.path() ) )
-								qWarning( "Could not create subdir %s\n", dir.path().ascii() );
-						}
+						dirlevel--;
+						dirlist.pop_back();
 					}
 				}
-				
-				QString filename = outdir + dirlist.join( "/" ) + "/" + dirs[i];
-				QFile wf( filename );
-				if ( !wf.open( IO_WriteOnly ) )
+				else
 				{
-					 qWarning( "Could not write file %s\n", filename.ascii() );
-					 continue;
+					dirlist.push_back( dirs[i] );
+					
+					QDir dir ( outdir + dirlist.join( "/" ) );
+					if ( !dir.exists() )
+					{
+						if ( !dir.mkdir( dir.path() ) )
+							qWarning( "Could not create subdir %s\n", dir.path().ascii() );
+					}
 				}
-				
-				wf. writeBlock( buf );
-				wf.close();
 			}
+			
+			QString filename = outdir + dirlist.join( "/" ) + "/" + dirs[i];
+			QFile wf( filename );
+			if ( !wf.open( IO_WriteOnly ) )
+			{
+					qWarning( "Could not write file %s\n", filename.ascii() );
+					continue;
+			}
+			
+			wf. writeBlock( buf );
+			wf.close();
 		}
 		else
-			qWarning( "Could not resolve file %s\n", files[i].ascii() );
+			qWarning( "Could not get file %s\n", files[i].ascii() );
 	}
 	
 	progress.setProgress( files.size() );
@@ -1113,12 +1119,15 @@ void KCHMMainWindow::slotBrowserChanged( KCHMViewWindow * newbrowser )
 
 void KCHMMainWindow::locateInContentTree( const QString & url )
 {
-	KCHMMainTreeViewItem * treeitem = m_chmFile->getTreeItem( url );
+	if ( !m_contentsWindow )
+		return;
 	
-	if ( treeitem && m_contentsWindow )
+	KCHMIndTocItem * treeitem = m_contentsWindow->getTreeItem( url );
+	
+	if ( treeitem )
 	{
-		KCHMMainTreeViewItem * itemparent = treeitem;
-		while ( (itemparent = (KCHMMainTreeViewItem*) itemparent->parent()) != 0 )
+		KCHMIndTocItem * itemparent = treeitem;
+		while ( (itemparent = (KCHMIndTocItem*) itemparent->parent()) != 0 )
 			itemparent->setOpen(true);
 			
 		m_contentsWindow->setCurrentItem (treeitem);
@@ -1140,7 +1149,7 @@ void KCHMMainWindow::slotOnTreeDoubleClicked( QListViewItem * item, const QPoint
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 void KCHMMainWindow::runAutoTest()
 {
-	KCHMMainTreeViewItem * item;
+	KCHMIndTocItem * item;
 
 	switch (m_autoteststate)
 	{
@@ -1157,7 +1166,7 @@ void KCHMMainWindow::runAutoTest()
 		break; // allow to finish the initialization sequence
 		
 	case STATE_CONTENTS_OPENNEXTPAGE:
-		if ( (item = (KCHMMainTreeViewItem *) m_autotestlistiterator.current()) != 0 )
+		if ( (item = (KCHMIndTocItem *) m_autotestlistiterator.current()) != 0 )
 		{
 			openPage( item->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 			m_autotestlistiterator++;

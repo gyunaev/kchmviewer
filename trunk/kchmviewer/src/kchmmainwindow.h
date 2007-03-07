@@ -24,8 +24,9 @@
 
 #include "kde-qt.h"
 
+#include "libchmfile.h"
+
 #include "forwarddeclarations.h"
-#include "kchmtextencoding.h"
 #include "kchmviewwindow.h"
 
 
@@ -53,7 +54,7 @@ public:
 
 	bool		openPage ( const QString &url, unsigned int flags = OPF_CONTENT_TREE );
 	
-	CHMFile *	getChmFile() const	{ return m_chmFile; }
+	LCHMFile *	getChmFile() const	{ return m_chmFile; }
 	const QString&	getOpenedFileName () { return m_chmFilename; }
 	
 	KCHMViewWindow * getCurrentBrowser() const;
@@ -63,7 +64,7 @@ public:
 	KCHMNavToolbar * getNavigationToolbar() const { return m_navToolbar; };
 	
 	void		showInStatusBar (const QString& text)	{ statusBar()->message( text, 2000 ); }
-	void		setTextEncoding (const KCHMTextEncoding::text_encoding_t * enc);
+	void		setTextEncoding (const LCHMTextEncoding * enc);
 		
 public slots:
 	void slotOnTreeClicked( QListViewItem *item );
@@ -138,7 +139,7 @@ private:
 	
 	KCHMSettings		*	m_currentSettings;
 	
-	CHMFile				*	m_chmFile;
+	LCHMFile			*	m_chmFile;
 	bool					m_FirstTimeShow;
 	
 	KQPopupMenu			*	m_menuHistory;

@@ -25,12 +25,13 @@
 #include <qstring.h>
 #include <qdir.h>
 
+#include "libchmfile.h"
+#include "libchmurlfactory.h"
+
 #include "kchmviewwindow.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindowmgr.h"
-#include "xchmfile.h"
 #include "kchmnavtoolbar.h"
-#include "filetype_handler.h"
 
 
 KCHMViewWindow::KCHMViewWindow( QTabWidget * parent )
@@ -198,7 +199,7 @@ void KCHMViewWindow::handleStartPageAsImage( QString & link )
 	|| link.endsWith( ".gif", false )
 	|| link.endsWith( ".png", false )
 	|| link.endsWith( ".bmp", false ) )
-		link += FILE_HANDLER_EXT;
+		link += LCHMUrlFactory::getInternalUriExtension();
 }
 
 
@@ -305,7 +306,7 @@ void KCHMViewWindow::navigateBack( )
 
 void KCHMViewWindow::navigateHome( )
 {
-	::mainWindow->openPage( ::mainWindow->getChmFile()->HomePage() );
+	::mainWindow->openPage( ::mainWindow->getChmFile()->homeUrl() );
 }
 
 void KCHMViewWindow::addNavigationHistory( const QString & url, int scrollpos )

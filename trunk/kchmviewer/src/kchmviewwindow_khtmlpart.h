@@ -104,7 +104,7 @@ private:
 	bool		m_searchForward;
 	QString		m_searchText;
 		
-	const KCHMTextEncoding::text_encoding_t *	m_currentEncoding;
+	const LCHMTextEncoding *	m_currentEncoding;
 };
 
 #endif /* USE_KDE */

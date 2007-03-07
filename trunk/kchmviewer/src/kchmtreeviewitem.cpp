@@ -24,42 +24,41 @@
 
 #include "kchmtreeviewitem.h"
 #include "kchmmainwindow.h"
-#include "xchmfile.h"
 #include "kchmdialogchooseurlfromlist.h"
-
 #include "iconstorage.h"
 
 
-KCHMMainTreeViewItem::KCHMMainTreeViewItem( QListViewItem * parent, QListViewItem * after, QString name, QString aurl, int image) : QListViewItem(parent, after, name), url(aurl), image_number(image)
+KCHMIndTocItem::KCHMIndTocItem( QListViewItem * parent, QListViewItem * after, QString name, QString aurl, int image) : QListViewItem(parent, after, name), url(aurl), image_number(image)
 {
 }
 
-KCHMMainTreeViewItem::KCHMMainTreeViewItem( QListView * parent, QListViewItem * after, QString name, QString aurl, int image) : QListViewItem(parent, after, name), url(aurl), image_number(image)
+KCHMIndTocItem::KCHMIndTocItem( QListView * parent, QListViewItem * after, QString name, QString aurl, int image) : QListViewItem(parent, after, name), url(aurl), image_number(image)
 {
 }
 
 
-const QPixmap * KCHMMainTreeViewItem::pixmap( int i ) const
+const QPixmap * KCHMIndTocItem::pixmap( int i ) const
 {
 	int imagenum;
 
-    if ( i || image_number == KCHMImageType::IMAGE_NONE || image_number == KCHMImageType::IMAGE_INDEX )
+	if ( i || image_number == LCHMBookIcons::IMAGE_NONE || image_number == LCHMBookIcons::IMAGE_INDEX )
         return 0;
 
 	if ( firstChild () )
 	{
 		if ( isOpen() )
-			imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 1 : image_number;
+			imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 1 : image_number;
 		else
-			imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 0 : image_number + 1;
+			imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 0 : image_number + 1;
 	}
 	else
-		imagenum = (image_number == KCHMImageType::IMAGE_AUTO) ? 10 : image_number;
+		imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 10 : image_number;
 
-	return gIconStorage.getBookIconPixmap(imagenum);
+	return ::mainWindow->getChmFile()->getBookIconPixmap( imagenum );
 }
 
-QString KCHMMainTreeViewItem::getUrl( ) const
+
+QString KCHMIndTocItem::getUrl( ) const
 {
 	if ( url.find ('|') == -1 )
 		return url;
@@ -67,7 +66,7 @@ QString KCHMMainTreeViewItem::getUrl( ) const
 	// Create a dialog with URLs, and show it, so user can select an URL he/she wants.
 	QStringList urls = QStringList::split ('|', url);
 	QStringList titles;
-	CHMFile * xchm = (CHMFile *) ::mainWindow->getChmFile();
+	LCHMFile * xchm = ::mainWindow->getChmFile();
 
 	for ( unsigned int i = 0; i < urls.size(); i++ )
 	{
@@ -90,9 +89,10 @@ QString KCHMMainTreeViewItem::getUrl( ) const
 	return QString::null;
 }
 
-void KCHMMainTreeViewItem::paintBranches( QPainter * p, const QColorGroup & cg, int w, int y, int h )
+
+void KCHMIndTocItem::paintBranches( QPainter * p, const QColorGroup & cg, int w, int y, int h )
 {
-	if ( image_number != KCHMImageType::IMAGE_INDEX )
+	if ( image_number != LCHMBookIcons::IMAGE_INDEX )
 		QListViewItem::paintBranches(p, cg, w, y, h);
 	else
 	{
@@ -109,7 +109,7 @@ void KCHMMainTreeViewItem::paintBranches( QPainter * p, const QColorGroup & cg, 
 }
 
 
-void KCHMMainTreeViewItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
+void KCHMIndTocItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
 {
     QColorGroup newcg ( cg );
     QColor c = newcg.text();
@@ -128,16 +128,9 @@ void KCHMMainTreeViewItem::paintCell( QPainter * p, const QColorGroup & cg, int 
 	newcg.setColor( QColorGroup::Text, c );
 }
 
-void KCHMMainTreeViewItem::setOpen( bool open )
+
+void KCHMIndTocItem::setOpen( bool open )
 {
-	if ( image_number != KCHMImageType::IMAGE_INDEX || open )
+	if ( image_number != LCHMBookIcons::IMAGE_INDEX || open )
 		QListViewItem::setOpen (open);
 }
-
-/*
-int KCHMMainTreeViewItem::width( const QFontMetrics & fm, const QListView * lv, int c ) const
-{
-        return (QListViewItem::width
-            (QFontMetrics (myFont), lv, c));
-}
-*/

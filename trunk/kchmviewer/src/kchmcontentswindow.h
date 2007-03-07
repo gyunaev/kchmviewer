@@ -18,10 +18,12 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #ifndef INCLUDE_KCHMCONTENTSWINDOW_H
 #define INCLUDE_KCHMCONTENTSWINDOW_H
 
 #include "kde-qt.h"
+#include "kchmtreeviewitem.h"
 
 /**
 @author tim
@@ -34,6 +36,10 @@ class KCHMContentsWindow : public KQListView
 		~KCHMContentsWindow();
 		
 		QRect	tip( const QPoint & p );
+		
+		void	refillTableOfContents();
+		
+		KCHMIndTocItem *	getTreeItem( const QString& url );
 		
 	public slots:
 		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );

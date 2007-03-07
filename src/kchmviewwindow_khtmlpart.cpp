@@ -21,7 +21,6 @@
 
 #include "kde-qt.h"
 #include "kchmmainwindow.h"
-#include "xchmfile.h"
 #include "kchmconfig.h"
 #include "kchmviewwindow_khtmlpart.h"
 
@@ -59,9 +58,9 @@ KCHMViewWindow_KHTMLPart::~KCHMViewWindow_KHTMLPart()
 bool KCHMViewWindow_KHTMLPart::openPage (const QString& url)
 {
 	// Set or change the encoding
-	if ( m_currentEncoding != ::mainWindow->getChmFile()->getCurrentEncoding() )
+	if ( m_currentEncoding != ::mainWindow->getChmFile()->currentEncoding() )
 	{
-		m_currentEncoding = ::mainWindow->getChmFile()->getCurrentEncoding();
+		m_currentEncoding = ::mainWindow->getChmFile()->currentEncoding();
 		setEncoding ( m_currentEncoding->qtcodec, TRUE );
 	}
 	

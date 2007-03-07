@@ -134,7 +134,7 @@ class LCHMFile
 		 * \brief Gets the URL of the default page in the chm archive.
 		 * \return The home page name, with a '/' added in front and relative to
 		 *         the root of the archive filesystem. If no .chm has been opened,
-		 *         returns empty value.
+		 *         returns "/".
 		 * \ingroup information
 		 */
 		QString homeUrl() const;

@@ -22,11 +22,14 @@
 #include <qlayout.h>
 #include <qheader.h>
 
+#include "libchmfile.h"
+
 #include "kchmmainwindow.h"
 #include "kchmindexwindow.h"
 #include "kchmlistitemtooltip.h"
-#include "xchmfile.h"
+#include "kchmtreeviewitem.h"
 
+#include "kchmindexwindow.moc"
 
 KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f )
 	: QWidget (parent, name, f)
@@ -91,10 +94,7 @@ void KCHMIndexWindow::showEvent( QShowEvent * )
 		return;
 
 	m_indexListFilled = true;
-	::mainWindow->getChmFile()->ParseAndFillIndex (m_indexList);
-	
-	if ( m_indexList->childCount() == 0 )
-		qWarning ("CHM index present but is empty; wrong parsing?");
+	refillIndex();
 }
 
 void KCHMIndexWindow::onReturnPressed( )
@@ -114,7 +114,7 @@ void KCHMIndexWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int 
 	if ( !item )
 		return;
 	
-	KCHMMainTreeViewItem * treeitem = (KCHMMainTreeViewItem*) item;
+	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
 	
 	QString url = treeitem->getUrl();
 	
@@ -141,11 +141,26 @@ void KCHMIndexWindow::slotContextMenuRequested( QListViewItem * item, const QPoi
 		
 	if( item )
 	{
-		KCHMMainTreeViewItem * treeitem = (KCHMMainTreeViewItem*) item;
+		KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
 		
 		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->getUrl() );
 		m_contextMenu->popup( point );
 	}
 }
 
-#include "kchmindexwindow.moc"
+void KCHMIndexWindow::refillIndex( )
+{
+	QValueVector< LCHMParsedEntry > data;
+	
+	if ( !::mainWindow->getChmFile()->parseIndex( &data )
+			   || data.size() == 0 )
+	{
+		qWarning ("CHM index present but is empty; wrong parsing?");
+		return;
+	}
+			   
+	m_indexList->clear();
+	//FIXME: no index add!		
+	
+	m_indexList->triggerUpdate();
+}

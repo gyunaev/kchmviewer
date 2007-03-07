@@ -23,11 +23,12 @@
 #include <qimage.h>
 #include <qdir.h>
 
+#include "libchmfile.h"
+#include "libchmurlfactory.h"
+
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
 #include "kchmsourcefactory.h"
-#include "filetype_handler.h"
-#include "xchmfile.h"
 
 KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
 	: QMimeSourceFactory()
@@ -39,13 +40,15 @@ KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
 const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 {
 	QString data, file, path = abs_name;
-	CHMFile * chm;
+	LCHMFile * chm;
 
 	// Retreive the data from chm file
-	if ( KCHMViewWindow::isNewChmURL( abs_name, file, path ) )
+/*	if ( KCHMViewWindow::isNewChmURL( abs_name, file, path ) )
 		chm = ::mainWindow->getChmFile()->getCHMfilePointer( file );
 	else
-		chm = ::mainWindow->getChmFile();
+		*/
+	//FIXME: loading of extra chm files
+	chm = ::mainWindow->getChmFile();
 
 	if ( !chm )
 		return 0;
@@ -57,36 +60,29 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 	// To handle a single-image pages, we need to generate the HTML page to show 
 	// this image. We did it in KCHMViewWindow::handleStartPageAsImage; now we need
 	// to generate the HTML page, and set it.
-	if ( handleFileType( path, data ) )
+	if ( LCHMUrlFactory::handleFileType( path, data ) )
 	{
 		((QMimeSourceFactory*)this)->setText (path, data);
 	}
 	else if ( path.endsWith (".htm") || path.endsWith (".html") )
 	{
-		chm->GetFileContentAsString (data, path);
-		((QMimeSourceFactory*)this)->setText (path, data);
+		if ( chm->getFileContentAsString( &data, path ) )
+			((QMimeSourceFactory*)this)->setText (path, data);
 	}
 	else
 	{
 		// treat as image
-		chmUnitInfo ui;
 		QImage img;
+		QByteArray buf;
 		
-		if ( chm->ResolveObject (path, &ui) )
+		if ( chm->getFileContentAsBinary( &buf, path ) )
 		{
-			QByteArray buf (ui.length);
-			
-			if ( chm->RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) )
-			{
-				if ( img.loadFromData ( (const uchar *) buf.data(), ui.length) )
-					((QMimeSourceFactory*)this)->setImage (path, img);
-			}
-			else
-				qWarning( "Could not retrieve file %s\n", path.ascii() );
+			if ( img.loadFromData ( (const uchar *) buf.data(), buf.size() ) )
+				((QMimeSourceFactory*)this)->setImage (path, img);
 		}
 		else
 		{
-			((QMimeSourceFactory*)this)->setImage (path, img);
+			((QMimeSourceFactory*)this)->setImage( path, img );
 			qWarning( "Could not resolve file %s\n", path.ascii() );
 		}
 	}

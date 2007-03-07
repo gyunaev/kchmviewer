@@ -25,7 +25,6 @@
 
 #include "forwarddeclarations.h"
 
-#include "kchmtextencoding.h"
 #include "kqtempfile.h"
 
 /**
@@ -33,56 +32,55 @@
 */
 class KCHMSearchAndViewToolbar : public QToolBar
 {
-Q_OBJECT
-public:
-    KCHMSearchAndViewToolbar (KCHMMainWindow *parent);
-
-	void	setEnabled (bool enable);
-	void	setChosenEncodingInMenu( const KCHMTextEncoding::text_encoding_t * enc );
-
-private slots:
-	void	onReturnPressed();
-	void	onBtnPrevSearchResult();
-	void	onBtnNextSearchResult();
-	void	onAccelFocusSearchField();
+	Q_OBJECT
+	public:
+		KCHMSearchAndViewToolbar (KCHMMainWindow *parent);
 	
-	void	onBtnFontInc();
-	void	onBtnFontDec();
-	void	onBtnViewSource();
-	void	onBtnAddBookmark();
-	void	onBtnNextPageInToc();
-	void	onBtnPrevPageInToc();
-	void	onMenuActivated ( int id );
-	void	onBtnFullScreen();
-	void	onBtnLocateInContentWindow();
-	void	onBtnToggleContentWindow();
+		void	setEnabled (bool enable);
+		void	setChosenEncodingInMenu( const LCHMTextEncoding * encoding );
 	
-	void	setFullScreen( bool enable );
-	void	showContentsWindow( bool enable );
-	
-private:
-	void	search (bool forward);
-	
-	KQPopupMenu 		*	m_MenuView;
-	QComboBox			*	m_findBox;
-	QToolButton			*	m_buttonPrev;
-	QToolButton			*	m_buttonNext;
-	QToolButton			*	m_buttonFontInc;
-	QToolButton			*	m_buttonFontDec;
-	QToolButton			*	m_buttonViewSource;
-	QToolButton			*	m_buttonAddBookmark;
-	QToolButton			*	m_buttonNextPageInTOC;
-	QToolButton			*	m_buttonPrevPageInTOC;
-	QToolButton			*	m_buttonLocateInContent;
-	
-	int						m_checkedLanguageInMenu;
-	int						m_checkedEncodingInMenu;
-	
-	int						m_menuShowFullscreenMenuID;
-	int						m_menuShowContentWindowMenuID;
-	
-	KQTempFileKeeper		m_tempFileKeeper;
-	
+	private slots:
+		void	onReturnPressed();
+		void	onBtnPrevSearchResult();
+		void	onBtnNextSearchResult();
+		void	onAccelFocusSearchField();
+		
+		void	onBtnFontInc();
+		void	onBtnFontDec();
+		void	onBtnViewSource();
+		void	onBtnAddBookmark();
+		void	onBtnNextPageInToc();
+		void	onBtnPrevPageInToc();
+		void	onMenuActivated ( int id );
+		void	onBtnFullScreen();
+		void	onBtnLocateInContentWindow();
+		void	onBtnToggleContentWindow();
+		
+		void	setFullScreen( bool enable );
+		void	showContentsWindow( bool enable );
+		
+	private:
+		void	search (bool forward);
+		
+		KQPopupMenu 		*	m_MenuView;
+		QComboBox			*	m_findBox;
+		QToolButton			*	m_buttonPrev;
+		QToolButton			*	m_buttonNext;
+		QToolButton			*	m_buttonFontInc;
+		QToolButton			*	m_buttonFontDec;
+		QToolButton			*	m_buttonViewSource;
+		QToolButton			*	m_buttonAddBookmark;
+		QToolButton			*	m_buttonNextPageInTOC;
+		QToolButton			*	m_buttonPrevPageInTOC;
+		QToolButton			*	m_buttonLocateInContent;
+		
+		int						m_checkedLanguageInMenu;
+		int						m_checkedEncodingInMenu;
+		
+		int						m_menuShowFullscreenMenuID;
+		int						m_menuShowContentWindowMenuID;
+		
+		KQTempFileKeeper		m_tempFileKeeper;
 };
 
 #endif

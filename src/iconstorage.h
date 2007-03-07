@@ -18,53 +18,52 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #ifndef ICON_STORAGE_H
 #define ICON_STORAGE_H
 
 #include <qmap.h>
 #include <qpixmap.h>
 
-static const unsigned int MAX_BUILTIN_ICONS = 42;
 
 class KCHMIconStorage
 {
-public:
-	typedef struct
-	{
-		unsigned int 	size;
-		const char * 	data;
-	} png_memory_image_t;
+	public:
+		typedef struct
+		{
+			unsigned int 	size;
+			const char * 	data;
+		} png_memory_image_t;
 
-	enum pixmap_index_t
-	{
-		back = 1000,
-		bookmark_add,
-		fileopen,
-		print,
-		findnext,
-		findprev,
-		forward,
-		gohome,
-		viewsource,
-		view_decrease,
-		view_increase,
-		next_page,
-		prev_page,
-		locate_in_content
-	};
-
-	KCHMIconStorage();
-	const QPixmap * getBookIconPixmap (unsigned int id);
-	const QPixmap * getToolbarPixmap (pixmap_index_t pix);
-	const QPixmap * getApplicationIcon();
-	const QPixmap * getCloseWindowIcon();
-
-private:
-	const QPixmap * returnOrLoadImage (unsigned int id, const png_memory_image_t * image);
-
-	QMap<unsigned int, QPixmap*>	m_iconMap;
-	QPixmap *						m_iconApplication;
-	QPixmap *						m_iconCloseWindow;
+		enum pixmap_index_t
+		{
+			back = 1000,
+			bookmark_add,
+			fileopen,
+			print,
+			findnext,
+			findprev,
+			forward,
+			gohome,
+			viewsource,
+			view_decrease,
+			view_increase,
+			next_page,
+			prev_page,
+			locate_in_content
+		};
+	
+		KCHMIconStorage();
+		const QPixmap * getToolbarPixmap (pixmap_index_t pix);
+		const QPixmap * getApplicationIcon();
+		const QPixmap * getCloseWindowIcon();
+	
+	private:
+		const QPixmap * returnOrLoadImage (unsigned int id, const png_memory_image_t * image);
+	
+		QMap<unsigned int, QPixmap*>	m_iconMap;
+		QPixmap *						m_iconApplication;
+		QPixmap *						m_iconCloseWindow;
 };
 
 extern KCHMIconStorage	gIconStorage;

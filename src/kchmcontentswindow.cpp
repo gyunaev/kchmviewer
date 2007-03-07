@@ -20,13 +20,18 @@
  ***************************************************************************/
 
 #include "kde-qt.h"
+
+#include "libchmfile.h"
+
 #include "kchmcontentswindow.h"
 #include "kchmlistitemtooltip.h"
 #include "kchmmainwindow.h"
 #include "kchmtreeviewitem.h"
 
+#include "kchmcontentswindow.moc"
+
 KCHMContentsWindow::KCHMContentsWindow(QWidget *parent, const char *name)
- : KQListView(parent, name)
+	: KQListView(parent, name)
 {
 	m_contextMenu = 0;
 	
@@ -58,10 +63,32 @@ void KCHMContentsWindow::slotContextMenuRequested( QListViewItem * item, const Q
 		
 	if( item )
 	{
-		KCHMMainTreeViewItem * treeitem = (KCHMMainTreeViewItem*) item;
+		KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
 		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->getUrl() );
 		m_contextMenu->popup( point );
 	}
 }
 
-#include "kchmcontentswindow.moc"
+void KCHMContentsWindow::refillTableOfContents( )
+{
+	QValueVector< LCHMParsedEntry > data;
+	
+	if ( !::mainWindow->getChmFile()->parseTableOfContents( &data )
+	|| data.size() == 0 )
+	{
+		qWarning ("CHM toc present but is empty; wrong parsing?");
+		return;
+	}
+			   
+	clear();
+//	m_chmFile->ParseAndFillTopicsTree(m_contentsWindow);
+	triggerUpdate();
+
+	
+	//FIXME: no TOC add!		
+}
+
+KCHMIndTocItem * KCHMContentsWindow::getTreeItem( const QString & url )
+{
+	//FIXME! code!
+}

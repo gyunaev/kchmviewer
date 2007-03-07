@@ -3,6 +3,7 @@ all:
 	@echo "This will be deleted before making the distribution"
 	@echo ""
 	$(MAKE) -f admin/Makefile.common cvs
+	rm -rf autom4te.cache
 
 dist:
 	$(MAKE) -f admin/Makefile.common dist

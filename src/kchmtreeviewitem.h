@@ -18,83 +18,77 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #ifndef CTREEVIEWITEM_H
 #define CTREEVIEWITEM_H
 
 #include <qlistview.h>
 
-namespace KCHMImageType
-{
-	const int IMAGE_NONE = -1;
-	const int IMAGE_AUTO = -2;
-	const int IMAGE_INDEX = -3;
-};
-
 /**
 @author Georgy Yunaev
 */
-class KCHMMainTreeViewItem : public QListViewItem
+//! This is a list item used both in Index and Table Of Content trees
+class KCHMIndTocItem : public QListViewItem
 {
-public:
-    KCHMMainTreeViewItem(QListViewItem* parent, QListViewItem* after, QString name, QString aurl, int image); 
-	KCHMMainTreeViewItem(QListView* parent, QListViewItem* after, QString name, QString url, int image);
-	
-	QString		getUrl() const;
-	virtual void setOpen ( bool open );
-	
-private:
-//	virtual int width ( const QFontMetrics & fm, const QListView * lv, int c ) const;
-	virtual void paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h );
-	virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
-	virtual const QPixmap * pixmap( int i ) const;
-	
-	QString		url;
-	int 		image_number;
+	public:
+		KCHMIndTocItem( QListViewItem* parent, QListViewItem* after, QString name, QString aurl, int image); 
+		KCHMIndTocItem( QListView* parent, QListViewItem* after, QString name, QString url, int image);
+		
+		QString		getUrl() const;
+		virtual void setOpen ( bool open );
+		
+	private:
+		virtual void paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h );
+		virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
+		virtual const QPixmap * pixmap( int i ) const;
+		
+		QString		url;
+		int 		image_number;
 };
 
 
 class KCMSearchTreeViewItem : public QListViewItem
 {
-public:
-	KCMSearchTreeViewItem (QListView* parent, QString name, QString loc, QString url)
-		 : QListViewItem (parent, name, loc)
-	{
-		this->url = url;
-	}
-
-	QString		getUrl() const	{ return url; }
+	public:
+		KCMSearchTreeViewItem (QListView* parent, QString name, QString loc, QString url)
+			: QListViewItem (parent, name, loc)
+		{
+			this->url = url;
+		}
 	
-private:
-	QString		url;
+		QString		getUrl() const	{ return url; }
+		
+	private:
+		QString		url;
 };
 
 
 class KCHMSingleTreeViewItem : public QListViewItem
 {
-public:
-	KCHMSingleTreeViewItem (QListView* parent, QString name, QString url)
-		 : QListViewItem (parent, name)
-	{
-		this->url = url;
-	}
-
-	QString		getUrl() const	{ return url; }
+	public:
+		KCHMSingleTreeViewItem (QListView* parent, QString name, QString url)
+			: QListViewItem (parent, name)
+		{
+			this->url = url;
+		}
 	
-private:
-	QString		url;
+		QString		getUrl() const	{ return url; }
+		
+	private:
+		QString		url;
 };
 
 
-class KCMBookmarkTreeViewItem : public QListViewItem
+class KCHMBookmarkTreeViewItem : public QListViewItem
 {
-public:
-	KCMBookmarkTreeViewItem (QListView* parent, QString n, QString u, int s)
-		: QListViewItem (parent, n), url(u), name(n), scroll_y(s) {	menuid = 0; }
-
-	QString		url;
-	QString		name;
-	int			scroll_y;
-	int			menuid;
+	public:
+		KCHMBookmarkTreeViewItem (QListView* parent, QString n, QString u, int s)
+			: QListViewItem (parent, n), url(u), name(n), scroll_y(s) {	menuid = 0; }
+	
+		QString		url;
+		QString		name;
+		int			scroll_y;
+		int			menuid;
 };
 
 #endif

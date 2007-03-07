@@ -41,6 +41,7 @@ public:
 	QString	getOpenedPage() const	{ return m_openedPage; }
 	QString	getNewTabLink() const	{ return m_newTabLinkKeeper; }
 	
+	//FIXME: remove
 	//! true if url is remote (http/ftp/mailto/news etc.)
 	static bool	isRemoteURL (const QString& url, QString& protocol);
 	

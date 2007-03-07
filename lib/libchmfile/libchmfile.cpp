@@ -54,7 +54,7 @@ QString LCHMFile::title( ) const
 
 QString LCHMFile::homeUrl( ) const
 {
-	return m_impl->homeUrl();
+	return m_impl->homeUrl().isNull() ? "/" : m_impl->homeUrl();
 }
 
 bool LCHMFile::hasTableOfContents( ) const

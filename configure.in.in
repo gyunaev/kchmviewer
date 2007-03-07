@@ -8,7 +8,7 @@ AC_ARG_PROGRAM
 
 dnl All versioning is done via the following line
 AM_CONFIG_HEADER(src/config.h)
-AM_INIT_AUTOMAKE(KchmViewer, 2.7)
+AM_INIT_AUTOMAKE(kchmviewer, 2.7)
 
 dnl Chuck #defines for PACKAGE and VERSION into config.h
 AC_DEFINE_UNQUOTED(APP_NAME, "$PACKAGE", [ Application name ] )
@@ -29,7 +29,7 @@ AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(no)
 AC_PATH_QT
 
-CHMLIBDIR="chmlib"
+CHMLIBDIR="lib/chmlib"
 EXTRA_SUBDIRS=""
 
 AC_ARG_WITH(kde,    AC_HELP_STRING([--with-kde],[enable KDE support]))
@@ -61,7 +61,7 @@ if test "$USE_BUILTIN_CHMLIB" = "0"; then
 fi
 
 if test "$USE_BUILTIN_CHMLIB" = "1"; then
-	CHM_INCLUDES="-I\$(top_srcdir)/$CHMLIBDIR/"
+	CHM_INCLUDES="-I\$(top_srcdir)/$CHMLIBDIR"
 	CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.la"
 	USE_LIB_CHM="internal"
 	EXTRA_SUBDIRS="chmlib $EXTRA_SUBDIRS"
@@ -75,10 +75,14 @@ fi
 AM_CONDITIONAL([BUILD_KIOMSITS], [test "$have_kde" = yes ])
 AM_CONDITIONAL([BUILD_CHMLIB], [test "$USE_BUILTIN_CHMLIB" = "1" ])
 
+# libchmfile is built unconditionally
+LIBCHMFILE_INCLUDES="-I\$(top_srcdir)/lib/libchmfile"
+
 AC_SUBST([EXTRA_SUBDIRS])
 AC_SUBST(CHM_INCLUDES)
 AC_SUBST(CHM_LIBS)
-
+AC_SUBST(LIBCHMFILE_INCLUDES)
+AC_SUBST(LIBCHMFILE_LIBS)
 
 echo ""
 echo "Please remember to use GNU make, often installed as gmake."

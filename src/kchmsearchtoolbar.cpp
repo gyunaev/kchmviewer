@@ -27,14 +27,19 @@
 #include <qpopupmenu.h>
 #include <qmenubar.h>
  
+#include "libchmfile.h"
+#include "libchmfileimpl.h"
+
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
 #include "kchmconfig.h"
 #include "kchmsearchtoolbar.h"
-#include "xchmfile.h"
 #include "kqrunprocess.h"
-
+#include "kchmtreeviewitem.h"
+#include "kchmcontentswindow.h"
 #include "iconstorage.h"
+
+#include "kchmsearchtoolbar.moc"
 
 static KQPopupMenu *menu_langlist, *menu_enclist;
 
@@ -175,28 +180,28 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	connect (menu_langlist, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 	
 	// Add the language entries
-	const KCHMTextEncoding::text_encoding_t * enctable = KCHMTextEncoding::getTextEncoding();
+	const LCHMTextEncoding * enctable = LCHMFileImpl::getTextEncodingTable();
 	int idx;
 			
-	for ( idx = 0; (enctable + idx)->charset; idx++ )
+	for ( idx = 0; (enctable + idx)->language; idx++ )
 	{
 		// See the next item; does is have the same charset as current?
-		const KCHMTextEncoding::text_encoding_t * item = enctable + idx;
-		const KCHMTextEncoding::text_encoding_t * nextitem = enctable + idx + 1;
+		const LCHMTextEncoding * item = enctable + idx;
+		const LCHMTextEncoding * nextitem = enctable + idx + 1;
 		
-		if ( nextitem->charset
-		&& !strcmp (item->charset, nextitem->charset) )
+		if ( nextitem->language
+		&& !strcmp( item->language, nextitem->language) )
 		{
-				// If charset is the same as next one, create a new popup menu.
-				// If the menu is already created, add to it
-				if ( !menu_sublang )
-				{
-					menu_sublang = new KQPopupMenu( menu_langlist );
-					connect (menu_sublang, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
-				}
-					
-				menu_sublang->insertItem( item->country, idx );
-				continue;
+			// If charset is the same as next one, create a new popup menu.
+			// If the menu is already created, add to it
+			if ( !menu_sublang )
+			{
+				menu_sublang = new KQPopupMenu( menu_langlist );
+				connect (menu_sublang, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
+			}
+				
+			menu_sublang->insertItem( item->sublanguage, idx );
+			continue;
 		}
 		
 		// If the next charset differs from this one,
@@ -204,12 +209,12 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 		// otherwise, just add an item
 		if ( menu_sublang )
 		{
-			menu_sublang->insertItem( item->country, idx );
-			menu_langlist->insertItem( item->charset, menu_sublang );
+			menu_sublang->insertItem( item->sublanguage, idx );
+			menu_langlist->insertItem( item->language, menu_sublang );
 			menu_sublang = 0;
 		}
 		else
-			menu_langlist->insertItem( item->charset, idx );
+			menu_langlist->insertItem( item->language, idx );
 	}
 
 	m_MenuView->insertItem( i18n( "&Set language"), menu_langlist );
@@ -223,9 +228,9 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	connect (menu_enclist, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 	
 	// Add the codepage entries
-	for ( idx = 0; (enctable + idx)->charset; idx++ )
+	for ( idx = 0; (enctable + idx)->language; idx++ )
 	{
-		const KCHMTextEncoding::text_encoding_t * item = enctable + idx;
+		const LCHMTextEncoding * item = enctable + idx;
 		
 		// This menu is only for charsets, so we won't add duplicate charset twice
 		if ( addedCharsets.find( item->qtcodec ) != addedCharsets.end() )
@@ -294,7 +299,7 @@ void KCHMSearchAndViewToolbar::onBtnViewSource( )
 {
 	QString text;
 
-	if ( !::mainWindow->getChmFile()->GetFileContentAsString (text, ::mainWindow->getCurrentBrowser()->getOpenedPage()) )
+	if ( !::mainWindow->getChmFile()->getFileContentAsString( &text, ::mainWindow->getCurrentBrowser()->getOpenedPage() ) )
 		return;
 
 	if ( appConfig.m_advUseInternalEditor )
@@ -323,11 +328,11 @@ void KCHMSearchAndViewToolbar::onBtnAddBookmark( )
 
 void KCHMSearchAndViewToolbar::onMenuActivated( int id )
 {
-	const KCHMTextEncoding::text_encoding_t * enc = KCHMTextEncoding::getTextEncoding() + id;
-	::mainWindow->setTextEncoding (enc);
+	const LCHMTextEncoding * enc = LCHMFileImpl::getTextEncodingTable() + id;
+	::mainWindow->setTextEncoding( enc );
 }
 
-void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const KCHMTextEncoding::text_encoding_t * enc)
+void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const LCHMTextEncoding * enc)
 {
 	if ( m_checkedEncodingInMenu != -1 )
 		menu_enclist->setItemChecked( m_checkedEncodingInMenu, false );
@@ -335,7 +340,7 @@ void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const KCHMTextEncoding::
 	if ( m_checkedLanguageInMenu != -1 )
 		menu_langlist->setItemChecked( m_checkedLanguageInMenu, false );
 	
-	int idx = KCHMTextEncoding::lookupByIndex( enc );
+	int idx = LCHMFileImpl::getEncodingIndex( enc );
 	if ( idx == -1 )
 		return;
 	
@@ -343,11 +348,11 @@ void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const KCHMTextEncoding::
 	m_checkedLanguageInMenu = idx;
 	
 	// For encoding, we need to set up charset!
-	const KCHMTextEncoding::text_encoding_t * enctable = KCHMTextEncoding::getTextEncoding();
-	for ( idx = 0; (enctable + idx)->charset; idx++ )
+	const LCHMTextEncoding * enctable = LCHMFileImpl::getTextEncodingTable();
+	for ( idx = 0; (enctable + idx)->language; idx++ )
 	{
 		// See the next item; does is have the same charset as current?
-		const KCHMTextEncoding::text_encoding_t * item = enctable + idx;
+		const LCHMTextEncoding * item = enctable + idx;
 	
 		// This menu is only for charsets, so we won't add duplicate charset twice
 		if ( !strcmp( item->qtcodec, enc->qtcodec ) )
@@ -361,8 +366,13 @@ void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const KCHMTextEncoding::
 
 void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
 {
+	KCHMContentsWindow * cwnd = ::mainWindow->getContentsWindow();
+	
+	if ( !cwnd )
+		return;
+	
 	// Try to find current list item
-	KCHMMainTreeViewItem *current = ::mainWindow->getChmFile()->getTreeItem( ::mainWindow->getCurrentBrowser()->getOpenedPage() );
+	KCHMIndTocItem * current = cwnd->getTreeItem( ::mainWindow->getCurrentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
@@ -371,13 +381,18 @@ void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
 	lit++;
 	
 	if ( lit.current() )
-		::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+	::mainWindow->openPage( ((KCHMIndTocItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
 void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
 {
+	KCHMContentsWindow * cwnd = ::mainWindow->getContentsWindow();
+	
+	if ( !cwnd )
+		return;
+	
 	// Try to find current list item
-	KCHMMainTreeViewItem *current = ::mainWindow->getChmFile()->getTreeItem( ::mainWindow->getCurrentBrowser()->getOpenedPage() );
+	KCHMIndTocItem * current = cwnd->getTreeItem( ::mainWindow->getCurrentBrowser()->getOpenedPage() );
 	
 	if ( !current )
 		return;
@@ -386,7 +401,7 @@ void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
 	lit--;
 	
 	if ( lit.current() )
-		::mainWindow->openPage( ((KCHMMainTreeViewItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+	::mainWindow->openPage( ((KCHMIndTocItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
 void KCHMSearchAndViewToolbar::onAccelFocusSearchField( )
@@ -421,4 +436,3 @@ void KCHMSearchAndViewToolbar::onBtnLocateInContentWindow( )
 	::mainWindow->slotLocateInContentWindow( );
 }
 
-#include "kchmsearchtoolbar.moc"

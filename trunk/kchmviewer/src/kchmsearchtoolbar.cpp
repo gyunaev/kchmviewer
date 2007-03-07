@@ -255,7 +255,7 @@ void KCHMSearchAndViewToolbar::setEnabled( bool enable )
 	m_buttonViewSource->setEnabled (enable);
 	m_buttonAddBookmark->setEnabled (enable);
 
-	bool enable_toc_nav_buttons = ::mainWindow->getContentsWindow() && enable;
+	bool enable_toc_nav_buttons = ::mainWindow->contentsWindow() && enable;
 	m_buttonNextPageInTOC->setEnabled( enable_toc_nav_buttons );
 	m_buttonPrevPageInTOC->setEnabled( enable_toc_nav_buttons );
 }
@@ -282,24 +282,24 @@ void KCHMSearchAndViewToolbar::search( bool search_forward )
 	if ( searchexpr.isEmpty() )
 		return;
 
-	::mainWindow->getCurrentBrowser()->searchWord( searchexpr, search_forward, false );
+	::mainWindow->currentBrowser()->searchWord( searchexpr, search_forward, false );
 }
 
 void KCHMSearchAndViewToolbar::onBtnFontInc( )
 {
-	::mainWindow->getCurrentBrowser()->addZoomFactor(1);
+	::mainWindow->currentBrowser()->addZoomFactor(1);
 }
 
 void KCHMSearchAndViewToolbar::onBtnFontDec( )
 {
-	::mainWindow->getCurrentBrowser()->addZoomFactor(-1);
+	::mainWindow->currentBrowser()->addZoomFactor(-1);
 }
 
 void KCHMSearchAndViewToolbar::onBtnViewSource( )
 {
 	QString text;
 
-	if ( !::mainWindow->getChmFile()->getFileContentAsString( &text, ::mainWindow->getCurrentBrowser()->getOpenedPage() ) )
+	if ( !::mainWindow->chmFile()->getFileContentAsString( &text, ::mainWindow->currentBrowser()->getOpenedPage() ) )
 		return;
 
 	if ( appConfig.m_advUseInternalEditor )
@@ -307,7 +307,7 @@ void KCHMSearchAndViewToolbar::onBtnViewSource( )
 		QTextEdit * editor = new QTextEdit ( 0 );
 		editor->setTextFormat ( Qt::PlainText );
 		editor->setText (text);
-		editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->getCurrentBrowser()->getOpenedPage() );
+		editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->currentBrowser()->getOpenedPage() );
 		editor->resize (800, 600);
 		editor->show();
 	}
@@ -366,13 +366,13 @@ void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const LCHMTextEncoding *
 
 void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
 {
-	KCHMContentsWindow * cwnd = ::mainWindow->getContentsWindow();
+	KCHMContentsWindow * cwnd = ::mainWindow->contentsWindow();
 	
 	if ( !cwnd )
 		return;
 	
 	// Try to find current list item
-	KCHMIndTocItem * current = cwnd->getTreeItem( ::mainWindow->getCurrentBrowser()->getOpenedPage() );
+	KCHMIndTocItem * current = cwnd->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
@@ -386,13 +386,13 @@ void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
 
 void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
 {
-	KCHMContentsWindow * cwnd = ::mainWindow->getContentsWindow();
+	KCHMContentsWindow * cwnd = ::mainWindow->contentsWindow();
 	
 	if ( !cwnd )
 		return;
 	
 	// Try to find current list item
-	KCHMIndTocItem * current = cwnd->getTreeItem( ::mainWindow->getCurrentBrowser()->getOpenedPage() );
+	KCHMIndTocItem * current = cwnd->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
 	
 	if ( !current )
 		return;

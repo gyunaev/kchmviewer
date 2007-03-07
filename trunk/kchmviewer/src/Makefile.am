@@ -12,8 +12,8 @@ INCLUDES = $(QT_INCLUDES) $(CHM_INCLUDES) $(KDE_INCLUDES) $(LIBCHMFILE_INCLUDES)
 SUBDIRS = pics
 
 # the library search path.
-kchmviewer_LDADD = $(CHM_LIBS) $(LIB_QT) $(LIB_KDEUI) $(LIB_KHTML)
-kchmviewer_LDFLAGS = $(QT_LDFLAGS) $(KDE_LDFLAGS) -L../chmlib/ -L../kio-msits
+kchmviewer_LDADD = $(CHM_LIBS) $(LIBCHMFILE_LIBS) $(LIB_QT) $(LIB_KDEUI) $(LIB_KHTML)
+kchmviewer_LDFLAGS = $(QT_LDFLAGS) $(KDE_LDFLAGS) -L../lib/chmlib/ -L../lib/kio-msits
 
 METASOURCES = AUTO
 KDE_OPTIONS = qtonly

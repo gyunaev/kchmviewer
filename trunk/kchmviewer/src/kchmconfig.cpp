@@ -207,5 +207,5 @@ void KCHMConfig::addFileToHistory( const QString & file )
 	m_History.push_back( file );
 	
 	// And remove the appropriate history file
-	mainWindow->getCurrentSettings()->removeSettings ( filetoremove );
+	mainWindow->currentSettings()->removeSettings ( filetoremove );
 }

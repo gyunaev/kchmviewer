@@ -54,7 +54,7 @@ const QPixmap * KCHMIndTocItem::pixmap( int i ) const
 	else
 		imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 10 : image_number;
 
-	return ::mainWindow->getChmFile()->getBookIconPixmap( imagenum );
+	return ::mainWindow->chmFile()->getBookIconPixmap( imagenum );
 }
 
 
@@ -66,7 +66,7 @@ QString KCHMIndTocItem::getUrl( ) const
 	// Create a dialog with URLs, and show it, so user can select an URL he/she wants.
 	QStringList urls = QStringList::split ('|', url);
 	QStringList titles;
-	LCHMFile * xchm = ::mainWindow->getChmFile();
+	LCHMFile * xchm = ::mainWindow->chmFile();
 
 	for ( unsigned int i = 0; i < urls.size(); i++ )
 	{

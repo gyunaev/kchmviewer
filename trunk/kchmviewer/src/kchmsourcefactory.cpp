@@ -48,7 +48,7 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 	else
 		*/
 	//FIXME: loading of extra chm files
-	chm = ::mainWindow->getChmFile();
+	chm = ::mainWindow->chmFile();
 
 	if ( !chm )
 		return 0;

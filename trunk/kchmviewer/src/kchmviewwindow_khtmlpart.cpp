@@ -58,9 +58,9 @@ KCHMViewWindow_KHTMLPart::~KCHMViewWindow_KHTMLPart()
 bool KCHMViewWindow_KHTMLPart::openPage (const QString& url)
 {
 	// Set or change the encoding
-	if ( m_currentEncoding != ::mainWindow->getChmFile()->currentEncoding() )
+	if ( m_currentEncoding != ::mainWindow->chmFile()->currentEncoding() )
 	{
-		m_currentEncoding = ::mainWindow->getChmFile()->currentEncoding();
+		m_currentEncoding = ::mainWindow->chmFile()->currentEncoding();
 		setEncoding ( m_currentEncoding->qtcodec, TRUE );
 	}
 	

@@ -90,7 +90,7 @@ void KCHMIndexWindow::onTextChanged ( const QString & newvalue)
 
 void KCHMIndexWindow::showEvent( QShowEvent * )
 {
-	if ( !::mainWindow->getChmFile() || m_indexListFilled )
+	if ( !::mainWindow->chmFile() || m_indexListFilled )
 		return;
 
 	m_indexListFilled = true;
@@ -137,13 +137,13 @@ void KCHMIndexWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int 
 void KCHMIndexWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
-		m_contextMenu = ::mainWindow->getCurrentBrowser()->createListItemContextMenu( this );
+		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
 		
 	if( item )
 	{
 		KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
 		
-		::mainWindow->getCurrentBrowser()->setTabKeeper( treeitem->getUrl() );
+		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
 		m_contextMenu->popup( point );
 	}
 }
@@ -152,7 +152,7 @@ void KCHMIndexWindow::refillIndex( )
 {
 	QValueVector< LCHMParsedEntry > data;
 	
-	if ( !::mainWindow->getChmFile()->parseIndex( &data )
+	if ( !::mainWindow->chmFile()->parseIndex( &data )
 			   || data.size() == 0 )
 	{
 		qWarning ("CHM index present but is empty; wrong parsing?");

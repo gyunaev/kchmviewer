@@ -1558,7 +1558,7 @@ static Int64 _chm_decompress_region(struct chmFile *h,
 
 /* retrieve (part of) an object */
 LONGINT64 chm_retrieve_object(struct chmFile *h,
-                               struct chmUnitInfo *ui,
+                               const struct chmUnitInfo *ui,
                                unsigned char *buf,
                                LONGUINT64 addr,
                                LONGINT64 len)
@@ -1568,7 +1568,7 @@ LONGINT64 chm_retrieve_object(struct chmFile *h,
         return (Int64)0;
 
     /* starting address must be in correct range */
-    if (addr < 0  ||  addr >= ui->length)
+    if ( addr >= ui->length)
         return (Int64)0;
 
     /* clip length */

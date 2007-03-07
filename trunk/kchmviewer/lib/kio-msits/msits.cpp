@@ -34,7 +34,7 @@
 #include <qvaluevector.h>
 
 #include "msits.h"
-#include "../libchmfile/filetype_handler.h"
+#include "libchmurlfactory.h"
 
 using namespace KIO;
 
@@ -95,7 +95,7 @@ void ProtocolMSITS::get( const KURL& url )
 
 	kdDebug() << "kio_msits::get: parseLoadAndLookup returned " << fileName << endl;
 
-	if ( handleFileType( url.path(), htmdata ) )
+	if ( LCHMUrlFactory::handleFileType( url.path(), htmdata ) )
 	{
 		buf = htmdata.utf8();
 		kdDebug() << "Using special handling for image pages: " << htmdata << endl;
@@ -295,7 +295,6 @@ void ProtocolMSITS::listDir (const KURL & url)
 		return;
 	}
 
-//	totalFiles(listing.size());
 	UDSEntry entry;
 	unsigned int striplength = filepath.length();
 

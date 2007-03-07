@@ -42,7 +42,7 @@ static inline bool isRemoteURL( const QString & url, QString & protocol )
 	{
 		QString proto = uriregex.cap ( 1 ).lower();
 	
-	// Filter the URLs which need to be opened by a browser
+		// Filter the URLs which need to be opened by a browser
 		if ( proto == "http" 
 						|| proto == "ftp"
 						|| proto == "mailto"
@@ -57,13 +57,13 @@ static inline bool isRemoteURL( const QString & url, QString & protocol )
 }
 
 // Some JS urls start with javascript://
-bool isJavascriptURL( const QString & url )
+static inline bool isJavascriptURL( const QString & url )
 {
 	return url.startsWith ("javascript://");
 }
 
 // Parse urls like "ms-its:file name.chm::/topic.htm"
-bool isNewChmURL( const QString & url, QString & chmfile, QString & page )
+static inline bool isNewChmURL( const QString & url, QString & chmfile, QString & page )
 {
 	QRegExp uriregex ( "^ms-its:(.*)::(.*)$" );
 
@@ -78,8 +78,7 @@ bool isNewChmURL( const QString & url, QString & chmfile, QString & page )
 	return false;
 }
 
-
-QString makeURLabsoluteIfNeeded( const QString & url )
+static inline QString makeURLabsoluteIfNeeded( const QString & url )
 {
 	QString p1, p2, newurl = url;
 
@@ -99,9 +98,25 @@ QString makeURLabsoluteIfNeeded( const QString & url )
 }
 
 
+// Returns a special string, which allows the kio-slave, or viewwindow-browser iteraction 
+// to regognize our own internal urls, which is necessary to show image-only pages.
+static inline QString getInternalUriExtension()
+{
+	return ".KCHMVIEWER_SPECIAL_HANDLER";
+}
+
+
+static inline bool handleFileType( const QString& link, QString& generated )
+{
+	QString intext = getInternalUriExtension();
+	
+	if ( !link.endsWith( intext ) )
+		return false;
+
+	QString filelink = link.left( link.length() - strlen( intext ) );
+	generated = "<html><body><img src=\"" + filelink + "\"></body></html>";
+	return true;
+}
+
+
 };
-
-
-
-
-

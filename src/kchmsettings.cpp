@@ -46,6 +46,9 @@ enum marker_t
 	
 	MARKER_BOOKMARKS,
 	MARKER_VIEWINDOWS,
+ 
+ 	MARKER_CONTENTSDATA,
+	MARKER_INDEXDATA,
 
 	// This should be the last
 	MARKER_END = 0x7FFF

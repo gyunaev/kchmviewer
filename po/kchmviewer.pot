@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-06 20:02-0700\n"
+"POT-Creation-Date: 2006-12-06 18:36-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -356,23 +356,23 @@ msgstr ""
 msgid "Loading aborted"
 msgstr ""
 
-#: kchmmainwindow.cpp:239
+#: kchmmainwindow.cpp:244
 msgid "%1 - failed to load the chm file"
 msgstr ""
 
-#: kchmmainwindow.cpp:240
+#: kchmmainwindow.cpp:245
 msgid "Unable to load the chm file %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:250
+#: kchmmainwindow.cpp:255
 msgid "Could not load file %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:266
+#: kchmmainwindow.cpp:271
 msgid "About %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:267
+#: kchmmainwindow.cpp:272
 msgid ""
 "%1 version %2\n"
 "\n"
@@ -385,40 +385,40 @@ msgid ""
 "address, which expires automatically."
 msgstr ""
 
-#: kchmmainwindow.cpp:350
+#: kchmmainwindow.cpp:358
 msgid "%1 - remote link clicked - %2"
 msgstr ""
 
-#: kchmmainwindow.cpp:351
+#: kchmmainwindow.cpp:359
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
+#: kchmmainwindow.cpp:360 kchmmainwindow.cpp:396
 msgid "&Yes"
 msgstr ""
 
-#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
+#: kchmmainwindow.cpp:360 kchmmainwindow.cpp:396
 msgid "&No"
 msgstr ""
 
-#: kchmmainwindow.cpp:376
+#: kchmmainwindow.cpp:384
 msgid "%1 - JavsScript link clicked"
 msgstr ""
 
-#: kchmmainwindow.cpp:377
+#: kchmmainwindow.cpp:385
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
 msgstr ""
 
-#: kchmmainwindow.cpp:386
+#: kchmmainwindow.cpp:394
 msgid "%1 - link to a new CHM file clicked"
 msgstr ""
 
-#: kchmmainwindow.cpp:387
+#: kchmmainwindow.cpp:395
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -426,81 +426,87 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: kchmmainwindow.cpp:448
+#: kchmmainwindow.cpp:456
 msgid "File Operations"
 msgstr ""
 
-#: kchmmainwindow.cpp:452
+#: kchmmainwindow.cpp:460
 msgid "Open File"
 msgstr ""
 
-#: kchmmainwindow.cpp:458
+#: kchmmainwindow.cpp:466
 msgid "Click this button to open an existing chm file."
 msgstr ""
 
-#: kchmmainwindow.cpp:463
+#: kchmmainwindow.cpp:471
 msgid "Print File"
 msgstr ""
 
-#: kchmmainwindow.cpp:469
+#: kchmmainwindow.cpp:477
 msgid "Click this button to print the current page"
 msgstr ""
 
-#: kchmmainwindow.cpp:484
+#: kchmmainwindow.cpp:492
 msgid "E&xtract CHM content..."
 msgstr ""
 
-#: kchmmainwindow.cpp:485
+#: kchmmainwindow.cpp:493
 msgid ""
 "Click this button to extract the whole CHM file content into a specific "
 "directory"
 msgstr ""
 
-#: kchmmainwindow.cpp:491
+#: kchmmainwindow.cpp:499
 msgid "&Recent files"
 msgstr ""
 
-#: kchmmainwindow.cpp:500
+#: kchmmainwindow.cpp:508
 msgid "&Select all"
 msgstr ""
 
-#: kchmmainwindow.cpp:518
+#: kchmmainwindow.cpp:526
 msgid "&Change settings..."
 msgstr ""
 
-#: kchmmainwindow.cpp:524
+#: kchmmainwindow.cpp:532
 msgid "About &Qt"
 msgstr ""
 
-#: kchmmainwindow.cpp:526
+#: kchmmainwindow.cpp:534
 msgid "What's &This"
 msgstr ""
 
-#: kchmmainwindow.cpp:853
+#: kchmmainwindow.cpp:786
+msgid ""
+"Changing browser view options require\n"
+"restarting the application to take effect."
+msgstr ""
+
+#: kchmmainwindow.cpp:904
 msgid "Index"
 msgstr ""
 
-#: kchmmainwindow.cpp:876
+#: kchmmainwindow.cpp:927
 msgid "Search"
 msgstr ""
 
-#: kchmmainwindow.cpp:939
+#: kchmmainwindow.cpp:990
 msgid "Could not locate opened topic in content window"
 msgstr ""
 
-#: kchmmainwindow.cpp:950 kchmmainwindow.cpp:956
+#: kchmmainwindow.cpp:1001 kchmmainwindow.cpp:1007
 msgid "Choose a directory to store CHM content"
 msgstr ""
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 msgid "Extracting CHM content"
 msgstr ""
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 msgid "Extracting files..."
 msgstr ""
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 msgid "Abort"
 msgstr ""
 
@@ -696,14 +702,6 @@ msgid ""
 "For example, search for 'C' will give the same result as searching for 'C++'."
 msgstr ""
 
-#: kchmviewwindow.cpp:233 kchmviewwindow.cpp:346
-msgid "Shift+Enter"
-msgstr ""
-
-#: kchmviewwindow.cpp:235 kchmviewwindow.cpp:348
-msgid "Ctrl+Enter"
-msgstr ""
-
 #: kchmviewwindow_qtextbrowser.cpp:171
 msgid "Printing (page %1)..."
 msgstr ""
@@ -726,7 +724,7 @@ msgid ""
 "Your Qt library has been compiled without printing support"
 msgstr ""
 
-#: kchmviewwindowmgr.cpp:63
+#: kchmviewwindowmgr.cpp:65
 msgid "&Window"
 msgstr ""
 

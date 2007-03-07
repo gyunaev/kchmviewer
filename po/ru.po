@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-06 20:02-0700\n"
+"POT-Creation-Date: 2006-12-06 18:36-0800\n"
 "PO-Revision-Date: 2006-02-04 15:29-0800\n"
 "Last-Translator: George Yunaev <gyunaev@ulduzsoft.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -367,23 +367,23 @@ msgstr ""
 msgid "Loading aborted"
 msgstr "Загрузка отменена"
 
-#: kchmmainwindow.cpp:239
+#: kchmmainwindow.cpp:244
 msgid "%1 - failed to load the chm file"
 msgstr "%1 - невозможно открыть CHM файл"
 
-#: kchmmainwindow.cpp:240
+#: kchmmainwindow.cpp:245
 msgid "Unable to load the chm file %1"
 msgstr "Невозможно загрузить CHM файл %1"
 
-#: kchmmainwindow.cpp:250
+#: kchmmainwindow.cpp:255
 msgid "Could not load file %1"
 msgstr "Нельзя открыть CHM файл %1"
 
-#: kchmmainwindow.cpp:266
+#: kchmmainwindow.cpp:271
 msgid "About %1"
 msgstr "О программе %1"
 
-#: kchmmainwindow.cpp:267
+#: kchmmainwindow.cpp:272
 msgid ""
 "%1 version %2\n"
 "\n"
@@ -405,11 +405,11 @@ msgstr ""
 "Попробуйте наш другой проект, www.transientmail.com - e-mail адрес, который "
 "уничтожается самостоятельно."
 
-#: kchmmainwindow.cpp:350
+#: kchmmainwindow.cpp:358
 msgid "%1 - remote link clicked - %2"
 msgstr "%1 - нажата внешняя ссылка - %2"
 
-#: kchmmainwindow.cpp:351
+#: kchmmainwindow.cpp:359
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
@@ -419,19 +419,19 @@ msgstr ""
 "\n"
 "Продолжить?"
 
-#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
+#: kchmmainwindow.cpp:360 kchmmainwindow.cpp:396
 msgid "&Yes"
 msgstr "Да"
 
-#: kchmmainwindow.cpp:352 kchmmainwindow.cpp:388
+#: kchmmainwindow.cpp:360 kchmmainwindow.cpp:396
 msgid "&No"
 msgstr "Нет"
 
-#: kchmmainwindow.cpp:376
+#: kchmmainwindow.cpp:384
 msgid "%1 - JavsScript link clicked"
 msgstr "%1 - нажата ссылка на JavaScript"
 
-#: kchmmainwindow.cpp:377
+#: kchmmainwindow.cpp:385
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
@@ -439,11 +439,11 @@ msgstr ""
 "Вы нажали ссылку на код JavaScript.\n"
 "Для обеспечения безопасности все ссылки на JavaScript отключены."
 
-#: kchmmainwindow.cpp:386
+#: kchmmainwindow.cpp:394
 msgid "%1 - link to a new CHM file clicked"
 msgstr "%1 - нажата ссылка на новый CHM файл"
 
-#: kchmmainwindow.cpp:387
+#: kchmmainwindow.cpp:395
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -455,82 +455,88 @@ msgstr ""
 "\n"
 "Продолжить??"
 
-#: kchmmainwindow.cpp:448
+#: kchmmainwindow.cpp:456
 msgid "File Operations"
 msgstr "Файловые операции"
 
-#: kchmmainwindow.cpp:452
+#: kchmmainwindow.cpp:460
 msgid "Open File"
 msgstr "Открыть файл"
 
-#: kchmmainwindow.cpp:458
+#: kchmmainwindow.cpp:466
 msgid "Click this button to open an existing chm file."
 msgstr "Нажмите на эту кнопку для открытия существующего CHM файла"
 
-#: kchmmainwindow.cpp:463
+#: kchmmainwindow.cpp:471
 msgid "Print File"
 msgstr "Печать"
 
-#: kchmmainwindow.cpp:469
+#: kchmmainwindow.cpp:477
 msgid "Click this button to print the current page"
 msgstr "Нажмите на эту кнопку для печати текущей страницы"
 
-#: kchmmainwindow.cpp:484
+#: kchmmainwindow.cpp:492
 msgid "E&xtract CHM content..."
 msgstr ""
 
-#: kchmmainwindow.cpp:485
+#: kchmmainwindow.cpp:493
 #, fuzzy
 msgid ""
 "Click this button to extract the whole CHM file content into a specific "
 "directory"
 msgstr "Нажмите на эту кнопку для поиска данной темы в окне содержания"
 
-#: kchmmainwindow.cpp:491
+#: kchmmainwindow.cpp:499
 msgid "&Recent files"
 msgstr "Последние файлы"
 
-#: kchmmainwindow.cpp:500
+#: kchmmainwindow.cpp:508
 msgid "&Select all"
 msgstr "Выбрать все"
 
-#: kchmmainwindow.cpp:518
+#: kchmmainwindow.cpp:526
 msgid "&Change settings..."
 msgstr "Изменить настройки"
 
-#: kchmmainwindow.cpp:524
+#: kchmmainwindow.cpp:532
 msgid "About &Qt"
 msgstr "О библиотеке Qt..."
 
-#: kchmmainwindow.cpp:526
+#: kchmmainwindow.cpp:534
 msgid "What's &This"
 msgstr "Что это"
 
-#: kchmmainwindow.cpp:853
+#: kchmmainwindow.cpp:786
+msgid ""
+"Changing browser view options require\n"
+"restarting the application to take effect."
+msgstr ""
+
+#: kchmmainwindow.cpp:904
 msgid "Index"
 msgstr "Индекс"
 
-#: kchmmainwindow.cpp:876
+#: kchmmainwindow.cpp:927
 msgid "Search"
 msgstr "Поиск"
 
-#: kchmmainwindow.cpp:939
+#: kchmmainwindow.cpp:990
 msgid "Could not locate opened topic in content window"
 msgstr "Невозможно найти открытую тему в окне контента"
 
-#: kchmmainwindow.cpp:950 kchmmainwindow.cpp:956
+#: kchmmainwindow.cpp:1001 kchmmainwindow.cpp:1007
 msgid "Choose a directory to store CHM content"
 msgstr ""
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 msgid "Extracting CHM content"
 msgstr ""
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 msgid "Extracting files..."
 msgstr ""
 
-#: kchmmainwindow.cpp:969
+#: kchmmainwindow.cpp:1020
 #, fuzzy
 msgid "Abort"
 msgstr "О программе %1"
@@ -742,14 +748,6 @@ msgstr ""
 "К примеру, запрос 'C' вернет тот же результат поиска, что и запрос, "
 "содержащий 'C++'"
 
-#: kchmviewwindow.cpp:233 kchmviewwindow.cpp:346
-msgid "Shift+Enter"
-msgstr ""
-
-#: kchmviewwindow.cpp:235 kchmviewwindow.cpp:348
-msgid "Ctrl+Enter"
-msgstr ""
-
 #: kchmviewwindow_qtextbrowser.cpp:171
 msgid "Printing (page %1)..."
 msgstr "Печать страницы № %1..."
@@ -774,7 +772,7 @@ msgstr ""
 "Печать невозможна.\n"
 "Ваша библиотека QT была собрана без поддержки печати."
 
-#: kchmviewwindowmgr.cpp:63
+#: kchmviewwindowmgr.cpp:65
 msgid "&Window"
 msgstr ""
 

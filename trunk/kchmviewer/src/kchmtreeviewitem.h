@@ -23,6 +23,9 @@
 #define CTREEVIEWITEM_H
 
 #include <qlistview.h>
+#include <qvaluevector.h>
+
+#include "libchmfile.h"
 
 /**
 @author Georgy Yunaev
@@ -90,5 +93,8 @@ class KCHMBookmarkTreeViewItem : public QListViewItem
 		int			scroll_y;
 		int			menuid;
 };
+
+
+void kchmFillListViewWithParsedData( QListView * list, const QValueVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map );
 
 #endif

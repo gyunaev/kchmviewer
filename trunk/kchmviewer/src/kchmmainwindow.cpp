@@ -237,7 +237,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 			m_searchToolbar->setChosenEncodingInMenu( m_chmFile->currentEncoding() );
 			
 			if ( call_open_page )
-				openPage( m_chmFile->homeUrl().isNull() ? "/" : m_chmFile->homeUrl() );
+				openPage( m_chmFile->homeUrl() );
 		}
 
 		m_searchToolbar->setEnabled (true);

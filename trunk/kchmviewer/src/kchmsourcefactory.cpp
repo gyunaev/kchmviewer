@@ -40,15 +40,9 @@ KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
 const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 {
 	QString data, file, path = abs_name;
-	LCHMFile * chm;
 
 	// Retreive the data from chm file
-/*	if ( KCHMViewWindow::isNewChmURL( abs_name, file, path ) )
-		chm = ::mainWindow->getChmFile()->getCHMfilePointer( file );
-	else
-		*/
-	//FIXME: loading of extra chm files
-	chm = ::mainWindow->chmFile();
+	 LCHMFile * chm = ::mainWindow->chmFile();
 
 	if ( !chm )
 		return 0;

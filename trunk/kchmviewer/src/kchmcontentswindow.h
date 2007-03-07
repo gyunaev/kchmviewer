@@ -45,7 +45,8 @@ class KCHMContentsWindow : public KQListView
 		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
 		
 	private:
-		KQPopupMenu * m_contextMenu;
+		KQPopupMenu 				  * m_contextMenu;
+		QMap<QString, KCHMIndTocItem*>	m_urlListMap;
 };
 
 #endif /* INCLUDE_KCHMCONTENTSWINDOW_H */

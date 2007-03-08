@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>605</width>
-            <height>324</height>
+            <width>654</width>
+            <height>334</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -600,6 +600,12 @@
         <signal>toggled(bool)</signal>
         <receiver>m_advExternalProgramName</receiver>
         <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_radioUseQtextBrowser</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>groupKhtmlSecurity</receiver>
+        <slot>setDisabled(bool)</slot>
     </connection>
 </connections>
 <slots>

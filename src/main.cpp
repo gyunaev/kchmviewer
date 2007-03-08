@@ -70,6 +70,12 @@ int main( int argc, char ** argv )
 	
 	mainWindow = new KCHMMainWindow();
 	mainWindow->show();
+	
+#if !defined(USE_KDE)
 	app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );
+#else
+	app.setMainWidget( mainWindow );
+#endif
+	
 	return app.exec();
 }

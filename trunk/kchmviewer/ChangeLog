@@ -4,8 +4,9 @@
     - Removed duplicated application title in KDE.
     - Gentoo installation issues fixed.
     - KDE version sometime didn't kill the process after quit; thanks Norberto Bensa for fix.
-    - Fixed popup menu popping in a wrong place when using QTextDocument if the scrollbar 
+    - Fixed popup menu popping in a wrong place when using QTextBrowser if the scrollbar 
       position is not at the top of the document.
+    - KHTMLPart options sometime were not disabled while QTextBrowser was choosen.
     
 2007-03-01 tim <gyunaev@ulduzsoft.com>
     - Version changed to 2.9

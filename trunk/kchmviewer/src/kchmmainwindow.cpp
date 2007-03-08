@@ -302,10 +302,15 @@ void KCHMMainWindow::slotAboutQtMenuItemActivated()
 void KCHMMainWindow::refreshCurrentBrowser( )
 {
 	QString title = m_chmFile->title();
+	
 	if ( !title )
 		title = APP_NAME;
+	// KDE adds application name automatically, so we don't need it here	
+#if !defined (USE_KDE)
 	else
 		title = (QString) APP_NAME + " - " + title;
+#endif	
+	
 	setCaption ( title );
 	
 	currentBrowser()->invalidate();

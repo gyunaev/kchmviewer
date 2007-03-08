@@ -45,7 +45,7 @@ fi
 if test "x$with_kde" != "xyes"; then
 	include_ARTS_FALSE="yes"
 	AC_PREFIX_DEFAULT(${prefix:-/usr/local})
-    kde_icondir="/usr/share"
+    kde_icondir="/usr/share/icons"
 fi
 
 dnl Checking whether to use built-in, or system-wide chmlib

@@ -96,7 +96,10 @@ bool LCHMFileImpl::loadFile( const QString & archiveName )
 			&& ResolveObject("/#STRINGS", &m_chmSTRINGS)
 			&& ResolveObject("/#URLTBL", &m_chmURLTBL)
 			&& ResolveObject("/#URLSTR", &m_chmURLSTR) )
+	{
 		m_lookupTablesValid = true;
+		fillTopicsUrlMap();
+	}
 	else
 		m_lookupTablesValid = false;
 
@@ -1072,49 +1075,12 @@ bool LCHMFileImpl::getFileContentAsString( QString * str, const QString & url, b
 
 QString LCHMFileImpl::getTopicByUrl( const QString & url ) const
 {
-	unsigned char buf[COMMON_BUF_LEN];
+	QMap< QString, QString >::const_iterator it = m_url2topics.find( url );
 	
-	if ( !m_lookupTablesValid )
+	if ( it == m_url2topics.end() )
 		return QString::null;
-
-	QString fixedurl = normalizeUrl( url );
-
-	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
-	{
-		if ( RetrieveObject ( &m_chmTOPICS, buf, i, TOPICS_ENTRY_LEN ) == 0 )
-			return QString::null;
-
-		u_int32_t off_title = get_int32_le( (u_int32_t *)(buf + 4) );
-		u_int32_t off_url = get_int32_le( (u_int32_t *)(buf + 8) );
-
-		QString topic, url;
-
-		if ( RetrieveObject ( &m_chmURLTBL, buf, off_url, URLTBL_ENTRY_LEN ) == 0 )
-			return QString::null;
-
-		off_url = get_int32_le( (u_int32_t *)(buf + 8) );
-
-		if ( RetrieveObject ( &m_chmURLSTR, buf, off_url + 8, sizeof(buf) - 1 ) == 0 )
-			return false;
-
-		buf[sizeof(buf) - 1] = '\0';
-		url = LCHMUrlFactory::makeURLabsoluteIfNeeded ((const char*)buf);
-
-		if ( url != fixedurl )
-			continue;
-
-		if ( RetrieveObject ( &m_chmSTRINGS, buf, off_title, sizeof(buf) - 1 ) != 0 )
-		{
-			buf[sizeof(buf) - 1] = '\0';
-			topic = encodeWithCurrentCodec ((const char*)buf);
-		}
-		else
-			topic = "Untitled";
-
-		return topic;
-	}
-
-	return QString::null;
+	
+	return it.data();
 }
 
 
@@ -1215,4 +1181,74 @@ bool LCHMFileImpl::changeFileEncoding( const char *qtencoding  )
 	
 	m_entityDecodeMap.clear();
 	return true;
+}
+
+
+void LCHMFileImpl::fillTopicsUrlMap()
+{
+	/*
+	unsigned char buf[COMMON_BUF_LEN];
+	
+	if ( !m_lookupTablesValid )
+		return;
+
+	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
+	{
+		if ( RetrieveObject ( &m_chmTOPICS, buf, i, TOPICS_ENTRY_LEN ) == 0 )
+			return;
+
+		u_int32_t off_title = get_int32_le( (u_int32_t *)(buf + 4) );
+		u_int32_t off_url = get_int32_le( (u_int32_t *)(buf + 8) );
+
+		QString topic, url;
+
+		if ( RetrieveObject ( &m_chmURLTBL, buf, off_url, URLTBL_ENTRY_LEN ) == 0 )
+			return;
+
+		off_url = get_int32_le( (u_int32_t *)(buf + 8) );
+
+		if ( RetrieveObject ( &m_chmURLSTR, buf, off_url + 8, sizeof(buf) - 1 ) == 0 )
+			return;
+
+		buf[sizeof(buf) - 1] = '\0';
+		url = LCHMUrlFactory::makeURLabsoluteIfNeeded ((const char*)buf);
+
+		if ( RetrieveObject ( &m_chmSTRINGS, buf, off_title, sizeof(buf) - 1 ) != 0 )
+		{
+			buf[sizeof(buf) - 1] = '\0';
+			topic = encodeWithCurrentCodec ((const char*)buf);
+		}
+		else
+			topic = "Untitled";
+
+		m_url2topics[url] = topic;
+	}
+	qDebug("total: %d", m_url2topics.size());
+	*/
+	
+	if ( !m_lookupTablesValid )
+		return;
+
+	// Read those tables
+	QByteArray topics( m_chmTOPICS.length ), urltbl( m_chmURLTBL.length ), urlstr( m_chmURLSTR.length ), strings( m_chmSTRINGS.length );
+
+	if ( !RetrieveObject( &m_chmTOPICS, (unsigned char*) topics.data(), 0, m_chmTOPICS.length )
+	|| !RetrieveObject( &m_chmURLTBL, (unsigned char*) urltbl.data(), 0, m_chmURLTBL.length )
+	|| !RetrieveObject( &m_chmURLSTR, (unsigned char*) urlstr.data(), 0, m_chmURLSTR.length )
+	|| !RetrieveObject( &m_chmSTRINGS, (unsigned char*) strings.data(), 0, m_chmSTRINGS.length ) )
+		return;
+	
+	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
+	{
+		u_int32_t off_title = get_int32_le( (u_int32_t *)(topics.data() + i + 4) );
+		u_int32_t off_url = get_int32_le( (u_int32_t *)(topics.data() + i + 8) );
+		off_url = get_int32_le( (u_int32_t *)( urltbl.data() + off_url + 8) ) + 8;
+
+		QString url = LCHMUrlFactory::makeURLabsoluteIfNeeded( (const char*) urlstr.data() + off_url );
+
+		if ( off_title < strings.size() )
+			m_url2topics[url] = encodeWithCurrentCodec ( (const char*) strings.data() + off_title );
+		else
+			m_url2topics[url] = "Untitled";
+	}
 }

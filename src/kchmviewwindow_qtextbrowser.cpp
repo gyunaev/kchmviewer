@@ -263,7 +263,7 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
 QPopupMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
 {
 	KQPopupMenu * menu = getContextMenu( anchorAt( pos ), this );
-	menu->exec( mapToGlobal( pos ) );
+	menu->exec( mapToGlobal( contentsToViewport( pos ) ) );
 	return 0;
 }
 

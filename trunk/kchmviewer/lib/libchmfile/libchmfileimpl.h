@@ -154,6 +154,9 @@ class LCHMFileImpl
 		//! Looks up as much information as possible from #SYSTEM.
 		bool getInfoFromSystem();
 	
+		//! Fill the topic-url map
+		void	fillTopicsUrlMap();
+		
 		//! Sets up textCodec
 		void setupTextCodec (const char * name);
 
@@ -208,7 +211,7 @@ class LCHMFileImpl
 		QString normalizeUrl (const QString& path ) const;
 
 		
-	// Members		
+		// Members		
 		
 		//! Pointer to the chmlib structure
 		chmFile	*	m_chmFile;
@@ -269,4 +272,7 @@ class LCHMFileImpl
 		
 		//! Book TOC icon images storage
 		LCHMTocImageKeeper	m_imagesKeeper;
+		
+		//! Map url->topic
+		QMap< QString, QString >	m_url2topics;
 };

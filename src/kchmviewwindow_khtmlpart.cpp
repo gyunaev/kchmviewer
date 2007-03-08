@@ -26,6 +26,8 @@
 
 #if defined (USE_KDE)
 
+#include <qclipboard.h>
+
 #include <khtmlview.h>
 #include <kfinddialog.h>
 
@@ -146,7 +148,10 @@ void KCHMViewWindow_KHTMLPart::clipSelectAll()
 
 void KCHMViewWindow_KHTMLPart::clipCopy()
 {
-	kapp->copy();
+	QString text = selectedText();
+	
+	if ( !text.isEmpty() )
+		QApplication::clipboard()->setText( text );
 }
 
 void  KCHMViewWindow_KHTMLPart::onPopupMenu ( const QString &url, const QPoint & point )

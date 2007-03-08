@@ -45,6 +45,7 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f
 	m_indexList->header()->hide();
 	m_indexList->setTreeStepSize (10);
 	m_indexList->setShowToolTips(true);
+	//m_indexList->setSorting( 0, true );
 
 	layout->addWidget (m_indexFinder);
 	layout->addSpacing (10);

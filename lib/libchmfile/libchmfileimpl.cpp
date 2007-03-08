@@ -999,7 +999,13 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 			if ( pname == "name" )
 				entry.name = pvalue;
 			else if ( pname == "local" )
-				entry.urls.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( pvalue ) );
+			{
+				// Check for URL duplication
+				QString url = LCHMUrlFactory::makeURLabsoluteIfNeeded( pvalue );
+				
+				if ( entry.urls.find( url ) == entry.urls.end() )
+					entry.urls.push_back( url );
+			}
 			else if ( pname == "see also" && asIndex && entry.name != pvalue )
 				entry.urls.push_back (":" + pvalue);
 			else if ( pname == "imagenumber" )

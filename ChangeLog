@@ -1,6 +1,7 @@
 2007-03-08 tim <gyunaev@ulduzsoft.com>
     - Fixed 'copy' in KDE browser
     - Version changed to 3.0
+    - Removed duplicated application title in KDE.
 
 2007-03-01 tim <gyunaev@ulduzsoft.com>
     - Version changed to 2.9

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CHMDIR="/home/tim/Distro/Ebooks/ /mnt/disk_d/Docs"
+CHMDIR="/mnt/ebooks /mnt/disk_d/Docs"
 #KCHMVIEWER="../src/kchmviewer"
 KCHMVIEWER="../build/src/kchmviewer"
 COMMONLOG="autotest.log"

@@ -1,3 +1,10 @@
+2007-03-01 tim <gyunaev@ulduzsoft.com>
+    - Version changed to 2.9
+    - The design changed; created the chm files processing library, and moved it outside the source
+      to improve and simplify Okular integration.
+    - Changed URL2Topic search, the result - startup and opening times increased up to 20 times 
+      for large chm files!
+
 2006-12-01 tim <gyunaev@ulduzsoft.com>
     - Version changed to 2.7.
     - You can now switch between tabs using Alt+<tab number>, thanks Bobi Jam.

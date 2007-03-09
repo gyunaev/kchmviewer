@@ -150,7 +150,7 @@ class KCHMMainWindow : public KQMainWindow
 		int						m_tabSearchPage;
 		int						m_tabBookmarkPage;
 	
-	#if defined (ENABLE_AUTOTEST_SUPPORT)
+#if defined (ENABLE_AUTOTEST_SUPPORT)
 		enum	auto_test_state_t
 		{
 			STATE_OFF,
@@ -166,7 +166,8 @@ class KCHMMainWindow : public KQMainWindow
 	
 	private slots:
 		void	runAutoTest();
-	#endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
+#endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
+		
 };
 
 extern KCHMMainWindow * mainWindow;

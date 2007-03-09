@@ -838,19 +838,12 @@ void LCHMFileImpl::getSearchResults( const LCHMSearchProgressResults& tempres,
 		
 		LCHMSearchResult res;
 		
-		if ( RetrieveObject (&m_chmSTRINGS, combuf, tempres[i].titleoff, COMMON_BUF_LEN - 1) != 0 )
-		{
-			combuf[COMMON_BUF_LEN - 1] = 0;
-			res.title = encodeWithCurrentCodec ((const char*)combuf);
-		}
-		else
-			res.title = "Untitled";
-
 		if ( RetrieveObject (&m_chmURLSTR, combuf, tempres[i].urloff + 8, COMMON_BUF_LEN - 1) == 0 )
 			continue;
 
 		combuf[COMMON_BUF_LEN - 1] = 0;
 		res.url = LCHMUrlFactory::makeURLabsoluteIfNeeded( (const char*) combuf );
+		res.title = getTopicByUrl( res.url );
 
 		results->push_back (res);
 		

@@ -26,6 +26,7 @@
 #include "kchmconfig.h"
 #include "kchmlistitemtooltip.h"
 #include "kchmtreeviewitem.h"
+#include "kchmsearchengine.h"
 
 #include "kchmsearchwindow.moc"
 
@@ -83,6 +84,10 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	
 	new KCHMListItemTooltip( m_searchList );
 	m_contextMenu = 0;
+	m_searchEngine = 0;
+	m_useNewSearchEngine = false;
+	m_newSearchEngineOffered = false;
+	m_newSearchEngineBroken = false;
 }
 
 void KCHMSearchWindow::invalidate( )
@@ -94,15 +99,21 @@ void KCHMSearchWindow::invalidate( )
 
 void KCHMSearchWindow::onReturnPressed( )
 {
+	//if ( appConfig.m_useSearchEngine 
+	if ( !m_searchEngine )
+		initSearchEngine();
+	
 	QValueVector<LCHMSearchResult> results;
 	QString text = m_searchQuery->lineEdit()->text();
 	
 	if ( text.isEmpty() )
 		return;
 
+	KCHMShowWaitCursor waitcursor;
 	m_searchList->clear();
 	
-	if ( ::mainWindow->chmFile()->searchQuery( text, &results ) )
+//	if ( ::mainWindow->chmFile()->searchQuery( text, &results ) )
+	if ( m_searchEngine->searchQuery( text, &results ) )
 	{
 		if ( !results.empty() )
 		{
@@ -165,3 +176,22 @@ void KCHMSearchWindow::slotContextMenuRequested( QListViewItem * item, const QPo
 	}
 }
 
+bool KCHMSearchWindow::initSearchEngine( )
+{
+	m_searchEngine = new KCHMSearchEngine();
+	
+	if ( !m_searchEngine->loadOrGenerateIndex() )
+	{
+		m_useNewSearchEngine = false;
+		m_newSearchEngineBroken = true;
+		
+		delete m_searchEngine;
+		m_searchEngine = 0;
+		return false;
+	}
+	
+	m_useNewSearchEngine = true;
+	m_newSearchEngineBroken = false;
+	
+	return true;
+}

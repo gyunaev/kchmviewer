@@ -19,53 +19,44 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef KCHMSEARCHWINDOW_H
-#define KCHMSEARCHWINDOW_H
+#ifndef KCHMSEARCHENGINE_H
+#define KCHMSEARCHENGINE_H
 
-#include "kde-qt.h"
+#include <qobject.h>
+#include <qmap.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qprogressdialog.h>
 
-#include "kchmsettings.h"
-#include "forwarddeclarations.h"
+#include "libchmfile.h"
+
+namespace QtAs { class Index; };
 
 
-/**
-@author Georgy Yunaev
-*/
-class KCHMSearchEngine;
-
-class KCHMSearchWindow : public QWidget
+class KCHMSearchEngine : public QObject
 {
 	Q_OBJECT
+			
 	public:
-		KCHMSearchWindow ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
-	
-		void	invalidate();
-		void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
-		void	saveSettings (KCHMSettings::search_saved_settings_t& settings);
-	
-	public slots:
-		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+		KCHMSearchEngine();
+		~KCHMSearchEngine();
+		
+		bool	loadOrGenerateIndex();
+		bool	searchQuery ( const QString& query, QValueVector< LCHMSearchResult > * results, unsigned int limit = 100 );
+		
 		
 	private slots:
-		void	onHelpClicked();
-		void 	onReturnPressed ();
-		void	onDoubleClicked ( QListViewItem *, const QPoint &, int);
-	
+		void	setIndexingProgress( int progress );
+		void	cancelButtonPressed();
+
 	private:
-		bool	initSearchEngine();
-		
-	private:
-		QString				m_lastQuery; // for 'Search in results' option
-		QComboBox 		*	m_searchQuery;
-		KQListView		*	m_searchList;
-		QCheckBox		*	m_matchSimilarWords;
-		QPushButton 	*	m_helpButton;
-		KQPopupMenu		* 	m_contextMenu;
-		
-		KCHMSearchEngine*	m_searchEngine;
-		bool				m_useNewSearchEngine;
-		bool				m_newSearchEngineOffered;
-		bool				m_newSearchEngineBroken;
+		void	processEvents();
+//		void	loadIndexFile();
+
+		// Used during the index generation
+		QProgressDialog			*	m_progressDlg;
+		QStringList 				m_keywordDocuments;
+		QtAs::Index 			*	m_Index;
 };
 
 #endif

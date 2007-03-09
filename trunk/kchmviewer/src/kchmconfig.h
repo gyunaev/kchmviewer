@@ -40,6 +40,13 @@ public:
 		ACTION_DONT_OPEN
 	};
 	
+	enum use_search_engine
+	{
+		SEARCH_ALWAYS_USE_CHM,
+  		SEARCH_ALWAYS_USE_NEW,
+		SEARCH_ASK,
+	};
+	
     KCHMConfig();
 	~KCHMConfig();
 	
@@ -57,7 +64,8 @@ public:
 	choose_action_t		m_onExternalLinkClick;
 	unsigned int		m_HistorySize;
 	bool				m_HistoryStoreExtra;
-	
+	use_search_engine	m_useSearchEngine;
+			
 	QString				m_QtBrowserPath;
 	bool				m_kdeUseQTextBrowser;
 	bool				m_kdeEnableJS;

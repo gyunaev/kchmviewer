@@ -136,4 +136,13 @@ public:
 #include <qbuttongroup.h>
 #include <qtooltip.h>
 
+
+class KCHMShowWaitCursor
+{
+	public:
+		KCHMShowWaitCursor() { QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) ); }
+		~KCHMShowWaitCursor() { QApplication::restoreOverrideCursor(); }
+};
+
+				 
 #endif /* KDE_QT_H */

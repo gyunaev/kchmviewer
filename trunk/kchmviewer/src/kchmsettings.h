@@ -34,56 +34,58 @@ class QFileInfo;
 
 class KCHMSettings
 {
-public:
-    KCHMSettings ();
-	
-	bool	loadSettings (const QString& filename);
-	bool	saveSettings ( );
-	void 	removeSettings ( const QString& filename );
-	
-	class SavedBookmark
-	{
 	public:
-		SavedBookmark() { scroll_y = 0; }
-		SavedBookmark (QString n, QString u, int y) : name(n), url(u), scroll_y(y) {};
+		KCHMSettings ();
 		
-		QString		name;
-		QString		url;
-		int			scroll_y;
-	};
-
-	class SavedViewWindow
-	{
+		bool	loadSettings (const QString& filename);
+		bool	saveSettings ( );
+		void 	removeSettings ( const QString& filename );
+		
+		QString	getSettingsFilename() const {	return m_currentsettingsname; }
+		
+		class SavedBookmark
+		{
 		public:
-			SavedViewWindow() { scroll_y = 0; zoom = 0; }
-			SavedViewWindow (QString u, int y, int z) : url(u), scroll_y(y), zoom(z) {};
-		
+			SavedBookmark() { scroll_y = 0; }
+			SavedBookmark (QString n, QString u, int y) : name(n), url(u), scroll_y(y) {};
+			
+			QString		name;
 			QString		url;
 			int			scroll_y;
-			int			zoom;
-	};
+		};
 	
-	typedef 	QValueList<QString>			search_saved_settings_t;
-	typedef 	QValueList<SavedBookmark>	bookmark_saved_settings_t;
-	typedef 	QValueList<SavedViewWindow>	viewindow_saved_settings_t;
+		class SavedViewWindow
+		{
+			public:
+				SavedViewWindow() { scroll_y = 0; zoom = 0; }
+				SavedViewWindow (QString u, int y, int z) : url(u), scroll_y(y), zoom(z) {};
+			
+				QString		url;
+				int			scroll_y;
+				int			zoom;
+		};
+		
+		typedef 	QValueList<QString>			search_saved_settings_t;
+		typedef 	QValueList<SavedBookmark>	bookmark_saved_settings_t;
+		typedef 	QValueList<SavedViewWindow>	viewindow_saved_settings_t;
+		
+		int							m_window_size_x;
+		int							m_window_size_y;
+		int							m_window_size_splitter;
+		int							m_activetabsystem;
+		int							m_activetabwindow;
+		int							m_activeencodinglcid;
+		search_saved_settings_t		m_searchhistory;
+		bookmark_saved_settings_t	m_bookmarks;
+		viewindow_saved_settings_t	m_viewwindows;
 	
-	int							m_window_size_x;
-	int							m_window_size_y;
-	int							m_window_size_splitter;
-	int							m_activetabsystem;
-	int							m_activetabwindow;
-	int							m_activeencodinglcid;
-	search_saved_settings_t		m_searchhistory;
-	bookmark_saved_settings_t	m_bookmarks;
-	viewindow_saved_settings_t	m_viewwindows;
-
-private:
-	QString  getSettingsFilename ( const QString& filename );
-	
-	// params of current file
-	QString						m_currentsettingsname;
-	unsigned int				m_currentfiledate;
-	unsigned int				m_currentfilesize;
+	private:
+		QString  getSettingsFilename ( const QString& filename );
+		
+		// params of current file
+		QString						m_currentsettingsname;
+		unsigned int				m_currentfiledate;
+		unsigned int				m_currentfilesize;
 };
 
 #endif

@@ -49,10 +49,11 @@
 #include "kchmkeyeventfilter.h"
 #include "kchmcontentswindow.h"
 
-
 #if !defined (USE_KDE)
 	#include "kqrunprocess.h"
 #endif
+
+#include "kchmmainwindow.moc"
 
 
 KCHMMainWindow::KCHMMainWindow()
@@ -1013,7 +1014,7 @@ void KCHMMainWindow::slotLocateInContentWindow( )
 
 void KCHMMainWindow::slotExtractCHM( )
 {
-	QValueVector<QString> files;
+	QStringList files;
 	
 #if defined (USE_KDE)
 	QString outdir = KFileDialog::getExistingDirectory (
@@ -1207,4 +1208,7 @@ void KCHMMainWindow::runAutoTest()
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
 
-#include "kchmmainwindow.moc"
+//TODO: KDE: dcop
+//TODO: KDE: xmpgui
+//TODO: Search result highlighting
+//TODO: command-line index/search

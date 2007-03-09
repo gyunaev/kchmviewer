@@ -1092,11 +1092,11 @@ QString LCHMFileImpl::getTopicByUrl( const QString & url ) const
 
 static int chm_enumerator_callback( struct chmFile*, struct chmUnitInfo *ui, void *context )
 {
-	((QT34VECTOR<QString> *) context)->push_back( ui->path );
+	((QStringList*) context)->push_back( ui->path );
 	return CHM_ENUMERATOR_CONTINUE;
 }
 
-bool LCHMFileImpl::enumerateFiles( QT34VECTOR< QString > * files )
+bool LCHMFileImpl::enumerateFiles( QStringList * files )
 {
 	files->clear();
 	return chm_enumerate( m_chmFile, CHM_ENUMERATE_ALL, chm_enumerator_callback, files );

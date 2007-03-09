@@ -85,15 +85,17 @@ class Index : public QObject
 
 		Index( const QString &dp, const QString &hp );
 		Index( const QStringList &dl, const QString &hp );
-		void writeDict();
-		bool readDict();
-		int makeIndex();
+		
+		void 		writeDict();
+		bool 		readDict();
+		bool 		makeIndex();
 		QStringList query( const QStringList&, const QStringList&, const QStringList& );
-		void setDictionaryFile( const QString& );
-		void setDocListFile( const QString& );
-		void setDocList( const QStringList & );
-		QString getCharsSplit() const { return m_charssplit; }
-		QString getCharsPartOfWord() const { return m_charsword; }
+		
+		void 		setDictionaryFile( const QString& );
+		void 		setDocListFile( const QString& );
+		void 		setDocList( const QStringList & );
+		QString 	getCharsSplit() const { return m_charssplit; }
+		QString 	getCharsPartOfWord() const { return m_charsword; }
 
 	signals:
 		void indexingProgress( int );

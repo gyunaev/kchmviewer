@@ -87,30 +87,29 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 		// Get the list of files in CHM archive
 		QStringList alldocuments;
 		
-		if ( !::mainWindow->chmFile()->enumerateFiles( &alldocuments ) )
-			return false;
-		
-		// Process the list keeping only HTML documents there
-		for ( unsigned int i = 0; i < alldocuments.size(); i++ )
-			if ( alldocuments[i].endsWith( ".html", false ) || alldocuments[i].endsWith( ".htm", false ) )
-				documents.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
-
-//		if ( !loadIndexFile( indexfile, &progressdlg ) )
-//			return false;
-
-		m_Index->setDocList( documents );
-
 		m_progressDlg->setLabelText( tr( "Indexing files..." ) );
 		m_progressDlg->setTotalSteps( 100 );
 		m_progressDlg->reset();
 		m_progressDlg->show();
 		processEvents();
 		
+		if ( !::mainWindow->chmFile()->enumerateFiles( &alldocuments ) )
+		{
+			delete m_progressDlg;
+			m_progressDlg = 0;
+			return false;
+		}
+		
+		// Process the list keeping only HTML documents there
+		for ( unsigned int i = 0; i < alldocuments.size(); i++ )
+			if ( alldocuments[i].endsWith( ".html", false ) || alldocuments[i].endsWith( ".htm", false ) )
+				documents.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
+
+		m_Index->setDocList( documents );
+
 		if ( m_Index->makeIndex() != -1 )
 		{
 			m_Index->writeDict();
-			m_progressDlg->setProgress( 100 );
-
 			m_keywordDocuments.clear();
 		}
 		else
@@ -133,7 +132,9 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 
 void KCHMSearchEngine::setIndexingProgress( int progress )
 {
-	m_progressDlg->setProgress( progress );
+	if ( progress <= 100 )
+		m_progressDlg->setProgress( progress );
+	
 	processEvents();
 }
 
@@ -224,84 +225,3 @@ bool KCHMSearchEngine::searchQuery( const QString & query, QValueVector< LCHMSea
 	
 	return true;
 }
-
-
-/*
-bool KCHMSearchEngine::loadIndexFile( const QString& filename, QProgressDialog * progressdlg )
-{
-//	setCursor( waitCursor );
-
-	progressdlg->setLabel( tr( "Prepare..." ) );
-	progressdlg->setTotalSteps( 100 );
-	progressdlg->reset();
-	progressdlg->show();
-	processEvents();	
-	
-	keywordDocuments.clear();
-	
-	QValueList<IndexKeyword> lst;
-	QFile indexFile( filename );
-	
-	if ( !indexFile.open( IO_ReadOnly ) )
-	{
-		buildKeywordDB();
-		processEvents();
-		
-		if( m_progressCancelled )
-			return false;
-		
-		if ( !indexFile.open(IO_ReadOnly) )
-		{
-			qWarning( "Failed to load keyword index file, custom search/index disabled for this file.\n" );
-			return false;
-		}
-	}
-
-	QDataStream ds( &indexFile );
-	Q_UINT32 fileAges;
-	ds >> fileAges;
-	if ( fileAges != getFileAges() )
-	{
-		indexFile.close();
-		buildKeywordDB();
-		
-		if ( !indexFile.open( IO_ReadOnly ) )
-		{
-			qWarning( "Cannot open the index file %s", QFileInfo( indexFile ).absFilePath().ascii() );
-			return false;
-		}
-		
-		ds.setDevice( &indexFile );
-		ds >> fileAges;
-	}
-	
-	ds >> lst;
-	indexFile.close();
-
-	progressdlg->setProgress( progressdlg->totalSteps() );
-	processEvents();
-
-	listIndex->clear();
-	HelpNavigationListItem *lastItem = 0;
-	QString lastKeyword = QString::null;
-	QValueList<IndexKeyword>::ConstIterator it = lst.begin();
-	for ( ; it != lst.end(); ++it ) {
-		if ( lastKeyword.lower() != (*it).keyword.lower() )
-			lastItem = new HelpNavigationListItem( listIndex, (*it).keyword );
-		lastItem->addLink( (*it).link );
-		lastKeyword = (*it).keyword;
-
-		QString lnk = (*it).link;
-		int i = lnk.findRev('#');
-		if ( i > -1 )
-			lnk = lnk.left( i );
-		if (!keywordDocuments.contains(lnk))
-			keywordDocuments.append(lnk);
-	}
-	framePrepare->hide();
-	showInitDoneMessage();
-	setCursor( arrowCursor );
-	editIndex->setEnabled(TRUE);
-}
-*/
-

@@ -212,7 +212,7 @@ class LCHMFile
 		 *
 		 * \ingroup dataretrieve
 		 */
-		bool enumerateFiles( QT34VECTOR< QString > * files );
+		bool enumerateFiles( QStringList * files );
 	
 		/*!
 		 * \brief Gets the Title of the HTML page referenced by url.

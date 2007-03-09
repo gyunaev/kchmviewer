@@ -93,7 +93,7 @@ bool LCHMFile::getFileContentAsBinary( QByteArray * data, const QString & url )
 	return m_impl->getFileContentAsBinary( data, url );
 }
 
-bool LCHMFile::enumerateFiles( QT34VECTOR< QString > * files )
+bool LCHMFile::enumerateFiles( QStringList * files )
 {
 	return m_impl->enumerateFiles( files );
 }

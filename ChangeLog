@@ -1,4 +1,5 @@
 2007-03-08 tim <gyunaev@ulduzsoft.com>
+    - KDE version now shows KDE about dialog
     - Fixed 'copy' in KDE browser
     - Version changed to 3.0
     - Removed duplicated application title in KDE.

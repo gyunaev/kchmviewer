@@ -115,6 +115,13 @@ KCHMMainWindow::KCHMMainWindow()
 
 	statusBar()->show();
 	setIcon( *gIconStorage.getApplicationIcon() );
+
+	m_aboutDlgMenuText = i18n( "%1 version %2\n\nCopyright (C) George Yunaev,"
+			"gyunaev@ulduzsoft.com, 2004-2007\nhttp://www.kchmviewer.net\n\n"
+			"Licensed under GNU GPL license.\n\n"
+			"Please check my another project, http://www.transientmail.com - temporary "
+			"e-mail address, which expires automatically." )
+			. arg(APP_NAME) . arg(APP_VERSION);
 }
 
 
@@ -278,12 +285,7 @@ void KCHMMainWindow::slotPrintMenuItemActivated()
 void KCHMMainWindow::slotAboutMenuItemActivated()
 {
 	QString caption = i18n( "About %1" ) . arg(APP_NAME);
-	QString text = i18n( "%1 version %2\n\nCopyright (C) George Yunaev,"
-		"gyunaev@ulduzsoft.com, 2005-2006\nwww.kchmviewer.net\n\n"
-		"Licensed under GNU GPL license.\n\n"
-		"Please try our another project, www.transientmail.com - temporary "
-		"e-mail address, which expires automatically." )
-			. arg(APP_NAME) . arg(APP_VERSION);
+	QString text = m_aboutDlgMenuText;
 	
 	// It is quite funny that the argument order differs
 #if defined (USE_KDE)
@@ -535,14 +537,18 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	menuBar()->insertItem( i18n( "&Settings"), settings );
 	settings->insertItem( i18n( "&Change settings..."), this, SLOT( slotChangeSettingsMenuItemActivated() ));
 
+#if defined(USE_KDE)
+	QPopupMenu *help = helpMenu( m_aboutDlgMenuText );
+	//FIXME: connect what's this action
+#else
     KQPopupMenu * help = new KQPopupMenu( this );
-	menuBar()->insertItem( i18n( "&Help"), help );
-
 	help->insertItem( i18n( "&About"), this, SLOT( slotAboutMenuItemActivated() ), Key_F1 );
 	help->insertItem( i18n( "About &Qt"), this, SLOT( slotAboutQtMenuItemActivated() ));
-    help->insertSeparator();
+	help->insertSeparator();
 	help->insertItem( i18n( "What's &This"), this, SLOT(whatsThis()), SHIFT+Key_F1 );
-	
+#endif
+		
+	menuBar()->insertItem( i18n( "&Help"), help );
 	updateHistoryMenu();
 }
 

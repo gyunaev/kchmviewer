@@ -129,8 +129,7 @@ void LCHMFileImpl::closeAll( )
 }
 
 
-
-inline int LCHMFileImpl::findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities)
+QString LCHMFileImpl::decodeEntity( const QString & entity )
 {
 	// Set up m_entityDecodeMap characters according to current textCodec
 	if ( m_entityDecodeMap.isEmpty() )
@@ -248,7 +247,38 @@ inline int LCHMFileImpl::findStringInQuotes (const QString& tag, int offset, QSt
 		m_entityDecodeMap["quot"] = "\""; // double quote
 		m_entityDecodeMap["apos"] = "'"; 	// single quote
 	}
-	
+
+	// If entity is an ASCII code like &#12349; - just decode it
+	if ( entity[0] == '#' )
+	{
+		bool valid;
+		unsigned int ascode = entity.mid(1).toUInt( &valid );
+						
+		if ( !valid )
+		{
+			qWarning ( "LCHMFileImpl::decodeEntity: could not decode HTML entity '%s'", entity.ascii() );
+			return QString::null;
+		}
+
+		return (QString) (QChar( ascode ));
+	}
+	else
+	{
+		QMap<QString, QString>::const_iterator it = m_entityDecodeMap.find( entity );
+
+		if ( it == m_entityDecodeMap.end() )
+		{
+			qWarning ("LCHMFileImpl::decodeEntity: could not decode HTML entity '%s'", entity.ascii());
+			return QString::null;
+		}
+		
+		return *it;
+	}
+}
+
+
+inline int LCHMFileImpl::findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities)
+{
 	int qbegin = tag.find ('"', offset);
 	
 	if ( qbegin == -1 )
@@ -281,32 +311,12 @@ inline int LCHMFileImpl::findStringInQuotes (const QString& tag, int offset, QSt
 				if ( tag[i] == ';' ) // HTML entity ends
 				{
 					// If entity is an ASCII code, just decode it
-					if ( htmlentity[0] == '#' )
-					{
-						bool valid;
-						unsigned int ascode = htmlentity.mid(1).toUInt( &valid );
-						
-						if ( !valid )
-						{
-							qWarning ("LCHMFileImpl::DecodeHTMLUnicodeEntity: could not decode HTML entity '%s', abort decoding.", htmlentity.ascii());
-							break;
-						}
-
-						value.append ( QChar( ascode ) );
-					}
-					else
-					{
-						QMap<QString, QString>::const_iterator it = m_entityDecodeMap.find (htmlentity);
+					QString decode = decodeEntity( htmlentity );
 					
-						if ( it == m_entityDecodeMap.end() )
-						{
-							qWarning ("LCHMFileImpl::DecodeHTMLUnicodeEntity: could not decode HTML entity '%s', abort decoding.", htmlentity.ascii());
-							break;
-						}
-						
-						value.append (it.data());
-					}
-
+					if ( decode.isNull() )
+						break;
+					
+					value.append ( decode );
 					htmlentity = QString::null;
 					fill_entity = false;
 				}

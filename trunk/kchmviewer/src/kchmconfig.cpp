@@ -45,7 +45,7 @@ KCHMConfig::KCHMConfig()
 	m_onExternalLinkClick = ACTION_ASK_USER;
 	m_HistorySize = 10;
 	m_HistoryStoreExtra = true;
-	m_useSearchEngine = SEARCH_ALWAYS_USE_NEW;
+	m_useSearchEngine = SEARCH_NOT_CHOSEN;
 	
 	m_QtBrowserPath = "viewurl-netscape.sh '%s'";
 	m_kdeUseQTextBrowser = false;

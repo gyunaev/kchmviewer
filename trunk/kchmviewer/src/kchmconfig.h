@@ -42,9 +42,9 @@ public:
 	
 	enum use_search_engine
 	{
-		SEARCH_ALWAYS_USE_CHM,
-  		SEARCH_ALWAYS_USE_NEW,
-		SEARCH_ASK,
+		SEARCH_NOT_CHOSEN,		
+		SEARCH_USE_CHM,
+  		SEARCH_USE_MINE,
 	};
 	
     KCHMConfig();

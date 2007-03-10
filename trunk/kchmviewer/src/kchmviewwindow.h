@@ -40,20 +40,7 @@ public:
 	QString	getBaseUrl() const	{ return m_base_url; }
 	QString	getOpenedPage() const	{ return m_openedPage; }
 	QString	getNewTabLink() const	{ return m_newTabLinkKeeper; }
-	
-	//FIXME: remove
-	//! true if url is remote (http/ftp/mailto/news etc.)
-	static bool	isRemoteURL (const QString& url, QString& protocol);
-	
-	//! true if url is javascript:// URL
-	static bool	isJavascriptURL (const QString& url);
-	
-	//! true if url is a different CHM url, return new chm file and the page.
-	static bool	isNewChmURL (const QString& url, QString& chmfile, QString& page);
-
-	//! Making URL absolute
-	static QString makeURLabsoluteIfNeeded ( const QString & url );
-	QString		makeURLabsolute ( const QString &url, bool set_as_base = true );
+	QString	makeURLabsolute ( const QString &url, bool set_as_base = true );
 	
 public: 
 	// virtual members, which should be implemented by viewers

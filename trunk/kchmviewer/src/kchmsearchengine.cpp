@@ -140,10 +140,6 @@ void KCHMSearchEngine::setIndexingProgress( int progress )
 	processEvents();
 }
 
-
-//FIXME: index source rename and copyright
-
-
 // Helper class to simplity state management and data keeping
 class SearchDataKeeper
 {

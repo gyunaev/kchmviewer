@@ -32,6 +32,7 @@
 
 #include "libchmfile.h"
 #include "libchmfileimpl.h"
+#include "libchmurlfactory.h"
 
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
@@ -359,7 +360,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 {
 	QString p1, p2, url = srcurl;
 
-	if ( currentBrowser()->isRemoteURL (url, p1) )
+	if ( LCHMUrlFactory::isRemoteURL (url, p1) )
 	{
 		switch ( appConfig.m_onExternalLinkClick )
 		{
@@ -391,7 +392,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 	}
 		
 	// Filter the URLs which do not need to be opened at all by Qt version
-	if ( currentBrowser()->isJavascriptURL (url) )
+	if ( LCHMUrlFactory::isJavascriptURL (url) )
 	{
 		QMessageBox::information( this, 
 			i18n( "%1 - JavsScript link clicked") . arg(APP_NAME),
@@ -400,8 +401,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 		return false;
 	}
 
-	if ( currentBrowser()->isNewChmURL (url, p1, p2) 
-	&& p1 != m_chmFilename )
+	if ( LCHMUrlFactory::isNewChmURL (url, p1, p2) && p1 != m_chmFilename )
 	{
    		if ( QMessageBox::question( this,
 			i18n( "%1 - link to a new CHM file clicked"). arg(APP_NAME),

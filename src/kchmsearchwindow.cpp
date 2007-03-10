@@ -35,30 +35,42 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	: QWidget (parent, name, f)
 {
 	QVBoxLayout * layout = new QVBoxLayout (this);
-	layout->setMargin (5);
-	layout->addWidget (new QLabel (i18n( "Type in word(s) to search for:"), this));
+	layout->setMargin(6);
+	layout->setSpacing(6);
+	
+	// Labels <type words to search> and <help>
+	QHBoxLayout * labellayout = new QHBoxLayout();
+	labellayout->addWidget( new QLabel( i18n( "Type in word(s) to search for:"), this) );
+	labellayout->addStretch( 10 );
+	
+	KCHMClickableLabel * helplink = new KCHMClickableLabel( i18n( "<a href=\"q\"><b>Help</b></a>"), this );
+	connect( helplink, SIGNAL( clicked() ), this, SLOT( onHelpClicked() ) );
+	helplink->setCursor( QCursor( Qt::PointingHandCursor ) );
+	
+	labellayout->addWidget ( helplink );
+	layout->addLayout( labellayout );
 	
 	m_searchQuery = new QComboBox (TRUE, this);
 	m_searchQuery->setFocus();
 	m_searchQuery->setMaxCount (10);
 	m_searchQuery->setSizePolicy ( QSizePolicy ( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 	
-	m_helpButton = new QPushButton ( tr("?"), this);
-	m_helpButton->setSizePolicy ( QSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+	QPushButton * searchButton = new QPushButton ( i18n("Button which starts Search; must be small!", "Go"), this);
+	searchButton->setSizePolicy ( QSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 	
 	QHBoxLayout * hlayout = new QHBoxLayout ( layout );
 	hlayout->addWidget ( m_searchQuery );
-	hlayout->addWidget ( m_helpButton );
+	hlayout->addWidget ( searchButton );
 	
 	m_searchList = new KQListView (this);
 	m_searchList->addColumn( i18n( "Title" ) );
 	m_searchList->addColumn( i18n( "Location" ) );
 	m_searchList->setShowToolTips(true);
 
-	connect( m_helpButton, 
+	connect( searchButton, 
 			 SIGNAL( clicked () ), 
 			 this, 
-			 SLOT( onHelpClicked() ) );
+			 SLOT( onReturnPressed() ) );
 
 	connect( m_searchQuery->lineEdit(), 
 			 SIGNAL( returnPressed() ), 
@@ -75,19 +87,14 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 			 this, 
 			 SLOT( slotContextMenuRequested ( QListViewItem *, const QPoint &, int ) ) );
 	
-	m_matchSimilarWords = new QCheckBox (this);
-	m_matchSimilarWords->setText( i18n( "Match similar words") );
-
-	layout->addSpacing (10);
+	//layout->addSpacing (10);
 	layout->addWidget (m_searchList);
-//	layout->addWidget (m_matchSimilarWords);
 	
 	new KCHMListItemTooltip( m_searchList );
 	m_contextMenu = 0;
 	m_searchEngine = 0;
-	m_useNewSearchEngine = false;
-	m_newSearchEngineOffered = false;
-	m_newSearchEngineBroken = false;
+	
+	appConfig.m_useSearchEngine = KCHMConfig::SEARCH_USE_MINE;
 }
 
 void KCHMSearchWindow::invalidate( )
@@ -157,9 +164,18 @@ void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & set
 
 void KCHMSearchWindow::onHelpClicked( )
 {
-	QMessageBox::information ( this, 
-		i18n( "How to use search"), 
-		i18n( "The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for non-character symbols other than underscope, and those symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
+	if ( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
+	{
+		QMessageBox::information ( this, 
+			i18n( "How to use search"), 
+			i18n( "<html><p>The improved search engine allows you to search for a word, symbol or phrase, which is set of words and symbols included in quotes. Only the documents which include all the terms speficide in th search query are shown; no prefixes needed.<p>Unlike MS CHM internal search index, my improved search engine indexes everything, including special symbols. Therefore it is possible to search (and find!) for something like <i>$q = new ChmFile();</i>. This search also fully supports Unicode, which means that you can search in non-English documents.<p>If you want to search for a quote symbol, use quotation mark instead. The engine treats a quote and a quotation mark as the same symbol, which allows to use them in phrases.</html>") );
+	}
+	else
+	{
+		QMessageBox::information ( this, 
+			i18n( "How to use search"), 
+			i18n( "The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for non-character symbols other than underscope, and those symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
+	}
 }
 
 void KCHMSearchWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
@@ -182,16 +198,10 @@ bool KCHMSearchWindow::initSearchEngine( )
 	
 	if ( !m_searchEngine->loadOrGenerateIndex() )
 	{
-		m_useNewSearchEngine = false;
-		m_newSearchEngineBroken = true;
-		
 		delete m_searchEngine;
 		m_searchEngine = 0;
 		return false;
 	}
-	
-	m_useNewSearchEngine = true;
-	m_newSearchEngineBroken = false;
 	
 	return true;
 }

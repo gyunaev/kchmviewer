@@ -27,7 +27,7 @@
 #include "kchmsettings.h"
 #include "libchmurlfactory.h"
 
-#include "qassistant_index.h"
+#include "kchmsearchengine_impl.h"
 
 #include "kchmsearchengine.moc"
 
@@ -87,7 +87,8 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 		// Get the list of files in CHM archive
 		QStringList alldocuments;
 		
-		m_progressDlg->setLabelText( tr( "Indexing files..." ) );
+		m_progressDlg->setCaption( tr( "Generating search index..." ) );
+		m_progressDlg->setLabelText( tr( "Generating search index..." ) );
 		m_progressDlg->setTotalSteps( 100 );
 		m_progressDlg->reset();
 		m_progressDlg->show();
@@ -130,6 +131,7 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 	return true;
 }
 
+
 void KCHMSearchEngine::setIndexingProgress( int progress )
 {
 	if ( progress <= 100 )
@@ -137,96 +139,8 @@ void KCHMSearchEngine::setIndexingProgress( int progress )
 	
 	processEvents();
 }
-/*
-bool KCHMSearchEngine::searchQuery( const QString & query, QValueVector< LCHMSearchResult > * results, unsigned int limit )
-{
-	QString str = query;
-//	str = str.replace( "\'", "\"" );
-//	str = str.replace( "`", "\"" );
-	QString buf = str;
-//	str = str.replace( "-", " " );
-//	str = str.replace( QRegExp( "\\s[\\S]?\\s" ), " " );
-	QStringList terms = QStringList::split( " ", str );
-	QStringList termSeq;
-	QStringList seqWords;
-	QStringList::iterator it = terms.begin();
-	for ( ; it != terms.end(); ++it ) {
-		(*it) = (*it).simplifyWhiteSpace();
-		(*it) = (*it).lower();
-		(*it) = (*it).replace( "\"", "" );
-	}
-	if ( str.contains( '\"' ) ) {
-		if ( (str.contains( '\"' ))%2 == 0 ) {
-			int beg = 0;
-			int end = 0;
-			QString s;
-			beg = str.find( '\"', beg );
-			while ( beg != -1 ) {
-				beg++;
-				end = str.find( '\"', beg );
-				s = str.mid( beg, end - beg );
-				s = s.lower();
-				s = s.simplifyWhiteSpace();
-				seqWords += QStringList::split( ' ', s );
-				termSeq << s;
-				beg = str.find( '\"', end + 1);
-			}
-			for ( QStringList::iterator it = termSeq.begin(); it != termSeq.end(); it++ )
-				qDebug("termSeq: '%s'", (*it).ascii() );
-		
-			for ( QStringList::iterator it = seqWords.begin(); it != seqWords.end(); it++ )
-				qDebug("seqWords: '%s'", (*it).ascii() );
-}
-		else
-		{
-			QMessageBox::warning( 0,
-								  tr( "Full Text Search" ),
-								  tr( "The closing quotation mark is missing." ) );
-			return false;
-		}
-	}
-	
-	KCHMShowWaitCursor waitcursor;
-	QStringList foundDocs;
-	
-	foundDocs = m_Index->query( terms, termSeq, seqWords );
-	
-	for ( it = foundDocs.begin(); it != foundDocs.end() && limit > 0; ++it, limit-- )
-	{
-		LCHMSearchResult res;
-		
-		res.url = *it;
-		res.title = ::mainWindow->chmFile()->getTopicByUrl( res.url );
-		results->push_back( res );
-	}
 
-	terms.clear();
-	bool isPhrase = FALSE;
-	QString s = "";
-	for ( int i = 0; i < (int)buf.length(); ++i ) {
-		if ( buf[i] == '\"' ) {
-			isPhrase = !isPhrase;
-			s = s.simplifyWhiteSpace();
-			if ( !s.isEmpty() )
-				terms << s;
-			s = "";
-		} else if ( buf[i] == ' ' && !isPhrase ) {
-			s = s.simplifyWhiteSpace();
-			if ( !s.isEmpty() )
-				terms << s;
-			s = "";
-		} else
-			s += buf[i];
-	}
-	if ( !s.isEmpty() )
-		terms << s;
-	
-	return true;
-}
-*/
 
-//FIXME: search: iterate QString, not text.unicode()
-//FIXME: search help according to engine
 //FIXME: index source rename and copyright
 
 

@@ -33,6 +33,24 @@
 */
 class KCHMSearchEngine;
 
+
+class KCHMClickableLabel : public QLabel
+{
+	Q_OBJECT
+	public:
+		KCHMClickableLabel( const QString& label, QWidget * parent )
+	: QLabel( label, parent ) {};
+		
+		virtual ~KCHMClickableLabel() {};
+				
+	signals:
+		void	clicked();
+						
+	protected:
+		virtual void mousePressEvent ( QMouseEvent * ) 	{ emit clicked(); }
+};
+
+
 class KCHMSearchWindow : public QWidget
 {
 	Q_OBJECT
@@ -55,17 +73,11 @@ class KCHMSearchWindow : public QWidget
 		bool	initSearchEngine();
 		
 	private:
-		QString				m_lastQuery; // for 'Search in results' option
 		QComboBox 		*	m_searchQuery;
 		KQListView		*	m_searchList;
-		QCheckBox		*	m_matchSimilarWords;
-		QPushButton 	*	m_helpButton;
 		KQPopupMenu		* 	m_contextMenu;
 		
 		KCHMSearchEngine*	m_searchEngine;
-		bool				m_useNewSearchEngine;
-		bool				m_newSearchEngineOffered;
-		bool				m_newSearchEngineBroken;
 };
 
 #endif

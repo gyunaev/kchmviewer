@@ -4,7 +4,7 @@ kchmviewer_SOURCES = iconstorage.cpp kchmbookmarkwindow.cpp kchmconfig.cpp \
 		kchmsettings.cpp kchmsourcefactory.cpp kchmtreeviewitem.cpp kchmviewwindow.cpp main.cpp \
 		kchmdialogchooseurlfromlist.cpp kde-qt.cpp kchmviewwindow_qtextbrowser.cpp kchmviewwindow_khtmlpart.cpp \
 		kchmsetupdialog.ui kqtempfile.cpp kchmnavtoolbar.cpp kchmviewwindowmgr.cpp \
-		kchmkeyeventfilter.cpp kchmcontentswindow.cpp qassistant_index.cpp kchmsearchengine.cpp
+		kchmkeyeventfilter.cpp kchmcontentswindow.cpp kchmsearchengine_impl.cpp kchmsearchengine.cpp
 
 # set the include path found by configure
 INCLUDES = $(QT_INCLUDES) $(CHM_INCLUDES) $(KDE_INCLUDES) $(LIBCHMFILE_INCLUDES)
@@ -24,8 +24,8 @@ noinst_HEADERS = kchmsettings.h forwarddeclarations.h kchmsourcefactory.h \
 		kchmdialogchooseurlfromlist.h kchmviewwindow.h kchmindexwindow.h kchmviewwindow_khtmlpart.h \
 		kchmmainwindow.h kchmviewwindow_qtextbrowser.h kchmsearchtoolbar.h kde-qt.h \
 		kchmsearchwindow.h kqtempfile.h kqrunprocess.h kchmnavtoolbar.h kchmviewwindowmgr.h \
-		kchmkeyeventfilter.h kchmcontentswindow.h kchmlistitemtooltip.h qassistant_index.h \
-	kchmsearchengine.h
+		kchmkeyeventfilter.h kchmcontentswindow.h kchmlistitemtooltip.h kchmsearchengine_impl.h \
+		kchmsearchengine.h
 
 messages: rc.cpp
 		$(EXTRACTRC) *.rc > rc.cpp

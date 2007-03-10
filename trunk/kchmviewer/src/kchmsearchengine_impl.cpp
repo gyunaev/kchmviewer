@@ -1,6 +1,6 @@
 /***************************************************************************
- *  Copyright (C) 2000-2005 Trolltech AS.                                  *
- *  Copyright (C) 2004-2007 by Georgy Yunaev, gyunaev@ulduzsoft.com        *
+ *   Copyright (C) 2004-2007 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Portions Copyright (C) 2000-2005 Trolltech AS.                        *   
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *

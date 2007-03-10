@@ -1,6 +1,5 @@
-
 /***************************************************************************
- *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Copyright (C) 2004-2007 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
@@ -20,8 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "iconstorage.h"
 
+#include "iconstorage.h"
 
 
 static const KCHMIconStorage::png_memory_image_t png_image_toolbakicons[] =

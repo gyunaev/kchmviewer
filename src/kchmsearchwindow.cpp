@@ -80,7 +80,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 
 	layout->addSpacing (10);
 	layout->addWidget (m_searchList);
-	layout->addWidget (m_matchSimilarWords);
+//	layout->addWidget (m_matchSimilarWords);
 	
 	new KCHMListItemTooltip( m_searchList );
 	m_contextMenu = 0;

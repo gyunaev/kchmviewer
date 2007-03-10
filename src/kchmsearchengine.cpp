@@ -137,15 +137,15 @@ void KCHMSearchEngine::setIndexingProgress( int progress )
 	
 	processEvents();
 }
-
+/*
 bool KCHMSearchEngine::searchQuery( const QString & query, QValueVector< LCHMSearchResult > * results, unsigned int limit )
 {
 	QString str = query;
-	str = str.replace( "\'", "\"" );
-	str = str.replace( "`", "\"" );
+//	str = str.replace( "\'", "\"" );
+//	str = str.replace( "`", "\"" );
 	QString buf = str;
-	str = str.replace( "-", " " );
-	str = str.replace( QRegExp( "\\s[\\S]?\\s" ), " " );
+//	str = str.replace( "-", " " );
+//	str = str.replace( QRegExp( "\\s[\\S]?\\s" ), " " );
 	QStringList terms = QStringList::split( " ", str );
 	QStringList termSeq;
 	QStringList seqWords;
@@ -167,18 +167,16 @@ bool KCHMSearchEngine::searchQuery( const QString & query, QValueVector< LCHMSea
 				s = str.mid( beg, end - beg );
 				s = s.lower();
 				s = s.simplifyWhiteSpace();
-				if ( s.contains( '*' ) )
-				{
-					QMessageBox::warning( 0, 
-										  tr( "Full Text Search" ),
-										  tr( "Using a wildcard within phrases is not allowed." ) );
-					return false;
-				}
 				seqWords += QStringList::split( ' ', s );
 				termSeq << s;
 				beg = str.find( '\"', end + 1);
 			}
-		}
+			for ( QStringList::iterator it = termSeq.begin(); it != termSeq.end(); it++ )
+				qDebug("termSeq: '%s'", (*it).ascii() );
+		
+			for ( QStringList::iterator it = seqWords.begin(); it != seqWords.end(); it++ )
+				qDebug("seqWords: '%s'", (*it).ascii() );
+}
 		else
 		{
 			QMessageBox::warning( 0,
@@ -223,5 +221,133 @@ bool KCHMSearchEngine::searchQuery( const QString & query, QValueVector< LCHMSea
 	if ( !s.isEmpty() )
 		terms << s;
 	
+	return true;
+}
+*/
+
+//FIXME: search: iterate QString, not text.unicode()
+//FIXME: search help according to engine
+//FIXME: index source rename and copyright
+
+
+// Helper class to simplity state management and data keeping
+class SearchDataKeeper
+{
+	public:
+		SearchDataKeeper() { m_inPhrase = false; }
+				
+		void beginPhrase()
+		{
+			phrase_terms.clear();
+			m_inPhrase = true;
+		}
+		
+		void endPhrase()
+		{
+			m_inPhrase = false;
+			phrasewords += phrase_terms;
+			phrases.push_back( phrase_terms.join(" ") );
+		}
+		
+		bool isInPhrase() const { return m_inPhrase; }
+		
+		void addTerm( const QString& term )
+		{
+			if ( !term.isEmpty() )
+			{
+				terms.push_back( term );
+				
+				if ( m_inPhrase )
+					phrase_terms.push_back( term );
+			}
+		}
+		
+		// Should contain all the search terms present in query, includind those from phrases. One element - one term .
+		QStringList terms;
+	
+		// Should contain phrases present in query without quotes. One element - one phrase.
+		QStringList phrases;
+	
+		// Should contain all the terms present in all the phrases (but not outside).
+		QStringList phrasewords;
+
+	private:		
+		bool		m_inPhrase;
+		QStringList phrase_terms;
+};
+
+
+bool KCHMSearchEngine::searchQuery( const QString & query, QValueVector< LCHMSearchResult > * results, unsigned int limit )
+{
+	// Characters which split the words. We need to make them separate tokens
+	QString splitChars = m_Index->getCharsSplit();
+	
+	// Characters which are part of the word. We should keep them apart.
+	QString partOfWordChars = m_Index->getCharsPartOfWord();
+	
+	SearchDataKeeper keeper;
+	
+	// State machine variables
+	QString term;
+
+	for ( unsigned int i = 0; i < query.length(); i++ )
+	{
+		QChar ch = query[i].lower();
+		
+		// a quote either begins or ends the phrase
+		if ( ch == '"' )
+		{
+			keeper.addTerm( term );
+			
+			if ( keeper.isInPhrase() )
+				keeper.endPhrase();
+			else
+				keeper.beginPhrase();
+
+			continue;
+		}
+		
+		// If new char does not stop the word, add ot and continue
+		if ( ch.isLetterOrNumber() || partOfWordChars.find( ch ) != -1 )
+		{
+			term.append( ch );
+			continue;
+		}
+		
+		// If it is a split char, add this term and split char as separate term
+		if ( splitChars.find( ch ) != -1 )
+		{
+			// Add existing term if present
+			keeper.addTerm( term );
+			
+			// Change the term variable, so it will be added when we exit this block
+			term = ch;
+		}
+
+		// Just add the word; it is most likely a space or terminated by tokenizer.
+		keeper.addTerm( term );
+		term = QString::null;			
+	}
+	
+	keeper.addTerm( term );
+	
+	if ( keeper.isInPhrase() )
+	{
+		QMessageBox::warning( 0, i18n( "Search" ), i18n( "A closing quote character is missing." ) );
+		return false;
+	}
+	
+	KCHMShowWaitCursor waitcursor;
+	QStringList foundDocs = m_Index->query( keeper.terms, keeper.phrases, keeper.phrasewords );
+	
+	for ( QStringList::iterator it = foundDocs.begin(); it != foundDocs.end() && limit > 0; ++it, limit-- )
+	{
+		LCHMSearchResult res;
+		
+		res.url = *it;
+		res.title = ::mainWindow->chmFile()->getTopicByUrl( res.url );
+		results->push_back( res );
+	}
+
 	return true;
 }

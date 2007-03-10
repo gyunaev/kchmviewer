@@ -143,7 +143,7 @@ void Index::insertInDict( const QString &str, int docNum )
 {
 	Entry *e = 0;
 	if ( dict.count() )
-		e = dict[ str.lower() ];
+		e = dict[ str ];
 	
 	if ( e )
 	{
@@ -154,13 +154,14 @@ void Index::insertInDict( const QString &str, int docNum )
 	}
 	else
 	{
-		dict.insert( str.lower(), new Entry( docNum ) );
+		dict.insert( str, new Entry( docNum ) );
 	}
 }
 
 
 bool Index::parseDocumentToStringlist( const QString & filename, QStringList & tokenlist )
 {
+	QString parsedbuf, parseentity;
 	QString text;
 	
 	if ( !::mainWindow->chmFile()->getFileContentAsString( &text, filename ) )
@@ -180,71 +181,102 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 	
 	tokenlist.clear();
 	
-	const QChar *buf = text.unicode();
-	QString parsedbuf;
+	// State machine states
+	enum state_t
+	{
+		STATE_OUTSIDE_TAGS,		// outside HTML tags; parse text
+		STATE_IN_HTML_TAG,		// inside HTML tags; wait for end tag
+		STATE_IN_QUOTES,		// inside HTML tags and inside quotes; wait for end quote (in var QuoteChar)
+		STATE_IN_HTML_ENTITY,	// inside HTML entity; parse the entity
+	};
 	
-	// true if we are inside HTML tag (i.e. ignore everything)
-	bool in_html_tag = false;
-	
-	// true if we are inside HTML entity (like &nbsp;) - unlike Qt assistant, we decode it
-	bool in_html_entiry = false;
+	state_t state = STATE_OUTSIDE_TAGS;
+	QChar QuoteChar; // used in STATE_IN_QUOTES
 	
 	for ( unsigned int j = 0; j < text.length(); j++ )
 	{
-		QChar ch = buf[j];
+		QChar ch = text[j];
 		
-		// State 1: we are inside HTML tag. Ignore everything until we see '>'
-		if ( in_html_tag )
+		if ( state == STATE_IN_HTML_TAG )
 		{
-			if ( ch == '>' )
-				in_html_tag = false;
-			
+			// We are inside HTML tag.
+			// Ignore everything until we see '>' (end of HTML tag) or quote char (quote start)
+			if ( ch == '"' || ch == '\'' )
+			{
+				state = STATE_IN_QUOTES;
+				QuoteChar = ch;
+			}
+			else if ( ch == '>' )
+				state = STATE_OUTSIDE_TAGS;
+				
 			continue;
 		}
-		
-		// State 2: The HTML tag is about to start.
-		// Must be here, as '<' could be a decoded entity at state 4.
-		if ( ch == '<' )
+		else if ( state == STATE_IN_QUOTES )
 		{
-			in_html_tag = true;
-			goto tokenize_buf;
+			// We are inside quoted text inside HTML tag. 
+			// Ignore everything until we see the quote character again
+			if ( ch == QuoteChar )
+				state = STATE_IN_HTML_TAG;
+				
+			continue;
 		}
-		
-		// State 3: The HTML entity is about to start.
-		// Must be here, as '&' could be a decoded entity at state 4.
-		if ( ch == '&' )
+		else if ( state == STATE_IN_HTML_ENTITY )
 		{
-			in_html_entiry = true;
-			goto tokenize_buf;
-		}
-		
-		// State 4: we're in HTML entity
-		if ( in_html_entiry )
-		{
+			// We are inside encoded HTML entity (like &nbsp;).
+			// Collect to parsedbuf everything until we see ;
 			if ( ch != ';' )
 			{
 				// get next character of this entity
-				parsedbuf.append( ch );
+				parseentity.append( ch );
 				continue;
 			}
 			
 			// The entity ended
-			in_html_entiry = false;
-			QString entity = ::mainWindow->chmFile()->impl()->decodeEntity( parsedbuf.lower() );
+			state = STATE_OUTSIDE_TAGS;
 			
-			if ( entity.isNull() )
+			// Don't we have a space?
+			if ( parseentity.lower() != "nbsp" )
 			{
-				qWarning( "Index::parseDocument: failed to decode entity &%s;", parsedbuf.ascii() );
-				parsedbuf = QString::null;
+				QString entity = ::mainWindow->chmFile()->impl()->decodeEntity( parseentity.lower() );
+			
+				if ( entity.isNull() )
+				{
+					qWarning( "Index::parseDocument: failed to decode entity &%s;", parsedbuf.ascii() );
+					parsedbuf = QString::null;
+					continue;
+				}
+			
+				parsedbuf += entity;
 				continue;
 			}
-			
-			parsedbuf = entity;
-			
-			// No continue! this is valid character, and we go to state 5.
+			else
+				ch = ' '; // We got a space, so treat it like it, and not add it to parsebuf
 		}
 		
-		// State 5: we have a valid character outside HTML tags, and probably some in buffer already.
+		// 
+		// Now process STATE_OUTSIDE_TAGS
+		//
+		
+		// Check for start of HTML tag, and switch to STATE_IN_HTML_TAG if it is
+		if ( ch == '<' )
+		{
+			state = STATE_IN_HTML_TAG;
+			goto tokenize_buf;
+		}
+		
+		// Check for start of HTML entity
+		if ( ch == '&' )
+		{
+			state = STATE_IN_HTML_ENTITY;
+			parseentity = QString::null;
+			continue;
+		}
+		
+		// Replace quote by ' - quotes are used in search window to set the phrase
+		if ( ch == '"' )
+			ch = '\'';
+		
+		// Ok, we have a valid character outside HTML tags, and probably some in buffer already.
 		// If it is char or letter, add it and continue
 		if ( ch.isLetterOrNumber() || m_charsword.find( ch ) != -1 )
 		{
@@ -256,9 +288,9 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 		if ( m_charssplit.find( ch ) != -1 )
 		{
 			if ( !parsedbuf.isEmpty() )
-				tokenlist.push_back( parsedbuf );
+				tokenlist.push_back( parsedbuf.lower() );
 			
-			tokenlist.push_back( ch );
+			tokenlist.push_back( ch.lower() );
 			parsedbuf = QString::null;
 			continue;
 		}
@@ -267,14 +299,14 @@ tokenize_buf:
 		// Just add the word; it is most likely a space or terminated by tokenizer.
 		if ( !parsedbuf.isEmpty() )
 		{
-			tokenlist.push_back( parsedbuf );
+			tokenlist.push_back( parsedbuf.lower() );
 			parsedbuf = QString::null;
 		}
 	}
 	
 	// Add the last word if still here - for broken htmls.
 	if ( !parsedbuf.isEmpty() )
-		tokenlist.push_back( parsedbuf );
+		tokenlist.push_back( parsedbuf.lower() );
 	
 	return true;
 }
@@ -289,58 +321,6 @@ void Index::parseDocument( const QString &filename, int docNum )
 	
 	for ( unsigned int i = 0; i < terms.size(); i++ )
 		insertInDict( terms[i], docNum );
-}
-
-
-bool Index::searchForPattern( const QStringList &patterns, const QStringList &words, const QString &filename )
-{
-	QStringList terms;
-		
-	if ( !parseDocumentToStringlist( filename, terms ) )
-		return false;
-
-	wordNum = 3;
-	miniDict.clear();
-	QStringList::ConstIterator cIt = words.begin();
-	
-	for ( ; cIt != words.end(); ++cIt )
-		miniDict.insert( *cIt, new PosEntry( 0 ) );
-
-	for ( unsigned int i = 0; i < terms.size(); i++ )
-		buildMiniDict( terms[i] );
-	
-	QStringList::ConstIterator patIt = patterns.begin();
-	QStringList wordLst;
-	QValueList<uint> a, b;
-	QValueList<uint>::iterator aIt;
-	
-	for ( ; patIt != patterns.end(); ++patIt )
-	{
-		wordLst = QStringList::split( ' ', *patIt );
-		a = miniDict[ wordLst[0] ]->positions;
-		
-		for ( int j = 1; j < (int)wordLst.count(); ++j )
-		{
-			b = miniDict[ wordLst[j] ]->positions;
-			aIt = a.begin();
-			
-			while ( aIt != a.end() )
-			{
-				if ( b.find( *aIt + 1 ) != b.end() )
-				{
-					(*aIt)++;
-					++aIt;
-				}
-				else
-					aIt = a.remove( aIt );
-			}
-		}
-	}
-	
-	if ( a.count() )
-		return true;
-	
-	return false;
 }
 
 
@@ -429,12 +409,7 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 	{
 		Entry *e = 0;
 		
-		if ( (*it).contains( '*' ) )
-		{
-			QValueList<Document> wcts = setupDummyTerm( getWildcardTerms( *it ) );
-			termList.append( new Term( "dummy", wcts.count(), wcts ) );
-		}
-		else if ( dict[ *it ] )
+		if ( dict[ *it ] )
 		{
 			e = dict[ *it ];
 			termList.append( new Term( *it, e->documents.count(), e->documents ) );
@@ -502,7 +477,7 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 	{
 		fileName =  docList[ (int)(*C).docNumber ];
 		
-		if ( searchForPattern( termSeq, seqWords, fileName ) )
+		if ( searchForPhrases( termSeq, seqWords, fileName ) )
 			results << fileName;
 	}
 	
@@ -510,143 +485,72 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 }
 
 
-QStringList Index::getWildcardTerms( const QString &term )
+bool Index::searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename )
 {
-	QStringList lst;
-	QStringList terms = split( term );
-	QValueList<QString>::iterator iter;
-
-	QDictIterator<Entry> it( dict );
+	QStringList parsed_document;
 	
+	if ( !parseDocumentToStringlist( filename, parsed_document ) )
+		return false;
+
+	miniDict.clear();
+	
+	// Initialize the dictionary with the words in phrase(s)
+	for ( QStringList::ConstIterator cIt = words.begin(); cIt != words.end(); ++cIt )
+		miniDict.insert( *cIt, new PosEntry( 0 ) );
+
+	// Fill the dictionary with the words from the document
+	unsigned int word_offset = 3;
+	for ( QStringList::ConstIterator it = parsed_document.begin(); it != parsed_document.end(); it++, word_offset++ )
+	{
+		PosEntry * entry = miniDict[ *it ];
+		
+		if ( entry )
+			entry->positions.append( word_offset );
+	}
+	
+	// Dump it
+/*	
+	QDictIterator<PosEntry> it( miniDict );
 	for( ; it.current(); ++it )
 	{
-		int index = 0;
-		bool found = false;
 		QString text( it.currentKey() );
+		QValueList<uint> pos = miniDict[text]->positions;
+		for ( unsigned int i = 1; i < pos.size(); i++ )
+			text += " " + QString::number( pos[i] );
 		
-		for ( iter = terms.begin(); iter != terms.end(); ++iter )
+		qDebug( "%s", text.ascii());
+	}
+*/				
+	
+	QValueList<uint> first_word_positions;
+	
+	for ( QStringList::ConstIterator phrase_it = phrases.begin(); phrase_it != phrases.end(); phrase_it++ )
+	{
+		QStringList phrasewords = QStringList::split( ' ', *phrase_it );
+		first_word_positions = miniDict[ phrasewords[0] ]->positions;
+		
+		for ( unsigned int j = 1; j < phrasewords.count(); ++j )
 		{
-			if ( *iter == "*" )
-			{
-				found = true;
-				continue;
-			}
+			QValueList<uint> next_word_it = miniDict[ phrasewords[j] ]->positions;
+			QValueList<uint>::iterator dict_it = first_word_positions.begin();
 			
-			if ( iter == terms.begin() && (*iter)[0] != text[0] )
+			while ( dict_it != first_word_positions.end() )
 			{
-				found = false;
-				break;
-			}
-			
-			index = text.find( *iter, index );
-			
-			if ( *iter == terms.last() && index != (int)text.length()-1 )
-			{
-				index = text.findRev( *iter );
-				
-				if ( index != (int)text.length() - (int)(*iter).length() )
+				if ( next_word_it.find( *dict_it + 1 ) != next_word_it.end() )
 				{
-					found = false;
-					break;
+					(*dict_it)++;
+					++dict_it;
 				}
-			}
-			
-			if ( index != -1 )
-			{
-				found = true;
-				index += (*iter).length();
-				continue;
-			}
-			else
-			{
-				found = false;
-				break;
+				else
+					dict_it = first_word_positions.remove( dict_it );
 			}
 		}
-		
-		if ( found )
-			lst << text;
-	}
-
-	return lst;
-}
-
-QStringList Index::split( const QString &str )
-{
-	QStringList lst;
-	int j = 0;
-	int i = str.find( '*', j );
-
-	while ( i != -1 )
-	{
-		if ( i > j && i <= (int)str.length() )
-		{
-			lst << str.mid( j, i - j );
-			lst << "*";
-		}
-		
-		j = i + 1;
-		i = str.find( '*', j );
-	}
-
-	int l = str.length() - 1;
-	
-	if ( str.mid( j, l - j + 1 ).length() > 0 )
-		lst << str.mid( j, l - j + 1 );
-
-	return lst;
-}
-
-QValueList<Document> Index::setupDummyTerm( const QStringList &terms )
-{
-	TermList termList;
-	QStringList::ConstIterator it = terms.begin();
-	
-	for ( ; it != terms.end(); ++it )
-	{
-		Entry *e = 0;
-		if ( dict[ *it ] )
-		{
-			e = dict[ *it ];
-			termList.append( new Term( *it, e->documents.count(), e->documents ) );
-		}
 	}
 	
-	termList.sort();
-
-	QValueList<Document> maxList;
-
-	if ( !termList.count() )
-		return maxList;
+	if ( first_word_positions.count() )
+		return true;
 	
-	maxList = termList.last()->documents;
-	termList.removeLast();
-
-	QValueList<Document>::iterator docIt;
-	Term *t = termList.first();
-	
-	while ( t )
-	{
-		QValueList<Document> docs = t->documents;
-		
-		for ( docIt = docs.begin(); docIt != docs.end(); ++docIt )
-		{
-			if ( maxList.findIndex( *docIt ) == -1 )
-				maxList.append( *docIt );
-		}
-		
-		t = termList.next();
-	}
-	
-	return maxList;
-}
-
-void Index::buildMiniDict( const QString &str )
-{
-	if ( miniDict[ str ] )
-		miniDict[ str ]->positions.append( wordNum );
-	
-	++wordNum;
+	return false;
 }
 
 

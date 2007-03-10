@@ -115,13 +115,11 @@ class Index : public QObject
 		QStringList				getWildcardTerms( const QString& );
 		QStringList				split( const QString& );
 		QValueList<Document> 	setupDummyTerm( const QStringList& );
-		bool 					searchForPattern( const QStringList&, const QStringList&, const QString& );
-		void 					buildMiniDict( const QString& );
+		bool 					searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename );
 		
 		QStringList 		docList;
 		QDict<Entry> 		dict;
 		QDict<PosEntry>		miniDict;
-		uint 				wordNum;
 		QString 			docPath;
 		QString 			dictFile;
 		QString 			docListFile;

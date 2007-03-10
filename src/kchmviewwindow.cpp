@@ -61,65 +61,14 @@ void KCHMViewWindow::invalidate( )
 }
 
 
-bool KCHMViewWindow::isRemoteURL( const QString & url, QString & protocol )
-{
-	// Check whether the URL is external
-	QRegExp uriregex ( "^(\\w+):\\/\\/" );
-	QRegExp mailtoregex ( "^(mailto):" );
-
-	// mailto: can also have different format, so handle it
-	if ( url.startsWith( "mailto:" ) )
-	{
-		protocol = "mailto";
-		return true;
-	}
-	else if ( uriregex.search ( url ) != -1 )
-	{
-		QString proto = uriregex.cap ( 1 ).lower();
-		
-		// Filter the URLs which need to be opened by a browser
-		if ( proto == "http" 
-		|| proto == "ftp"
-		|| proto == "mailto"
-		|| proto == "news" )
-		{
-			protocol = proto;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool KCHMViewWindow::isJavascriptURL( const QString & url )
-{
-	return url.startsWith ("javascript://");
-}
-
-// Parse urls like "ms-its:file name.chm::/topic.htm"
-bool KCHMViewWindow::isNewChmURL( const QString & url, QString & chmfile, QString & page )
-{
-	QRegExp uriregex ( "^ms-its:(.*)::(.*)$" );
-
-	if ( uriregex.search ( url ) != -1 )
-	{
-		chmfile = uriregex.cap ( 1 );
-		page = uriregex.cap ( 2 );
-		
-		return true;
-	}
-
-	return false;
-}
-
 
 QString KCHMViewWindow::makeURLabsolute ( const QString & url, bool set_as_base )
 {
 	QString p1, p2, newurl = url;
 
-	if ( !isRemoteURL (url, p1)
-	&& !isJavascriptURL (url)
-	&& !isNewChmURL (url, p1, p2) )
+	if ( !LCHMUrlFactory::isRemoteURL (url, p1)
+	&& !LCHMUrlFactory::isJavascriptURL (url)
+	&& !LCHMUrlFactory::isNewChmURL (url, p1, p2) )
 	{
 		newurl = QDir::cleanDirPath (url);
 
@@ -144,36 +93,16 @@ QString KCHMViewWindow::makeURLabsolute ( const QString & url, bool set_as_base 
 	return newurl;
 }
 
-
-QString KCHMViewWindow::makeURLabsoluteIfNeeded ( const QString & url )
-{
-	QString p1, p2, newurl = url;
-
-	if ( !isRemoteURL (url, p1)
-	&& !isJavascriptURL (url)
-	&& !isNewChmURL (url, p1, p2) )
-	{
-		newurl = QDir::cleanDirPath (url);
-
-		// Normalize url, so it becomes absolute
-		if ( newurl[0] != '/' )
-			newurl = "/" + newurl;
-	}
-
-//qDebug ("KCHMViewWindow::makeURLabsolute (%s) -> (%s)", url.ascii(), newurl.ascii());
-	return newurl;
-}
-
 bool KCHMViewWindow::openUrl ( const QString& origurl )
 {
 	QString chmfile, page, newurl = origurl;
 
 	if ( !origurl )
 		return true;
-
+//FIXME: remote url
 	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
 	// or will be loaded (for kio slave). We care only about the path component.
-	if ( isNewChmURL( newurl, chmfile, page ) )
+	if ( LCHMUrlFactory::isNewChmURL( newurl, chmfile, page ) )
 		newurl = page;
 
 	makeURLabsolute (newurl);

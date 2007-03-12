@@ -60,7 +60,8 @@ class KCHMSearchWindow : public QWidget
 		void	invalidate();
 		void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
 		void	saveSettings (KCHMSettings::search_saved_settings_t& settings);
-	
+		void	searchQuery( const QString& query );
+		
 	public slots:
 		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
 		

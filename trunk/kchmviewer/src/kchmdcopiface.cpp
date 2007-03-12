@@ -23,6 +23,8 @@
 #include "kchmdcopiface.moc"
 
 #include "kchmmainwindow.h"
+#include "kchmsearchwindow.h"
+
 
 KCHMDCOPIface::KCHMDCOPIface(QObject *parent, const char *name)
  : QObject(parent, name), DCOPObject( "KCHMDCOPIface" )
@@ -74,5 +76,11 @@ void KCHMDCOPIface::guiSearchQuery( const QString & query )
 
 QStringList KCHMDCOPIface::searchQuery( const QString & query )
 {
+	QStringList results;
+	
+	if ( ::mainWindow->searchWindow()->searchQuery( query, &results ) )
+		return results;
+	else
+		return QStringList();
 }
 

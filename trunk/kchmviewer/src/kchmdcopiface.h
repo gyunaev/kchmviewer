@@ -38,7 +38,7 @@ class KCHMDCOPIface : public QObject, public DCOPObject
 		
 	k_dcop:
 		//! Loads a CHM file \a filename , and opens the URL \a url. Use URL "/" to open default homepage
-		void		loadHelpFile( const QString& filename, const QString& page2open );
+		void		loadHelpFile( const QString& filename, const QString& url );
 	
 		//! Opens a specific \a url inside the loaded CHM file
 		void		openPage( const QString& url );

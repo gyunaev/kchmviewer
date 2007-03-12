@@ -42,7 +42,7 @@ class KCHMSearchEngine : public QObject
 		~KCHMSearchEngine();
 		
 		bool	loadOrGenerateIndex();
-		bool	searchQuery ( const QString& query, QValueVector< LCHMSearchResult > * results, unsigned int limit = 100 );
+		bool	searchQuery ( const QString& query, QStringList * results, unsigned int limit = 100 );
 		
 		
 	private slots:
@@ -51,7 +51,6 @@ class KCHMSearchEngine : public QObject
 
 	private:
 		void	processEvents();
-//		void	loadIndexFile();
 
 		// Used during the index generation
 		QProgressDialog			*	m_progressDlg;

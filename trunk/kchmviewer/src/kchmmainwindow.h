@@ -72,7 +72,8 @@ class KCHMMainWindow : public KQMainWindow
 		KCHMContentsWindow  * contentsWindow() const { return m_contentsWindow; }
 		KCHMSettings   * currentSettings() const { return m_currentSettings; }
 		KCHMViewWindowMgr*	viewWindowMgr() const { return m_viewWindowMgr; }
-		KCHMNavToolbar * navigationToolbar() const { return m_navToolbar; };
+		KCHMNavToolbar * navigationToolbar() const { return m_navToolbar; }
+		KCHMSearchWindow * searchWindow() const { return m_searchWindow; }
 		
 		void		showInStatusBar (const QString& text)	{ statusBar()->message( text, 2000 ); }
 		void		setTextEncoding (const LCHMTextEncoding * enc);

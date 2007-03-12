@@ -193,10 +193,8 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		else
 			m_tabIndexPage = -1;
 
-		if ( m_chmFile->hasSearchTable() || appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
-			m_tabSearchPage = number_of_pages++;
-		else
-			m_tabSearchPage = -1;
+		// We always show search
+		m_tabSearchPage = number_of_pages++;
 
 		m_tabBookmarkPage = number_of_pages;
 
@@ -360,6 +358,9 @@ void KCHMMainWindow::slotLinkClicked ( const QString & link, bool& follow_link )
 bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 {
 	QString p1, p2, url = srcurl;
+	
+	if ( url == "/" )
+		url = m_chmFile->homeUrl();
 
 	if ( LCHMUrlFactory::isRemoteURL (url, p1) )
 	{
@@ -1218,7 +1219,7 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 		if ( event->m_args.size() != 1 )
 			qFatal( "handleUserEvent: event searchQuery must receive 1 arg" );
 		
-		if ( m_tabIndexPage != -1 )
+		if ( m_tabIndexPage == -1 )
 			return false;
 
 		slotActivateIndexTab();
@@ -1234,7 +1235,7 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 			return false;
 
 		slotActivateSearchTab();
-		m_searchWindow->searchQuery( event->m_args[0] );
+		m_searchWindow->execSearchQueryInGui( event->m_args[0] );
 		return true;
 	}
 	else

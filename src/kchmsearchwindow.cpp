@@ -104,30 +104,27 @@ void KCHMSearchWindow::invalidate( )
 
 void KCHMSearchWindow::onReturnPressed( )
 {
-	//if ( appConfig.m_useSearchEngine 
-	if ( !m_searchEngine )
-		initSearchEngine();
-	
-	QValueVector<LCHMSearchResult> results;
+	QStringList results;
 	QString text = m_searchQuery->lineEdit()->text();
 	
 	if ( text.isEmpty() )
 		return;
-
-	KCHMShowWaitCursor waitcursor;
+	
 	m_searchList->clear();
 	
-//	if ( ::mainWindow->chmFile()->searchQuery( text, &results ) )
-	if ( m_searchEngine->searchQuery( text, &results ) )
+	if ( searchQuery( text, &results ) )
 	{
 		if ( !results.empty() )
 		{
 			for ( unsigned int i = 0; i < results.size(); i++ )
 			{
-				new KCMSearchTreeViewItem (m_searchList, results[i].title, results[i].url, results[i].url);
+				new KCMSearchTreeViewItem ( m_searchList, 
+											::mainWindow->chmFile()->getTopicByUrl( results[i] ),
+										 	results[i],
+											results[i] );
 			}
 
-				::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" ) . arg(results.size()) );
+			::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" ) . arg(results.size()) );
 		}
 		else
 			::mainWindow->showInStatusBar( i18n( "Search returned no results") );
@@ -135,6 +132,7 @@ void KCHMSearchWindow::onReturnPressed( )
 	else
 		::mainWindow->showInStatusBar( i18n( "Search failed") );
 }
+
 
 void KCHMSearchWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int)
 {
@@ -204,42 +202,42 @@ bool KCHMSearchWindow::initSearchEngine( )
 	return true;
 }
 
-void KCHMSearchWindow::searchQuery( const QString & query )
+
+void KCHMSearchWindow::execSearchQueryInGui( const QString & query )
 {
 	m_searchQuery->lineEdit()->setText( query );
 	onReturnPressed();
 }
 
-QStringList KCHMSearchWindow::execSearchQuery( const QString & query )
+
+bool KCHMSearchWindow::searchQuery( const QString & query, QStringList * results )
 {
-	//if ( appConfig.m_useSearchEngine 
-	if ( !m_searchEngine )
-		initSearchEngine();
+	if ( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
+	{
+		if ( !m_searchEngine && !initSearchEngine() )
+			return false;
+	}
+	else if ( !::mainWindow->chmFile()->hasSearchTable() )
+	{
+		QMessageBox::information ( this, 
+					i18n( "Search is not available" ),
+					i18n( "<p>The search feature is not avaiable for this chm file."
+					"<p>The old search engine depends on indexes present in chm files itself. Not every chm file has an index; it is set up"
+					" during chm file creation. Therefore if the search index was not created during chm file creation, this makes search "
+					"impossible.<p>Solution: use new search engine (menu Settings/Advanced), which generates its own index.") );
+		return false;
+	}
 	
-	QValueVector<LCHMSearchResult> results;
-	QString text = m_searchQuery->lineEdit()->text();
-	
-	if ( text.isEmpty() )
-		return;
+	if ( query.isEmpty() )
+		return false;
 
 	KCHMShowWaitCursor waitcursor;
-	m_searchList->clear();
+	bool result;
 	
-//	if ( ::mainWindow->chmFile()->searchQuery( text, &results ) )
-	if ( m_searchEngine->searchQuery( text, &results ) )
-	{
-		if ( !results.empty() )
-		{
-			for ( unsigned int i = 0; i < results.size(); i++ )
-			{
-				new KCMSearchTreeViewItem (m_searchList, results[i].title, results[i].url, results[i].url);
-			}
-
-				::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" ) . arg(results.size()) );
-		}
-		else
-			::mainWindow->showInStatusBar( i18n( "Search returned no results") );
-	}
+	if ( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
+		result = m_searchEngine->searchQuery( query, results );
 	else
-	::mainWindow->showInStatusBar( i18n( "Search failed") );
+		result = ::mainWindow->chmFile()->searchQuery( query, results );
+
+	return result;
 }

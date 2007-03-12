@@ -187,7 +187,7 @@ class SearchDataKeeper
 };
 
 
-bool KCHMSearchEngine::searchQuery( const QString & query, QValueVector< LCHMSearchResult > * results, unsigned int limit )
+bool KCHMSearchEngine::searchQuery( const QString & query, QStringList * results, unsigned int limit )
 {
 	// Characters which split the words. We need to make them separate tokens
 	QString splitChars = m_Index->getCharsSplit();
@@ -251,13 +251,7 @@ bool KCHMSearchEngine::searchQuery( const QString & query, QValueVector< LCHMSea
 	QStringList foundDocs = m_Index->query( keeper.terms, keeper.phrases, keeper.phrasewords );
 	
 	for ( QStringList::iterator it = foundDocs.begin(); it != foundDocs.end() && limit > 0; ++it, limit-- )
-	{
-		LCHMSearchResult res;
-		
-		res.url = *it;
-		res.title = ::mainWindow->chmFile()->getTopicByUrl( res.url );
-		results->push_back( res );
-	}
+		results->push_back( *it );
 
 	return true;
 }

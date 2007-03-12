@@ -27,6 +27,9 @@
 
 #if defined (USE_KDE)
 	#include <kaboutdata.h>
+	#include <dcopclient.h>
+	
+	#include "kchmdcopiface.h"
 #endif
 
 KCHMMainWindow * mainWindow;
@@ -67,6 +70,19 @@ int main( int argc, char ** argv )
 	appConfig.load();
 	app.installEventFilter( &gKeyEventFilter );
 	
+#if defined(USE_KDE)	
+	// DCOP stuff
+	KCHMDCOPIface iface;
+	
+	DCOPClient *client = kapp->dcopClient();
+	
+	if ( !client->attach() )
+		qWarning("DCOP attach failed");
+	
+	//QCString realAppId = client->registerAs( kapp->name() );
+	QCString realAppId = client->registerAs( "kchmviewer" );
+#endif
+						
 	mainWindow = new KCHMMainWindow();
 	mainWindow->show();
 	

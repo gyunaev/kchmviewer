@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Copyright (C) 2004-2007 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Portions Copyright (C) 2003  Razvan Cojocaru <razvanco@gmx.net>       *  
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
@@ -1000,7 +1001,11 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 			//qDebug ("<param>: name '%s', value '%s'", pname.ascii(), pvalue.ascii());
 
 			if ( pname == "name" )
-				entry.name = pvalue;
+			{
+				// Some help files contain duplicate names, where the second name is empty. Work it around by keeping the first one
+				if ( !pvalue.isEmpty() )
+					entry.name = pvalue;
+			}
 			else if ( pname == "local" )
 			{
 				// Check for URL duplication

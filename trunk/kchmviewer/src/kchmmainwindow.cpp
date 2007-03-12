@@ -57,16 +57,6 @@
 
 #include "kchmmainwindow.moc"
 
-class KCHMUserEvent : public QEvent
-{
-	public:
-		KCHMUserEvent( const QString& action, const QStringList& args = QStringList()) 
-			: QEvent( QEvent::User ), m_action(action), m_args(args) {};
-	
-		QString			m_action;
-		QStringList		m_args;
-};
-
 
 KCHMMainWindow::KCHMMainWindow()
     : KQMainWindow ( 0, "KCHMMainWindow", WDestructiveClose )
@@ -1215,6 +1205,13 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 		QString openurl = event->m_args.size() > 1 ? event->m_args[1] : "/";
 				
 		return loadChmFile( chmfile, false ) && openPage( openurl );
+	}
+	else if ( event->m_action == "openPage" )
+	{
+		if ( event->m_args.size() != 1 )
+			qFatal("handleUserEvent: event openPage must receive 1 arg");
+		
+		return openPage( event->m_args[0] );
 	}
 	else if ( event->m_action == "findInIndex" )
 	{

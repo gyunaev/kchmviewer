@@ -209,3 +209,37 @@ void KCHMSearchWindow::searchQuery( const QString & query )
 	m_searchQuery->lineEdit()->setText( query );
 	onReturnPressed();
 }
+
+QStringList KCHMSearchWindow::execSearchQuery( const QString & query )
+{
+	//if ( appConfig.m_useSearchEngine 
+	if ( !m_searchEngine )
+		initSearchEngine();
+	
+	QValueVector<LCHMSearchResult> results;
+	QString text = m_searchQuery->lineEdit()->text();
+	
+	if ( text.isEmpty() )
+		return;
+
+	KCHMShowWaitCursor waitcursor;
+	m_searchList->clear();
+	
+//	if ( ::mainWindow->chmFile()->searchQuery( text, &results ) )
+	if ( m_searchEngine->searchQuery( text, &results ) )
+	{
+		if ( !results.empty() )
+		{
+			for ( unsigned int i = 0; i < results.size(); i++ )
+			{
+				new KCMSearchTreeViewItem (m_searchList, results[i].title, results[i].url, results[i].url);
+			}
+
+				::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" ) . arg(results.size()) );
+		}
+		else
+			::mainWindow->showInStatusBar( i18n( "Search returned no results") );
+	}
+	else
+	::mainWindow->showInStatusBar( i18n( "Search failed") );
+}

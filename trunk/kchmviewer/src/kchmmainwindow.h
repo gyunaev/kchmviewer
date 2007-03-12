@@ -43,8 +43,17 @@ static const unsigned int OPF_NEW_TAB 		= 1 << 2;
 //! Open the page in a new tab in background
 static const unsigned int OPF_BACKGROUND 	= 1 << 3;
 
+//! Those events could be sent to main window to do useful things. See handleUserEvents()
+class KCHMUserEvent : public QEvent
+{
+	public:
+		KCHMUserEvent( const QString& action, const QStringList& args = QStringList()) 
+			: QEvent( QEvent::User ), m_action(action), m_args(args) {};
+	
+		QString			m_action;
+		QStringList		m_args;
+};
 
-class KCHMUserEvent;
 
 class KCHMMainWindow : public KQMainWindow
 {

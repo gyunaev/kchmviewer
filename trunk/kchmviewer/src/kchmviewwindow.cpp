@@ -28,6 +28,7 @@
 #include "libchmfile.h"
 #include "libchmurlfactory.h"
 
+#include "kchmconfig.h"
 #include "kchmviewwindow.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindowmgr.h"
@@ -99,11 +100,19 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 
 	if ( !origurl )
 		return true;
-//FIXME: remote url
+
 	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
 	// or will be loaded (for kio slave). We care only about the path component.
 	if ( LCHMUrlFactory::isNewChmURL( newurl, chmfile, page ) )
+	{
+		// If a new chm file is opened here, and we do not use KCHMLPart, we better abort
+		if ( chmfile != ::mainWindow->getOpenedFileName() && appConfig.m_kdeUseQTextBrowser )
+			qFatal("KCHMViewWindow::openUrl(): opened new chm file %s while current is %s",
+				   chmfile.ascii(), ::mainWindow->getOpenedFileName().ascii() );
+
+		// It is OK to have a new file in chm for KHTMLPart
 		newurl = page;
+	}
 
 	makeURLabsolute (newurl);
 	handleStartPageAsImage( newurl );

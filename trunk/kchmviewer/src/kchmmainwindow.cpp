@@ -29,6 +29,7 @@
 #include "kde-qt.h"
 
 #include <qaccel.h>
+#include <qevent.h>
 
 #include "libchmfile.h"
 #include "libchmfileimpl.h"
@@ -55,6 +56,16 @@
 #endif
 
 #include "kchmmainwindow.moc"
+
+class KCHMUserEvent : public QEvent
+{
+	public:
+		KCHMUserEvent( const QString& action, const QStringList& args = QStringList()) 
+			: QEvent( QEvent::User ), m_action(action), m_args(args) {};
+	
+		QString			m_action;
+		QStringList		m_args;
+};
 
 
 KCHMMainWindow::KCHMMainWindow()
@@ -413,11 +424,14 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 		// Because chm file always contain relative link, and current filename is not changed,
 		// we need to form a new path
 		QFileInfo qfi( m_chmFilename );
-
-		if ( !loadChmFile ( qfi.dirPath(true) + "/" + p1, false ) )
-			return false;
-
-		url = p2;
+		QString newfilename = qfi.dirPath(true) + "/" + p1;
+		
+		QStringList event_args;
+		event_args.push_back( newfilename );
+		event_args.push_back( p2 ); // url
+		
+		qApp->postEvent( this, new KCHMUserEvent( "loadAndOpen", event_args ) );
+		return false;
 	}
 	
 	KCHMViewWindow * vwnd = currentBrowser();
@@ -1155,6 +1169,36 @@ void KCHMMainWindow::slotOnTreeDoubleClicked( QListViewItem * item, const QPoint
 	
 	item->setOpen( !item->isOpen() );
 	item->repaint();
+}
+
+bool KCHMMainWindow::event( QEvent * e )
+{
+	if ( e->type() == QEvent::User )
+		return handleUserEvent( (KCHMUserEvent*) e );
+	
+	return QWidget::event( e );
+}
+
+bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
+{
+	if ( event->m_action == "loadAndOpen" )
+	{
+		if ( event->m_args.size() != 1 && event->m_args.size() != 2 )
+			qFatal("handleUserEvent: event loadAndOpen must receive 1 or 2 args");
+		
+		QString chmfile = event->m_args[0];
+		QString openurl = event->m_args.size() > 1 ? event->m_args[1] : "/";
+				
+		return loadChmFile( chmfile, false ) && openPage( openurl );
+	}
+	else if ( event->m_action == "findInIndex" )
+	{
+	}
+	else if ( event->m_action == "searchQuery" )
+	{
+	}
+	
+	return false;
 }
 
 

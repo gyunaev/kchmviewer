@@ -44,6 +44,8 @@ static const unsigned int OPF_NEW_TAB 		= 1 << 2;
 static const unsigned int OPF_BACKGROUND 	= 1 << 3;
 
 
+class KCHMUserEvent;
+
 class KCHMMainWindow : public KQMainWindow
 {
 		Q_OBJECT
@@ -120,6 +122,10 @@ class KCHMMainWindow : public KQMainWindow
 		void	showOrHideContextWindow( int tabindex );
 		void	showOrHideIndexWindow( int tabindex );
 		void	showOrHideSearchWindow( int tabindex );
+		
+		// User events
+		bool	event ( QEvent * e );
+		bool	handleUserEvent( const KCHMUserEvent * event );
 		
 		void	locateInContentTree( const QString& url );
 		

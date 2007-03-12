@@ -21,7 +21,6 @@
 
 #include "kde-qt.h"
 
-//TODO: handle execute signal
 #if defined (USE_KDE)
 KQListView::KQListView( QWidget * parent, const char * name, int )
 	: KListView (parent, name)

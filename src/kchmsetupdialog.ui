@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>654</width>
-            <height>334</height>
+            <height>343</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -493,6 +493,73 @@
                             </widget>
                         </vbox>
                     </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>groupBox6</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Search engine to use</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton" row="1" column="0">
+                                <property name="name">
+									<cstring>m_useSearchEngineInternal</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="1">
+                                <property name="name">
+									<cstring>m_labelUseSearchEngineInternal</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>10</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Use the search based on internal CHM index. This engine cannot search for any symbols except underscode, does not support multibyte languages, and is not always available.</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignVCenter</set>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
+									<cstring>m_useSearchEngineNew</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_labelUseSearchEngineNew</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>10</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Use new kchmviewer internal  search engine (recommended). This engine indexes symbols, so it is possible to search for special symbols (like "C++"). All languages are supported. The index will be generated before the first search.</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>WordBreak|AlignVCenter</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
                 </vbox>
             </widget>
         </widget>
@@ -608,6 +675,34 @@
         <slot>setDisabled(bool)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>m_advViewSourceInternal</tabstop>
+    <tabstop>m_advViewSourceExternal</tabstop>
+    <tabstop>m_useSearchEngineNew</tabstop>
+    <tabstop>m_useSearchEngineInternal</tabstop>
+    <tabstop>tabWidget</tabstop>
+    <tabstop>m_radioOnBeginOpenDialog</tabstop>
+    <tabstop>m_radioOnBeginOpenLast</tabstop>
+    <tabstop>m_historySize</tabstop>
+    <tabstop>m_rememberHistoryInfo</tabstop>
+    <tabstop>m_radioExtLinkOpenAlways</tabstop>
+    <tabstop>m_radioExtLinkAsk</tabstop>
+    <tabstop>m_radioExtLinkOpenNever</tabstop>
+    <tabstop>m_radioNewChmOpenAlways</tabstop>
+    <tabstop>m_radioNewChmAsk</tabstop>
+    <tabstop>m_radioNewChmOpenNever</tabstop>
+    <tabstop>m_qtBrowserPath</tabstop>
+    <tabstop>m_radioUseQtextBrowser</tabstop>
+    <tabstop>m_radioUseKHTMLPart</tabstop>
+    <tabstop>m_enableJS</tabstop>
+    <tabstop>m_enablePlugins</tabstop>
+    <tabstop>m_enableJava</tabstop>
+    <tabstop>m_enableRefresh</tabstop>
+    <tabstop>m_advExternalProgramName</tabstop>
+    <tabstop>buttonHelp</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
 <slots>
     <slot>m_radioUseKHTMLPart_toggled( bool )</slot>
 </slots>

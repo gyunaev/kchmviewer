@@ -93,9 +93,6 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	new KCHMListItemTooltip( m_searchList );
 	m_contextMenu = 0;
 	m_searchEngine = 0;
-	
-	//FIXME! remove
-	appConfig.m_useSearchEngine = KCHMConfig::SEARCH_USE_MINE;
 }
 
 void KCHMSearchWindow::invalidate( )

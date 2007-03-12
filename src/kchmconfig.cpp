@@ -45,7 +45,7 @@ KCHMConfig::KCHMConfig()
 	m_onExternalLinkClick = ACTION_ASK_USER;
 	m_HistorySize = 10;
 	m_HistoryStoreExtra = true;
-	m_useSearchEngine = SEARCH_NOT_CHOSEN;
+	m_useSearchEngine = SEARCH_USE_MINE;
 	
 	m_QtBrowserPath = "viewurl-netscape.sh '%s'";
 	m_kdeUseQTextBrowser = false;
@@ -129,6 +129,8 @@ bool KCHMConfig::load()
 				m_advUseInternalEditor = value.toInt() ? true : false;
 			else if ( key == "advExternalEditorPath" )
 				m_advExternalEditorPath = value;
+			else if ( key == "useSearchEngine" )
+				m_useSearchEngine = (use_search_engine) value.toInt();
 			else
 				qWarning ("Unknown key=value pair: %s", line.ascii());
 		}
@@ -171,6 +173,7 @@ bool KCHMConfig::save( )
 	stream << "kdeEnableRefresh=" << m_kdeEnableRefresh << "\n";
 	stream << "advUseInternalEditor=" << m_advUseInternalEditor << "\n";
 	stream << "advExternalEditorPath=" << m_advExternalEditorPath << "\n";
+	stream << "useSearchEngine=" << m_useSearchEngine << "\n";
 	
 	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
 	

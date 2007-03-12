@@ -43,7 +43,6 @@ public:
 	
 	enum use_search_engine
 	{
-		SEARCH_NOT_CHOSEN,		
 		SEARCH_USE_CHM,
   		SEARCH_USE_MINE,
 	};

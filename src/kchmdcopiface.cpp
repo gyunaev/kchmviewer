@@ -22,6 +22,8 @@
 #include "kchmdcopiface.h"
 #include "kchmdcopiface.moc"
 
+#include "kchmmainwindow.h"
+
 KCHMDCOPIface::KCHMDCOPIface(QObject *parent, const char *name)
  : QObject(parent, name), DCOPObject( "KCHMDCOPIface" )
 {
@@ -33,27 +35,44 @@ KCHMDCOPIface::~KCHMDCOPIface()
 }
 
 
-bool KCHMDCOPIface::loadHelpFile( const QString & filename, const QString & page2open )
+void KCHMDCOPIface::loadHelpFile( const QString & filename, const QString & page2open )
 {
-	qDebug("loadHelpFile");
-	return false;
+	QStringList args;
+	
+	args.push_back( filename );
+	args.push_back( page2open );
+	
+	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "loadAndOpen", args ) );
 }
+
 
 void KCHMDCOPIface::openPage( const QString & page2open )
 {
-}
-
-void KCHMDCOPIface::findInIndex( const QString & word )
-{
-}
-
-void KCHMDCOPIface::searchQuery( const QString & query )
-{
-}
-
-QStringList KCHMDCOPIface::getSearchResults( )
-{
-	QStringList results;
+	QStringList args;
 	
-	return results;
+	args.push_back( page2open );
+	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "openPage", args ) );
 }
+
+
+void KCHMDCOPIface::guiFindInIndex( const QString & word )
+{
+	QStringList args;
+	
+	args.push_back( word );
+	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "findInIndex", args ) );
+}
+
+
+void KCHMDCOPIface::guiSearchQuery( const QString & query )
+{
+	QStringList args;
+	
+	args.push_back( query );
+	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "searchQuery", args ) );
+}
+
+QStringList KCHMDCOPIface::searchQuery( const QString & query )
+{
+}
+

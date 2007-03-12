@@ -37,11 +37,22 @@ class KCHMDCOPIface : public QObject, public DCOPObject
 		~KCHMDCOPIface();
 		
 	k_dcop:
-		bool	loadHelpFile( const QString& filename, const QString& page2open );
-		void	openPage( const QString& page2open );
-		void	findInIndex( const QString& word );
-		void	searchQuery( const QString& query );
-		QStringList	getSearchResults();
+		//! Loads a CHM file \a filename , and opens the URL \a url. Use URL "/" to open default homepage
+		void		loadHelpFile( const QString& filename, const QString& page2open );
+	
+		//! Opens a specific \a url inside the loaded CHM file
+		void		openPage( const QString& url );
+		
+		//! Tries to find word in index, opening the index window and scrolling it there
+		void		guiFindInIndex( const QString& word );
+		
+		//! Executes a search in GUI. \a query contains the complete search query.
+		void		guiSearchQuery( const QString& query );
+		
+		//! Executes a search; GUI is not involved and user sees nothing.
+		//! \a query contains the complete search query.
+		//! Returns a list of URLs, or empty array if nothing os
+		QStringList	searchQuery( const QString& query );
 };
 
 #endif

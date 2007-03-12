@@ -37,6 +37,7 @@ class KCHMIndexWindow : public QWidget
 		KCHMIndexWindow ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
 	
 		void	invalidate();
+		void	search( const QString& index );
 		
 	public slots:
 		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );

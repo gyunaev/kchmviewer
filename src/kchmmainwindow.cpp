@@ -203,7 +203,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		else
 			m_tabIndexPage = -1;
 
-		if ( m_chmFile->hasSearchTable() )
+		if ( m_chmFile->hasSearchTable() || appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
 			m_tabSearchPage = number_of_pages++;
 		else
 			m_tabSearchPage = -1;
@@ -637,11 +637,10 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	
 	if ( args->isSet("shortautotestmode") )
 		do_autotest = m_useShortAutotest = true;
-/*
+
 	search_query = args->getOption ("search");
 	search_index = args->getOption ("sindex");
-	search_bookmark = args->getOption ("sbook");
-*/
+	
 	if ( args->count() > 0 )
 		filename = args->arg(0);
 #else
@@ -656,8 +655,6 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 			search_query = qApp->argv()[++i];
 		else if ( !strcmp (qApp->argv()[i], "--sindex") )
 			search_index = qApp->argv()[++i];
-		else if ( !strcmp (qApp->argv()[i], "--sbook") )
-			search_bookmark = qApp->argv()[++i];
 		else if ( !strcmp (qApp->argv()[i], "-h") || !strcmp (qApp->argv()[i], "--help") )
 		{
 			fprintf (stderr, "Usage: %s [chmfile]\n", qApp->argv()[0]);
@@ -672,14 +669,20 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	{
 		if ( !loadChmFile( QString::fromLocal8Bit( filename )) )
 			return false;
-/*
-		if ( search_index.isEmpty() )
-			
-			
-			search_query = args->getOption ("search");
+
+		if ( !search_index.isEmpty() )
+		{
+			QStringList event_args;
+			event_args.push_back( search_index );
+			qApp->postEvent( this, new KCHMUserEvent( "findInIndex", event_args ) );
+		}
 		
-		search_bookmark = args->getOption ("sbook");
-*/
+		if ( !search_query.isEmpty() )	
+		{
+			QStringList event_args;
+			event_args.push_back( search_query );
+			qApp->postEvent( this, new KCHMUserEvent( "searchQuery", event_args ) );
+		}
 		
 		if ( do_autotest )
 		{
@@ -1193,10 +1196,30 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 	}
 	else if ( event->m_action == "findInIndex" )
 	{
+		if ( event->m_args.size() != 1 )
+			qFatal( "handleUserEvent: event searchQuery must receive 1 arg" );
+		
+		if ( m_tabIndexPage != -1 )
+			return false;
+
+		slotActivateIndexTab();
+		m_indexWindow->search( event->m_args[0] );
+		return true;
 	}
 	else if ( event->m_action == "searchQuery" )
 	{
+		if ( event->m_args.size() != 1 )
+			qFatal( "handleUserEvent: event searchQuery must receive 1 arg" );
+		
+		if ( m_tabSearchPage == -1 )
+			return false;
+
+		slotActivateSearchTab();
+		m_searchWindow->searchQuery( event->m_args[0] );
+		return true;
 	}
+	else
+		qWarning( "Unknown user event received: %s", event->m_action.ascii() );
 	
 	return false;
 }

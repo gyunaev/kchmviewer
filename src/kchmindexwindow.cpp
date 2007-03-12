@@ -162,3 +162,18 @@ void KCHMIndexWindow::refillIndex( )
 	
 	kchmFillListViewWithParsedData( m_indexList, data, 0 );
 }
+
+void KCHMIndexWindow::search( const QString & index )
+{
+	if ( !::mainWindow->chmFile() )
+		return;
+
+	if ( !m_indexListFilled )
+	{
+		m_indexListFilled = true;
+		refillIndex();
+	}
+
+	m_indexFinder->setText( index );
+	onTextChanged( index );
+}

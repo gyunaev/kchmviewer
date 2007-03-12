@@ -94,6 +94,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_contextMenu = 0;
 	m_searchEngine = 0;
 	
+	//FIXME! remove
 	appConfig.m_useSearchEngine = KCHMConfig::SEARCH_USE_MINE;
 }
 
@@ -204,4 +205,10 @@ bool KCHMSearchWindow::initSearchEngine( )
 	}
 	
 	return true;
+}
+
+void KCHMSearchWindow::searchQuery( const QString & query )
+{
+	m_searchQuery->lineEdit()->setText( query );
+	onReturnPressed();
 }

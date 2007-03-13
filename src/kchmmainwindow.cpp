@@ -608,7 +608,11 @@ void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 {
 	// Save the settings if we have something opened
 	if ( m_chmFile )
+	{
 		closeChmFile( );
+		delete m_chmFile;
+		m_chmFile = 0;
+	}
 
 	QMainWindow::closeEvent ( e );
 }

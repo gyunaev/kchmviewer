@@ -55,7 +55,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	m_searchQuery->setMaxCount (10);
 	m_searchQuery->setSizePolicy ( QSizePolicy ( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 	
-	QPushButton * searchButton = new QPushButton ( i18n("Button which starts Search; must be small!", "Go"), this);
+	QPushButton * searchButton = new QPushButton ( i18n("Go"), this);
 	searchButton->setSizePolicy ( QSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 	
 	QHBoxLayout * hlayout = new QHBoxLayout ( layout );

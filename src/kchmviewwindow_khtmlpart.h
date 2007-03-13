@@ -26,6 +26,8 @@
 
 #include "kchmviewwindow.h"
 #include "kchmsourcefactory.h"
+#include "libchmtextencoding.h"
+
 
 /**
 @author Georgy Yunaev

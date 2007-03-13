@@ -30,7 +30,7 @@
 #include "kchmviewwindow_qtextbrowser.h"
 
 #if defined (USE_KDE)
-	#include "kchmviewwindow_khtmlpart.h"
+	#include "kde/kchmviewwindow_khtmlpart.h"
 #endif
 
 

@@ -545,7 +545,6 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 
 #if defined(USE_KDE)
 	QPopupMenu *help = helpMenu( m_aboutDlgMenuText );
-	//FIXME: connect what's this action
 #else
     KQPopupMenu * help = new KQPopupMenu( this );
 	help->insertItem( i18n( "&About"), this, SLOT( slotAboutMenuItemActivated() ), Key_F1 );
@@ -1295,6 +1294,5 @@ void KCHMMainWindow::runAutoTest()
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
 
-//TODO: KDE: dcop
-//TODO: KDE: xmpgui
+//TODO: KDE: xmlgui
 //TODO: Search result highlighting

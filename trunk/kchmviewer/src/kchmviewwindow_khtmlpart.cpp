@@ -19,17 +19,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <qclipboard.h>
+
+#include <khtmlview.h>
+#include <kfinddialog.h>
+
 #include "kde-qt.h"
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
 #include "kchmviewwindow_khtmlpart.h"
 
-#if defined (USE_KDE)
+#include "kchmviewwindow_khtmlpart.moc"
 
-#include <qclipboard.h>
-
-#include <khtmlview.h>
-#include <kfinddialog.h>
 
 QWidget * KCHMViewWindow_KHTMLPart::getQWidget()
 {
@@ -160,9 +161,3 @@ void  KCHMViewWindow_KHTMLPart::onPopupMenu ( const QString &url, const QPoint &
 	menu->exec( point );
 }
 
-
-#include "kchmviewwindow_khtmlpart.moc"
-
-#endif /* USE_KDE */
-
-//TODO: KDE: about box and "About KDE"

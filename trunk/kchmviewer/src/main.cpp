@@ -29,7 +29,7 @@
 	#include <kaboutdata.h>
 	#include <dcopclient.h>
 	
-	#include "kchmdcopiface.h"
+	#include "kde/kchmdcopiface.h"
 #endif
 
 KCHMMainWindow * mainWindow;

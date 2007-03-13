@@ -42,7 +42,8 @@ class KCHMSettings
 		bool	saveSettings ( );
 		void 	removeSettings ( const QString& filename );
 		
-		QString	getSettingsFilename() const {	return m_currentsettingsname; }
+		QString	searchIndexDictFilename() const	{ return m_searchDictFile; }
+		QString	searchIndexDocFilename() const	{ return m_searchDocFile; }
 		
 		class SavedBookmark
 		{
@@ -81,12 +82,13 @@ class KCHMSettings
 		viewindow_saved_settings_t	m_viewwindows;
 	
 	private:
-		QString  getSettingsFilename ( const QString& filename );
+		void		getFilenames(const QString & helpfilename, QString * settingsfile, QString * dictfile, QString * doclistfile );
 		
-		// params of current file
-		QString						m_currentsettingsname;
-		unsigned int				m_currentfiledate;
 		unsigned int				m_currentfilesize;
+		unsigned int				m_currentfiledate;
+		QString						m_settingsFile;
+		QString						m_searchDictFile;
+		QString						m_searchDocFile;
 };
 
 #endif

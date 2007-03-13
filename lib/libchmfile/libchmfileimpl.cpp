@@ -1121,23 +1121,6 @@ bool LCHMFileImpl::guessTextEncoding( )
 {
 	const LCHMTextEncoding * enc = 0;
 
-/*
-	* Skip encoding by font family; detect encoding by LCID seems to be more reliable
-	// First try 'by font'
-	int i, charset;
-		
-	if ( !m_font.isEmpty() )
-	{
-	if ( (i = m_font.findRev (',')) != -1
-	&& (charset = m_font.mid (i+1).toUInt()) != 0 )
-	enc = KCHMTextEncoding::lookupByWinCharset(charset);
-}
-
-	// The next step - detect by LCID
-	if ( !enc && m_detectedLCID )
-	enc = KCHMTextEncoding::lookupByLCID (m_detectedLCID);
-*/
-
 	if ( !m_detectedLCID || (enc = lookupByLCID (m_detectedLCID)) == 0 )
 		qFatal ("Could not detect text encoding by LCID");
 	
@@ -1195,46 +1178,6 @@ bool LCHMFileImpl::changeFileEncoding( const char *qtencoding  )
 
 void LCHMFileImpl::fillTopicsUrlMap()
 {
-	/*
-	unsigned char buf[COMMON_BUF_LEN];
-	
-	if ( !m_lookupTablesValid )
-		return;
-
-	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
-	{
-		if ( RetrieveObject ( &m_chmTOPICS, buf, i, TOPICS_ENTRY_LEN ) == 0 )
-			return;
-
-		u_int32_t off_title = get_int32_le( (u_int32_t *)(buf + 4) );
-		u_int32_t off_url = get_int32_le( (u_int32_t *)(buf + 8) );
-
-		QString topic, url;
-
-		if ( RetrieveObject ( &m_chmURLTBL, buf, off_url, URLTBL_ENTRY_LEN ) == 0 )
-			return;
-
-		off_url = get_int32_le( (u_int32_t *)(buf + 8) );
-
-		if ( RetrieveObject ( &m_chmURLSTR, buf, off_url + 8, sizeof(buf) - 1 ) == 0 )
-			return;
-
-		buf[sizeof(buf) - 1] = '\0';
-		url = LCHMUrlFactory::makeURLabsoluteIfNeeded ((const char*)buf);
-
-		if ( RetrieveObject ( &m_chmSTRINGS, buf, off_title, sizeof(buf) - 1 ) != 0 )
-		{
-			buf[sizeof(buf) - 1] = '\0';
-			topic = encodeWithCurrentCodec ((const char*)buf);
-		}
-		else
-			topic = "Untitled";
-
-		m_url2topics[url] = topic;
-	}
-	qDebug("total: %d", m_url2topics.size());
-	*/
-	
 	if ( !m_lookupTablesValid )
 		return;
 
@@ -1260,4 +1203,16 @@ void LCHMFileImpl::fillTopicsUrlMap()
 		else
 			m_url2topics[url] = "Untitled";
 	}
+}
+
+
+bool LCHMFileImpl::getFileSize(unsigned int * size, const QString & url)
+{
+	chmUnitInfo ui;
+
+	if( !ResolveObject( url, &ui ) )
+		return false;
+
+	*size = ui.length;
+	return true;
 }

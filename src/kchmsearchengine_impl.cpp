@@ -194,6 +194,9 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 	{
 		QChar ch = text[j];
 		
+		if ( (j % 20000) == 0 )
+			qApp->processEvents( QEventLoop::ExcludeUserInput );
+		
 		if ( state == STATE_IN_HTML_TAG )
 		{
 			// We are inside HTML tag.

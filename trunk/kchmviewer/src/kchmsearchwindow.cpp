@@ -100,6 +100,9 @@ void KCHMSearchWindow::invalidate( )
 	m_searchList->clear();
 	m_searchQuery->clear();
 	m_searchQuery->lineEdit()->clear();
+	
+	delete m_searchEngine;
+	m_searchEngine = 0;
 }
 
 void KCHMSearchWindow::onReturnPressed( )

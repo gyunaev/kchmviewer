@@ -179,6 +179,7 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 		m_entityDecodeMap["ccedil"]	= encodeWithCurrentCodec ("\347"); // small c, cedilla
 		m_entityDecodeMap["eacute"]	= encodeWithCurrentCodec ("\351"); // small e, acute accent
 		m_entityDecodeMap["ecirc"]	= encodeWithCurrentCodec ("\352"); // small e, circumflex accent
+		m_entityDecodeMap["Scaron"]	= encodeWithCurrentCodec ("\352"); // small e, circumflex accent
 		m_entityDecodeMap["egrave"]	= encodeWithCurrentCodec ("\350"); // small e, grave accent
 		m_entityDecodeMap["eth"]	= encodeWithCurrentCodec ("\360"); // small eth, Icelandic
 		m_entityDecodeMap["euml"]	= encodeWithCurrentCodec ("\353"); // small e, dieresis or umlaut mark
@@ -201,7 +202,7 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 		m_entityDecodeMap["uuml"]	= encodeWithCurrentCodec ("\374"); // small u, dieresis or umlaut mark
 		m_entityDecodeMap["yacute"]	= encodeWithCurrentCodec ("\375"); // small y, acute accent
 		m_entityDecodeMap["yuml"]	= encodeWithCurrentCodec ("\377"); // small y, dieresis or umlaut mark
-
+	
 		m_entityDecodeMap["iexcl"]	= encodeWithCurrentCodec ("\241");
 		m_entityDecodeMap["cent"]	= encodeWithCurrentCodec ("\242");
 		m_entityDecodeMap["pound"]	= encodeWithCurrentCodec ("\243");
@@ -233,12 +234,28 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 		m_entityDecodeMap["iquest"]	= encodeWithCurrentCodec ("\277");
 		m_entityDecodeMap["times"]	= encodeWithCurrentCodec ("\327");
 		m_entityDecodeMap["divide"]	= encodeWithCurrentCodec ("\367");
-		m_entityDecodeMap["pi"]	= QChar((unsigned short) 960);
 				
 		m_entityDecodeMap["copy"]	= encodeWithCurrentCodec ("\251"); // copyright sign
 		m_entityDecodeMap["reg"]	= encodeWithCurrentCodec ("\256"); // registered sign
 		m_entityDecodeMap["nbsp"]	= encodeWithCurrentCodec ("\240"); // non breaking space
 
+		m_entityDecodeMap["fnof"]	= QChar((unsigned short) 402);
+				
+		m_entityDecodeMap["Delta"]	= QChar((unsigned short) 916);
+		m_entityDecodeMap["Pi"]	= QChar((unsigned short) 928);
+		m_entityDecodeMap["Sigma"]	= QChar((unsigned short) 931);
+		
+		m_entityDecodeMap["beta"]	= QChar((unsigned short) 946);
+		m_entityDecodeMap["gamma"]	= QChar((unsigned short) 947);
+		m_entityDecodeMap["delta"]	= QChar((unsigned short) 948);
+		m_entityDecodeMap["eta"]	= QChar((unsigned short) 951);
+		m_entityDecodeMap["theta"]	= QChar((unsigned short) 952);
+		m_entityDecodeMap["lambda"]	= QChar((unsigned short) 955);
+		m_entityDecodeMap["mu"]	= QChar((unsigned short) 956);
+		m_entityDecodeMap["nu"]	= QChar((unsigned short) 957);
+		m_entityDecodeMap["pi"]	= QChar((unsigned short) 960);
+		m_entityDecodeMap["rho"]	= QChar((unsigned short) 961);
+		
 		m_entityDecodeMap["lsquo"]	= QChar((unsigned short) 8216);
 		m_entityDecodeMap["rsquo"]	= QChar((unsigned short) 8217);
 		m_entityDecodeMap["rdquo"]	= QChar((unsigned short) 8221);
@@ -251,12 +268,30 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 		m_entityDecodeMap["hellip"]  = QChar((unsigned short) 8230);
 		m_entityDecodeMap["emsp"]  = QChar((unsigned short) 8195);
 		m_entityDecodeMap["rarr"]  = QChar((unsigned short) 8594);
-			
+		m_entityDecodeMap["rArr"]  = QChar((unsigned short) 8658);
+		m_entityDecodeMap["crarr"]  = QChar((unsigned short) 8629);
+		m_entityDecodeMap["le"]  = QChar((unsigned short) 8804);
+		m_entityDecodeMap["ge"]  = QChar((unsigned short) 8805);
+		m_entityDecodeMap["lte"]  = QChar((unsigned short) 8804); // wrong, but used somewhere
+		m_entityDecodeMap["gte"]  = QChar((unsigned short) 8805); // wrong, but used somewhere
+		m_entityDecodeMap["dagger"]  = QChar((unsigned short) 8224);
+		m_entityDecodeMap["Dagger"]  = QChar((unsigned short) 8225);
+		m_entityDecodeMap["euro"]  = QChar((unsigned short) 8364);
+		m_entityDecodeMap["asymp"]  = QChar((unsigned short) 8776);
+		m_entityDecodeMap["isin"]  = QChar((unsigned short) 8712);
+		m_entityDecodeMap["notin"]  = QChar((unsigned short) 8713);
+		m_entityDecodeMap["prod"]  = QChar((unsigned short) 8719);
+		m_entityDecodeMap["ne"]  = QChar((unsigned short) 8800);
+				
 		m_entityDecodeMap["amp"]	= "&";	// ampersand
 		m_entityDecodeMap["gt"] = ">";	// greater than
 		m_entityDecodeMap["lt"] = "<"; 	// less than
 		m_entityDecodeMap["quot"] = "\""; // double quote
 		m_entityDecodeMap["apos"] = "'"; 	// single quote
+		m_entityDecodeMap["frasl"]  = "/";
+		m_entityDecodeMap["minus"]  = "-";
+		m_entityDecodeMap["oplus"] = "+";
+		m_entityDecodeMap["Prime"] = "\"";
 	}
 
 	// If entity is an ASCII code like &#12349; - just decode it

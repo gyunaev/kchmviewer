@@ -834,7 +834,7 @@ QCString LCHMFileImpl::convertSearchWord( const QString & src )
 
 
 void LCHMFileImpl::getSearchResults( const LCHMSearchProgressResults& tempres, 
-									 QT34VECTOR<LCHMSearchResult> * results, 
+									 QStringList * results, 
 		  							 unsigned int limit_results )
 {
 	unsigned char combuf [COMMON_BUF_LEN];
@@ -847,16 +847,11 @@ void LCHMFileImpl::getSearchResults( const LCHMSearchProgressResults& tempres,
 		
 		urlsmap[tempres[i].urloff] = 1;
 		
-		LCHMSearchResult res;
-		
 		if ( RetrieveObject (&m_chmURLSTR, combuf, tempres[i].urloff + 8, COMMON_BUF_LEN - 1) == 0 )
 			continue;
 
 		combuf[COMMON_BUF_LEN - 1] = 0;
-		res.url = LCHMUrlFactory::makeURLabsoluteIfNeeded( (const char*) combuf );
-		res.title = getTopicByUrl( res.url );
-
-		results->push_back (res);
+		results->push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( (const char*) combuf ) );
 		
 		if ( --limit_results == 0 )
 			break;

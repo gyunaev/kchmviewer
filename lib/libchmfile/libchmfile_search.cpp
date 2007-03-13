@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Copyright (C) 2004-2007 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
@@ -173,7 +173,7 @@ inline bool searchPhrase( LCHMFileImpl * impl, const QStringList & phrase, LCHMS
 
 
 
-bool LCHMFile::searchQuery( const QString& inquery, QT34VECTOR< LCHMSearchResult > * searchresults, unsigned int limit )
+bool LCHMFile::searchQuery( const QString& inquery, QStringList * searchresults, unsigned int limit )
 {
 	QStringList words_must_exist, words_must_not_exist, words_highlight;
 	QT34VECTOR<QStringList> phrases_must_exist;

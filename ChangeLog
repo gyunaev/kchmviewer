@@ -1,3 +1,7 @@
+2007-03-09 tim <gyunaev@ulduzsoft.com>
+    - Added improved custom search engine.
+    - Added DCOP support for KDE version.
+    
 2007-03-08 tim <gyunaev@ulduzsoft.com>
     - KDE version now shows KDE about dialog
     - Fixed 'copy' in KDE browser

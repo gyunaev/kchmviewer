@@ -79,12 +79,12 @@ for target in $DIRS; do
 
 	# Should KIO slave be build?
 	if test "$TEST_KDE" = 1; then
-		if test ! -f "$target/kio-msits/kio_msits.la"; then
+		if test ! -f "$target/lib/kio-msits/kio_msits.la"; then
 			echo "Bad build - KIO slave is not built!"
 			exit 1;
 		fi
 	else
-		if test -f "$target/kio-msits/kio_msits.la"; then
+		if test -f "$target/lib/kio-msits/kio_msits.la"; then
 			echo "Bad build - KIO slave is built, but should not be!"
 			exit 1;
 		fi

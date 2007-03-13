@@ -39,7 +39,6 @@ if test "x$with_kde" = "xyes"; then
 	AC_PATH_KDE
 	AM_KDE_WITH_NLS
 	AC_DEFINE(USE_KDE, 1, [use KDE support])
-	EXTRA_SUBDIRS="$EXTRA_SUBDIRS kio-msits"
 fi
 
 if test "x$with_kde" != "xyes"; then
@@ -47,6 +46,8 @@ if test "x$with_kde" != "xyes"; then
 	AC_PREFIX_DEFAULT(${prefix:-/usr/local})
     kde_icondir="/usr/share/icons"
 fi
+
+AM_CONDITIONAL([AMC_USE_KDE], [test "x$with_kde" = "xyes"])
 
 dnl Checking whether to use built-in, or system-wide chmlib
 dnl First check for --with-builtin-chmlib configure option - no more checks needed
@@ -72,15 +73,15 @@ else
 	AC_DEFINE(USE_BUILTIN_CHMLIB, 0, [use builtin chmlib])
 fi
 
-AM_CONDITIONAL([BUILD_KIOMSITS], [test "$have_kde" = yes ])
-AM_CONDITIONAL([BUILD_CHMLIB], [test "$USE_BUILTIN_CHMLIB" = "1" ])
+AM_CONDITIONAL([AMC_BUILD_CHMLIB], [test "$USE_BUILTIN_CHMLIB" = "1"])
 
 # libchmfile is built unconditionally
-LIBCHMFILE_INCLUDES="-I\$(top_srcdir)/lib/libchmfile"
+LIBCHMFILE_INCLUDES="-I\$(top_srcdir)/lib/libchmfile -I\$(top_srcdir)/src"
 LIBCHMFILE_LIBS="\$(top_builddir)/lib/libchmfile/libchmfile.a"
 
 AC_SUBST([EXTRA_SUBDIRS])
 AC_SUBST(CHM_INCLUDES)
+AC_SUBST(USE_KDE)
 AC_SUBST(CHM_LIBS)
 AC_SUBST(LIBCHMFILE_INCLUDES)
 AC_SUBST(LIBCHMFILE_LIBS)

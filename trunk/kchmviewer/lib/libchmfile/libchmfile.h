@@ -3,10 +3,6 @@
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
- *   Copyright (C) 2003  Razvan Cojocaru <razvanco@gmx.net>                *
- *   XML-RPC/Context ID code contributed by Eamon Millman / PCI Geomatics  *
- *   <millman@pcigeomatics.com>                                            *
- *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
@@ -22,7 +18,6 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
 
 #ifndef INCLUDE_LIBCHMFILE_H
 #define INCLUDE_LIBCHMFILE_H
@@ -44,17 +39,6 @@
 #else
 	#define	QT34VECTOR	QValueVector
 #endif
-
-//! Contains a single search result. Usually the application works with a container of search results. See LCHMFile::searchQuery()
-typedef struct
-{
-	//! The page title search result found in
-	QString	title;
-	
-	//! The URL search result found in
-	QString	url;
-	
-} LCHMSearchResult;
 
 
 //! Contains different (non-standard) image types
@@ -260,7 +244,7 @@ class LCHMFile
 		/*!
 		 * \brief Execute a search query, return the results.
 		 * \param query A search query.
-		 * \param results An array to store search results.
+		 * \param results An array to store URLs where the query was found.
 		 * \return true if search was successful (this does not mean that it returned any results); 
 		 *         false otherwise.
 		 *
@@ -276,7 +260,7 @@ class LCHMFile
 		 *   If there is no prefix, the word considered as required.
 		 * \ingroup search
 		 */
-		bool	searchQuery ( const QString& query, QT34VECTOR< LCHMSearchResult > * results, unsigned int limit = 100 );
+		bool	searchQuery ( const QString& query, QStringList * results, unsigned int limit = 100 );
 		
 		//! Access to implementation
 		LCHMFileImpl * impl()	{ return m_impl; }

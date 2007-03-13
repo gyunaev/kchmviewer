@@ -1,7 +1,12 @@
-# don't warn about missing AUTHORS, NEWS, ChangeLog .. files
-AUTOMAKE_OPTIONS = foreign 1.4
+if AMC_USE_KDE
+SUBDIR_KIO = kio-msits
+endif
 
-SUBDIRS = $(EXTRA_SUBDIRS) libchmfile
+if AMC_BUILD_CHMLIB
+SUBDIR_CHMLIB = chmlib
+endif	
+
+SUBDIRS = $(SUBDIR_CHMLIB) $(SUBDIR_KIO) libchmfile 
 DIST_SUBDIRS = chmlib kio-msits libchmfile
 
 package-messages:

@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Copyright (C) 2004-2007 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Portions Copyright (C) 2003  Razvan Cojocaru <razvanco@gmx.net>       *  
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
@@ -91,7 +92,7 @@ class LCHMFileImpl
 		 *  The keys are the URLs and the values are the page titles.
 		 */
 		void getSearchResults( const LCHMSearchProgressResults& tempres, 
-							   QT34VECTOR< LCHMSearchResult > * results, 
+							   QStringList * results, 
 		  					   unsigned int limit_results = 500 );
 
 		//! Looks up fileName in the archive.

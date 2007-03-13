@@ -13,8 +13,10 @@
     <ignoreparts/>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
-    <versioncontrol/>
+    <description></description>
+    <versioncontrol></versioncontrol>
+    <projectname>kchmviewer</projectname>
+    <defaultencoding></defaultencoding>
   </general>
   <kdevautoproject>
     <general>
@@ -22,16 +24,21 @@
       <useconfiguration>debug</useconfiguration>
     </general>
     <run>
-      <mainprogram>src/kchmviewer</mainprogram>
+      <mainprogram>/home/tim/work/kchmviewer/build/src/kchmviewer</mainprogram>
       <terminal>false</terminal>
       <directoryradio>build</directoryradio>
       <runarguments>
         <kchmviewer/>
       </runarguments>
       <customdirectory>/</customdirectory>
-      <programargs/>
+      <programargs></programargs>
       <autocompile>true</autocompile>
       <envvars/>
+      <globaldebugarguments></globaldebugarguments>
+      <globalcwd>/home/tim/work/kchmviewer/build</globalcwd>
+      <useglobalprogram>false</useglobalprogram>
+      <autoinstall>false</autoinstall>
+      <autokdesu>false</autokdesu>
     </run>
     <configurations>
       <optimized>
@@ -91,7 +98,7 @@
       <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <prio>0</prio>
       <runmultiplejobs>false</runmultiplejobs>
     </make>
@@ -165,7 +172,7 @@
     <projectdoc>
       <docsystem>Doxygen Documentation Collection</docsystem>
       <docurl>kchmviewer.tag</docurl>
-      <usermanualurl/>
+      <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
   <substmap>
@@ -194,9 +201,24 @@
       <codeCompletionDelay>250</codeCompletionDelay>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
+      <showOnlyAccessibleItems>false</showOnlyAccessibleItems>
+      <completionBoxItemOrder>0</completionBoxItemOrder>
+      <howEvaluationContextMenu>true</howEvaluationContextMenu>
+      <showCommentWithArgumentHint>true</showCommentWithArgumentHint>
+      <statusBarTypeEvaluation>true</statusBarTypeEvaluation>
+      <namespaceAliases>std=_GLIBCXX_STD;__gnu_cxx=std</namespaceAliases>
+      <processPrimaryTypes>true</processPrimaryTypes>
+      <processFunctionArguments>false</processFunctionArguments>
+      <preProcessAllHeaders>true</preProcessAllHeaders>
+      <parseMissingHeaders>false</parseMissingHeaders>
+      <resolveIncludePaths>true</resolveIncludePaths>
+      <alwaysParseInBackground>true</alwaysParseInBackground>
+      <usePermanentCaching>true</usePermanentCaching>
+      <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
+      <includePaths>.;</includePaths>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -207,7 +229,17 @@
       <used>true</used>
       <version>3</version>
       <root>/usr/lib/qt3</root>
+      <includestyle>3</includestyle>
+      <designerintegration>EmbeddedKDevDesigner</designerintegration>
+      <qmake>/usr/lib/qt3/bin/qmake</qmake>
+      <designer>/usr/lib/qt3/bin/designer</designer>
+      <designerpluginpaths/>
     </qt>
+    <splitheadersource>
+      <enabled>false</enabled>
+      <synchronize>true</synchronize>
+      <orientation>Vertical</orientation>
+    </splitheadersource>
   </kdevcppsupport>
   <cppsupportpart>
     <filetemplates>
@@ -218,11 +250,11 @@
   <kdevdebugger>
     <general>
       <programargs/>
-      <gdbpath/>
-      <dbgshell/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <dbgshell></dbgshell>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>false</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>

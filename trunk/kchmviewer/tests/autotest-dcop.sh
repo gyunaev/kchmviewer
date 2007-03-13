@@ -26,7 +26,7 @@ if test $? != 0; then
 	continue
 fi
 
-res=`dcop $dname KCHMDCOPIface searchQuery this | head -n 1`
+res=`dcop $dname KCHMDCOPIface searchQuery 1 | head -n 1`
 if test $? != 0; then
 	echo "dcop Search failed" >> FATALLOG
 	kill $pid
@@ -34,7 +34,8 @@ if test $? != 0; then
 fi
 
 if test -z "$res"; then
-	echo "dcop search returned empty string" >> FATALLOG
+	echo "File $file: dcop search returned empty string" >> FATALLOG
+	kill $pid
 	continue
 fi
 

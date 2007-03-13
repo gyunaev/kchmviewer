@@ -224,25 +224,40 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 		{
 			// We are inside encoded HTML entity (like &nbsp;).
 			// Collect to parsedbuf everything until we see ;
-			if ( ch != ';' )
+			if ( ch.isLetterOrNumber() )
 			{
 				// get next character of this entity
 				parseentity.append( ch );
 				continue;
 			}
-			
+				
 			// The entity ended
 			state = STATE_OUTSIDE_TAGS;
+			
+			// Some shitty HTML does not terminate entities correctly. Screw it.			
+			if ( ch != ';' )
+			{
+				if ( parseentity.isEmpty() )
+				{
+					// straight '&' symbol. Add and continue.
+					parsedbuf += "&";
+				}
+				else
+					qWarning( "Index::parseDocument: incorrectly terminated HTML entity '&%s', ignoring", parseentity.ascii() );
+				
+				j--; // parse this character again, but in different state
+				continue;
+			}
 			
 			// Don't we have a space?
 			if ( parseentity.lower() != "nbsp" )
 			{
-				QString entity = ::mainWindow->chmFile()->impl()->decodeEntity( parseentity.lower() );
+				QString entity = ::mainWindow->chmFile()->impl()->decodeEntity( parseentity );
 			
 				if ( entity.isNull() )
 				{
-					qWarning( "Index::parseDocument: failed to decode entity &%s;", parsedbuf.ascii() );
-					parsedbuf = QString::null;
+					// decodeEntity() already printed error message
+					//qWarning( "Index::parseDocument: failed to decode entity &%s;", parsedbuf.ascii() );
 					continue;
 				}
 			

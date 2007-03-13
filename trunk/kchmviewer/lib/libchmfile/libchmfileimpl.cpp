@@ -166,7 +166,9 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 		m_entityDecodeMap["Ugrave"]	= encodeWithCurrentCodec ("\331"); // capital U, grave accent
 		m_entityDecodeMap["Uuml"]	= encodeWithCurrentCodec ("\334"); // capital U, dieresis or umlaut mark
 		m_entityDecodeMap["Yacute"]	= encodeWithCurrentCodec ("\335"); // capital Y, acute accent
-		
+		m_entityDecodeMap["OElig"]	= encodeWithCurrentCodec ("\338"); // capital Y, acute accent
+		m_entityDecodeMap["oelig"]	= encodeWithCurrentCodec ("\339"); // capital Y, acute accent
+						
 		m_entityDecodeMap["aacute"]	= encodeWithCurrentCodec ("\341"); // small a, acute accent
 		m_entityDecodeMap["acirc"]	= encodeWithCurrentCodec ("\342"); // small a, circumflex accent
 		m_entityDecodeMap["aelig"]	= encodeWithCurrentCodec ("\346"); // small ae diphthong (ligature)
@@ -231,17 +233,25 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 		m_entityDecodeMap["iquest"]	= encodeWithCurrentCodec ("\277");
 		m_entityDecodeMap["times"]	= encodeWithCurrentCodec ("\327");
 		m_entityDecodeMap["divide"]	= encodeWithCurrentCodec ("\367");
-
+		m_entityDecodeMap["pi"]	= QChar((unsigned short) 960);
+				
 		m_entityDecodeMap["copy"]	= encodeWithCurrentCodec ("\251"); // copyright sign
 		m_entityDecodeMap["reg"]	= encodeWithCurrentCodec ("\256"); // registered sign
 		m_entityDecodeMap["nbsp"]	= encodeWithCurrentCodec ("\240"); // non breaking space
 
+		m_entityDecodeMap["lsquo"]	= QChar((unsigned short) 8216);
 		m_entityDecodeMap["rsquo"]	= QChar((unsigned short) 8217);
 		m_entityDecodeMap["rdquo"]	= QChar((unsigned short) 8221);
+		m_entityDecodeMap["bdquo"]	= QChar((unsigned short) 8222);
 		m_entityDecodeMap["trade"]  = QChar((unsigned short) 8482);
 		m_entityDecodeMap["ldquo"]  = QChar((unsigned short) 8220);
+		m_entityDecodeMap["ndash"]  = QChar((unsigned short) 8211);
 		m_entityDecodeMap["mdash"]  = QChar((unsigned short) 8212);
-				
+		m_entityDecodeMap["bull"]  = QChar((unsigned short) 8226);
+		m_entityDecodeMap["hellip"]  = QChar((unsigned short) 8230);
+		m_entityDecodeMap["emsp"]  = QChar((unsigned short) 8195);
+		m_entityDecodeMap["rarr"]  = QChar((unsigned short) 8594);
+			
 		m_entityDecodeMap["amp"]	= "&";	// ampersand
 		m_entityDecodeMap["gt"] = ">";	// greater than
 		m_entityDecodeMap["lt"] = "<"; 	// less than

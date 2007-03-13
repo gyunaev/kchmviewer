@@ -118,6 +118,10 @@ bool KCHMSettings::loadSettings( const QString & filename )
 
 	QFileInfo finfo ( filename );
 
+	m_settingsFile = QString::null;
+	m_searchDictFile = QString::null;
+	m_searchDocFile = QString::null;
+	
 	if ( !finfo.size() )
 		return false;
 	

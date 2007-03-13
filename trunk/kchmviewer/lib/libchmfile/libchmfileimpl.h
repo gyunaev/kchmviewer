@@ -57,7 +57,8 @@ class LCHMFileImpl
 		
 		bool 		getFileContentAsString( QString * str, const QString& url, bool internal_encoding = false );
 		bool 		getFileContentAsBinary( QByteArray * data, const QString& url ) const;
-		
+		bool 		getFileSize( unsigned int * size, const QString& url );
+				
 		bool		enumerateFiles( QStringList * files );
 		QString		getTopicByUrl ( const QString& url )  const;
 		

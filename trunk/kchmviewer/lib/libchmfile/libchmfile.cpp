@@ -118,3 +118,8 @@ QString LCHMFile::normalizeUrl( const QString & url ) const
 {
 	return m_impl->normalizeUrl( url );
 }
+
+bool LCHMFile::getFileSize(unsigned int * size, const QString & url)
+{
+	return m_impl->getFileSize( size, url );
+}

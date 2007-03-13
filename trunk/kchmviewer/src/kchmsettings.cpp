@@ -121,12 +121,9 @@ bool KCHMSettings::loadSettings( const QString & filename )
 	if ( !finfo.size() )
 		return false;
 	
-	m_currentsettingsname = getSettingsFilename( filename );
+	getFilenames( filename, &m_settingsFile, &m_searchDictFile, &m_searchDocFile );
 	
-	if ( m_currentsettingsname.isEmpty() )
-		return false;
-
-	QFile file( m_currentsettingsname );
+	QFile file( m_settingsFile );
 
     if ( !file.open (IO_ReadOnly) )
 		return false; // it's ok, file may not exist
@@ -219,7 +216,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 
 bool KCHMSettings::saveSettings( )
 {
-	QFile file( m_currentsettingsname );
+	QFile file( m_settingsFile );
     if ( !file.open (IO_WriteOnly) )
 	{
 		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());
@@ -269,21 +266,25 @@ bool KCHMSettings::saveSettings( )
 	return true;
 }
 
-QString KCHMSettings::getSettingsFilename( const QString & filename )
-{
-	// Create a filename for help storage: name-size-lastmodified.kchmviewer
-	QFileInfo finfo ( filename );
-
-	if ( !finfo.size() )
-		return QString::null;
-		
-	return appConfig.m_datapath + "/" + finfo.baseName() + ".kchmviewer";
-}
 
 void KCHMSettings::removeSettings( const QString & filename )
 {
-	QString rmfile = getSettingsFilename ( filename );
+	QString settingsfile, dictfile, doclistfile;
 	
-	if ( !rmfile.isNull() )
-		QFile::remove ( getSettingsFilename ( filename ) );
+	getFilenames( filename, &settingsfile, &dictfile, &doclistfile );
+	
+	QFile::remove( settingsfile );
+	QFile::remove( dictfile );
+	QFile::remove( doclistfile );
+}
+
+
+void KCHMSettings::getFilenames(const QString & helpfilename, QString * settingsfile, QString * dictfile, QString * doclistfile )
+{
+	QFileInfo finfo ( helpfilename );
+	QString prefix = appConfig.m_datapath + "/" + finfo.baseName();
+
+	*settingsfile = prefix + ".kchmviewer";
+	*dictfile = prefix + ".dict";
+	*doclistfile  = prefix + ".doclist";
 }

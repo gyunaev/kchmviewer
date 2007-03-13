@@ -48,7 +48,9 @@ KCHMSearchEngine::~KCHMSearchEngine()
 
 void KCHMSearchEngine::processEvents( )
 {
+	// Do it twice; some events generate other events
 	qApp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput );
+	qApp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput );	
 }
 
 
@@ -63,10 +65,8 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 	if ( m_Index )
 		return true;
 
-	QString settingspath = ::mainWindow->currentSettings()->getSettingsFilename();
-	QString indexfiledict = settingspath + ".indexdb-dict";
-	QString indexfiledoc = settingspath + ".indexdb-doc";
-	QString indexfile = settingspath + ".indexdb";
+	QString indexfiledict = ::mainWindow->currentSettings()->searchIndexDictFilename();
+	QString indexfiledoc = ::mainWindow->currentSettings()->searchIndexDocFilename();
 	QStringList documents;
 	
 	m_Index = new QtAs::Index( documents, appConfig.m_datapath );

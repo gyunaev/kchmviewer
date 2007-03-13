@@ -190,6 +190,16 @@ class LCHMFile
 		bool getFileContentAsBinary( QByteArray * data, const QString& url );
 		
 		/*!
+		 * \brief Retrieves the content size.
+		 * \param size A pointer where the size will be stored.
+		 * \param url An URL in chm file to retreive content from. Must be absolute.
+		 * \return true if the content size is successfully stored; false otherwise.
+		 *
+		 * \ingroup dataretrieve
+		 */
+		bool getFileSize( unsigned int * size, const QString& url );
+		
+		/*!
 		 * \brief Obtains the list of all the files in current chm file archive.
 		 * \param files An array to store list of URLs (file names) present in chm archive.
 		 * \return true if the enumeration succeed; false otherwise (I could hardly imagine a reason).

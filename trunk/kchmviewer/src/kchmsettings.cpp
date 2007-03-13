@@ -125,6 +125,10 @@ bool KCHMSettings::loadSettings( const QString & filename )
 	if ( !finfo.size() )
 		return false;
 	
+	// Init those params, as they'll be used during save the first time even if the file is not here
+	m_currentfilesize = finfo.size();
+	m_currentfiledate = finfo.lastModified().toTime_t();
+	
 	getFilenames( filename, &m_settingsFile, &m_searchDictFile, &m_searchDocFile );
 	
 	QFile file( m_settingsFile );

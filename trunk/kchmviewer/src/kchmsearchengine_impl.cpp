@@ -235,7 +235,7 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 			state = STATE_OUTSIDE_TAGS;
 			
 			// Some shitty HTML does not terminate entities correctly. Screw it.			
-			if ( ch != ';' )
+			if ( ch != ';' && ch != '<' )
 			{
 				if ( parseentity.isEmpty() )
 				{
@@ -243,7 +243,7 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 					parsedbuf += "&";
 				}
 				else
-					qWarning( "Index::parseDocument: incorrectly terminated HTML entity '&%s', ignoring", parseentity.ascii() );
+					qWarning( "Index::parseDocument: incorrectly terminated HTML entity '&%s%c', ignoring", parseentity.ascii(), ch.latin1() );
 				
 				j--; // parse this character again, but in different state
 				continue;

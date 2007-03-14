@@ -53,10 +53,10 @@ int main( int argc, char ** argv )
 				APP_VERSION,
 				I18N_NOOP("CHM file viewer"),
 				KAboutData::License_GPL,
-				"(c) 2005 George Yunaev, gyunaev@sourceforge.net",
+				"(c) 2004-2007 George Yunaev, gyunaev@ulduzsoft.com",
 				0,
-				"http://kchmviewer.sourceforge.net",
-				"gyunaev@sourceforge.net");
+				"http://www.kchmviewer.net",
+				"gyunaev@ulduzsoft.com");
 
 	KLocale::setMainCatalogue( "kchmviewer" );
 	KCmdLineArgs::init (argc, argv, &aboutdata);

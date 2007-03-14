@@ -1,0 +1,22 @@
+kchmviewer supports the following DCOP bindings:
+
+Interface name: KCHMDCOPIface
+
+Bingings:
+
+	// Loads a CHM file filename , and opens the URL url. Use URL "/" to open default homepage
+	void loadHelpFile( String filename, String url );
+	
+	// Opens a specific url inside the loaded CHM file
+	void openPage( String url );
+		
+	// Tries to find word in index, opening the index window and scrolling it there
+	void guiFindInIndex( String word );
+		
+	// Executes a search in GUI. query contains the complete search query.
+	void guiSearchQuery( String query );
+		
+	// Executes a search; GUI is not involved and user sees nothing.
+	// query contains the complete search query.
+	// Returns a list of URLs, or empty array if nothing os
+	StringList	searchQuery( String query );

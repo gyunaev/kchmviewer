@@ -922,7 +922,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 	QString src;
 	const int MAX_NEST_DEPTH = 256;
 
-	if ( !getFileContentAsString( &src, file, true ) || src.isEmpty() )
+	if ( !getFileContentAsString( &src, file ) || src.isEmpty() )
 		return false;
 
 	KCHMShowWaitCursor wc;

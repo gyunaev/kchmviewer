@@ -64,7 +64,7 @@ fi
 
 if test "$USE_BUILTIN_CHMLIB" = "1"; then
 	CHM_INCLUDES="-I\$(top_srcdir)/$CHMLIBDIR"
-	CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.a"
+	CHM_LIBS="\$(top_builddir)/$CHMLIBDIR/libchm.la"
 	USE_LIB_CHM="internal"
 	EXTRA_SUBDIRS="chmlib $EXTRA_SUBDIRS"
     AC_DEFINE(USE_BUILTIN_CHMLIB, 1, [use builtin chmlib])

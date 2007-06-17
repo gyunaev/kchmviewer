@@ -1,4 +1,9 @@
+2007-06-16 tim <gyunaev@ulduzsoft.com>
+    - Fixed locale and .desktop installation directory for Gentoo (thx Peter Volkov)
+    
+
 2007-03-14 tim <gyunaev@ulduzsoft.com>
+	- Version 3.0 released
     - Added a lot of decoded entities.
     - Fixed incorrect saving of the settings file which result of this file not being loaded.
     - Added FAQ.

@@ -1,3 +1,3 @@
-lib_LIBRARIES=libchm.a
-libchm_a_SOURCES=chm_lib.c lzx.c
-noinst_HEADERS=chm_lib.h lzx.h
+noinst_LTLIBRARIES = libchm.la
+noinst_HEADERS = chm_lib.h lzx.h
+libchm_la_SOURCES = chm_lib.c lzx.c

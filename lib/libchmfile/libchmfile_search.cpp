@@ -80,7 +80,7 @@ inline static void mergeResults ( LCHMSearchProgressResults & results, const LCH
 }
 
 
-static inline void findNextWords ( QT34VECTOR<u_int64_t> & src, const QT34VECTOR<u_int64_t> & needle )
+static inline void findNextWords ( LIBCHMVector<u_int64_t> & src, const LIBCHMVector<u_int64_t> & needle )
 {
 	for ( unsigned int s1 = 0; s1 < src.size(); s1++ )
 	{
@@ -176,7 +176,7 @@ inline bool searchPhrase( LCHMFileImpl * impl, const QStringList & phrase, LCHMS
 bool LCHMFile::searchQuery( const QString& inquery, QStringList * searchresults, unsigned int limit )
 {
 	QStringList words_must_exist, words_must_not_exist, words_highlight;
-	QT34VECTOR<QStringList> phrases_must_exist;
+	LIBCHMVector<QStringList> phrases_must_exist;
 	QString query = inquery;
 	bool query_valid = true;
 	LCHMSearchProgressResults results;
@@ -196,15 +196,15 @@ bool LCHMFile::searchQuery( const QString& inquery, QStringList * searchresults,
 	*   If there is no prefix, the word considered as required.
 	*/
 	
-	QRegExp rxphrase( "\"(.*)\"" );
-	QRegExp rxword( "([^\\s]+)" );
-	rxphrase.setMinimal( TRUE );
+	LIBCHMRegExp rxphrase( "\"(.*)\"" );
+	LIBCHMRegExp rxword( "([^\\s]+)" );
+	rxphrase.setMinimal( true );
 
 	// First, get the phrase queries
 	while ( (pos = rxphrase.search (query, 0)) != -1 )
 	{
 		// A phrase query found. Locate its boundaries, and parse it.
-		QStringList plist = QStringList::split ( QRegExp ("\\s+"), rxphrase.cap ( 1 ));
+		QStringList plist = LIBCHMStringList::split( QRegExp ("\\s+"), rxphrase.cap ( 1 ));
 		
 		validateWords ( plist, query_valid );
 		

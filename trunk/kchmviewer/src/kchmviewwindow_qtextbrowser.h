@@ -77,6 +77,8 @@ public:
 	virtual QObject *	getQObject() { return this; }
 	virtual QWidget *	getQWidget() { return this; }
 
+	static	QString decodeUrl( const QString &url );
+		
 signals:
 	/*!
 	 * Emitted when the user clicked on the link, before the page changed.
@@ -91,7 +93,6 @@ private slots:
 private:
 	QPopupMenu * 	createPopupMenu ( const QPoint & pos );
 	void	setSource ( const QString & name );
-	static	QString decodeUrl( const QString &url );
 			
 	int						m_zoomfactor;
 	bool					m_allowSourceChange;

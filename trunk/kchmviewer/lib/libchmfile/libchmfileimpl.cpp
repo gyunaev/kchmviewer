@@ -71,15 +71,23 @@ LCHMFileImpl::~ LCHMFileImpl( )
 
 bool LCHMFileImpl::loadFile( const QString & archiveName )
 {
+	QString filename;
+			
+	// If the file has a file:// prefix, remove it
+	if ( archiveName.startsWith( "file://" ) )
+		filename = archiveName.mid( 7 ); // strip it
+	else
+		filename = archiveName;
+	
 	if( m_chmFile )
 		closeAll();
 
-	m_chmFile = chm_open( QFile::encodeName(archiveName) );
+	m_chmFile = chm_open( QFile::encodeName(filename) );
 	
 	if ( m_chmFile == NULL )
 		return false;
 
-	m_filename = archiveName;
+	m_filename = filename;
 	
 	// Reset encoding
 	m_textCodec = 0;

@@ -255,18 +255,14 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 	}
 	else
 	{
-		if ( !m_chmFile )
-		{
-			QMessageBox mbox(
-					i18n("%1 - failed to load the chm file") . arg(APP_NAME),
-					i18n("Unable to load the chm file %1") . arg(fileName), 
-					QMessageBox::Critical, 
-					QMessageBox::Ok, 
-					QMessageBox::NoButton, 
-					QMessageBox::NoButton);
-			mbox.exec();
-			exit (1);
-		}
+		QMessageBox mbox(
+				i18n("%1 - failed to load the chm file") . arg(APP_NAME),
+				i18n("Unable to load the chm file %1") . arg(fileName), 
+				QMessageBox::Critical, 
+				QMessageBox::Ok, 
+				QMessageBox::NoButton, 
+				QMessageBox::NoButton);
+		mbox.exec();
 		
 		statusBar()->message( 
 				i18n("Could not load file %1").arg(fileName),

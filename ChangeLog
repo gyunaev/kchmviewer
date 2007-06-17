@@ -2,6 +2,9 @@
     - Fixed locale and .desktop installation directory for Gentoo (thx Peter Volkov)
     - Increased the speed of search engine indexing (thx Kai Londenberg)
     - Fixed the problem when kchmviewer is called from a browser with URL like file://.
+    - Fixed the unability to run the program when the last opened file does not exist anymore,
+      and the LoadLatestFileOnStartup is set to 1.
+    - 
     
 
 2007-03-14 tim <gyunaev@ulduzsoft.com>

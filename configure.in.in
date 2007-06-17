@@ -44,7 +44,8 @@ fi
 if test "x$with_kde" != "xyes"; then
 	include_ARTS_FALSE="yes"
 	AC_PREFIX_DEFAULT(${prefix:-/usr/local})
-    kde_icondir="/usr/share/icons"
+	KDE_SET_DEFAULT_PATHS([default])
+	eval "$kde_cv_all_paths"
 fi
 
 AM_CONDITIONAL([AMC_USE_KDE], [test "x$with_kde" = "xyes"])

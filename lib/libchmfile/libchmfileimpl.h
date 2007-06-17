@@ -25,8 +25,6 @@
 #include "libchmfile.h"
 #include "libchmtocimage.h"
 
-#include "qt34.h"
-
 //! Keeps the intermediate search result
 class LCHMSearchProgressResult
 {
@@ -34,13 +32,13 @@ class LCHMSearchProgressResult
 		inline LCHMSearchProgressResult() {}
 		inline LCHMSearchProgressResult( u_int32_t t, u_int32_t u ) : titleoff(t),urloff(u) {}
 		
-		LIBCHMVector<u_int64_t>		offsets;
+		QValueVector<u_int64_t>		offsets;
 		u_int32_t					titleoff;
 		u_int32_t					urloff;
 };
 
 //! An array to keeps the intermediate search results
-typedef LIBCHMVector<LCHMSearchProgressResult>	LCHMSearchProgressResults;
+typedef QT34VECTOR<LCHMSearchProgressResult>	LCHMSearchProgressResults;
 
 
 //! CHM files processor; the implementation
@@ -54,8 +52,8 @@ class LCHMFileImpl
 		bool 		loadFile( const QString& archiveName );
 		void		closeAll();
 		
-		QString 	title() const	{ return encodeWithCurrentCodec( m_title.toCString() ); }
-		QString 	homeUrl() const	{ return encodeWithCurrentCodec( m_home.toCString() ); }
+		QString 	title() const	{ return encodeWithCurrentCodec( m_title ); }
+		QString 	homeUrl() const	{ return encodeWithCurrentCodec( m_home ); }
 		
 		bool 		getFileContentAsString( QString * str, const QString& url, bool internal_encoding = false );
 		bool 		getFileContentAsBinary( QByteArray * data, const QString& url ) const;
@@ -69,7 +67,7 @@ class LCHMFileImpl
 		bool		setCurrentEncoding( const LCHMTextEncoding * encoding );
 						
 		//! Parse the HHC or HHS file, and fill the context (asIndex is false) or index (asIndex is true) array.
-		bool  		parseFileAndFillArray (const QString& file, LIBCHMVector< LCHMParsedEntry > * data, bool asIndex );
+		bool  		parseFileAndFillArray (const QString& file, QT34VECTOR< LCHMParsedEntry > * data, bool asIndex );
 	
 		/*!
 		 * \brief Fast search using the $FIftiMain file in the .chm.
@@ -99,29 +97,42 @@ class LCHMFileImpl
 		  					   unsigned int limit_results = 500 );
 
 		//! Looks up fileName in the archive.
-		bool ResolveObject( const LIBCHMString& fileName, chmUnitInfo *ui ) const;
+		bool ResolveObject( const QString& fileName, chmUnitInfo *ui ) const;
 
 		//!  Retrieves an uncompressed chunk of a file in the .chm.
 		size_t RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize) const;
 		
 		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
-		inline QString encodeWithCurrentCodec (const char *str) const
+		inline QString encodeWithCurrentCodec (const QString& str) const
 		{
-			return (m_textCodec ? m_textCodec->toUnicode (str) : QString(str));
+			return (m_textCodec ? m_textCodec->toUnicode (str) : str);
+		}
+
+		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
+		inline QString encodeWithCurrentCodec (const char * str) const
+		{
+			return (m_textCodec ? m_textCodec->toUnicode (str) : (QString) str);
 		}
 	
 		//! Encode the string from internal files with the currently selected text codec, if possible. 
 		//! Or return as-is, if not.	
-		inline QString encodeInternalWithCurrentCodec (const char *str) const
+		inline QString encodeInternalWithCurrentCodec (const QString& str) const
 		{
-			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode (str) : QString(str));
+			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode (str) : str);
+		}
+	
+		//! Encode the string from internal files with the currently selected text codec, if possible. 
+		//! Or return as-is, if not.	
+		inline QString encodeInternalWithCurrentCodec (const char * str) const
+		{
+			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode (str) : (QString) str);
 		}
 	
 		//! Helper. Translates from Win32 encodings to generic wxWidgets ones.
 		const char * GetFontEncFromCharSet (const QString& font) const;
 
 		//! Helper. Returns the $FIftiMain offset of leaf node or 0.
-		u_int32_t GetLeafNodeOffset(const LIBCHMCString& text,
+		u_int32_t GetLeafNodeOffset(const QString& text,
 									u_int32_t initalOffset,
 		 							u_int32_t buffSize,
    									u_int16_t treeDepth );
@@ -160,13 +171,13 @@ class LCHMFileImpl
 		bool  changeFileEncoding( const char *qtencoding );
 
 		//! Convert the word, so it has an appropriate encoding
-		LIBCHMCString convertSearchWord ( const QString &src );
+		QCString convertSearchWord ( const QString &src );
 
 		/*!
 		 * Helper procedure in TOC parsing, decodes the string between the quotes (first or last) with decoding HTML
 		 * entities like &iacute;
 		 */
-		int findStringInQuotes (const LIBCHMString& tag, int offset, QString& value, bool firstquote, bool decodeentities );
+		int findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities );
 
 		/*!
 		 * Decodes Unicode HTML entities according to current encoding.
@@ -203,7 +214,7 @@ class LCHMFileImpl
 		/*!
 		 * Normalizes path to search in internal arrays
 		 */
-		QString normalizeUrl (const LIBCHMString& path ) const;
+		QString normalizeUrl (const QString& path ) const;
 
 		
 		// Members		
@@ -215,7 +226,7 @@ class LCHMFileImpl
 		QString  	m_filename;
 	
 		//! Home url, got from CHM file
-		LIBCHMCString  	m_home;
+		QString  	m_home;
 
 		//! Context tree filename. Got from CHM file
 		QString  	m_topicsFile;
@@ -224,7 +235,7 @@ class LCHMFileImpl
 		QString 	m_indexFile;
 
 		//! Chm Title. Got from CHM file
-		LIBCHMCString		m_title;
+		QString		m_title;
 
 		// Localization stuff
 		//! LCID from CHM file, used in encoding detection

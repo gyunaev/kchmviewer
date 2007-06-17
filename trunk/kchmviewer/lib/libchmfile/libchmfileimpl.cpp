@@ -820,12 +820,12 @@ bool LCHMFileImpl::getInfoFromSystem()
 
 					tmp = topicAttempt + ".hhc";
 				
-					if ( ResolveObject (tmp.ascii(), &ui) )
+					if ( ResolveObject( tmp, &ui) )
 						m_topicsFile = tmp;
 
 					tmp = topicAttempt + ".hhk";
 				
-					if ( ResolveObject(tmp.ascii(), &ui) )
+					if ( ResolveObject( tmp, &ui) )
 						m_indexFile = tmp;
 				}
 				break;

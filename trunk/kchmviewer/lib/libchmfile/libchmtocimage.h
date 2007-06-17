@@ -19,7 +19,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qpixmap.h>
 
 //! This class is used to retrieve the book TOC icons associated with images
 class LCHMTocImageKeeper

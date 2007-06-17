@@ -431,7 +431,7 @@ if test "$1" = "default"; then
     kde_htmldir='\${datadir}/doc/HTML'
   fi
   if test -z "$kde_appsdir"; then
-    kde_appsdir='\${datadir}/applnk'
+    kde_appsdir='\${datadir}/applications'
   fi
   if test -z "$kde_icondir"; then
     kde_icondir='\${datadir}/icons'

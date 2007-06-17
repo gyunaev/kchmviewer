@@ -54,8 +54,6 @@ class KCHMShowWaitCursor
 LCHMFileImpl::LCHMFileImpl( )
 {
 	m_chmFile = NULL;
-	m_home = m_filename = m_home = m_topicsFile = m_indexFile = m_font = QString::null;
-	m_entityDecodeMap.clear();
 	m_textCodec = 0;
 	m_textCodecForSpecialFiles = 0;
 	m_detectedLCID = 0;
@@ -121,7 +119,9 @@ void LCHMFileImpl::closeAll( )
 	chm_close( m_chmFile );
 	
 	m_chmFile = NULL;
-	m_home = m_filename = m_home = m_topicsFile = m_indexFile = m_font = QString::null;
+	m_filename = m_indexFile = m_font = QString::null;
+	m_home.clear();
+	m_title.clear();
 	m_entityDecodeMap.clear();
 	m_textCodec = 0;
 	m_textCodecForSpecialFiles = 0;
@@ -302,7 +302,7 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 						
 		if ( !valid )
 		{
-			qWarning ( "LCHMFileImpl::decodeEntity: could not decode HTML entity '%s'", entity.ascii() );
+			qWarning ( "LCHMFileImpl::decodeEntity: could not decode HTML entity '%s'", LIBCHMString(entity).ascii() );
 			return QString::null;
 		}
 
@@ -314,7 +314,7 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 
 		if ( it == m_entityDecodeMap.end() )
 		{
-			qWarning ("LCHMFileImpl::decodeEntity: could not decode HTML entity '%s'", entity.ascii());
+			qWarning ("LCHMFileImpl::decodeEntity: could not decode HTML entity '%s'", LIBCHMString(entity).ascii() );
 			return QString::null;
 		}
 		
@@ -323,7 +323,7 @@ QString LCHMFileImpl::decodeEntity( const QString & entity )
 }
 
 
-inline int LCHMFileImpl::findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities)
+inline int LCHMFileImpl::findStringInQuotes (const LIBCHMString& tag, int offset, QString& value, bool firstquote, bool decodeentities)
 {
 	int qbegin = tag.find ('"', offset);
 	
@@ -347,14 +347,14 @@ inline int LCHMFileImpl::findStringInQuotes (const QString& tag, int offset, QSt
 		{
 			if ( !fill_entity )
 			{
-				if ( tag[i] == '&' ) // HTML entity starts
+				if ( tag.at(i) == '&' ) // HTML entity starts
 					fill_entity = true;
 				else
-					value.append (tag[i]);
+					value.append (tag.at(i));
 			}
 			else
 			{
-				if ( tag[i] == ';' ) // HTML entity ends
+				if ( tag.at(i) == ';' ) // HTML entity ends
 				{
 					// If entity is an ASCII code, just decode it
 					QString decode = decodeEntity( htmlentity );
@@ -367,12 +367,12 @@ inline int LCHMFileImpl::findStringInQuotes (const QString& tag, int offset, QSt
 					fill_entity = false;
 				}
 				else
-					htmlentity.append (tag[i]);
+					htmlentity.append (tag.at(i));
 			}
 		}
 	}
 	else
-		value = tag.mid (qbegin + 1, qend - qbegin - 1);
+		value = tag.mid (qbegin + 1, qend - qbegin - 1).toString();
 
 	return qend + 1;
 }
@@ -389,7 +389,7 @@ bool LCHMFileImpl::searchWord (const QString& text,
 	if ( text.isEmpty() || !m_searchAvailable )
 		return false;
 
-	QString searchword = (QString) convertSearchWord (text);
+	LIBCHMCString searchword = convertSearchWord (text);
 
 #define FTS_HEADER_LEN 0x32
 	unsigned char header[FTS_HEADER_LEN];
@@ -421,7 +421,7 @@ bool LCHMFileImpl::searchWord (const QString& text,
 	u_int32_t i = sizeof(u_int16_t);
 	u_int16_t free_space;
 
-	QMemArray<unsigned char> buffer(node_len);
+	LIBCHMMemArray<unsigned char> buffer(node_len);
 
 	node_offset = GetLeafNodeOffset (searchword, node_offset, node_len, tree_depth);
 
@@ -486,7 +486,7 @@ bool LCHMFileImpl::searchWord (const QString& text,
 
 			if ( !wholeWords )
 			{
-				if ( word.startsWith (searchword))
+				if ( word.startsWith (searchword.toCString()))
 				{
 					partial = true;
 					
@@ -497,18 +497,18 @@ bool LCHMFileImpl::searchWord (const QString& text,
  							   loc_codes_r, results, phrase_search);
 
 				}
-				else if ( QString::compare (searchword, word.mid(0, searchword.length())) < -1 )
+				else if ( QString::compare (searchword.toCString(), word.mid(0, searchword.length())) < -1 )
 					break;
 			}
 		}	
 	}
-	while ( !wholeWords && word.startsWith (searchword) && node_offset );
+	while ( !wholeWords && word.startsWith (searchword.toCString()) && node_offset );
 	
 	return partial;
 }
 
 
-bool LCHMFileImpl::ResolveObject(const QString& fileName, chmUnitInfo *ui) const
+bool LCHMFileImpl::ResolveObject(const LIBCHMString& fileName, chmUnitInfo *ui) const
 {
 	return m_chmFile != NULL 
 			&& ::chm_resolve_object(m_chmFile, fileName.ascii(), ui) ==
@@ -529,7 +529,7 @@ size_t LCHMFileImpl::RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer
 }
 
 
-inline u_int32_t LCHMFileImpl::GetLeafNodeOffset(const QString& text,
+inline u_int32_t LCHMFileImpl::GetLeafNodeOffset(const LIBCHMCString& text,
 											 u_int32_t initialOffset,
 			u_int32_t buffSize,
    u_int16_t treeDepth)
@@ -538,7 +538,7 @@ inline u_int32_t LCHMFileImpl::GetLeafNodeOffset(const QString& text,
 	unsigned char* cursor16, *cursor32;
 	unsigned char word_len, pos;
 	u_int32_t i = sizeof(u_int16_t);
-	QMemArray<unsigned char> buffer(buffSize);
+	LIBCHMMemArray<unsigned char> buffer(buffSize);
 	QString word;
 	
 	while(--treeDepth)
@@ -569,7 +569,7 @@ inline u_int32_t LCHMFileImpl::GetLeafNodeOffset(const QString& text,
 
 			delete[] wrd_buf;
 
-			if ( text <= word )
+			if ( text.toCString() <= word )
 			{
 				cursor32 = buffer.data() + i + word_len + 1;
 				initialOffset = UINT32ARRAY(cursor32);
@@ -599,7 +599,7 @@ inline bool LCHMFileImpl::ProcessWLC (u_int64_t wlc_count, u_int64_t wlc_size,
 	int wlc_bit = 7;
 	u_int64_t index = 0, count;
 	size_t length, off = 0;
-	QMemArray<unsigned char> buffer (wlc_size);
+	LIBCHMMemArray<unsigned char> buffer (wlc_size);
 	unsigned char *cursor32;
 
 	unsigned char entry[TOPICS_ENTRY_LEN];
@@ -674,7 +674,8 @@ bool LCHMFileImpl::getInfoFromWindows()
 		u_int32_t entries = get_int32_le( (u_int32_t *)(buffer) );
 		u_int32_t entry_size = get_int32_le( (u_int32_t *)(buffer + 0x04) );
 		
-		QByteArray uptr(entries * entry_size);
+		QByteArray uptr;
+		uptr.resize(entries * entry_size);
 		unsigned char* raw = (unsigned char*) uptr.data();
 		
 		if ( !RetrieveObject (&ui, raw, 8, entries * entry_size) )
@@ -698,7 +699,7 @@ bool LCHMFileImpl::getInfoFromWindows()
 				size = RetrieveObject(&ui, buffer, factor * 4096, BUF_SIZE);
 
 			if ( size && off_title )
-				m_title = QString ((const char*) (buffer + off_title % 4096));
+				m_title = LIBCHMCString((const char*) (buffer + off_title % 4096));
 
 			if ( factor != off_home / 4096)
 			{
@@ -706,8 +707,10 @@ bool LCHMFileImpl::getInfoFromWindows()
 				size = RetrieveObject (&ui, buffer, factor * 4096, BUF_SIZE);
 			}
 			
-			if ( size && off_home )
-				m_home = QString("/") + QString( (const char*) buffer + off_home % 4096);
+			if ( size && off_home ) {
+				m_home = LIBCHMCString( (const char*) buffer + off_home % 4096);
+				m_home.prepend('/');
+			}
 
 			if ( factor != off_hhc / 4096)
 			{
@@ -783,14 +786,16 @@ bool LCHMFileImpl::getInfoFromSystem()
 				index += 2;
 				cursor = buffer + index;
 				
-				if(m_home.isEmpty() || m_home == "/")
-					m_home = QString("/") + QString ((const char*) buffer + index + 2);
+				if(m_home.isEmpty() || m_home == "/") {
+					m_home = LIBCHMCString((const char*) buffer + index + 2);
+					m_home.prepend('/');
+				}
 				break;
 			
 			case 3:
 				index += 2;
 				cursor = buffer + index;
-				m_title = QString((const char*) (buffer + index + 2));
+				m_title = LIBCHMCString((const char*) (buffer + index + 2));
 				break;
 
 			case 4:
@@ -812,12 +817,12 @@ bool LCHMFileImpl::getInfoFromSystem()
 
 					tmp = topicAttempt + ".hhc";
 				
-					if ( ResolveObject (tmp.ascii(), &ui) )
+					if ( ResolveObject (LIBCHMString(tmp).ascii(), &ui) )
 						m_topicsFile = tmp;
 
 					tmp = topicAttempt + ".hhk";
 				
-					if ( ResolveObject(tmp.ascii(), &ui) )
+					if ( ResolveObject(LIBCHMString(tmp).ascii(), &ui) )
 						m_indexFile = tmp;
 				}
 				break;
@@ -842,7 +847,7 @@ bool LCHMFileImpl::getInfoFromSystem()
 }
 
  
-QCString LCHMFileImpl::convertSearchWord( const QString & src )
+LIBCHMCString LCHMFileImpl::convertSearchWord( const QString & src )
 {
 	static const char * searchwordtable[128] =
 	{
@@ -857,15 +862,15 @@ QCString LCHMFileImpl::convertSearchWord( const QString & src )
 	};
 
 	if ( !m_textCodec )
-		return (QCString) src.lower();
+		return LIBCHMCString(LIBCHMString(LIBCHMString(src).lower()).ascii());
 
-	QCString dest = m_textCodec->fromUnicode (src);
+	LIBCHMCString dest(m_textCodec->fromUnicode (src));
 
-	for ( unsigned int i = 0; i < dest.size(); i++ )
+	for ( unsigned int i = 0; i < dest.length(); i++ )
 	{
-		if ( dest[i] & 0x80 )
+		if ( dest.at(i) & 0x80 )
 		{
-			int index = dest[i] & 0x7F;
+			int index = dest.at(i) & 0x7F;
 			if ( searchwordtable[index] )
 				dest.replace (i, 1, searchwordtable[index]);
 			else
@@ -904,12 +909,12 @@ void LCHMFileImpl::getSearchResults( const LCHMSearchProgressResults& tempres,
 }
 
 
-QString LCHMFileImpl::normalizeUrl( const QString & path ) const
+QString LCHMFileImpl::normalizeUrl( const LIBCHMString & path ) const
 {
 	int pos = path.find ('#');
-	QString fixedpath = pos == -1 ? path : path.left (pos);
+	LIBCHMString fixedpath = pos == -1 ? path : path.left (pos);
 	
-	return LCHMUrlFactory::makeURLabsoluteIfNeeded( fixedpath );
+	return LCHMUrlFactory::makeURLabsoluteIfNeeded( fixedpath.toString() );
 }
 
 
@@ -917,7 +922,7 @@ QString LCHMFileImpl::normalizeUrl( const QString & path ) const
  * FIXME: <OBJECT type="text/sitemap"><param name="Merge" value="hhaxref.chm::/HHOCX_c.hhc"></OBJECT>
  *  (from htmlhelp.chm)
 */
-bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHMParsedEntry > * data, bool asIndex )
+bool LCHMFileImpl::parseFileAndFillArray( const QString & file, LIBCHMVector< LCHMParsedEntry > * data, bool asIndex )
 {
 	QString src;
 	const int MAX_NEST_DEPTH = 256;
@@ -949,7 +954,9 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 	// Split the HHC file by HTML tags
 	int stringlen = src.length();
 	
-	while ( pos < stringlen && (pos = src.find ('<', pos)) != -1 )
+	LIBCHMString src2(src);
+	
+	while ( pos < stringlen && (pos = src2.find ('<', pos)) != -1 )
 	{
 		int i, word_end = 0;
 		
@@ -959,10 +966,10 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 			if ( (src[i] == '"' || src[i] == '\'') )
 			{
 				// find where quote ends, either by another quote, or by '>' symbol (some people don't know HTML)
-				int nextpos = src.find (src[i], i+1);
-				if ( nextpos == -1 	&& (nextpos = src.find ('>', i+1)) == -1 )
+				int nextpos = src2.find (src.at(i), i+1);
+				if ( nextpos == -1 	&& (nextpos = src2.find ('>', i+1)) == -1 )
 				{
-					qWarning ("LCHMFileImpl::ParseHhcAndFillTree: corrupted TOC: %s", src.mid(i).ascii());
+					qWarning ("LCHMFileImpl::ParseHhcAndFillTree: corrupted TOC: %s", src2.mid(i).ascii());
 					return false;
 				}
 
@@ -974,10 +981,10 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 				word_end = i;
 		}
 		
-		QString tagword, tag = src.mid (pos, i - pos);
+		LIBCHMString tagword, tag = src2.mid (pos, i - pos);
 		 
 		if ( word_end )
-			tagword = src.mid (pos, word_end - pos).lower();
+			tagword = src2.mid (pos, word_end - pos).lower();
 		else
 			tagword = tag.lower();
 
@@ -989,7 +996,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 		else if ( tagword == "/object" && in_object ) 
 		{
 			// a topic entry closed. Add a tree item
-			if ( entry.name )
+			if ( !entry.name.isEmpty() )
 			{
 				if ( !root_indent_offset_set )
 				{
@@ -1008,7 +1015,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 			else
 			{
 				if ( !entry.urls.isEmpty() )
-					qDebug ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", entry.urls[0].ascii());
+					qDebug ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", LIBCHMString(entry.urls[0]).ascii());
 				else
 					qDebug ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag is parsed, but both name and url are empty.");	
 			}
@@ -1030,7 +1037,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 
 			// offset+5 skips 'name='
 			offset = findStringInQuotes (tag, offset + name_pattern.length(), pname, TRUE, FALSE);
-			pname = pname.lower();
+			pname = LIBCHMString(pname).lower();
 
 			if ( (offset = tag.find (value_pattern, offset, FALSE)) == -1 )
 				qFatal ("LCHMFileImpl::ParseAndFillTopicsTree: bad <param> tag '%s': no value=\n", tag.ascii());
@@ -1051,7 +1058,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QT34VECTOR< LCHM
 				// Check for URL duplication
 				QString url = LCHMUrlFactory::makeURLabsoluteIfNeeded( pvalue );
 				
-				if ( entry.urls.find( url ) == entry.urls.end() )
+				if ( LIBCHMStringList::contains(entry.urls, url) )
 					entry.urls.push_back( url );
 			}
 			else if ( pname == "see also" && asIndex && entry.name != pvalue )
@@ -1133,8 +1140,12 @@ QString LCHMFileImpl::getTopicByUrl( const QString & url ) const
 	
 	if ( it == m_url2topics.end() )
 		return QString::null;
-	
+
+#if defined (USE_QT_4)
+	return it.value();
+#else
 	return it.data();
+#endif
 }
 
 
@@ -1227,7 +1238,11 @@ void LCHMFileImpl::fillTopicsUrlMap()
 		return;
 
 	// Read those tables
-	QByteArray topics( m_chmTOPICS.length ), urltbl( m_chmURLTBL.length ), urlstr( m_chmURLSTR.length ), strings( m_chmSTRINGS.length );
+	QByteArray topics, urltbl, urlstr, strings;
+	topics.resize( m_chmTOPICS.length );
+	urltbl.resize( m_chmURLTBL.length );
+	urlstr.resize( m_chmURLSTR.length );
+	strings.resize( m_chmSTRINGS.length );
 
 	if ( !RetrieveObject( &m_chmTOPICS, (unsigned char*) topics.data(), 0, m_chmTOPICS.length )
 	|| !RetrieveObject( &m_chmURLTBL, (unsigned char*) urltbl.data(), 0, m_chmURLTBL.length )

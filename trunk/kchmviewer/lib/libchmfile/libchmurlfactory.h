@@ -21,7 +21,8 @@
 
 #include <qdir.h>
 #include <qstring.h>
-#include <qregexp.h>
+#include "qt34.h"
+
 
 namespace LCHMUrlFactory
 {
@@ -29,8 +30,8 @@ namespace LCHMUrlFactory
 static inline bool isRemoteURL( const QString & url, QString & protocol )
 {
 	// Check whether the URL is external
-	QRegExp uriregex ( "^(\\w+):\\/\\/" );
-	QRegExp mailtoregex ( "^(mailto):" );
+	LIBCHMRegExp uriregex ( "^(\\w+):\\/\\/" );
+	LIBCHMRegExp mailtoregex ( "^(mailto):" );
 
 	// mailto: can also have different format, so handle it
 	if ( url.startsWith( "mailto:" ) )
@@ -40,15 +41,16 @@ static inline bool isRemoteURL( const QString & url, QString & protocol )
 	}
 	else if ( uriregex.search ( url ) != -1 )
 	{
-		QString proto = uriregex.cap ( 1 ).lower();
+		LIBCHMString proto = uriregex.cap ( 1 );
+		QString proto2 = proto.lower();
 	
 		// Filter the URLs which need to be opened by a browser
-		if ( proto == "http" 
-						|| proto == "ftp"
-						|| proto == "mailto"
-						|| proto == "news" )
+		if ( proto2 == "http" 
+						|| proto2 == "ftp"
+						|| proto2 == "mailto"
+						|| proto2 == "news" )
 		{
-			protocol = proto;
+			protocol = proto2;
 			return true;
 		}
 	}
@@ -65,7 +67,7 @@ static inline bool isJavascriptURL( const QString & url )
 // Parse urls like "ms-its:file name.chm::/topic.htm"
 static inline bool isNewChmURL( const QString & url, QString & chmfile, QString & page )
 {
-	QRegExp uriregex ( "^ms-its:(.*)::(.*)$" );
+	LIBCHMRegExp uriregex ( "^ms-its:(.*)::(.*)$" );
 
 	if ( uriregex.search ( url ) != -1 )
 	{
@@ -86,7 +88,7 @@ static inline QString makeURLabsoluteIfNeeded( const QString & url )
 	&& !isJavascriptURL (url)
 	&& !isNewChmURL (url, p1, p2) )
 	{
-		newurl = QDir::cleanDirPath (url);
+		newurl = LIBCHMDir::cleanDirPath (url);
 
 		// Normalize url, so it becomes absolute
 		if ( newurl[0] != '/' )
@@ -113,7 +115,7 @@ static inline bool handleFileType( const QString& link, QString& generated )
 	if ( !link.endsWith( intext ) )
 		return false;
 
-	QString filelink = link.left( link.length() - strlen( intext ) );
+	QString filelink = link.left( link.length() - intext.length() );
 	generated = "<html><body><img src=\"" + filelink + "\"></body></html>";
 	return true;
 }

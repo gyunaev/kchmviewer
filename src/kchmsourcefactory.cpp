@@ -29,6 +29,8 @@
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
 #include "kchmsourcefactory.h"
+#include "kchmviewwindow_qtextbrowser.h"
+
 
 KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
 	: QMimeSourceFactory()
@@ -46,7 +48,7 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 
 	if ( !chm )
 		return 0;
-	
+
 	int pos = path.find ('#');
 	if ( pos != -1 )
 		path = path.left (pos);
@@ -69,7 +71,9 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 		QImage img;
 		QByteArray buf;
 		
-		if ( chm->getFileContentAsBinary( &buf, path ) )
+		QString fpath = KCHMViewWindow_QTextBrowser::decodeUrl( path );
+		
+		if ( chm->getFileContentAsBinary( &buf, fpath ) )
 		{
 			if ( img.loadFromData ( (const uchar *) buf.data(), buf.size() ) )
 				((QMimeSourceFactory*)this)->setImage (path, img);

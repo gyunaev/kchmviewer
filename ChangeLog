@@ -4,8 +4,9 @@
     - Fixed the problem when kchmviewer is called from a browser with URL like file://.
     - Fixed the unability to run the program when the last opened file does not exist anymore,
       and the LoadLatestFileOnStartup is set to 1.
-    - 
-    
+    - Fixed CHMs with Unicode index/topic filenames inside CHM file (thx hephooey).
+    - Fixed showing book images in QTextBrowser when file path contains urlencoded symbols.
+    - Fixed 64bit platforms compilation if system chmlib is not present.
 
 2007-03-14 tim <gyunaev@ulduzsoft.com>
 	- Version 3.0 released

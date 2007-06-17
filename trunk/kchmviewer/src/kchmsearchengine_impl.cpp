@@ -334,8 +334,8 @@ void Index::parseDocument( const QString &filename, int docNum )
 	if ( !parseDocumentToStringlist( filename, terms ) )
 		return;
 	
-	for ( unsigned int i = 0; i < terms.size(); i++ )
-		insertInDict( terms[i], docNum );
+	for ( QStringList::Iterator it = terms.begin(); it != terms.end(); ++it )
+		insertInDict( *it, docNum );
 }
 
 

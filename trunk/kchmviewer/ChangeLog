@@ -1,5 +1,7 @@
 2007-06-16 tim <gyunaev@ulduzsoft.com>
     - Fixed locale and .desktop installation directory for Gentoo (thx Peter Volkov)
+    - Increased the speed of search engine indexing (thx Kai Londenberg)
+    - 
     
 
 2007-03-14 tim <gyunaev@ulduzsoft.com>

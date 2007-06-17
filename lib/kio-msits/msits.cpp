@@ -151,7 +151,11 @@ bool ProtocolMSITS::parseLoadAndLookup ( const KURL& url, QString& abspath )
 
 	QString filename = url.path().left (pos);
 	abspath = url.path().mid (pos + 2); // skip ::
-
+	
+	// Some buggy apps add ms-its:/ to the path as well
+	if ( abspath.startsWith( "ms-its:" ) )
+		abspath = abspath.mid( 7 );
+			
 	kdDebug() << "ProtocolMSITS::parseLoadAndLookup: filename " << filename << ", path " << abspath << endl;
 
     if ( filename.isEmpty() )

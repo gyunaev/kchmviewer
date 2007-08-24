@@ -28,8 +28,14 @@
 
 #include "kde-qt.h"
 
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QPixmap>
+#include <Q3PopupMenu>
+#include <QShowEvent>
+#include <QCloseEvent>
 
 #include "libchmfile.h"
 #include "libchmfileimpl.h"
@@ -55,11 +61,9 @@
 	#include "kqrunprocess.h"
 #endif
 
-#include "kchmmainwindow.moc"
-
 
 KCHMMainWindow::KCHMMainWindow()
-    : KQMainWindow ( 0, "KCHMMainWindow", WDestructiveClose )
+    : KQMainWindow ( 0, "KCHMMainWindow", Qt::WDestructiveClose )
 {
 	const unsigned int WND_X_SIZE = 700;
 	const unsigned int WND_Y_SIZE = 500;
@@ -96,7 +100,7 @@ KCHMMainWindow::KCHMMainWindow()
 		
 	setCentralWidget( m_windowSplitter );
 	
-	QValueList<int> sizes;
+	Q3ValueList<int> sizes;
 	sizes.push_back (SPLT_X_SIZE);
 	sizes.push_back (WND_X_SIZE - SPLT_X_SIZE);
 	m_windowSplitter->setSizes (sizes);
@@ -108,7 +112,7 @@ KCHMMainWindow::KCHMMainWindow()
 	m_useShortAutotest = false;
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
-	QAccel * accel = new QAccel( this );
+	Q3Accel * accel = new Q3Accel( this );
 	accel->connectItem ( accel->insertItem ( Key_F11 ), this, SLOT ( slotToggleFullScreenMode() ) );
 	accel->connectItem ( accel->insertItem ( CTRL + Key_1), this, SLOT ( slotActivateContentTab() ) );
 	accel->connectItem ( accel->insertItem ( CTRL + Key_2), this, SLOT ( slotActivateIndexTab() ) );
@@ -138,7 +142,7 @@ void KCHMMainWindow::slotOpenMenuItemActivated()
 #if defined (USE_KDE)
     QString fn = KFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("*.chm|Compressed Help Manual (*.chm)"), this);
 #else
-    QString fn = QFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("Compressed Help Manual (*.chm)"), this);
+    QString fn = Q3FileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("Compressed Help Manual (*.chm)"), this);
 #endif
 
     if ( !fn.isEmpty() )
@@ -232,7 +236,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 			}
 			
 			// Restore the main window size
-			QValueList<int> sizes;
+			Q3ValueList<int> sizes;
 			sizes.push_back( m_currentSettings->m_window_size_splitter );
 			sizes.push_back( m_currentSettings->m_window_size_x - m_currentSettings->m_window_size_splitter );
 			
@@ -260,8 +264,8 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 				i18n("Unable to load the chm file %1") . arg(fileName), 
 				QMessageBox::Critical, 
 				QMessageBox::Ok, 
-				QMessageBox::NoButton, 
-				QMessageBox::NoButton);
+				Qt::NoButton, 
+				Qt::NoButton);
 		mbox.exec();
 		
 		statusBar()->message( 
@@ -318,7 +322,7 @@ void KCHMMainWindow::refreshCurrentBrowser( )
 		m_contentsWindow->refillTableOfContents();
 }
 
-void KCHMMainWindow::slotOnTreeClicked( QListViewItem * item )
+void KCHMMainWindow::slotOnTreeClicked( Q3ListViewItem * item )
 {
 	bool unused;
 	
@@ -465,7 +469,7 @@ void KCHMMainWindow::showEvent( QShowEvent * )
 void KCHMMainWindow::setupToolbarsAndMenu( )
 {
 	// Create a 'file' toolbar
-    QToolBar * toolbar = new QToolBar(this);
+    Q3ToolBar * toolbar = new Q3ToolBar(this);
 	
 	toolbar->setLabel( i18n( "File Operations") );
 
@@ -478,7 +482,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				toolbar);
 	
 	QString fileOpenText = i18n( "Click this button to open an existing chm file." );
-	QWhatsThis::add( fileOpen, fileOpenText );
+	Q3WhatsThis::add( fileOpen, fileOpenText );
 
     QPixmap iconFilePrint (*gIconStorage.getToolbarPixmap(KCHMIconStorage::print));
     QToolButton * filePrint	= new QToolButton (iconFilePrint,
@@ -489,10 +493,10 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 				toolbar);
 
 	QString filePrintText = i18n( "Click this button to print the current page");
-	QWhatsThis::add( filePrint, filePrintText );
+	Q3WhatsThis::add( filePrint, filePrintText );
 
 	// Setup the menu
-	KQPopupMenu * file = new KQPopupMenu( this );
+	KQMenu * file = new KQMenu( this );
 	menuBar()->insertItem( i18n( "&File"), file );
 
     int id;
@@ -507,7 +511,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	file->setWhatsThis( id, i18n( "Click this button to extract the whole CHM file content into a specific directory") );
 	file->insertSeparator();
 	
-	m_menuHistory = new KQPopupMenu( file );
+	m_menuHistory = new KQMenu( file );
 	connect ( m_menuHistory, SIGNAL( activated(int) ), this, SLOT ( slotHistoryMenuItemActivated(int) ));
 	
 	file->insertItem( i18n( "&Recent files"), m_menuHistory );
@@ -515,7 +519,7 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	file->insertSeparator();
 	file->insertItem( i18n( "&Quit"), qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
 
-	KQPopupMenu * menu_edit = new KQPopupMenu( this );
+	KQMenu * menu_edit = new KQMenu( this );
 	menuBar()->insertItem( i18n( "&Edit"), menu_edit );
 
 	menu_edit->insertItem ( i18n( "&Copy"), this, SLOT( slotBrowserCopy()), CTRL+Key_C );
@@ -535,14 +539,14 @@ void KCHMMainWindow::setupToolbarsAndMenu( )
 	// m_viewWindowMgr creates 'Window' menu
 	m_viewWindowMgr->createMenu( this );
 	
-	KQPopupMenu * settings = new KQPopupMenu( this );
+	KQMenu * settings = new KQMenu( this );
 	menuBar()->insertItem( i18n( "&Settings"), settings );
 	settings->insertItem( i18n( "&Change settings..."), this, SLOT( slotChangeSettingsMenuItemActivated() ));
 
 #if defined(USE_KDE)
-	QPopupMenu *help = helpMenu( m_aboutDlgMenuText );
+	Q3PopupMenu *help = helpMenu( m_aboutDlgMenuText );
 #else
-    KQPopupMenu * help = new KQPopupMenu( this );
+    KQMenu * help = new KQMenu( this );
 	help->insertItem( i18n( "&About"), this, SLOT( slotAboutMenuItemActivated() ), Key_F1 );
 	help->insertItem( i18n( "About &Qt"), this, SLOT( slotAboutQtMenuItemActivated() ));
 	help->insertSeparator();
@@ -610,7 +614,7 @@ void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 		m_chmFile = 0;
 	}
 
-	QMainWindow::closeEvent ( e );
+	Q3MainWindow::closeEvent ( e );
 }
 
 bool KCHMMainWindow::parseCmdLineArgs( )
@@ -916,14 +920,14 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 			
 			// Handle clicking on m_contentsWindow element
 			connect( m_contentsWindow, 
-					 SIGNAL( clicked( QListViewItem* ) ), 
+					 SIGNAL( clicked( Q3ListViewItem* ) ), 
 					 this, 
-					 SLOT( slotOnTreeClicked( QListViewItem* ) ) );
+					 SLOT( slotOnTreeClicked( Q3ListViewItem* ) ) );
 			
 			connect( m_contentsWindow, 
-					 SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int ) ), 
+					 SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int ) ), 
 					 this, 
-					 SLOT( slotOnTreeDoubleClicked ( QListViewItem *, const QPoint &, int ) ) );
+					 SLOT( slotOnTreeDoubleClicked ( Q3ListViewItem *, const QPoint &, int ) ) );
 			
 			m_tabWidget->insertTab (m_contentsWindow, i18n( "Contents" ), tabindex);
 		}
@@ -1051,7 +1055,7 @@ void KCHMMainWindow::slotExtractCHM( )
 			this,
 			i18n("Choose a directory to store CHM content") );
 #else
-	QString outdir = QFileDialog::getExistingDirectory (
+	QString outdir = Q3FileDialog::getExistingDirectory (
 			QString::null,
 			this,
 			0,
@@ -1122,7 +1126,7 @@ void KCHMMainWindow::slotExtractCHM( )
 			
 			QString filename = outdir + dirlist.join( "/" ) + "/" + dirs[i];
 			QFile wf( filename );
-			if ( !wf.open( IO_WriteOnly ) )
+			if ( !wf.open( QIODevice::WriteOnly ) )
 			{
 					qWarning( "Could not write file %s\n", filename.ascii() );
 					continue;
@@ -1176,7 +1180,7 @@ void KCHMMainWindow::locateInContentTree( const QString & url )
 	}
 }
 
-void KCHMMainWindow::slotOnTreeDoubleClicked( QListViewItem * item, const QPoint &, int )
+void KCHMMainWindow::slotOnTreeDoubleClicked( Q3ListViewItem * item, const QPoint &, int )
 {
 	// Open/close only existing item which have children
 	if ( !item || item->childCount() == 0 )
@@ -1254,7 +1258,7 @@ void KCHMMainWindow::runAutoTest()
 	case STATE_INITIAL:
 		if ( m_contentsWindow && !m_useShortAutotest )
 		{
-			m_autotestlistiterator = QListViewItemIterator (m_contentsWindow);
+			m_autotestlistiterator = Q3ListViewItemIterator (m_contentsWindow);
 			m_autoteststate = STATE_CONTENTS_OPENNEXTPAGE;
 		}
 		else

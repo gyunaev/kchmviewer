@@ -29,8 +29,6 @@
 #include "kchmconfig.h"
 #include "kchmviewwindow_khtmlpart.h"
 
-#include "kchmviewwindow_khtmlpart.moc"
-
 
 QWidget * KCHMViewWindow_KHTMLPart::getQWidget()
 {

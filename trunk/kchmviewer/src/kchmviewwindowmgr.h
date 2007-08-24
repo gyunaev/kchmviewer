@@ -26,7 +26,9 @@
 #include "forwarddeclarations.h"
 #include "kchmsettings.h"
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class KCHMViewWindowMgr : public QTabWidget
 {
@@ -79,11 +81,11 @@ class KCHMViewWindowMgr : public QTabWidget
 		QMap<QWidget*,tab_window_t>	m_Windows;
 		typedef QMap<QWidget*,tab_window_t>::iterator WindowsIterator;
 		
-        QValueList<int>         m_idSlot;
-        typedef QValueList<int>::iterator IdIterator;
+        Q3ValueList<int>         m_idSlot;
+        typedef Q3ValueList<int>::iterator IdIterator;
 		
 		QPushButton			*	m_closeButton;
-		KQPopupMenu 		*	m_MenuWindow;
+		KQMenu 		*	m_MenuWindow;
 		int						m_menuIdClose;
 };
 

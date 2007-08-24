@@ -22,6 +22,8 @@
 #include "libchmfile.h"
 #include "libchmfileimpl.h"
 
+#include <QPixmap>
+
 
 LCHMFile::LCHMFile( )
 {
@@ -69,12 +71,12 @@ bool LCHMFile::hasSearchTable( ) const
 	return m_impl->m_searchAvailable;
 }
 
-bool LCHMFile::parseTableOfContents( QT34VECTOR< LCHMParsedEntry > * topics ) const
+bool LCHMFile::parseTableOfContents( QVector< LCHMParsedEntry > * topics ) const
 {
 	return m_impl->parseFileAndFillArray( m_impl->m_topicsFile, topics, false );
 }
 
-bool LCHMFile::parseIndex( QT34VECTOR< LCHMParsedEntry > * indexes ) const
+bool LCHMFile::parseIndex( QVector< LCHMParsedEntry > * indexes ) const
 {
 	return m_impl->parseFileAndFillArray( m_impl->m_indexFile, indexes, true );
 }

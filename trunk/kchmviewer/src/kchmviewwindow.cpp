@@ -141,9 +141,9 @@ void KCHMViewWindow::handleStartPageAsImage( QString & link )
 }
 
 
-KQPopupMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
+KQMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
 {
-	KQPopupMenu * contextMenu = new KQPopupMenu( parent );
+	KQMenu * contextMenu = new KQMenu( parent );
 	
 	contextMenu->insertItem ( "&Copy", ::mainWindow, SLOT(slotBrowserCopy()) );
 	contextMenu->insertItem ( "&Select all", ::mainWindow, SLOT(slotBrowserSelectAll()) );
@@ -152,7 +152,7 @@ KQPopupMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
 }
 
 
-KQPopupMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
+KQMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
 {
 	if ( link.isNull() )
 	{
@@ -280,9 +280,9 @@ void KCHMViewWindow::updateNavigationToolbar( )
 	}
 }
 
-KQPopupMenu * KCHMViewWindow::createListItemContextMenu( QWidget * w )
+KQMenu * KCHMViewWindow::createListItemContextMenu( QWidget * w )
 {
-	KQPopupMenu * contextMenu = new KQPopupMenu( w );
+	KQMenu * contextMenu = new KQMenu( w );
 		
 	contextMenu->insertItem ( "&Open this link in a new tab",
 							  ::mainWindow, 

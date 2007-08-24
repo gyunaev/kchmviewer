@@ -20,7 +20,10 @@
  ***************************************************************************/
 
 #include <qlayout.h>
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <Q3VBoxLayout>
 
 #include "libchmfile.h"
 
@@ -29,12 +32,11 @@
 #include "kchmlistitemtooltip.h"
 #include "kchmtreeviewitem.h"
 
-#include "kchmindexwindow.moc"
 
-KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f )
+KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, Qt::WFlags f )
 	: QWidget (parent, name, f)
 {
-	QVBoxLayout * layout = new QVBoxLayout (this);
+	Q3VBoxLayout * layout = new Q3VBoxLayout (this);
 	layout->setMargin (5);
 
 	m_indexFinder = new QLineEdit (this);
@@ -62,14 +64,14 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, WFlags f
 			 SLOT( onReturnPressed() ) );
 	
 	connect( m_indexList, 
-			 SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), 
+			 SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int) ), 
 			 this, 
-			 SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
+			 SLOT( onDoubleClicked ( Q3ListViewItem *, const QPoint &, int) ) );
 	
 	connect( m_indexList,
-			 SIGNAL( contextMenuRequested( QListViewItem *, const QPoint& , int ) ),
+			 SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint& , int ) ),
 			 this, 
-			 SLOT( slotContextMenuRequested ( QListViewItem *, const QPoint &, int ) ) );
+			 SLOT( slotContextMenuRequested ( Q3ListViewItem *, const QPoint &, int ) ) );
 
 	m_indexListFilled = false;
 	m_lastSelectedItem = 0;
@@ -110,7 +112,7 @@ void KCHMIndexWindow::invalidate( )
 	m_indexListFilled = false;
 }
 
-void KCHMIndexWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int )
+void KCHMIndexWindow::onDoubleClicked( Q3ListViewItem *item, const QPoint &, int )
 {
 	if ( !item )
 		return;
@@ -135,7 +137,7 @@ void KCHMIndexWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int 
 		::mainWindow->openPage( url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
-void KCHMIndexWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
+void KCHMIndexWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
 		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
@@ -151,7 +153,7 @@ void KCHMIndexWindow::slotContextMenuRequested( QListViewItem * item, const QPoi
 
 void KCHMIndexWindow::refillIndex( )
 {
-	QValueVector< LCHMParsedEntry > data;
+	Q3ValueVector< LCHMParsedEntry > data;
 	
 	if ( !::mainWindow->chmFile()->parseIndex( &data )
 			   || data.size() == 0 )

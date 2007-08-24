@@ -42,10 +42,10 @@ class KCHMContentsWindow : public KQListView
 		KCHMIndTocItem *	getTreeItem( const QString& url );
 		
 	public slots:
-		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+		void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
 		
 	private:
-		KQPopupMenu 				  * m_contextMenu;
+		KQMenu 				  * m_contextMenu;
 		QMap<QString, KCHMIndTocItem*>	m_urlListMap;
 };
 

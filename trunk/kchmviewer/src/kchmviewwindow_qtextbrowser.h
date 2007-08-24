@@ -26,11 +26,13 @@
 
 #include "kchmviewwindow.h"
 #include "kchmsourcefactory.h"
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 /**
 @author Georgy Yunaev
 */
-class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
+class KCHMViewWindow_QTextBrowser : public Q3TextBrowser, public KCHMViewWindow
 {
 Q_OBJECT
 public:
@@ -91,7 +93,7 @@ private slots:
 	virtual void	slotLinkClicked (const QString & newlink);
 	
 private:
-	QPopupMenu * 	createPopupMenu ( const QPoint & pos );
+	Q3PopupMenu * 	createPopupMenu ( const QPoint & pos );
 	void	setSource ( const QString & name );
 			
 	int						m_zoomfactor;

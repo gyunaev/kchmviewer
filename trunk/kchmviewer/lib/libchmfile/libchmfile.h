@@ -22,23 +22,13 @@
 #ifndef INCLUDE_LIBCHMFILE_H
 #define INCLUDE_LIBCHMFILE_H
 
-#include <qstring.h>
-#include <qcstring.h>
-#include <qlistview.h>
-#include <qlistbox.h>
-#include <qmap.h>
-#include <qvaluevector.h>
-#include <qtextcodec.h> 
+#include <QString>
+#include <QMap>
+#include <QVector>
+#include <QTextCodec> 
+#include <QPixmap>
 
 #include "libchmtextencoding.h"
-
-// Qt3/Qt4 compatibility: in Qt3 QVector stores pointers, not values - so QValueVector should be used. 
-// In Qt4 QVector stores values, so we can use QVector
-#if defined (USE_QT_4)
-	#define	QT34VECTOR	QVector
-#else
-	#define	QT34VECTOR	QValueVector
-#endif
 
 
 //! Contains different (non-standard) image types
@@ -147,7 +137,7 @@ class LCHMFile
 		 *         by really buggy chm file; please report a bug if the file is opened ok under Windows.
 		 * \ingroup fileparsing
 		 */
-		bool parseTableOfContents( QT34VECTOR< LCHMParsedEntry > * topics ) const;
+		bool parseTableOfContents( QVector< LCHMParsedEntry > * topics ) const;
 
 		/*!
 		 * \brief Parses the Index Table
@@ -158,7 +148,7 @@ class LCHMFile
 		 *         by really buggy chm file; so far it never happened on indexes.
 		 * \ingroup fileparsing
 		 */
-		bool parseIndex( QT34VECTOR< LCHMParsedEntry > * indexes ) const;
+		bool parseIndex( QVector< LCHMParsedEntry > * indexes ) const;
 
 		/*!
 		 * \brief Retrieves the content from url in current chm file to QString.

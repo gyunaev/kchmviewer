@@ -30,6 +30,8 @@
 	#include <dcopclient.h>
 	
 	#include "kde/kchmdcopiface.h"
+//Added by qt3to4:
+#include <Q3CString>
 #endif
 
 KCHMMainWindow * mainWindow;
@@ -80,7 +82,7 @@ int main( int argc, char ** argv )
 		qWarning("DCOP attach failed");
 	
 	//QCString realAppId = client->registerAs( kapp->name() );
-	QCString realAppId = client->registerAs( "kchmviewer" );
+	Q3CString realAppId = client->registerAs( "kchmviewer" );
 #endif
 						
 	mainWindow = new KCHMMainWindow();

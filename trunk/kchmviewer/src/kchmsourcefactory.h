@@ -28,7 +28,7 @@
 /**
 @author Georgy Yunaev
 */
-class KCHMSourceFactory : public QMimeSourceFactory
+class KCHMSourceFactory : public Q3MimeSourceFactory
 {
 public:
 	KCHMSourceFactory (KCHMViewWindow * viewwindow);

@@ -21,6 +21,8 @@
 
 #include <qstringlist.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include "kchmtreeviewitem.h"
 #include "kchmmainwindow.h"
@@ -28,11 +30,11 @@
 #include "iconstorage.h"
 
 
-KCHMIndTocItem::KCHMIndTocItem( QListViewItem * parent, QListViewItem * after, QString name, QString aurl, int image) : QListViewItem(parent, after, name), url(aurl), image_number(image)
+KCHMIndTocItem::KCHMIndTocItem( Q3ListViewItem * parent, Q3ListViewItem * after, QString name, QString aurl, int image) : Q3ListViewItem(parent, after, name), url(aurl), image_number(image)
 {
 }
 
-KCHMIndTocItem::KCHMIndTocItem( QListView * parent, QListViewItem * after, QString name, QString aurl, int image) : QListViewItem(parent, after, name), url(aurl), image_number(image)
+KCHMIndTocItem::KCHMIndTocItem( Q3ListView * parent, Q3ListViewItem * after, QString name, QString aurl, int image) : Q3ListViewItem(parent, after, name), url(aurl), image_number(image)
 {
 }
 
@@ -93,7 +95,7 @@ QString KCHMIndTocItem::getUrl( ) const
 void KCHMIndTocItem::paintBranches( QPainter * p, const QColorGroup & cg, int w, int y, int h )
 {
 	if ( image_number != LCHMBookIcons::IMAGE_INDEX )
-		QListViewItem::paintBranches(p, cg, w, y, h);
+		Q3ListViewItem::paintBranches(p, cg, w, y, h);
 	else
 	{
 		// Too bad that listView()->paintEmptyArea( p, QRect( 0, 0, w, h ) ) is protected. 
@@ -120,11 +122,11 @@ void KCHMIndTocItem::paintCell( QPainter * p, const QColorGroup & cg, int column
         newcg.setColor( QColorGroup::Text, Qt::lightGray );
 	else
 	{
-		QListViewItem::paintCell( p, cg, column, width, align );
+		Q3ListViewItem::paintCell( p, cg, column, width, align );
 		return;
 	}
 
-    QListViewItem::paintCell( p, newcg, column, width, align );
+    Q3ListViewItem::paintCell( p, newcg, column, width, align );
 	newcg.setColor( QColorGroup::Text, c );
 }
 
@@ -132,13 +134,13 @@ void KCHMIndTocItem::paintCell( QPainter * p, const QColorGroup & cg, int column
 void KCHMIndTocItem::setOpen( bool open )
 {
 	if ( image_number != LCHMBookIcons::IMAGE_INDEX || open )
-		QListViewItem::setOpen (open);
+		Q3ListViewItem::setOpen (open);
 }
 
-void kchmFillListViewWithParsedData( QListView * list, const QValueVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
+void kchmFillListViewWithParsedData( Q3ListView * list, const Q3ValueVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
 {
-	QValueVector< KCHMIndTocItem *> lastchild;
-	QValueVector< KCHMIndTocItem *> rootentry;	
+	Q3ValueVector< KCHMIndTocItem *> lastchild;
+	Q3ValueVector< KCHMIndTocItem *> rootentry;	
 
 	if ( map )
 		map->clear();

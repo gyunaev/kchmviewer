@@ -24,7 +24,7 @@
 
 #include "forwarddeclarations.h"
 
-class KCHMNavToolbar : public QToolBar
+class KCHMNavToolbar : public Q3ToolBar
 {
 Q_OBJECT
 public:

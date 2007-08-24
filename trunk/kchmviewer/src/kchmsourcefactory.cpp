@@ -19,7 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qimage.h>
 #include <qdir.h>
 
@@ -33,7 +33,7 @@
 
 
 KCHMSourceFactory::KCHMSourceFactory (KCHMViewWindow * viewwindow)
-	: QMimeSourceFactory()
+	: Q3MimeSourceFactory()
 {
 	m_viewWindow = viewwindow;
 }
@@ -58,12 +58,12 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 	// to generate the HTML page, and set it.
 	if ( LCHMUrlFactory::handleFileType( path, data ) )
 	{
-		((QMimeSourceFactory*)this)->setText (path, data);
+		((Q3MimeSourceFactory*)this)->setText (path, data);
 	}
 	else if ( path.endsWith (".htm") || path.endsWith (".html") )
 	{
 		if ( chm->getFileContentAsString( &data, path ) )
-			((QMimeSourceFactory*)this)->setText (path, data);
+			((Q3MimeSourceFactory*)this)->setText (path, data);
 	}
 	else
 	{
@@ -76,16 +76,16 @@ const QMimeSource * KCHMSourceFactory::data( const QString & abs_name ) const
 		if ( chm->getFileContentAsBinary( &buf, fpath ) )
 		{
 			if ( img.loadFromData ( (const uchar *) buf.data(), buf.size() ) )
-				((QMimeSourceFactory*)this)->setImage (path, img);
+				((Q3MimeSourceFactory*)this)->setImage (path, img);
 		}
 		else
 		{
-			((QMimeSourceFactory*)this)->setImage( path, img );
+			((Q3MimeSourceFactory*)this)->setImage( path, img );
 			qWarning( "Could not resolve file %s\n", path.ascii() );
 		}
 	}
 	
-	return QMimeSourceFactory::data (path);
+	return Q3MimeSourceFactory::data (path);
 }
 
 QString KCHMSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QString & ) const

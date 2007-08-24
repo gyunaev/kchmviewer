@@ -1,0 +1,2 @@
+SUBDIRS += libchmfile
+TEMPLATE = subdirs 

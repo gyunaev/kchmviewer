@@ -24,9 +24,12 @@
 #define QASSISTANTINDEX_H
 
 #include <qstringlist.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qdatastream.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 namespace QtAs
 {
@@ -69,14 +72,14 @@ class Index : public QObject
 		struct Entry
 		{
 			Entry( int d ) { documents.append( Document( d, 1 ) ); }
-			Entry( QValueList<Document> l ) : documents( l ) {}
-			QValueList<Document> documents;
+			Entry( Q3ValueList<Document> l ) : documents( l ) {}
+			Q3ValueList<Document> documents;
 		};
 		
 		struct PosEntry
 		{
 			PosEntry( int p ) { positions.append( p ); }
-			QValueList<uint> positions;
+			Q3ValueList<uint> positions;
 		};
 
 		Index( const QString &dp, const QString &hp );
@@ -110,12 +113,12 @@ class Index : public QObject
 		
 		QStringList				getWildcardTerms( const QString& );
 		QStringList				split( const QString& );
-		QValueList<Document> 	setupDummyTerm( const QStringList& );
+		Q3ValueList<Document> 	setupDummyTerm( const QStringList& );
 		bool 					searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename );
 		
 		QStringList 		docList;
-		QDict<Entry> 		dict;
-		QDict<PosEntry>		miniDict;
+		Q3Dict<Entry> 		dict;
+		Q3Dict<PosEntry>		miniDict;
 		QString 			docPath;
 		QString 			dictFile;
 		QString 			docListFile;
@@ -132,18 +135,18 @@ class Index : public QObject
 
 struct Term
 {
-	Term( const QString &t, int f, QValueList<Document> l ) : term( t ), frequency( f ), documents( l ) {}
+	Term( const QString &t, int f, Q3ValueList<Document> l ) : term( t ), frequency( f ), documents( l ) {}
 	
 	QString 				term;
 	int 					frequency;
-	QValueList<Document>	documents;
+	Q3ValueList<Document>	documents;
 };
 
-class TermList : public QPtrList<Term>
+class TermList : public Q3PtrList<Term>
 {
 	public:
-		TermList() : QPtrList<Term>() {}
-		int compareItems( QPtrCollection::Item i1, QPtrCollection::Item i2 );
+		TermList() : Q3PtrList<Term>() {}
+		int compareItems( Q3PtrCollection::Item i1, Q3PtrCollection::Item i2 );
 };
 
 };

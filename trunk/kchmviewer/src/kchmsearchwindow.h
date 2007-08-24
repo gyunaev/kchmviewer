@@ -26,6 +26,9 @@
 
 #include "kchmsettings.h"
 #include "forwarddeclarations.h"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QLabel>
 
 
 /**
@@ -55,7 +58,7 @@ class KCHMSearchWindow : public QWidget
 {
 	Q_OBJECT
 	public:
-		KCHMSearchWindow ( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
+		KCHMSearchWindow ( QWidget * parent = 0, const char * name = 0, Qt::WFlags f = 0 );
 	
 		void	invalidate();
 		void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
@@ -64,12 +67,12 @@ class KCHMSearchWindow : public QWidget
 		bool	searchQuery( const QString& query, QStringList * results );
 		
 	public slots:
-		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
+		void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
 		
 	private slots:
 		void	onHelpClicked();
 		void 	onReturnPressed ();
-		void	onDoubleClicked ( QListViewItem *, const QPoint &, int);
+		void	onDoubleClicked ( Q3ListViewItem *, const QPoint &, int);
 	
 	private:
 		bool	initSearchEngine();
@@ -77,7 +80,7 @@ class KCHMSearchWindow : public QWidget
 	private:
 		QComboBox 		*	m_searchQuery;
 		KQListView		*	m_searchList;
-		KQPopupMenu		* 	m_contextMenu;
+		KQMenu		* 	m_contextMenu;
 		
 		KCHMSearchEngine*	m_searchEngine;
 };

@@ -25,6 +25,8 @@
 #include "libchmfile.h"
 #include "libchmtocimage.h"
 
+#include <QPixmap>
+
 //! Keeps the intermediate search result
 class LCHMSearchProgressResult
 {
@@ -32,13 +34,13 @@ class LCHMSearchProgressResult
 		inline LCHMSearchProgressResult() {}
 		inline LCHMSearchProgressResult( u_int32_t t, u_int32_t u ) : titleoff(t),urloff(u) {}
 		
-		QValueVector<u_int64_t>		offsets;
-		u_int32_t					titleoff;
-		u_int32_t					urloff;
+		QVector<u_int64_t>		offsets;
+		u_int32_t				titleoff;
+		u_int32_t				urloff;
 };
 
 //! An array to keeps the intermediate search results
-typedef QT34VECTOR<LCHMSearchProgressResult>	LCHMSearchProgressResults;
+typedef QVector<LCHMSearchProgressResult>	LCHMSearchProgressResults;
 
 
 //! CHM files processor; the implementation
@@ -67,7 +69,7 @@ class LCHMFileImpl
 		bool		setCurrentEncoding( const LCHMTextEncoding * encoding );
 						
 		//! Parse the HHC or HHS file, and fill the context (asIndex is false) or index (asIndex is true) array.
-		bool  		parseFileAndFillArray (const QString& file, QT34VECTOR< LCHMParsedEntry > * data, bool asIndex );
+		bool  		parseFileAndFillArray (const QString& file, QVector< LCHMParsedEntry > * data, bool asIndex );
 	
 		/*!
 		 * \brief Fast search using the $FIftiMain file in the .chm.
@@ -105,20 +107,20 @@ class LCHMFileImpl
 		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
 		inline QString encodeWithCurrentCodec (const QString& str) const
 		{
-			return (m_textCodec ? m_textCodec->toUnicode (str) : str);
+			return (m_textCodec ? m_textCodec->toUnicode( qPrintable(str) ) : str);
 		}
 
 		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
 		inline QString encodeWithCurrentCodec (const char * str) const
 		{
-			return (m_textCodec ? m_textCodec->toUnicode (str) : (QString) str);
+			return (m_textCodec ? m_textCodec->toUnicode( str ) : (QString) str);
 		}
 	
 		//! Encode the string from internal files with the currently selected text codec, if possible. 
 		//! Or return as-is, if not.	
 		inline QString encodeInternalWithCurrentCodec (const QString& str) const
 		{
-			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode (str) : str);
+			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode( qPrintable(str) ) : str);
 		}
 	
 		//! Encode the string from internal files with the currently selected text codec, if possible. 
@@ -171,7 +173,7 @@ class LCHMFileImpl
 		bool  changeFileEncoding( const char *qtencoding );
 
 		//! Convert the word, so it has an appropriate encoding
-		QCString convertSearchWord ( const QString &src );
+		QByteArray convertSearchWord ( const QString &src );
 
 		/*!
 		 * Helper procedure in TOC parsing, decodes the string between the quotes (first or last) with decoding HTML

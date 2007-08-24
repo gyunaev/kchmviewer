@@ -25,9 +25,12 @@
 #include "kde-qt.h"
 #include "forwarddeclarations.h"
 
+
 /**
 @author tim
 */
+//FIXME! porting
+/*
 class KCHMListItemTooltip : public QToolTip
 {
 	public:
@@ -38,7 +41,7 @@ class KCHMListItemTooltip : public QToolTip
 
 		void maybeTip ( const QPoint & pos )
 		{
-			QListViewItem *it = m_pParent->itemAt( pos );
+			Q3ListViewItem *it = m_pParent->itemAt( pos );
 
 			if ( !it )
 				return;
@@ -68,5 +71,5 @@ class KCHMListItemTooltip : public QToolTip
 	private:
 		KQListView *	m_pParent;
 };
-
+*/
 #endif /* INCLUDE_KCHMLISTITEMTOOLTIP_H */

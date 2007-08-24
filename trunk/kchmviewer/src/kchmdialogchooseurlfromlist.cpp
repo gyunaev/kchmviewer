@@ -23,14 +23,18 @@
 
 #include "kchmdialogchooseurlfromlist.h"
 #include "kchmtreeviewitem.h"
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
 KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList(const QStringList& urls, const QStringList& titles, QWidget* parent)
 	: QDialog(parent, 0, true)
 {
-	QVBoxLayout * layout = new QVBoxLayout (this);
+	Q3VBoxLayout * layout = new Q3VBoxLayout (this);
 	layout->setMargin (5);
 
-	QListView * m_urlsList = new QListView (this);
+	Q3ListView * m_urlsList = new Q3ListView (this);
 	m_urlsList->addColumn( i18n( "Topics" ) );
 	
 	for ( unsigned int i = 0; i < urls.size(); i++ )
@@ -39,32 +43,30 @@ KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList(const QStringList& urls
 	layout->addWidget ( new QLabel( i18n( "Please select one of the topics below:"), this) );
 	layout->addWidget ( m_urlsList );
 
-	QHBoxLayout * hlayout = new QHBoxLayout (layout);
+	Q3HBoxLayout * hlayout = new Q3HBoxLayout (layout);
 	QPushButton * bok = new QPushButton( i18n( "&Ok" ), this);
 	QPushButton * bcancel = new QPushButton( i18n( "&Cancel" ), this);
 
 	hlayout->addWidget (bok);
 	hlayout->addWidget (bcancel);
 
-	connect( m_urlsList, SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
-	connect( m_urlsList, SIGNAL( currentChanged ( QListViewItem *) ), this, SLOT( onCurrentChanged ( QListViewItem *) ) );
+	connect( m_urlsList, SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int) ), this, SLOT( onDoubleClicked ( Q3ListViewItem *, const QPoint &, int) ) );
+	connect( m_urlsList, SIGNAL( currentChanged ( Q3ListViewItem *) ), this, SLOT( onCurrentChanged ( Q3ListViewItem *) ) );
 	
 	connect( bok, SIGNAL( clicked () ), this, SLOT( accept() ) );
 	connect( bcancel, SIGNAL( clicked () ), this, SLOT( reject() ) );
 	m_acceptedurl = QString::null;
 }
 
-void KCHMDialogChooseUrlFromList::onDoubleClicked( QListViewItem * , const QPoint &, int )
+void KCHMDialogChooseUrlFromList::onDoubleClicked( Q3ListViewItem * , const QPoint &, int )
 {
 	accept();
 }
 
-void KCHMDialogChooseUrlFromList::onCurrentChanged( QListViewItem * item )
+void KCHMDialogChooseUrlFromList::onCurrentChanged( Q3ListViewItem * item )
 {
 	if ( item )
 		m_acceptedurl = ((KCHMSingleTreeViewItem *) item)->getUrl();
 	else
 		m_acceptedurl = QString::null;
 }
-
-#include "kchmdialogchooseurlfromlist.moc"

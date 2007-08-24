@@ -23,7 +23,7 @@
 #define KCHMDIALOGCHOOSEURLFROMLIST_H
 
 #include <qdialog.h>
-#include <qlistview.h>
+#include <q3listview.h>
 
 /**
 @author tim
@@ -36,11 +36,11 @@ public:
 	QString getSelectedItemUrl()	{ return m_acceptedurl; }
 
 private slots:
-	void onDoubleClicked( QListViewItem * item, const QPoint &, int );
-	void onCurrentChanged ( QListViewItem * item);
+	void onDoubleClicked( Q3ListViewItem * item, const QPoint &, int );
+	void onCurrentChanged ( Q3ListViewItem * item);
 
 private:
-	QListView *	m_urlsList;
+	Q3ListView *	m_urlsList;
 	QString		m_acceptedurl;
 };
 

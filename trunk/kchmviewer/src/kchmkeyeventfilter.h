@@ -23,6 +23,8 @@
 #define INCLUDE_KCHMKEYEVENTFILTER_H
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QEvent>
 
 /*!*
  * This class must be installed as a global event handler. Its responsibility

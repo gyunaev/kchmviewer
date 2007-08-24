@@ -20,6 +20,8 @@
  ***************************************************************************/
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QEventLoop>
 
 #include "kchmmainwindow.h"
 #include "kchmsearchengine.h"
@@ -28,9 +30,6 @@
 #include "libchmurlfactory.h"
 
 #include "kchmsearchengine_impl.h"
-
-#include "kchmsearchengine.moc"
-
 
 
 KCHMSearchEngine::KCHMSearchEngine()
@@ -73,7 +72,7 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 	m_Index->setDictionaryFile( indexfiledict );
 	m_Index->setDocListFile( indexfiledoc );
 
-	m_progressDlg = new QProgressDialog( 0 );
+	m_progressDlg = new Q3ProgressDialog( 0 );
 	connect( m_progressDlg, SIGNAL( canceled() ), this, SLOT( cancelButtonPressed() ) );
 	
 	connect( m_Index, SIGNAL( indexingProgress( int ) ),  this, SLOT( setIndexingProgress( int ) ) );

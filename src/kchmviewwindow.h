@@ -24,6 +24,8 @@
 
 #include "forwarddeclarations.h"
 #include "kde-qt.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /**
 @author Georgy Yunaev
@@ -98,7 +100,7 @@ public:
 	 * Used by contents window (and probably by other windows in future) to show
 	 * context menu in listviews. Put here to futher reuse code in index and search windows.
 	 */
-	KQPopupMenu *	createListItemContextMenu ( QWidget * w );
+	KQMenu *	createListItemContextMenu ( QWidget * w );
 	void			setTabKeeper ( const QString& link );
 	
 		
@@ -114,8 +116,8 @@ protected:
 	virtual bool	openPage ( const QString& url ) = 0;
 	virtual void	handleStartPageAsImage( QString& link );
 	
-	KQPopupMenu * 	getContextMenu( const QString& link, QWidget * parent );
-	KQPopupMenu * 	createStandardContextMenu( QWidget * parent );
+	KQMenu * 	getContextMenu( const QString& link, QWidget * parent );
+	KQMenu * 	createStandardContextMenu( QWidget * parent );
 	
 	//! History
 	class KCHMUrlHistory
@@ -137,10 +139,10 @@ protected:
 	unsigned int	m_historyMaxSize;
 	unsigned int	m_historyCurrentPos;
 	
-	QValueList<KCHMUrlHistory>		m_history;
+	Q3ValueList<KCHMUrlHistory>		m_history;
 	
-	KQPopupMenu *	m_contextMenu;
-	KQPopupMenu *	m_contextMenuLink;
+	KQMenu *	m_contextMenu;
+	KQMenu *	m_contextMenuLink;
 	
 	// This member keeps a "open new tab" link between getContextMenu() call and appropriate
 	// slot call

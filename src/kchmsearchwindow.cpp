@@ -28,18 +28,21 @@
 #include "kchmtreeviewitem.h"
 #include "kchmsearchengine.h"
 
-#include "kchmsearchwindow.moc"
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
+#include <QLabel>
 
 
-KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags f )
+KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, Qt::WFlags f )
 	: QWidget (parent, name, f)
 {
-	QVBoxLayout * layout = new QVBoxLayout (this);
+	Q3VBoxLayout * layout = new Q3VBoxLayout (this);
 	layout->setMargin(6);
 	layout->setSpacing(6);
 	
 	// Labels <type words to search> and <help>
-	QHBoxLayout * labellayout = new QHBoxLayout();
+	Q3HBoxLayout * labellayout = new Q3HBoxLayout();
 	labellayout->addWidget( new QLabel( i18n( "Type in word(s) to search for:"), this) );
 	labellayout->addStretch( 10 );
 	
@@ -58,7 +61,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 	QPushButton * searchButton = new QPushButton ( i18n("Go"), this);
 	searchButton->setSizePolicy ( QSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 	
-	QHBoxLayout * hlayout = new QHBoxLayout ( layout );
+	Q3HBoxLayout * hlayout = new Q3HBoxLayout ( layout );
 	hlayout->addWidget ( m_searchQuery );
 	hlayout->addWidget ( searchButton );
 	
@@ -78,14 +81,14 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, WFlags 
 			 SLOT( onReturnPressed() ) );
 	
 	connect( m_searchList, 
-			 SIGNAL( doubleClicked ( QListViewItem *, const QPoint &, int) ), 
+			 SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int) ), 
 			 this, 
-			 SLOT( onDoubleClicked ( QListViewItem *, const QPoint &, int) ) );
+			 SLOT( onDoubleClicked ( Q3ListViewItem *, const QPoint &, int) ) );
 
 	connect( m_searchList, 
-			 SIGNAL( contextMenuRequested( QListViewItem *, const QPoint& , int ) ),
+			 SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint& , int ) ),
 			 this, 
-			 SLOT( slotContextMenuRequested ( QListViewItem *, const QPoint &, int ) ) );
+			 SLOT( slotContextMenuRequested ( Q3ListViewItem *, const QPoint &, int ) ) );
 	
 	//layout->addSpacing (10);
 	layout->addWidget (m_searchList);
@@ -137,7 +140,7 @@ void KCHMSearchWindow::onReturnPressed( )
 }
 
 
-void KCHMSearchWindow::onDoubleClicked( QListViewItem *item, const QPoint &, int)
+void KCHMSearchWindow::onDoubleClicked( Q3ListViewItem *item, const QPoint &, int)
 {
 	if ( !item )
 		return;
@@ -177,7 +180,7 @@ void KCHMSearchWindow::onHelpClicked( )
 	}
 }
 
-void KCHMSearchWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
+void KCHMSearchWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
 		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );

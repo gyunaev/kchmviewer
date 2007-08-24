@@ -22,8 +22,10 @@
 #ifndef CTREEVIEWITEM_H
 #define CTREEVIEWITEM_H
 
-#include <qlistview.h>
-#include <qvaluevector.h>
+#include <q3listview.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include "libchmfile.h"
 
@@ -31,11 +33,11 @@
 @author Georgy Yunaev
 */
 //! This is a list item used both in Index and Table Of Content trees
-class KCHMIndTocItem : public QListViewItem
+class KCHMIndTocItem : public Q3ListViewItem
 {
 	public:
-		KCHMIndTocItem( QListViewItem* parent, QListViewItem* after, QString name, QString aurl, int image); 
-		KCHMIndTocItem( QListView* parent, QListViewItem* after, QString name, QString url, int image);
+		KCHMIndTocItem( Q3ListViewItem* parent, Q3ListViewItem* after, QString name, QString aurl, int image); 
+		KCHMIndTocItem( Q3ListView* parent, Q3ListViewItem* after, QString name, QString url, int image);
 		
 		QString		getUrl() const;
 		virtual void setOpen ( bool open );
@@ -50,11 +52,11 @@ class KCHMIndTocItem : public QListViewItem
 };
 
 
-class KCMSearchTreeViewItem : public QListViewItem
+class KCMSearchTreeViewItem : public Q3ListViewItem
 {
 	public:
-		KCMSearchTreeViewItem (QListView* parent, QString name, QString loc, QString url)
-			: QListViewItem (parent, name, loc)
+		KCMSearchTreeViewItem (Q3ListView* parent, QString name, QString loc, QString url)
+			: Q3ListViewItem (parent, name, loc)
 		{
 			this->url = url;
 		}
@@ -66,11 +68,11 @@ class KCMSearchTreeViewItem : public QListViewItem
 };
 
 
-class KCHMSingleTreeViewItem : public QListViewItem
+class KCHMSingleTreeViewItem : public Q3ListViewItem
 {
 	public:
-		KCHMSingleTreeViewItem (QListView* parent, QString name, QString url)
-			: QListViewItem (parent, name)
+		KCHMSingleTreeViewItem (Q3ListView* parent, QString name, QString url)
+			: Q3ListViewItem (parent, name)
 		{
 			this->url = url;
 		}
@@ -82,19 +84,7 @@ class KCHMSingleTreeViewItem : public QListViewItem
 };
 
 
-class KCHMBookmarkTreeViewItem : public QListViewItem
-{
-	public:
-		KCHMBookmarkTreeViewItem (QListView* parent, QString n, QString u, int s)
-			: QListViewItem (parent, n), url(u), name(n), scroll_y(s) {	menuid = 0; }
-	
-		QString		url;
-		QString		name;
-		int			scroll_y;
-		int			menuid;
-};
 
-
-void kchmFillListViewWithParsedData( QListView * list, const QValueVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map );
+void kchmFillListViewWithParsedData( Q3ListView * list, const Q3ValueVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map );
 
 #endif

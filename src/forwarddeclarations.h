@@ -23,10 +23,10 @@
 #define FORWARD_DECLARATIONS_H
 
 class QComboBox;
-class QListView;
-class QListBox;
-class QListViewItem;
-class QListViewItemIterator;
+class Q3ListView;
+class Q3ListBox;
+class Q3ListViewItem;
+class Q3ListViewItemIterator;
 class QLineEdit;
 class QTabWidget;
 class QToolButton;

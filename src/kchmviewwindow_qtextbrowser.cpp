@@ -21,8 +21,10 @@
 
 #include <qprinter.h>
 #include <qpainter.h>
-#include <qsimplerichtext.h>
-#include <qpaintdevicemetrics.h>
+#include <q3simplerichtext.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include "kde-qt.h"
 #include "kchmmainwindow.h"
@@ -40,7 +42,7 @@
 #define KEEP_ALL_OPENED_DATA_IN_SOURCE_FACTORY
 
 KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
-	: QTextBrowser ( parent ), KCHMViewWindow ( parent )
+	: Q3TextBrowser ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 0;
 	m_sourcefactory = 0;
@@ -77,7 +79,7 @@ void KCHMViewWindow_QTextBrowser::setSource ( const QString & name )
 	{
 		// Do URI decoding, qtextbrowser does stupid job.
 		QString fixedname = decodeUrl( name );
-		QTextBrowser::setSource (fixedname);
+		Q3TextBrowser::setSource (fixedname);
 	}
 	else
 		m_allowSourceChange = true;
@@ -88,9 +90,9 @@ void KCHMViewWindow_QTextBrowser::setZoomFactor( int zoom )
 	m_zoomfactor = zoom;
 	
 	if ( zoom < 0 )
-		QTextBrowser::zoomOut( -zoom );
+		Q3TextBrowser::zoomOut( -zoom );
 	else if ( zoom > 0 )
-		QTextBrowser::zoomIn( zoom);
+		Q3TextBrowser::zoomIn( zoom);
 }
 
 void KCHMViewWindow_QTextBrowser::invalidate( )
@@ -142,11 +144,11 @@ bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 		if( !p.isActive() ) // starting printing failed
 			return false;
 		
-		QPaintDeviceMetrics metrics(p.device());
+		Q3PaintDeviceMetrics metrics(p.device());
 		int dpiy = metrics.logicalDpiY();
 		int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
 		QRect body( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
-		QSimpleRichText richText( text(),
+		Q3SimpleRichText richText( text(),
 								  QFont(),
 								  context(),
 								  styleSheet(),
@@ -260,11 +262,9 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
     return temp;
 }
 
-QPopupMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
+Q3PopupMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
 {
-	KQPopupMenu * menu = getContextMenu( anchorAt( pos ), this );
+	KQMenu * menu = getContextMenu( anchorAt( pos ), this );
 	menu->exec( mapToGlobal( contentsToViewport( pos ) ) );
 	return 0;
 }
-
-#include "kchmviewwindow_qtextbrowser.moc"

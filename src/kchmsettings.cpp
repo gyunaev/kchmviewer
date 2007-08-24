@@ -133,7 +133,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 	
 	QFile file( m_settingsFile );
 
-    if ( !file.open (IO_ReadOnly) )
+    if ( !file.open (QIODevice::ReadOnly) )
 		return false; // it's ok, file may not exist
 	
     QDataStream stream (&file);
@@ -225,7 +225,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 bool KCHMSettings::saveSettings( )
 {
 	QFile file( m_settingsFile );
-    if ( !file.open (IO_WriteOnly) )
+    if ( !file.open (QIODevice::WriteOnly) )
 	{
 		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());
 		return false;

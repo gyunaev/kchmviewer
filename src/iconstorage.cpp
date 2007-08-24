@@ -21,6 +21,8 @@
 
 
 #include "iconstorage.h"
+//Added by qt3to4:
+#include <QPixmap>
 
 
 static const KCHMIconStorage::png_memory_image_t png_image_toolbakicons[] =

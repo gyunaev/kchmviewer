@@ -19,7 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qaccel.h>
+#include <q3accel.h>
 
 #include "kchmconfig.h"
 #include "kchmmainwindow.h"
@@ -43,7 +43,7 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	connect( this, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
 	
 	// Create an iconset for the button
-	QIconSet iset( *gIconStorage.getCloseWindowIcon() );
+	QIcon iset( *gIconStorage.getCloseWindowIcon() );
 	
 	// Create a pushbutton
 	m_closeButton = new QPushButton( iset, QString::null, this );
@@ -61,7 +61,7 @@ KCHMViewWindowMgr::~KCHMViewWindowMgr( )
 void KCHMViewWindowMgr::createMenu( KCHMMainWindow * parent )
 {
 	// Create the approptiate menu entries in 'View' main menu
-	m_MenuWindow = new KQPopupMenu( parent );
+	m_MenuWindow = new KQMenu( parent );
 	parent->menuBar()->insertItem( i18n( "&Window"), m_MenuWindow );
 
 	m_menuIdClose = m_MenuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()), CTRL+Key_W );
@@ -339,6 +339,3 @@ QKeySequence KCHMViewWindowMgr::key(int i)
 			return Key_9;
 	}
 }
-
-
-#include "kchmviewwindowmgr.moc"

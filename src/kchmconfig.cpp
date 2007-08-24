@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QTextStream>
+
 #include "kde-qt.h"
 #include "kchmconfig.h"
 #include "kchmsettings.h"
@@ -68,7 +70,7 @@ KCHMConfig::~KCHMConfig()
 bool KCHMConfig::load()
 {
 	QFile file (m_datapath + "/config");
-	if ( !file.open (IO_ReadOnly) )
+	if ( !file.open (QIODevice::ReadOnly) )
 		return false; // no error message - not actually a problem
 	
 	QString line;
@@ -149,7 +151,7 @@ bool KCHMConfig::load()
 bool KCHMConfig::save( )
 {
 	QFile file (m_datapath + "/config");
-	if ( !file.open (IO_WriteOnly) )
+	if ( !file.open (QIODevice::WriteOnly) )
 	{
 		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());
 		return false;
@@ -180,7 +182,7 @@ bool KCHMConfig::save( )
 	stream << "\n[history]\n";
 	
 	// Do not write all the history, but only the needed amount
-	for ( unsigned int i = 0; i < m_History.size(); i++ )
+	for ( int i = 0; i < m_History.size(); i++ )
 		stream << m_History[m_History.size() - 1 - i] << "\n";
 	
 	//	m_History

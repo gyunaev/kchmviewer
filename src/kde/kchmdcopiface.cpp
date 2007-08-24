@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include "kchmdcopiface.h"
-#include "kchmdcopiface.moc"
 
 #include "kchmmainwindow.h"
 #include "kchmsearchwindow.h"

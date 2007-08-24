@@ -22,8 +22,8 @@
 #ifndef KCHMCONFIG_H
 #define KCHMCONFIG_H
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 extern const char * APP_PATHINUSERDIR;
 
@@ -62,7 +62,7 @@ public:
 	bool				m_LoadLatestFileOnStartup;
 	choose_action_t		m_onNewChmClick;
 	choose_action_t		m_onExternalLinkClick;
-	unsigned int		m_HistorySize;
+	int					m_HistorySize;
 	bool				m_HistoryStoreExtra;
 	use_search_engine	m_useSearchEngine;
 			

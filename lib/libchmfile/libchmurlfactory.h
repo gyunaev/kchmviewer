@@ -19,9 +19,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qdir.h>
-#include <qstring.h>
-#include <qregexp.h>
+#include <QDir>
+#include <QString>
+#include <QRegExp>
 
 namespace LCHMUrlFactory
 {
@@ -38,9 +38,9 @@ static inline bool isRemoteURL( const QString & url, QString & protocol )
 		protocol = "mailto";
 		return true;
 	}
-	else if ( uriregex.search ( url ) != -1 )
+	else if ( uriregex.indexIn( url ) != -1 )
 	{
-		QString proto = uriregex.cap ( 1 ).lower();
+		QString proto = uriregex.cap ( 1 ).toLower();
 	
 		// Filter the URLs which need to be opened by a browser
 		if ( proto == "http" 
@@ -67,7 +67,7 @@ static inline bool isNewChmURL( const QString & url, QString & chmfile, QString 
 {
 	QRegExp uriregex ( "^ms-its:(.*)::(.*)$" );
 
-	if ( uriregex.search ( url ) != -1 )
+	if ( uriregex.indexIn ( url ) != -1 )
 	{
 		chmfile = uriregex.cap ( 1 );
 		page = uriregex.cap ( 2 );
@@ -86,7 +86,7 @@ static inline QString makeURLabsoluteIfNeeded( const QString & url )
 	&& !isJavascriptURL (url)
 	&& !isNewChmURL (url, p1, p2) )
 	{
-		newurl = QDir::cleanDirPath (url);
+		newurl = QDir::cleanPath (url);
 
 		// Normalize url, so it becomes absolute
 		if ( newurl[0] != '/' )
@@ -113,7 +113,7 @@ static inline bool handleFileType( const QString& link, QString& generated )
 	if ( !link.endsWith( intext ) )
 		return false;
 
-	QString filelink = link.left( link.length() - strlen( intext ) );
+	QString filelink = link.left( link.length() - intext.length() );
 	generated = "<html><body><img src=\"" + filelink + "\"></body></html>";
 	return true;
 }

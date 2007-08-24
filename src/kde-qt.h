@@ -48,56 +48,57 @@
 
 	#define KQ_CLASSNAME(name)			Q##name
 
-	#include <qapplication.h>
-	#include <qmainwindow.h>
-	#include <qstring.h>
-	#include <qstatusbar.h>
-	#include <qlistview.h>
-	#include <qfiledialog.h>
-	#include <qmenubar.h>
-	#include <qtabwidget.h>
-	#include <qmessagebox.h>
-	#include <qprogressdialog.h>
+	#include <QApplication>
+	#include <QMainWindow>
+	#include <QStatusBar>
+//	#include <Qq3listview.h>
+	#include <QFileDialog>
+	#include <QMenuBar>
+	#include <QMenu>
+	#include <QTabWidget>
+	#include <QMessageBox>
+	#include <QProgressDialog>
 
 	#define i18n(A)		tr(A)
 
 #endif /* USE_KDE */
 
 /* common non-wrapped UI classes */
-#include <qsplitter.h>
-#include <qtoolbutton.h>
-#include <qheader.h>
-#include <qtextbrowser.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qpushbutton.h>
+#include <QSplitter>
+#include <QToolButton>
+//#include <QHeader>
+#include <QTextBrowser>
+#include <QLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QPushButton>
 
 /* common utility classes */
-#include <qwhatsthis.h>
-#include <qstring.h>
-#include <qtextedit.h>
-#include <qfile.h>
-#include <qdir.h>
-#include <qregexp.h>
-#include <qtimer.h>
-#include <qmap.h>
-#include <qeventloop.h>
+#include <QWhatsThis>
+#include <QString>
+#include <QTextEdit>
+#include <QFile>
+#include <QDir>
+#include <QRegExp>
+#include <QTimer>
+#include <QMap>
+#include <QEventLoop>
+
 
 class KQMainWindow : public KQ_CLASSNAME(MainWindow)
 {
 public:
-	KQMainWindow ( QWidget * parent, const char * name, WFlags f )
+	KQMainWindow ( QWidget * parent, const char * name, Qt::WFlags f )
 		: KQ_CLASSNAME(MainWindow) (parent, name, f) {};
 };
 
-
+/*
 class KQListView : public KQ_CLASSNAME(ListView)
 {
 public:
 	KQListView(QWidget *parent = 0, const char *name = 0, int f = 0);
 };
-
+*/
 
 class KQProgressModalDialog : public KQ_CLASSNAME(ProgressDialog)
 {
@@ -116,26 +117,28 @@ class KQProgressModalDialog : public KQ_CLASSNAME(ProgressDialog)
 class KQTabWidget : public KQ_CLASSNAME(TabWidget)
 {
 public:
-	KQTabWidget (QWidget *parent = 0, const char *name = 0, int f = 0)
-		: KQ_CLASSNAME(TabWidget) (parent, name, f) {};
+	KQTabWidget (QWidget *parent = 0 )
+		: KQ_CLASSNAME(TabWidget) (parent) {};
 };
 
-class KQPopupMenu : public KQ_CLASSNAME(PopupMenu)
+class KQMenu : public KQ_CLASSNAME(Menu)
 {
 public:
-	KQPopupMenu (QWidget *parent = 0 )
-		: KQ_CLASSNAME(PopupMenu) (parent) {};
+	KQMenu (QWidget *parent = 0 )
+		: KQ_CLASSNAME(Menu) (parent) {};
 };
 
-#include <qinputdialog.h>
-#include <qcheckbox.h>
-#include <qtextedit.h>
-#include <qradiobutton.h>
-#include <qspinbox.h>
-#include <qgroupbox.h>
-#include <qbuttongroup.h>
-#include <qtooltip.h>
-
+#include <QInputDialog>
+#include <QCheckBox>
+#include <QTextEdit>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QGroupBox>
+//#include <QButtonGroup>
+#include <QToolTip>
+#include <QListWidget>
+#include <QTreeWidget>
+				 
 
 class KCHMShowWaitCursor
 {

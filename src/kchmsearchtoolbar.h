@@ -31,7 +31,7 @@
 /**
 @author Georgy Yunaev
 */
-class KCHMSearchAndViewToolbar : public QToolBar
+class KCHMSearchAndViewToolbar : public Q3ToolBar
 {
 	Q_OBJECT
 	public:
@@ -63,7 +63,7 @@ class KCHMSearchAndViewToolbar : public QToolBar
 	private:
 		void	search (bool forward);
 		
-		KQPopupMenu 		*	m_MenuView;
+		KQMenu 		*	m_MenuView;
 		QComboBox			*	m_findBox;
 		QToolButton			*	m_buttonPrev;
 		QToolButton			*	m_buttonNext;

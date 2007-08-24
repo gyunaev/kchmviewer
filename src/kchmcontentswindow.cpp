@@ -28,7 +28,6 @@
 #include "kchmmainwindow.h"
 #include "kchmtreeviewitem.h"
 
-#include "kchmcontentswindow.moc"
 
 KCHMContentsWindow::KCHMContentsWindow(QWidget *parent, const char *name)
 	: KQListView(parent, name)
@@ -42,11 +41,11 @@ KCHMContentsWindow::KCHMContentsWindow(QWidget *parent, const char *name)
 	header()->hide();
 	setShowToolTips( false );
 	
-	connect( this, SIGNAL( onItem ( QListViewItem * ) ), this, SLOT( slotOnItem( QListViewItem * ) ) );
+	connect( this, SIGNAL( onItem ( Q3ListViewItem * ) ), this, SLOT( slotOnItem( Q3ListViewItem * ) ) );
 	connect( this, 
-			 SIGNAL( contextMenuRequested( QListViewItem *, const QPoint& , int ) ),
+			 SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint& , int ) ),
 			 this, 
-			 SLOT( slotContextMenuRequested ( QListViewItem *, const QPoint &, int ) ) );
+			 SLOT( slotContextMenuRequested ( Q3ListViewItem *, const QPoint &, int ) ) );
 
 	
 	new KCHMListItemTooltip( this );
@@ -56,7 +55,7 @@ KCHMContentsWindow::~KCHMContentsWindow()
 {
 }
 
-void KCHMContentsWindow::slotContextMenuRequested( QListViewItem * item, const QPoint & point, int )
+void KCHMContentsWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
 		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
@@ -71,7 +70,7 @@ void KCHMContentsWindow::slotContextMenuRequested( QListViewItem * item, const Q
 
 void KCHMContentsWindow::refillTableOfContents( )
 {
-	QValueVector< LCHMParsedEntry > data;
+	Q3ValueVector< LCHMParsedEntry > data;
 	
 	if ( !::mainWindow->chmFile()->parseTableOfContents( &data )
 	|| data.size() == 0 )

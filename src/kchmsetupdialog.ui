@@ -299,7 +299,7 @@
                                     <string>Enter the path to the program, which will be used as a browser for external links.  A &lt;i&gt;%s&lt;/i&gt; symbol will be replaced by the URL clicked.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>WordBreak|AlignVCenter</set>
+                                    <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
                                 </property>
                             </widget>
                             <widget class="QLineEdit">
@@ -344,7 +344,7 @@
                                             <cstring>m_radioUseQtextBrowser</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;QTextBrowser-based widget</string>
+                                            <string>&amp;Q3TextBrowser-based widget</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+Q</string>
@@ -528,7 +528,7 @@
                                     <string>Use the search based on internal CHM index. This engine cannot search for any symbols except underscode, does not support multibyte languages, and is not always available.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>WordBreak|AlignVCenter</set>
+                                    <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
                                 </property>
                             </widget>
                             <widget class="QRadioButton" row="0" column="0">
@@ -555,7 +555,7 @@
                                     <string>Use new kchmviewer internal  search engine (recommended). This engine indexes symbols, so it is possible to search for special symbols (like "C++"). All languages are supported. The index will be generated before the first search.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>WordBreak|AlignVCenter</set>
+                                    <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
                                 </property>
                             </widget>
                         </grid>
@@ -593,10 +593,10 @@
                 </widget>
                 <spacer>
                     <property name="name">
-                        <cstring>Horizontal Spacing2</cstring>
+                        <cstring>Qt::Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

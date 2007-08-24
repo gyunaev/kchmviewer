@@ -22,6 +22,10 @@
 #ifndef KCHMMAINWINDOW_H
 #define KCHMMAINWINDOW_H
 
+#include <QCloseEvent>
+#include <QShowEvent>
+#include <QEvent>
+
 #include "kde-qt.h"
 
 #include "libchmfile.h"
@@ -79,8 +83,8 @@ class KCHMMainWindow : public KQMainWindow
 		void		setTextEncoding (const LCHMTextEncoding * enc);
 			
 	public slots:
-		void slotOnTreeClicked( QListViewItem *item );
-		void slotOnTreeDoubleClicked( QListViewItem *item, const QPoint &, int );
+		void slotOnTreeClicked( Q3ListViewItem *item );
+		void slotOnTreeDoubleClicked( Q3ListViewItem *item, const QPoint &, int );
 		
 		void slotAddBookmark ( );
 		void slotOpenPageInNewTab( );
@@ -159,7 +163,7 @@ class KCHMMainWindow : public KQMainWindow
 		LCHMFile			*	m_chmFile;
 		bool					m_FirstTimeShow;
 		
-		KQPopupMenu			*	m_menuHistory;
+		KQMenu			*	m_menuHistory;
 		
 		int						m_tabContextPage;	
 		int						m_tabIndexPage;
@@ -178,7 +182,7 @@ class KCHMMainWindow : public KQMainWindow
 		
 		bool					m_useShortAutotest;
 		auto_test_state_t		m_autoteststate;
-		QListViewItemIterator	m_autotestlistiterator;
+		QTreeWidgetItemIterator	m_autotestlistiterator;
 	
 	private slots:
 		void	runAutoTest();

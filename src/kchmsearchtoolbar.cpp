@@ -22,10 +22,12 @@
 #include <qtoolbutton.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
-#include <qtextedit.h>
-#include <qaccel.h>
-#include <qpopupmenu.h>
+#include <q3textedit.h>
+#include <q3accel.h>
+#include <q3popupmenu.h>
 #include <qmenubar.h>
+//Added by qt3to4:
+#include <QPixmap>
  
 #include "libchmfile.h"
 #include "libchmfileimpl.h"
@@ -39,12 +41,10 @@
 #include "kchmcontentswindow.h"
 #include "iconstorage.h"
 
-#include "kchmsearchtoolbar.moc"
-
-static KQPopupMenu *menu_langlist, *menu_enclist;
+static KQMenu *menu_langlist, *menu_enclist;
 
 KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
-	: QToolBar (parent)
+	: Q3ToolBar (parent)
 {
 	// Toolbar label
 	setLabel( i18n( "Find in page") );
@@ -64,9 +64,9 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	m_findBox = new QComboBox (TRUE, this);
 	m_findBox->setMinimumWidth (200);
 	connect( m_findBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( onReturnPressed() ) );
-	QWhatsThis::add( m_findBox, i18n( "Enter here the text to search in the current page.") );	
+	Q3WhatsThis::add( m_findBox, i18n( "Enter here the text to search in the current page.") );	
 	
-	QAccel *acc = new QAccel( this );
+	Q3Accel *acc = new Q3Accel( this );
 	acc->connectItem( acc->insertItem(Key_F+CTRL), this, SLOT( onAccelFocusSearchField() ) );
 	
 	// Button 'prevous search result'
@@ -76,7 +76,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT(onBtnPrevSearchResult()),
 				this);
-	QWhatsThis::add( m_buttonPrev, i18n( "Click this button to find previous search result.") );
+	Q3WhatsThis::add( m_buttonPrev, i18n( "Click this button to find previous search result.") );
 
 	// Button 'next search result'
 	m_buttonNext = new QToolButton (iconNext,
@@ -85,7 +85,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT(onBtnNextSearchResult()),
 				this);
-	QWhatsThis::add( m_buttonNext, i18n( "Click this button to find next search result.") );
+	Q3WhatsThis::add( m_buttonNext, i18n( "Click this button to find next search result.") );
 
 	// Button 'locate in content'
 	m_buttonLocateInContent = new QToolButton( iconLocateInContent,
@@ -94,7 +94,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT( onBtnLocateInContentWindow() ),
 				this );
-	QWhatsThis::add( m_buttonLocateInContent, i18n( "Click this button to find current topic in the content window, and open it.") );
+	Q3WhatsThis::add( m_buttonLocateInContent, i18n( "Click this button to find current topic in the content window, and open it.") );
 	
 	// Button 'increase font size'
 	m_buttonFontInc = new QToolButton (iconFontInc,
@@ -103,7 +103,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT(onBtnFontInc()),
 				this);
-	QWhatsThis::add( m_buttonFontInc, i18n( "Click this button to increase the font size.") );
+	Q3WhatsThis::add( m_buttonFontInc, i18n( "Click this button to increase the font size.") );
 
 	// Button 'decrease font size'
 	m_buttonFontDec = new QToolButton (iconFontDec,
@@ -112,7 +112,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT(onBtnFontDec()),
 				this);
-	QWhatsThis::add( m_buttonFontDec, i18n( "Click this button to decrease the font size.") );
+	Q3WhatsThis::add( m_buttonFontDec, i18n( "Click this button to decrease the font size.") );
 	
 	// Button 'view HTML source'
 	m_buttonViewSource = new QToolButton (iconViewSource,
@@ -121,7 +121,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT(onBtnViewSource()),
 				this);
-	QWhatsThis::add( m_buttonViewSource, i18n( "Click this button to open a separate window with the page HTML source.") );
+	Q3WhatsThis::add( m_buttonViewSource, i18n( "Click this button to open a separate window with the page HTML source.") );
 	
 	// Button 'add a bookmark'
 	m_buttonAddBookmark = new QToolButton (iconAddBookmark,
@@ -130,7 +130,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT(onBtnAddBookmark()),
 				this);
-	QWhatsThis::add( m_buttonAddBookmark, i18n( "Click this button to add the current page to the bookmarks list.") );
+	Q3WhatsThis::add( m_buttonAddBookmark, i18n( "Click this button to add the current page to the bookmarks list.") );
 	
 	m_buttonPrevPageInTOC = new QToolButton( iconPrevPage,
 				i18n( "Prev page in TOC"),
@@ -138,7 +138,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT(onBtnPrevPageInToc()),
 				this);
-	QWhatsThis::add( m_buttonAddBookmark, i18n( "Click this button to go to previous page in Table Of Content.") );
+	Q3WhatsThis::add( m_buttonAddBookmark, i18n( "Click this button to go to previous page in Table Of Content.") );
 	
 	m_buttonNextPageInTOC = new QToolButton (iconNextPage,
 				i18n( "Next page in TOC"),
@@ -146,10 +146,10 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 				this,
 				SLOT(onBtnNextPageInToc()),
 				this);
-	QWhatsThis::add( m_buttonAddBookmark, i18n( "Click this button to go to next page in Table of Content.") );
+	Q3WhatsThis::add( m_buttonAddBookmark, i18n( "Click this button to go to next page in Table of Content.") );
 	
 	// Create the approptiate menu entries in 'View' main menu
-	m_MenuView = new KQPopupMenu( parent );
+	m_MenuView = new KQMenu( parent );
 	parent->menuBar()->insertItem( i18n( "&View"), m_MenuView );
 
 	m_MenuView->insertItem( i18n( "&Increase font"), this, SLOT(onBtnFontInc()), CTRL+Key_Plus );
@@ -172,8 +172,8 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	m_MenuView->insertSeparator();
 		
 	// Create the language selection menu.
-    menu_langlist = new KQPopupMenu( parent );
-	KQPopupMenu * menu_sublang = 0;
+    menu_langlist = new KQMenu( parent );
+	KQMenu * menu_sublang = 0;
 
 	// Because the encoding menu is very large, it is not reasonable to have a slot for every item.
 	// It is simplier just to use a single slot for any menu item of this submenu.
@@ -196,7 +196,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 			// If the menu is already created, add to it
 			if ( !menu_sublang )
 			{
-				menu_sublang = new KQPopupMenu( menu_langlist );
+				menu_sublang = new KQMenu( menu_langlist );
 				connect (menu_sublang, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 			}
 				
@@ -223,7 +223,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 
 	// Special menu for very smart people just to select codepage
 	QMap<QString,bool> addedCharsets;
-	menu_enclist = new KQPopupMenu( parent );
+	menu_enclist = new KQMenu( parent );
 
 	connect (menu_enclist, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 	
@@ -242,7 +242,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 
 	m_MenuView->insertItem( i18n( "&Set codepage"), menu_enclist );
 	
-	QWhatsThis::whatsThisButton( this );
+	Q3WhatsThis::whatsThisButton( this );
 }
 
 void KCHMSearchAndViewToolbar::setEnabled( bool enable )
@@ -304,7 +304,7 @@ void KCHMSearchAndViewToolbar::onBtnViewSource( )
 
 	if ( appConfig.m_advUseInternalEditor )
 	{
-		QTextEdit * editor = new QTextEdit ( 0 );
+		Q3TextEdit * editor = new Q3TextEdit ( 0 );
 		editor->setTextFormat ( Qt::PlainText );
 		editor->setText (text);
 		editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->currentBrowser()->getOpenedPage() );
@@ -377,7 +377,7 @@ void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
 	if ( !current )
 		return;
 	
-	QListViewItemIterator lit( current );
+	Q3ListViewItemIterator lit( current );
 	lit++;
 	
 	if ( lit.current() )
@@ -397,7 +397,7 @@ void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
 	if ( !current )
 		return;
 	
-	QListViewItemIterator lit( current );
+	Q3ListViewItemIterator lit( current );
 	lit--;
 	
 	if ( lit.current() )

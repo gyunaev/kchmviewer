@@ -24,8 +24,11 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qstringlist.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QEventLoop>
 
 #include <ctype.h>
 
@@ -45,7 +48,7 @@ static const char SPLIT_CHARACTERS[] = "!()*&^%#@[]{}':;,.?/|/?<>\\-+=~`";
 static const char WORD_CHARACTERS[] = "$_";
 
 	
-int TermList::compareItems( QPtrCollection::Item i1, QPtrCollection::Item i2 )
+int TermList::compareItems( Q3PtrCollection::Item i1, Q3PtrCollection::Item i2 )
 {
 	if( ( (Term*)i1 )->frequency == ( (Term*)i2 )->frequency )
 		return 0;
@@ -341,10 +344,10 @@ void Index::parseDocument( const QString &filename, int docNum )
 
 void Index::writeDict()
 {
-	QDictIterator<Entry> it( dict );
+	Q3DictIterator<Entry> it( dict );
 	QFile f( dictFile );
 	
-	if ( !f.open( IO_WriteOnly ) )
+	if ( !f.open( QIODevice::WriteOnly ) )
 	{
 		qWarning( "Index::writeDict: could not write dictionary file %s", dictFile.ascii() );
 		return;
@@ -369,7 +372,7 @@ void Index::writeDict()
 void Index::writeDocumentList()
 {
 	QFile f( docListFile );
-	if ( !f.open( IO_WriteOnly ) )
+	if ( !f.open( QIODevice::WriteOnly ) )
 	{
 		qWarning( "Index::writeDocumentList: could not write dictionary file %s", docListFile.ascii() );
 		return;
@@ -381,14 +384,14 @@ void Index::writeDocumentList()
 bool Index::readDict()
 {
 	QFile f( dictFile );
-	if ( !f.open( IO_ReadOnly ) )
+	if ( !f.open( QIODevice::ReadOnly ) )
 		return false;
 
 	dict.clear();
 	QDataStream s( &f );
 	QString key;
 	int version;
-	QValueList<Document> docs;
+	Q3ValueList<Document> docs;
 	
 	s >> version;
 	s >> m_charssplit;
@@ -408,7 +411,7 @@ bool Index::readDict()
 bool Index::readDocumentList()
 {
 	QFile f( docListFile );
-	if ( !f.open( IO_ReadOnly ) )
+	if ( !f.open( QIODevice::ReadOnly ) )
 		return false;
 	QDataStream s( &f );
 	s >> docList;
@@ -444,14 +447,14 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 	
 	termList.removeFirst();
 
-	QValueList<Document> minDocs = minTerm->documents;
-	QValueList<Document>::iterator C;
-	QValueList<Document>::ConstIterator It;
+	Q3ValueList<Document> minDocs = minTerm->documents;
+	Q3ValueList<Document>::iterator C;
+	Q3ValueList<Document>::ConstIterator It;
 	Term *t = termList.first();
 	
 	for ( ; t; t = termList.next() )
 	{
-		QValueList<Document> docs = t->documents;
+		Q3ValueList<Document> docs = t->documents;
 		C = minDocs.begin();
 		
 		while ( C != minDocs.end() )
@@ -476,7 +479,7 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 	}
 
 	QStringList results;
-	qHeapSort( minDocs );
+	qSort( minDocs );
 	
 	if ( termSeq.isEmpty() )
 	{
@@ -537,7 +540,7 @@ bool Index::searchForPhrases( const QStringList &phrases, const QStringList &wor
 	}
 */				
 	
-	QValueList<uint> first_word_positions;
+	Q3ValueList<uint> first_word_positions;
 	
 	for ( QStringList::ConstIterator phrase_it = phrases.begin(); phrase_it != phrases.end(); phrase_it++ )
 	{
@@ -546,8 +549,8 @@ bool Index::searchForPhrases( const QStringList &phrases, const QStringList &wor
 		
 		for ( unsigned int j = 1; j < phrasewords.count(); ++j )
 		{
-			QValueList<uint> next_word_it = miniDict[ phrasewords[j] ]->positions;
-			QValueList<uint>::iterator dict_it = first_word_positions.begin();
+			Q3ValueList<uint> next_word_it = miniDict[ phrasewords[j] ]->positions;
+			Q3ValueList<uint>::iterator dict_it = first_word_positions.begin();
 			
 			while ( dict_it != first_word_positions.end() )
 			{

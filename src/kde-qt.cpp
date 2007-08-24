@@ -26,7 +26,7 @@ KQListView::KQListView( QWidget * parent, const char * name, int )
 	: KListView (parent, name)
 #else
 KQListView::KQListView( QWidget * parent, const char * name, int f )
-	: QListView (parent, name, f)
+	: Q3ListView (parent, name, f)
 #endif
 {
 }
@@ -44,7 +44,7 @@ KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, cons
 }
 #else
 KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
-	: QProgressDialog( labelText, cancelButtonText, totalSteps, creator, 0, false )
+	: Q3ProgressDialog( labelText, cancelButtonText, totalSteps, creator, 0, false )
 {
 	setCaption( captionText );
 	setMinimumDuration( 1 );

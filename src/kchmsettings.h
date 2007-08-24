@@ -23,7 +23,7 @@
 #define KCHMSETTINGS_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 
 /**
@@ -67,9 +67,9 @@ class KCHMSettings
 				int			zoom;
 		};
 		
-		typedef 	QValueList<QString>			search_saved_settings_t;
-		typedef 	QValueList<SavedBookmark>	bookmark_saved_settings_t;
-		typedef 	QValueList<SavedViewWindow>	viewindow_saved_settings_t;
+		typedef 	Q3ValueList<QString>			search_saved_settings_t;
+		typedef 	Q3ValueList<SavedBookmark>	bookmark_saved_settings_t;
+		typedef 	Q3ValueList<SavedViewWindow>	viewindow_saved_settings_t;
 		
 		int							m_window_size_x;
 		int							m_window_size_y;

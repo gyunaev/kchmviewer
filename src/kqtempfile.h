@@ -22,7 +22,7 @@
 #ifndef KQTEMPFILE_H
 #define KQTEMPFILE_H
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qfile.h>
 
 /*
@@ -45,7 +45,7 @@ class KQTempFileKeeper
 		void	destroyTempFiles();
 		
 	private:
-		QValueVector<QString>	m_tempFiles;
+		Q3ValueVector<QString>	m_tempFiles;
 		QString					m_tempDir;
 		unsigned int			m_fileNumber;
 };

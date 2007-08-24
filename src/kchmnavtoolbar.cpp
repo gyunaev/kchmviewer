@@ -24,10 +24,12 @@
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
 #include "iconstorage.h"
+//Added by qt3to4:
+#include <QPixmap>
 
 
 KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
-	: QToolBar( parent )
+	: Q3ToolBar( parent )
 {
 	// Initialize toolbar
 	setLabel( i18n( "Navigation") );
@@ -39,7 +41,7 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 											 parent,
 											 SLOT( slotNavigateBack() ),
 											 this);
-	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move backward in browser history") );	
+	Q3WhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move backward in browser history") );	
 
 	QPixmap iconForward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::forward));
 	m_toolbarIconForward = new QToolButton (iconForward,
@@ -48,7 +50,7 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 											parent,
 											SLOT( slotNavigateForward() ),
 											this);
-	QWhatsThis::add( m_toolbarIconForward, i18n( "Click this button to move forward in browser history") );	
+	Q3WhatsThis::add( m_toolbarIconForward, i18n( "Click this button to move forward in browser history") );	
 	
 	QPixmap iconHome = (*gIconStorage.getToolbarPixmap(KCHMIconStorage::gohome));
 	QToolButton	* hb = new QToolButton (iconHome,
@@ -57,7 +59,7 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 					 parent,
 					 SLOT( slotNavigateHome() ),
 					 this);
-	QWhatsThis::add( hb, i18n( "Click this button to move to the home page") );	
+	Q3WhatsThis::add( hb, i18n( "Click this button to move to the home page") );	
 }
 
 
@@ -70,6 +72,3 @@ void KCHMNavToolbar::updateIconStatus( bool enable_backward, bool enable_forward
 	m_toolbarIconBackward->setEnabled( enable_backward );
 	m_toolbarIconForward->setEnabled ( enable_forward );
 }
-
-
-#include "kchmnavtoolbar.moc"

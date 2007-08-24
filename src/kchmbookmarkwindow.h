@@ -26,14 +26,14 @@
 #include "forwarddeclarations.h"
 #include "kchmsettings.h"
 
-/**
-@author Georgy Yunaev
-*/
-class KCHMBookmarkWindow : public QWidget
+
+#include "ui_tab_bookmarks.h"
+
+class KCHMBookmarkWindow : public QWidget, public Ui::TabBookmarks
 {
 	Q_OBJECT
 	public:
-		KCHMBookmarkWindow(QWidget *parent = 0, const char *name = 0);
+		KCHMBookmarkWindow( QWidget *parent = 0 );
 		virtual ~KCHMBookmarkWindow() {};
 	
 		void 	createMenu( KCHMMainWindow * parent );
@@ -44,20 +44,21 @@ class KCHMBookmarkWindow : public QWidget
 		
 	public slots:
 		void 	onAddBookmarkPressed ();
-		void	slotContextMenuRequested ( QListViewItem *item, const QPoint &point, int column );
 			
 	private slots:
 		void	onBookmarkSelected( int );
 		void	onDelBookmarkPressed( );
 		void	onEditBookmarkPressed( );
-		void	onDoubleClicked ( QListViewItem *, const QPoint &, int );
-	
+		void	onItemDoubleClicked ( QListWidgetItem* );
+		
+	protected:
+		void	contextMenuEvent ( QContextMenuEvent * event );
+		
 	private:
-		KQPopupMenu *	m_menuBookmarks;
-		KQListView	*	m_bookmarkList;
+		KQMenu 		*	m_menuBookmarks;
+		KQMenu 		* 	m_contextMenu;
 		QString			m_bookmarkFileName;
 		bool			m_listChanged;
-		KQPopupMenu * 	m_contextMenu;		
 };
 
 #endif

@@ -43,7 +43,7 @@ static inline void validateWords ( QStringList & wordlist, bool & query_valid )
 {
 	QRegExp rxvalid ("[^\\d\\w_\\.]+");
 	
-	for ( unsigned int i = 0; i < wordlist.size(); i++ )
+	for ( int i = 0; i < wordlist.size(); i++ )
 		validateWord ( wordlist[i], query_valid );
 }
 
@@ -56,11 +56,11 @@ inline static void mergeResults ( LCHMSearchProgressResults & results, const LCH
 		return;
 	}
 	
-	for ( unsigned int s1 = 0; s1 < results.size(); s1++ )
+	for ( int s1 = 0; s1 < results.size(); s1++ )
 	{
 		bool found = false;
 	
-		for ( unsigned int s2 = 0; s2 < src.size(); s2++ )
+		for ( int s2 = 0; s2 < src.size(); s2++ )
 		{
 			if ( results[s1].urloff == src[s2].urloff )
 			{
@@ -80,9 +80,9 @@ inline static void mergeResults ( LCHMSearchProgressResults & results, const LCH
 }
 
 
-static inline void findNextWords ( QT34VECTOR<u_int64_t> & src, const QT34VECTOR<u_int64_t> & needle )
+static inline void findNextWords ( QVector<u_int64_t> & src, const QVector<u_int64_t> & needle )
 {
-	for ( unsigned int s1 = 0; s1 < src.size(); s1++ )
+	for ( int s1 = 0; s1 < src.size(); s1++ )
 	{
 		bool found = false;
 		u_int64_t target_offset = src[s1] + 1;
@@ -91,7 +91,7 @@ static inline void findNextWords ( QT34VECTOR<u_int64_t> & src, const QT34VECTOR
 					   (unsigned int) src[s1], (unsigned int) target_offset));
 		
 		// Search in the offsets list in attempt to find next word
-		for ( unsigned int s2 = 0; s2 < needle.size(); s2++ )
+		for ( int s2 = 0; s2 < needle.size(); s2++ )
 		{
 			if ( needle[s2] == target_offset )
 			{
@@ -126,7 +126,7 @@ inline bool searchPhrase( LCHMFileImpl * impl, const QStringList & phrase, LCHMS
 	if ( !impl->searchWord ( phrase[0], true, false, phrasekeeper, true ) )
 		return false; // the word not found, so the whole phrase is not found either.
 
-	for ( unsigned int i = 1; i < phrase.size(); i++ )
+	for ( int i = 1; i < phrase.size(); i++ )
 	{
 		LCHMSearchProgressResults srchtmp;
 
@@ -136,13 +136,13 @@ inline bool searchPhrase( LCHMFileImpl * impl, const QStringList & phrase, LCHMS
 
 		// Iterate the both arrays, and remove every word in phrasekeeper, which is not found
 		// in the srchtmp, or is found on a different position.
-		for ( unsigned int p1 = 0; p1 < phrasekeeper.size(); p1++ )
+		for ( int p1 = 0; p1 < phrasekeeper.size(); p1++ )
 		{
 			bool found = false;
 			
 			DEBUG_SEARCH (("Ext loop (it %d): urloff %d", p1, phrasekeeper[p1].urloff));
 			
-			for ( unsigned int p2 = 0; p2 < srchtmp.size(); p2++ )
+			for ( int p2 = 0; p2 < srchtmp.size(); p2++ )
 			{
 				// look up for words on the the same page
 				if ( srchtmp[p2].urloff != phrasekeeper[p1].urloff )
@@ -165,7 +165,7 @@ inline bool searchPhrase( LCHMFileImpl * impl, const QStringList & phrase, LCHMS
 		}
 	}
 
-	for ( unsigned int o = 0; o < phrasekeeper.size(); o++ )
+	for ( int o = 0; o < phrasekeeper.size(); o++ )
 		results.push_back ( LCHMSearchProgressResult (phrasekeeper[o].titleoff, phrasekeeper[o].urloff) );
 			
 	return !results.empty();
@@ -176,12 +176,12 @@ inline bool searchPhrase( LCHMFileImpl * impl, const QStringList & phrase, LCHMS
 bool LCHMFile::searchQuery( const QString& inquery, QStringList * searchresults, unsigned int limit )
 {
 	QStringList words_must_exist, words_must_not_exist, words_highlight;
-	QT34VECTOR<QStringList> phrases_must_exist;
+	QVector<QStringList> phrases_must_exist;
 	QString query = inquery;
 	bool query_valid = true;
 	LCHMSearchProgressResults results;
 	int pos;
-	unsigned int i;	
+	int i;	
 		
 	/*
 	* Parse the search query with a simple state machine.
@@ -201,10 +201,10 @@ bool LCHMFile::searchQuery( const QString& inquery, QStringList * searchresults,
 	rxphrase.setMinimal( TRUE );
 
 	// First, get the phrase queries
-	while ( (pos = rxphrase.search (query, 0)) != -1 )
+	while ( (pos = rxphrase.indexIn (query, 0)) != -1 )
 	{
 		// A phrase query found. Locate its boundaries, and parse it.
-		QStringList plist = QStringList::split ( QRegExp ("\\s+"), rxphrase.cap ( 1 ));
+		QStringList plist = rxphrase.cap ( 1 ).split ( QRegExp ("\\s+") );
 		
 		validateWords ( plist, query_valid );
 		
@@ -215,7 +215,7 @@ bool LCHMFile::searchQuery( const QString& inquery, QStringList * searchresults,
 	}
 
 	// Then, parse the rest query
-	while ( (pos = rxword.search (query, 0)) != -1 )
+	while ( (pos = rxword.indexIn( query, 0 )) != -1 )
 	{
 		// A phrase query found. Locate its boundaries, and parse it.
 		QString word = rxword.cap ( 1 );

@@ -30,12 +30,16 @@
 #include "iconstorage.h"
 
 
-KCHMIndTocItem::KCHMIndTocItem( Q3ListViewItem * parent, Q3ListViewItem * after, QString name, QString aurl, int image) : Q3ListViewItem(parent, after, name), url(aurl), image_number(image)
+KCHMIndTocItem::KCHMIndTocItem( QTreeWidgetItem * parent, QTreeWidgetItem * after, QString name, QString aurl, int image) 
+	: QTreeWidgetItem( parent, after), url(aurl), image_number(image)
 {
+	setText( 0, name );
 }
 
-KCHMIndTocItem::KCHMIndTocItem( Q3ListView * parent, Q3ListViewItem * after, QString name, QString aurl, int image) : Q3ListViewItem(parent, after, name), url(aurl), image_number(image)
+KCHMIndTocItem::KCHMIndTocItem( QTreeWidget * parent, QTreeWidgetItem * after, QString name, QString aurl, int image) 
+	: QTreeWidgetItem(parent, after), url(aurl), image_number(image)
 {
+	setText( 0, name );
 }
 
 
@@ -46,9 +50,10 @@ const QPixmap * KCHMIndTocItem::pixmap( int i ) const
 	if ( i || image_number == LCHMBookIcons::IMAGE_NONE || image_number == LCHMBookIcons::IMAGE_INDEX )
         return 0;
 
-	if ( firstChild () )
+	// If the item has children, we change the book image to "open book", or next image automatically
+	if ( childCount() )
 	{
-		if ( isOpen() )
+		if ( isExpanded() )
 			imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 1 : image_number;
 		else
 			imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 0 : image_number + 1;
@@ -70,11 +75,11 @@ QString KCHMIndTocItem::getUrl( ) const
 	QStringList titles;
 	LCHMFile * xchm = ::mainWindow->chmFile();
 
-	for ( unsigned int i = 0; i < urls.size(); i++ )
+	for ( int i = 0; i < urls.size(); i++ )
 	{
 		QString title = xchm->getTopicByUrl (urls[i]);
 		
-		if ( !title )
+		if ( title.isEmpty() )
 		{
 			qWarning ("Could not get item name for url '%s'", urls[i].ascii());
 			titles.push_back(QString::null);
@@ -83,15 +88,11 @@ QString KCHMIndTocItem::getUrl( ) const
 			titles.push_back(title);
 	}
 
-	KCHMDialogChooseUrlFromList dlg (urls, titles, ::mainWindow);
-
-	if ( dlg.exec() == QDialog::Accepted )
-		return dlg.getSelectedItemUrl();
-
-	return QString::null;
+	KCHMDialogChooseUrlFromList dlg( ::mainWindow );
+	return dlg.getSelectedItemUrl( urls, titles );
 }
 
-
+/*
 void KCHMIndTocItem::paintBranches( QPainter * p, const QColorGroup & cg, int w, int y, int h )
 {
 	if ( image_number != LCHMBookIcons::IMAGE_INDEX )
@@ -129,27 +130,27 @@ void KCHMIndTocItem::paintCell( QPainter * p, const QColorGroup & cg, int column
     Q3ListViewItem::paintCell( p, newcg, column, width, align );
 	newcg.setColor( QColorGroup::Text, c );
 }
+*/
 
-
-void KCHMIndTocItem::setOpen( bool open )
+void KCHMIndTocItem::setExpanded( bool open )
 {
 	if ( image_number != LCHMBookIcons::IMAGE_INDEX || open )
-		Q3ListViewItem::setOpen (open);
+		QTreeWidgetItem::setExpanded( open );
 }
 
-void kchmFillListViewWithParsedData( Q3ListView * list, const Q3ValueVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
+void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
 {
-	Q3ValueVector< KCHMIndTocItem *> lastchild;
-	Q3ValueVector< KCHMIndTocItem *> rootentry;	
+	QVector< KCHMIndTocItem *> lastchild;
+	QVector< KCHMIndTocItem *> rootentry;
 
 	if ( map )
 		map->clear();
 	
 	list->clear();	
 	
-	for ( unsigned int i = 0; i < data.size(); i++ )
+	for ( int i = 0; i < data.size(); i++ )
 	{
-		unsigned int indent = data[i].indent;
+		int indent = data[i].indent;
 
 		// Do we need to add another indent?
 		if ( indent >= lastchild.size() )
@@ -180,17 +181,17 @@ void kchmFillListViewWithParsedData( Q3ListView * list, const Q3ValueVector< LCH
 		// Hack: if map is 0, we have index, so make it open
 		if ( map )
 		{
-			for ( unsigned int li = 0; li < data[i].urls.size(); li++ )
+			for ( int li = 0; li < data[i].urls.size(); li++ )
 				map->insert( data[i].urls[li], item );
 		}
 		else
-			item->setOpen( true );
+			item->setExpanded( true );
 
 		lastchild[indent] = item;
 		rootentry[indent] = item;
 	}		
 
-	list->triggerUpdate();
+	list->update();
 /*	
 	KCHMMainTreeViewItem * item;
 
@@ -285,4 +286,17 @@ void kchmFillListViewWithParsedData( Q3ListView * list, const Q3ValueVector< LCH
 	
 	return true;
 */
+}
+
+KCMSearchTreeViewItem::KCMSearchTreeViewItem( const QString& name, const QString& loc, const QString& url )
+	: QTableWidgetItem()
+{
+	m_name = name;
+	m_loc = loc;
+	m_url = url;
+}
+
+QString KCMSearchTreeViewItem::getUrl() const
+{
+	return m_url;
 }

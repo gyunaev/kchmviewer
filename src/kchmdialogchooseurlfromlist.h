@@ -22,26 +22,26 @@
 #ifndef KCHMDIALOGCHOOSEURLFROMLIST_H
 #define KCHMDIALOGCHOOSEURLFROMLIST_H
 
-#include <qdialog.h>
-#include <q3listview.h>
+#include <QDialog>
+#include "ui_dialog_topicselector.h"
 
-/**
-@author tim
-*/
-class KCHMDialogChooseUrlFromList : public QDialog
+
+class QListViewItem;
+
+class KCHMDialogChooseUrlFromList : public QDialog, public Ui::DialogTopicSelector
 {
-Q_OBJECT
-public:
-    KCHMDialogChooseUrlFromList (const QStringList& urls, const QStringList& titles, QWidget* parent);
-	QString getSelectedItemUrl()	{ return m_acceptedurl; }
+	Q_OBJECT
+	
+	public:
+    	KCHMDialogChooseUrlFromList( QWidget* parent );
+		
+		// Shows the dialog with titles, and let the user to select the title.
+		// Obviously urls.size() == titles.size(). Returns the appropriate URL
+		// for the selected title, or empty string if no title selected, or dialog canceled.
+		QString getSelectedItemUrl( const QStringList& urls, const QStringList& titles );
 
-private slots:
-	void onDoubleClicked( Q3ListViewItem * item, const QPoint &, int );
-	void onCurrentChanged ( Q3ListViewItem * item);
-
-private:
-	Q3ListView *	m_urlsList;
-	QString		m_acceptedurl;
+	private slots:
+		void onDoubleClicked( QListViewItem * item );
 };
 
 #endif

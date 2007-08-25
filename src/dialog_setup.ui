@@ -1,0 +1,740 @@
+<ui version="4.0" >
+ <class>DialogSetup</class>
+ <widget class="QDialog" name="DialogSetup" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>597</width>
+    <height>342</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>1</hsizetype>
+    <vsizetype>1</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>KchmViewer settings</string>
+  </property>
+  <property name="sizeGripEnabled" >
+   <bool>false</bool>
+  </property>
+  <property name="modal" >
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="Widget8" >
+      <attribute name="title" >
+       <string>General behavior</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="Q3ButtonGroup" name="buttonGroup1" >
+           <property name="title" >
+            <string>If no arguments given on load</string>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QRadioButton" name="m_radioOnBeginOpenDialog" >
+              <property name="text" >
+               <string>Open the 'open CHM file' dialog</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="m_radioOnBeginOpenLast" >
+              <property name="text" >
+               <string>Open the &amp;last used CHM file, if exist</string>
+              </property>
+              <property name="shortcut" >
+               <string>Alt+L</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="Q3ButtonGroup" name="buttonGroup2" >
+           <property name="title" >
+            <string>History</string>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="textLabel1" >
+                <property name="text" >
+                 <string>Store history information for</string>
+                </property>
+                <property name="wordWrap" >
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="m_historySize" >
+                <property name="prefix" >
+                 <string/>
+                </property>
+                <property name="value" >
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel2" >
+                <property name="text" >
+                 <string>latest files</string>
+                </property>
+                <property name="wordWrap" >
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="m_rememberHistoryInfo" >
+              <property name="toolTip" >
+               <string>Remembers the information about the files, which were opened. Remembers last opened page, search history, font size, bookmarks and so on.</string>
+              </property>
+              <property name="text" >
+               <string>R&amp;emember extra information for history files</string>
+              </property>
+              <property name="shortcut" >
+               <string>Alt+E</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Q3GroupBox" name="groupBox1" >
+         <property name="title" >
+          <string>CHM security settings</string>
+         </property>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="Q3ButtonGroup" name="buttonGroup4" >
+            <property name="title" >
+             <string>When external link clicked</string>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QRadioButton" name="m_radioExtLinkOpenAlways" >
+               <property name="text" >
+                <string>Alwa&amp;ys open it in external browser</string>
+               </property>
+               <property name="shortcut" >
+                <string>Alt+Y</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_radioExtLinkAsk" >
+               <property name="text" >
+                <string>Ask for confirmation</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_radioExtLinkOpenNever" >
+               <property name="text" >
+                <string>Do not open the link</string>
+               </property>
+               <property name="shortcut" >
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="Q3ButtonGroup" name="buttonGroup5" >
+            <property name="title" >
+             <string>When link pointed to a new CHM file clicked</string>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QRadioButton" name="m_radioNewChmOpenAlways" >
+               <property name="text" >
+                <string>Always open a new CHM file</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_radioNewChmAsk" >
+               <property name="text" >
+                <string>Ask for confirmation</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_radioNewChmOpenNever" >
+               <property name="text" >
+                <string>Do not open a new CHM file</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Widget9" >
+      <attribute name="title" >
+       <string>Version-specific settings</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="Q3GroupBox" name="m_groupQtsettings" >
+         <property name="title" >
+          <string>Qt version settings</string>
+         </property>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="textLabel1_2" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>7</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="lineWidth" >
+             <number>1</number>
+            </property>
+            <property name="text" >
+             <string>Enter the path to the program, which will be used as a browser for external links.  A &lt;i>%s&lt;/i> symbol will be replaced by the URL clicked.</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="m_qtBrowserPath" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Q3GroupBox" name="m_groupKDEsettings" >
+         <property name="title" >
+          <string>KDE version settings</string>
+         </property>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="Q3ButtonGroup" name="buttonGroup5_2" >
+            <property name="title" >
+             <string>To show HTML content, use</string>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QRadioButton" name="m_radioUseQtextBrowser" >
+               <property name="text" >
+                <string>&amp;Q3TextBrowser-based widget</string>
+               </property>
+               <property name="shortcut" >
+                <string>Alt+Q</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_radioUseKHTMLPart" >
+               <property name="text" >
+                <string>&amp;KHTMLPart-based widget</string>
+               </property>
+               <property name="shortcut" >
+                <string>Alt+K</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="Q3GroupBox" name="groupKhtmlSecurity" >
+            <property name="title" >
+             <string>KHTMLPart security</string>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <layout class="QGridLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item row="0" column="0" >
+              <widget class="QCheckBox" name="m_enableJS" >
+               <property name="text" >
+                <string>Enable Java&amp;Script</string>
+               </property>
+               <property name="shortcut" >
+                <string>Alt+S</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" >
+              <widget class="QCheckBox" name="m_enablePlugins" >
+               <property name="text" >
+                <string>Enable &amp;plugins</string>
+               </property>
+               <property name="shortcut" >
+                <string>Alt+P</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" >
+              <widget class="QCheckBox" name="m_enableJava" >
+               <property name="text" >
+                <string>Enable &amp;Java</string>
+               </property>
+               <property name="shortcut" >
+                <string>Alt+J</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" >
+              <widget class="QCheckBox" name="m_enableRefresh" >
+               <property name="text" >
+                <string>Enable &amp;refresh</string>
+               </property>
+               <property name="shortcut" >
+                <string>Alt+R</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="TabPage" >
+      <attribute name="title" >
+       <string>Advanced</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="Q3ButtonGroup" name="buttonGroup7" >
+         <property name="title" >
+          <string>View HTML source command uses</string>
+         </property>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QRadioButton" name="m_advViewSourceInternal" >
+            <property name="text" >
+             <string>Built-in HTML source viewer</string>
+            </property>
+            <property name="shortcut" >
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="m_advViewSourceExternal" >
+            <property name="text" >
+             <string>E&amp;xternal program, specified below</string>
+            </property>
+            <property name="shortcut" >
+             <string>Alt+X</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="textLabel1_3" >
+              <property name="text" >
+               <string>External program:</string>
+              </property>
+              <property name="wordWrap" >
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="m_advExternalProgramName" />
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Q3ButtonGroup" name="groupBox6" >
+         <property name="title" >
+          <string>Search engine to use</string>
+         </property>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="1" column="0" >
+           <widget class="QRadioButton" name="m_useSearchEngineInternal" >
+            <property name="text" >
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QLabel" name="m_labelUseSearchEngineInternal" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>10</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Use the search based on internal CHM index. This engine cannot search for any symbols except underscode, does not support multibyte languages, and is not always available.</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QRadioButton" name="m_useSearchEngineNew" >
+            <property name="text" >
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QLabel" name="m_labelUseSearchEngineNew" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>10</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Use new kchmviewer internal  search engine (recommended). This engine indexes symbols, so it is possible to search for special symbols (like "C++"). All languages are supported. The index will be generated before the first search.</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>Q3GroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>Qt3Support/Q3GroupBox</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Q3ButtonGroup</class>
+   <extends>Q3GroupBox</extends>
+   <header>Qt3Support/Q3ButtonGroup</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>m_radioOnBeginOpenDialog</tabstop>
+  <tabstop>m_radioOnBeginOpenLast</tabstop>
+  <tabstop>m_historySize</tabstop>
+  <tabstop>m_rememberHistoryInfo</tabstop>
+  <tabstop>m_radioExtLinkOpenAlways</tabstop>
+  <tabstop>m_radioExtLinkAsk</tabstop>
+  <tabstop>m_radioExtLinkOpenNever</tabstop>
+  <tabstop>m_radioNewChmOpenAlways</tabstop>
+  <tabstop>m_radioNewChmAsk</tabstop>
+  <tabstop>m_radioNewChmOpenNever</tabstop>
+  <tabstop>m_qtBrowserPath</tabstop>
+  <tabstop>m_radioUseQtextBrowser</tabstop>
+  <tabstop>m_radioUseKHTMLPart</tabstop>
+  <tabstop>m_enableJS</tabstop>
+  <tabstop>m_enableJava</tabstop>
+  <tabstop>m_enablePlugins</tabstop>
+  <tabstop>m_enableRefresh</tabstop>
+  <tabstop>m_advViewSourceInternal</tabstop>
+  <tabstop>m_advViewSourceExternal</tabstop>
+  <tabstop>m_advExternalProgramName</tabstop>
+  <tabstop>m_useSearchEngineNew</tabstop>
+  <tabstop>m_useSearchEngineInternal</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>tabWidget</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>m_radioUseKHTMLPart</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>groupKhtmlSecurity</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>57</x>
+     <y>271</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>318</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_advViewSourceExternal</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_advExternalProgramName</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>44</x>
+     <y>113</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>148</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_radioUseQtextBrowser</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>groupKhtmlSecurity</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>57</x>
+     <y>243</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>318</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>DialogSetup</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>481</x>
+     <y>326</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>445</x>
+     <y>346</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>DialogSetup</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>557</x>
+     <y>316</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>598</x>
+     <y>262</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

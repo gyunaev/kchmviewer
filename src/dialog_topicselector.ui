@@ -1,0 +1,84 @@
+<ui version="4.0" >
+ <class>DialogTopicSelector</class>
+ <widget class="QDialog" name="DialogTopicSelector" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>218</width>
+    <height>258</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Multiple topics</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Please select the topic to open:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="list" />
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>DialogTopicSelector</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>66</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>-3</x>
+     <y>275</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>DialogTopicSelector</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>151</x>
+     <y>327</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>277</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

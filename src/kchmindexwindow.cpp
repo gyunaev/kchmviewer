@@ -33,62 +33,51 @@
 #include "kchmtreeviewitem.h"
 
 
-KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent, const char * name, Qt::WFlags f )
-	: QWidget (parent, name, f)
+KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent )
+	: QWidget( parent ), Ui::TabIndex()
 {
-	Q3VBoxLayout * layout = new Q3VBoxLayout (this);
-	layout->setMargin (5);
-
-	m_indexFinder = new QLineEdit (this);
-	m_indexFinder->setFocus();
+	// UIC stuff
+	setupUi( this );
 	
-	m_indexList = new KQListView (this);
-	m_indexList->addColumn( "idx" ); // it is hidden anyway
-	m_indexList->header()->hide();
-	m_indexList->setTreeStepSize (10);
-	m_indexList->setShowToolTips(true);
-	//m_indexList->setSorting( 0, true );
-
-	layout->addWidget (m_indexFinder);
-	layout->addSpacing (10);
-	layout->addWidget (m_indexList);
+	tree->headerItem()->setHidden( true );
 	
-	connect( m_indexFinder, 
+	connect( text,
 			 SIGNAL( textChanged (const QString &) ), 
 			 this, 
 			 SLOT( onTextChanged(const QString &) ) );
 	
-	connect( m_indexFinder, 
+	connect( text, 
 			 SIGNAL( returnPressed() ), 
 			 this, 
 			 SLOT( onReturnPressed() ) );
 	
-	connect( m_indexList, 
-			 SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int) ), 
+	connect( tree, 
+			 SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ), 
 			 this, 
-			 SLOT( onDoubleClicked ( Q3ListViewItem *, const QPoint &, int) ) );
+			 SLOT( onDoubleClicked ( QTreeWidgetItem *, int) ) );
 	
-	connect( m_indexList,
-			 SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint& , int ) ),
-			 this, 
-			 SLOT( slotContextMenuRequested ( Q3ListViewItem *, const QPoint &, int ) ) );
-
 	m_indexListFilled = false;
 	m_lastSelectedItem = 0;
 	m_contextMenu = 0;
 	
-	new KCHMListItemTooltip( m_indexList );
+	// FIXME: tooltips, context menu
+	// new KCHMListItemTooltip( m_indexList );
+	
+	text->setFocus();
 }
 
 void KCHMIndexWindow::onTextChanged ( const QString & newvalue)
 {
-	m_lastSelectedItem = m_indexList->findItem (newvalue, 0, Qt::BeginsWith);
+	// FIXME: index search
+	/*
+	m_lastSelectedItem = tree->findItem (newvalue, 0, Qt::BeginsWith);
 	
 	if ( m_lastSelectedItem )
 	{
 		m_indexList->ensureItemVisible (m_lastSelectedItem);
 		m_indexList->setCurrentItem (m_lastSelectedItem);
 	}
+	*/
 }
 
 void KCHMIndexWindow::showEvent( QShowEvent * )
@@ -108,12 +97,14 @@ void KCHMIndexWindow::onReturnPressed( )
 
 void KCHMIndexWindow::invalidate( )
 {
-	m_indexList->clear();
+	tree->clear();
 	m_indexListFilled = false;
 }
 
-void KCHMIndexWindow::onDoubleClicked( Q3ListViewItem *item, const QPoint &, int )
+void KCHMIndexWindow::onDoubleClicked ( QTreeWidgetItem * item, int )
 {
+	/*
+	FIXME!!!
 	if ( !item )
 		return;
 	
@@ -121,22 +112,24 @@ void KCHMIndexWindow::onDoubleClicked( Q3ListViewItem *item, const QPoint &, int
 	
 	QString url = treeitem->getUrl();
 	
-	if ( !url )
+	if ( url.isEmpty() )
 		return;
 
 	if ( url[0] == ':' ) // 'see also' link
 	{
-		m_lastSelectedItem = m_indexList->findItem (url.mid(1), 0);
+		m_lastSelectedItem = tree->findItem (url.mid(1), 0);
 		if ( m_lastSelectedItem )
 		{
-			m_indexList->ensureItemVisible (m_lastSelectedItem);
-			m_indexList->setCurrentItem (m_lastSelectedItem);
+			tree->ensureItemVisible (m_lastSelectedItem);
+			tree->setCurrentItem (m_lastSelectedItem);
 		}
 	}
 	else
 		::mainWindow->openPage( url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+	*/
 }
 
+/*
 void KCHMIndexWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
@@ -150,10 +143,10 @@ void KCHMIndexWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPo
 		m_contextMenu->popup( point );
 	}
 }
-
+*/
 void KCHMIndexWindow::refillIndex( )
 {
-	Q3ValueVector< LCHMParsedEntry > data;
+	QVector< LCHMParsedEntry > data;
 	
 	if ( !::mainWindow->chmFile()->parseIndex( &data )
 			   || data.size() == 0 )
@@ -162,7 +155,7 @@ void KCHMIndexWindow::refillIndex( )
 		return;
 	}
 	
-	kchmFillListViewWithParsedData( m_indexList, data, 0 );
+	kchmFillListViewWithParsedData( tree, data, 0 );
 }
 
 void KCHMIndexWindow::search( const QString & index )
@@ -176,6 +169,6 @@ void KCHMIndexWindow::search( const QString & index )
 		refillIndex();
 	}
 
-	m_indexFinder->setText( index );
+	text->setText( index );
 	onTextChanged( index );
 }

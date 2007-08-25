@@ -51,7 +51,7 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	m_closeButton->setEnabled( false );
 	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( closeCurrentWindow() ) );
 	
-	setCornerWidget( m_closeButton, TopRight);
+	setCornerWidget( m_closeButton, Qt::TopRightCorner );
 }
 
 KCHMViewWindowMgr::~KCHMViewWindowMgr( )
@@ -64,7 +64,9 @@ void KCHMViewWindowMgr::createMenu( KCHMMainWindow * parent )
 	m_MenuWindow = new KQMenu( parent );
 	parent->menuBar()->insertItem( i18n( "&Window"), m_MenuWindow );
 
-	m_menuIdClose = m_MenuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()), CTRL+Key_W );
+	//FIXME
+	//m_menuIdClose = m_MenuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()), CTRL+Key_W );
+	m_menuIdClose = m_MenuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()) );
 	m_MenuWindow->insertSeparator();
 
 	//connect( m_MenuWindow, SIGNAL( activated(int) ), this, SLOT ( onCloseWindow(int) ));
@@ -299,13 +301,16 @@ void KCHMViewWindowMgr::updateTabAccel()
 			else
 				index = 0;
 			
-			m_MenuWindow->setAccel(ALT + key(index), menuid);
+			// FIXME
+			//m_MenuWindow->setAccel(ALT + key(index), menuid);
 		}
 	}
 }
 
 QKeySequence KCHMViewWindowMgr::key(int i)
 {
+	//FIXME
+	/*
 	switch (i)
 	{
 		case 0:
@@ -338,4 +343,5 @@ QKeySequence KCHMViewWindowMgr::key(int i)
 		default:
 			return Key_9;
 	}
+	*/
 }

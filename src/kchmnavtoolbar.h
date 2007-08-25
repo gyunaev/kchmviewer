@@ -22,9 +22,13 @@
 #ifndef INCLUDE_KCHMNAVHISTORY_H
 #define INCLUDE_KCHMNAVHISTORY_H
 
+#include <QToolBar>
+
 #include "forwarddeclarations.h"
 
-class KCHMNavToolbar : public Q3ToolBar
+//FIXME: commented
+
+class KCHMNavToolbar : public QToolBar
 {
 Q_OBJECT
 public:
@@ -38,5 +42,6 @@ private:
 	QToolButton	*	m_toolbarIconBackward;
 	QToolButton	*	m_toolbarIconForward;
 };
+
 
 #endif /* INCLUDE_KCHMNAVHISTORY_H */

@@ -22,16 +22,6 @@
 #include "kde-qt.h"
 
 #if defined (USE_KDE)
-KQListView::KQListView( QWidget * parent, const char * name, int )
-	: KListView (parent, name)
-#else
-KQListView::KQListView( QWidget * parent, const char * name, int f )
-	: Q3ListView (parent, name, f)
-#endif
-{
-}
-
-#if defined (USE_KDE)
 KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
 	: KProgressDialog( creator, 0, captionText, labelText, true )
 {
@@ -44,7 +34,7 @@ KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, cons
 }
 #else
 KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
-	: Q3ProgressDialog( labelText, cancelButtonText, totalSteps, creator, 0, false )
+	: QProgressDialog( labelText, cancelButtonText, 0, totalSteps, creator )
 {
 	setCaption( captionText );
 	setMinimumDuration( 1 );

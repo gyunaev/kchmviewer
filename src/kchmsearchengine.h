@@ -22,12 +22,7 @@
 #ifndef KCHMSEARCHENGINE_H
 #define KCHMSEARCHENGINE_H
 
-#include <qobject.h>
-#include <qmap.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <q3progressdialog.h>
-
+#include "kde-qt.h"
 #include "libchmfile.h"
 
 namespace QtAs { class Index; };
@@ -53,7 +48,7 @@ class KCHMSearchEngine : public QObject
 		void	processEvents();
 
 		// Used during the index generation
-		Q3ProgressDialog			*	m_progressDlg;
+		QProgressDialog			*	m_progressDlg;
 		QStringList 				m_keywordDocuments;
 		QtAs::Index 			*	m_Index;
 };

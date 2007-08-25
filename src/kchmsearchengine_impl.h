@@ -23,13 +23,7 @@
 #ifndef QASSISTANTINDEX_H
 #define QASSISTANTINDEX_H
 
-#include <qstringlist.h>
-#include <q3dict.h>
-#include <qdatastream.h>
-#include <qobject.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include "kde-qt.h"
 
 namespace QtAs
 {
@@ -58,8 +52,8 @@ struct Document
 		return frequency < doc.frequency;
 	}
 	
-	Q_INT16 docNumber;
-	Q_INT16 frequency;
+	qint16	docNumber;
+	qint16	frequency;
 };
 
 QDataStream &operator>>( QDataStream &s, Document &l );
@@ -72,14 +66,14 @@ class Index : public QObject
 		struct Entry
 		{
 			Entry( int d ) { documents.append( Document( d, 1 ) ); }
-			Entry( Q3ValueList<Document> l ) : documents( l ) {}
-			Q3ValueList<Document> documents;
+			Entry( QVector<Document> l ) : documents( l ) {}
+			QVector<Document> documents;
 		};
 		
 		struct PosEntry
 		{
 			PosEntry( int p ) { positions.append( p ); }
-			Q3ValueList<uint> positions;
+			QList<uint> positions;
 		};
 
 		Index( const QString &dp, const QString &hp );
@@ -113,40 +107,34 @@ class Index : public QObject
 		
 		QStringList				getWildcardTerms( const QString& );
 		QStringList				split( const QString& );
-		Q3ValueList<Document> 	setupDummyTerm( const QStringList& );
+		QList<Document> 		setupDummyTerm( const QStringList& );
 		bool 					searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename );
 		
-		QStringList 		docList;
-		Q3Dict<Entry> 		dict;
-		Q3Dict<PosEntry>		miniDict;
-		QString 			docPath;
-		QString 			dictFile;
-		QString 			docListFile;
-		bool 				lastWindowClosed;
+		QStringList 			docList;
+		QHash<QString, Entry*> 	dict;
+		QHash<QString,PosEntry*>miniDict;
+		QString 				docPath;
+		QString 				dictFile;
+		QString 				docListFile;
+		bool 					lastWindowClosed;
 	
 		// Those characters are splitters (i.e. split the word), but added themselves into dictionary too.
 		// This makes the dictionary MUCH larger, but ensure that for the piece of "window->print" both 
 		// search for "print" and "->print" will find it.
-		QString m_charssplit;
+		QString 				m_charssplit;
 
 		// Those characters are parts of word - for example, '_' is here, and search for _debug will find only _debug.
-		QString m_charsword;
+		QString 				m_charsword;
 };
 
 struct Term
 {
-	Term( const QString &t, int f, Q3ValueList<Document> l ) : term( t ), frequency( f ), documents( l ) {}
-	
-	QString 				term;
-	int 					frequency;
-	Q3ValueList<Document>	documents;
-};
-
-class TermList : public Q3PtrList<Term>
-{
-	public:
-		TermList() : Q3PtrList<Term>() {}
-		int compareItems( Q3PtrCollection::Item i1, Q3PtrCollection::Item i2 );
+	Term() : frequency(-1) {}
+	Term( const QString &t, int f, QVector<Document> l ) : term( t ), frequency( f ), documents( l ) {}
+	QString term;
+	int frequency;
+	QVector<Document>documents;
+	bool operator<( const Term &i2 ) const { return frequency < i2.frequency; }
 };
 
 };

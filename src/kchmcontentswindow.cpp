@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QHeaderView>
+
 #include "kde-qt.h"
 
 #include "libchmfile.h"
@@ -29,18 +31,19 @@
 #include "kchmtreeviewitem.h"
 
 
-KCHMContentsWindow::KCHMContentsWindow(QWidget *parent, const char *name)
-	: KQListView(parent, name)
+KCHMContentsWindow::KCHMContentsWindow( QWidget *parent )
+	: QWidget( parent ), Ui::TabContents()
 {
+	setupUi( this );
+	
 	m_contextMenu = 0;
 	
-	addColumn( "Contents" ); // no i18n - this column is hidden
-	setSorting(-1);
-	setFocus();
-	setRootIsDecorated(true);
-	header()->hide();
-	setShowToolTips( false );
+	tree->setFocus();
+	tree->header()->hide();
 	
+	// FIXME: model-view, data preload on show, like index
+	
+	/*
 	connect( this, SIGNAL( onItem ( Q3ListViewItem * ) ), this, SLOT( slotOnItem( Q3ListViewItem * ) ) );
 	connect( this, 
 			 SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint& , int ) ),
@@ -49,12 +52,14 @@ KCHMContentsWindow::KCHMContentsWindow(QWidget *parent, const char *name)
 
 	
 	new KCHMListItemTooltip( this );
+	*/
 }
 
 KCHMContentsWindow::~KCHMContentsWindow()
 {
 }
 
+/*
 void KCHMContentsWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
@@ -67,10 +72,12 @@ void KCHMContentsWindow::slotContextMenuRequested( Q3ListViewItem * item, const 
 		m_contextMenu->popup( point );
 	}
 }
+*/
+
 
 void KCHMContentsWindow::refillTableOfContents( )
 {
-	Q3ValueVector< LCHMParsedEntry > data;
+	QVector< LCHMParsedEntry > data;
 	
 	if ( !::mainWindow->chmFile()->parseTableOfContents( &data )
 	|| data.size() == 0 )
@@ -79,8 +86,9 @@ void KCHMContentsWindow::refillTableOfContents( )
 		return;
 	}
 			   
-	kchmFillListViewWithParsedData( this, data, &m_urlListMap );
+	kchmFillListViewWithParsedData( tree, data, &m_urlListMap );
 }
+
 
 KCHMIndTocItem * KCHMContentsWindow::getTreeItem( const QString & url )
 {
@@ -91,4 +99,10 @@ KCHMIndTocItem * KCHMContentsWindow::getTreeItem( const QString & url )
 		return 0;
 		
 	return *it;
+}
+
+void KCHMContentsWindow::showItem(KCHMIndTocItem * item)
+{
+	tree->setCurrentItem( item );
+	tree->scrollToItem( item );
 }

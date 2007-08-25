@@ -23,42 +23,19 @@
 #define KCHMSEARCHWINDOW_H
 
 #include "kde-qt.h"
-
 #include "kchmsettings.h"
 #include "forwarddeclarations.h"
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QLabel>
+#include "ui_tab_search.h"
 
-
-/**
-@author Georgy Yunaev
-*/
 class KCHMSearchEngine;
 
 
-class KCHMClickableLabel : public QLabel
+//FIXME: content menu
+class KCHMSearchWindow : public QWidget, public Ui::TabSearch
 {
 	Q_OBJECT
 	public:
-		KCHMClickableLabel( const QString& label, QWidget * parent )
-	: QLabel( label, parent ) {};
-		
-		virtual ~KCHMClickableLabel() {};
-				
-	signals:
-		void	clicked();
-						
-	protected:
-		virtual void mousePressEvent ( QMouseEvent * ) 	{ emit clicked(); }
-};
-
-
-class KCHMSearchWindow : public QWidget
-{
-	Q_OBJECT
-	public:
-		KCHMSearchWindow ( QWidget * parent = 0, const char * name = 0, Qt::WFlags f = 0 );
+		KCHMSearchWindow ( QWidget * parent = 0 );
 	
 		void	invalidate();
 		void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
@@ -67,21 +44,18 @@ class KCHMSearchWindow : public QWidget
 		bool	searchQuery( const QString& query, QStringList * results );
 		
 	public slots:
-		void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
+	//	void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
 		
 	private slots:
 		void	onHelpClicked();
 		void 	onReturnPressed ();
-		void	onDoubleClicked ( Q3ListViewItem *, const QPoint &, int);
+		void	onDoubleClicked ( QTableWidgetItem *, const QPoint &, int);
 	
 	private:
 		bool	initSearchEngine();
 		
 	private:
-		QComboBox 		*	m_searchQuery;
-		KQListView		*	m_searchList;
-		KQMenu		* 	m_contextMenu;
-		
+		KQMenu			* 	m_contextMenu;
 		KCHMSearchEngine*	m_searchEngine;
 };
 

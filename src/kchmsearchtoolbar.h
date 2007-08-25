@@ -23,15 +23,13 @@
 #define KCHMSEARCHTOOLBAR_H
 
 #include "kde-qt.h"
-
 #include "forwarddeclarations.h"
-
 #include "kqtempfile.h"
 
-/**
-@author Georgy Yunaev
-*/
-class KCHMSearchAndViewToolbar : public Q3ToolBar
+#include "libchmtextencoding.h"
+
+
+class KCHMSearchAndViewToolbar : public QToolBar
 {
 	Q_OBJECT
 	public:
@@ -83,5 +81,6 @@ class KCHMSearchAndViewToolbar : public Q3ToolBar
 		
 		KQTempFileKeeper		m_tempFileKeeper;
 };
+
 
 #endif

@@ -48,8 +48,8 @@ KCHMSearchEngine::~KCHMSearchEngine()
 void KCHMSearchEngine::processEvents( )
 {
 	// Do it twice; some events generate other events
-	qApp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput );
-	qApp->eventLoop()->processEvents( QEventLoop::ExcludeUserInput );	
+	qApp->processEvents( QEventLoop::ExcludeUserInput );
+	qApp->processEvents( QEventLoop::ExcludeUserInput );	
 }
 
 
@@ -72,7 +72,7 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 	m_Index->setDictionaryFile( indexfiledict );
 	m_Index->setDocListFile( indexfiledoc );
 
-	m_progressDlg = new Q3ProgressDialog( 0 );
+	m_progressDlg = new QProgressDialog( 0 );
 	connect( m_progressDlg, SIGNAL( canceled() ), this, SLOT( cancelButtonPressed() ) );
 	
 	connect( m_Index, SIGNAL( indexingProgress( int ) ),  this, SLOT( setIndexingProgress( int ) ) );
@@ -88,7 +88,7 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 		
 		m_progressDlg->setCaption( tr( "Generating search index..." ) );
 		m_progressDlg->setLabelText( tr( "Generating search index..." ) );
-		m_progressDlg->setTotalSteps( 100 );
+		m_progressDlg->setMaximum( 100 );
 		m_progressDlg->reset();
 		m_progressDlg->show();
 		processEvents();
@@ -101,7 +101,7 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 		}
 		
 		// Process the list keeping only HTML documents there
-		for ( unsigned int i = 0; i < alldocuments.size(); i++ )
+		for ( int i = 0; i < alldocuments.size(); i++ )
 			if ( alldocuments[i].endsWith( ".html", false ) || alldocuments[i].endsWith( ".htm", false ) )
 				documents.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
 
@@ -134,7 +134,7 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 void KCHMSearchEngine::setIndexingProgress( int progress )
 {
 	if ( progress <= 100 )
-		m_progressDlg->setProgress( progress );
+		m_progressDlg->setValue( progress );
 	
 	processEvents();
 }
@@ -199,7 +199,7 @@ bool KCHMSearchEngine::searchQuery( const QString & query, QStringList * results
 	// State machine variables
 	QString term;
 
-	for ( unsigned int i = 0; i < query.length(); i++ )
+	for ( int i = 0; i < query.length(); i++ )
 	{
 		QChar ch = query[i].lower();
 		

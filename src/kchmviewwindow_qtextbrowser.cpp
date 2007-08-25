@@ -19,14 +19,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qprinter.h>
-#include <qpainter.h>
-#include <q3simplerichtext.h>
-#include <q3paintdevicemetrics.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
+//#include <qprinter.h>
+//#include <qpainter.h>
+//#include <q3simplerichtext.h>
+//#include <q3paintdevicemetrics.h>
+//#include <Q3PopupMenu>
+
+#include <QScrollBar>
 
 #include "kde-qt.h"
+#include "libchmurlfactory.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow_qtextbrowser.h"
 
@@ -42,10 +44,9 @@
 #define KEEP_ALL_OPENED_DATA_IN_SOURCE_FACTORY
 
 KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
-	: Q3TextBrowser ( parent ), KCHMViewWindow ( parent )
+	: QTextBrowser ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 0;
-	m_sourcefactory = 0;
 	invalidate();
 	
 	setTextFormat ( Qt::RichText );
@@ -55,20 +56,10 @@ KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
 
 KCHMViewWindow_QTextBrowser::~KCHMViewWindow_QTextBrowser()
 {
-	delete m_sourcefactory;
 }
 
 bool KCHMViewWindow_QTextBrowser::openPage (const QString& url)
 {
-	// If we're using a memory saving scheme, we destroy MimeSourceFactory (including all the stored data)
-	// when opening a new page. It saves some memory, but spends more time while looking for already loaded
-	// images and HTML pages
-#if !defined (KEEP_ALL_OPENED_DATA_IN_SOURCE_FACTORY)
-	delete m_sourcefactory;
-	m_sourcefactory = new KCHMSourceFactory;
-	setMimeSourceFactory (m_sourcefactory);
-#endif	
-
 	setSource (url);
 	return true;
 }
@@ -79,7 +70,7 @@ void KCHMViewWindow_QTextBrowser::setSource ( const QString & name )
 	{
 		// Do URI decoding, qtextbrowser does stupid job.
 		QString fixedname = decodeUrl( name );
-		Q3TextBrowser::setSource (fixedname);
+		QTextBrowser::setSource (fixedname);
 	}
 	else
 		m_allowSourceChange = true;
@@ -90,21 +81,15 @@ void KCHMViewWindow_QTextBrowser::setZoomFactor( int zoom )
 	m_zoomfactor = zoom;
 	
 	if ( zoom < 0 )
-		Q3TextBrowser::zoomOut( -zoom );
+		QTextBrowser::zoomOut( -zoom );
 	else if ( zoom > 0 )
-		Q3TextBrowser::zoomIn( zoom);
+		QTextBrowser::zoomIn( zoom);
 }
 
 void KCHMViewWindow_QTextBrowser::invalidate( )
 {
-	delete m_sourcefactory;
-	m_sourcefactory = new KCHMSourceFactory (this);
-	setMimeSourceFactory (m_sourcefactory);
 	m_zoomfactor = 0;
 	m_allowSourceChange = true;
-	m_searchLastIndex = 0;
-	m_searchLastParagraph = 0;
-	m_searchText = QString::null;
 	reload();
 	
 	KCHMViewWindow::invalidate( );
@@ -112,12 +97,12 @@ void KCHMViewWindow_QTextBrowser::invalidate( )
 
 int KCHMViewWindow_QTextBrowser::getScrollbarPosition( )
 {
-	return contentsY ();
+	return verticalScrollBar()->sliderPosition();
 }
 
 void KCHMViewWindow_QTextBrowser::setScrollbarPosition( int pos )
 {
-	setContentsPos (0, pos);
+	verticalScrollBar()->setSliderPosition( pos);
 }
 
 void KCHMViewWindow_QTextBrowser::addZoomFactor( int value )
@@ -133,6 +118,7 @@ void KCHMViewWindow_QTextBrowser::slotLinkClicked( const QString & newlink )
 
 bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 {
+/* FIXME: printing
 #if !defined (QT_NO_PRINTER)
     QPrinter printer( QPrinter::HighResolution );
     printer.setFullPage(TRUE);
@@ -185,37 +171,31 @@ bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 	::mainWindow->showInStatusBar( i18n( "Printing aborted") );
 	return false;
 
-#else /* QT_NO_PRINTER */
-
+#else
 	QMessageBox::warning( this, 
 		i18n( "%1 - could not print") . arg(APP_NAME),
 		i18n( "Could not print.\nYour Qt library has been compiled without printing support");
 	return false;
 
-#endif /* QT_NO_PRINTER */
+#endif
+*/
 }
 
 
 void KCHMViewWindow_QTextBrowser::searchWord( const QString & word, bool forward, bool )
 {
-	if ( m_searchText == word )
-	{
-		if ( forward && (m_searchLastIndex || m_searchLastParagraph) )
-			m_searchLastIndex += m_searchText.length();
-	}
-	else
-	{
-		m_searchLastParagraph = m_searchLastIndex = 0;
-		m_searchText = word;
-	}
-
-	if ( find (m_searchText, false, false, forward, &m_searchLastParagraph, &m_searchLastIndex) )
+	QTextDocument::FindFlags flags = 0;
+	
+	if ( !forward )
+		flags |= QTextDocument::FindBackward;
+	
+	if ( !find( word, flags) )
 		::mainWindow->showInStatusBar( i18n( "Search failed") );
 }
 
 void KCHMViewWindow_QTextBrowser::clipSelectAll( )
 {
-	selectAll (TRUE);
+	selectAll();
 }
 
 void KCHMViewWindow_QTextBrowser::clipCopy( )
@@ -238,16 +218,22 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
 		c = input[i];
 		if (c == '%' && i + 2 < len)
 		{
-			a = input[++i];
-			b = input[++i];
+			a = input[++i].unicode();
+			b = input[++i].unicode();
 
-			if (a >= '0' && a <= '9') a -= '0';
-			else if (a >= 'a' && a <= 'f') a = a - 'a' + 10;
-			else if (a >= 'A' && a <= 'F') a = a - 'A' + 10;
+			if (a >= '0' && a <= '9')
+				a -= '0';
+			else if (a >= 'a' && a <= 'f')
+				a = a - 'a' + 10;
+			else if (a >= 'A' && a <= 'F')
+				a = a - 'A' + 10;
 
-			if (b >= '0' && b <= '9') b -= '0';
-			else if (b >= 'a' && b <= 'f') b  = b - 'a' + 10;
-			else if (b >= 'A' && b <= 'F') b  = b - 'A' + 10;
+			if (b >= '0' && b <= '9')
+				b -= '0';
+			else if (b >= 'a' && b <= 'f')
+				b  = b - 'a' + 10;
+			else if (b >= 'A' && b <= 'F')
+				b  = b - 'A' + 10;
 
 			temp.append( (QChar)((a << 4) | b ) );
 		}
@@ -262,9 +248,57 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
     return temp;
 }
 
-Q3PopupMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
+KQMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
 {
+	/*FIXME
 	KQMenu * menu = getContextMenu( anchorAt( pos ), this );
 	menu->exec( mapToGlobal( contentsToViewport( pos ) ) );
+	*/
 	return 0;
+}
+
+QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
+{
+	QString data, file, path = name.toString();
+
+	// Retreive the data from chm file
+	LCHMFile * chm = ::mainWindow->chmFile();
+
+	if ( !chm )
+		return 0;
+
+	int pos = path.find ('#');
+	if ( pos != -1 )
+		path = path.left (pos);
+	
+	// To handle a single-image pages, we need to generate the HTML page to show 
+	// this image. We did it in KCHMViewWindow::handleStartPageAsImage; now we need
+	// to generate the HTML page, and set it.
+	if ( LCHMUrlFactory::handleFileType( path, data ) )
+		return QVariant( QString( data ) );
+	
+	if ( type == QTextDocument::HtmlResource || type == QTextDocument::StyleSheetResource )
+	{
+		if ( chm->getFileContentAsString( &data, path ) )
+			return QVariant( QString( data ) );
+	}
+	else if ( type == QTextDocument::ImageResource )
+	{
+				// treat as image
+		QImage img;
+		QByteArray buf;
+		
+		QString fpath = KCHMViewWindow_QTextBrowser::decodeUrl( path );
+		
+		if ( chm->getFileContentAsBinary( &buf, fpath ) )
+		{
+			if ( !img.loadFromData ( (const uchar *) buf.data(), buf.size() ) )
+				qWarning( "Could not resolve file %s\n", path.ascii() );
+		}
+		
+		return QVariant( img );
+	}
+	
+	qWarning("loadResource: Unknown type %d", type);
+	return QVariant();
 }

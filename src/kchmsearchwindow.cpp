@@ -28,81 +28,54 @@
 #include "kchmtreeviewitem.h"
 #include "kchmsearchengine.h"
 
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-#include <QLabel>
 
-
-KCHMSearchWindow::KCHMSearchWindow( QWidget * parent, const char * name, Qt::WFlags f )
-	: QWidget (parent, name, f)
+KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
+	: QWidget( parent ), Ui::TabSearch()
 {
-	Q3VBoxLayout * layout = new Q3VBoxLayout (this);
-	layout->setMargin(6);
-	layout->setSpacing(6);
+	// UIC stuff
+	setupUi( this );
 	
-	// Labels <type words to search> and <help>
-	Q3HBoxLayout * labellayout = new Q3HBoxLayout();
-	labellayout->addWidget( new QLabel( i18n( "Type in word(s) to search for:"), this) );
-	labellayout->addStretch( 10 );
+	// Clickable Help label
+	connect( lblHelp, SIGNAL( linkActivated() ), this, SLOT( onHelpClicked() ) );
 	
-	KCHMClickableLabel * helplink = new KCHMClickableLabel( i18n( "<a href=\"q\"><b>Help</b></a>"), this );
-	connect( helplink, SIGNAL( clicked() ), this, SLOT( onHelpClicked() ) );
-	helplink->setCursor( QCursor( Qt::PointingHandCursor ) );
-	
-	labellayout->addWidget ( helplink );
-	layout->addLayout( labellayout );
-	
-	m_searchQuery = new QComboBox (TRUE, this);
-	m_searchQuery->setFocus();
-	m_searchQuery->setMaxCount (10);
-	m_searchQuery->setSizePolicy ( QSizePolicy ( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
-	
-	QPushButton * searchButton = new QPushButton ( i18n("Go"), this);
-	searchButton->setSizePolicy ( QSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
-	
-	Q3HBoxLayout * hlayout = new Q3HBoxLayout ( layout );
-	hlayout->addWidget ( m_searchQuery );
-	hlayout->addWidget ( searchButton );
-	
-	m_searchList = new KQListView (this);
-	m_searchList->addColumn( i18n( "Title" ) );
-	m_searchList->addColumn( i18n( "Location" ) );
-	m_searchList->setShowToolTips(true);
-
-	connect( searchButton, 
+	// Go Button
+	connect( btnGo, 
 			 SIGNAL( clicked () ), 
 			 this, 
 			 SLOT( onReturnPressed() ) );
 
-	connect( m_searchQuery->lineEdit(), 
+	// Pressing 'Return' in the combo box line edit
+	connect( searchBox->lineEdit(), 
 			 SIGNAL( returnPressed() ), 
 			 this, 
 			 SLOT( onReturnPressed() ) );
 	
-	connect( m_searchList, 
+	// Clicking on table element
+	connect( table, 
 			 SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int) ), 
 			 this, 
 			 SLOT( onDoubleClicked ( Q3ListViewItem *, const QPoint &, int) ) );
 
-	connect( m_searchList, 
+	/*
+	connect( table, 
 			 SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint& , int ) ),
 			 this, 
 			 SLOT( slotContextMenuRequested ( Q3ListViewItem *, const QPoint &, int ) ) );
+	*/
+	// FIXME: tooltips
+	// new KCHMListItemTooltip( table );
 	
-	//layout->addSpacing (10);
-	layout->addWidget (m_searchList);
+	searchBox->setFocus();
 	
-	new KCHMListItemTooltip( m_searchList );
 	m_contextMenu = 0;
 	m_searchEngine = 0;
 }
 
 void KCHMSearchWindow::invalidate( )
 {
-	m_searchList->clear();
-	m_searchQuery->clear();
-	m_searchQuery->lineEdit()->clear();
+	table->clear();
+	searchBox->clear();
+	searchBox->lineEdit()->clear();
 	
 	delete m_searchEngine;
 	m_searchEngine = 0;
@@ -111,21 +84,21 @@ void KCHMSearchWindow::invalidate( )
 void KCHMSearchWindow::onReturnPressed( )
 {
 	QStringList results;
-	QString text = m_searchQuery->lineEdit()->text();
+	QString text = searchBox->lineEdit()->text();
 	
 	if ( text.isEmpty() )
 		return;
 	
-	m_searchList->clear();
+	table->clear();
 	
 	if ( searchQuery( text, &results ) )
 	{
 		if ( !results.empty() )
 		{
-			for ( unsigned int i = 0; i < results.size(); i++ )
+			for ( int i = 0; i < results.size(); i++ )
 			{
-				new KCMSearchTreeViewItem ( m_searchList, 
-											::mainWindow->chmFile()->getTopicByUrl( results[i] ),
+				// FIXME: maybe we could remove last entries?
+				new KCMSearchTreeViewItem ( ::mainWindow->chmFile()->getTopicByUrl( results[i] ),
 										 	results[i],
 											results[i] );
 			}
@@ -140,7 +113,7 @@ void KCHMSearchWindow::onReturnPressed( )
 }
 
 
-void KCHMSearchWindow::onDoubleClicked( Q3ListViewItem *item, const QPoint &, int)
+void KCHMSearchWindow::onDoubleClicked( QTableWidgetItem *item, const QPoint &, int)
 {
 	if ( !item )
 		return;
@@ -151,16 +124,16 @@ void KCHMSearchWindow::onDoubleClicked( Q3ListViewItem *item, const QPoint &, in
 
 void KCHMSearchWindow::restoreSettings( const KCHMSettings::search_saved_settings_t & settings )
 {
-	for ( unsigned int i = 0; i < settings.size(); i++ )
-		m_searchQuery->insertItem (settings[i]);
+	for ( int i = 0; i < settings.size(); i++ )
+		searchBox->insertItem (settings[i]);
 }
 
 void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & settings )
 {
 	settings.clear();
 
-	for ( int i = 0; i < m_searchQuery->count(); i++ )
-		settings.push_back (m_searchQuery->text(i));
+	for ( int i = 0; i < searchBox->count(); i++ )
+		settings.push_back (searchBox->text(i));
 }
 
 
@@ -180,6 +153,7 @@ void KCHMSearchWindow::onHelpClicked( )
 	}
 }
 
+/*
 void KCHMSearchWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
 {
 	if ( !m_contextMenu )
@@ -193,6 +167,7 @@ void KCHMSearchWindow::slotContextMenuRequested( Q3ListViewItem * item, const QP
 		m_contextMenu->popup( point );
 	}
 }
+*/
 
 bool KCHMSearchWindow::initSearchEngine( )
 {
@@ -211,7 +186,7 @@ bool KCHMSearchWindow::initSearchEngine( )
 
 void KCHMSearchWindow::execSearchQueryInGui( const QString & query )
 {
-	m_searchQuery->lineEdit()->setText( query );
+	searchBox->lineEdit()->setText( query );
 	onReturnPressed();
 }
 

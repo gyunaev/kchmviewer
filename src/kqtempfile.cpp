@@ -57,7 +57,7 @@ bool KQTempFileKeeper::generateTempFile( QFile & file, const QString & tempdir )
 		char fnbuf[128];
 		sprintf( fnbuf, "KQTEMPFILE%d-%d-%d.tmp", (int) getpid(), (int) time(0), m_fileNumber++ );
 				
-		file.setName( usetempdir + fnbuf );
+		file.setName( usetempdir + (QString) fnbuf );
 		if ( file.open( QIODevice::WriteOnly ) )
 			break;
 	}

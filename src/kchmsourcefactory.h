@@ -22,13 +22,12 @@
 #ifndef KCHMSOURCEFACTORY_H
 #define KCHMSOURCEFACTORY_H
 
+/*FIXME: remove
 #include <qmime.h>
 #include "forwarddeclarations.h"
 
-/**
-@author Georgy Yunaev
-*/
-class KCHMSourceFactory : public Q3MimeSourceFactory
+
+class KCHMSourceFactory : public QMimeSourceFactory
 {
 public:
 	KCHMSourceFactory (KCHMViewWindow * viewwindow);
@@ -39,5 +38,6 @@ public:
 private:
 	KCHMViewWindow 	*	m_viewWindow;
 };
+*/
 
 #endif

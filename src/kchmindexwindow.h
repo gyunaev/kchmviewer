@@ -23,42 +23,35 @@
 #define KCHMINDEXWINDOW_H
 
 
-#include <qlineedit.h>
-#include <q3listview.h>
-//Added by qt3to4:
-#include <QShowEvent>
+#include "kde-qt.h"
+#include "ui_tab_index.h"
 
 
-/**
-@author Georgy Yunaev
-*/
-class KCHMIndexWindow : public QWidget
+class KCHMIndexWindow : public QWidget, public Ui::TabIndex
 {
 	Q_OBJECT
 	public:
-		KCHMIndexWindow ( QWidget * parent = 0, const char * name = 0, Qt::WFlags f = 0 );
+		KCHMIndexWindow ( QWidget * parent = 0 );
 	
 		void	invalidate();
 		void	search( const QString& index );
 		
-	public slots:
-		void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
-			
 	private slots:
 		void 	onTextChanged ( const QString & newvalue);
 		void 	onReturnPressed ();
-		void	onDoubleClicked ( Q3ListViewItem *, const QPoint &, int);
+		void	onDoubleClicked ( QTreeWidgetItem * item, int column );
 	
+	protected:
+		//void	contextMenuEvent ( QContextMenuEvent * event );
+		
 	private:
 		virtual void showEvent ( QShowEvent * );
 		
 		void	refillIndex();
 		
-		QLineEdit 	*	m_indexFinder;
-		KQListView	*	m_indexList;
-		KQMenu * 	m_contextMenu;	
-		Q3ListViewItem * m_lastSelectedItem;
-		bool			m_indexListFilled;
+		KQMenu 			* 	m_contextMenu;	
+		QTreeWidgetItem	*	m_lastSelectedItem;
+		bool				m_indexListFilled;
 };
 
 #endif

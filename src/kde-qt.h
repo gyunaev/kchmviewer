@@ -134,7 +134,7 @@ public:
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QGroupBox>
-//#include <QButtonGroup>
+#include <QToolBar>
 #include <QToolTip>
 #include <QListWidget>
 #include <QTreeWidget>

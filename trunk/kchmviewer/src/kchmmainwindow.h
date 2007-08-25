@@ -22,9 +22,11 @@
 #ifndef KCHMMAINWINDOW_H
 #define KCHMMAINWINDOW_H
 
+//FIXME: move Qt includes to kde-qt
 #include <QCloseEvent>
 #include <QShowEvent>
 #include <QEvent>
+#include <QMainWindow>
 
 #include "kde-qt.h"
 
@@ -34,7 +36,7 @@
 #include "kchmviewwindow.h"
 
 
-#define ENABLE_AUTOTEST_SUPPORT
+//#define ENABLE_AUTOTEST_SUPPORT
 
 //! OpenPage extra flags, specifying extra behavior
 
@@ -59,7 +61,8 @@ class KCHMUserEvent : public QEvent
 };
 
 
-class KCHMMainWindow : public KQMainWindow
+// FIXME: mainwindow to UIC
+class KCHMMainWindow : public QMainWindow
 {
 		Q_OBJECT
 	
@@ -83,8 +86,8 @@ class KCHMMainWindow : public KQMainWindow
 		void		setTextEncoding (const LCHMTextEncoding * enc);
 			
 	public slots:
-		void slotOnTreeClicked( Q3ListViewItem *item );
-		void slotOnTreeDoubleClicked( Q3ListViewItem *item, const QPoint &, int );
+		void slotOnTreeClicked( QTreeWidgetItem *item );
+		void slotOnTreeDoubleClicked( QTreeWidgetItem *item, const QPoint &, int );
 		
 		void slotAddBookmark ( );
 		void slotOpenPageInNewTab( );
@@ -180,9 +183,9 @@ class KCHMMainWindow : public KQMainWindow
 			STATE_SHUTDOWN
 		};
 		
-		bool					m_useShortAutotest;
-		auto_test_state_t		m_autoteststate;
-		QTreeWidgetItemIterator	m_autotestlistiterator;
+		bool						m_useShortAutotest;
+		auto_test_state_t			m_autoteststate;
+		QTreeWidgetItemIterator	*	m_autotestlistiterator;
 	
 	private slots:
 		void	runAutoTest();

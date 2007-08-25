@@ -16,7 +16,7 @@ SOURCES +=  lchmurlhandler.cpp \
 			libchmfile_search.cpp \
 			libchmtextencoding.cpp \
 			libchmtocimage.cpp
-TARGET = libchmfile
+TARGET = chmfile
 CONFIG += warn_on \
 		  qt \
 		  staticlib

@@ -136,23 +136,22 @@ protected:
 			int 		scrollbarpos;
 	};
 
-	unsigned int	m_historyMaxSize;
-	unsigned int	m_historyCurrentPos;
+	int						m_historyMaxSize;
+	int						m_historyCurrentPos;
+	KQMenu 				*	m_contextMenu;
+	KQMenu 				*	m_contextMenuLink;
+	QList<KCHMUrlHistory>	m_history;
+		
+	// This member keeps a "open new tab" link between getContextMenu()
+	// call and appropriate slot call
+	QString					m_newTabLinkKeeper;
 	
-	Q3ValueList<KCHMUrlHistory>		m_history;
-	
-	KQMenu *	m_contextMenu;
-	KQMenu *	m_contextMenuLink;
-	
-	// This member keeps a "open new tab" link between getContextMenu() call and appropriate
-	// slot call
-	QString			m_newTabLinkKeeper;
+	QString 				m_openedPage;
+	QString 				m_lastOpenedPage;
+	QString					m_base_url;
 
-	QString 		m_openedPage;
-	QString 		m_lastOpenedPage;
-	QString			m_base_url;
-
-	QTabWidget	*	m_parentTabWidget;
+	// The parent tab browser
+	QTabWidget			*	m_parentTabWidget;
 };
 
 #endif

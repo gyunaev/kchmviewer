@@ -98,7 +98,7 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 {
 	QString chmfile, page, newurl = origurl;
 
-	if ( !origurl )
+	if ( origurl.isEmpty() )
 		return true;
 
 	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
@@ -251,7 +251,7 @@ void KCHMViewWindow::addNavigationHistory( const QString & url, int scrollpos )
 {
 	// shred the 'forward' history
 	if ( m_historyCurrentPos < m_history.size() )
-		m_history.erase( m_history.at( m_historyCurrentPos ), m_history.end());
+		m_history.erase( m_history.begin() + m_historyCurrentPos, m_history.end() );
 
 	// do not grow the history if already max size
 	if ( m_history.size() >= m_historyMaxSize )

@@ -19,32 +19,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef CTREEVIEWITEM_H
-#define CTREEVIEWITEM_H
+#ifndef KCHMTREEVIEWITEM_H
+#define KCHMTREEVIEWITEM_H
 
-#include <q3listview.h>
-#include <q3valuevector.h>
-//Added by qt3to4:
+#include <QVector>
 #include <QPixmap>
+#include <QListWidget>
+#include <QTreeWidget>
+#include <QTableWidget>
 
 #include "libchmfile.h"
 
-/**
-@author Georgy Yunaev
-*/
+
 //! This is a list item used both in Index and Table Of Content trees
-class KCHMIndTocItem : public Q3ListViewItem
+class KCHMIndTocItem : public QTreeWidgetItem
 {
 	public:
-		KCHMIndTocItem( Q3ListViewItem* parent, Q3ListViewItem* after, QString name, QString aurl, int image); 
-		KCHMIndTocItem( Q3ListView* parent, Q3ListViewItem* after, QString name, QString url, int image);
+		KCHMIndTocItem( QTreeWidgetItem* parent, QTreeWidgetItem* after, QString name, QString aurl, int image); 
+		KCHMIndTocItem( QTreeWidget* parent, QTreeWidgetItem* after, QString name, QString url, int image);
 		
-		QString		getUrl() const;
-		virtual void setOpen ( bool open );
+		QString			getUrl() const;
+		virtual void 	setExpanded ( bool open );
 		
 	private:
-		virtual void paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h );
-		virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
+		// FIXME: painting!
+		//virtual void paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h );
+		//virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
 		virtual const QPixmap * pixmap( int i ) const;
 		
 		QString		url;
@@ -52,12 +52,36 @@ class KCHMIndTocItem : public Q3ListViewItem
 };
 
 
-class KCMSearchTreeViewItem : public Q3ListViewItem
+
+class KCMSearchTreeViewItem : public QTableWidgetItem
 {
 	public:
-		KCMSearchTreeViewItem (Q3ListView* parent, QString name, QString loc, QString url)
-			: Q3ListViewItem (parent, name, loc)
+		// FIXME: check that QString is const QString& everywhere
+		KCMSearchTreeViewItem( const QString& name, const QString& loc, const QString& url );
+		QString		getUrl() const;
+		
+	protected:
+		// Overriden members
+		int columnCount () const;
+		
+		// Overriden member
+		QVariant data ( int column, int role ) const; 
+		
+	private:
+		QString		m_url;
+		QString		m_name;
+		QString		m_loc;
+};
+
+
+
+class KCHMSingleTreeViewItem : public QListWidgetItem
+{
+	public:
+		KCHMSingleTreeViewItem( QListWidget* parent, QString name, QString url )
+			: QListWidgetItem( parent )
 		{
+			setText( name );
 			this->url = url;
 		}
 	
@@ -68,23 +92,6 @@ class KCMSearchTreeViewItem : public Q3ListViewItem
 };
 
 
-class KCHMSingleTreeViewItem : public Q3ListViewItem
-{
-	public:
-		KCHMSingleTreeViewItem (Q3ListView* parent, QString name, QString url)
-			: Q3ListViewItem (parent, name)
-		{
-			this->url = url;
-		}
-	
-		QString		getUrl() const	{ return url; }
-		
-	private:
-		QString		url;
-};
-
-
-
-void kchmFillListViewWithParsedData( Q3ListView * list, const Q3ValueVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map );
+void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map );
 
 #endif

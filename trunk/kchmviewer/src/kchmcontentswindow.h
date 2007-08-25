@@ -24,29 +24,30 @@
 
 #include "kde-qt.h"
 #include "kchmtreeviewitem.h"
+#include "ui_tab_contents.h"
 
-/**
-@author tim
-*/
-class KCHMContentsWindow : public KQListView
+
+class KCHMContentsWindow : public QWidget, public Ui::TabContents
 {
 	Q_OBJECT
 	public:
-    	KCHMContentsWindow( QWidget *parent = 0, const char *name = 0 );
+    	KCHMContentsWindow( QWidget *parent = 0 );
 		~KCHMContentsWindow();
 		
-		QRect	tip( const QPoint & p );
+		//QRect	tip( const QPoint & p );
 		
 		void	refillTableOfContents();
+		void	showItem( KCHMIndTocItem * item );
 		
 		KCHMIndTocItem *	getTreeItem( const QString& url );
 		
 	public slots:
-		void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
+		//void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
 		
 	private:
-		KQMenu 				  * m_contextMenu;
+		KQMenu 				  			* m_contextMenu;
 		QMap<QString, KCHMIndTocItem*>	m_urlListMap;
 };
+
 
 #endif /* INCLUDE_KCHMCONTENTSWINDOW_H */

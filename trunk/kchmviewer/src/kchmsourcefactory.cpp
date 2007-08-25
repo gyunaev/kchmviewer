@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+/* FIXME: remove
 #include <q3cstring.h>
 #include <qimage.h>
 #include <qdir.h>
@@ -92,3 +93,4 @@ QString KCHMSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const
 {
 	return m_viewWindow->makeURLabsolute ( abs_or_rel_name, false );
 }
+*/

@@ -29,7 +29,7 @@
 
 
 KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
-	: Q3ToolBar( parent )
+	: QToolBar( parent )
 {
 	// Initialize toolbar
 	setLabel( i18n( "Navigation") );
@@ -41,7 +41,7 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 											 parent,
 											 SLOT( slotNavigateBack() ),
 											 this);
-	Q3WhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move backward in browser history") );	
+	QWhatsThis::add( m_toolbarIconBackward, i18n( "Click this button to move backward in browser history") );	
 
 	QPixmap iconForward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::forward));
 	m_toolbarIconForward = new QToolButton (iconForward,
@@ -50,7 +50,7 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 											parent,
 											SLOT( slotNavigateForward() ),
 											this);
-	Q3WhatsThis::add( m_toolbarIconForward, i18n( "Click this button to move forward in browser history") );	
+	QWhatsThis::add( m_toolbarIconForward, i18n( "Click this button to move forward in browser history") );	
 	
 	QPixmap iconHome = (*gIconStorage.getToolbarPixmap(KCHMIconStorage::gohome));
 	QToolButton	* hb = new QToolButton (iconHome,
@@ -59,7 +59,7 @@ KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 					 parent,
 					 SLOT( slotNavigateHome() ),
 					 this);
-	Q3WhatsThis::add( hb, i18n( "Click this button to move to the home page") );	
+	QWhatsThis::add( hb, i18n( "Click this button to move to the home page") );	
 }
 
 

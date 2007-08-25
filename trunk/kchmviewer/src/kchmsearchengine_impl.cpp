@@ -21,13 +21,11 @@
  ***************************************************************************/
 
 
-#include <qfile.h>
-#include <qdir.h>
-#include <qstringlist.h>
-#include <q3dict.h>
-#include <qapplication.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QFile>
+#include <QDir>
+#include <QStringList>
+#include <QHash>
+#include <QApplication>
 #include <QEventLoop>
 
 #include <ctype.h>
@@ -48,15 +46,6 @@ static const char SPLIT_CHARACTERS[] = "!()*&^%#@[]{}':;,.?/|/?<>\\-+=~`";
 static const char WORD_CHARACTERS[] = "$_";
 
 	
-int TermList::compareItems( Q3PtrCollection::Item i1, Q3PtrCollection::Item i2 )
-{
-	if( ( (Term*)i1 )->frequency == ( (Term*)i2 )->frequency )
-		return 0;
-	if( ( (Term*)i1 )->frequency < ( (Term*)i2 )->frequency )
-		return -1;
-	return 1;
-}
-
 QDataStream &operator>>( QDataStream &s, Document &l )
 {
 	s >> l.docNumber;
@@ -72,7 +61,7 @@ QDataStream &operator<<( QDataStream &s, const Document &l )
 }
 
 Index::Index( const QString &dp, const QString & )
-	: QObject( 0, 0 ), dict( 8999 ), docPath( dp )
+	: QObject( 0 ), docPath( dp )
 {
 	lastWindowClosed = false;
 	connect( qApp, SIGNAL( lastWindowClosed() ),
@@ -80,7 +69,7 @@ Index::Index( const QString &dp, const QString & )
 }
 
 Index::Index( const QStringList &dl, const QString & )
-	: QObject( 0, 0 ), dict( 20011 )
+	: QObject( 0 )
 {
 	docList = dl;
 	lastWindowClosed = false;
@@ -144,13 +133,13 @@ void Index::insertInDict( const QString &str, int docNum )
 	Entry *e = 0;
 	if ( dict.count() )
 		e = dict[ str ];
-	
+
 	if ( e )
 	{
-		if ( e->documents.first().docNumber != docNum )
-			e->documents.prepend( Document( docNum, 1 ) );
+		if ( e->documents.last().docNumber != docNum )
+			e->documents.append( Document(docNum, 1 ) );
 		else
-			e->documents.first().frequency++;
+			e->documents.last().frequency++;
 	}
 	else
 	{
@@ -193,7 +182,7 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 	state_t state = STATE_OUTSIDE_TAGS;
 	QChar QuoteChar; // used in STATE_IN_QUOTES
 	
-	for ( unsigned int j = 0; j < text.length(); j++ )
+	for ( int j = 0; j < text.length(); j++ )
 	{
 		QChar ch = text[j];
 		
@@ -344,7 +333,6 @@ void Index::parseDocument( const QString &filename, int docNum )
 
 void Index::writeDict()
 {
-	Q3DictIterator<Entry> it( dict );
 	QFile f( dictFile );
 	
 	if ( !f.open( QIODevice::WriteOnly ) )
@@ -354,17 +342,17 @@ void Index::writeDict()
 	}
 	
 	QDataStream s( &f );
-	s << (int) 1; // version
+	s << (int) 2; // version
 	s << m_charssplit;
 	s << m_charsword;
 	
-	for( ; it.current(); ++it )
+	for(QHash<QString, Entry *>::Iterator it = dict.begin(); it != dict.end(); ++it)
 	{
-		Entry *e = it.current();
-		s << it.currentKey();
-		s << e->documents;
+		s << it.key();
+		s << (int) it.value()->documents.count();
+		s << it.value()->documents;
 	}
-	
+
 	f.close();
 	writeDocumentList();
 }
@@ -390,16 +378,22 @@ bool Index::readDict()
 	dict.clear();
 	QDataStream s( &f );
 	QString key;
-	int version;
-	Q3ValueList<Document> docs;
+	int version, numOfDocs;
+	QVector<Document> docs;
 	
 	s >> version;
+	
+	if ( version < 2 )
+		return false;
+	
 	s >> m_charssplit;
 	s >> m_charsword;
 	
 	while ( !s.atEnd() )
 	{
 		s >> key;
+		s >> numOfDocs;
+		docs.resize(numOfDocs);
 		s >> docs;
 		dict.insert( key, new Entry( docs ) );
 	}
@@ -420,7 +414,7 @@ bool Index::readDocumentList()
 
 QStringList Index::query( const QStringList &terms, const QStringList &termSeq, const QStringList &seqWords )
 {
-	TermList termList;
+	QList<Term> termList;
 
 	QStringList::ConstIterator it = terms.begin();
 	for ( it = terms.begin(); it != terms.end(); ++it )
@@ -430,7 +424,7 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 		if ( dict[ *it ] )
 		{
 			e = dict[ *it ];
-			termList.append( new Term( *it, e->documents.count(), e->documents ) );
+			termList.append( Term( *it, e->documents.count(), e->documents ) );
 		}
 		else
 		{
@@ -438,63 +432,42 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 		}
 	}
 	
-	termList.sort();
-
-	Term *minTerm = termList.first();
-	
 	if ( !termList.count() )
 		return QStringList();
 	
-	termList.removeFirst();
+	qSort( termList );
 
-	Q3ValueList<Document> minDocs = minTerm->documents;
-	Q3ValueList<Document>::iterator C;
-	Q3ValueList<Document>::ConstIterator It;
-	Term *t = termList.first();
-	
-	for ( ; t; t = termList.next() )
-	{
-		Q3ValueList<Document> docs = t->documents;
-		C = minDocs.begin();
-		
-		while ( C != minDocs.end() )
-		{
+	QVector<Document> minDocs = termList.takeFirst().documents;
+	for(QList<Term>::Iterator it = termList.begin(); it != termList.end(); ++it) {
+		Term *t = &(*it);
+		QVector<Document> docs = t->documents;
+		for(QVector<Document>::Iterator minDoc_it = minDocs.begin(); minDoc_it != minDocs.end(); ) {
 			bool found = false;
-			
-			for ( It = docs.begin(); It != docs.end(); ++It )
-			{
-				if ( (*C).docNumber == (*It).docNumber )
-				{
-					(*C).frequency += (*It).frequency;
+			for (QVector<Document>::ConstIterator doc_it = docs.constBegin(); doc_it != docs.constEnd(); ++doc_it ) {
+				if ( (*minDoc_it).docNumber == (*doc_it).docNumber ) {
+					(*minDoc_it).frequency += (*doc_it).frequency;
 					found = true;
 					break;
 				}
 			}
-			
 			if ( !found )
-				C = minDocs.remove( C );
+				minDoc_it = minDocs.erase( minDoc_it );
 			else
-				++C;
+				++minDoc_it;
 		}
 	}
 
 	QStringList results;
 	qSort( minDocs );
-	
-	if ( termSeq.isEmpty() )
-	{
-		for ( C = minDocs.begin(); C != minDocs.end(); ++C )
-			results << docList[ (int)(*C).docNumber ];
-		
+	if ( termSeq.isEmpty() ) {
+		for(QVector<Document>::Iterator it = minDocs.begin(); it != minDocs.end(); ++it)
+			results << docList.at((int)(*it).docNumber);
 		return results;
 	}
 
 	QString fileName;
-	
-	for ( C = minDocs.begin(); C != minDocs.end(); ++C )
-	{
-		fileName =  docList[ (int)(*C).docNumber ];
-		
+	for(QVector<Document>::Iterator it = minDocs.begin(); it != minDocs.end(); ++it) {
+		fileName =  docList[ (int)(*it).docNumber ];
 		if ( searchForPhrases( termSeq, seqWords, fileName ) )
 			results << fileName;
 	}
@@ -547,7 +520,7 @@ bool Index::searchForPhrases( const QStringList &phrases, const QStringList &wor
 		QStringList phrasewords = QStringList::split( ' ', *phrase_it );
 		first_word_positions = miniDict[ phrasewords[0] ]->positions;
 		
-		for ( unsigned int j = 1; j < phrasewords.count(); ++j )
+		for ( int j = 1; j < phrasewords.count(); ++j )
 		{
 			Q3ValueList<uint> next_word_it = miniDict[ phrasewords[j] ]->positions;
 			Q3ValueList<uint>::iterator dict_it = first_word_positions.begin();

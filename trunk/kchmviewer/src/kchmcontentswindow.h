@@ -44,7 +44,6 @@ class KCHMContentsWindow : public QWidget, public Ui::TabContents
 	public slots:
 		//void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
 		// FIXME: slot naming
-		void	onDoubleClicked ( QTreeWidgetItem * item, int column );
 		void	onClicked ( QTreeWidgetItem * item, int column );
 	
 	private:

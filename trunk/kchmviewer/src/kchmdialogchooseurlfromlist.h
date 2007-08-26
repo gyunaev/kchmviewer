@@ -41,7 +41,7 @@ class KCHMDialogChooseUrlFromList : public QDialog, public Ui::DialogTopicSelect
 		QString getSelectedItemUrl( const QStringList& urls, const QStringList& titles );
 
 	private slots:
-		void onDoubleClicked( QListViewItem * item );
+		void onDoubleClicked( QListWidgetItem * item );
 };
 
 #endif

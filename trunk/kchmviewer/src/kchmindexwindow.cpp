@@ -19,12 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qlayout.h>
-#include <q3header.h>
-//Added by qt3to4:
-#include <QShowEvent>
-#include <Q3VBoxLayout>
-
+//FIXME: check headers, move all Qt stuff to kde-qt or to headers
 #include "libchmfile.h"
 
 #include "kchmmainwindow.h"
@@ -60,25 +55,24 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent )
 	m_lastSelectedItem = 0;
 	m_contextMenu = 0;
 	
-	// FIXME: tooltips, context menu
-	// new KCHMListItemTooltip( m_indexList );
-	
+	// FIXME: context menu
 	text->setFocus();
 }
 
 void KCHMIndexWindow::onTextChanged ( const QString & newvalue)
 {
-	// FIXME: index search
-	/*
-	m_lastSelectedItem = tree->findItem (newvalue, 0, Qt::BeginsWith);
+	QList<QTreeWidgetItem *> items = tree->findItems( newvalue, Qt::MatchStartsWith );
 	
-	if ( m_lastSelectedItem )
+	if ( !items.isEmpty() )
 	{
-		m_indexList->ensureItemVisible (m_lastSelectedItem);
-		m_indexList->setCurrentItem (m_lastSelectedItem);
+		m_lastSelectedItem = items[0];
+		tree->setCurrentItem( m_lastSelectedItem );
+		tree->scrollToItem( m_lastSelectedItem );
 	}
-	*/
+	else
+		m_lastSelectedItem = 0;
 }
+
 
 void KCHMIndexWindow::showEvent( QShowEvent * )
 {
@@ -109,12 +103,16 @@ void KCHMIndexWindow::invalidate( )
 
 void KCHMIndexWindow::onDoubleClicked ( QTreeWidgetItem * item, int )
 {
-	/*
-	FIXME!!!
 	if ( !item )
 		return;
 	
 	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
+	
+	// Prevent opened index tree item from closing; because the tree open/close 
+	// procedure will be triggered after the slots are called, we change the tree
+	// state to "collapsed", so the slot handler expands it again.
+	if ( item->isExpanded() )
+		item->setExpanded( false );
 	
 	QString url = treeitem->getUrl();
 	
@@ -123,16 +121,19 @@ void KCHMIndexWindow::onDoubleClicked ( QTreeWidgetItem * item, int )
 
 	if ( url[0] == ':' ) // 'see also' link
 	{
-		m_lastSelectedItem = tree->findItem (url.mid(1), 0);
-		if ( m_lastSelectedItem )
+		QList<QTreeWidgetItem *> items = tree->findItems( url.mid(1), Qt::MatchFixedString );
+	
+		if ( !items.isEmpty() )
 		{
-			tree->ensureItemVisible (m_lastSelectedItem);
-			tree->setCurrentItem (m_lastSelectedItem);
+			m_lastSelectedItem = items[0];
+			tree->setCurrentItem( m_lastSelectedItem );
+			tree->scrollToItem( m_lastSelectedItem );
 		}
+		else
+			m_lastSelectedItem = 0;
 	}
 	else
 		::mainWindow->openPage( url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-	*/
 }
 
 /*

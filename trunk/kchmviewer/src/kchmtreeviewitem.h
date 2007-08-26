@@ -41,15 +41,10 @@ class KCHMIndTocItem : public QTreeWidgetItem
 		QString			getUrl() const;
 	
 		// Overridden methods
-		void 			setExpanded ( bool open );
 		int 			columnCount () const;
 		QVariant 		data ( int column, int role ) const;
 		
 	private:
-		// FIXME: painting!
-		//virtual void paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h );
-		//virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
-			
 		QString		m_name;
 		QString		m_url;
 		int 		m_image_number;
@@ -60,7 +55,6 @@ class KCHMIndTocItem : public QTreeWidgetItem
 class KCMSearchTreeViewItem : public QTableWidgetItem
 {
 	public:
-		// FIXME: check that QString is const QString& everywhere
 		KCMSearchTreeViewItem( const QString& name, const QString& loc, const QString& url );
 		QString		getUrl() const;
 		
@@ -77,23 +71,6 @@ class KCMSearchTreeViewItem : public QTableWidgetItem
 		QString		m_loc;
 };
 
-
-
-class KCHMSingleTreeViewItem : public QListWidgetItem
-{
-	public:
-		KCHMSingleTreeViewItem( QListWidget* parent, QString name, QString url )
-			: QListWidgetItem( parent )
-		{
-			setText( name );
-			this->url = url;
-		}
-	
-		QString		getUrl() const	{ return url; }
-		
-	private:
-		QString		url;
-};
 
 
 void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map );

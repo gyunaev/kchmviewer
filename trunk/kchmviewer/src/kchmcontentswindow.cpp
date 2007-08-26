@@ -48,11 +48,6 @@ KCHMContentsWindow::KCHMContentsWindow( QWidget *parent )
 	         this, 
 	         SLOT( onClicked ( QTreeWidgetItem *, int ) ) );
 	
-	connect( tree,
-	         SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ), 
-	         this, 
-	         SLOT( onDoubleClicked ( QTreeWidgetItem *, int ) ) );
-	
 	/*
 	connect( this, SIGNAL( onItem ( Q3ListViewItem * ) ), this, SLOT( slotOnItem( Q3ListViewItem * ) ) );
 	connect( this, 
@@ -124,18 +119,6 @@ void KCHMContentsWindow::showEvent(QShowEvent *)
 	
 	m_contentFilled = true;
 	refillTableOfContents();
-}
-
-void KCHMContentsWindow::onDoubleClicked(QTreeWidgetItem * item, int column)
-{
-	// Open/close only existing item which have children
-	if ( !item )
-		return;
-	qDebug("dblclick");
-	item->setExpanded( !item->isExpanded() );
-	tree->scrollToItem( item );
-	//FIXME: maybe we need it
-	//item->repaint();
 }
 
 void KCHMContentsWindow::onClicked(QTreeWidgetItem * item, int column)

@@ -32,7 +32,6 @@
 #include "kchmviewwindow.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindowmgr.h"
-#include "kchmnavtoolbar.h"
 
 
 KCHMViewWindow::KCHMViewWindow( QTabWidget * parent )
@@ -90,7 +89,7 @@ QString KCHMViewWindow::makeURLabsolute ( const QString & url, bool set_as_base 
 		}
 	}
 
-//qDebug ("KCHMViewWindow::makeURLabsolute (%s) -> (%s)", url.ascii(), newurl.ascii());
+	//qDebug ("KCHMViewWindow::makeURLabsolute (%s) -> (%s)", url.ascii(), newurl.ascii());
 	return newurl;
 }
 
@@ -274,11 +273,8 @@ void KCHMViewWindow::updateNavigationToolbar( )
 	
 	if ( mainWindow )
 	{
-//FIXME: nav toolbar
-/*		mainWindow->navigationToolbar()->updateIconStatus( 
-					m_historyCurrentPos > 0,
-					m_historyCurrentPos < (m_history.size() - 1) );
-*/		
+		mainWindow->navSetBackEnabled( m_historyCurrentPos > 0 );
+		mainWindow->navSetForwardEnabled( m_historyCurrentPos < (m_history.size() - 1) );
 	}
 }
 

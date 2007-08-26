@@ -49,7 +49,6 @@
 #include "kchmsearchtoolbar.h"
 #include "kchmsettings.h"
 #include "kchmsetupdialog.h"
-#include "kchmnavtoolbar.h"
 #include "kchmviewwindow.h"
 #include "kchmviewwindowmgr.h"
 #include "kchmkeyeventfilter.h"

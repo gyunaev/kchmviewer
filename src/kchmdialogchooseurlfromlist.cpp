@@ -34,12 +34,13 @@ KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList( QWidget* parent )
 	connect( list, 
 			 SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ),
 			 this,
-			 SLOT( onDoubleClicked ( QListWidgetItem * ) ) );
+	         SLOT( onDoubleClicked( QListWidgetItem * ) ) );
 }
 
-void KCHMDialogChooseUrlFromList::onDoubleClicked( QListViewItem * )
+void KCHMDialogChooseUrlFromList::onDoubleClicked( QListWidgetItem * item )
 {
-	accept();
+	if ( item )
+		accept();
 }
 
 
@@ -49,7 +50,7 @@ QString KCHMDialogChooseUrlFromList::getSelectedItemUrl( const QStringList & url
 		list->addItem( titles[i] );
 	
 	if ( exec() == QDialog::Accepted && list->currentRow() != -1 )
-		return titles[ list->currentRow() ];
+		return urls[ list->currentRow() ];
 	
 	return QString::null;
 }

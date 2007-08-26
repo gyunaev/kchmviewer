@@ -513,7 +513,7 @@ bool Index::searchForPhrases( const QStringList &phrases, const QStringList &wor
 	}
 */				
 	
-	Q3ValueList<uint> first_word_positions;
+	QList<uint> first_word_positions;
 	
 	for ( QStringList::ConstIterator phrase_it = phrases.begin(); phrase_it != phrases.end(); phrase_it++ )
 	{
@@ -522,8 +522,8 @@ bool Index::searchForPhrases( const QStringList &phrases, const QStringList &wor
 		
 		for ( int j = 1; j < phrasewords.count(); ++j )
 		{
-			Q3ValueList<uint> next_word_it = miniDict[ phrasewords[j] ]->positions;
-			Q3ValueList<uint>::iterator dict_it = first_word_positions.begin();
+			QList<uint> next_word_it = miniDict[ phrasewords[j] ]->positions;
+			QList<uint>::iterator dict_it = first_word_positions.begin();
 			
 			while ( dict_it != first_word_positions.end() )
 			{

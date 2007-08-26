@@ -66,120 +66,6 @@ QString KCHMIndTocItem::getUrl( ) const
 	return dlg.getSelectedItemUrl( urls, titles );
 }
 
-/*
-void KCHMIndTocItem::paintBranches( QPainter * p, const QColorGroup & cg, int w, int y, int h )
-{
-	if ( image_number != LCHMBookIcons::IMAGE_INDEX )
-		Q3ListViewItem::paintBranches(p, cg, w, y, h);
-	else
-	{
-		// Too bad that listView()->paintEmptyArea( p, QRect( 0, 0, w, h ) ) is protected. 
-		// Taken from qt-x11-free-3.0.4/src/widgets/qlistview.cpp
-    	QStyleOption opt( 0, 0 );
-    	QStyle::SFlags how = QStyle::Style_Default | QStyle::Style_Enabled;
-
-    	listView()->style().drawComplexControl( QStyle::CC_ListView,
-				p, listView(), QRect( 0, 0, w, h ), cg,
-				how, QStyle::SC_ListView, QStyle::SC_None,
-				opt );
-	}
-}
-
-
-void KCHMIndTocItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
-{
-    QColorGroup newcg ( cg );
-    QColor c = newcg.text();
-
-	if ( url.find ('|') != -1 )
-        newcg.setColor( QColorGroup::Text, Qt::red );
-	else if ( url[0] == ':' )
-        newcg.setColor( QColorGroup::Text, Qt::lightGray );
-	else
-	{
-		Q3ListViewItem::paintCell( p, cg, column, width, align );
-		return;
-	}
-
-    Q3ListViewItem::paintCell( p, newcg, column, width, align );
-	newcg.setColor( QColorGroup::Text, c );
-}
-*/
-
-void KCHMIndTocItem::setExpanded( bool open )
-{
-	if ( m_image_number != LCHMBookIcons::IMAGE_INDEX || open )
-		QTreeWidgetItem::setExpanded( open );
-}
-
-void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
-{
-	QVector< KCHMIndTocItem *> lastchild;
-	QVector< KCHMIndTocItem *> rootentry;
-
-	if ( map )
-		map->clear();
-	
-	list->clear();	
-	
-	for ( int i = 0; i < data.size(); i++ )
-	{
-		int indent = data[i].indent;
-
-		// Do we need to add another indent?
-		if ( indent >= lastchild.size() )
-		{
-			lastchild.resize( indent + 1 );
-			lastchild[indent] = 0;
-		
-			rootentry.resize( indent + 1 );
-			rootentry[indent] = 0;
-		}
-	
-		// Create the node
-		KCHMIndTocItem * item;
-		QString url = data[i].urls.join ("|");
-		
-		if ( indent == 0 )
-			item = new KCHMIndTocItem( list, lastchild[indent], data[i].name, url, data[i].imageid );
-		else
-		{
-			// New non-root entry. It is possible (for some buggy CHMs) that there is no previous entry: previoous entry had indent 1,
-			// and next entry has indent 3. Backtracking it up, creating missing entries.
-			if ( rootentry[indent-1] == 0 )
-				qFatal("Child entry indented as %d with no root entry!", indent);
-
-			item = new KCHMIndTocItem( rootentry[indent-1], lastchild[indent], data[i].name, url, data[i].imageid );
-		}
-
-		// Hack: if map is 0, we have index, so make it open
-		if ( map )
-		{
-			for ( int li = 0; li < data[i].urls.size(); li++ )
-				map->insert( data[i].urls[li], item );
-		}
-		else
-			item->setExpanded( true );
-
-		lastchild[indent] = item;
-		rootentry[indent] = item;
-	}		
-
-	list->update();
-}
-
-KCMSearchTreeViewItem::KCMSearchTreeViewItem( const QString& name, const QString& loc, const QString& url )
-	: QTableWidgetItem()
-{
-	m_name = name;
-	m_loc = loc;
-	m_url = url;
-}
-
-QString KCMSearchTreeViewItem::getUrl() const
-{
-	return m_url;
-}
 
 int KCHMIndTocItem::columnCount() const
 {
@@ -189,7 +75,7 @@ int KCHMIndTocItem::columnCount() const
 QVariant KCHMIndTocItem::data(int column, int role) const
 {
 	int imagenum;
-
+	
 	if ( column != 0 )
 		return QVariant();
 	
@@ -198,11 +84,11 @@ QVariant KCHMIndTocItem::data(int column, int role) const
 		// Item name
 		case Qt::DisplayRole:
 			return m_name;
-			
+		
 		// Item image
 		case Qt::DecorationRole:
 			if ( m_image_number != LCHMBookIcons::IMAGE_NONE 
-			     && m_image_number != LCHMBookIcons::IMAGE_INDEX )
+        	&& m_image_number != LCHMBookIcons::IMAGE_INDEX )
 			{
 				// If the item has children, we change the book image to "open book", or next image automatically
 				if ( childCount() )
@@ -214,12 +100,12 @@ QVariant KCHMIndTocItem::data(int column, int role) const
 				}
 				else
 					imagenum = (m_image_number == LCHMBookIcons::IMAGE_AUTO) ? 10 : m_image_number;
-		
+			
 				const QPixmap *pix = ::mainWindow->chmFile()->getBookIconPixmap( imagenum );
-				
+			
 				if ( !pix || pix->isNull() )
 					abort();
-				
+			
 				return *pix;
 			}
 			break;
@@ -241,3 +127,78 @@ QVariant KCHMIndTocItem::data(int column, int role) const
 	
 	return QVariant();
 }
+
+
+
+KCMSearchTreeViewItem::KCMSearchTreeViewItem( const QString& name, const QString& loc, const QString& url )
+	: QTableWidgetItem()
+{
+	m_name = name;
+	m_loc = loc;
+	m_url = url;
+}
+
+QString KCMSearchTreeViewItem::getUrl() const
+{
+	return m_url;
+}
+
+
+void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
+{
+	QVector< KCHMIndTocItem *> lastchild;
+	QVector< KCHMIndTocItem *> rootentry;
+	
+	if ( map )
+		map->clear();
+	
+	list->clear();	
+	
+	for ( int i = 0; i < data.size(); i++ )
+	{
+		int indent = data[i].indent;
+		
+		// Do we need to add another indent?
+		if ( indent >= lastchild.size() )
+		{
+			lastchild.resize( indent + 1 );
+			lastchild[indent] = 0;
+			
+			rootentry.resize( indent + 1 );
+			rootentry[indent] = 0;
+		}
+		
+		// Create the node
+		KCHMIndTocItem * item;
+		QString url = data[i].urls.join ("|");
+		
+		if ( indent == 0 )
+			item = new KCHMIndTocItem( list, lastchild[indent], data[i].name, url, data[i].imageid );
+		else
+		{
+			// New non-root entry. It is possible (for some buggy CHMs) that there is no previous entry: previoous entry had indent 1,
+			// and next entry has indent 3. Backtracking it up, creating missing entries.
+			if ( rootentry[indent-1] == 0 )
+				qFatal("Child entry indented as %d with no root entry!", indent);
+			
+			item = new KCHMIndTocItem( rootentry[indent-1], lastchild[indent], data[i].name, url, data[i].imageid );
+		}
+		
+		// Hack: if map is 0, we have index, so make it open
+		if ( map )
+		{
+			for ( int li = 0; li < data[i].urls.size(); li++ )
+				map->insert( data[i].urls[li], item );
+		}
+		else
+			item->setExpanded( true );
+		
+		lastchild[indent] = item;
+		rootentry[indent] = item;
+	}		
+	
+	list->update();
+}
+
+
+// FIXME: check that QString is const QString& everywhere

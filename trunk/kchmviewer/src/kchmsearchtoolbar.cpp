@@ -39,16 +39,16 @@
 #include "kqrunprocess.h"
 #include "kchmtreeviewitem.h"
 #include "kchmcontentswindow.h"
-#include "iconstorage.h"
 
-static KQMenu *menu_langlist, *menu_enclist;
+
+static QMenu *menu_langlist, *menu_enclist;
 
 KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	: QToolBar (parent)
 {
 	// Toolbar label
 	setLabel( i18n( "Find in page") );
-
+/*
 	// Load the pixmaps
     QPixmap iconPrev (*gIconStorage.getToolbarPixmap(KCHMIconStorage::findprev));
     QPixmap iconNext (*gIconStorage.getToolbarPixmap(KCHMIconStorage::findnext));
@@ -149,7 +149,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	QWhatsThis::add( m_buttonAddBookmark, i18n( "Click this button to go to next page in Table of Content.") );
 	
 	// Create the approptiate menu entries in 'View' main menu
-	m_MenuView = new KQMenu( parent );
+	m_MenuView = new QMenu( parent );
 	parent->menuBar()->insertItem( i18n( "&View"), m_MenuView );
 
 /*	m_MenuView->insertItem( i18n( "&Increase font"), this, SLOT(onBtnFontInc()), CTRL+Key_Plus );
@@ -172,8 +172,8 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 	m_MenuView->insertSeparator();
 		
 	// Create the language selection menu.
-    menu_langlist = new KQMenu( parent );
-	KQMenu * menu_sublang = 0;
+    menu_langlist = new QMenu( parent );
+	QMenu * menu_sublang = 0;
 
 	// Because the encoding menu is very large, it is not reasonable to have a slot for every item.
 	// It is simplier just to use a single slot for any menu item of this submenu.
@@ -196,7 +196,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 			// If the menu is already created, add to it
 			if ( !menu_sublang )
 			{
-				menu_sublang = new KQMenu( menu_langlist );
+				menu_sublang = new QMenu( menu_langlist );
 				connect (menu_sublang, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 			}
 				
@@ -223,7 +223,7 @@ KCHMSearchAndViewToolbar::KCHMSearchAndViewToolbar( KCHMMainWindow * parent )
 
 	// Special menu for very smart people just to select codepage
 	QMap<QString,bool> addedCharsets;
-	menu_enclist = new KQMenu( parent );
+	menu_enclist = new QMenu( parent );
 
 	connect (menu_enclist, SIGNAL( activated(int) ), this, SLOT ( onMenuActivated(int) ));
 	
@@ -285,47 +285,6 @@ void KCHMSearchAndViewToolbar::search( bool search_forward )
 	::mainWindow->currentBrowser()->searchWord( searchexpr, search_forward, false );
 }
 
-void KCHMSearchAndViewToolbar::onBtnFontInc( )
-{
-	::mainWindow->currentBrowser()->addZoomFactor(1);
-}
-
-void KCHMSearchAndViewToolbar::onBtnFontDec( )
-{
-	::mainWindow->currentBrowser()->addZoomFactor(-1);
-}
-
-void KCHMSearchAndViewToolbar::onBtnViewSource( )
-{
-	QString text;
-
-	if ( !::mainWindow->chmFile()->getFileContentAsString( &text, ::mainWindow->currentBrowser()->getOpenedPage() ) )
-		return;
-
-	if ( appConfig.m_advUseInternalEditor )
-	{
-		Q3TextEdit * editor = new Q3TextEdit ( 0 );
-		editor->setTextFormat ( Qt::PlainText );
-		editor->setText (text);
-		editor->setCaption ( QString(APP_NAME) + " - view HTML source of " + ::mainWindow->currentBrowser()->getOpenedPage() );
-		editor->resize (800, 600);
-		editor->show();
-	}
-	else
-	{
-		QFile file;
-		m_tempFileKeeper.generateTempFile( file );
-		
-		file.writeBlock( text.utf8() );
-		run_process( appConfig.m_advExternalEditorPath, file.name() );
-	}
-}
-
-void KCHMSearchAndViewToolbar::onBtnAddBookmark( )
-{
-	emit ::mainWindow->slotAddBookmark();
-}
-
 void KCHMSearchAndViewToolbar::onMenuActivated( int id )
 {
 	const LCHMTextEncoding * enc = LCHMFileImpl::getTextEncodingTable() + id;
@@ -364,54 +323,14 @@ void KCHMSearchAndViewToolbar::setChosenEncodingInMenu( const LCHMTextEncoding *
 	}
 }
 
-void KCHMSearchAndViewToolbar::onBtnNextPageInToc()
-{
-	KCHMContentsWindow * cwnd = ::mainWindow->contentsWindow();
-	
-	if ( !cwnd )
-		return;
-	
-	// Try to find current list item
-	KCHMIndTocItem * current = cwnd->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
 
-	if ( !current )
-		return;
-	
-	/* FIXME
-	Q3ListViewItemIterator lit( current );
-	lit++;
-	
-	if ( lit.current() )
-	::mainWindow->openPage( ((KCHMIndTocItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-	*/
-}
-
-void KCHMSearchAndViewToolbar::onBtnPrevPageInToc()
-{
-	KCHMContentsWindow * cwnd = ::mainWindow->contentsWindow();
-	
-	if ( !cwnd )
-		return;
-	
-	// Try to find current list item
-	KCHMIndTocItem * current = cwnd->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
-	
-	if ( !current )
-		return;
-/*FIXME	
-	Q3ListViewItemIterator lit( current );
-	lit--;
-	
-	if ( lit.current() )
-	::mainWindow->openPage( ((KCHMIndTocItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-	*/
-}
 
 void KCHMSearchAndViewToolbar::onAccelFocusSearchField( )
 {
 	m_findBox->setFocus();
 }
 
+/*
 void KCHMSearchAndViewToolbar::onBtnToggleContentWindow( )
 {
 	showContentsWindow( !m_MenuView->isItemChecked( m_menuShowContentWindowMenuID ) );
@@ -438,4 +357,4 @@ void KCHMSearchAndViewToolbar::onBtnLocateInContentWindow( )
 {
 	::mainWindow->slotLocateInContentWindow( );
 }
-
+*/

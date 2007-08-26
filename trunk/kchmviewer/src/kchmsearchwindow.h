@@ -55,7 +55,7 @@ class KCHMSearchWindow : public QWidget, public Ui::TabSearch
 		bool	initSearchEngine();
 		
 	private:
-		KQMenu			* 	m_contextMenu;
+		QMenu			* 	m_contextMenu;
 		KCHMSearchEngine*	m_searchEngine;
 };
 

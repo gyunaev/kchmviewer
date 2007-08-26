@@ -15,7 +15,7 @@
     <absoluteprojectpath>false</absoluteprojectpath>
     <description></description>
     <defaultencoding></defaultencoding>
-    <versioncontrol></versioncontrol>
+    <versioncontrol/>
   </general>
   <kdevfileview>
     <groups>
@@ -153,7 +153,7 @@
       <envvars/>
     </run>
     <general>
-      <activedir>src</activedir>
+      <activedir>lib</activedir>
     </general>
     <make>
       <abortonerror>true</abortonerror>
@@ -169,6 +169,7 @@
       <replacePaths>false</replacePaths>
       <disableDefaultOpts>true</disableDefaultOpts>
     </qmake>
+    <subclassing/>
   </kdevtrollproject>
   <workspace>
     <openfiles/>
@@ -186,7 +187,7 @@
     <projectdoc>
       <docsystem>Doxygen Documentation Collection</docsystem>
       <docurl>kchmviewer.tag</docurl>
-      <usermanualurl></usermanualurl>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <substmap>
@@ -211,7 +212,7 @@
     </filetemplates>
   </cppsupportpart>
   <ctagspart>
-    <customArguments></customArguments>
+    <customArguments/>
     <customTagfilePath>/home/tim/work/kchmviewer/tags</customTagfilePath>
     <activeTagsFiles/>
   </ctagspart>

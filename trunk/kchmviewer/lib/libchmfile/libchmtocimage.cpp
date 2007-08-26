@@ -21,8 +21,6 @@
 
 #include "libchmfile.h"
 #include "libchmtocimage.h"
-//Added by qt3to4:
-#include <QPixmap>
 
 typedef struct
 {

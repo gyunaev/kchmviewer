@@ -49,7 +49,7 @@ class KCHMIndexWindow : public QWidget, public Ui::TabIndex
 		
 		void	refillIndex();
 		
-		KQMenu 			* 	m_contextMenu;	
+		QMenu 			* 	m_contextMenu;	
 		QTreeWidgetItem	*	m_lastSelectedItem;
 		bool				m_indexListFilled;
 };

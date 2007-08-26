@@ -81,7 +81,6 @@ int main( int argc, char ** argv )
 	if ( !client->attach() )
 		qWarning("DCOP attach failed");
 	
-	//QCString realAppId = client->registerAs( kapp->name() );
 	Q3CString realAppId = client->registerAs( "kchmviewer" );
 #endif
 						

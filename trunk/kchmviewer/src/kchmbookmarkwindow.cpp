@@ -43,7 +43,7 @@ class KCHMBookmarkTreeViewItem : public QListWidgetItem
 
 
 
-KCHMBookmarkWindow::KCHMBookmarkWindow( QWidget *parent )
+KCHMBookmarkWindow::KCHMBookmarkWindow( QWidget *parent, QMenu * menuBookmarks )
 	: QWidget( parent ), Ui::TabBookmarks()
 {
 	// UIC code
@@ -74,7 +74,7 @@ KCHMBookmarkWindow::KCHMBookmarkWindow( QWidget *parent )
 			 this, 
 			 SLOT( onEditBookmarkPressed( ) ) );
 	
-	m_menuBookmarks = 0;
+	m_menuBookmarks = menuBookmarks;
 	m_contextMenu = 0;
 	m_listChanged = false;
 }

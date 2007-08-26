@@ -24,7 +24,6 @@
 
 #include "kde-qt.h"
 #include "forwarddeclarations.h"
-#include "kqtempfile.h"
 
 #include "libchmtextencoding.h"
 
@@ -44,24 +43,20 @@ class KCHMSearchAndViewToolbar : public QToolBar
 		void	onBtnNextSearchResult();
 		void	onAccelFocusSearchField();
 		
+		/*
 		void	onBtnFontInc();
 		void	onBtnFontDec();
 		void	onBtnViewSource();
 		void	onBtnAddBookmark();
 		void	onBtnNextPageInToc();
 		void	onBtnPrevPageInToc();
+		*/
 		void	onMenuActivated ( int id );
-		void	onBtnFullScreen();
-		void	onBtnLocateInContentWindow();
-		void	onBtnToggleContentWindow();
-		
-		void	setFullScreen( bool enable );
-		void	showContentsWindow( bool enable );
 		
 	private:
 		void	search (bool forward);
 		
-		KQMenu 		*	m_MenuView;
+		QMenu 				*	m_MenuView;
 		QComboBox			*	m_findBox;
 		QToolButton			*	m_buttonPrev;
 		QToolButton			*	m_buttonNext;
@@ -79,7 +74,7 @@ class KCHMSearchAndViewToolbar : public QToolBar
 		int						m_menuShowFullscreenMenuID;
 		int						m_menuShowContentWindowMenuID;
 		
-		KQTempFileKeeper		m_tempFileKeeper;
+
 };
 
 

@@ -34,7 +34,7 @@ class KCHMViewWindowMgr : public QTabWidget
 {
 	Q_OBJECT
 	public:
-    	KCHMViewWindowMgr( QWidget *parent = 0 );
+		KCHMViewWindowMgr( QWidget *parent, QMenu * menuWindow, QAction * actionCloseWindow );
 		~KCHMViewWindowMgr( );
 		
 		// Returns a handle to a currently viewed window.
@@ -81,12 +81,12 @@ class KCHMViewWindowMgr : public QTabWidget
 		QMap<QWidget*,tab_window_t>	m_Windows;
 		typedef QMap<QWidget*,tab_window_t>::iterator WindowsIterator;
 		
-        Q3ValueList<int>         m_idSlot;
-        typedef Q3ValueList<int>::iterator IdIterator;
+        QList<int>         					m_idSlot;
+        typedef Q3ValueList<int>::iterator	IdIterator;
 		
 		QPushButton			*	m_closeButton;
-		KQMenu 		*	m_MenuWindow;
-		int						m_menuIdClose;
+		QMenu 				*	m_menuWindow;
+		QAction				*	m_actionCloseWindow;
 };
 
 #endif /* INCLUDE_KCHMVIEWWINDOWMGR_H */

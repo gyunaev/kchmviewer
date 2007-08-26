@@ -45,7 +45,7 @@ class KCHMContentsWindow : public QWidget, public Ui::TabContents
 		//void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
 		
 	private:
-		KQMenu 				  			* m_contextMenu;
+		QMenu 				  			* m_contextMenu;
 		QMap<QString, KCHMIndTocItem*>	m_urlListMap;
 };
 

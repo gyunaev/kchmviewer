@@ -21,13 +21,11 @@
 
 #include <qstringlist.h>
 #include <qstyle.h>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include "kchmtreeviewitem.h"
 #include "kchmmainwindow.h"
 #include "kchmdialogchooseurlfromlist.h"
-#include "iconstorage.h"
 
 
 KCHMIndTocItem::KCHMIndTocItem( QTreeWidgetItem * parent, QTreeWidgetItem * after, QString name, QString aurl, int image) 

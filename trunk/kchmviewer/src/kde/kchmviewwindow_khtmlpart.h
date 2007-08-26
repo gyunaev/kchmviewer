@@ -89,10 +89,10 @@ public:
 signals:
 	/*!
 	 * Emitted when the user clicked on the link, before the page changed.
- 	 * If signalLinkClicked() sets follow_link to false, the current page should NOT change.
+ 	 * If linkClicked() sets follow_link to false, the current page should NOT change.
 	 * Otherwise it should be changed to the new link value.
 	 */
-	void	signalLinkClicked ( const QString & newlink, bool& follow_link );
+	void	linkClicked ( const QString & newlink, bool& follow_link );
 
 private slots:
 	virtual void	slotLinkClicked ( const QString & newlink);

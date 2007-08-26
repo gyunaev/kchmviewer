@@ -91,7 +91,13 @@ void KCHMIndexWindow::showEvent( QShowEvent * )
 
 void KCHMIndexWindow::onReturnPressed( )
 {
-	emit ::mainWindow->slotOnTreeClicked ( m_lastSelectedItem );
+	bool unused;
+	
+	if ( !m_lastSelectedItem )
+		return;
+	
+	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) m_lastSelectedItem;
+	::mainWindow->activateLink( treeitem->getUrl(), unused );
 }
 
 

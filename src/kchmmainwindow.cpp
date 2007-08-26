@@ -295,19 +295,9 @@ void KCHMMainWindow::refreshCurrentBrowser( )
 		m_contentsWindow->refillTableOfContents();
 }
 
-void KCHMMainWindow::slotOnTreeClicked( QTreeWidgetItem * item )
-{
-	bool unused;
-	
-	if ( !item )
-		return;
-	
-	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
-	slotLinkClicked( treeitem->getUrl(), unused );
-}
 
 
-void KCHMMainWindow::slotLinkClicked ( const QString & link, bool& follow_link )
+void KCHMMainWindow::activateLink ( const QString & link, bool& follow_link )
 {
 	if ( link.isEmpty() )
 		return;
@@ -636,18 +626,6 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 		if ( !m_contentsWindow )
 		{
 			m_contentsWindow = new KCHMContentsWindow( m_tabWidget );
-			
-			// Handle clicking on m_contentsWindow element
-			connect( m_contentsWindow, 
-					 SIGNAL( clicked( Q3ListViewItem* ) ), 
-					 this, 
-					 SLOT( slotOnTreeClicked( Q3ListViewItem* ) ) );
-			
-			connect( m_contentsWindow, 
-					 SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int ) ), 
-					 this, 
-					 SLOT( slotOnTreeDoubleClicked ( Q3ListViewItem *, const QPoint &, int ) ) );
-			
 			m_tabWidget->insertTab (m_contentsWindow, i18n( "Contents" ), tabindex);
 		}
 	}
@@ -736,17 +714,6 @@ void KCHMMainWindow::locateInContentTree( const QString & url )
 			
 		m_contentsWindow->showItem( treeitem );
 	}
-}
-
-void KCHMMainWindow::slotOnTreeDoubleClicked( QTreeWidgetItem * item, const QPoint &, int )
-{
-	// Open/close only existing item which have children
-	if ( !item || item->childCount() == 0 )
-		return;
-	
-	item->setExpanded( !item->isExpanded() );
-	//FIXME: maybe we need it
-	//item->repaint();
 }
 
 bool KCHMMainWindow::event( QEvent * e )

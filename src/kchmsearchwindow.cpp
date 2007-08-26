@@ -36,7 +36,10 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
 	setupUi( this );
 	
 	// Clickable Help label
-	connect( lblHelp, SIGNAL( linkActivated() ), this, SLOT( onHelpClicked() ) );
+	connect( lblHelp, 
+	         SIGNAL( linkActivated( const QString & ) ), 
+	         this, 
+	         SLOT( onHelpClicked(const QString & ) ) );
 	
 	// Go Button
 	connect( btnGo, 
@@ -52,9 +55,9 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
 	
 	// Clicking on table element
 	connect( table, 
-			 SIGNAL( doubleClicked ( Q3ListViewItem *, const QPoint &, int) ), 
+	         SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), 
 			 this, 
-			 SLOT( onDoubleClicked ( Q3ListViewItem *, const QPoint &, int) ) );
+	         SLOT( onDoubleClicked( QTableWidgetItem * ) ) );
 
 	/*
 	connect( table, 
@@ -113,7 +116,7 @@ void KCHMSearchWindow::onReturnPressed( )
 }
 
 
-void KCHMSearchWindow::onDoubleClicked( QTableWidgetItem *item, const QPoint &, int)
+void KCHMSearchWindow::onDoubleClicked( QTableWidgetItem * item )
 {
 	if ( !item )
 		return;
@@ -137,7 +140,7 @@ void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & set
 }
 
 
-void KCHMSearchWindow::onHelpClicked( )
+void KCHMSearchWindow::onHelpClicked( const QString & )
 {
 	if ( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
 	{

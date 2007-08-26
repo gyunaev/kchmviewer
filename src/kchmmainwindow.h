@@ -84,14 +84,11 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		
 		void		showInStatusBar (const QString& text);
 		void		setTextEncoding (const LCHMTextEncoding * enc);
-			
+	
 	public slots:
 		// Navigation toolbar icons
 		void		navSetBackEnabled( bool enabled );
 		void		navSetForwardEnabled( bool enabled );
-		
-		void 		slotOnTreeClicked( QTreeWidgetItem *item );
-		void 		slotOnTreeDoubleClicked( QTreeWidgetItem *item, const QPoint &, int );
 		
 		void 		slotOpenPageInNewTab();
 		void 		slotOpenPageInNewBackgroundTab();
@@ -127,10 +124,11 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		void		actionSwitchToSearchTab();
 		void		actionSwitchToBookmarkTab();
 		
-		
-		
+		// Link activation. MainWindow decides whether we should follow this link or not
+		// by setting up follow_link appropriately.
+		void 		activateLink ( const QString & link, bool& follow_link );
+	
 	private slots:
-		void slotLinkClicked ( const QString & link, bool& follow_link );
 		void slotHistoryMenuItemActivated ( int );
 		/*
 	

@@ -28,13 +28,10 @@
 
 #include "kde-qt.h"
 
-//#include <QAccel>
 #include <QEvent>
-//#include <QList>
-#include <QPixmap>
-//#include <Q3PopupMenu>
 #include <QShowEvent>
 #include <QCloseEvent>
+#include <QShortcut>
 
 #include "libchmfile.h"
 #include "libchmfileimpl.h"
@@ -76,10 +73,9 @@ KCHMMainWindow::KCHMMainWindow()
 	m_FirstTimeShow = true;
 	m_chmFile = 0;
 	
-	// FIXME: those are tabs, not windows. rename.
-	m_indexWindow = 0;
-	m_searchWindow = 0;
-	m_contentsWindow = 0;
+	m_indexTab = 0;
+	m_searchTab = 0;
+	m_contentsTab = 0;
 	m_viewWindowMgr = 0;
 
 	m_tabContextPage = -1;
@@ -123,12 +119,6 @@ KCHMMainWindow::KCHMMainWindow()
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
 	/* FIXME: accelerators -> actions
-	Q3Accel * accel = new Q3Accel( this );
-	accel->connectItem ( accel->insertItem ( Key_F11 ), this, SLOT ( slotToggleFullScreenMode() ) );
-	accel->connectItem ( accel->insertItem ( CTRL + Key_1), this, SLOT ( slotActivateContentTab() ) );
-	accel->connectItem ( accel->insertItem ( CTRL + Key_2), this, SLOT ( slotActivateIndexTab() ) );
-	accel->connectItem ( accel->insertItem ( CTRL + Key_3), this, SLOT ( slotActivateSearchTab() ) );
-	accel->connectItem ( accel->insertItem ( CTRL + Key_4), this, SLOT ( slotActivateBookmarkTab() ) );
 	accel->connectItem ( accel->insertItem ( Key_F3 ), m_searchToolbar, SLOT ( onBtnNextSearchResult() ) );
 */
 	statusBar()->show();
@@ -165,7 +155,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		m_chmFile = new_chmfile;
 		
 		// Show current encoding in status bar
-		showInStatusBar( tr("Detected chm file charset: %1") . arg(m_chmFile->currentEncoding()->language) );
+		showInStatusBar( i18n("Detected chm file charset: %1"). arg(m_chmFile->currentEncoding()->language) );
 
 		// Make the file name absolute; we'll need it later
 		QDir qd;
@@ -199,8 +189,8 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		showOrHideSearchWindow( m_tabSearchPage );
 		
 		m_bookmarkWindow->invalidate();
-		// FIXME! do it.
-//		m_navToolbar->updateIconStatus( false, false );
+		navSetBackEnabled( false );
+		navSetForwardEnabled( false );
 		m_viewWindowMgr->invalidate();
 		refreshCurrentBrowser();
 
@@ -218,8 +208,8 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 //				m_searchToolbar->setChosenEncodingInMenu( encoding );
 			}
 			
-			if ( m_searchWindow )
-				m_searchWindow->restoreSettings (m_currentSettings->m_searchhistory);
+			if ( m_searchTab )
+				m_searchTab->restoreSettings (m_currentSettings->m_searchhistory);
 				
 			m_bookmarkWindow->restoreSettings (m_currentSettings->m_bookmarks);
 
@@ -290,8 +280,8 @@ void KCHMMainWindow::refreshCurrentBrowser( )
 	
 	currentBrowser()->invalidate();
 	
-	if ( m_contentsWindow )
-		m_contentsWindow->refillTableOfContents();
+	if ( m_contentsTab )
+		m_contentsTab->refillTableOfContents();
 }
 
 
@@ -458,8 +448,8 @@ void KCHMMainWindow::closeChmFile( )
 		m_currentSettings->m_window_size_y = height();
 		m_currentSettings->m_window_size_splitter = m_windowSplitter->sizes()[0];
 		
-		if ( m_searchWindow )
-			m_searchWindow->saveSettings (m_currentSettings->m_searchhistory);
+		if ( m_searchTab )
+			m_searchTab->saveSettings (m_currentSettings->m_searchhistory);
 				
 		m_bookmarkWindow->saveSettings( m_currentSettings->m_bookmarks );
 
@@ -613,20 +603,26 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 {
 	if ( tabindex == -1 )
 	{
-		if ( m_contentsWindow )
+		if ( m_contentsTab )
 		{
-			m_tabWidget->removePage (m_contentsWindow);
-			delete m_contentsWindow;
-			m_contentsWindow = 0;
+			m_tabWidget->removePage (m_contentsTab);
+			delete m_contentsTab;
+			m_contentsTab = 0;
 		}
+		
+		nav_actionPreviousPage->setEnabled( false );
+		nav_actionNextPageToc->setEnabled( false );
 	}
 	else
 	{
-		if ( !m_contentsWindow )
+		if ( !m_contentsTab )
 		{
-			m_contentsWindow = new KCHMContentsWindow( m_tabWidget );
-			m_tabWidget->insertTab (m_contentsWindow, i18n( "Contents" ), tabindex);
+			m_contentsTab = new KCHMContentsWindow( m_tabWidget );
+			m_tabWidget->insertTab (m_contentsTab, i18n( "Contents" ), tabindex);
 		}
+	
+		nav_actionPreviousPage->setEnabled( true );
+		nav_actionNextPageToc->setEnabled( true );
 	}
 }
 
@@ -635,22 +631,22 @@ void KCHMMainWindow::showOrHideIndexWindow( int tabindex )
 	// Test whether to show/invalidate the index window
 	if ( tabindex == -1 )
 	{
-		if ( m_indexWindow )
+		if ( m_indexTab )
 		{
-			m_tabWidget->removePage (m_indexWindow);
-			delete m_indexWindow;
-			m_indexWindow = 0;
+			m_tabWidget->removePage (m_indexTab);
+			delete m_indexTab;
+			m_indexTab = 0;
 		}
 	}
 	else
 	{
-		if ( !m_indexWindow )
+		if ( !m_indexTab )
 		{
-			m_indexWindow = new KCHMIndexWindow (m_tabWidget);
-			m_tabWidget->insertTab (m_indexWindow, i18n( "Index" ), tabindex);
+			m_indexTab = new KCHMIndexWindow (m_tabWidget);
+			m_tabWidget->insertTab (m_indexTab, i18n( "Index" ), tabindex);
 		}
 		else
-			m_indexWindow->invalidate();
+			m_indexTab->invalidate();
 	}
 }
 
@@ -658,22 +654,22 @@ void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
 {
 	if ( tabindex == -1 )
 	{
-		if ( m_searchWindow )
+		if ( m_searchTab )
 		{
-			m_tabWidget->removePage (m_searchWindow);
-			delete m_searchWindow;
-			m_searchWindow = 0;
+			m_tabWidget->removePage (m_searchTab);
+			delete m_searchTab;
+			m_searchTab = 0;
 		}
 	}
 	else
 	{
-		if ( !m_searchWindow )
+		if ( !m_searchTab )
 		{
-			m_searchWindow = new KCHMSearchWindow (m_tabWidget);
-			m_tabWidget->insertTab (m_searchWindow, i18n( "Search" ), tabindex);
+			m_searchTab = new KCHMSearchWindow (m_tabWidget);
+			m_tabWidget->insertTab (m_searchTab, i18n( "Search" ), tabindex);
 		}
 		else
-			m_searchWindow->invalidate();
+			m_searchTab->invalidate();
 	}
 }
 
@@ -700,10 +696,10 @@ void KCHMMainWindow::slotBrowserChanged( KCHMViewWindow * newbrowser )
 
 void KCHMMainWindow::locateInContentTree( const QString & url )
 {
-	if ( !m_contentsWindow )
+	if ( !m_contentsTab )
 		return;
 	
-	KCHMIndTocItem * treeitem = m_contentsWindow->getTreeItem( url );
+	KCHMIndTocItem * treeitem = m_contentsTab->getTreeItem( url );
 	
 	if ( treeitem )
 	{
@@ -711,7 +707,7 @@ void KCHMMainWindow::locateInContentTree( const QString & url )
 		while ( (itemparent = (KCHMIndTocItem*) itemparent->parent()) != 0 )
 			itemparent->setExpanded(true);
 			
-		m_contentsWindow->showItem( treeitem );
+		m_contentsTab->showItem( treeitem );
 	}
 }
 
@@ -751,7 +747,7 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 			return false;
 
 		actionSwitchToIndexTab();
-		m_indexWindow->search( event->m_args[0] );
+		m_indexTab->search( event->m_args[0] );
 		return true;
 	}
 	else if ( event->m_action == "searchQuery" )
@@ -763,7 +759,7 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 			return false;
 
 		actionSwitchToSearchTab();
-		m_searchWindow->execSearchQueryInGui( event->m_args[0] );
+		m_searchTab->execSearchQueryInGui( event->m_args[0] );
 		return true;
 	}
 	else
@@ -781,9 +777,9 @@ void KCHMMainWindow::runAutoTest()
 	switch (m_autoteststate)
 	{
 	case STATE_INITIAL:
-		if ( m_contentsWindow && !m_useShortAutotest )
+		if ( m_contentsTab && !m_useShortAutotest )
 		{
-			m_autotestlistiterator = Q3ListViewItemIterator (m_contentsWindow);
+			m_autotestlistiterator = Q3ListViewItemIterator (m_contentsTab);
 			m_autoteststate = STATE_CONTENTS_OPENNEXTPAGE;
 		}
 		else
@@ -805,7 +801,7 @@ void KCHMMainWindow::runAutoTest()
 		break;
 
 	case STATE_OPEN_INDEX:
-		if ( m_indexWindow )
+		if ( m_indexTab )
 			m_tabWidget->setCurrentPage (1);
 		
 		m_autoteststate = STATE_SHUTDOWN;
@@ -987,14 +983,14 @@ void KCHMMainWindow::actionChangeSettings()
 				   && appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_CHM )
 		{
 			appConfig.m_useSearchEngine = KCHMConfig::SEARCH_USE_MINE;
-			m_searchWindow->invalidate();
+			m_searchTab->invalidate();
 		}
 		
 		if ( dlg.m_useSearchEngineInternal->isChecked() 
 				   && appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
 		{
 			appConfig.m_useSearchEngine = KCHMConfig::SEARCH_USE_CHM;
-			m_searchWindow->invalidate();
+			m_searchTab->invalidate();
 		}
 					
 		appConfig.m_advExternalEditorPath = dlg.m_advExternalProgramName->text();
@@ -1005,10 +1001,10 @@ void KCHMMainWindow::actionChangeSettings()
 		
 		if ( need_restart )
 			QMessageBox::information( 
-									 this,
-		  APP_NAME,
-	i18n( "Changing browser view options or search engine used\n"
-			"requires restarting the application to take effect." )	);
+			                          this,
+			                          APP_NAME,
+			                          i18n( "Changing browser view options or search engine used\n"
+			                                "requires restarting the application to take effect." )	);
 	}
 }
 
@@ -1018,15 +1014,15 @@ void KCHMMainWindow::actionExtractCHM()
 	
 #if defined (USE_KDE)
 	QString outdir = KFileDialog::getExistingDirectory (
-			QString::null,
-   this,
-   i18n("Choose a directory to store CHM content") );
+		QString::null,
+		this,
+		i18n("Choose a directory to store CHM content") );
 #else
 	QString outdir = QFileDialog::getExistingDirectory (
-			QString::null,
-   this,
-   0,
-   i18n("Choose a directory to store CHM content"),
+		QString::null,
+		this,
+		0,
+		i18n("Choose a directory to store CHM content"),
 		TRUE );
 #endif
 	
@@ -1039,7 +1035,11 @@ void KCHMMainWindow::actionExtractCHM()
 	if ( !m_chmFile || !m_chmFile->enumerateFiles( &files ) )
 		return;
 
-	KQProgressModalDialog progress( i18n("Extracting CHM content"), i18n("Extracting files..."), i18n("Abort"), files.size(), this );
+	KQProgressModalDialog progress( i18n("Extracting CHM content"), 
+	                                i18n("Extracting files..."), 
+	                                i18n("Abort"), 
+	                                files.size(), 
+	                                this );
 	
 	for ( int i = 0; i < files.size(); i++ )
 	{
@@ -1152,15 +1152,16 @@ void KCHMMainWindow::actionViewHTMLsource()
 
 void KCHMMainWindow::actionToggleFullScreen()
 {
-	bool fullscreen = view_Toggle_fullscreen_action->isChecked() ? false : true;
-	view_Toggle_fullscreen_action->setChecked( fullscreen );
+	bool fullscreen = view_Toggle_fullscreen_action->isChecked();
 	
 	if ( fullscreen )
 	{
 		if ( !isFullScreen() )
 		{
 			showFullScreen ();
-			menuBar()->hide();
+			
+			// Hiding menu bar disables menu actions. Probably a bug in Qt.
+			//menuBar()->hide();
 			statusBar()->hide();
 		}
 	}
@@ -1177,9 +1178,8 @@ void KCHMMainWindow::actionToggleFullScreen()
 
 void KCHMMainWindow::actionToggleContentsTab()
 {
-	bool show = view_Toggle_contents_action->isChecked() ? false : true;
-	view_Toggle_contents_action->setChecked( show );
-	
+	bool show = view_Toggle_contents_action->isChecked();
+
 	if ( show )
 		m_tabWidget->show();
 	else
@@ -1189,16 +1189,16 @@ void KCHMMainWindow::actionToggleContentsTab()
 void KCHMMainWindow::actionLocateInContentsTab()
 {
 	// There may be no content tab at all
-	if ( !m_contentsWindow  || m_tabContextPage == -1 )
+	if ( !m_contentsTab || m_tabContextPage == -1 )
 		return;
 	
 	// Activate a content tab
 	m_tabWidget->setCurrentPage( m_tabContextPage );
 	
-	if ( m_contentsWindow )
+	if ( m_contentsTab )
 	{
 		// Open all the tree items to show current item (if needed)
-		KCHMIndTocItem * treeitem = m_contentsWindow->getTreeItem( currentBrowser()->getOpenedPage() );
+		KCHMIndTocItem * treeitem = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
 	
 		if ( treeitem )
 		{
@@ -1207,7 +1207,7 @@ void KCHMMainWindow::actionLocateInContentsTab()
 			while ( (itemparent = (KCHMIndTocItem*) itemparent->parent()) != 0 )
 				itemparent->setExpanded(true);
 			
-			m_contentsWindow->showItem( treeitem );
+			m_contentsTab->showItem( treeitem );
 		}
 		else
 			statusBar()->message( i18n( "Could not locate opened topic in content window"), 2000 );
@@ -1216,42 +1216,38 @@ void KCHMMainWindow::actionLocateInContentsTab()
 
 void KCHMMainWindow::actionNavigatePrevInToc()
 {
-	if ( !m_contentsWindow )
+	if ( !m_contentsTab )
 		return;
 	
 	// Try to find current list item
-	KCHMIndTocItem * current = m_contentsWindow->getTreeItem( currentBrowser()->getOpenedPage() );
+	KCHMIndTocItem * current = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
 	
 	if ( !current )
 		return;
-/*FIXME	
-	Q3ListViewItemIterator lit( current );
+
+	QTreeWidgetItemIterator lit( current );
 	lit--;
 	
-	if ( lit.current() )
-	::mainWindow->openPage( ((KCHMIndTocItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-	*/
+	if ( *lit )
+		::mainWindow->openPage( ((KCHMIndTocItem *) (*lit) )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
-//FIXME: those actions should not be enabled if there is no contents window
 void KCHMMainWindow::actionNavigateNextInToc()
 {
-	if ( !m_contentsWindow )
+	if ( !m_contentsTab )
 		return;
 	
 	// Try to find current list item
-	KCHMIndTocItem * current = m_contentsWindow->getTreeItem( currentBrowser()->getOpenedPage() );
+	KCHMIndTocItem * current = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
 	
-	/* FIXME
-	Q3ListViewItemIterator lit( current );
+	QTreeWidgetItemIterator lit( current );
 	lit++;
 	
-	if ( lit.current() )
-	::mainWindow->openPage( ((KCHMIndTocItem *) lit.current() )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-	*/
+	if ( *lit )
+		::mainWindow->openPage( ((KCHMIndTocItem *) (*lit) )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
 void KCHMMainWindow::actionAboutApp()
@@ -1314,8 +1310,7 @@ void KCHMMainWindow::setupActions()
 			 this,
 			 SLOT( actionEditCopy() ) );
 	
-	//FIXME: rename to selectall
-	connect( edit_PasteAction,
+	connect( edit_SelectAll_action,
 			 SIGNAL( activated() ),
 			 this,
 			 SLOT( actionEditSelectAll() ) );
@@ -1401,26 +1396,6 @@ void KCHMMainWindow::setupActions()
 	         this,
 	         SLOT( actionNavigateNextInToc() ) );
 	
-	connect( actionSwitch_to_tab_content,
-	         SIGNAL( activated() ),
-	         this,
-	         SLOT( actionSwitchToContentTab() ) );
-	
-	connect( actionSwitch_to_tab_index,
-	         SIGNAL( activated() ),
-	         this,
-	         SLOT( actionSwitchToIndexTab() ) );
-
-	connect( actionSwitch_to_tab_search,
-	         SIGNAL( activated() ),
-	         this,
-	         SLOT( actionSwitchToSearchTab() ) );
-	
-	connect( actionSwitch_to_tab_bookmark,
-	         SIGNAL( activated() ),
-	         this,
-	         SLOT( actionSwitchToBookmarkTab() ) );
-
 	connect( file_exit_action, 
 	         SIGNAL( activated() ),
 	         qApp,
@@ -1449,7 +1424,33 @@ void KCHMMainWindow::setupActions()
 		
 	menuBar()->addMenu( help );
 	updateHistoryMenu();
+	
+	// Tab switching actions
+	(void) new QShortcut( QKeySequence( i18n("Alt+1") ),
+	                      this,
+	                      SLOT( actionSwitchToContentTab() ),
+	                      SLOT( actionSwitchToContentTab() ),
+	                      Qt::ApplicationShortcut );
+	
+	(void)  new QShortcut( QKeySequence( i18n("Alt+2") ),
+	                       this,
+	                       SLOT( actionSwitchToIndexTab() ),
+	                       SLOT( actionSwitchToIndexTab() ),
+	                       Qt::ApplicationShortcut );
+	
+	(void) new QShortcut( QKeySequence( i18n("Alt+3") ),
+	                      this,
+	                      SLOT( actionSwitchToSearchTab() ),
+	                      SLOT( actionSwitchToSearchTab() ),
+	                      Qt::ApplicationShortcut );
+	
+	(void) new QShortcut( QKeySequence( i18n("Alt+4") ),
+	                      this,
+	                      SLOT( actionSwitchToBookmarkTab() ),
+	                      SLOT( actionSwitchToBookmarkTab() ),
+	                      Qt::ApplicationShortcut );
 }
+
 
 void KCHMMainWindow::navSetBackEnabled(bool enabled)
 {

@@ -77,10 +77,10 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		const QString&	getOpenedFileName () { return m_chmFilename; }
 		
 		KCHMViewWindow * currentBrowser() const;
-		KCHMContentsWindow  * contentsWindow() const { return m_contentsWindow; }
+		KCHMContentsWindow  * contentsWindow() const { return m_contentsTab; }
 		KCHMSettings   * currentSettings() const { return m_currentSettings; }
 		KCHMViewWindowMgr*	viewWindowMgr() const { return m_viewWindowMgr; }
-		KCHMSearchWindow * searchWindow() const { return m_searchWindow; }
+		KCHMSearchWindow * searchWindow() const { return m_searchTab; }
 		
 		void		showInStatusBar (const QString& text);
 		void		setTextEncoding (const LCHMTextEncoding * enc);
@@ -167,10 +167,10 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		QString					m_aboutDlgMenuText;	// to show in KDE or Qt about dialogs
 		
 		KCHMViewWindowMgr	*	m_viewWindowMgr;
-		KCHMIndexWindow		*	m_indexWindow;
-		KCHMSearchWindow	*	m_searchWindow;
+		KCHMIndexWindow		*	m_indexTab;
+		KCHMSearchWindow	*	m_searchTab;
 		KCHMBookmarkWindow	*	m_bookmarkWindow;
-		KCHMContentsWindow	*	m_contentsWindow;
+		KCHMContentsWindow	*	m_contentsTab;
 	
 		KQTabWidget			*	m_tabWidget;
 		QSplitter 			*	m_windowSplitter;

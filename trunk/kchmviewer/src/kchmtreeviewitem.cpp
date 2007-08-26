@@ -38,28 +38,6 @@ KCHMIndTocItem::KCHMIndTocItem( QTreeWidget * parent, QTreeWidgetItem * after, Q
 {
 }
 
-/*
-const QPixmap * KCHMIndTocItem::pixmap( int i ) const
-{
-	int imagenum;
-
-	if ( i || image_number == LCHMBookIcons::IMAGE_NONE || image_number == LCHMBookIcons::IMAGE_INDEX )
-        return 0;
-
-	// If the item has children, we change the book image to "open book", or next image automatically
-	if ( childCount() )
-	{
-		if ( isExpanded() )
-			imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 1 : image_number;
-		else
-			imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 0 : image_number + 1;
-	}
-	else
-		imagenum = (image_number == LCHMBookIcons::IMAGE_AUTO) ? 10 : image_number;
-
-	return ::mainWindow->chmFile()->getBookIconPixmap( imagenum );
-}
-*/
 
 QString KCHMIndTocItem::getUrl( ) const
 {
@@ -217,9 +195,11 @@ QVariant KCHMIndTocItem::data(int column, int role) const
 	
 	switch( role )
 	{
+		// Item name
 		case Qt::DisplayRole:
 			return m_name;
 			
+		// Item image
 		case Qt::DecorationRole:
 			if ( m_image_number != LCHMBookIcons::IMAGE_NONE 
 			     && m_image_number != LCHMBookIcons::IMAGE_INDEX )
@@ -243,6 +223,20 @@ QVariant KCHMIndTocItem::data(int column, int role) const
 				return *pix;
 			}
 			break;
+		
+		// Item foreground color
+		case Qt::ForegroundRole:
+			// For Index URL it means that there is URL list in m_url
+			if ( m_url.indexOf( '|' ) != -1 )
+				return QBrush( QColor( Qt::red ) );
+			// For Index URLs it means that this is "see also" URL
+			else if ( !m_url.isEmpty() && m_url[0] == ':' )
+				return QBrush( QColor( Qt::lightGray ) );
+			break;
+		
+		case Qt::ToolTipRole:
+		case Qt::WhatsThisRole:
+			return m_name;
 	}
 	
 	return QVariant();

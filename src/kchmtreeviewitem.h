@@ -49,8 +49,7 @@ class KCHMIndTocItem : public QTreeWidgetItem
 		// FIXME: painting!
 		//virtual void paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h );
 		//virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
-	//virtual const QPixmap * pixmap( int i ) const;
-		
+			
 		QString		m_name;
 		QString		m_url;
 		int 		m_image_number;

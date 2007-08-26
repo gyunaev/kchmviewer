@@ -100,7 +100,7 @@ public:
 	 * Used by contents window (and probably by other windows in future) to show
 	 * context menu in listviews. Put here to futher reuse code in index and search windows.
 	 */
-	KQMenu *	createListItemContextMenu ( QWidget * w );
+	QMenu 		*	createListItemContextMenu ( QWidget * w );
 	void			setTabKeeper ( const QString& link );
 	
 		
@@ -110,14 +110,14 @@ protected: /* signals */
 	 * If linkClicked() return false, the current page should NOT change.
 	 * Otherwise it should be changed to the new link value.
 	 */
-	virtual void	signalLinkClicked ( const QString & newlink, bool& follow_link ) = 0;
+	virtual void	linkClicked ( const QString & newlink, bool& follow_link ) = 0;
 
 protected:
 	virtual bool	openPage ( const QString& url ) = 0;
 	virtual void	handleStartPageAsImage( QString& link );
 	
-	KQMenu * 	getContextMenu( const QString& link, QWidget * parent );
-	KQMenu * 	createStandardContextMenu( QWidget * parent );
+	QMenu * 		getContextMenu( const QString& link, QWidget * parent );
+	QMenu * 		createStandardContextMenu( QWidget * parent );
 	
 	//! History
 	class KCHMUrlHistory
@@ -138,8 +138,8 @@ protected:
 
 	int						m_historyMaxSize;
 	int						m_historyCurrentPos;
-	KQMenu 				*	m_contextMenu;
-	KQMenu 				*	m_contextMenuLink;
+	QMenu 				*	m_contextMenu;
+	QMenu 				*	m_contextMenuLink;
 	QList<KCHMUrlHistory>	m_history;
 		
 	// This member keeps a "open new tab" link between getContextMenu()

@@ -23,17 +23,14 @@
 #include "kchmnavtoolbar.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
-#include "iconstorage.h"
-//Added by qt3to4:
-#include <QPixmap>
 
-
+/*
 KCHMNavToolbar::KCHMNavToolbar( KCHMMainWindow *parent )
 	: QToolBar( parent )
 {
 	// Initialize toolbar
 	setLabel( i18n( "Navigation") );
-	
+
 	QPixmap iconBackward (*gIconStorage.getToolbarPixmap(KCHMIconStorage::back));
 	m_toolbarIconBackward = new QToolButton (iconBackward,
 											 i18n( "Move backward in history"),
@@ -72,3 +69,4 @@ void KCHMNavToolbar::updateIconStatus( bool enable_backward, bool enable_forward
 	m_toolbarIconBackward->setEnabled( enable_backward );
 	m_toolbarIconForward->setEnabled ( enable_forward );
 }
+*/

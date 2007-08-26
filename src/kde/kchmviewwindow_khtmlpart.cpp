@@ -130,13 +130,13 @@ void KCHMViewWindow_KHTMLPart::searchWord( const QString & word, bool forward, b
 void KCHMViewWindow_KHTMLPart::onOpenURLRequest( const KURL & url, const KParts::URLArgs & )
 {
 	bool sourcechange = true;
-	emit signalLinkClicked ( url.prettyURL(), sourcechange );
+	emit linkClicked ( url.prettyURL(), sourcechange );
 }
 
 void KCHMViewWindow_KHTMLPart::slotLinkClicked( const QString & newlink )
 {
 	bool notused;
-	emit signalLinkClicked (newlink, notused);
+	emit linkClicked (newlink, notused);
 }
 
 

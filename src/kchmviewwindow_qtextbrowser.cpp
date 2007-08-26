@@ -32,16 +32,6 @@
 #include "kchmmainwindow.h"
 #include "kchmviewwindow_qtextbrowser.h"
 
-/*
- * If defined, all the data viewed is kept in source factory. It increases the response time
- * when a user opens the page he has already seen, in cost of everything which has been opened 
- * is stored in memory, increasing memory usage.
- *
- * If not defined, on any page change the source factory cleans up, saving the memory, but 
- * increasing the page loading time in case the page has the same images, or the page is opened
- * second time.
- */
-#define KEEP_ALL_OPENED_DATA_IN_SOURCE_FACTORY
 
 KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
 	: QTextBrowser ( parent ), KCHMViewWindow ( parent )
@@ -50,7 +40,7 @@ KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
 	invalidate();
 	
 	setTextFormat ( Qt::RichText );
-	connect( this, SIGNAL( linkClicked (const QString &) ), this, SLOT( slotLinkClicked(const QString &) ) );
+	connect( this, SIGNAL( anchorClicked ( const QUrl& ) ), this, SLOT( slotAnchorClicked ( const QUrl& ) ) );
 }
 
 
@@ -110,9 +100,9 @@ void KCHMViewWindow_QTextBrowser::addZoomFactor( int value )
 	setZoomFactor( value);
 }
 
-void KCHMViewWindow_QTextBrowser::slotLinkClicked( const QString & newlink )
+void KCHMViewWindow_QTextBrowser::slotAnchorClicked(const QUrl & url)
 {
-	emit signalLinkClicked (newlink, m_allowSourceChange);
+	emit linkClicked( url.toString(), m_allowSourceChange );
 }
 
 
@@ -248,10 +238,10 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
     return temp;
 }
 
-KQMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
+QMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
 {
 	/*FIXME
-	KQMenu * menu = getContextMenu( anchorAt( pos ), this );
+	QMenu * menu = getContextMenu( anchorAt( pos ), this );
 	menu->exec( mapToGlobal( contentsToViewport( pos ) ) );
 	*/
 	return 0;
@@ -259,7 +249,7 @@ KQMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
 
 QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 {
-	QString data, file, path = name.toString();
+	QString data, file, path = name.toString( QUrl::StripTrailingSlash );
 
 	// Retreive the data from chm file
 	LCHMFile * chm = ::mainWindow->chmFile();
@@ -271,6 +261,8 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	if ( pos != -1 )
 		path = path.left (pos);
 	
+	path = makeURLabsolute( path, false );
+	
 	// To handle a single-image pages, we need to generate the HTML page to show 
 	// this image. We did it in KCHMViewWindow::handleStartPageAsImage; now we need
 	// to generate the HTML page, and set it.
@@ -279,16 +271,17 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	
 	if ( type == QTextDocument::HtmlResource || type == QTextDocument::StyleSheetResource )
 	{
-		if ( chm->getFileContentAsString( &data, path ) )
-			return QVariant( QString( data ) );
+		if ( !chm->getFileContentAsString( &data, path ) )
+			qWarning( "Could not resolve file %s\n", path.ascii() );
+		
+		return QVariant( QString( data ) );
 	}
 	else if ( type == QTextDocument::ImageResource )
 	{
-				// treat as image
 		QImage img;
 		QByteArray buf;
 		
-		QString fpath = KCHMViewWindow_QTextBrowser::decodeUrl( path );
+		QString fpath = decodeUrl( path );
 		
 		if ( chm->getFileContentAsBinary( &buf, fpath ) )
 		{

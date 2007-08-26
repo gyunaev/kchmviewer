@@ -141,9 +141,9 @@ void KCHMViewWindow::handleStartPageAsImage( QString & link )
 }
 
 
-KQMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
+QMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
 {
-	KQMenu * contextMenu = new KQMenu( parent );
+	QMenu * contextMenu = new QMenu( parent );
 	
 	contextMenu->insertItem ( "&Copy", ::mainWindow, SLOT(slotBrowserCopy()) );
 	contextMenu->insertItem ( "&Select all", ::mainWindow, SLOT(slotBrowserSelectAll()) );
@@ -152,7 +152,7 @@ KQMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
 }
 
 
-KQMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
+QMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
 {
 	if ( link.isNull() )
 	{
@@ -274,15 +274,17 @@ void KCHMViewWindow::updateNavigationToolbar( )
 	
 	if ( mainWindow )
 	{
-		mainWindow->navigationToolbar()->updateIconStatus( 
+//FIXME: nav toolbar
+/*		mainWindow->navigationToolbar()->updateIconStatus( 
 					m_historyCurrentPos > 0,
 					m_historyCurrentPos < (m_history.size() - 1) );
+*/		
 	}
 }
 
-KQMenu * KCHMViewWindow::createListItemContextMenu( QWidget * w )
+QMenu * KCHMViewWindow::createListItemContextMenu( QWidget * w )
 {
-	KQMenu * contextMenu = new KQMenu( w );
+	QMenu * contextMenu = new QMenu( w );
 		
 	contextMenu->insertItem ( "&Open this link in a new tab",
 							  ::mainWindow, 

@@ -30,6 +30,7 @@
 
 class KCHMNavToolbar : public QToolBar
 {
+	/*
 Q_OBJECT
 public:
 	KCHMNavToolbar( KCHMMainWindow *parent );
@@ -41,6 +42,7 @@ public slots:
 private:
 	QToolButton	*	m_toolbarIconBackward;
 	QToolButton	*	m_toolbarIconForward;
+	*/
 };
 
 

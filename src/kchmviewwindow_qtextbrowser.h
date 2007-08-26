@@ -80,16 +80,16 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 	signals:
 		/*!
 		* Emitted when the user clicked on the link, before the page changed.
-		* If signalLinkClicked() sets follow_link to false, the current page should NOT change.
+		* If linkClicked() sets follow_link to false, the current page should NOT change.
 		* Otherwise it should be changed to the new link value.
 		*/
-		void	signalLinkClicked ( const QString & newlink, bool& follow_link );
+		void	linkClicked ( const QString & newlink, bool& follow_link );
 	
 	private slots:
-		virtual void	slotLinkClicked (const QString & newlink);
+		virtual void	slotAnchorClicked ( const QUrl& url);
 		
 	private:
-		KQMenu * 		createPopupMenu ( const QPoint & pos );
+		QMenu * 		createPopupMenu ( const QPoint & pos );
 		
 		// Overriden to change the source
 		void			setSource ( const QString & name );

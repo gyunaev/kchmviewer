@@ -33,7 +33,7 @@ class KCHMBookmarkWindow : public QWidget, public Ui::TabBookmarks
 {
 	Q_OBJECT
 	public:
-		KCHMBookmarkWindow( QWidget *parent = 0 );
+		KCHMBookmarkWindow( QWidget *parent, QMenu * menuBookmarks );
 		virtual ~KCHMBookmarkWindow() {};
 	
 		void 	createMenu( KCHMMainWindow * parent );
@@ -55,8 +55,8 @@ class KCHMBookmarkWindow : public QWidget, public Ui::TabBookmarks
 		void	contextMenuEvent ( QContextMenuEvent * event );
 		
 	private:
-		KQMenu 		*	m_menuBookmarks;
-		KQMenu 		* 	m_contextMenu;
+		QMenu 		*	m_menuBookmarks;
+		QMenu 		* 	m_contextMenu;
 		QString			m_bookmarkFileName;
 		bool			m_listChanged;
 };

@@ -25,7 +25,6 @@
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
 #include "kchmviewwindowmgr.h"
-#include "iconstorage.h"
 
 #include "kchmviewwindow_qtextbrowser.h"
 
@@ -34,16 +33,17 @@
 #endif
 
 
-KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
+KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent, QMenu * menuWindow, QAction * actionCloseWindow )
 	: QTabWidget( parent ) //QTabWidget
 {
-	m_MenuWindow = 0;
+	m_menuWindow = menuWindow;
+	m_actionCloseWindow = actionCloseWindow; 
 	
 	// on current tab changed
 	connect( this, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
 	
 	// Create an iconset for the button
-	QIcon iset( *gIconStorage.getCloseWindowIcon() );
+	QIcon iset( ":/images/closetab.png" );
 	
 	// Create a pushbutton
 	m_closeButton = new QPushButton( iset, QString::null, this );
@@ -60,17 +60,19 @@ KCHMViewWindowMgr::~KCHMViewWindowMgr( )
 	
 void KCHMViewWindowMgr::createMenu( KCHMMainWindow * parent )
 {
+	/*FIXME
 	// Create the approptiate menu entries in 'View' main menu
-	m_MenuWindow = new KQMenu( parent );
-	parent->menuBar()->insertItem( i18n( "&Window"), m_MenuWindow );
+	m_menuWindow = new QMenu( parent );
+	parent->menuBar()->insertItem( i18n( "&Window"), m_menuWindow );
 
 	//FIXME
-	//m_menuIdClose = m_MenuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()), CTRL+Key_W );
-	m_menuIdClose = m_MenuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()) );
-	m_MenuWindow->insertSeparator();
+	//m_menuIdClose = m_menuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()), CTRL+Key_W );
+	m_menuIdClose = m_menuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()) );
+	m_menuWindow->insertSeparator();
 
-	//connect( m_MenuWindow, SIGNAL( activated(int) ), this, SLOT ( onCloseWindow(int) ));
-	connect( m_MenuWindow, SIGNAL( activated(int) ), this, SLOT ( onActiveWindow(int) ));
+	//connect( m_menuWindow, SIGNAL( activated(int) ), this, SLOT ( onCloseWindow(int) ));
+	connect( m_menuWindow, SIGNAL( activated(int) ), this, SLOT ( onActiveWindow(int) ));
+	*/
 }
 
 void KCHMViewWindowMgr::invalidate()
@@ -116,7 +118,10 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 		showPage( widget );
 	
 	// Handle clicking on link in browser window
-	connect( viewvnd->getQObject(), SIGNAL( signalLinkClicked (const QString &, bool &) ), ::mainWindow, SLOT( slotLinkClicked(const QString &, bool &) ) );
+	connect( viewvnd->getQObject(), 
+	         SIGNAL( linkClicked (const QString &, bool &) ), 
+	         ::mainWindow, 
+	         SLOT( slotLinkClicked(const QString &, bool &) ) );
 	
 	return viewvnd;
 }
@@ -158,13 +163,13 @@ void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 
 		QString menutitle = "&" + QString::number(menuid) + " " + title;
 		it.data().menuitem = menuid;
-		m_MenuWindow->insertItem(menutitle, menuid);
+		m_menuWindow->insertItem(menutitle, menuid);
 		updateTabAccel();
 	}
 	else
 	{
 		QString menutitle = "&" + QString::number(it.data().menuitem) + " " + title;
-		m_MenuWindow->changeItem( it.data().menuitem, menutitle );
+		m_menuWindow->changeItem( it.data().menuitem, menutitle );
 	}
 	
 	updateCloseButtons();
@@ -194,7 +199,7 @@ void KCHMViewWindowMgr::closeWindow( const tab_window_t & tab )
 
 	if ( tab.menuitem != 0 )
 	{
-		m_MenuWindow->removeItem( tab.menuitem );
+		m_menuWindow->removeItem( tab.menuitem );
 		m_idSlot.push_back( tab.menuitem );
 	}
 	
@@ -238,7 +243,7 @@ void KCHMViewWindowMgr::restoreSettings( const KCHMSettings::viewindow_saved_set
 	// Destroy pre-created tab
 	closeWindow( m_Windows.begin().data() );
 	
-	for ( unsigned int i = 0; i < settings.size(); i++ )
+	for ( int i = 0; i < settings.size(); i++ )
 	{
 		KCHMViewWindow * window = addNewTab( false );
 		window->openUrl( settings[i].url ); // will call setTabName()
@@ -270,8 +275,10 @@ void KCHMViewWindowMgr::saveSettings( KCHMSettings::viewindow_saved_settings_t &
 
 void KCHMViewWindowMgr::updateCloseButtons( )
 {
-	m_MenuWindow->setItemEnabled( m_menuIdClose, m_Windows.size() > 1 );
-	m_closeButton->setEnabled( m_Windows.size() > 1 );
+	bool enabled = m_Windows.size() > 1;
+	
+	m_actionCloseWindow->setEnabled( enabled );
+	m_closeButton->setEnabled( enabled );
 }
 
 void KCHMViewWindowMgr::onTabChanged( QWidget * newtab )
@@ -302,7 +309,7 @@ void KCHMViewWindowMgr::updateTabAccel()
 				index = 0;
 			
 			// FIXME
-			//m_MenuWindow->setAccel(ALT + key(index), menuid);
+			//m_menuWindow->setAccel(ALT + key(index), menuid);
 		}
 	}
 }

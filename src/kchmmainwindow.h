@@ -28,13 +28,14 @@
 #include <QEvent>
 #include <QMainWindow>
 
-#include "kde-qt.h"
-
 #include "libchmfile.h"
 
+#include "kde-qt.h"
 #include "forwarddeclarations.h"
 #include "kchmviewwindow.h"
+#include "kqtempfile.h"
 
+#include "ui_window_main.h"
 
 //#define ENABLE_AUTOTEST_SUPPORT
 
@@ -61,10 +62,10 @@ class KCHMUserEvent : public QEvent
 };
 
 
-// FIXME: mainwindow to UIC
-class KCHMMainWindow : public QMainWindow
+
+class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 {
-		Q_OBJECT
+	Q_OBJECT
 	
 	public:
 		KCHMMainWindow();
@@ -79,73 +80,91 @@ class KCHMMainWindow : public QMainWindow
 		KCHMContentsWindow  * contentsWindow() const { return m_contentsWindow; }
 		KCHMSettings   * currentSettings() const { return m_currentSettings; }
 		KCHMViewWindowMgr*	viewWindowMgr() const { return m_viewWindowMgr; }
-		KCHMNavToolbar * navigationToolbar() const { return m_navToolbar; }
 		KCHMSearchWindow * searchWindow() const { return m_searchWindow; }
 		
-		void		showInStatusBar (const QString& text)	{ statusBar()->message( text, 2000 ); }
+		void		showInStatusBar (const QString& text);
 		void		setTextEncoding (const LCHMTextEncoding * enc);
 			
 	public slots:
-		void slotOnTreeClicked( QTreeWidgetItem *item );
-		void slotOnTreeDoubleClicked( QTreeWidgetItem *item, const QPoint &, int );
+		// Navigation toolbar icons
+		void		navSetBackEnabled( bool enabled );
+		void		navSetForwardEnabled( bool enabled );
 		
-		void slotAddBookmark ( );
-		void slotOpenPageInNewTab( );
-		void slotOpenPageInNewBackgroundTab( );
-		void slotEnableFullScreenMode( bool enable );
-		void slotShowContentsWindow( bool show );
-		void slotLocateInContentWindow( );
-		void slotBrowserChanged( KCHMViewWindow * newbrowser );
+		void 		slotOnTreeClicked( QTreeWidgetItem *item );
+		void 		slotOnTreeDoubleClicked( QTreeWidgetItem *item, const QPoint &, int );
+		
+		void 		slotOpenPageInNewTab();
+		void 		slotOpenPageInNewBackgroundTab();
+		void		slotBrowserChanged( KCHMViewWindow * newbrowser );
 					
+		// Actions
+		void		actionOpenFile();
+		void		actionPrint();
+		void		actionEditCopy();
+		void		actionEditSelectAll();
+		void		actionFindInPage();
+		void		actionExtractCHM();
+		void		actionChangeSettings();
+		void		actionAddBookmark();		
+		void		actionFontSizeIncrease();
+		void		actionFontSizeDecrease();
+		void		actionViewHTMLsource();
+		void		actionToggleFullScreen();
+		void		actionToggleContentsTab();
+		void		actionLocateInContentsTab();
+
+		void		actionNavigateBack();
+		void		actionNavigateForward();
+		void		actionNavigateHome();
+		void		actionNavigatePrevInToc();
+		void		actionNavigateNextInToc();
+		
+		void		actionAboutApp();
+		void		actionAboutQt();
+		
+		void		actionSwitchToContentTab();
+		void		actionSwitchToIndexTab();
+		void		actionSwitchToSearchTab();
+		void		actionSwitchToBookmarkTab();
+		
+		
+		
 	private slots:
 		void slotLinkClicked ( const QString & link, bool& follow_link );
-				
-		void slotOpenMenuItemActivated();
-		void slotPrintMenuItemActivated();
-	
-		void slotAboutMenuItemActivated();
-		void slotAboutQtMenuItemActivated();
-	
-		void slotActivateContentTab();
-		void slotActivateIndexTab();
-		void slotActivateSearchTab();
-		void slotActivateBookmarkTab();
-		
-		void slotBrowserSelectAll();
-		void slotBrowserCopy();
-		void slotExtractCHM();
+		void slotHistoryMenuItemActivated ( int );
+		/*
 	
 		void slotChangeSettingsMenuItemActivated();
-		void slotHistoryMenuItemActivated ( int );
+		
 		
 		void slotToggleFullScreenMode( );
 		
-		void slotNavigateBack()	{	currentBrowser()->navigateBack(); }
-		void slotNavigateHome()	{	currentBrowser()->navigateHome(); }
-		void slotNavigateForward(){	currentBrowser()->navigateForward(); }
+		*/
+		
+	protected:
+		// Reimplemented functions
+		void 		showEvent( QShowEvent * );
+		void		closeEvent ( QCloseEvent * e );
+		bool		event ( QEvent * e );
 		
 	private:
-		bool	parseCmdLineArgs();
-		void 	showEvent( QShowEvent * );
-		void	closeEvent ( QCloseEvent * e );
-		void	setupSignals ();
-	
-		void 	setupToolbarsAndMenu ( );
-		bool	loadChmFile ( const QString &fileName,  bool call_open_page = true );
-		void	closeChmFile();	
-		void	refreshCurrentBrowser();
-		void	updateHistoryMenu();
+		bool		parseCmdLineArgs();
+		void		setupSignals ();
+		void 		setupActions();
 		
-		void	showOrHideContextWindow( int tabindex );
-		void	showOrHideIndexWindow( int tabindex );
-		void	showOrHideSearchWindow( int tabindex );
+		bool		loadChmFile ( const QString &fileName,  bool call_open_page = true );
+		void		closeChmFile();	
+		void		refreshCurrentBrowser();
+		void		updateHistoryMenu();
 		
-		// User events
-		bool	event ( QEvent * e );
-		bool	handleUserEvent( const KCHMUserEvent * event );
+		void		showOrHideContextWindow( int tabindex );
+		void		showOrHideIndexWindow( int tabindex );
+		void		showOrHideSearchWindow( int tabindex );
 		
-		void	locateInContentTree( const QString& url );
+		bool		handleUserEvent( const KCHMUserEvent * event );
+		void		locateInContentTree( const QString& url );
 		
+	private:		
 		QString 				m_chmFilename;
 		QString					m_aboutDlgMenuText;	// to show in KDE or Qt about dialogs
 		
@@ -158,21 +177,18 @@ class KCHMMainWindow : public QMainWindow
 		KQTabWidget			*	m_tabWidget;
 		QSplitter 			*	m_windowSplitter;
 	
-		KCHMSearchAndViewToolbar	*	m_searchToolbar;
-		KCHMNavToolbar		*	m_navToolbar;
-		
 		KCHMSettings		*	m_currentSettings;
-		
 		LCHMFile			*	m_chmFile;
 		bool					m_FirstTimeShow;
 		
-		KQMenu			*	m_menuHistory;
-		
+		QMenu				*	m_recentFiles;
 		int						m_tabContextPage;	
 		int						m_tabIndexPage;
 		int						m_tabSearchPage;
 		int						m_tabBookmarkPage;
 	
+		KQTempFileKeeper		m_tempFileKeeper;
+				
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 		enum	auto_test_state_t
 		{

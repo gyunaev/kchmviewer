@@ -121,12 +121,6 @@ public:
 		: KQ_CLASSNAME(TabWidget) (parent) {};
 };
 
-class KQMenu : public KQ_CLASSNAME(Menu)
-{
-public:
-	KQMenu (QWidget *parent = 0 )
-		: KQ_CLASSNAME(Menu) (parent) {};
-};
 
 #include <QInputDialog>
 #include <QCheckBox>
@@ -138,7 +132,8 @@ public:
 #include <QToolTip>
 #include <QListWidget>
 #include <QTreeWidget>
-				 
+#include <QPixmap>
+				 				 
 
 class KCHMShowWaitCursor
 {

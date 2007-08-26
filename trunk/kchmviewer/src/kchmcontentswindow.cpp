@@ -37,11 +37,21 @@ KCHMContentsWindow::KCHMContentsWindow( QWidget *parent )
 	setupUi( this );
 	
 	m_contextMenu = 0;
+	m_contentFilled = false;
 	
 	tree->setFocus();
 	tree->header()->hide();
 	
-	// FIXME: model-view, data preload on show, like index
+	// Handle clicking on m_contentsWindow element
+	connect( tree, 
+	         SIGNAL( itemClicked ( QTreeWidgetItem *, int ) ), 
+	         this, 
+	         SLOT( onClicked ( QTreeWidgetItem *, int ) ) );
+	
+	connect( tree,
+	         SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ), 
+	         this, 
+	         SLOT( onDoubleClicked ( QTreeWidgetItem *, int ) ) );
 	
 	/*
 	connect( this, SIGNAL( onItem ( Q3ListViewItem * ) ), this, SLOT( slotOnItem( Q3ListViewItem * ) ) );
@@ -105,4 +115,36 @@ void KCHMContentsWindow::showItem(KCHMIndTocItem * item)
 {
 	tree->setCurrentItem( item );
 	tree->scrollToItem( item );
+}
+
+void KCHMContentsWindow::showEvent(QShowEvent *)
+{
+	if ( !::mainWindow->chmFile() || m_contentFilled )
+		return;
+	
+	m_contentFilled = true;
+	refillTableOfContents();
+}
+
+void KCHMContentsWindow::onDoubleClicked(QTreeWidgetItem * item, int column)
+{
+	// Open/close only existing item which have children
+	if ( !item )
+		return;
+	qDebug("dblclick");
+	item->setExpanded( !item->isExpanded() );
+	tree->scrollToItem( item );
+	//FIXME: maybe we need it
+	//item->repaint();
+}
+
+void KCHMContentsWindow::onClicked(QTreeWidgetItem * item, int column)
+{
+	bool unused;
+	
+	if ( !item )
+		return;
+	
+	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
+	::mainWindow->activateLink( treeitem->getUrl(), unused );
 }

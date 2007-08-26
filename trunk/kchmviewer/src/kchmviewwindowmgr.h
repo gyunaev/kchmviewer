@@ -74,15 +74,15 @@ class KCHMViewWindowMgr : public QTabWidget
 		} tab_window_t;
 		
 		void	closeWindow( const tab_window_t& tab );
-		void	deleteAllWindows();
+		void	closeAllWindows();
 		void    updateTabAccel();
 		QKeySequence key(int);
 		
 		QMap<QWidget*,tab_window_t>	m_Windows;
 		typedef QMap<QWidget*,tab_window_t>::iterator WindowsIterator;
 		
-        QList<int>         					m_idSlot;
-        typedef Q3ValueList<int>::iterator	IdIterator;
+        QList<int>     					m_idSlot;
+        typedef QList<int>::iterator	IdIterator;
 		
 		QPushButton			*	m_closeButton;
 		QMenu 				*	m_menuWindow;

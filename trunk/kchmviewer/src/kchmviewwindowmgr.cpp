@@ -77,7 +77,7 @@ void KCHMViewWindowMgr::createMenu( KCHMMainWindow * parent )
 
 void KCHMViewWindowMgr::invalidate()
 {
-	deleteAllWindows();
+	closeAllWindows();
 	addNewTab( true );
 }
 
@@ -121,12 +121,12 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 	connect( viewvnd->getQObject(), 
 	         SIGNAL( linkClicked (const QString &, bool &) ), 
 	         ::mainWindow, 
-	         SLOT( slotLinkClicked(const QString &, bool &) ) );
+	         SLOT( activateLink(const QString &, bool &) ) );
 	
 	return viewvnd;
 }
 
-void KCHMViewWindowMgr::deleteAllWindows( )
+void KCHMViewWindowMgr::closeAllWindows( )
 {
 	// No it++ - we removing the window by every closeWindow call
 	while ( m_Windows.begin() != m_Windows.end() )

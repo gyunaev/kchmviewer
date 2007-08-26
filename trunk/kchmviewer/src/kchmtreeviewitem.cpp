@@ -29,18 +29,16 @@
 
 
 KCHMIndTocItem::KCHMIndTocItem( QTreeWidgetItem * parent, QTreeWidgetItem * after, QString name, QString aurl, int image) 
-	: QTreeWidgetItem( parent, after), url(aurl), image_number(image)
+	: QTreeWidgetItem( parent, after ), m_name(name), m_url(aurl), m_image_number(image)
 {
-	setText( 0, name );
 }
 
 KCHMIndTocItem::KCHMIndTocItem( QTreeWidget * parent, QTreeWidgetItem * after, QString name, QString aurl, int image) 
-	: QTreeWidgetItem(parent, after), url(aurl), image_number(image)
+	: QTreeWidgetItem( parent, after ), m_name(name), m_url(aurl), m_image_number(image)
 {
-	setText( 0, name );
 }
 
-
+/*
 const QPixmap * KCHMIndTocItem::pixmap( int i ) const
 {
 	int imagenum;
@@ -61,15 +59,15 @@ const QPixmap * KCHMIndTocItem::pixmap( int i ) const
 
 	return ::mainWindow->chmFile()->getBookIconPixmap( imagenum );
 }
-
+*/
 
 QString KCHMIndTocItem::getUrl( ) const
 {
-	if ( url.find ('|') == -1 )
-		return url;
+	if ( m_url.find ('|') == -1 )
+		return m_url;
 
 	// Create a dialog with URLs, and show it, so user can select an URL he/she wants.
-	QStringList urls = QStringList::split ('|', url);
+	QStringList urls = QStringList::split ('|', m_url);
 	QStringList titles;
 	LCHMFile * xchm = ::mainWindow->chmFile();
 
@@ -132,7 +130,7 @@ void KCHMIndTocItem::paintCell( QPainter * p, const QColorGroup & cg, int column
 
 void KCHMIndTocItem::setExpanded( bool open )
 {
-	if ( image_number != LCHMBookIcons::IMAGE_INDEX || open )
+	if ( m_image_number != LCHMBookIcons::IMAGE_INDEX || open )
 		QTreeWidgetItem::setExpanded( open );
 }
 
@@ -190,100 +188,6 @@ void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMPars
 	}		
 
 	list->update();
-/*	
-	KCHMMainTreeViewItem * item;
-
-				if ( !root_indent_offset_set )
-				{
-					root_indent_offset_set = true;
-					root_indent_offset = indent;
-					
-					if ( root_indent_offset > 1 )
-						qWarning("CHM has improper index; root indent offset is %d", root_indent_offset);
-				}
-
-				int real_indent = indent - root_indent_offset;
-				QString url = urls.join ("|");
-
-				if ( real_indent == 0 )
-				{
-					// New root entry
-					item = new KCHMMainTreeViewItem (tree, lastchild[real_indent], name, url, imagenum);
-					DEBUGPARSER(("<root object>: '%s', new rootentry %08X\n", name.ascii(), item));
-				}
-				else
-				{
-					// New non-root entry
-					if ( !rootentry[real_indent-1] )
-						qFatal("CHMFile::ParseAndFillTopicsTree: child entry \"%s\" indented as %d with no root entry!", name.ascii(), real_indent);
-
-					item = new KCHMMainTreeViewItem (rootentry[real_indent-1], lastchild[real_indent], name, url,  imagenum);
-					DEBUGPARSER(("<object>: '%s', indent %d, rootentry %08X, item %08X\n", name.ascii(), real_indent, rootentry[real_indent-1], item));
-				}
-
-				lastchild[real_indent] = item;
-				rootentry[real_indent] = item;
-
-				if ( asIndex  )
-					rootentry[real_indent]->setOpen(true);
-
-				// There are no 'titles' in index file
-				if ( add2treemap  )
-				{
-					for ( unsigned int li = 0; li < urls.size(); li++ )
-						m_treeUrlMap[urls[li]] = item;
-				}
-			}
-			else
-			{
-				if ( !urls.isEmpty() )
-					qDebug ("CHMFile::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", urls[0].ascii());
-				else
-					qDebug ("CHMFile::ParseAndFillTopicsTree: <object> tag is parsed, but both name and url are empty.");	
-			}
-
-			name = QString::null;
-			urls.clear();
-			in_object = false;
-			imagenum = defaultimagenum;
-		}
-		}
-		else if ( tagword == "ul" ) // increase indent level
-		{
-			// Fix for buggy help files		
-			if ( ++indent >= MAX_NEST_DEPTH )
-				qFatal("CHMFile::ParseAndFillTopicsTree: max nest depth (%d) is reached, error in help file", MAX_NEST_DEPTH);
-
-			lastchild[indent] = 0;
-			rootentry[indent] = 0;
-			
-			// This intended to fix <ul><ul>, which was seen in some buggy chm files,
-			// and brokes rootentry[indent-1] check
-			int real_indent = indent - root_indent_offset;
-			if ( real_indent > 1
-						  && rootentry[real_indent - 1] == 0
-						  && rootentry[real_indent - 2] != 0 )
-			{
-				rootentry[real_indent - 1] = rootentry[real_indent - 2];
-				qWarning("Broken CHM index/content: tree autocorrection enabled.");
-			}
-						  
-			DEBUGPARSER(("<ul>: new indent is %d, last rootentry was %08X\n", indent - root_indent_offset, rootentry[indent-1]));
-		}
-		else if ( tagword == "/ul" ) // decrease indent level
-		{
-			if ( --indent < root_indent_offset )
-				indent = root_indent_offset;
-
-			rootentry[indent] = 0;
-			DEBUGPARSER(("</ul>: new intent is %d\n", indent - root_indent_offset));
-		}
-
-		pos = i;	
-	}
-	
-	return true;
-*/
 }
 
 KCMSearchTreeViewItem::KCMSearchTreeViewItem( const QString& name, const QString& loc, const QString& url )
@@ -297,4 +201,49 @@ KCMSearchTreeViewItem::KCMSearchTreeViewItem( const QString& name, const QString
 QString KCMSearchTreeViewItem::getUrl() const
 {
 	return m_url;
+}
+
+int KCHMIndTocItem::columnCount() const
+{
+	return 1;
+}
+
+QVariant KCHMIndTocItem::data(int column, int role) const
+{
+	int imagenum;
+
+	if ( column != 0 )
+		return QVariant();
+	
+	switch( role )
+	{
+		case Qt::DisplayRole:
+			return m_name;
+			
+		case Qt::DecorationRole:
+			if ( m_image_number != LCHMBookIcons::IMAGE_NONE 
+			     && m_image_number != LCHMBookIcons::IMAGE_INDEX )
+			{
+				// If the item has children, we change the book image to "open book", or next image automatically
+				if ( childCount() )
+				{
+					if ( isExpanded() )
+						imagenum = (m_image_number == LCHMBookIcons::IMAGE_AUTO) ? 1 : m_image_number;
+					else
+						imagenum = (m_image_number == LCHMBookIcons::IMAGE_AUTO) ? 0 : m_image_number + 1;
+				}
+				else
+					imagenum = (m_image_number == LCHMBookIcons::IMAGE_AUTO) ? 10 : m_image_number;
+		
+				const QPixmap *pix = ::mainWindow->chmFile()->getBookIconPixmap( imagenum );
+				
+				if ( !pix || pix->isNull() )
+					abort();
+				
+				return *pix;
+			}
+			break;
+	}
+	
+	return QVariant();
 }

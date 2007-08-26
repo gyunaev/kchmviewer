@@ -39,16 +39,21 @@ class KCHMIndTocItem : public QTreeWidgetItem
 		KCHMIndTocItem( QTreeWidget* parent, QTreeWidgetItem* after, QString name, QString url, int image);
 		
 		QString			getUrl() const;
-		virtual void 	setExpanded ( bool open );
+	
+		// Overridden methods
+		void 			setExpanded ( bool open );
+		int 			columnCount () const;
+		QVariant 		data ( int column, int role ) const;
 		
 	private:
 		// FIXME: painting!
 		//virtual void paintBranches ( QPainter * p, const QColorGroup & cg, int w, int y, int h );
 		//virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
-		virtual const QPixmap * pixmap( int i ) const;
+	//virtual const QPixmap * pixmap( int i ) const;
 		
-		QString		url;
-		int 		image_number;
+		QString		m_name;
+		QString		m_url;
+		int 		m_image_number;
 };
 
 

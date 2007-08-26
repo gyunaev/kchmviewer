@@ -43,9 +43,16 @@ class KCHMContentsWindow : public QWidget, public Ui::TabContents
 		
 	public slots:
 		//void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
-		
+		// FIXME: slot naming
+		void	onDoubleClicked ( QTreeWidgetItem * item, int column );
+		void	onClicked ( QTreeWidgetItem * item, int column );
+	
 	private:
-		QMenu 				  			* m_contextMenu;
+		virtual void showEvent ( QShowEvent * );
+	
+	private:
+		bool		m_contentFilled;
+		QMenu 	*	m_contextMenu;
 		QMap<QString, KCHMIndTocItem*>	m_urlListMap;
 };
 

@@ -31,7 +31,7 @@ class KCHMViewWindowMgr : public QTabWidget
 {
 	Q_OBJECT
 	public:
-		KCHMViewWindowMgr( QWidget *parent, QMenu * menuWindow, QAction * actionCloseWindow );
+		KCHMViewWindowMgr( QWidget *parent );
 		~KCHMViewWindowMgr( );
 		
 		// Returns a handle to a currently viewed window.
@@ -47,7 +47,7 @@ class KCHMViewWindowMgr : public QTabWidget
 		void 	invalidate();
 		
 		// Creates a Window menu
-		void 	createMenu( KCHMMainWindow * parent );
+		void 	createMenu( KCHMMainWindow * parent, QMenu * menuWindow, QAction * actionCloseWindow );
 		
 		// Saves and restores current settings between sessions
 		void	restoreSettings( const KCHMSettings::viewindow_saved_settings_t& settings );
@@ -59,32 +59,34 @@ class KCHMViewWindowMgr : public QTabWidget
 	protected slots:
 		void	openNewTab();
 		void	onTabChanged( QWidget * newtab );
-		void	onCloseWindow( int id );
-		void	onActiveWindow( int id );
 		void	updateCloseButtons();
+		void	activateWindow();
 		
 	private:
 		typedef struct
 		{
 			QWidget			*	widget;
 			KCHMViewWindow	*	window;
-			int					menuitem;
-		} tab_window_t;
+			QAction			*	action;
+		} TabData;
 		
-		void	closeWindow( const tab_window_t& tab );
+		void	closeWindow( const TabData& tab );
 		void	closeAllWindows();
-		void    updateTabAccel();
-		QKeySequence key(int);
+	
+		TabData & findTab( QWidget * widget );
 		
-		QMap<QWidget*,tab_window_t>	m_Windows;
-		typedef QMap<QWidget*,tab_window_t>::iterator WindowsIterator;
-		
-        QList<int>     					m_idSlot;
-        typedef QList<int>::iterator	IdIterator;
+		// Storage of all available windows
+		QList< TabData >	m_Windows;
+		typedef QList< TabData >::iterator WindowsIterator;
 		
 		QToolButton			*	m_closeButton;
 		QMenu 				*	m_menuWindow;
 		QAction				*	m_actionCloseWindow;
+	
+		// Window menu actions. Contains one action per window. They are not 
+		// linked permanently - if a middle window is deleted, all the following
+		// actions will be relinked and replaced.
+		QList< QAction* >		m_actions;
 };
 
 #endif /* INCLUDE_KCHMVIEWWINDOWMGR_H */

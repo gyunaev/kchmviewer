@@ -19,8 +19,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <q3accel.h>
-
 #include "kchmconfig.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
@@ -33,12 +31,9 @@
 #endif
 
 
-KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent, QMenu * menuWindow, QAction * actionCloseWindow )
-	: QTabWidget( parent ) //QTabWidget
+KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
+	: QTabWidget( parent )
 {
-	m_menuWindow = menuWindow;
-	m_actionCloseWindow = actionCloseWindow; 
-	
 	// on current tab changed
 	connect( this, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
 	
@@ -70,21 +65,10 @@ KCHMViewWindowMgr::~KCHMViewWindowMgr( )
 {
 }
 	
-void KCHMViewWindowMgr::createMenu( KCHMMainWindow * parent )
+void KCHMViewWindowMgr::createMenu( KCHMMainWindow *, QMenu * menuWindow, QAction * actionCloseWindow )
 {
-	/*FIXME
-	// Create the approptiate menu entries in 'View' main menu
-	m_menuWindow = new QMenu( parent );
-	parent->menuBar()->insertItem( i18n( "&Window"), m_menuWindow );
-
-	//FIXME
-	//m_menuIdClose = m_menuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()), CTRL+Key_W );
-	m_menuIdClose = m_menuWindow->insertItem( i18n( "&Close"), this, SLOT( closeCurrentWindow()) );
-	m_menuWindow->insertSeparator();
-
-	//connect( m_menuWindow, SIGNAL( activated(int) ), this, SLOT ( onCloseWindow(int) ));
-	connect( m_menuWindow, SIGNAL( activated(int) ), this, SLOT ( onActiveWindow(int) ));
-	*/
+	m_menuWindow = menuWindow;
+	m_actionCloseWindow = actionCloseWindow; 
 }
 
 void KCHMViewWindowMgr::invalidate()
@@ -96,13 +80,8 @@ void KCHMViewWindowMgr::invalidate()
 
 KCHMViewWindow * KCHMViewWindowMgr::current()
 {
-	QWidget * w = currentPage();
-	WindowsIterator it;
-			
-	if ( !w || (it = m_Windows.find( w )) == m_Windows.end() )
-		qFatal( "KCHMViewWindowMgr::current called without any windows!" );
-	
-	return it.data().window;
+	TabData& tab = findTab( currentPage() );
+	return tab.window;
 }
 
 KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
@@ -116,24 +95,38 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 #endif
 		viewvnd = new KCHMViewWindow_QTextBrowser( this );
 
-	QWidget * widget = viewvnd->getQWidget();
-	m_Windows[widget].window = viewvnd;
-	m_Windows[widget].menuitem = 0;
-	m_Windows[widget].widget = widget;
+	// Create the tab data structure
+	TabData tabdata;
+	tabdata.window = viewvnd;
+	tabdata.action = new QAction( "window", this ); // temporary name; real name is set in setTabName
+	tabdata.widget = viewvnd->getQWidget();
 	
-	addTab( widget, "" );
+	connect( tabdata.action,
+	         SIGNAL( activated() ),
+	         this,
+	         SLOT( activateWindow() ) );
+	
+	addTab( tabdata.widget, "" );
 
-	Q_ASSERT( m_Windows.size() == (unsigned int) count() );
+	m_Windows.push_back( tabdata );
+	Q_ASSERT( m_Windows.size() == count() );
 		
 	// Set active if it is the first tab
 	if ( set_active || m_Windows.size() == 1 )
-		showPage( widget );
+		showPage( tabdata.widget );
 	
 	// Handle clicking on link in browser window
 	connect( viewvnd->getQObject(), 
 	         SIGNAL( linkClicked (const QString &, bool &) ), 
 	         ::mainWindow, 
 	         SLOT( activateLink(const QString &, bool &) ) );
+	
+	// Set up the accelerator if we have room
+	if ( m_Windows.size() < 10 )
+		tabdata.action->setShortcut( QKeySequence( i18n("Alt+%1").arg( m_Windows.size() ) ) );
+	
+	// Add it to the "Windows" menu
+	m_menuWindow->addAction( tabdata.action );
 	
 	return viewvnd;
 }
@@ -142,15 +135,12 @@ void KCHMViewWindowMgr::closeAllWindows( )
 {
 	// No it++ - we removing the window by every closeWindow call
 	while ( m_Windows.begin() != m_Windows.end() )
-		closeWindow( m_Windows.begin().data() );
+		closeWindow( m_Windows.first() );
 }
 
 void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 {
-	WindowsIterator it = m_Windows.find( window->getQWidget() );
-			
-	if ( it == m_Windows.end() )
-		qFatal( "KCHMViewWindowMgr::setTabName called with unknown window!" );
+	TabData& tab = findTab( window->getQWidget() );
 	
 	QString title = window->getTitle();
 	
@@ -159,30 +149,7 @@ void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 		title = title.left( 22 ) + "...";
 
 	setTabLabel( window->getQWidget(), title );
-	
-	if ( it.data().menuitem == 0 )
-	{
-		// find the empty menuid
-		int menuid;
-		
-		if ( !m_idSlot.empty() )
-		{
-			menuid = *m_idSlot.begin();
-			m_idSlot.erase( m_idSlot.begin() );
-		}
-		else
-			menuid = m_Windows.size();
-
-		QString menutitle = "&" + QString::number(menuid) + " " + title;
-		it.data().menuitem = menuid;
-		m_menuWindow->insertItem(menutitle, menuid);
-		updateTabAccel();
-	}
-	else
-	{
-		QString menutitle = "&" + QString::number(it.data().menuitem) + " " + title;
-		m_menuWindow->changeItem( it.data().menuitem, menutitle );
-	}
+	tab.action->setText( title );
 	
 	updateCloseButtons();
 }
@@ -193,67 +160,41 @@ void KCHMViewWindowMgr::closeCurrentWindow( )
 	if ( m_Windows.size() == 1 )
 		return;
 			
-	QWidget * w = currentPage();
-	WindowsIterator it;
-			
-	if ( !w || (it = m_Windows.find( w )) == m_Windows.end() )
-		qFatal( "KCHMViewWindowMgr::closeCurrentWindow called without any windows!" );
-	
-	closeWindow( it.data() );
+	TabData& tab = findTab( currentPage() );
+	closeWindow( tab );
 }
 
-void KCHMViewWindowMgr::closeWindow( const tab_window_t & tab )
+void KCHMViewWindowMgr::closeWindow( const TabData & tab )
 {
-	WindowsIterator it = m_Windows.find( tab.widget );
-			
+	WindowsIterator it;
+	
+	for ( it = m_Windows.begin(); it != m_Windows.end(); ++it )
+		if ( (*it).widget == tab.widget )
+			break;
+	
 	if ( it == m_Windows.end() )
 		qFatal( "KCHMViewWindowMgr::closeWindow called with unknown widget!" );
 
-	if ( tab.menuitem != 0 )
-	{
-		m_menuWindow->removeItem( tab.menuitem );
-		m_idSlot.push_back( tab.menuitem );
-	}
+	m_menuWindow->removeAction( tab.action );
 	
 	removePage( tab.widget );
 	delete tab.window;
+	delete tab.action;
 	
 	m_Windows.remove( it );
 	updateCloseButtons();
-	updateTabAccel();
-}
-
-void KCHMViewWindowMgr::onCloseWindow( int id )
-{
-	for ( WindowsIterator it = m_Windows.begin(); it != m_Windows.end(); it++ )
-	{
-		if ( it.data().menuitem != id )
-			continue;
-		
-		closeWindow( it.data() );
-		break;
-	}
-}
-
-
-void KCHMViewWindowMgr::onActiveWindow(int id)
-{
-	for (WindowsIterator it = m_Windows.begin(); it != m_Windows.end(); ++it)
-	{
-		if ( it.data().menuitem != id )
-			continue;
-		
-		QWidget *widget = it.data().widget;
-		showPage(widget);
-		break;
-	}
+	
+	// Change the accelerators, as we might have removed the item in the middle
+	int count = 1;
+	for ( WindowsIterator it = m_Windows.begin(); it != m_Windows.end() && count < 10; ++it, count++ )
+		(*it).action->setShortcut( QKeySequence( i18n("Alt+%1").arg( count ) ) );
 }
 
 
 void KCHMViewWindowMgr::restoreSettings( const KCHMSettings::viewindow_saved_settings_t & settings )
 {
 	// Destroy pre-created tab
-	closeWindow( m_Windows.begin().data() );
+	closeWindow( m_Windows.first() );
 	
 	for ( int i = 0; i < settings.size(); i++ )
 	{
@@ -272,16 +213,13 @@ void KCHMViewWindowMgr::saveSettings( KCHMSettings::viewindow_saved_settings_t &
 	for ( int i = 0; i < count(); i++ )
 	{
 		QWidget * p = page( i );
-		WindowsIterator it = m_Windows.find( p );
+		TabData& tab = findTab( p );
 			
-		if ( it == m_Windows.end() )
-			qFatal( "KCHMViewWindowMgr::saveSettings: could not find widget!" );
-
 		settings.push_back( 
-				KCHMSettings::SavedViewWindow( 
-						it.data().window->getOpenedPage(), 
-						it.data().window->getScrollbarPosition(), 
-						it.data().window->getZoomFactor()) );
+		                    KCHMSettings::SavedViewWindow( 
+			                    tab.window->getOpenedPage(), 
+			                    tab.window->getScrollbarPosition(), 
+			                    tab.window->getZoomFactor()) );
 	}
 }
 
@@ -295,77 +233,39 @@ void KCHMViewWindowMgr::updateCloseButtons( )
 
 void KCHMViewWindowMgr::onTabChanged( QWidget * newtab )
 {
-	WindowsIterator it = m_Windows.find( newtab );
-			
-	if ( it == m_Windows.end() )
-		qFatal( "KCHMViewWindowMgr::onTabChanged called with unknown widget!" );
+	TabData& tab = findTab( newtab );
 
-	it.data().window->updateNavigationToolbar();
-	mainWindow->slotBrowserChanged( it.data().window );
+	tab.window->updateNavigationToolbar();
+	mainWindow->slotBrowserChanged( tab.window );
 }
 
-
-void KCHMViewWindowMgr::updateTabAccel()
-{
-	WindowsIterator it;
-    for ( it = m_Windows.begin(); it != m_Windows.end(); ++it )
-	{
-		int menuid = it.data().menuitem;
-		int index = indexOf(it.data().widget);
-		
-		if ( index <= 9 )
-		{
-			if ( index < 9 )
-				index++;
-			else
-				index = 0;
-			
-			// FIXME
-			//m_menuWindow->setAccel(ALT + key(index), menuid);
-		}
-	}
-}
-
-QKeySequence KCHMViewWindowMgr::key(int i)
-{
-	//FIXME
-	/*
-	switch (i)
-	{
-		case 0:
-			return Key_0;
-			
-		case 1:
-			return Key_1;
-			
-		case 2:
-			return Key_2;
-			
-		case 3:
-			return Key_3;
-			
-		case 4:
-			return Key_4;
-			
-		case 5:
-			return Key_5;
-			
-		case 6:
-			return Key_6;
-			
-		case 7:
-			return Key_7;
-			
-		case 8:
-			return Key_8;
-			
-		default:
-			return Key_9;
-	}
-	*/
-}
 
 void KCHMViewWindowMgr::openNewTab()
 {
 	::mainWindow->openPage( current()->getOpenedPage(), OPF_NEW_TAB | OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+}
+
+void KCHMViewWindowMgr::activateWindow()
+{
+	QAction *action = qobject_cast< QAction * >(sender());
+	
+	for ( WindowsIterator it = m_Windows.begin(); it != m_Windows.end(); ++it )
+	{
+		if ( (*it).action != action )
+			continue;
+		
+		QWidget *widget = (*it).widget;
+		showPage(widget);
+		break;
+	}
+}
+
+KCHMViewWindowMgr::TabData & KCHMViewWindowMgr::findTab(QWidget * widget)
+{
+	for ( QList< TabData >::iterator it = m_Windows.begin(); it != m_Windows.end(); ++it )
+		if ( (*it).widget == widget )
+			return *it;
+		
+	qFatal( "KCHMViewWindowMgr::findTab did not find tab" );
+	abort(); // to satisfy gcc
 }

@@ -125,6 +125,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		void		actionSwitchToBookmarkTab();
 		
 		void		actionOpenRecentFile();
+		void		actionEncodingChanged( QAction * action );
 	
 		// Link activation. MainWindow decides whether we should follow this link or not
 		// by setting up follow_link appropriately.
@@ -140,6 +141,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		bool		parseCmdLineArgs();
 		void		setupSignals ();
 		void 		setupActions();
+		void		setupLangEncodingMenu();
 		
 		bool		loadChmFile ( const QString &fileName,  bool call_open_page = true );
 		void		closeChmFile();	
@@ -184,6 +186,8 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		int						m_numOfRecentFiles;
 		QVector<QAction*>		m_recentFiles;
 		QAction 			*	m_recentFileSeparator;
+	
+		QActionGroup		*	m_encodingActions;
 	
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 		enum	auto_test_state_t

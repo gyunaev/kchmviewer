@@ -51,6 +51,8 @@ enum marker_t
  	MARKER_CONTENTSDATA,
 	MARKER_INDEXDATA,
 
+	MARKER_ACTIVEENCODINGNAME,
+		
 	// This should be the last
 	MARKER_END = 0x7FFF
 };
@@ -99,7 +101,7 @@ KCHMSettings::KCHMSettings( )
 {
 	m_activetabsystem = 0;
 	m_activetabwindow = 0;
-	m_activeencodinglcid = 0;
+	m_activeEncoding = "CP1252";
 	
 	m_window_size_x = 700;
 	m_window_size_y = 500;
@@ -111,7 +113,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 {
 	m_activetabsystem = 0;
 	m_activetabwindow = 0;
-	m_activeencodinglcid = 0;
+	m_activeEncoding = "CP1252";
 	
 	m_searchhistory.clear();
 	m_bookmarks.clear();
@@ -195,8 +197,13 @@ bool KCHMSettings::loadSettings( const QString & filename )
 			stream >> m_activetabwindow;
 			break;
 			
+		// Not used anymore
 		case MARKER_ACTIVEENCODING:
-			stream >> m_activeencodinglcid;
+			stream >> data;
+			break;
+			
+		case MARKER_ACTIVEENCODINGNAME:
+			stream >> m_activeEncoding;
 			break;
 	
 		case MARKER_WINDOW_SIZE:
@@ -252,8 +259,8 @@ bool KCHMSettings::saveSettings( )
 	stream << MARKER_ACTIVETABWINDOW;
 	stream << m_activetabwindow;
 	
-	stream << MARKER_ACTIVEENCODING;
-	stream << m_activeencodinglcid;
+	stream << MARKER_ACTIVEENCODINGNAME;
+	stream << m_activeEncoding;
 	
 	// Save search history vector
 	stream << MARKER_SEARCHHISTORY;

@@ -22,13 +22,10 @@
 #ifndef KCHMSETTINGS_H
 #define KCHMSETTINGS_H
 
-#include <qstring.h>
-#include <q3valuelist.h>
+#include <QString>
+#include <QList>
 
 
-/**
-@author Georgy Yunaev
-*/
 class SavedBookmark;
 class QFileInfo;
 
@@ -67,16 +64,16 @@ class KCHMSettings
 				int			zoom;
 		};
 		
-		typedef 	Q3ValueList<QString>			search_saved_settings_t;
-		typedef 	Q3ValueList<SavedBookmark>	bookmark_saved_settings_t;
-		typedef 	Q3ValueList<SavedViewWindow>	viewindow_saved_settings_t;
+		typedef QList<QString>			search_saved_settings_t;
+		typedef QList<SavedBookmark>	bookmark_saved_settings_t;
+		typedef QList<SavedViewWindow>	viewindow_saved_settings_t;
 		
 		int							m_window_size_x;
 		int							m_window_size_y;
 		int							m_window_size_splitter;
 		int							m_activetabsystem;
 		int							m_activetabwindow;
-		int							m_activeencodinglcid;
+		QString						m_activeEncoding;
 		search_saved_settings_t		m_searchhistory;
 		bookmark_saved_settings_t	m_bookmarks;
 		viewindow_saved_settings_t	m_viewwindows;

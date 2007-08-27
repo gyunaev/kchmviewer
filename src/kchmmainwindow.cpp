@@ -106,8 +106,9 @@ KCHMMainWindow::KCHMMainWindow()
 	sizes.push_back( WND_X_SIZE - SPLT_X_SIZE );
 	m_windowSplitter->setSizes( sizes );
 	
-	// Connect actions
+	// Set up things
 	setupActions();
+	setupLangEncodingMenu();
 
 	// Resize main window
 	resize( WND_X_SIZE, WND_Y_SIZE );	
@@ -155,7 +156,9 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		m_chmFile = new_chmfile;
 		
 		// Show current encoding in status bar
-		showInStatusBar( i18n("Detected chm file charset: %1"). arg(m_chmFile->currentEncoding()->language) );
+		showInStatusBar( i18n("Detected file encoding: %1 ( %2 )") 
+		                 .arg( m_chmFile->currentEncoding()->family)
+		                 .arg( m_chmFile->currentEncoding()->qtcodec) );
 
 		// Make the file name absolute; we'll need it later
 		QDir qd;
@@ -197,15 +200,13 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		if ( m_currentSettings->loadSettings (fileName) )
 		{
 			const LCHMTextEncoding * encoding = 
-					m_chmFile->impl()->lookupByLCID(  m_currentSettings->m_activeencodinglcid );
+					m_chmFile->impl()->lookupByQtCodec(  m_currentSettings->m_activeEncoding );
 
 			m_tabWidget->setCurrentPage( m_currentSettings->m_activetabsystem );
 			
 			if ( encoding )
 			{
-				m_chmFile->setCurrentEncoding( encoding );
-//FIXME: encoding				
-//				m_searchToolbar->setChosenEncodingInMenu( encoding );
+				setTextEncoding( encoding );
 			}
 			
 			if ( m_searchTab )
@@ -230,15 +231,12 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		else
 		{
 			m_tabWidget->setCurrentPage (0);
-//FIXME: encoding			
-//			m_searchToolbar->setChosenEncodingInMenu( m_chmFile->currentEncoding() );
+			setTextEncoding( m_chmFile->currentEncoding() );
 			
 			if ( call_open_page )
 				openPage( m_chmFile->homeUrl() );
 		}
 
-//FIXME: encoding
-//		m_searchToolbar->setEnabled (true);
 		appConfig.addRecentFile( m_chmFilename );
 		recentFilesUpdate();
 		return true;
@@ -422,8 +420,24 @@ void KCHMMainWindow::showEvent( QShowEvent * )
 void KCHMMainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
 {
 	m_chmFile->setCurrentEncoding( encoding );
-//FIXME: encoding	
-//	m_searchToolbar->setChosenEncodingInMenu( encoding );
+	
+	// Find the appropriate encoding item in "Set encodings" menu
+	const QList<QAction *> encodings = m_encodingActions->actions();
+	
+	for ( QList<QAction *>::const_iterator it = encodings.begin();
+	      it != encodings.end();
+	      ++it )
+	{
+		const LCHMTextEncoding * enc = (const LCHMTextEncoding *) (*it)->data().value< void* > ();
+		
+		if ( !strcmp( enc->qtcodec, encoding->qtcodec ) )
+		{
+			if ( !(*it)->isChecked() )
+				(*it)->setChecked( true );
+			
+			break;
+		}
+	}
 	
 	// Because updateView() will call view->invalidate(), which clears the view->getOpenedPage(),
 	// we have to make a copy of it.
@@ -440,7 +454,7 @@ void KCHMMainWindow::closeChmFile( )
 	// Prepare the settings
 	if ( appConfig.m_HistoryStoreExtra )
 	{
-		m_currentSettings->m_activeencodinglcid = m_chmFile->currentEncoding()->winlcid;
+		m_currentSettings->m_activeEncoding = m_chmFile->currentEncoding()->qtcodec;
 		m_currentSettings->m_activetabsystem = m_tabWidget->currentPageIndex( );
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
 		
@@ -1398,8 +1412,11 @@ void KCHMMainWindow::setupActions()
 	help->addAction( i18n( "&About"), this, SLOT( actionAboutApp() ), QKeySequence( "F1" ) );
 	help->addAction( i18n( "About &Qt"), this, SLOT( actionAboutQt() ) );
 	help->addSeparator();
-	//FIXME: whatsthis
-	//help->addAction( i18n( "What's &This"), this, SLOT( whatsThis() ), QKeySequence( "SHIFT+F1" ) );
+	
+	// "What's this" action
+	QAction * whatsthis = QWhatsThis::createAction( this );
+	help->addAction( whatsthis );
+	viewToolbar->addAction( whatsthis );
 #endif
 		
 	menuBar()->addMenu( help );
@@ -1498,4 +1515,50 @@ void KCHMMainWindow::actionOpenRecentFile()
 	
 	if ( action )
 		loadChmFile( action->data().toString() );
+}
+
+void KCHMMainWindow::setupLangEncodingMenu()
+{
+	// Create the language selection menu.
+	QMenu * encodings = new QMenu( this );
+	
+	// Create the action group
+	m_encodingActions = new QActionGroup( this );
+	
+	// Add the codepage entries
+	const LCHMTextEncoding * enctable = LCHMFileImpl::getTextEncodingTable();
+	
+	for ( int idx = 0; (enctable + idx)->family; idx++ )
+	{
+		const LCHMTextEncoding * enc = enctable + idx;
+		
+		QAction * action = new QAction( this );
+		
+		QString text = i18n("%1 ( %2 )") .arg( enc->family) .arg( enc->qtcodec );
+		action->setText( text );
+		action->setData( qVariantFromValue( (void*) enc ) );
+		action->setCheckable( true );
+		
+		// Add to the action group, so only one is checkable
+		m_encodingActions->addAction( action );
+		
+		// Add to the menu
+		encodings->addAction( action );
+	}
+	
+	// Set up the Select Codepage action
+	view_Set_encoding_action->setMenu( encodings );
+	
+	// Connect the action group signal
+	connect( m_encodingActions,
+	         SIGNAL( triggered ( QAction * ) ),
+	         this,
+	         SLOT( actionEncodingChanged( QAction * ) ) );
+}
+
+
+void KCHMMainWindow::actionEncodingChanged( QAction * action )
+{
+	const LCHMTextEncoding * enc = (const LCHMTextEncoding *) action->data().value< void* > ();
+	setTextEncoding( enc );
 }

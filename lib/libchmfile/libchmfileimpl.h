@@ -205,6 +205,15 @@ class LCHMFileImpl
 		static const LCHMTextEncoding * lookupByLCID( short lcid );
 		
 		/*!
+		 * \brief Looks up for encoding by QtCodec
+		 * \param qtcodec Qt text codec name to look up
+		 * \return A pointer to encoding structure.
+		 *
+		 * \ingroup encoding
+		 */
+		static const LCHMTextEncoding * lookupByQtCodec( const QString& codec );
+	
+		/*!
 		 * \brief Get the encoding index
 		 * \param enc Encoding
 		 * \return An index in encoding table. getTextEncodingTable() + i gets the encoding.

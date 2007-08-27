@@ -28,12 +28,9 @@
  */
 typedef struct LCHMTextEncoding
 {
-	const char	*	language;		//! French, English, etc. language == 0 represents the end of table.
-	const char	*	sublanguage;	//! French:Canada, French:France etc. May be 0 - no sublanguage
-	int				winlcid;		//! Windows LCID for this language
-	int				wincodepage;	//! Windows codepage for this language.
-	int				wincharset;		//! Windows charset.
+	const char	*	family;			//! Cyrillic, Western, Greek... NULL pointer represents the end of table.
 	const char	*	qtcodec;		//! Qt text codec to use
+	const short	*	lcids;			//! List of LCIDs to use for this codepage. Ends with LCID 0.
 };
 
 

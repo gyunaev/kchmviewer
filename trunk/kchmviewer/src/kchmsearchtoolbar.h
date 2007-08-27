@@ -35,7 +35,6 @@ class KCHMSearchAndViewToolbar : public QToolBar
 		KCHMSearchAndViewToolbar (KCHMMainWindow *parent);
 	
 		void	setEnabled (bool enable);
-		void	setChosenEncodingInMenu( const LCHMTextEncoding * encoding );
 	
 	private slots:
 		void	onReturnPressed();
@@ -43,38 +42,11 @@ class KCHMSearchAndViewToolbar : public QToolBar
 		void	onBtnNextSearchResult();
 		void	onAccelFocusSearchField();
 		
-		/*
-		void	onBtnFontInc();
-		void	onBtnFontDec();
-		void	onBtnViewSource();
-		void	onBtnAddBookmark();
-		void	onBtnNextPageInToc();
-		void	onBtnPrevPageInToc();
-		*/
-		void	onMenuActivated ( int id );
-		
 	private:
 		void	search (bool forward);
 		
 		QMenu 				*	m_MenuView;
 		QComboBox			*	m_findBox;
-		QToolButton			*	m_buttonPrev;
-		QToolButton			*	m_buttonNext;
-		QToolButton			*	m_buttonFontInc;
-		QToolButton			*	m_buttonFontDec;
-		QToolButton			*	m_buttonViewSource;
-		QToolButton			*	m_buttonAddBookmark;
-		QToolButton			*	m_buttonNextPageInTOC;
-		QToolButton			*	m_buttonPrevPageInTOC;
-		QToolButton			*	m_buttonLocateInContent;
-		
-		int						m_checkedLanguageInMenu;
-		int						m_checkedEncodingInMenu;
-		
-		int						m_menuShowFullscreenMenuID;
-		int						m_menuShowContentWindowMenuID;
-		
-
 };
 
 

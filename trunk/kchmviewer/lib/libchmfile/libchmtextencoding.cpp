@@ -22,143 +22,319 @@
 #include "libchmfileimpl.h"
 #include "libchmtextencoding.h"
 
+// Do not try to embed those in the text_encoding_table, it does not work - at least with gcc.
+static short lcid_arabic[] =
+{
+	0x1401, 0x3C01, 0x0C01, 0x0801, 0x2C01, 0x3401, 0x3001, 0x1001,  
+	0x1801, 0x2001,	0x4001, 0x0401, 0x2801, 0x1C01,	0x3801,	0x2401,
+	0x0429, 0x0420,
+	0,
+};
+
+static short lcid_baltic[] =
+{
+	0x0425,	0x0426,	0x0427, 0
+};
+
+static short lcid_centralEuropean[] =
+{
+	0x041C,	0x041A,	0x0405,	0x040E,	0x0415,	0x0418,	0x081A, 0x041B,	0x0424, 0
+};
+
+static short lcid_ChineseSimplifiedGB18030[] =
+{ 
+	0x0404, 0 
+};
+
+
+static short lcid_ChineseSimplifiedGBK[] =
+{
+	0x0804, 0	
+};
+
+	
+static short lcid_ChineseSimplifiedGB2313[] =
+{ 
+	0x1004, 0 
+};
+
+static short lcid_ChineseTraditionalBig5[] =
+{
+	0x0C04, 0x1404, 0x0404,	0
+};
+
+static short lcid_ChineseTraditionalBigHKSCS[] =
+{
+	0x0404,	0
+};
+
+static short lcid_CyrillicCP1251[] =
+{
+	0x082C, 0x0423, 0x0402, 0x042F, 0x0419, 0x0C1A, 0x0444, 0x0422, 0x0843,	0
+};
+
+static short lcid_CyrillicKOI8R[] =
+{
+	0x7001, // artifical LCID
+	0
+};
+
+static short lcid_CyrillicBrokenCPKOI[] =
+{
+	0x7002, // artifical LCID
+		0
+};
+
+static short lcid_CyrillicBrokenKOICP[] =
+{
+	0x7003, // artifical LCID
+	0
+};
+
+
+static short lcid_Greek[] =
+{
+	0x0408,	0
+};
+
+static short lcid_Hebrew[] =
+{
+	0x040D,	0
+};
+
+static short lcid_Japanese_eucJP[] =
+{
+	0x0411,	0
+};
+
+
+static short lcid_Japanese_JIS7[] =
+{
+	0x0411,	0
+};
+
+static short lcid_Japanese_ShiftJIS[] =
+{
+	0x0411,	0
+};
+
+static short lcid_Korean_eucKR[] =
+{
+	0x0412,	0
+};
+
+static short lcid_TamilTSCII[] =
+{
+	0x0449,	0
+};
+
+static short lcid_ThaiTIS[] =
+{
+	0x041E,	0
+};
+
+static short lcid_UkrainianKOI[] =
+{
+	0x7006,	0
+};
+
+static short lcid_Turkish[] =
+{
+	0x042C, 0x041F, 0x0443,	0
+};
+
+static short lcid_Vietnamese[] =
+{
+	0x042A,	0
+};
+
+static short lcid_UnicodeUTF8[] =
+{
+	0x7004, // artifical LCID
+	0
+};
+
+static short lcid_UnicodeUTF16[] =
+{
+	0x7005, // artifical LCID
+	0
+};
+
+static short lcid_Western[] =
+{
+	0x0436, 0x042D, 0x0403, 0x0406, 0x0813, 0x0413, 0x0C09, 0x2809,
+	0x1009, 0x2409, 0x1809, 0x2009, 0x1409, 0x3409, 0x1C09, 0x2C09,
+	0x0809, 0x0409, 0x0438, 0x040B, 0x080C, 0x0C0C, 0x040C, 0x140C, 
+	0x100C, 0x0C07, 0x0407, 0x1407, 0x1007, 0x0807, 0x040F, 0x0421,
+	0x0410, 0x0810, 0x083E, 0x043E, 0x0414, 0x0814, 0x0416, 0x0816,
+	0x0432, 0x2C0A, 0x400A, 0x340A, 0x240A, 0x140A, 0x1C0A, 0x300A,
+	0x440A, 0x100A, 0x480A, 0x080A, 0x4C0A, 0x180A, 0x3C0A, 0x280A,
+	0x500A, 0x0C0A, 0x380A, 0x200A, 0x0441, 0x081D, 0x041D, 0x0434,
+	0x0435, 0x042B, 0x042C, 0x0439, 0x043A, 0x044E, 0x044F, 0x081A,
+	0x0443,
+	0
+};
+
+
 static const LCHMTextEncoding text_encoding_table [] = 
 {
-	{	"Afrikaans",0,			0x0436,	1252,	0,		"CP1252"	},
-	{	"Albanian",	0,			0x041C,	1250,	238,	"CP1250"	},
-	{	"Arabic",	"Algeria",	0x1401,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Bahrain",	0x3C01,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Egypt",	0x0C01,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Iraq",		0x0801,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Jordan",	0x2C01,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Kuwait",	0x3401,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Lebanon",	0x3001,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Libya",	0x1001,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Morocco",	0x1801,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Oman",		0x2001,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Qatar",	0x4001,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Saudi Arabia",	0x0401,	1256,	0,	"CP1256"	},
-	{	"Arabic",	"Syria",	0x2801,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"Tunisia",	0x1C01,	1256,	0,		"CP1256"	},
-	{	"Arabic",	"United Arab Emirates",	0x3801,	1256,	178,	"CP1256"	},
-	{	"Arabic",	"Yemen",	0x2401,	1256,	0,		"CP1256"	},
-	{	"Armenian",	0,			0x042B,	0,		0,		"Latin1"	},
-	{	"Azeri",	"Cyrillic",	0x082C,	1251,	0,		"CP1251"	},
-	{	"Azeri",	"Latin",	0x042C,	1254,	162,	"CP1254"	},
-	{	"Basque",	0,			0x042D,	1252,	0,		"CP1252"	},
-	{	"Belarusian",	0,		0x0423,	1251,	0,		"CP1251"	},
-	{	"Bulgarian",	0,		0x0402,	1251,	0,		"CP1251"	},
-	{	"Catalan",	0,	0x0403,	1252,	0,	"CP1252"	},
-	{	"Chinese",	"China",	0x0804,	936,	134,	"GBK"		},
-	{	"Chinese",	"Hong Kong SAR",	0x0C04,	950,	136,	"Big5"	},
-	{	"Chinese",	"Macau SAR",	0x1404,	950,	136,	"Big5"	},
-	{	"Chinese",	"Singapore",	0x1004,	936,	134,	"GB2313"	},
-	{	"Chinese",	"Taiwan",	0x0404,	950,	136,	"Big5"	}, // traditional
-	{	"Chinese",	"Taiwan - Big5-HKSCS",	0x0404,	950,	136,	"Big5-HKSCS"	},
-	{	"Chinese",	"Taiwan - GB18030",	0x0404,	950,	136,	"GB18030"	},
-	{	"Croatian",	0,	0x041A,	1250,	238,	"CP1250"	},
-	{	"Czech",	0,	0x0405,	1250,	238,	"CP1250"	},
-	{	"Danish",	0,	0x0406,	1252,	0,	"CP1252"	},
-	{	"Dutch",	"Belgium",	0x0813,	1252,	0,	"CP1252"	},
-	{	"Dutch",	"The Netherlands",	0x0413,	1252,	0,	"CP1252"	},
-	{	"English",	"Australia",	0x0C09,	1252,	0,	"CP1252"	},
-	{	"English",	"Belize",	0x2809,	1252,	0,	"CP1252"	},
-	{	"English",	"Canada",	0x1009,	1252,	0,	"CP1252"	},
-	{	"English",	"Caribbean",	0x2409,	1252,	0,	"CP1252"	},
-	{	"English",	"Ireland",	0x1809,	1252,	0,	"CP1252"	},
-	{	"English",	"Jamaica",	0x2009,	1252,	0,	"CP1252"	},
-	{	"English",	"New Zealand",	0x1409,	1252,	0,	"CP1252"	},
-	{	"English",	"Phillippines",	0x3409,	1252,	0,	"CP1252"	},
-	{	"English",	"South Africa",	0x1C09,	1252,	0,	"CP1252"	},
-	{	"English",	"Trinidad",	0x2C09,	1252,	0,	"CP1252"	},
-	{	"English",	"United Kingdom",	0x0809,	1252,	0,	"CP1252"	},
-	{	"English",	"United States",	0x0409,	1252,	0,	"CP1252"	},
-	{	"Estonian",	0,	0x0425,	1257,	186,	"CP1257"	},
-	{	"FYRO Macedonian",	0,	0x042F,	1251,	0,		"CP1251"	},
-	{	"Faroese",	0,	0x0438,	1252,	0,	"CP1252"	},
-	{	"Farsi",	0,	0x0429,	1256,	178,	"CP1256"	},
-	{	"Finnish",	0,	0x040B,	1252,	0,	"CP1252"	},
-	{	"French",	"Belgium",	0x080C,	1252,	0,	"CP1252"	},
-	{	"French",	"Canada",	0x0C0C,	1252,	0,	"CP1252"	},
-	{	"French",	"France",	0x040C,	1252,	0,	"CP1252"	},
-	{	"French",	"Luxembourg",	0x140C,	1252,	0,	"CP1252"	},
-	{	"French",	"Switzerland",	0x100C,	1252,	0,	"CP1252"	},
-	{	"German",	"Austria",	0x0C07,	1252,	0,	"CP1252"	},
-	{	"German",	"Germany",	0x0407,	1252,	0,	"CP1252"	},
-	{	"German",	"Liechtenstein",	0x1407,	1252,	0,	"CP1252"	},
-	{	"German",	"Luxembourg",	0x1007,	1252,	0,	"CP1252"	},
-	{	"German",	"Switzerland",	0x0807,	1252,	0,	"CP1252"	},
-	{	"Greek",	0,	0x0408,	1253,	161,	"CP1253"	},
-	{	"Hebrew",	0,	0x040D,	1255,	177,	"CP1255"	},
-	{	"Hindi",	0,	0x0439,	0,	0,	"Latin1"	},
-	{	"Hungarian",	0,	0x040E,	1250,	238,	"CP1250"	},
-	{	"Icelandic",	0,	0x040F,	1252,	0,	"CP1252"	},
-	{	"Indonesian",	0,	0x0421,	1252,	0,	"CP1252"	},
-	{	"Italian",	"Italy",	0x0410,	1252,	0,	"CP1252"	},
-	{	"Italian",	"Switzerland",	0x0810,	1252,	0,	"CP1252"	},
-	{	"Japanese",	"Shift-JIS",	0x0411,	932,	128,	"Shift-JIS"	},
-	{	"Japanese",	"JIS7",	0x0411,	932,	128,	"JIS7"	},
-	{	"Japanese",	"eucJP",	0x0411,	932,	128,	"eucJP"	},
-	{	"Korean",	0,	0x0412,	949,	129,	"eucKR"	},
-	{	"Latvian",	0,	0x0426,	1257,	186,	"CP1257"	},
-	{	"Lithuanian",	0,	0x0427,	1257,	186,	"CP1257"	},
-	{	"Malay",	"Brunei",	0x083E,	1252,	0,	"CP1252"	},
-	{	"Malay",	"Malaysia",	0x043E,	1252,	0,	"CP1252"	},
-	{	"Maltese",	0,	0x043A,	0,	0,	"Latin1"	},
-	{	"Marathi",	0,	0x044E,	0,	0,	"Latin1"	},
-	{	"Norwegian",	"Bokmal",	0x0414,	1252,	0,	"CP1252"	},
-	{	"Norwegian",	"Nynorsk",	0x0814,	1252,	0,	"CP1252"	},
-	{	"Polish",	0,	0x0415,	1250,	238,	"CP1250"	},
-	{	"Portuguese",	"Brazil",	0x0416,	1252,	0,	"CP1252"	},
-	{	"Portuguese",	"Portugal",	0x0816,	1252,	0,	"CP1252"	},
-	{	"Romanian",	"Romania",	0x0418,	1250,	238,	"CP1250"	},
-	{	"Russian",	"Cyrillic",	0x0419,	1251,	204,	"CP1251"	},
-	{	"Russian",	"KOI-8",	0x7001,	2251,	204,	"KOI8-R"	},
-	{	"Russian",	"KOI-8 (TOC 1251)",	0x7002,	3251,	0,	"CP1251/KOI8-R"	},
-	{	"Russian",	"Cyrillic (TOC KOI8)",	0x7003,	3251,	0,	"KOI8-R/CP1251"	},
-	{	"Sanskrit",	0,	0x044F,	0,	0,	"Latin1"	},
-	{	"Serbian",	"Cyrillic",	0x0C1A,	1251,	0,		"CP1251"	},
-	{	"Serbian",	"Latin",	0x081A,	1250,	238,	"CP1250"	},
-	{	"Setsuana",	0,	0x0432,	1252,	0,	"CP1252"	},
-	{	"Slovak",	0,	0x041B,	1250,	238,	"CP1250"	},
-	{	"Slovenian",	0,	0x0424,	1250,	238,	"CP1250"	},
-	{	"Spanish",	"Argentina",	0x2C0A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Bolivia",	0x400A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Chile",	0x340A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Colombia",	0x240A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Costa Rica",	0x140A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Dominican Republic",	0x1C0A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Ecuador",	0x300A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"El Salvador",	0x440A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Guatemala",	0x100A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Honduras",	0x480A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Mexico",	0x080A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Nicaragua",	0x4C0A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Panama",	0x180A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Paraguay",	0x3C0A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Peru",	0x280A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Puerto Rico",	0x500A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Spain",	0x0C0A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Uruguay",	0x380A,	1252,	0,	"CP1252"	},
-	{	"Spanish",	"Venezuela",	0x200A,	1252,	0,	"CP1252"	},
-	{	"Swahili",	0,	0x0441,	1252,	0,	"CP1252"	},
-	{	"Swedish",	"Finland",	0x081D,	1252,	0,	"CP1252"	},
-	{	"Swedish",	"Sweden",	0x041D,	1252,	0,	"CP1252"	},
-	{	"Tamil",	0,	0x0449,	0,	0,	"TSCII"	},
-	{	"Tatar",	0,	0x0444,	1251,	204,	"CP1251"	},
-	{	"Thai",	0,	0x041E,	874,	222,	"TIS-620"	},
-	{	"Turkish",	0,	0x041F,	1254,	162,	"CP1254"	},
-	{	"Ukrainian",	"Cyrillic",	0x0422,	1251,	0,	"CP1251"	},
-	{	"Ukrainian",	"KOI-8",	0x8422,	2251,	204,	"KOI8-U"	},
-	{	"Unicode",	"UTF-8",	0x7010,	0,	0,	"UTF-8"	},
-	{	"Unicode",	"UTF-16",	0x7011,	0,	0,	"UTF-16"	},
-	{	"Urdu",	0,	0x0420,	1256,	178,	"CP1256"	},
-	{	"Uzbek",	"Cyrillic",	0x0843,	1251,	0,	"CP1251"	},
-	{	"Uzbek",	"Latin",	0x0443,	1254,	162,	"CP1254"	},
-	{	"Vietnamese",	0,	0x042A,	1258,	163,	"CP1258"	},
-	{	"Xhosa",	0,	0x0434,	1252,	0,	"CP1252"	},
-	{	"Zulu",	0,	0x0435,	1252,	0,	"CP1252"	},
-	{	0,		0,	0,		0,	0,	0	}
+	{	
+		"Arabic",
+		"CP1256",
+		lcid_arabic
+	},
+	
+	{	
+		"Baltic",
+		"CP1257",
+		lcid_baltic
+	},
+		
+	{	
+		"Central European",		
+		"CP1250",
+		lcid_centralEuropean
+	},
+			
+	{	
+		"Chinese Simplified",	
+		"GB18030",
+		lcid_ChineseSimplifiedGB18030
+	},	
+		
+	{	
+		"Chinese Simplified",	
+		"GBK",
+		lcid_ChineseSimplifiedGBK
+	},
+		
+	{	
+		"Chinese Simplified",	
+		"GB2313",
+		lcid_ChineseSimplifiedGB2313
+	},
+		
+	{	
+		"Chinese Traditional",	
+		"Big5",
+		lcid_ChineseTraditionalBig5
+	},
+			
+	{	
+		"Chinese Traditional",	
+		"Big5-HKSCS",
+		lcid_ChineseTraditionalBigHKSCS
+	},
+		
+	{	
+		"Cyrillic",
+		"CP1251",
+		lcid_CyrillicCP1251
+	},
+		
+	{	
+		"Cyrillic",
+		"KOI8-R",
+		lcid_CyrillicKOI8R
+	},
+		
+	{	
+		"Cyrillic Broken",
+		"CP1251/KOI8-R",
+		lcid_CyrillicBrokenCPKOI
+	},
+		
+	{	
+		"Cyrillic Broken",
+		"KOI8-R/CP1251",
+		lcid_CyrillicBrokenKOICP
+	},
+		
+	{	
+		"Greek",
+		"CP1253",
+		lcid_Greek
+	},
+		
+	{	
+		"Hebrew",
+		"CP1255",
+		lcid_Hebrew
+	},
+		
+	{	
+		"Japanese",
+		"eucJP",
+		lcid_Japanese_eucJP
+	},
+		
+	{	
+		"Japanese",
+		"JIS7",
+		lcid_Japanese_JIS7
+	},
+		
+	{	
+		"Japanese",
+		"Shift-JIS",
+		lcid_Japanese_ShiftJIS
+	},
+		
+	{	
+		"Korean",
+		"eucKR",
+		lcid_Korean_eucKR
+	},
+		
+	{	
+		"Tamil",
+		"TSCII",
+		lcid_TamilTSCII
+	},
+		
+	{	
+		"Thai",
+		"TIS-620",
+		lcid_ThaiTIS
+	},
+		
+	{	
+		"Ukrainian",
+		"KOI8-U",
+		lcid_UkrainianKOI
+	},
+		
+	{	
+		"Turkish",
+		"CP1254",
+		lcid_Turkish
+	},
+		
+	{	
+		"Vietnamese",
+		"CP1258",
+		lcid_Vietnamese
+	},
+		
+	{	
+		"Unicode",
+		"UTF-8",
+		lcid_UnicodeUTF8
+	},
+		
+	{	
+		"Unicode",
+		"UTF-16",
+		lcid_UnicodeUTF16
+	},
+		
+	{	
+		"Western",
+		"CP1252",
+		lcid_Western
+	},
+		
+	{	0,						0,					0	}
 };
 
 
@@ -169,29 +345,31 @@ const LCHMTextEncoding * LCHMFileImpl::getTextEncodingTable()
 
 const LCHMTextEncoding * LCHMFileImpl::lookupByLCID( short lcid )
 {
-	for ( const LCHMTextEncoding * t = text_encoding_table; t->language; t++ )
-		if ( t->winlcid == lcid )
-			return t;
-			
+	for ( const LCHMTextEncoding * t = text_encoding_table; t->family; t++ )
+	{
+		for ( const short * lcids = t->lcids; *lcids; lcids++ )
+			if ( *lcids == lcid )
+				return t;
+	}
+	
 	return 0;
 }
 
-/*
-const LCHMTextEncoding * LCHMFileImpl::lookupByWinCharset( int charset )
-{
-	for ( const text_encoding_t * t = text_encoding_table; t->charset; t++ )
-		if ( t->wincharset == charset )
-			return t;
-			
-	return 0;
-}
-*/
 
 int LCHMFileImpl::getEncodingIndex( const LCHMTextEncoding * enc)
 {
-	for ( int i = 0; text_encoding_table[i].language; i++ )
+	for ( int i = 0; text_encoding_table[i].family; i++ )
 		if ( (text_encoding_table + i) == enc )
 			return i;
 			
 	return -1;
+}
+
+const LCHMTextEncoding * LCHMFileImpl::lookupByQtCodec(const QString & codec)
+{
+	for ( const LCHMTextEncoding * t = text_encoding_table; t->family; t++ )
+		if ( codec == t->qtcodec )
+			return t;
+
+	return 0;
 }

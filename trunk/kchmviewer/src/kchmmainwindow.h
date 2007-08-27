@@ -124,20 +124,11 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		void		actionSwitchToSearchTab();
 		void		actionSwitchToBookmarkTab();
 		
+		void		actionOpenRecentFile();
+	
 		// Link activation. MainWindow decides whether we should follow this link or not
 		// by setting up follow_link appropriately.
 		void 		activateLink ( const QString & link, bool& follow_link );
-	
-	private slots:
-		void slotHistoryMenuItemActivated ( int );
-		/*
-	
-		void slotChangeSettingsMenuItemActivated();
-		
-		
-		void slotToggleFullScreenMode( );
-		
-		*/
 		
 	protected:
 		// Reimplemented functions
@@ -153,12 +144,16 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		bool		loadChmFile ( const QString &fileName,  bool call_open_page = true );
 		void		closeChmFile();	
 		void		refreshCurrentBrowser();
-		void		updateHistoryMenu();
 		
 		void		showOrHideContextWindow( int tabindex );
 		void		showOrHideIndexWindow( int tabindex );
 		void		showOrHideSearchWindow( int tabindex );
 		
+		// Creates and initializes the recent files array, and adds the 
+		// entries logic to the menu
+		void		recentFilesInit( QMenu * menu );
+		void		recentFilesUpdate();
+	
 		bool		handleUserEvent( const KCHMUserEvent * event );
 		void		locateInContentTree( const QString& url );
 		
@@ -179,14 +174,17 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		LCHMFile			*	m_chmFile;
 		bool					m_FirstTimeShow;
 		
-		QMenu				*	m_recentFiles;
 		int						m_tabContextPage;	
 		int						m_tabIndexPage;
 		int						m_tabSearchPage;
 		int						m_tabBookmarkPage;
 	
 		KQTempFileKeeper		m_tempFileKeeper;
-				
+
+		int						m_numOfRecentFiles;
+		QVector<QAction*>		m_recentFiles;
+		QAction 			*	m_recentFileSeparator;
+	
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 		enum	auto_test_state_t
 		{

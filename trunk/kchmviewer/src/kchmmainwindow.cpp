@@ -90,9 +90,9 @@ KCHMMainWindow::KCHMMainWindow()
 	// Create the initial layout - a splitter with tab window in left, and text browser in right
 	m_windowSplitter = new QSplitter(this);
 	m_tabWidget = new KQTabWidget( m_windowSplitter );
-	m_viewWindowMgr = new KCHMViewWindowMgr( m_windowSplitter, menu_Windows, action_Close_window );
+	m_viewWindowMgr = new KCHMViewWindowMgr( m_windowSplitter );
 	
-	m_bookmarkWindow = new KCHMBookmarkWindow( m_tabWidget, menu_Bookmarks );
+	m_bookmarkWindow = new KCHMBookmarkWindow( m_tabWidget );
 
 	// Add the tabs
 	m_tabWidget->addTab( m_bookmarkWindow, i18n("Bookmarks") );
@@ -1386,6 +1386,12 @@ void KCHMMainWindow::setupActions()
 	         SIGNAL( activated() ),
 	         this,
 	         SLOT( actionNavigateNextInToc() ) );
+	
+	// m_bookmarkWindow fills and maintains 'Bookmarks' menu
+	m_bookmarkWindow->createMenu( this, menu_Bookmarks );
+	
+	// m_viewWindowMgr fills and maintains 'Window' menu
+	m_viewWindowMgr->createMenu( this, menu_Windows, action_Close_window );
 	
 	// Close Window goes directly to the window manager
 	connect( action_Close_window,

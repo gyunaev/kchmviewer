@@ -43,7 +43,7 @@ class KCHMBookmarkTreeViewItem : public QListWidgetItem
 
 
 
-KCHMBookmarkWindow::KCHMBookmarkWindow( QWidget *parent, QMenu * menuBookmarks )
+KCHMBookmarkWindow::KCHMBookmarkWindow( QWidget *parent )
 	: QWidget( parent ), Ui::TabBookmarks()
 {
 	// UIC code
@@ -74,7 +74,7 @@ KCHMBookmarkWindow::KCHMBookmarkWindow( QWidget *parent, QMenu * menuBookmarks )
 			 this, 
 			 SLOT( onEditBookmarkPressed( ) ) );
 	
-	m_menuBookmarks = menuBookmarks;
+	m_menuBookmarks = 0;
 	m_contextMenu = 0;
 	m_listChanged = false;
 }
@@ -174,8 +174,9 @@ void KCHMBookmarkWindow::invalidate( )
 	list->clear();
 }
 
-void KCHMBookmarkWindow::createMenu( KCHMMainWindow * parent )
+void KCHMBookmarkWindow::createMenu( KCHMMainWindow * parent, QMenu * menuBookmarks )
 {
+	m_menuBookmarks = menuBookmarks;
 	/*
 	// Create the main Bookmark menu
 	m_menuBookmarks = new KQMenu( parent );

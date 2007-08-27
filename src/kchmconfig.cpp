@@ -45,7 +45,7 @@ KCHMConfig::KCHMConfig()
 	m_LoadLatestFileOnStartup = false;
 	m_onNewChmClick = ACTION_ASK_USER;
 	m_onExternalLinkClick = ACTION_ASK_USER;
-	m_HistorySize = 10;
+	m_numOfRecentFiles = 10;
 	m_HistoryStoreExtra = true;
 	m_useSearchEngine = SEARCH_USE_MINE;
 	
@@ -76,7 +76,7 @@ bool KCHMConfig::load()
 	QString line;
 	char readbuf[4096];
 	bool getting_history = false;
-	m_History.clear();
+	m_recentFiles.clear();
 	
 	while ( file.readLine( readbuf, sizeof(readbuf) - 1 ) > 0 )
 	{
@@ -110,7 +110,7 @@ bool KCHMConfig::load()
 			else if ( key == "onExternalLinkClick" )
 				m_onExternalLinkClick = (choose_action_t) value.toInt();
 			else if ( key == "HistorySize" )
-				m_HistorySize = value.toInt();
+				m_numOfRecentFiles = value.toInt();
 			else if ( key == "HistoryStoreExtra" )
 				m_HistoryStoreExtra = value.toInt() ? true : false;
 			else if ( key == "QtBrowserPath" )
@@ -138,8 +138,8 @@ bool KCHMConfig::load()
 		}
 		else if ( getting_history )
 		{
-			if ( m_History.size() < m_HistorySize )
-				addFileToHistory( line );
+			if ( m_recentFiles.size() < m_numOfRecentFiles )
+				addRecentFile( line );
 		}
 		else
 			qWarning ("Unknown line in configuration: %s", line.ascii());
@@ -164,7 +164,7 @@ bool KCHMConfig::save( )
 
 	stream << "onNewChmClick=" << m_onNewChmClick << "\n";
 	stream << "onExternalLinkClick=" << m_onExternalLinkClick << "\n";
-	stream << "HistorySize=" << m_HistorySize << "\n";
+	stream << "HistorySize=" << m_numOfRecentFiles << "\n";
 	stream << "HistoryStoreExtra=" << m_HistoryStoreExtra << "\n";
 
 	stream << "QtBrowserPath=" << m_QtBrowserPath << "\n";
@@ -182,36 +182,21 @@ bool KCHMConfig::save( )
 	stream << "\n[history]\n";
 	
 	// Do not write all the history, but only the needed amount
-	for ( int i = 0; i < m_History.size(); i++ )
-		stream << m_History[m_History.size() - 1 - i] << "\n";
+	for ( int i = 0; i < m_recentFiles.size(); i++ )
+		stream << m_recentFiles[m_recentFiles.size() - 1 - i] << "\n";
 	
-	//	m_History
 	return true;
 }
 
-void KCHMConfig::addFileToHistory( const QString & file )
+void KCHMConfig::addRecentFile( const QString & filename )
 {
-	QStringList::Iterator itr = m_History.find( file );
+	m_recentFiles.removeAll( filename );
+	m_recentFiles.prepend( filename );
 	
-	// check whether file already exists in history - more it forward
-	if ( itr != m_History.end() )
+	while( m_recentFiles.size() > m_numOfRecentFiles )
 	{
-		m_History.erase( itr );
-		m_History.push_back(file);
-		return;
+		// Remove the appropriate history file
+		mainWindow->currentSettings()->removeSettings( m_recentFiles.last() );
+		m_recentFiles.removeLast();
 	}
-
-	if ( m_History.size() < m_HistorySize )
-	{
-		m_History.push_back( file );
-		return;
-	}
-	
-	// Remove a file from the front
-	QString filetoremove = m_History[0];
-	m_History.erase( m_History.begin() );
-	m_History.push_back( file );
-	
-	// And remove the appropriate history file
-	mainWindow->currentSettings()->removeSettings ( filetoremove );
 }

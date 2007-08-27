@@ -239,8 +239,8 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 
 //FIXME: encoding
 //		m_searchToolbar->setEnabled (true);
-		appConfig.addFileToHistory( m_chmFilename );
-		updateHistoryMenu();
+		appConfig.addRecentFile( m_chmFilename );
+		recentFilesUpdate();
 		return true;
 	}
 	else
@@ -408,9 +408,9 @@ void KCHMMainWindow::showEvent( QShowEvent * )
 	
 	if ( !parseCmdLineArgs( ) )
 	{
-		if ( appConfig.m_LoadLatestFileOnStartup && appConfig.m_History.size() > 0 )
+		if ( appConfig.m_LoadLatestFileOnStartup && appConfig.m_recentFiles.size() > 0 )
 		{
-			if ( loadChmFile ( appConfig.m_History[0] ) )
+			if ( loadChmFile( appConfig.m_recentFiles[0] ) )
 				return;
 		}
 		
@@ -576,26 +576,6 @@ void KCHMMainWindow::setupSignals( )
 #else /* !HAVE_SIGACTION */
 	signal (SIGCHLD, SIG_IGN);
 #endif /* HAVE_SIGACTION */
-}
-
-void KCHMMainWindow::slotHistoryMenuItemActivated( int item )
-{
-	if ( item < 0 || item >= (signed) appConfig.m_History.size() )
-		qFatal ("KCHMMainWindow::slotHistoryMenuItemActivated: bad history menu id %d", item);
-	
-	QString filename = appConfig.m_History[item];
-	
-	// remove it, so it will be added again at the history top, and will not shitf anything.
-//	appConfig.m_History.remove ( appConfig.m_History.begin() + item);
-	loadChmFile ( filename );
-}
-
-void KCHMMainWindow::updateHistoryMenu()
-{
-	m_recentFiles->clear ();
-	
-	for ( int i = appConfig.m_History.size() - 1; i >= 0; i-- )
-		m_recentFiles->insertItem( appConfig.m_History[i], i );
 }
 
 
@@ -884,7 +864,7 @@ void KCHMMainWindow::actionChangeSettings()
 	// Set up the parameters
 	dlg.m_radioOnBeginOpenDialog->setChecked ( !appConfig.m_LoadLatestFileOnStartup );
 	dlg.m_radioOnBeginOpenLast->setChecked ( appConfig.m_LoadLatestFileOnStartup );
-	dlg.m_historySize->setValue ( appConfig.m_HistorySize );
+	dlg.m_historySize->setValue ( appConfig.m_numOfRecentFiles );
 	dlg.m_rememberHistoryInfo->setChecked ( appConfig.m_HistoryStoreExtra );
 	
 	dlg.m_radioExtLinkOpenAlways->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_ALWAYS_OPEN );
@@ -927,7 +907,7 @@ void KCHMMainWindow::actionChangeSettings()
 	if ( dlg.exec() == QDialog::Accepted )
 	{
 		appConfig.m_LoadLatestFileOnStartup = dlg.m_radioOnBeginOpenLast->isChecked();
-		appConfig.m_HistorySize = dlg.m_historySize->value();
+		appConfig.m_numOfRecentFiles = dlg.m_historySize->value();
 		appConfig.m_HistoryStoreExtra = dlg.m_rememberHistoryInfo->isChecked();
 
 		if ( dlg.m_radioExtLinkOpenAlways->isChecked () )
@@ -997,14 +977,17 @@ void KCHMMainWindow::actionChangeSettings()
 		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceExternal->isChecked();
 		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceInternal->isChecked();
 		
+		if ( appConfig.m_numOfRecentFiles != m_numOfRecentFiles )
+			need_restart = true;
+		
 		appConfig.save();
 		
 		if ( need_restart )
 			QMessageBox::information( 
 			                          this,
 			                          APP_NAME,
-			                          i18n( "Changing browser view options or search engine used\n"
-			                                "requires restarting the application to take effect." )	);
+			                          i18n( "Changing browser view options, search engine used or recent "
+			                                "files size requires restarting the application to take effect." )	);
 	}
 }
 
@@ -1401,16 +1384,13 @@ void KCHMMainWindow::setupActions()
 	         qApp,
 	         SLOT( closeAllWindows() ) );
 	
-	//FIXME: recent files
-	m_recentFiles = new QMenu( fileMenu );
-	connect ( m_recentFiles, SIGNAL( activated(int) ), this, SLOT ( slotHistoryMenuItemActivated(int) ));
+	// Set up recent files
+	recentFilesInit( menu_File );
 	
-	fileMenu->insertItem( i18n( "&Recent files"), m_recentFiles );
-	fileMenu->insertSeparator();
-
 	// Quit
-	fileMenu->addAction( file_exit_action );
-
+	menu_File->addSeparator();	
+	menu_File->addAction( file_exit_action );
+	
 #if defined(USE_KDE)
 	QMenu *help = helpMenu( m_aboutDlgMenuText );
 #else
@@ -1423,7 +1403,7 @@ void KCHMMainWindow::setupActions()
 #endif
 		
 	menuBar()->addMenu( help );
-	updateHistoryMenu();
+	recentFilesUpdate();
 	
 	// Tab switching actions
 	(void) new QShortcut( QKeySequence( i18n("Alt+1") ),
@@ -1460,4 +1440,62 @@ void KCHMMainWindow::navSetBackEnabled(bool enabled)
 void KCHMMainWindow::navSetForwardEnabled(bool enabled)
 {
 	nav_actionForward->setEnabled( enabled );
+}
+
+
+void KCHMMainWindow::recentFilesInit( QMenu * menu )
+{
+	m_numOfRecentFiles = appConfig.m_numOfRecentFiles;
+	
+	if ( !m_recentFiles.isEmpty() )
+	{
+		for ( int i = 0; i < m_recentFiles.size(); i++ )
+			delete m_recentFiles[i];
+		
+		m_recentFiles.clear();
+	}
+	
+	m_recentFiles.resize( m_numOfRecentFiles );
+	
+	// Initialize the recent file actions
+	for ( int i = 0; i < m_numOfRecentFiles; ++i )
+	{
+		m_recentFiles[i] = new QAction( this );
+		m_recentFiles[i]->setVisible( false );
+		connect( m_recentFiles[i], SIGNAL( triggered() ), this, SLOT( actionOpenRecentFile()) );
+	}
+	
+	// Add the separator, and actions
+	m_recentFileSeparator = menu->addSeparator();
+	
+	for ( int i = 0; i < m_numOfRecentFiles; ++i )
+		menu->addAction( m_recentFiles[i] );
+	
+}
+
+void KCHMMainWindow::recentFilesUpdate()
+{
+	// Set the actions
+	for ( int i = 0; i < m_numOfRecentFiles; ++i )
+	{
+		if ( i < appConfig.m_recentFiles.size() )
+		{
+			QString text = tr("&%1 %2").arg(i + 1).arg( QFileInfo( appConfig.m_recentFiles[i] ).fileName() );
+			m_recentFiles[i]->setText( text );
+			m_recentFiles[i]->setData( appConfig.m_recentFiles[i] );
+			m_recentFiles[i]->setVisible( true );
+		}
+		else
+			m_recentFiles[i]->setVisible( false );
+	}
+	
+	m_recentFileSeparator->setVisible( !appConfig.m_recentFiles.isEmpty() );
+}
+
+void KCHMMainWindow::actionOpenRecentFile()
+{
+	QAction *action = qobject_cast<QAction *>(sender());
+	
+	if ( action )
+		loadChmFile( action->data().toString() );
 }

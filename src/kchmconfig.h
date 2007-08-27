@@ -53,7 +53,7 @@ public:
 	bool	load();
 	bool	save();
 
-	void	addFileToHistory ( const QString& file );
+	void	addRecentFile( const QString& file );
 			
 public:
 	QString				m_datapath;
@@ -62,7 +62,7 @@ public:
 	bool				m_LoadLatestFileOnStartup;
 	choose_action_t		m_onNewChmClick;
 	choose_action_t		m_onExternalLinkClick;
-	int					m_HistorySize;
+	int					m_numOfRecentFiles;
 	bool				m_HistoryStoreExtra;
 	use_search_engine	m_useSearchEngine;
 			
@@ -76,7 +76,7 @@ public:
 	bool				m_advUseInternalEditor;
 	QString				m_advExternalEditorPath;
 	
-	QStringList			m_History;
+	QStringList			m_recentFiles;
 };
 
 extern KCHMConfig appConfig;

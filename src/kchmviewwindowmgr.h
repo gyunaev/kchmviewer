@@ -26,9 +26,6 @@
 #include "forwarddeclarations.h"
 #include "kchmsettings.h"
 
-#include <q3valuevector.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 class KCHMViewWindowMgr : public QTabWidget
 {
@@ -60,6 +57,7 @@ class KCHMViewWindowMgr : public QTabWidget
 		void	closeCurrentWindow();
 		
 	protected slots:
+		void	openNewTab();
 		void	onTabChanged( QWidget * newtab );
 		void	onCloseWindow( int id );
 		void	onActiveWindow( int id );
@@ -84,7 +82,7 @@ class KCHMViewWindowMgr : public QTabWidget
         QList<int>     					m_idSlot;
         typedef QList<int>::iterator	IdIterator;
 		
-		QPushButton			*	m_closeButton;
+		QToolButton			*	m_closeButton;
 		QMenu 				*	m_menuWindow;
 		QAction				*	m_actionCloseWindow;
 };

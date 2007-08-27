@@ -42,16 +42,28 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent, QMenu * menuWindow, QActi
 	// on current tab changed
 	connect( this, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
 	
-	// Create an iconset for the button
-	QIcon iset( ":/images/closetab.png" );
-	
-	// Create a pushbutton
-	m_closeButton = new QPushButton( iset, QString::null, this );
-	m_closeButton->setFlat( true );
+	// Create a close button
+	m_closeButton = new QToolButton( this );
+	m_closeButton->setCursor( Qt::ArrowCursor );
+	m_closeButton->setAutoRaise( true );
+	m_closeButton->setIcon( QIcon( ":/images/closetab.png" ) );
+	m_closeButton->setToolTip( i18n("Close current page") );
 	m_closeButton->setEnabled( false );
 	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( closeCurrentWindow() ) );
 	
+	// Put it there
 	setCornerWidget( m_closeButton, Qt::TopRightCorner );
+	
+	// Create a "new tab" button
+	QToolButton * newButton = new QToolButton( this );
+	newButton->setCursor( Qt::ArrowCursor );
+	newButton->setAutoRaise( true );
+	newButton->setIcon( QIcon( ":/images/addtab.png" ) );
+	newButton->setToolTip( i18n("Add page") );
+	connect( newButton, SIGNAL( clicked() ), this, SLOT( openNewTab() ) );
+	
+	// Put it there
+	setCornerWidget( newButton, Qt::TopLeftCorner );
 }
 
 KCHMViewWindowMgr::~KCHMViewWindowMgr( )
@@ -351,4 +363,9 @@ QKeySequence KCHMViewWindowMgr::key(int i)
 			return Key_9;
 	}
 	*/
+}
+
+void KCHMViewWindowMgr::openNewTab()
+{
+	::mainWindow->openPage( current()->getOpenedPage(), OPF_NEW_TAB | OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }

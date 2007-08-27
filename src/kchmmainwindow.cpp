@@ -221,7 +221,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 			}
 			
 			// Restore the main window size
-			Q3ValueList<int> sizes;
+			QList<int> sizes;
 			sizes.push_back( m_currentSettings->m_window_size_splitter );
 			sizes.push_back( m_currentSettings->m_window_size_x - m_currentSettings->m_window_size_splitter );
 			
@@ -1423,25 +1423,25 @@ void KCHMMainWindow::setupActions()
 	recentFilesUpdate();
 	
 	// Tab switching actions
-	(void) new QShortcut( QKeySequence( i18n("Alt+1") ),
+	(void) new QShortcut( QKeySequence( i18n("Ctrl+1") ),
 	                      this,
 	                      SLOT( actionSwitchToContentTab() ),
 	                      SLOT( actionSwitchToContentTab() ),
 	                      Qt::ApplicationShortcut );
 	
-	(void)  new QShortcut( QKeySequence( i18n("Alt+2") ),
+	(void)  new QShortcut( QKeySequence( i18n("Ctrl+2") ),
 	                       this,
 	                       SLOT( actionSwitchToIndexTab() ),
 	                       SLOT( actionSwitchToIndexTab() ),
 	                       Qt::ApplicationShortcut );
 	
-	(void) new QShortcut( QKeySequence( i18n("Alt+3") ),
+	(void) new QShortcut( QKeySequence( i18n("Ctrl+3") ),
 	                      this,
 	                      SLOT( actionSwitchToSearchTab() ),
 	                      SLOT( actionSwitchToSearchTab() ),
 	                      Qt::ApplicationShortcut );
 	
-	(void) new QShortcut( QKeySequence( i18n("Alt+4") ),
+	(void) new QShortcut( QKeySequence( i18n("Ctrl+4") ),
 	                      this,
 	                      SLOT( actionSwitchToBookmarkTab() ),
 	                      SLOT( actionSwitchToBookmarkTab() ),

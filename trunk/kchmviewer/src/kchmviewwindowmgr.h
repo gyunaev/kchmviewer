@@ -25,12 +25,19 @@
 #include "kde-qt.h"
 #include "forwarddeclarations.h"
 #include "kchmsettings.h"
+#include "ui_window_browser.h"
 
-
-class KCHMViewWindowMgr : public QTabWidget
+class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 {
 	Q_OBJECT
 	public:
+		enum SearchResultStatus
+		{
+			SearchResultFound,
+			SearchResultNotFound,
+			SearchResultFoundWrapped
+		};
+	
 		KCHMViewWindowMgr( QWidget *parent );
 		~KCHMViewWindowMgr( );
 		
@@ -53,8 +60,15 @@ class KCHMViewWindowMgr : public QTabWidget
 		void	restoreSettings( const KCHMSettings::viewindow_saved_settings_t& settings );
 		void	saveSettings( KCHMSettings::viewindow_saved_settings_t& settings );
 		
+		void	setCurrentPage( int index );
+		int		currentPageIndex() const;
+	
 	public slots:
 		void	closeCurrentWindow();
+		void	activateFind();
+		void	findNext();
+		void	findPrevious();
+		void	indicateFindResultStatus( SearchResultStatus status );
 		
 	protected slots:
 		void	openNewTab();
@@ -62,7 +76,11 @@ class KCHMViewWindowMgr : public QTabWidget
 		void	updateCloseButtons();
 		void	activateWindow();
 		
+		void	editTextEdited( const QString & text );
+	
 	private:
+		void	find();
+		
 		typedef struct
 		{
 			QWidget			*	widget;

@@ -53,14 +53,15 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 		//! Popups the print dialog, and prints the current page on the printer.
 		virtual bool	printCurrentPage();
 	
-		//! Initiates the find-in-page search, if succeed, cursor moved to the first entry
-		virtual void	searchWord( const QString & word, bool forward = true, bool casesensitive = false );
-	
 		//! Select the content of the whole page
 		virtual void	clipSelectAll();
 	
 		//! Copies the selected content to the clipboard
 		virtual void	clipCopy();
+	
+		virtual void	find( const QString& text, int flags );
+		virtual void	findNext();
+		virtual void	findPrevious();
 	
 		/*!
 		* Return current scrollbar position in view window. Saved on program exit. 
@@ -89,6 +90,8 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 		virtual void	slotAnchorClicked ( const QUrl& url);
 		
 	private:
+		void			find( bool forward, bool backward );
+		
 		QMenu * 		createPopupMenu ( const QPoint & pos );
 		
 		// Overriden to change the source
@@ -99,6 +102,10 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 				
 		int				m_zoomfactor;
 		bool			m_allowSourceChange;
+	
+		// Search data
+		QString			m_searchText;
+		int 	m_flags;
 };
 
 

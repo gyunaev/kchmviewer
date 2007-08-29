@@ -2,6 +2,10 @@
     <qresource prefix="/images" >
         <file>addtab.png</file>
         <file>closetab.png</file>
+        <file>find_close.png</file>
+        <file>find_next.png</file>
+        <file>find_previous.png</file>
+        <file>find_wrap.png</file>
         <file>icon_add_bookmark.png</file>
         <file>icon_back.png</file>
         <file>icon_find.png</file>

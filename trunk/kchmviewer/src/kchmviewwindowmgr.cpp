@@ -32,10 +32,13 @@
 
 
 KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
-	: QTabWidget( parent )
+	: QWidget( parent ), Ui::TabbedBrowser()
 {
+	// UIC
+	setupUi( this );
+	
 	// on current tab changed
-	connect( this, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
+	connect( tabWidget, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
 	
 	// Create a close button
 	m_closeButton = new QToolButton( this );
@@ -47,7 +50,7 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( closeCurrentWindow() ) );
 	
 	// Put it there
-	setCornerWidget( m_closeButton, Qt::TopRightCorner );
+	tabWidget->setCornerWidget( m_closeButton, Qt::TopRightCorner );
 	
 	// Create a "new tab" button
 	QToolButton * newButton = new QToolButton( this );
@@ -58,7 +61,22 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	connect( newButton, SIGNAL( clicked() ), this, SLOT( openNewTab() ) );
 	
 	// Put it there
-	setCornerWidget( newButton, Qt::TopLeftCorner );
+	tabWidget->setCornerWidget( newButton, Qt::TopLeftCorner );
+	
+	// Hide the search frame
+	frameFind->setVisible( false );
+	labelWrapped->setVisible( false );
+	
+	// Search Line edit
+	connect( editFind,
+	         SIGNAL( textEdited ( const QString & ) ),
+	         this, 
+	         SLOT( editTextEdited( const QString & ) ) );
+	
+	// Search toolbar buttons
+	connect( toolClose, SIGNAL(clicked()), frameFind, SLOT( hide()) );
+	connect( toolPrevious, SIGNAL(clicked()), this, SLOT( findPrevious()) );
+	connect( toolNext, SIGNAL(clicked()), this, SLOT( findNext()) );
 }
 
 KCHMViewWindowMgr::~KCHMViewWindowMgr( )
@@ -80,7 +98,7 @@ void KCHMViewWindowMgr::invalidate()
 
 KCHMViewWindow * KCHMViewWindowMgr::current()
 {
-	TabData& tab = findTab( currentPage() );
+	TabData& tab = findTab( tabWidget->currentPage() );
 	return tab.window;
 }
 
@@ -90,11 +108,13 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 	
 #if defined (USE_KDE)
 	if ( !appConfig.m_kdeUseQTextBrowser )
-		viewvnd = new KCHMViewWindow_KHTMLPart( this );
+		viewvnd = new KCHMViewWindow_KHTMLPart( tabWidget );
 	else
 #endif
-		viewvnd = new KCHMViewWindow_QTextBrowser( this );
+		viewvnd = new KCHMViewWindow_QTextBrowser( tabWidget );
 
+	editFind->installEventFilter( this );
+	
 	// Create the tab data structure
 	TabData tabdata;
 	tabdata.window = viewvnd;
@@ -106,14 +126,19 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 	         this,
 	         SLOT( activateWindow() ) );
 	
-	addTab( tabdata.widget, "" );
+	// The UIC-generated TabWidget already has a tab, so replace it instead of adding
+	// if this is the first window added
+	if ( m_Windows.size() == 0 )
+		tabWidget->removeTab ( 0 );
+	
+	tabWidget->addTab( tabdata.widget, "" );
 
 	m_Windows.push_back( tabdata );
-	Q_ASSERT( m_Windows.size() == count() );
+	Q_ASSERT( m_Windows.size() == tabWidget->count() );
 		
 	// Set active if it is the first tab
 	if ( set_active || m_Windows.size() == 1 )
-		showPage( tabdata.widget );
+		tabWidget->showPage( tabdata.widget );
 	
 	// Handle clicking on link in browser window
 	connect( viewvnd->getQObject(), 
@@ -148,7 +173,7 @@ void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 	if ( title.length() > 25 )
 		title = title.left( 22 ) + "...";
 
-	setTabLabel( window->getQWidget(), title );
+	tabWidget->setTabLabel( window->getQWidget(), title );
 	tab.action->setText( title );
 	
 	updateCloseButtons();
@@ -160,7 +185,7 @@ void KCHMViewWindowMgr::closeCurrentWindow( )
 	if ( m_Windows.size() == 1 )
 		return;
 			
-	TabData& tab = findTab( currentPage() );
+	TabData& tab = findTab( tabWidget->currentPage() );
 	closeWindow( tab );
 }
 
@@ -177,7 +202,7 @@ void KCHMViewWindowMgr::closeWindow( const TabData & tab )
 
 	m_menuWindow->removeAction( tab.action );
 	
-	removePage( tab.widget );
+	tabWidget->removePage( tab.widget );
 	delete tab.window;
 	delete tab.action;
 	
@@ -210,9 +235,9 @@ void KCHMViewWindowMgr::saveSettings( KCHMSettings::viewindow_saved_settings_t &
 {
 	settings.clear();
 	
-	for ( int i = 0; i < count(); i++ )
+	for ( int i = 0; i < tabWidget->count(); i++ )
 	{
-		QWidget * p = page( i );
+		QWidget * p = tabWidget->page( i );
 		TabData& tab = findTab( p );
 			
 		settings.push_back( 
@@ -255,7 +280,7 @@ void KCHMViewWindowMgr::activateWindow()
 			continue;
 		
 		QWidget *widget = (*it).widget;
-		showPage(widget);
+		tabWidget->showPage(widget);
 		break;
 	}
 }
@@ -268,4 +293,70 @@ KCHMViewWindowMgr::TabData & KCHMViewWindowMgr::findTab(QWidget * widget)
 		
 	qFatal( "KCHMViewWindowMgr::findTab did not find tab" );
 	abort(); // to satisfy gcc
+}
+
+void KCHMViewWindowMgr::setCurrentPage(int index)
+{
+	tabWidget->setCurrentPage( index );
+}
+
+int KCHMViewWindowMgr::currentPageIndex() const
+{
+	return tabWidget->currentPageIndex();
+}
+
+
+void KCHMViewWindowMgr::indicateFindResultStatus( SearchResultStatus status )
+{
+	QPalette p = editFind->palette();
+	
+	if ( status == SearchResultNotFound )
+		p.setColor( QPalette::Active, QPalette::Base, QColor(255, 102, 102) );
+	else
+		p.setColor( QPalette::Active, QPalette::Base, Qt::white );
+	
+	editFind->setPalette( p );
+	labelWrapped->setVisible( status == SearchResultFoundWrapped );
+}
+
+
+void KCHMViewWindowMgr::activateFind()
+{
+	frameFind->show();
+	labelWrapped->setVisible( false );
+	editFind->setFocus( Qt::ShortcutFocusReason );
+	editFind->selectAll();
+}
+
+
+void KCHMViewWindowMgr::find()
+{
+	int flags = 0;
+	
+	if ( checkCase->isChecked() )
+		flags |= KCHMViewWindow::SEARCH_CASESENSITIVE;
+	
+	if ( checkWholeWords->isChecked() )
+		flags |= KCHMViewWindow::SEARCH_WHOLEWORDS;
+
+	current()->find( editFind->text(), flags );
+		
+	if ( !frameFind->isVisible() )
+		frameFind->show();
+}
+
+
+void KCHMViewWindowMgr::editTextEdited(const QString &)
+{
+	find();
+}
+
+void KCHMViewWindowMgr::findNext()
+{
+	current()->findNext();
+}
+
+void KCHMViewWindowMgr::findPrevious()
+{
+	current()->findPrevious();
 }

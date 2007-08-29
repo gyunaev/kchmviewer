@@ -29,6 +29,12 @@
 class KCHMViewWindow
 {
 	public:
+		enum
+		{
+			SEARCH_CASESENSITIVE = 0x10,
+			SEARCH_WHOLEWORDS = 0x20
+		};
+	
 		KCHMViewWindow ( QTabWidget * parent );
 		virtual ~KCHMViewWindow();
 	
@@ -48,8 +54,10 @@ class KCHMViewWindow
 		//! Popups the print dialog, and prints the current page on the printer.
 		virtual bool	printCurrentPage() = 0;
 	
-		//! Continues the find-in-page search forward or backward
-		virtual void	searchWord( const QString & word, bool forward = true, bool casesensitive = false ) = 0;
+		//! Search function. find() starts new search, findNext and findPrevious continue it
+		virtual void	find( const QString& text, int flags ) = 0;
+		virtual void	findNext() = 0;
+		virtual void	findPrevious() = 0;
 	
 		//! Return current ZoomFactor.
 		virtual int		getZoomFactor() const = 0;

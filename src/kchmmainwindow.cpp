@@ -43,7 +43,6 @@
 #include "kchmsearchwindow.h"
 #include "kchmbookmarkwindow.h"
 #include "kchmtreeviewitem.h"
-#include "kchmsearchtoolbar.h"
 #include "kchmsettings.h"
 #include "kchmsetupdialog.h"
 #include "kchmviewwindow.h"
@@ -119,9 +118,6 @@ KCHMMainWindow::KCHMMainWindow()
 	m_useShortAutotest = false;
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
-	/* FIXME: accelerators -> actions
-	accel->connectItem ( accel->insertItem ( Key_F3 ), m_searchToolbar, SLOT ( onBtnNextSearchResult() ) );
-*/
 	statusBar()->show();
 	setIcon( QPixmap(":/images/application.png") );
 
@@ -869,6 +865,7 @@ void KCHMMainWindow::actionEditSelectAll()
 
 void KCHMMainWindow::actionFindInPage()
 {
+	m_viewWindowMgr->activateFind();
 }
 
 void KCHMMainWindow::actionChangeSettings()
@@ -1451,6 +1448,13 @@ void KCHMMainWindow::setupActions()
 	                      this,
 	                      SLOT( actionSwitchToBookmarkTab() ),
 	                      SLOT( actionSwitchToBookmarkTab() ),
+	                      Qt::ApplicationShortcut );
+
+	// Find next global shortcut
+	(void) new QShortcut( QKeySequence( i18n("F3") ),
+	                      m_viewWindowMgr,
+	                      SLOT( findNext() ),
+	                      SLOT( findNext() ),
 	                      Qt::ApplicationShortcut );
 }
 

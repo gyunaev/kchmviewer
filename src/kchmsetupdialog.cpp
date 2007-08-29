@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004-2007 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
+ *   Copyright (C) 2004-2005 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
  *   Please do not use email address above for bug reports; see            *
  *   the README file                                                       *
  *                                                                         *
@@ -19,35 +19,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef KCHMSEARCHTOOLBAR_H
-#define KCHMSEARCHTOOLBAR_H
+#include "kchmsetupdialog.h"
 
-#include "kde-qt.h"
-#include "forwarddeclarations.h"
-
-#include "libchmtextencoding.h"
-
-
-class KCHMSearchAndViewToolbar : public QToolBar
+KCHMSetupDialog::KCHMSetupDialog(QWidget *parent)
+	: QDialog(parent), Ui::DialogSetup()
 {
-	Q_OBJECT
-	public:
-		KCHMSearchAndViewToolbar (KCHMMainWindow *parent);
-	
-		void	setEnabled (bool enable);
-	
-	private slots:
-		void	onReturnPressed();
-		void	onBtnPrevSearchResult();
-		void	onBtnNextSearchResult();
-		void	onAccelFocusSearchField();
-		
-	private:
-		void	search (bool forward);
-		
-		QMenu 				*	m_MenuView;
-		QComboBox			*	m_findBox;
-};
+	setupUi( this );
+}
 
-
-#endif
+KCHMSetupDialog::~KCHMSetupDialog()
+{
+}

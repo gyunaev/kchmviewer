@@ -19,17 +19,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//#include <qprinter.h>
-//#include <qpainter.h>
-//#include <q3simplerichtext.h>
-//#include <q3paintdevicemetrics.h>
-//#include <Q3PopupMenu>
 
 #include <QScrollBar>
 
 #include "kde-qt.h"
 #include "libchmurlfactory.h"
 #include "kchmmainwindow.h"
+#include "kchmviewwindowmgr.h"
 #include "kchmviewwindow_qtextbrowser.h"
 
 
@@ -171,18 +167,6 @@ bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 */
 }
 
-
-void KCHMViewWindow_QTextBrowser::searchWord( const QString & word, bool forward, bool )
-{
-	QTextDocument::FindFlags flags = 0;
-	
-	if ( !forward )
-		flags |= QTextDocument::FindBackward;
-	
-	if ( !find( word, flags) )
-		::mainWindow->showInStatusBar( i18n( "Search failed") );
-}
-
 void KCHMViewWindow_QTextBrowser::clipSelectAll( )
 {
 	selectAll();
@@ -294,4 +278,67 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	
 	qWarning("loadResource: Unknown type %d", type);
 	return QVariant();
+}
+
+void KCHMViewWindow_QTextBrowser::find(const QString & text, int flags)
+{
+	m_searchText = text;
+	m_flags = flags;
+	
+	find( false, false );
+}
+
+void KCHMViewWindow_QTextBrowser::findNext()
+{
+	find( true, false );
+}
+
+void KCHMViewWindow_QTextBrowser::findPrevious()
+{
+	find( false, true );
+}
+
+void KCHMViewWindow_QTextBrowser::find( bool forward, bool backward )
+{
+	QTextDocument *doc = document();
+	QTextCursor c = textCursor();
+	QTextDocument::FindFlags options;
+	
+	::mainWindow->viewWindowMgr()->indicateFindResultStatus( KCHMViewWindowMgr::SearchResultFound );
+	
+	if ( c.hasSelection() )
+		c.setPosition( forward ? c.position() : c.anchor(), QTextCursor::MoveAnchor );
+	
+	QTextCursor newCursor = c;
+	
+	if ( !m_searchText.isEmpty() )
+	{
+		if ( backward )
+			options |= QTextDocument::FindBackward;
+		
+		if ( m_flags & SEARCH_CASESENSITIVE )
+			options |= QTextDocument::FindCaseSensitively;
+		
+		if ( m_flags & SEARCH_WHOLEWORDS )
+			options |= QTextDocument::FindWholeWords;
+		
+		newCursor = doc->find( m_searchText, c, options );
+		
+		if ( newCursor.isNull() )
+		{
+			QTextCursor ac( doc );
+			ac.movePosition( options & QTextDocument::FindBackward 
+			                 ? QTextCursor::End : QTextCursor::Start );
+			newCursor = doc->find( m_searchText, ac, options );
+			if ( newCursor.isNull() )
+			{
+				::mainWindow->viewWindowMgr()->indicateFindResultStatus( KCHMViewWindowMgr::SearchResultNotFound );
+				newCursor = c;
+			} 
+			else
+				::mainWindow->viewWindowMgr()->indicateFindResultStatus( KCHMViewWindowMgr::SearchResultFoundWrapped );
+		}
+	}
+	
+	setTextCursor( newCursor );
 }

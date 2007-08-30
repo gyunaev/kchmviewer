@@ -26,8 +26,6 @@
 #include "ui_dialog_topicselector.h"
 
 
-class QListViewItem;
-
 class KCHMDialogChooseUrlFromList : public QDialog, public Ui::DialogTopicSelector
 {
 	Q_OBJECT

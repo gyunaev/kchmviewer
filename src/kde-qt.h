@@ -51,7 +51,6 @@
 	#include <QApplication>
 	#include <QMainWindow>
 	#include <QStatusBar>
-//	#include <Qq3listview.h>
 	#include <QFileDialog>
 	#include <QMenuBar>
 	#include <QMenu>
@@ -63,17 +62,18 @@
 
 #endif /* USE_KDE */
 
-/* common non-wrapped UI classes */
+// common non-wrapped UI classes
 #include <QSplitter>
 #include <QToolButton>
-//#include <QHeader>
+#include <QHeaderView>
 #include <QTextBrowser>
 #include <QLayout>
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
 
-/* common utility classes */
+
+// common utility classes
 #include <QWhatsThis>
 #include <QString>
 #include <QTextEdit>
@@ -82,7 +82,13 @@
 #include <QRegExp>
 #include <QTimer>
 #include <QMap>
+#include <QShortcut>
+
+// events
 #include <QEventLoop>
+#include <QCloseEvent>
+#include <QShowEvent>
+#include <QEvent>
 
 
 class KQMainWindow : public KQ_CLASSNAME(MainWindow)
@@ -92,13 +98,6 @@ public:
 		: KQ_CLASSNAME(MainWindow) (parent, name, f) {};
 };
 
-/*
-class KQListView : public KQ_CLASSNAME(ListView)
-{
-public:
-	KQListView(QWidget *parent = 0, const char *name = 0, int f = 0);
-};
-*/
 
 class KQProgressModalDialog : public KQ_CLASSNAME(ProgressDialog)
 {
@@ -141,6 +140,19 @@ class KCHMShowWaitCursor
 		KCHMShowWaitCursor() { QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) ); }
 		~KCHMShowWaitCursor() { QApplication::restoreOverrideCursor(); }
 };
+
+
+// Forward declarations
+class KCHMMainWindow;
+class KCHMViewWindow;
+class KCHMIndexWindow;
+class KCHMSearchWindow;
+class KCHMBookmarkWindow;
+class KCHMSettings;
+class KCHMSearchAndViewToolbar;
+class KCHMViewWindow;
+class KCHMViewWindowMgr;
+class KCHMContentsWindow;
 
 				 
 #endif /* KDE_QT_H */

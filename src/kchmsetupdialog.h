@@ -18,11 +18,13 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #ifndef KCHMSETUPDIALOG_H
 #define KCHMSETUPDIALOG_H
 
 #include <QDialog>
 #include <ui_dialog_setup.h>
+
 
 class KCHMSetupDialog : public QDialog, public Ui::DialogSetup
 {

@@ -22,15 +22,14 @@
 #ifndef KQTEMPFILE_H
 #define KQTEMPFILE_H
 
-#include <q3valuevector.h>
-#include <qfile.h>
+#include <QList>
+#include <QFile>
 
-/*
+/*!
  * This class generates temp file names in race condition-safe way,
  * returns QFile and filename pairs, keeps the track of opened temp files,
  * and deletes them when program exist.
  */
-
 class KQTempFileKeeper
 {
 	public:
@@ -45,9 +44,9 @@ class KQTempFileKeeper
 		void	destroyTempFiles();
 		
 	private:
-		Q3ValueVector<QString>	m_tempFiles;
-		QString					m_tempDir;
-		unsigned int			m_fileNumber;
+		QList<QString>		m_tempFiles;
+		QString				m_tempDir;
+		unsigned int		m_fileNumber;
 };
 
 #endif /* KQTEMPFILE_H */

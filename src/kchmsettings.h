@@ -26,10 +26,6 @@
 #include <QList>
 
 
-class SavedBookmark;
-class QFileInfo;
-
-
 class KCHMSettings
 {
 	public:

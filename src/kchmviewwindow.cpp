@@ -170,9 +170,9 @@ QMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
 			m_contextMenuLink = createStandardContextMenu( parent );
 			m_contextMenuLink->insertSeparator();
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(slotOpenPageInNewTab()), QKeySequence("Shift+Enter") );
+			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(onOpenPageInNewTab()), QKeySequence("Shift+Enter") );
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(slotOpenPageInNewBackgroundTab()), QKeySequence("Ctrl+Enter") );
+			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(onOpenPageInNewBackgroundTab()), QKeySequence("Ctrl+Enter") );
 		}
 		
 		setTabKeeper( link );

@@ -28,11 +28,6 @@
 
 #include "kde-qt.h"
 
-#include <QEvent>
-#include <QShowEvent>
-#include <QCloseEvent>
-#include <QShortcut>
-
 #include "libchmfile.h"
 #include "libchmfileimpl.h"
 #include "libchmurlfactory.h"
@@ -136,7 +131,7 @@ KCHMMainWindow::~KCHMMainWindow()
 
 
 
-bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page )
+bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 {
 	LCHMFile * new_chmfile = new LCHMFile();
 	
@@ -145,7 +140,7 @@ bool KCHMMainWindow::loadChmFile ( const QString &fileName, bool call_open_page 
 		// The new file is opened, so we can close the old one
 		if ( m_chmFile )
 		{
-			closeChmFile( );
+			closeFile( );
 			delete m_chmFile;
 		}
 	
@@ -404,7 +399,7 @@ void KCHMMainWindow::showEvent( QShowEvent * )
 	{
 		if ( appConfig.m_LoadLatestFileOnStartup && appConfig.m_recentFiles.size() > 0 )
 		{
-			if ( loadChmFile( appConfig.m_recentFiles[0] ) )
+			if ( loadFile( appConfig.m_recentFiles[0] ) )
 				return;
 		}
 		
@@ -445,7 +440,7 @@ void KCHMMainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
 	currentBrowser()->openUrl( url );
 }
 
-void KCHMMainWindow::closeChmFile( )
+void KCHMMainWindow::closeFile( )
 {
 	// Prepare the settings
 	if ( appConfig.m_HistoryStoreExtra )
@@ -477,7 +472,7 @@ void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 	// Save the settings if we have something opened
 	if ( m_chmFile )
 	{
-		closeChmFile( );
+		closeFile( );
 		delete m_chmFile;
 		m_chmFile = 0;
 	}
@@ -531,7 +526,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	if ( !filename.isEmpty() )
 	{
-		if ( !loadChmFile( QString::fromLocal8Bit( filename )) )
+		if ( !loadFile( QString::fromLocal8Bit( filename )) )
 			return true; // skip the latest checks, but do not exit from the program
 
 		if ( !search_index.isEmpty() )
@@ -669,17 +664,17 @@ KCHMViewWindow * KCHMMainWindow::currentBrowser( ) const
 	return m_viewWindowMgr->current();
 }
 
-void KCHMMainWindow::slotOpenPageInNewTab( )
+void KCHMMainWindow::onOpenPageInNewTab( )
 {
 	openPage( currentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_CONTENT_TREE );
 }
 
-void KCHMMainWindow::slotOpenPageInNewBackgroundTab( )
+void KCHMMainWindow::onOpenPageInNewBackgroundTab( )
 {
 	openPage( currentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_BACKGROUND );
 }
 
-void KCHMMainWindow::slotBrowserChanged( KCHMViewWindow * newbrowser )
+void KCHMMainWindow::browserChanged( KCHMViewWindow * newbrowser )
 {
 	locateInContentTree( newbrowser->getOpenedPage() );
 }
@@ -719,7 +714,7 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 		QString chmfile = event->m_args[0];
 		QString openurl = event->m_args.size() > 1 ? event->m_args[1] : "/";
 				
-		return loadChmFile( chmfile, false ) && openPage( openurl );
+		return loadFile( chmfile, false ) && openPage( openurl );
 	}
 	else if ( event->m_action == "openPage" )
 	{
@@ -838,7 +833,7 @@ void KCHMMainWindow::actionOpenFile()
 #endif
 
 	if ( !fn.isEmpty() )
-		loadChmFile( fn );
+		loadFile( fn );
 	else
 	{
 		if ( !m_chmFile )
@@ -865,7 +860,7 @@ void KCHMMainWindow::actionEditSelectAll()
 
 void KCHMMainWindow::actionFindInPage()
 {
-	m_viewWindowMgr->activateFind();
+	m_viewWindowMgr->onActivateFind();
 }
 
 void KCHMMainWindow::actionChangeSettings()
@@ -1453,8 +1448,8 @@ void KCHMMainWindow::setupActions()
 	// Find next global shortcut
 	(void) new QShortcut( QKeySequence( i18n("F3") ),
 	                      m_viewWindowMgr,
-	                      SLOT( findNext() ),
-	                      SLOT( findNext() ),
+	                      SLOT( onFindNext() ),
+	                      SLOT( onFindNext() ),
 	                      Qt::ApplicationShortcut );
 
 	// Context menu
@@ -1462,12 +1457,12 @@ void KCHMMainWindow::setupActions()
 	
 	m_contextMenu->insertItem ( "&Open this link in a new tab",
 	                          this, 
-	                          SLOT( slotOpenPageInNewTab() ), 
+	                          SLOT( onOpenPageInNewTab() ), 
 	                          QKeySequence( "Shift+Enter" ) );
 	
 	m_contextMenu->insertItem ( "&Open this link in a new background tab", 
 	                          this, 
-	                          SLOT( slotOpenPageInNewBackgroundTab() ),
+	                          SLOT( onOpenPageInNewBackgroundTab() ),
 	                          QKeySequence( "Ctrl+Enter" ) );
 }
 
@@ -1537,7 +1532,7 @@ void KCHMMainWindow::actionOpenRecentFile()
 	QAction *action = qobject_cast<QAction *>(sender());
 	
 	if ( action )
-		loadChmFile( action->data().toString() );
+		loadFile( action->data().toString() );
 }
 
 void KCHMMainWindow::setupLangEncodingMenu()

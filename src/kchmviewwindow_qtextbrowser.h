@@ -25,7 +25,6 @@
 #include "kde-qt.h"
 
 #include "kchmviewwindow.h"
-#include "kchmsourcefactory.h"
 
 
 class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
@@ -60,8 +59,8 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 		virtual void	clipCopy();
 	
 		virtual void	find( const QString& text, int flags );
-		virtual void	findNext();
-		virtual void	findPrevious();
+		virtual void	onFindNext();
+		virtual void	onFindPrevious();
 	
 		/*!
 		* Return current scrollbar position in view window. Saved on program exit. 
@@ -87,7 +86,7 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 		void	linkClicked ( const QString & newlink, bool& follow_link );
 	
 	private slots:
-		virtual void	slotAnchorClicked ( const QUrl& url);
+		virtual void	onAnchorClicked ( const QUrl& url);
 		
 	private:
 		void			find( bool forward, bool backward );

@@ -34,16 +34,13 @@ class KCHMContentsWindow : public QWidget, public Ui::TabContents
     	KCHMContentsWindow( QWidget *parent = 0 );
 		~KCHMContentsWindow();
 		
-		//QRect	tip( const QPoint & p );
-		
 		void	refillTableOfContents();
 		void	showItem( KCHMIndTocItem * item );
 		
 		KCHMIndTocItem *	getTreeItem( const QString& url );
 		
 	public slots:
-		void	contextMenuRequested ( const QPoint &point );
-		// FIXME: slot naming
+		void	onContextMenuRequested ( const QPoint &point );
 		void	onClicked ( QTreeWidgetItem * item, int column );
 	
 	private:

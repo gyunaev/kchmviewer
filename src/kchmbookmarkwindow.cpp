@@ -22,7 +22,6 @@
 #include "kchmbookmarkwindow.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
-#include "kchmlistitemtooltip.h"
 #include "kchmtreeviewitem.h"
 
 
@@ -217,14 +216,12 @@ void KCHMBookmarkWindow::onItemDoubleClicked(QListWidgetItem *item)
 	KCHMBookmarkTreeViewItem * treeitem = (KCHMBookmarkTreeViewItem *) item;
 	
 	if ( ::mainWindow->currentBrowser()->getOpenedPage() != treeitem->url )
-	::mainWindow->openPage( treeitem->url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+		::mainWindow->openPage( treeitem->url, KCHMMainWindow::OPF_CONTENT_TREE | KCHMMainWindow::OPF_ADD2HISTORY );
 	
 	::mainWindow->currentBrowser()->setScrollbarPosition(treeitem->scroll_y);
 }
 
 
-void KCHMBookmarkWindow::contextMenuEvent(QContextMenuEvent * event)
-{
 /*
 	if ( !m_contextMenu )
 	m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
@@ -236,5 +233,3 @@ void KCHMBookmarkWindow::contextMenuEvent(QContextMenuEvent * event)
 	::mainWindow->currentBrowser()->setTabKeeper( treeitem->url );
 	m_contextMenu->popup( point );
 */
-}
-

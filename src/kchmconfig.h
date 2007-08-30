@@ -28,55 +28,52 @@
 extern const char * APP_PATHINUSERDIR;
 
 
-/**
-@author Georgy Yunaev
-*/
 class KCHMConfig
 {
-public:
-	enum choose_action_t
-	{
-		ACTION_ALWAYS_OPEN,
-		ACTION_ASK_USER,
-		ACTION_DONT_OPEN
-	};
+	public:
+		enum choose_action_t
+		{
+			ACTION_ALWAYS_OPEN,
+			ACTION_ASK_USER,
+			ACTION_DONT_OPEN
+		};
+		
+		enum use_search_engine
+		{
+			SEARCH_USE_CHM,
+			SEARCH_USE_MINE,
+		};
+		
+		KCHMConfig();
+		~KCHMConfig();
+		
+		bool	load();
+		bool	save();
 	
-	enum use_search_engine
-	{
-		SEARCH_USE_CHM,
-  		SEARCH_USE_MINE,
-	};
-	
-    KCHMConfig();
-	~KCHMConfig();
-	
-	bool	load();
-	bool	save();
-
-	void	addRecentFile( const QString& file );
-			
-public:
-	QString				m_datapath;
-	QString				m_lastOpenedDir;
-	
-	bool				m_LoadLatestFileOnStartup;
-	choose_action_t		m_onNewChmClick;
-	choose_action_t		m_onExternalLinkClick;
-	int					m_numOfRecentFiles;
-	bool				m_HistoryStoreExtra;
-	use_search_engine	m_useSearchEngine;
-			
-	QString				m_QtBrowserPath;
-	bool				m_kdeUseQTextBrowser;
-	bool				m_kdeEnableJS;
-	bool				m_kdeEnableJava;
-	bool				m_kdeEnablePlugins;
-	bool				m_kdeEnableRefresh;
-	
-	bool				m_advUseInternalEditor;
-	QString				m_advExternalEditorPath;
-	
-	QStringList			m_recentFiles;
+		void	addRecentFile( const QString& file );
+				
+	public:
+		QString				m_datapath;
+		QString				m_lastOpenedDir;
+		
+		bool				m_LoadLatestFileOnStartup;
+		choose_action_t		m_onNewChmClick;
+		choose_action_t		m_onExternalLinkClick;
+		int					m_numOfRecentFiles;
+		bool				m_HistoryStoreExtra;
+		use_search_engine	m_useSearchEngine;
+				
+		QString				m_QtBrowserPath;
+		bool				m_kdeUseQTextBrowser;
+		bool				m_kdeEnableJS;
+		bool				m_kdeEnableJava;
+		bool				m_kdeEnablePlugins;
+		bool				m_kdeEnableRefresh;
+		
+		bool				m_advUseInternalEditor;
+		QString				m_advExternalEditorPath;
+		
+		QStringList			m_recentFiles;
 };
 
 extern KCHMConfig appConfig;

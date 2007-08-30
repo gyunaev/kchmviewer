@@ -19,14 +19,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QHeaderView>
 
 #include "kde-qt.h"
 
 #include "libchmfile.h"
 
 #include "kchmcontentswindow.h"
-#include "kchmlistitemtooltip.h"
 #include "kchmmainwindow.h"
 #include "kchmtreeviewitem.h"
 
@@ -53,7 +51,7 @@ KCHMContentsWindow::KCHMContentsWindow( QWidget *parent )
 	connect( tree, 
 	         SIGNAL( customContextMenuRequested ( const QPoint & ) ),
 	         this, 
-	         SLOT( contextMenuRequested( const QPoint & ) ) );
+	         SLOT( onContextMenuRequested( const QPoint & ) ) );
 }
 
 KCHMContentsWindow::~KCHMContentsWindow()
@@ -112,7 +110,7 @@ void KCHMContentsWindow::onClicked(QTreeWidgetItem * item, int)
 	::mainWindow->activateLink( treeitem->getUrl(), unused );
 }
 
-void KCHMContentsWindow::contextMenuRequested(const QPoint & point)
+void KCHMContentsWindow::onContextMenuRequested(const QPoint & point)
 {
 	KCHMIndTocItem * treeitem = (KCHMIndTocItem *) tree->itemAt( point );
 	

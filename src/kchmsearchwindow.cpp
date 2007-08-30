@@ -26,7 +26,6 @@
 #include "kchmsearchwindow.h"
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
-#include "kchmlistitemtooltip.h"
 #include "kchmtreeviewitem.h"
 #include "kchmsearchengine.h"
 
@@ -104,7 +103,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
 	connect( tree, 
 			 SIGNAL( customContextMenuRequested ( const QPoint & ) ),
 			 this, 
-			 SLOT( contextMenuRequested( const QPoint & ) ) );
+			 SLOT( onContextMenuRequested( const QPoint & ) ) );
 
 	searchBox->setFocus();
 	
@@ -159,7 +158,7 @@ void KCHMSearchWindow::onDoubleClicked( QTreeWidgetItem * item, int )
 		return;
 	
 	KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) item;
-	::mainWindow->openPage( treeitem->getUrl(), OPF_ADD2HISTORY );
+	::mainWindow->openPage( treeitem->getUrl(), KCHMMainWindow::OPF_ADD2HISTORY );
 }
 
 void KCHMSearchWindow::restoreSettings( const KCHMSettings::search_saved_settings_t & settings )
@@ -249,7 +248,7 @@ bool KCHMSearchWindow::searchQuery( const QString & query, QStringList * results
 
 //FIXME: add whatsthis to toolbar items/actions
 
-void KCHMSearchWindow::contextMenuRequested( const QPoint & point )
+void KCHMSearchWindow::onContextMenuRequested( const QPoint & point )
 {
 	KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) tree->itemAt( point );
 	

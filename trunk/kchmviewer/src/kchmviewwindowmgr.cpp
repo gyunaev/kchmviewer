@@ -47,7 +47,7 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	m_closeButton->setIcon( QIcon( ":/images/closetab.png" ) );
 	m_closeButton->setToolTip( i18n("Close current page") );
 	m_closeButton->setEnabled( false );
-	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( closeCurrentWindow() ) );
+	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( onCloseCurrentWindow() ) );
 	
 	// Put it there
 	tabWidget->setCornerWidget( m_closeButton, Qt::TopRightCorner );
@@ -75,8 +75,8 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	
 	// Search toolbar buttons
 	connect( toolClose, SIGNAL(clicked()), frameFind, SLOT( hide()) );
-	connect( toolPrevious, SIGNAL(clicked()), this, SLOT( findPrevious()) );
-	connect( toolNext, SIGNAL(clicked()), this, SLOT( findNext()) );
+	connect( toolPrevious, SIGNAL(clicked()), this, SLOT( onFindPrevious()) );
+	connect( toolNext, SIGNAL(clicked()), this, SLOT( onFindNext()) );
 }
 
 KCHMViewWindowMgr::~KCHMViewWindowMgr( )
@@ -179,7 +179,7 @@ void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 	updateCloseButtons();
 }
 
-void KCHMViewWindowMgr::closeCurrentWindow( )
+void KCHMViewWindowMgr::onCloseCurrentWindow( )
 {
 	// Do not allow to close the last window
 	if ( m_Windows.size() == 1 )
@@ -261,13 +261,14 @@ void KCHMViewWindowMgr::onTabChanged( QWidget * newtab )
 	TabData& tab = findTab( newtab );
 
 	tab.window->updateNavigationToolbar();
-	mainWindow->slotBrowserChanged( tab.window );
+	mainWindow->browserChanged( tab.window );
 }
 
 
 void KCHMViewWindowMgr::openNewTab()
 {
-	::mainWindow->openPage( current()->getOpenedPage(), OPF_NEW_TAB | OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+	::mainWindow->openPage( current()->getOpenedPage(), 
+	                        KCHMMainWindow::OPF_NEW_TAB | KCHMMainWindow::OPF_CONTENT_TREE | KCHMMainWindow::OPF_ADD2HISTORY );
 }
 
 void KCHMViewWindowMgr::activateWindow()
@@ -320,7 +321,7 @@ void KCHMViewWindowMgr::indicateFindResultStatus( SearchResultStatus status )
 }
 
 
-void KCHMViewWindowMgr::activateFind()
+void KCHMViewWindowMgr::onActivateFind()
 {
 	frameFind->show();
 	labelWrapped->setVisible( false );
@@ -351,12 +352,12 @@ void KCHMViewWindowMgr::editTextEdited(const QString &)
 	find();
 }
 
-void KCHMViewWindowMgr::findNext()
+void KCHMViewWindowMgr::onFindNext()
 {
-	current()->findNext();
+	current()->onFindNext();
 }
 
-void KCHMViewWindowMgr::findPrevious()
+void KCHMViewWindowMgr::onFindPrevious()
 {
-	current()->findPrevious();
+	current()->onFindPrevious();
 }

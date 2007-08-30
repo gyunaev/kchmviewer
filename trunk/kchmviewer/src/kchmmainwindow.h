@@ -22,16 +22,9 @@
 #ifndef KCHMMAINWINDOW_H
 #define KCHMMAINWINDOW_H
 
-//FIXME: move Qt includes to kde-qt
-#include <QCloseEvent>
-#include <QShowEvent>
-#include <QEvent>
-#include <QMainWindow>
-
 #include "libchmfile.h"
 
 #include "kde-qt.h"
-#include "forwarddeclarations.h"
 #include "kchmviewwindow.h"
 #include "kqtempfile.h"
 
@@ -41,14 +34,6 @@
 
 //! OpenPage extra flags, specifying extra behavior
 
-//! Locate this page in the content tree, and move the cursor there
-static const unsigned int OPF_CONTENT_TREE	= 1 << 0;
-//! Add the previous page into the history
-static const unsigned int OPF_ADD2HISTORY	= 1 << 1;
-//! Open the page in a new tab
-static const unsigned int OPF_NEW_TAB 		= 1 << 2;
-//! Open the page in a new tab in background
-static const unsigned int OPF_BACKGROUND 	= 1 << 3;
 
 //! Those events could be sent to main window to do useful things. See handleUserEvents()
 class KCHMUserEvent : public QEvent
@@ -68,6 +53,16 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 	Q_OBJECT
 	
 	public:
+		// "Open page" parameter flags
+		enum
+		{
+			OPF_CONTENT_TREE = 1 << 0,	//! Locate this page in the content tree
+			OPF_ADD2HISTORY	= 1 << 1,	//! Add the previous page into the history
+			OPF_NEW_TAB = 1 << 2,		//! Open the page in a new tab
+			OPF_BACKGROUND 	= 1 << 3	//! Open the page in a new tab in background
+		};
+		
+	public:
 		KCHMMainWindow();
 		~KCHMMainWindow();
 	
@@ -86,14 +81,16 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		void		setTextEncoding (const LCHMTextEncoding * enc);
 		QMenu * 	tabItemsContextMenu();
 	
+		// Called from WindowMgr when another browser tab is activated
+		void		browserChanged( KCHMViewWindow * newbrowser );
+	
 	public slots:
 		// Navigation toolbar icons
 		void		navSetBackEnabled( bool enabled );
 		void		navSetForwardEnabled( bool enabled );
 		
-		void 		slotOpenPageInNewTab();
-		void 		slotOpenPageInNewBackgroundTab();
-		void		slotBrowserChanged( KCHMViewWindow * newbrowser );
+		void 		onOpenPageInNewTab();
+		void 		onOpenPageInNewBackgroundTab();
 					
 		// Actions
 		void		actionOpenFile();
@@ -130,7 +127,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 	
 		// Link activation. MainWindow decides whether we should follow this link or not
 		// by setting up follow_link appropriately.
-		void 		activateLink ( const QString & link, bool& follow_link );
+		void 		activateLink( const QString & link, bool& follow_link );
 		
 	protected:
 		// Reimplemented functions
@@ -144,8 +141,8 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		void 		setupActions();
 		void		setupLangEncodingMenu();
 		
-		bool		loadChmFile ( const QString &fileName,  bool call_open_page = true );
-		void		closeChmFile();	
+		bool		loadFile( const QString &fileName,  bool call_open_page = true );
+		void		closeFile();	
 		void		refreshCurrentBrowser();
 		
 		void		showOrHideContextWindow( int tabindex );

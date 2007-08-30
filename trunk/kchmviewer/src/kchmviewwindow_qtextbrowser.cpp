@@ -36,7 +36,7 @@ KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
 	invalidate();
 	
 	setTextFormat ( Qt::RichText );
-	connect( this, SIGNAL( anchorClicked ( const QUrl& ) ), this, SLOT( slotAnchorClicked ( const QUrl& ) ) );
+	connect( this, SIGNAL( anchorClicked ( const QUrl& ) ), this, SLOT( onAnchorClicked ( const QUrl& ) ) );
 }
 
 
@@ -96,7 +96,7 @@ void KCHMViewWindow_QTextBrowser::addZoomFactor( int value )
 	setZoomFactor( value);
 }
 
-void KCHMViewWindow_QTextBrowser::slotAnchorClicked(const QUrl & url)
+void KCHMViewWindow_QTextBrowser::onAnchorClicked(const QUrl & url)
 {
 	emit linkClicked( url.toString(), m_allowSourceChange );
 }
@@ -288,12 +288,12 @@ void KCHMViewWindow_QTextBrowser::find(const QString & text, int flags)
 	find( false, false );
 }
 
-void KCHMViewWindow_QTextBrowser::findNext()
+void KCHMViewWindow_QTextBrowser::onFindNext()
 {
 	find( true, false );
 }
 
-void KCHMViewWindow_QTextBrowser::findPrevious()
+void KCHMViewWindow_QTextBrowser::onFindPrevious()
 {
 	find( false, true );
 }

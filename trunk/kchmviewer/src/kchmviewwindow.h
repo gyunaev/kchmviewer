@@ -22,7 +22,7 @@
 #ifndef KCHMVIEWWINDOW_H
 #define KCHMVIEWWINDOW_H
 
-#include "forwarddeclarations.h"
+
 #include "kde-qt.h"
 
 
@@ -54,10 +54,10 @@ class KCHMViewWindow
 		//! Popups the print dialog, and prints the current page on the printer.
 		virtual bool	printCurrentPage() = 0;
 	
-		//! Search function. find() starts new search, findNext and findPrevious continue it
+		//! Search function. find() starts new search, onFindNext and onFindPrevious continue it
 		virtual void	find( const QString& text, int flags ) = 0;
-		virtual void	findNext() = 0;
-		virtual void	findPrevious() = 0;
+		virtual void	onFindNext() = 0;
+		virtual void	onFindPrevious() = 0;
 	
 		//! Return current ZoomFactor.
 		virtual int		getZoomFactor() const = 0;

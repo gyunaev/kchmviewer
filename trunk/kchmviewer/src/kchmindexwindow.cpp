@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright (C) 2004-2007 by Georgy Yunaev, gyunaev@ulduzsoft.com       *
  *   Please do not use email address above for bug reports; see            *
@@ -19,12 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//FIXME: check headers, move all Qt stuff to kde-qt or to headers
+
 #include "libchmfile.h"
 
 #include "kchmmainwindow.h"
 #include "kchmindexwindow.h"
-#include "kchmlistitemtooltip.h"
 #include "kchmtreeviewitem.h"
 
 
@@ -56,13 +56,12 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent )
 	connect( tree, 
 	         SIGNAL( customContextMenuRequested ( const QPoint & ) ),
 	         this, 
-	         SLOT( contextMenuRequested( const QPoint & ) ) );
+	         SLOT( onContextMenuRequested( const QPoint & ) ) );
 	
 	m_indexListFilled = false;
 	m_lastSelectedItem = 0;
 	m_contextMenu = 0;
 	
-	// FIXME: context menu
 	text->setFocus();
 }
 
@@ -140,7 +139,7 @@ void KCHMIndexWindow::onDoubleClicked ( QTreeWidgetItem * item, int )
 			m_lastSelectedItem = 0;
 	}
 	else
-		::mainWindow->openPage( url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+		::mainWindow->openPage( url, KCHMMainWindow::OPF_CONTENT_TREE | KCHMMainWindow::OPF_ADD2HISTORY );
 }
 
 
@@ -173,7 +172,7 @@ void KCHMIndexWindow::search( const QString & index )
 	onTextChanged( index );
 }
 
-void KCHMIndexWindow::contextMenuRequested(const QPoint & point)
+void KCHMIndexWindow::onContextMenuRequested(const QPoint & point)
 {
 	KCHMIndTocItem * treeitem = (KCHMIndTocItem *) tree->itemAt( point );
 	

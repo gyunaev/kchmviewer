@@ -23,11 +23,10 @@
 #define KCHMBOOKMARKWINDOW_H
 
 #include "kde-qt.h"
-#include "forwarddeclarations.h"
 #include "kchmsettings.h"
 
-
 #include "ui_tab_bookmarks.h"
+
 
 class KCHMBookmarkWindow : public QWidget, public Ui::TabBookmarks
 {
@@ -50,10 +49,7 @@ class KCHMBookmarkWindow : public QWidget, public Ui::TabBookmarks
 		void	onDelBookmarkPressed( );
 		void	onEditBookmarkPressed( );
 		void	onItemDoubleClicked ( QListWidgetItem* );
-		
-	protected:
-		void	contextMenuEvent ( QContextMenuEvent * event );
-		
+	//FIXME: context menu
 	private:
 		QMenu 		*	m_menuBookmarks;
 		QMenu 		* 	m_contextMenu;

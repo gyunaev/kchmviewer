@@ -24,13 +24,11 @@
 
 #include "kde-qt.h"
 #include "kchmsettings.h"
-#include "forwarddeclarations.h"
 #include "ui_tab_search.h"
 
 class KCHMSearchEngine;
 
 
-//FIXME: content menu
 class KCHMSearchWindow : public QWidget, public Ui::TabSearch
 {
 	Q_OBJECT
@@ -44,7 +42,7 @@ class KCHMSearchWindow : public QWidget, public Ui::TabSearch
 		bool	searchQuery( const QString& query, QStringList * results );
 		
 	private slots:
-		void	contextMenuRequested ( const QPoint &point );
+		void	onContextMenuRequested ( const QPoint &point );
 		void	onHelpClicked( const QString & );
 		void 	onReturnPressed ();
 		void	onDoubleClicked( QTreeWidgetItem * item, int );

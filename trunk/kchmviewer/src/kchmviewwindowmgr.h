@@ -23,9 +23,9 @@
 #define INCLUDE_KCHMVIEWWINDOWMGR_H
 
 #include "kde-qt.h"
-#include "forwarddeclarations.h"
 #include "kchmsettings.h"
 #include "ui_window_browser.h"
+
 
 class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 {
@@ -64,10 +64,10 @@ class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		int		currentPageIndex() const;
 	
 	public slots:
-		void	closeCurrentWindow();
-		void	activateFind();
-		void	findNext();
-		void	findPrevious();
+		void	onCloseCurrentWindow();
+		void	onActivateFind();
+		void	onFindNext();
+		void	onFindPrevious();
 		void	indicateFindResultStatus( SearchResultStatus status );
 		
 	protected slots:

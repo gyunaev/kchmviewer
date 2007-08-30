@@ -19,6 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QHeaderView>
+
 #include "libchmfile.h"
 
 #include "kchmsearchwindow.h"
@@ -27,6 +29,44 @@
 #include "kchmlistitemtooltip.h"
 #include "kchmtreeviewitem.h"
 #include "kchmsearchengine.h"
+
+
+
+class KCMSearchTreeViewItem : public QTreeWidgetItem
+{
+	public:
+		KCMSearchTreeViewItem( QTreeWidget * tree, const QString& name, const QString& url )
+			:	QTreeWidgetItem( tree ), m_name( name ), m_url( url ) {};
+	
+		QString		getUrl() const { return m_url; }
+	
+	protected:
+		// Overriden members
+	int columnCount () const	{ return 2; }
+	
+		// Overriden member
+		QVariant data ( int column, int role ) const
+		{
+			switch( role )
+			{
+				// Item name
+				case Qt::DisplayRole:
+				case Qt::ToolTipRole:
+				case Qt::WhatsThisRole:
+				if ( column == 0 )
+					return m_name;
+				else
+					return m_url;
+			}
+			
+			return QVariant();
+		}
+	
+	private:
+		QString		m_name;		
+		QString		m_url;
+};
+
 
 
 KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
@@ -53,21 +93,19 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
 			 this, 
 			 SLOT( onReturnPressed() ) );
 	
-	// Clicking on table element
-	connect( table, 
-	         SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), 
+	// Clicking on tree element
+	connect( tree, 
+	         SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ), 
 			 this, 
-	         SLOT( onDoubleClicked( QTableWidgetItem * ) ) );
+	         SLOT( onDoubleClicked( QTreeWidgetItem *, int ) ) );
 
-	/*
-	connect( table, 
-			 SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint& , int ) ),
+	// Activate custom context menu, and connect it
+	tree->setContextMenuPolicy( Qt::CustomContextMenu );
+	connect( tree, 
+			 SIGNAL( customContextMenuRequested ( const QPoint & ) ),
 			 this, 
-			 SLOT( slotContextMenuRequested ( Q3ListViewItem *, const QPoint &, int ) ) );
-	*/
-	// FIXME: tooltips
-	// new KCHMListItemTooltip( table );
-	
+			 SLOT( contextMenuRequested( const QPoint & ) ) );
+
 	searchBox->setFocus();
 	
 	m_contextMenu = 0;
@@ -76,7 +114,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
 
 void KCHMSearchWindow::invalidate( )
 {
-	table->clear();
+	tree->clear();
 	searchBox->clear();
 	searchBox->lineEdit()->clear();
 	
@@ -92,7 +130,7 @@ void KCHMSearchWindow::onReturnPressed( )
 	if ( text.isEmpty() )
 		return;
 	
-	table->clear();
+	tree->clear();
 	
 	if ( searchQuery( text, &results ) )
 	{
@@ -100,10 +138,9 @@ void KCHMSearchWindow::onReturnPressed( )
 		{
 			for ( int i = 0; i < results.size(); i++ )
 			{
-				// FIXME: maybe we could remove last entries?
-				new KCMSearchTreeViewItem ( ::mainWindow->chmFile()->getTopicByUrl( results[i] ),
-										 	results[i],
-											results[i] );
+				new KCMSearchTreeViewItem ( tree,
+				                            ::mainWindow->chmFile()->getTopicByUrl( results[i] ),
+										 	results[i] );
 			}
 
 			::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" ) . arg(results.size()) );
@@ -116,7 +153,7 @@ void KCHMSearchWindow::onReturnPressed( )
 }
 
 
-void KCHMSearchWindow::onDoubleClicked( QTableWidgetItem * item )
+void KCHMSearchWindow::onDoubleClicked( QTreeWidgetItem * item, int )
 {
 	if ( !item )
 		return;
@@ -144,9 +181,8 @@ void KCHMSearchWindow::onHelpClicked( const QString & )
 {
 	if ( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
 	{
-		QMessageBox::information ( this, 
-			i18n( "How to use search"), 
-			i18n( "<html><p>The improved search engine allows you to search for a word, symbol or phrase, which is set of words and symbols included in quotes. Only the documents which include all the terms speficide in th search query are shown; no prefixes needed.<p>Unlike MS CHM internal search index, my improved search engine indexes everything, including special symbols. Therefore it is possible to search (and find!) for something like <i>$q = new ChmFile();</i>. This search also fully supports Unicode, which means that you can search in non-English documents.<p>If you want to search for a quote symbol, use quotation mark instead. The engine treats a quote and a quotation mark as the same symbol, which allows to use them in phrases.</html>") );
+		QToolTip::showText ( mapToGlobal( lblHelp->pos() ),
+		                     i18n( "<html><p>The improved search engine allows you to search for a word, symbol or phrase, which is set of words and symbols included in quotes. Only the documents which include all the terms speficide in th search query are shown; no prefixes needed.<p>Unlike MS CHM internal search index, my improved search engine indexes everything, including special symbols. Therefore it is possible to search (and find!) for something like <i>$q = new ChmFile();</i>. This search also fully supports Unicode, which means that you can search in non-English documents.<p>If you want to search for a quote symbol, use quotation mark instead. The engine treats a quote and a quotation mark as the same symbol, which allows to use them in phrases.</html>") );
 	}
 	else
 	{
@@ -156,21 +192,6 @@ void KCHMSearchWindow::onHelpClicked( const QString & )
 	}
 }
 
-/*
-void KCHMSearchWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
-{
-	if ( !m_contextMenu )
-		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
-		
-	if( item )
-	{
-		KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) item;
-		
-		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
-		m_contextMenu->popup( point );
-	}
-}
-*/
 
 bool KCHMSearchWindow::initSearchEngine( )
 {
@@ -224,4 +245,17 @@ bool KCHMSearchWindow::searchQuery( const QString & query, QStringList * results
 		result = ::mainWindow->chmFile()->searchQuery( query, results );
 
 	return result;
+}
+
+//FIXME: add whatsthis to toolbar items/actions
+
+void KCHMSearchWindow::contextMenuRequested( const QPoint & point )
+{
+	KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) tree->itemAt( point );
+	
+	if( treeitem )
+	{
+		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
+		::mainWindow->tabItemsContextMenu()->popup( tree->viewport()->mapToGlobal( point ) );
+	}
 }

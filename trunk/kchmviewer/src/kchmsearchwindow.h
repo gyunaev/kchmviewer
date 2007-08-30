@@ -43,13 +43,11 @@ class KCHMSearchWindow : public QWidget, public Ui::TabSearch
 		void	execSearchQueryInGui( const QString& query );
 		bool	searchQuery( const QString& query, QStringList * results );
 		
-	public slots:
-	//	void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
-		
 	private slots:
+		void	contextMenuRequested ( const QPoint &point );
 		void	onHelpClicked( const QString & );
 		void 	onReturnPressed ();
-		void	onDoubleClicked( QTableWidgetItem * item );
+		void	onDoubleClicked( QTreeWidgetItem * item, int );
 	
 	private:
 		bool	initSearchEngine();

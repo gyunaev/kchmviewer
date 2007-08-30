@@ -278,22 +278,6 @@ void KCHMViewWindow::updateNavigationToolbar( )
 	}
 }
 
-QMenu * KCHMViewWindow::createListItemContextMenu( QWidget * w )
-{
-	QMenu * contextMenu = new QMenu( w );
-		
-	contextMenu->insertItem ( "&Open this link in a new tab",
-							  ::mainWindow, 
-							  SLOT( slotOpenPageInNewTab() ), 
-							  QKeySequence( "Shift+Enter" ) );
-			
-	contextMenu->insertItem ( "&Open this link in a new background tab", 
-							  ::mainWindow, 
-							  SLOT( slotOpenPageInNewBackgroundTab() ),
-							  QKeySequence( "Ctrl+Enter" ) );
-
-	return contextMenu;
-}
 
 void KCHMViewWindow::setTabKeeper( const QString & link )
 {

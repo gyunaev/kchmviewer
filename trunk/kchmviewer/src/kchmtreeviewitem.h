@@ -52,27 +52,6 @@ class KCHMIndTocItem : public QTreeWidgetItem
 
 
 
-class KCMSearchTreeViewItem : public QTableWidgetItem
-{
-	public:
-		KCMSearchTreeViewItem( const QString& name, const QString& loc, const QString& url );
-		QString		getUrl() const;
-		
-	protected:
-		// Overriden members
-		int columnCount () const;
-		
-		// Overriden member
-		QVariant data ( int column, int role ) const; 
-		
-	private:
-		QString		m_url;
-		QString		m_name;
-		QString		m_loc;
-};
-
-
-
 void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map );
 
 #endif

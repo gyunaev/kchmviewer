@@ -42,7 +42,7 @@ class KCHMContentsWindow : public QWidget, public Ui::TabContents
 		KCHMIndTocItem *	getTreeItem( const QString& url );
 		
 	public slots:
-		//void	slotContextMenuRequested ( Q3ListViewItem *item, const QPoint &point, int column );
+		void	contextMenuRequested ( const QPoint &point );
 		// FIXME: slot naming
 		void	onClicked ( QTreeWidgetItem * item, int column );
 	

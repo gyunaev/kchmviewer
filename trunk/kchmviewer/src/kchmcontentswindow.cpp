@@ -48,37 +48,17 @@ KCHMContentsWindow::KCHMContentsWindow( QWidget *parent )
 	         this, 
 	         SLOT( onClicked ( QTreeWidgetItem *, int ) ) );
 	
-	/*
-	connect( this, SIGNAL( onItem ( Q3ListViewItem * ) ), this, SLOT( slotOnItem( Q3ListViewItem * ) ) );
-	connect( this, 
-			 SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint& , int ) ),
-			 this, 
-			 SLOT( slotContextMenuRequested ( Q3ListViewItem *, const QPoint &, int ) ) );
-
-	
-	new KCHMListItemTooltip( this );
-	*/
+	// Activate custom context menu, and connect it
+	tree->setContextMenuPolicy( Qt::CustomContextMenu );
+	connect( tree, 
+	         SIGNAL( customContextMenuRequested ( const QPoint & ) ),
+	         this, 
+	         SLOT( contextMenuRequested( const QPoint & ) ) );
 }
 
 KCHMContentsWindow::~KCHMContentsWindow()
 {
 }
-
-/*
-void KCHMContentsWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
-{
-	if ( !m_contextMenu )
-		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
-		
-	if( item )
-	{
-		KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
-		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
-		m_contextMenu->popup( point );
-	}
-}
-*/
-
 
 void KCHMContentsWindow::refillTableOfContents( )
 {
@@ -121,7 +101,7 @@ void KCHMContentsWindow::showEvent(QShowEvent *)
 	refillTableOfContents();
 }
 
-void KCHMContentsWindow::onClicked(QTreeWidgetItem * item, int column)
+void KCHMContentsWindow::onClicked(QTreeWidgetItem * item, int)
 {
 	bool unused;
 	
@@ -130,4 +110,15 @@ void KCHMContentsWindow::onClicked(QTreeWidgetItem * item, int column)
 	
 	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
 	::mainWindow->activateLink( treeitem->getUrl(), unused );
+}
+
+void KCHMContentsWindow::contextMenuRequested(const QPoint & point)
+{
+	KCHMIndTocItem * treeitem = (KCHMIndTocItem *) tree->itemAt( point );
+	
+	if( treeitem )
+	{
+		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
+		::mainWindow->tabItemsContextMenu()->popup( tree->viewport()->mapToGlobal( point ) );
+	}
 }

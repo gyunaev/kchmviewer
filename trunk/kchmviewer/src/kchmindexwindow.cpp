@@ -51,6 +51,13 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent )
 			 this, 
 			 SLOT( onDoubleClicked ( QTreeWidgetItem *, int) ) );
 	
+	// Activate custom context menu, and connect it
+	tree->setContextMenuPolicy( Qt::CustomContextMenu );
+	connect( tree, 
+	         SIGNAL( customContextMenuRequested ( const QPoint & ) ),
+	         this, 
+	         SLOT( contextMenuRequested( const QPoint & ) ) );
+	
 	m_indexListFilled = false;
 	m_lastSelectedItem = 0;
 	m_contextMenu = 0;
@@ -136,21 +143,7 @@ void KCHMIndexWindow::onDoubleClicked ( QTreeWidgetItem * item, int )
 		::mainWindow->openPage( url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
-/*
-void KCHMIndexWindow::slotContextMenuRequested( Q3ListViewItem * item, const QPoint & point, int )
-{
-	if ( !m_contextMenu )
-		m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
-		
-	if( item )
-	{
-		KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
-		
-		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
-		m_contextMenu->popup( point );
-	}
-}
-*/
+
 void KCHMIndexWindow::refillIndex( )
 {
 	QVector< LCHMParsedEntry > data;
@@ -178,4 +171,15 @@ void KCHMIndexWindow::search( const QString & index )
 
 	text->setText( index );
 	onTextChanged( index );
+}
+
+void KCHMIndexWindow::contextMenuRequested(const QPoint & point)
+{
+	KCHMIndTocItem * treeitem = (KCHMIndTocItem *) tree->itemAt( point );
+	
+	if( treeitem )
+	{
+		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
+		::mainWindow->tabItemsContextMenu()->popup( tree->viewport()->mapToGlobal( point ) );
+	}
 }

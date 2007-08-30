@@ -4,6 +4,7 @@
 	- Search on page is now done via toolbar (like FireFox), activated by Ctrl-F and /.
 	- After switching tabs (either with mouse or Alt+<number> the focus is moved to the browser widget,
 	  so you don't have to click on it to navigate using keyboard.
+	- Enchanced browser context menu.
 	
 
 2007-06-16 tim <gyunaev@ulduzsoft.com>

@@ -57,6 +57,8 @@
 	#include <QTabWidget>
 	#include <QMessageBox>
 	#include <QProgressDialog>
+	#include <QPrinter>
+	#include <QPrintDialog>
 
 	#define i18n(A)		tr(A)
 
@@ -71,6 +73,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
+#include <QScrollBar>
 
 
 // common utility classes

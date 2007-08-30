@@ -20,8 +20,6 @@
  ***************************************************************************/
 
 
-#include <QScrollBar>
-
 #include "kde-qt.h"
 #include "libchmurlfactory.h"
 #include "kchmmainwindow.h"
@@ -104,67 +102,20 @@ void KCHMViewWindow_QTextBrowser::onAnchorClicked(const QUrl & url)
 
 bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 {
-/* FIXME: printing
-#if !defined (QT_NO_PRINTER)
-    QPrinter printer( QPrinter::HighResolution );
-    printer.setFullPage(TRUE);
+	QPrinter printer( QPrinter::HighResolution );
+	printer.setFullPage(true);
 	
-	if ( printer.setup( this ) )
+	QPrintDialog dlg( &printer, this );
+	
+	if ( dlg.exec() != QDialog::Accepted )
 	{
-		QPainter p( &printer );
-		
-		if( !p.isActive() ) // starting printing failed
-			return false;
-		
-		Q3PaintDeviceMetrics metrics(p.device());
-		int dpiy = metrics.logicalDpiY();
-		int margin = (int) ( (2/2.54)*dpiy ); // 2 cm margins
-		QRect body( margin, margin, metrics.width() - 2*margin, metrics.height() - 2*margin );
-		Q3SimpleRichText richText( text(),
-								  QFont(),
-								  context(),
-								  styleSheet(),
-								  mimeSourceFactory(),
-								  body.height() );
-		richText.setWidth( &p, body.width() );
-		QRect view( body );
-		
-		int page = 1;
-		
-		do
-		{
-			richText.draw( &p, body.left(), body.top(), view, colorGroup() );
-			view.moveBy( 0, body.height() );
-			p.translate( 0 , -body.height() );
-			p.drawText( view.right() - p.fontMetrics().width( QString::number(page) ),
-						view.bottom() + p.fontMetrics().ascent() + 5, QString::number(page) );
-			
-			if ( view.top()  >= richText.height() )
-				break;
-			
-			QString msg = i18n( "Printing (page %1)...") .arg(page);
-			::mainWindow->showInStatusBar( msg );
-			
-			printer.newPage();
-			page++;
-		}
-		while (TRUE);
-	
-		::mainWindow->showInStatusBar( i18n( "Printing completed") );
-		return true;
+		::mainWindow->showInStatusBar( i18n( "Printing aborted") );
+		return false;
 	}
 
-	::mainWindow->showInStatusBar( i18n( "Printing aborted") );
-	return false;
-
-#else
-	QMessageBox::warning( this, 
-		i18n( "%1 - could not print") . arg(APP_NAME),
-		i18n( "Could not print.\nYour Qt library has been compiled without printing support");
-	return false;
-
-#endif
-*/
+	document()->print( &printer );
+	::mainWindow->showInStatusBar( i18n( "Printing completed") );
+	return true;
 }
 
 void KCHMViewWindow_QTextBrowser::clipSelectAll( )

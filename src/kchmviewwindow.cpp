@@ -153,7 +153,7 @@ QMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
 
 QMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
 {
-	if ( link.isNull() )
+	if ( link.isEmpty() )
 	{
 		// standard context menu
 		if ( !m_contextMenu )
@@ -294,3 +294,5 @@ void KCHMViewWindow::setTabKeeper( const QString & link )
 		
 	m_newTabLinkKeeper = makeURLabsolute( m_newTabLinkKeeper, false );
 }
+
+// FIXME: use QTextEdit::createStandardContextMenu () for urls

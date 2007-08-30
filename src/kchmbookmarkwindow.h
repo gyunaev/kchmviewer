@@ -35,7 +35,7 @@ class KCHMBookmarkWindow : public QWidget, public Ui::TabBookmarks
 		KCHMBookmarkWindow( QWidget *parent );
 		virtual ~KCHMBookmarkWindow() {};
 	
-		void 	createMenu( KCHMMainWindow * parent, QMenu * menuBookmarks );
+		void 	createMenu( QMenu * menuBookmarks );
 		
 		void	restoreSettings (const KCHMSettings::bookmark_saved_settings_t& settings);
 		void	saveSettings (KCHMSettings::bookmark_saved_settings_t& settings);

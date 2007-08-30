@@ -1380,7 +1380,7 @@ void KCHMMainWindow::setupActions()
 	         SLOT( actionNavigateNextInToc() ) );
 	
 	// m_bookmarkWindow fills and maintains 'Bookmarks' menu
-	m_bookmarkWindow->createMenu( this, menu_Bookmarks );
+	m_bookmarkWindow->createMenu( menu_Bookmarks );
 	
 	// m_viewWindowMgr fills and maintains 'Window' menu
 	m_viewWindowMgr->createMenu( this, menu_Windows, action_Close_window );
@@ -1445,6 +1445,13 @@ void KCHMMainWindow::setupActions()
 	                      SLOT( actionSwitchToBookmarkTab() ),
 	                      Qt::ApplicationShortcut );
 
+	// Find (/) global shortcut
+	(void) new QShortcut( QKeySequence( i18n("/") ),
+	                      m_viewWindowMgr,
+	                      SLOT( onActivateFind() ),
+	                      SLOT( onActivateFind() ),
+	                      Qt::ApplicationShortcut );
+	
 	// Find next global shortcut
 	(void) new QShortcut( QKeySequence( i18n("F3") ),
 	                      m_viewWindowMgr,
@@ -1585,4 +1592,22 @@ void KCHMMainWindow::actionEncodingChanged( QAction * action )
 QMenu * KCHMMainWindow::tabItemsContextMenu()
 {
 	return m_contextMenu;
+}
+
+void KCHMMainWindow::setupPopupMenu( QMenu * menu )
+{
+	menu->addAction( action_Close_window );
+	menu->addSeparator();
+	menu->addAction( nav_action_Back );
+	menu->addAction( nav_actionForward );
+	menu->addAction( nav_actionHome );
+	menu->addSeparator();
+	menu->addAction( nav_actionPreviousPage );
+	menu->addAction( nav_actionNextPageToc );
+	menu->addSeparator();
+	menu->addAction( view_Increase_font_size_action );
+	menu->addAction( view_Decrease_font_size_action );
+	menu->addSeparator();
+	menu->addAction( edit_Copy_action );
+	menu->addAction( edit_FindAction );
 }

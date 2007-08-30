@@ -173,19 +173,9 @@ void KCHMBookmarkWindow::invalidate( )
 	list->clear();
 }
 
-void KCHMBookmarkWindow::createMenu( KCHMMainWindow * parent, QMenu * menuBookmarks )
+void KCHMBookmarkWindow::createMenu( QMenu * menuBookmarks )
 {
 	m_menuBookmarks = menuBookmarks;
-	/*
-	// Create the main Bookmark menu
-	m_menuBookmarks = new KQMenu( parent );
-	parent->menuBar()->insertItem( i18n( "&Bookmarks"), m_menuBookmarks );
-
-	m_menuBookmarks->insertItem( i18n( "&Add bookmark"), this, SLOT(onAddBookmarkPressed()), CTRL+Key_B );
-	m_menuBookmarks->insertSeparator();
-
-	connect( m_menuBookmarks, SIGNAL( activated(int) ), this, SLOT ( onBookmarkSelected(int) ));
-	*/
 }
 
 void KCHMBookmarkWindow::onBookmarkSelected( int bookmark )

@@ -84,6 +84,9 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		// Called from WindowMgr when another browser tab is activated
 		void		browserChanged( KCHMViewWindow * newbrowser );
 	
+		// Adds some main window actions to the provided popup menu
+		void		setupPopupMenu( QMenu * menu );	
+	
 	public slots:
 		// Navigation toolbar icons
 		void		navSetBackEnabled( bool enabled );

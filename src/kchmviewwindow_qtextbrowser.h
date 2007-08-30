@@ -89,6 +89,9 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 		virtual void	onAnchorClicked ( const QUrl& url);
 		
 	private:
+		// Overloaded to provide custom context menu
+		void 			contextMenuEvent( QContextMenuEvent *e );
+		
 		void			find( bool forward, bool backward );
 		
 		QMenu * 		createPopupMenu ( const QPoint & pos );

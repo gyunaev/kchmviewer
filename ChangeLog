@@ -1,6 +1,10 @@
 2007-08-26 tim <gyunaev@ulduzsoft.com>
 	- Application ported to Qt4.
 	- Recent files reworked.
+	- Search on page is now done via toolbar (like FireFox), activated by Ctrl-F and /.
+	- After switching tabs (either with mouse or Alt+<number> the focus is moved to the browser widget,
+	  so you don't have to click on it to navigate using keyboard.
+	
 
 2007-06-16 tim <gyunaev@ulduzsoft.com>
     - Fixed locale and .desktop installation directory for Gentoo (thx Peter Volkov)

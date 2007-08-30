@@ -148,7 +148,7 @@
   </action>
   <action name="edit_Copy_action" >
    <property name="icon" >
-    <iconset>image7</iconset>
+    <iconset resource="resources/images.qrc" >:/images/icon_copy.png</iconset>
    </property>
    <property name="text" >
     <string>C&amp;opy</string>

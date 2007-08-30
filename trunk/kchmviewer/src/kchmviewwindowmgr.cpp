@@ -262,6 +262,7 @@ void KCHMViewWindowMgr::onTabChanged( QWidget * newtab )
 
 	tab.window->updateNavigationToolbar();
 	mainWindow->browserChanged( tab.window );
+	tab.widget->setFocus();
 }
 
 

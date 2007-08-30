@@ -224,10 +224,9 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
 
 QMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
 {
-	/*FIXME
 	QMenu * menu = getContextMenu( anchorAt( pos ), this );
-	menu->exec( mapToGlobal( contentsToViewport( pos ) ) );
-	*/
+	menu->exec( viewport()->mapToGlobal( pos ) );
+
 	return 0;
 }
 
@@ -341,4 +340,24 @@ void KCHMViewWindow_QTextBrowser::find( bool forward, bool backward )
 	}
 	
 	setTextCursor( newCursor );
+}
+
+void KCHMViewWindow_QTextBrowser::contextMenuEvent(QContextMenuEvent * e)
+{
+	// From Qt Assistant
+	QMenu *m = new QMenu(0);
+	QString link = anchorAt( e->pos() );
+	
+	if ( !link.isEmpty() )
+	{
+		m->addAction( i18n("Open Link in a new tab\tShift+LMB"), ::mainWindow, SLOT( onOpenPageInNewTab() ) );
+		m->addAction( i18n("Open Link in a new background tab\tCtrl+LMB"), ::mainWindow, SLOT( onOpenPageInNewBackgroundTab() ) );
+		m->addSeparator();
+		m_newTabLinkKeeper = link;
+	}
+	
+	::mainWindow->setupPopupMenu( m );
+	m->exec( e->globalPos() );
+	delete m;
+	
 }

@@ -40,9 +40,7 @@ class KCHMIndexWindow : public QWidget, public Ui::TabIndex
 		void 	onTextChanged ( const QString & newvalue);
 		void 	onReturnPressed ();
 		void	onDoubleClicked ( QTreeWidgetItem * item, int column );
-	
-	protected:
-		//void	contextMenuEvent ( QContextMenuEvent * event );
+		void	contextMenuRequested ( const QPoint &point );
 		
 	private:
 		virtual void showEvent ( QShowEvent * );

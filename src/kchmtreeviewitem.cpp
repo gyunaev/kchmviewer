@@ -129,21 +129,6 @@ QVariant KCHMIndTocItem::data(int column, int role) const
 }
 
 
-
-KCMSearchTreeViewItem::KCMSearchTreeViewItem( const QString& name, const QString& loc, const QString& url )
-	: QTableWidgetItem()
-{
-	m_name = name;
-	m_loc = loc;
-	m_url = url;
-}
-
-QString KCMSearchTreeViewItem::getUrl() const
-{
-	return m_url;
-}
-
-
 void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
 {
 	QVector< KCHMIndTocItem *> lastchild;

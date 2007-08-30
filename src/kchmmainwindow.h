@@ -84,6 +84,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		
 		void		showInStatusBar (const QString& text);
 		void		setTextEncoding (const LCHMTextEncoding * enc);
+		QMenu * 	tabItemsContextMenu();
 	
 	public slots:
 		// Navigation toolbar icons
@@ -188,6 +189,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		QAction 			*	m_recentFileSeparator;
 	
 		QActionGroup		*	m_encodingActions;
+		QMenu				*	m_contextMenu;
 	
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 		enum	auto_test_state_t

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>232</width>
-    <height>411</height>
+    <width>210</width>
+    <height>409</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -14,7 +14,7 @@
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>6</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -45,7 +45,7 @@
         </sizepolicy>
        </property>
        <property name="text" >
-        <string>&lt;url href="help">Help&lt;/url></string>
+        <string>&lt;a href="help">Help&lt;/a></string>
        </property>
        <property name="textFormat" >
         <enum>Qt::RichText</enum>
@@ -90,7 +90,22 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableWidget" name="table" >
+    <widget class="QTreeWidget" name="tree" >
+     <property name="rootIsDecorated" >
+      <bool>false</bool>
+     </property>
+     <property name="itemsExpandable" >
+      <bool>false</bool>
+     </property>
+     <property name="sortingEnabled" >
+      <bool>false</bool>
+     </property>
+     <property name="allColumnsShowFocus" >
+      <bool>true</bool>
+     </property>
+     <property name="columnCount" >
+      <number>2</number>
+     </property>
      <column>
       <property name="text" >
        <string>Title</string>

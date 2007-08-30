@@ -1456,6 +1456,19 @@ void KCHMMainWindow::setupActions()
 	                      SLOT( findNext() ),
 	                      SLOT( findNext() ),
 	                      Qt::ApplicationShortcut );
+
+	// Context menu
+	m_contextMenu = new QMenu( this );
+	
+	m_contextMenu->insertItem ( "&Open this link in a new tab",
+	                          this, 
+	                          SLOT( slotOpenPageInNewTab() ), 
+	                          QKeySequence( "Shift+Enter" ) );
+	
+	m_contextMenu->insertItem ( "&Open this link in a new background tab", 
+	                          this, 
+	                          SLOT( slotOpenPageInNewBackgroundTab() ),
+	                          QKeySequence( "Ctrl+Enter" ) );
 }
 
 
@@ -1571,4 +1584,10 @@ void KCHMMainWindow::actionEncodingChanged( QAction * action )
 {
 	const LCHMTextEncoding * enc = (const LCHMTextEncoding *) action->data().value< void* > ();
 	setTextEncoding( enc );
+}
+
+
+QMenu * KCHMMainWindow::tabItemsContextMenu()
+{
+	return m_contextMenu;
 }

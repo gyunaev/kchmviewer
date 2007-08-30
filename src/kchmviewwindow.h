@@ -100,11 +100,7 @@ class KCHMViewWindow
 		virtual void	addNavigationHistory( const QString & url, int scrollpos );
 		virtual void 	updateNavigationToolbar();
 		
-		/*! 
-		* Used by contents window (and probably by other windows in future) to show
-		* context menu in listviews. Put here to futher reuse code in index and search windows.
-		*/
-		QMenu 		*	createListItemContextMenu ( QWidget * w );
+		//! Keeps the tab URL between link following
 		void			setTabKeeper ( const QString& link );
 		
 	protected: /* signals */

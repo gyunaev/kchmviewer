@@ -43,13 +43,14 @@ class KCHMBookmarkWindow : public QWidget, public Ui::TabBookmarks
 		
 	public slots:
 		void 	onAddBookmarkPressed ();
-			
+	
 	private slots:
-		void	onBookmarkSelected( int );
+		void	actionBookmarkActivated();
 		void	onDelBookmarkPressed( );
 		void	onEditBookmarkPressed( );
 		void	onItemDoubleClicked ( QListWidgetItem* );
-	//FIXME: context menu
+		void	onContextMenuRequested ( const QPoint &point );
+
 	private:
 		QMenu 		*	m_menuBookmarks;
 		QMenu 		* 	m_contextMenu;

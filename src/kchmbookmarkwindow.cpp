@@ -25,19 +25,42 @@
 #include "kchmtreeviewitem.h"
 
 
-class KCHMBookmarkTreeViewItem : public QListWidgetItem
+class KCHMBookmarkItem : public QListWidgetItem
 {
 	public:
-		KCHMBookmarkTreeViewItem( QListWidget* parent, const QString& n, const QString& u, int s )
-			: QListWidgetItem( n, parent ), url(u), name(n), scroll_y(s)
+		KCHMBookmarkItem( KCHMBookmarkWindow * widget, QListWidget* parent, const QString& name, const QString& url, int pos )
+			: QListWidgetItem( parent )
 		{
-			menuid = 0;
+			m_name = name;
+			m_url = url;
+			m_scroll_y = pos;
+			m_action = new QAction( name, widget );
+			m_action->setData( qVariantFromValue( (void*) this ) );
+			
+			QObject::connect( m_action,
+			         SIGNAL( activated() ),
+			         widget,
+			         SLOT( actionBookmarkActivated() ) );
 		}
 	
-		QString		url;
-		QString		name;
-		int			scroll_y;
-		int			menuid;
+		// Visualization
+		virtual QVariant data ( int role ) const
+		{
+			switch ( role )
+			{
+			case Qt::ToolTipRole:
+			case Qt::WhatsThisRole:
+			case Qt::DisplayRole:
+			     	return m_name;
+			}
+			
+			return QVariant();
+		}
+	
+		QString		m_name;
+		QString		m_url;
+		int			m_scroll_y;
+		QAction *	m_action;
 };
 
 
@@ -47,11 +70,6 @@ KCHMBookmarkWindow::KCHMBookmarkWindow( QWidget *parent )
 {
 	// UIC code
 	setupUi( this );
-	
-	// FIXME: tooltips!
-	// FIXME: context menu
-	// FIXME: bookmarks in menu, and menu
-	//new KCHMListItemTooltip( list );
 	
 	connect( list,
 			 SIGNAL( itemDoubleClicked ( QListWidgetItem* ) ),
@@ -76,6 +94,13 @@ KCHMBookmarkWindow::KCHMBookmarkWindow( QWidget *parent )
 	m_menuBookmarks = 0;
 	m_contextMenu = 0;
 	m_listChanged = false;
+
+	// Activate custom context menu, and connect it
+	list->setContextMenuPolicy( Qt::CustomContextMenu );
+	connect( list, 
+	         SIGNAL( customContextMenuRequested ( const QPoint & ) ),
+	         this, 
+	         SLOT( onContextMenuRequested( const QPoint & ) ) );
 }
 
 void KCHMBookmarkWindow::onAddBookmarkPressed( )
@@ -94,24 +119,24 @@ void KCHMBookmarkWindow::onAddBookmarkPressed( )
 	if ( !ok || name.isEmpty() )
 		return;
 
-	KCHMBookmarkTreeViewItem * item = new KCHMBookmarkTreeViewItem (
-			list, 
-			name, 
-			url, 
-			::mainWindow->currentBrowser()->getScrollbarPosition() );
+	KCHMBookmarkItem * item = new KCHMBookmarkItem ( this,
+	                                                 list, 
+	                                                 name, 
+	                                                 url, 
+	                                                 ::mainWindow->currentBrowser()->getScrollbarPosition() );
 	
-	item->menuid = m_menuBookmarks->insertItem( name );
+	m_menuBookmarks->addAction( item->m_action );
 	m_listChanged = true;
 }
 
 
 void KCHMBookmarkWindow::onDelBookmarkPressed( )
 {
-	KCHMBookmarkTreeViewItem * item = (KCHMBookmarkTreeViewItem *) list->currentItem();
+	KCHMBookmarkItem * item = (KCHMBookmarkItem *) list->currentItem();
 	
 	if ( item )
 	{
-		m_menuBookmarks->removeItem( item->menuid );
+		m_menuBookmarks->removeAction( item->m_action );
 		delete item;
 		m_listChanged = true;
 	}
@@ -120,7 +145,7 @@ void KCHMBookmarkWindow::onDelBookmarkPressed( )
 
 void KCHMBookmarkWindow::onEditBookmarkPressed( )
 {
-	KCHMBookmarkTreeViewItem * item = (KCHMBookmarkTreeViewItem *) list->currentItem();
+	KCHMBookmarkItem * item = (KCHMBookmarkItem *) list->currentItem();
 	
 	if ( item )
 	{
@@ -129,7 +154,7 @@ void KCHMBookmarkWindow::onEditBookmarkPressed( )
 			i18n( "%1 - edit the bookmark name") . arg(APP_NAME),
 			i18n( "Enter the name for this bookmark:" ),
 			QLineEdit::Normal,
-			item->name, 
+			item->m_name, 
 			&ok, 
 			this);
     
@@ -137,7 +162,7 @@ void KCHMBookmarkWindow::onEditBookmarkPressed( )
 			return;
 
 		item->setText( name );
-		m_menuBookmarks->changeItem( item->menuid, name );
+		item->m_action->setText( name );
 		m_listChanged = true;
 	}
 }
@@ -147,9 +172,8 @@ void KCHMBookmarkWindow::restoreSettings( const KCHMSettings::bookmark_saved_set
 {
 	for ( int i = 0; i < settings.size(); i++ )
 	{
-		KCHMBookmarkTreeViewItem * item = new KCHMBookmarkTreeViewItem (list, settings[i].name, settings[i].url, settings[i].scroll_y);
-		
-		item->menuid = m_menuBookmarks->insertItem( settings[i].name );
+		KCHMBookmarkItem * item = new KCHMBookmarkItem( this, list, settings[i].name, settings[i].url, settings[i].scroll_y );
+		m_menuBookmarks->addAction( item->m_action );
 	}
 }
 
@@ -160,15 +184,15 @@ void KCHMBookmarkWindow::saveSettings( KCHMSettings::bookmark_saved_settings_t &
 
 	for ( int i = 0; i < list->count(); i++ )
 	{
-		KCHMBookmarkTreeViewItem * treeitem = (KCHMBookmarkTreeViewItem *) list->item( i );
-		settings.push_back (KCHMSettings::SavedBookmark(treeitem->name, treeitem->url, treeitem->scroll_y));
+		KCHMBookmarkItem * treeitem = (KCHMBookmarkItem *) list->item( i );
+		settings.push_back (KCHMSettings::SavedBookmark( treeitem->m_name, treeitem->m_url, treeitem->m_scroll_y) );
     }
 }
 
 void KCHMBookmarkWindow::invalidate( )
 {
 	for ( int i = 0; i < list->count(); i++ )
-		m_menuBookmarks->removeItem( ((KCHMBookmarkTreeViewItem *) list->item( i ))->menuid );
+		m_menuBookmarks->removeAction( ((KCHMBookmarkItem *) list->item( i ))->m_action );
 
 	list->clear();
 }
@@ -178,48 +202,41 @@ void KCHMBookmarkWindow::createMenu( QMenu * menuBookmarks )
 	m_menuBookmarks = menuBookmarks;
 }
 
-void KCHMBookmarkWindow::onBookmarkSelected( int bookmark )
-{
-	/*
-	for ( int i = 0; i < list->count(); i++ )
-	{
-		KCHMBookmarkTreeViewItem * treeitem = (KCHMBookmarkTreeViewItem *) list->item( i );
-		
-		if ( treeitem->menuid == bookmark )
-		{
-			if ( ::mainWindow->currentBrowser()->getOpenedPage() != treeitem->url )
-				::mainWindow->openPage( treeitem->url, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-	
-			::mainWindow->currentBrowser()->setScrollbarPosition(treeitem->scroll_y);
-			break;
-		}
-	}
-	*/
-}
-
-
-void KCHMBookmarkWindow::onItemDoubleClicked(QListWidgetItem *item)
+void KCHMBookmarkWindow::onItemDoubleClicked(QListWidgetItem * item)
 {
 	if ( !item )
 		return;
 	
-	KCHMBookmarkTreeViewItem * treeitem = (KCHMBookmarkTreeViewItem *) item;
+	KCHMBookmarkItem * treeitem = (KCHMBookmarkItem *) item;
 	
-	if ( ::mainWindow->currentBrowser()->getOpenedPage() != treeitem->url )
-		::mainWindow->openPage( treeitem->url, KCHMMainWindow::OPF_CONTENT_TREE | KCHMMainWindow::OPF_ADD2HISTORY );
+	if ( ::mainWindow->currentBrowser()->getOpenedPage() != treeitem->m_url )
+		::mainWindow->openPage( treeitem->m_url, KCHMMainWindow::OPF_CONTENT_TREE | KCHMMainWindow::OPF_ADD2HISTORY );
 	
-	::mainWindow->currentBrowser()->setScrollbarPosition(treeitem->scroll_y);
+	::mainWindow->currentBrowser()->setScrollbarPosition( treeitem->m_scroll_y );
 }
 
+void KCHMBookmarkWindow::actionBookmarkActivated()
+{
+	QAction *action = qobject_cast< QAction * >(sender());
 
-/*
-	if ( !m_contextMenu )
-	m_contextMenu = ::mainWindow->currentBrowser()->createListItemContextMenu( this );
-		
+	KCHMBookmarkItem * item = (KCHMBookmarkItem *) action->data().value< void* > ();
+	
+	if ( !item )
+		return;
+	
+	if ( ::mainWindow->currentBrowser()->getOpenedPage() != item->m_url )
+		::mainWindow->openPage( item->m_url, KCHMMainWindow::OPF_CONTENT_TREE | KCHMMainWindow::OPF_ADD2HISTORY );
+	
+	::mainWindow->currentBrowser()->setScrollbarPosition( item->m_scroll_y );
+}
+
+void KCHMBookmarkWindow::onContextMenuRequested(const QPoint & point)
+{
+	KCHMBookmarkItem * item = (KCHMBookmarkItem *) list->itemAt( point );
+	
 	if( item )
 	{
-	KCHMBookmarkTreeViewItem * treeitem = (KCHMBookmarkTreeViewItem *) item;
-		
-	::mainWindow->currentBrowser()->setTabKeeper( treeitem->url );
-	m_contextMenu->popup( point );
-*/
+		::mainWindow->currentBrowser()->setTabKeeper( item->m_url );
+		::mainWindow->tabItemsContextMenu()->popup( list->viewport()->mapToGlobal( point ) );
+	}
+}

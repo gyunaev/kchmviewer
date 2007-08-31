@@ -28,12 +28,12 @@
 #include "kchmdialogchooseurlfromlist.h"
 
 
-KCHMIndTocItem::KCHMIndTocItem( QTreeWidgetItem * parent, QTreeWidgetItem * after, QString name, QString aurl, int image) 
+KCHMIndTocItem::KCHMIndTocItem( QTreeWidgetItem * parent, QTreeWidgetItem * after, const QString& name, const QString& aurl, int image) 
 	: QTreeWidgetItem( parent, after ), m_name(name), m_url(aurl), m_image_number(image)
 {
 }
 
-KCHMIndTocItem::KCHMIndTocItem( QTreeWidget * parent, QTreeWidgetItem * after, QString name, QString aurl, int image) 
+KCHMIndTocItem::KCHMIndTocItem( QTreeWidget * parent, QTreeWidgetItem * after, const QString& name, const QString& aurl, int image) 
 	: QTreeWidgetItem( parent, after ), m_name(name), m_url(aurl), m_image_number(image)
 {
 }

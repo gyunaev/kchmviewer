@@ -42,7 +42,7 @@ class KCHMSettings
 		{
 		public:
 			SavedBookmark() { scroll_y = 0; }
-			SavedBookmark (QString n, QString u, int y) : name(n), url(u), scroll_y(y) {};
+			SavedBookmark ( const QString& n, const QString& u, int y) : name(n), url(u), scroll_y(y) {};
 			
 			QString		name;
 			QString		url;
@@ -53,7 +53,7 @@ class KCHMSettings
 		{
 			public:
 				SavedViewWindow() { scroll_y = 0; zoom = 0; }
-				SavedViewWindow (QString u, int y, int z) : url(u), scroll_y(y), zoom(z) {};
+				SavedViewWindow ( const QString& u, int y, int z) : url(u), scroll_y(y), zoom(z) {};
 			
 				QString		url;
 				int			scroll_y;

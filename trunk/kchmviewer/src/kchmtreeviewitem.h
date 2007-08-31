@@ -35,8 +35,8 @@
 class KCHMIndTocItem : public QTreeWidgetItem
 {
 	public:
-		KCHMIndTocItem( QTreeWidgetItem* parent, QTreeWidgetItem* after, QString name, QString aurl, int image); 
-		KCHMIndTocItem( QTreeWidget* parent, QTreeWidgetItem* after, QString name, QString url, int image);
+		KCHMIndTocItem( QTreeWidgetItem* parent, QTreeWidgetItem* after, const QString& name, const QString& aurl, int image); 
+		KCHMIndTocItem( QTreeWidget* parent, QTreeWidgetItem* after, const QString& name, const QString& url, int image);
 		
 		QString			getUrl() const;
 	

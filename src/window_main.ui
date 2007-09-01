@@ -131,6 +131,9 @@
    <property name="toolTip" >
     <string>Print current page</string>
    </property>
+   <property name="whatsThis" >
+    <string>Prints currently opened page.</string>
+   </property>
    <property name="shortcut" >
     <string>Ctrl+P</string>
    </property>
@@ -141,6 +144,9 @@
    </property>
    <property name="iconText" >
     <string>Exit</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Exits the application</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+Q</string>
@@ -156,6 +162,9 @@
    <property name="iconText" >
     <string>Copy</string>
    </property>
+   <property name="whatsThis" >
+    <string>Copies selected content to clipboard</string>
+   </property>
    <property name="shortcut" >
     <string>Ctrl+C</string>
    </property>
@@ -169,6 +178,9 @@
    </property>
    <property name="iconText" >
     <string>Paste</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Selects everything in the document</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+V</string>
@@ -184,6 +196,12 @@
    <property name="iconText" >
     <string>Find</string>
    </property>
+   <property name="toolTip" >
+    <string>Find text in currently opened page</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Enters the Find in page mode</string>
+   </property>
    <property name="shortcut" >
     <string>Ctrl+F</string>
    </property>
@@ -192,10 +210,22 @@
    <property name="text" >
     <string>E&amp;xtract CHM content...</string>
    </property>
+   <property name="toolTip" >
+    <string>Extract the CHM content to the directory</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Exctracts the CHM archive content to the specified directory. All the files are extracted.</string>
+   </property>
   </action>
   <action name="settings_SettingsAction" >
    <property name="text" >
     <string>&amp;Application settings...</string>
+   </property>
+   <property name="toolTip" >
+    <string>Change the application settings</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Change the application settings</string>
    </property>
   </action>
   <action name="bookmark_AddAction" >
@@ -206,7 +236,10 @@
     <string>&amp;Add bookmark</string>
    </property>
    <property name="toolTip" >
-    <string>Add a bookmark</string>
+    <string>Adds a bookmark for currently opened page</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Adds a bookmark for currently opened page. Remembers the opened page, and scroll position. Bookmarks are accessible through Bookmarks menu or tab.</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+B</string>
@@ -222,6 +255,9 @@
    <property name="toolTip" >
     <string>Increase the font size</string>
    </property>
+   <property name="whatsThis" >
+    <string>Increases the document font size. The new font size will be stored.</string>
+   </property>
    <property name="shortcut" >
     <string>Ctrl++</string>
    </property>
@@ -235,6 +271,9 @@
    </property>
    <property name="toolTip" >
     <string>Decrease the font size</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Decreases the document font size. The new font size will be stored.</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+-</string>
@@ -250,6 +289,9 @@
    <property name="toolTip" >
     <string>View HTML source of current page</string>
    </property>
+   <property name="whatsThis" >
+    <string>Shows the HTML source of currently opened page</string>
+   </property>
    <property name="shortcut" >
     <string>Ctrl+U</string>
    </property>
@@ -260,6 +302,9 @@
    </property>
    <property name="text" >
     <string>Enable &amp;full screen mode</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Enters or leaves the fullscreen mode</string>
    </property>
    <property name="shortcut" >
     <string>F11</string>
@@ -278,6 +323,9 @@
    <property name="text" >
     <string>Enable &amp;side window</string>
    </property>
+   <property name="whatsThis" >
+    <string>Shows or hides the size window (with Content, Index, Search and Bookmark tabs)</string>
+   </property>
    <property name="shortcut" >
     <string>F9</string>
    </property>
@@ -295,6 +343,9 @@
    <property name="toolTip" >
     <string>Locate the current page in contents window</string>
    </property>
+   <property name="whatsThis" >
+    <string>If the current page is present in the Table of Contents, locate it there. </string>
+   </property>
    <property name="shortcut" >
     <string>Ctrl+</string>
    </property>
@@ -302,6 +353,9 @@
   <action name="view_Set_encoding_action" >
    <property name="text" >
     <string>Set &amp;encoding</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Changes the current document encoding. </string>
    </property>
   </action>
   <action name="file_Open_action" >
@@ -314,6 +368,9 @@
    <property name="toolTip" >
     <string>Open a CHM file</string>
    </property>
+   <property name="whatsThis" >
+    <string>Opens a new CHM file</string>
+   </property>
   </action>
   <action name="nav_action_Back" >
    <property name="icon" >
@@ -324,6 +381,9 @@
    </property>
    <property name="toolTip" >
     <string>Navigate back</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Navigate back in navigation history</string>
    </property>
   </action>
   <action name="nav_actionForward" >
@@ -336,6 +396,9 @@
    <property name="toolTip" >
     <string>Navigate forward</string>
    </property>
+   <property name="whatsThis" >
+    <string>Navigate forward in navigation history</string>
+   </property>
   </action>
   <action name="nav_actionHome" >
    <property name="icon" >
@@ -347,6 +410,9 @@
    <property name="toolTip" >
     <string>Navigate home</string>
    </property>
+   <property name="whatsThis" >
+    <string>Navigate to the document Home page, as specified in the document.</string>
+   </property>
   </action>
   <action name="nav_actionPreviousPage" >
    <property name="icon" >
@@ -356,7 +422,10 @@
     <string>PreviousPage</string>
    </property>
    <property name="toolTip" >
-    <string>Show the previous page in the Table of Contents</string>
+    <string>Go to the previous page in the Table of Contents</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Go to the previous page in the &lt;b>Table of Contents&lt;/b></string>
    </property>
   </action>
   <action name="nav_actionNextPageToc" >
@@ -367,7 +436,10 @@
     <string>NextPageToc</string>
    </property>
    <property name="toolTip" >
-    <string>Show the next page in the Table of Contents</string>
+    <string>Go to the next page in the Table of Contents</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Go to the next page in the &lt;b>Table of Contents&lt;/b></string>
    </property>
   </action>
   <action name="action_Close_window" >
@@ -376,6 +448,9 @@
    </property>
    <property name="toolTip" >
     <string>Close current window</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Closes currently opened window</string>
    </property>
    <property name="shortcut" >
     <string>Ctrl+W</string>

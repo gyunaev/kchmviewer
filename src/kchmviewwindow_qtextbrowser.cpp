@@ -103,7 +103,7 @@ void KCHMViewWindow_QTextBrowser::onAnchorClicked(const QUrl & url)
 bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 {
 	QPrinter printer( QPrinter::HighResolution );
-	printer.setFullPage(true);
+	//printer.setFullPage(true);
 	
 	QPrintDialog dlg( &printer, this );
 	
@@ -114,7 +114,7 @@ bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 	}
 
 	document()->print( &printer );
-	::mainWindow->showInStatusBar( i18n( "Printing completed") );
+	::mainWindow->showInStatusBar( i18n( "Printing finished") );
 	return true;
 }
 

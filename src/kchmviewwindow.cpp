@@ -294,5 +294,3 @@ void KCHMViewWindow::setTabKeeper( const QString & link )
 		
 	m_newTabLinkKeeper = makeURLabsolute( m_newTabLinkKeeper, false );
 }
-
-// FIXME: use QTextEdit::createStandardContextMenu () for urls

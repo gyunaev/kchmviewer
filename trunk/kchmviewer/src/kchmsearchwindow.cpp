@@ -246,7 +246,6 @@ bool KCHMSearchWindow::searchQuery( const QString & query, QStringList * results
 	return result;
 }
 
-//FIXME: add whatsthis to toolbar items/actions
 
 void KCHMSearchWindow::onContextMenuRequested( const QPoint & point )
 {

@@ -184,6 +184,3 @@ void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMPars
 	
 	list->update();
 }
-
-
-// FIXME: check that QString is const QString& everywhere

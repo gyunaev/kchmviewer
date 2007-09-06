@@ -41,7 +41,7 @@ static bool run_process( const QString& command, const QString& filename )
 		if ( fork() != 0 )
 			exit(0); // exit immediately - our child is now has init as his parent
 				
-		system( preparedcommand.ascii() );
+		system( qPrintable( preparedcommand ) );
 		exit (0);
 				
 	default: // parent

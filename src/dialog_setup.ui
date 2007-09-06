@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>597</width>
-    <height>342</height>
+    <width>607</width>
+    <height>348</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -44,7 +44,7 @@
       </attribute>
       <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
@@ -58,16 +58,13 @@
           <number>6</number>
          </property>
          <item>
-          <widget class="Q3ButtonGroup" name="buttonGroup1" >
+          <widget class="QGroupBox" name="buttonGroup1" >
            <property name="title" >
             <string>If no arguments given on load</string>
            </property>
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-           </property>
            <layout class="QVBoxLayout" >
             <property name="margin" >
-             <number>0</number>
+             <number>9</number>
             </property>
             <property name="spacing" >
              <number>6</number>
@@ -93,16 +90,13 @@
           </widget>
          </item>
          <item>
-          <widget class="Q3ButtonGroup" name="buttonGroup2" >
+          <widget class="QGroupBox" name="buttonGroup2" >
            <property name="title" >
             <string>History</string>
            </property>
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-           </property>
            <layout class="QVBoxLayout" >
             <property name="margin" >
-             <number>0</number>
+             <number>9</number>
             </property>
             <property name="spacing" >
              <number>6</number>
@@ -166,31 +160,33 @@
         </layout>
        </item>
        <item>
-        <widget class="Q3GroupBox" name="groupBox1" >
+        <widget class="QGroupBox" name="groupBox1" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>5</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>4</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title" >
           <string>CHM security settings</string>
          </property>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
          <layout class="QHBoxLayout" >
           <property name="margin" >
-           <number>0</number>
+           <number>9</number>
           </property>
           <property name="spacing" >
            <number>6</number>
           </property>
           <item>
-           <widget class="Q3ButtonGroup" name="buttonGroup4" >
+           <widget class="QGroupBox" name="buttonGroup4" >
             <property name="title" >
              <string>When external link clicked</string>
             </property>
-            <property name="orientation" >
-             <enum>Qt::Vertical</enum>
-            </property>
             <layout class="QVBoxLayout" >
              <property name="margin" >
-              <number>0</number>
+              <number>9</number>
              </property>
              <property name="spacing" >
               <number>6</number>
@@ -226,16 +222,13 @@
            </widget>
           </item>
           <item>
-           <widget class="Q3ButtonGroup" name="buttonGroup5" >
+           <widget class="QGroupBox" name="buttonGroup5" >
             <property name="title" >
              <string>When link pointed to a new CHM file clicked</string>
             </property>
-            <property name="orientation" >
-             <enum>Qt::Vertical</enum>
-            </property>
             <layout class="QVBoxLayout" >
              <property name="margin" >
-              <number>0</number>
+              <number>9</number>
              </property>
              <property name="spacing" >
               <number>6</number>
@@ -275,22 +268,19 @@
       </attribute>
       <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
        <item>
-        <widget class="Q3GroupBox" name="m_groupQtsettings" >
+        <widget class="QGroupBox" name="m_groupQtsettings" >
          <property name="title" >
           <string>Qt version settings</string>
          </property>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
          <layout class="QHBoxLayout" >
           <property name="margin" >
-           <number>0</number>
+           <number>9</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -335,31 +325,25 @@
         </widget>
        </item>
        <item>
-        <widget class="Q3GroupBox" name="m_groupKDEsettings" >
+        <widget class="QGroupBox" name="m_groupKDEsettings" >
          <property name="title" >
           <string>KDE version settings</string>
          </property>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
          <layout class="QHBoxLayout" >
           <property name="margin" >
-           <number>0</number>
+           <number>9</number>
           </property>
           <property name="spacing" >
            <number>6</number>
           </property>
           <item>
-           <widget class="Q3ButtonGroup" name="buttonGroup5_2" >
+           <widget class="QGroupBox" name="buttonGroup5_2" >
             <property name="title" >
              <string>To show HTML content, use</string>
             </property>
-            <property name="orientation" >
-             <enum>Qt::Vertical</enum>
-            </property>
             <layout class="QVBoxLayout" >
              <property name="margin" >
-              <number>0</number>
+              <number>9</number>
              </property>
              <property name="spacing" >
               <number>6</number>
@@ -367,7 +351,7 @@
              <item>
               <widget class="QRadioButton" name="m_radioUseQtextBrowser" >
                <property name="text" >
-                <string>&amp;Q3TextBrowser-based widget</string>
+                <string>&amp;QTextBrowser-based widget</string>
                </property>
                <property name="shortcut" >
                 <string>Alt+Q</string>
@@ -388,37 +372,24 @@
            </widget>
           </item>
           <item>
-           <widget class="Q3GroupBox" name="groupKhtmlSecurity" >
+           <widget class="QGroupBox" name="groupKhtmlSecurity" >
             <property name="title" >
              <string>KHTMLPart security</string>
             </property>
-            <property name="orientation" >
-             <enum>Qt::Vertical</enum>
-            </property>
             <layout class="QGridLayout" >
              <property name="margin" >
-              <number>0</number>
+              <number>9</number>
              </property>
              <property name="spacing" >
               <number>6</number>
              </property>
-             <item row="0" column="0" >
-              <widget class="QCheckBox" name="m_enableJS" >
+             <item row="1" column="1" >
+              <widget class="QCheckBox" name="m_enableRefresh" >
                <property name="text" >
-                <string>Enable Java&amp;Script</string>
+                <string>Enable &amp;refresh</string>
                </property>
                <property name="shortcut" >
-                <string>Alt+S</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1" >
-              <widget class="QCheckBox" name="m_enablePlugins" >
-               <property name="text" >
-                <string>Enable &amp;plugins</string>
-               </property>
-               <property name="shortcut" >
-                <string>Alt+P</string>
+                <string>Alt+R</string>
                </property>
               </widget>
              </item>
@@ -432,13 +403,23 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1" >
-              <widget class="QCheckBox" name="m_enableRefresh" >
+             <item row="0" column="1" >
+              <widget class="QCheckBox" name="m_enablePlugins" >
                <property name="text" >
-                <string>Enable &amp;refresh</string>
+                <string>Enable &amp;plugins</string>
                </property>
                <property name="shortcut" >
-                <string>Alt+R</string>
+                <string>Alt+P</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" >
+              <widget class="QCheckBox" name="m_enableJS" >
+               <property name="text" >
+                <string>Enable Java&amp;Script</string>
+               </property>
+               <property name="shortcut" >
+                <string>Alt+S</string>
                </property>
               </widget>
              </item>
@@ -448,6 +429,19 @@
          </layout>
         </widget>
        </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="TabPage" >
@@ -456,22 +450,19 @@
       </attribute>
       <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
        <item>
-        <widget class="Q3ButtonGroup" name="buttonGroup7" >
+        <widget class="QGroupBox" name="buttonGroup7" >
          <property name="title" >
           <string>View HTML source command uses</string>
          </property>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
          <layout class="QVBoxLayout" >
           <property name="margin" >
-           <number>0</number>
+           <number>9</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -523,75 +514,98 @@
         </widget>
        </item>
        <item>
-        <widget class="Q3ButtonGroup" name="groupBox6" >
+        <widget class="QGroupBox" name="groupBox6" >
          <property name="title" >
           <string>Search engine to use</string>
          </property>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <layout class="QGridLayout" >
+         <layout class="QVBoxLayout" >
           <property name="margin" >
-           <number>0</number>
+           <number>9</number>
           </property>
           <property name="spacing" >
            <number>6</number>
           </property>
-          <item row="1" column="0" >
-           <widget class="QRadioButton" name="m_useSearchEngineInternal" >
-            <property name="text" >
-             <string/>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
             </property>
-           </widget>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QRadioButton" name="m_useSearchEngineNew" >
+              <property name="text" >
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_labelUseSearchEngineNew" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>10</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text" >
+               <string>Use new kchmviewer internal  search engine (recommended). This engine indexes symbols, so it is possible to search for special symbols (like "C++"). All languages are supported. The index will be generated before the first search.</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap" >
+               <bool>true</bool>
+              </property>
+              <property name="buddy" >
+               <cstring>m_useSearchEngineNew</cstring>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
-          <item row="1" column="1" >
-           <widget class="QLabel" name="m_labelUseSearchEngineInternal" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>5</hsizetype>
-              <vsizetype>5</vsizetype>
-              <horstretch>10</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
             </property>
-            <property name="text" >
-             <string>Use the search based on internal CHM index. This engine cannot search for any symbols except underscode, does not support multibyte languages, and is not always available.</string>
+            <property name="spacing" >
+             <number>6</number>
             </property>
-            <property name="alignment" >
-             <set>Qt::AlignVCenter</set>
-            </property>
-            <property name="wordWrap" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QRadioButton" name="m_useSearchEngineNew" >
-            <property name="text" >
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QLabel" name="m_labelUseSearchEngineNew" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>5</hsizetype>
-              <vsizetype>5</vsizetype>
-              <horstretch>10</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>Use new kchmviewer internal  search engine (recommended). This engine indexes symbols, so it is possible to search for special symbols (like "C++"). All languages are supported. The index will be generated before the first search.</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignVCenter</set>
-            </property>
-            <property name="wordWrap" >
-             <bool>true</bool>
-            </property>
-           </widget>
+            <item>
+             <widget class="QRadioButton" name="m_useSearchEngineInternal" >
+              <property name="text" >
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_labelUseSearchEngineInternal" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>10</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text" >
+               <string>Use the search based on internal CHM index. This engine cannot search for any symbols except underscode, does not support multibyte languages, and is not always available.</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap" >
+               <bool>true</bool>
+              </property>
+              <property name="buddy" >
+               <cstring>m_useSearchEngineInternal</cstring>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -614,20 +628,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>m_radioOnBeginOpenDialog</tabstop>
   <tabstop>m_radioOnBeginOpenLast</tabstop>

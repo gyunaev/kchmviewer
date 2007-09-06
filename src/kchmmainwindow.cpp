@@ -39,11 +39,11 @@
 #include "kchmbookmarkwindow.h"
 #include "kchmtreeviewitem.h"
 #include "kchmsettings.h"
-#include "kchmsetupdialog.h"
 #include "kchmviewwindow.h"
 #include "kchmviewwindowmgr.h"
 #include "kchmkeyeventfilter.h"
 #include "kchmcontentswindow.h"
+#include "kchmsetupdialog.h"
 
 #if !defined (USE_KDE)
 	#include "kqrunprocess.h"
@@ -114,7 +114,7 @@ KCHMMainWindow::KCHMMainWindow()
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
 	statusBar()->show();
-	setIcon( QPixmap(":/images/application.png") );
+	qApp->setWindowIcon( QPixmap(":/images/application.png") );
 
 	m_aboutDlgMenuText = i18n( "%1 version %2\n\nCopyright (C) George Yunaev,"
 			"gyunaev@ulduzsoft.com, 2004-2007\nhttp://www.kchmviewer.net\n\n"
@@ -154,11 +154,11 @@ bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 		// Make the file name absolute; we'll need it later
 		QDir qd;
 		qd.setPath (fileName);
-		m_chmFilename = qd.absPath();
+		m_chmFilename = qd.absolutePath();
 		
 		// Qt's 'dirname' does not work well
 		QFileInfo qf ( m_chmFilename );
-		appConfig.m_lastOpenedDir = qf.dirPath(true);
+		appConfig.m_lastOpenedDir = qf.dir().path();
 
 		// Order the tabulations
 		int number_of_pages = 0;
@@ -193,7 +193,7 @@ bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 			const LCHMTextEncoding * encoding = 
 					m_chmFile->impl()->lookupByQtCodec(  m_currentSettings->m_activeEncoding );
 
-			m_tabWidget->setCurrentPage( m_currentSettings->m_activetabsystem );
+			m_tabWidget->setCurrentIndex( m_currentSettings->m_activetabsystem );
 			
 			if ( encoding )
 			{
@@ -221,7 +221,7 @@ bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 		}
 		else
 		{
-			m_tabWidget->setCurrentPage (0);
+			m_tabWidget->setCurrentIndex( 0 );
 			setTextEncoding( m_chmFile->currentEncoding() );
 			
 			if ( call_open_page )
@@ -243,7 +243,7 @@ bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 				Qt::NoButton);
 		mbox.exec();
 		
-		statusBar()->message( 
+		statusBar()->showMessage( 
 				i18n("Could not load file %1").arg(fileName),
 				2000 );
 		delete new_chmfile;	
@@ -265,7 +265,7 @@ void KCHMMainWindow::refreshCurrentBrowser( )
 		title = (QString) APP_NAME + " - " + title;
 #endif	
 	
-	setCaption ( title );
+	setWindowTitle( title );
 	
 	currentBrowser()->invalidate();
 	
@@ -356,7 +356,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 		// Because chm file always contain relative link, and current filename is not changed,
 		// we need to form a new path
 		QFileInfo qfi( m_chmFilename );
-		QString newfilename = qfi.dirPath(true) + "/" + p1;
+		QString newfilename = qfi.dir().path() + "/" + p1;
 		
 		QStringList event_args;
 		event_args.push_back( newfilename );
@@ -446,7 +446,7 @@ void KCHMMainWindow::closeFile( )
 	if ( appConfig.m_HistoryStoreExtra )
 	{
 		m_currentSettings->m_activeEncoding = m_chmFile->currentEncoding()->qtcodec;
-		m_currentSettings->m_activetabsystem = m_tabWidget->currentPageIndex( );
+		m_currentSettings->m_activetabsystem = m_tabWidget->currentIndex( );
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
 		
 		m_currentSettings->m_window_size_x = width();
@@ -526,7 +526,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	if ( !filename.isEmpty() )
 	{
-		if ( !loadFile( QString::fromLocal8Bit( filename )) )
+		if ( !loadFile( QString::fromLocal8Bit( qPrintable( filename ) )) )
 			return true; // skip the latest checks, but do not exit from the program
 
 		if ( !search_index.isEmpty() )
@@ -590,7 +590,7 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 	{
 		if ( m_contentsTab )
 		{
-			m_tabWidget->removePage (m_contentsTab);
+			m_tabWidget->removeTab( m_tabWidget->indexOf( m_contentsTab ) );
 			delete m_contentsTab;
 			m_contentsTab = 0;
 		}
@@ -603,7 +603,7 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 		if ( !m_contentsTab )
 		{
 			m_contentsTab = new KCHMContentsWindow( m_tabWidget );
-			m_tabWidget->insertTab (m_contentsTab, i18n( "Contents" ), tabindex);
+			m_tabWidget->insertTab( tabindex, m_contentsTab, i18n( "Contents" ) );
 		}
 	
 		nav_actionPreviousPage->setEnabled( true );
@@ -618,7 +618,7 @@ void KCHMMainWindow::showOrHideIndexWindow( int tabindex )
 	{
 		if ( m_indexTab )
 		{
-			m_tabWidget->removePage (m_indexTab);
+			m_tabWidget->removeTab( m_tabWidget->indexOf( m_indexTab ) );
 			delete m_indexTab;
 			m_indexTab = 0;
 		}
@@ -628,7 +628,7 @@ void KCHMMainWindow::showOrHideIndexWindow( int tabindex )
 		if ( !m_indexTab )
 		{
 			m_indexTab = new KCHMIndexWindow (m_tabWidget);
-			m_tabWidget->insertTab (m_indexTab, i18n( "Index" ), tabindex);
+			m_tabWidget->insertTab( tabindex, m_indexTab, i18n( "Index" ) );
 		}
 		else
 			m_indexTab->invalidate();
@@ -641,7 +641,7 @@ void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
 	{
 		if ( m_searchTab )
 		{
-			m_tabWidget->removePage (m_searchTab);
+			m_tabWidget->removeTab( m_tabWidget->indexOf( m_searchTab ) );
 			delete m_searchTab;
 			m_searchTab = 0;
 		}
@@ -651,7 +651,7 @@ void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
 		if ( !m_searchTab )
 		{
 			m_searchTab = new KCHMSearchWindow (m_tabWidget);
-			m_tabWidget->insertTab (m_searchTab, i18n( "Search" ), tabindex);
+			m_tabWidget->insertTab( tabindex, m_searchTab, i18n( "Search" ) );
 		}
 		else
 			m_searchTab->invalidate();
@@ -748,7 +748,7 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 		return true;
 	}
 	else
-		qWarning( "Unknown user event received: %s", event->m_action.ascii() );
+		qWarning( "Unknown user event received: %s", qPrintable( event->m_action ) );
 	
 	return false;
 }
@@ -787,7 +787,7 @@ void KCHMMainWindow::runAutoTest()
 
 	case STATE_OPEN_INDEX:
 		if ( m_indexTab )
-			m_tabWidget->setCurrentPage (1);
+			m_tabWidget->setCurrentIndex (1);
 		
 		m_autoteststate = STATE_SHUTDOWN;
 		QTimer::singleShot (500, this, SLOT(runAutoTest()) );
@@ -806,7 +806,7 @@ void KCHMMainWindow::runAutoTest()
 
 void KCHMMainWindow::showInStatusBar(const QString & text)
 {
-	statusBar()->message( text, 2000 );
+	statusBar()->showMessage( text, 2000 );
 }
 
 void KCHMMainWindow::actionNavigateBack()
@@ -829,7 +829,7 @@ void KCHMMainWindow::actionOpenFile()
 #if defined (USE_KDE)
 	QString fn = KFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("*.chm|Compressed Help Manual (*.chm)"), this);
 #else
-	QString fn = QFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("Compressed Help Manual (*.chm)"), this );
+	QString fn = QFileDialog::getOpenFileName( this, appConfig.m_lastOpenedDir, i18n("Compressed Help Manual (*.chm)") );
 #endif
 
 	if ( !fn.isEmpty() )
@@ -839,7 +839,7 @@ void KCHMMainWindow::actionOpenFile()
 		if ( !m_chmFile )
 			exit (1);
 			
-		statusBar()->message( i18n("Loading aborted"), 2000 );
+		statusBar()->showMessage( i18n("Loading aborted"), 2000 );
 	}
 }
 
@@ -1008,11 +1008,10 @@ void KCHMMainWindow::actionExtractCHM()
 		i18n("Choose a directory to store CHM content") );
 #else
 	QString outdir = QFileDialog::getExistingDirectory (
-		QString::null,
 		this,
-		0,
 		i18n("Choose a directory to store CHM content"),
-		TRUE );
+		QString::null,
+		QFileDialog::ShowDirsOnly );
 #endif
 	
 	if ( outdir.isEmpty() )
@@ -1048,7 +1047,7 @@ void KCHMMainWindow::actionExtractCHM()
 		if ( m_chmFile->getFileContentAsBinary( &buf, files[i] ) )
 		{
 			// Split filename to get the list of subdirectories
-			QStringList dirs = QStringList::split( '/', files[i] );
+			QStringList dirs = files[i].split( '/' );
 
 			// Walk through the list of subdirectories, and create them if needed
 			// dirlevel is used to detect extra .. and prevent overwriting files
@@ -1075,7 +1074,7 @@ void KCHMMainWindow::actionExtractCHM()
 					if ( !dir.exists() )
 					{
 						if ( !dir.mkdir( dir.path() ) )
-							qWarning( "Could not create subdir %s\n", dir.path().ascii() );
+							qWarning( "Could not create subdir %s\n", qPrintable( dir.path() ) );
 					}
 				}
 			}
@@ -1084,15 +1083,15 @@ void KCHMMainWindow::actionExtractCHM()
 			QFile wf( filename );
 			if ( !wf.open( QIODevice::WriteOnly ) )
 			{
-				qWarning( "Could not write file %s\n", filename.ascii() );
+				qWarning( "Could not write file %s\n", qPrintable( filename ) );
 				continue;
 			}
 			
-			wf. writeBlock( buf );
+			wf. write( buf );
 			wf.close();
 		}
 		else
-			qWarning( "Could not get file %s\n", files[i].ascii() );
+			qWarning( "Could not get file %s\n", qPrintable( files[i] ) );
 	}
 	
 	progress.setValue( files.size() );
@@ -1123,9 +1122,8 @@ void KCHMMainWindow::actionViewHTMLsource()
 	if ( appConfig.m_advUseInternalEditor )
 	{
 		QTextEdit * editor = new QTextEdit ( 0 );
-		editor->setTextFormat ( Qt::PlainText );
-		editor->setText( text );
-		editor->setCaption ( QString("HTML source of %1") .arg( currentBrowser()->getOpenedPage() ));
+		editor->setPlainText( text );
+		editor->setWindowTitle( QString("HTML source of %1") .arg( currentBrowser()->getOpenedPage() ));
 		editor->resize( 800, 600 );
 		editor->show();
 	}
@@ -1134,8 +1132,8 @@ void KCHMMainWindow::actionViewHTMLsource()
 		QFile file;
 		m_tempFileKeeper.generateTempFile( file );
 		
-		file.writeBlock( text.utf8() );
-		run_process( appConfig.m_advExternalEditorPath, file.name() );
+		file.write( text.toUtf8() );
+		run_process( appConfig.m_advExternalEditorPath, file.fileName() );
 	}
 }
 
@@ -1182,7 +1180,7 @@ void KCHMMainWindow::actionLocateInContentsTab()
 		return;
 	
 	// Activate a content tab
-	m_tabWidget->setCurrentPage( m_tabContextPage );
+	m_tabWidget->setCurrentIndex( m_tabContextPage );
 	
 	if ( m_contentsTab )
 	{
@@ -1199,7 +1197,7 @@ void KCHMMainWindow::actionLocateInContentsTab()
 			m_contentsTab->showItem( treeitem );
 		}
 		else
-			statusBar()->message( i18n( "Could not locate opened topic in content window"), 2000 );
+			statusBar()->showMessage( i18n( "Could not locate opened topic in content window"), 2000 );
 	}
 }
 
@@ -1260,24 +1258,24 @@ void KCHMMainWindow::actionAboutQt()
 void KCHMMainWindow::actionSwitchToContentTab()
 {
 	if ( m_tabContextPage != -1 ) 
-		m_tabWidget->setCurrentPage( m_tabContextPage );
+		m_tabWidget->setCurrentIndex( m_tabContextPage );
 }
 
 void KCHMMainWindow::actionSwitchToIndexTab()
 {
 	if ( m_tabIndexPage != -1 ) 
-		m_tabWidget->setCurrentPage( m_tabIndexPage );
+		m_tabWidget->setCurrentIndex( m_tabIndexPage );
 }
 
 void KCHMMainWindow::actionSwitchToSearchTab()
 {
 	if ( m_tabSearchPage != -1 ) 
-		m_tabWidget->setCurrentPage( m_tabSearchPage );
+		m_tabWidget->setCurrentIndex( m_tabSearchPage );
 }
 
 void KCHMMainWindow::actionSwitchToBookmarkTab()
 {
-	m_tabWidget->setCurrentPage( m_tabBookmarkPage );
+	m_tabWidget->setCurrentIndex( m_tabBookmarkPage );
 }
 
 
@@ -1462,12 +1460,12 @@ void KCHMMainWindow::setupActions()
 	// Context menu
 	m_contextMenu = new QMenu( this );
 	
-	m_contextMenu->insertItem ( "&Open this link in a new tab",
+	m_contextMenu->addAction ( "&Open this link in a new tab",
 	                          this, 
 	                          SLOT( onOpenPageInNewTab() ), 
 	                          QKeySequence( "Shift+Enter" ) );
 	
-	m_contextMenu->insertItem ( "&Open this link in a new background tab", 
+	m_contextMenu->addAction ( "&Open this link in a new background tab", 
 	                          this, 
 	                          SLOT( onOpenPageInNewBackgroundTab() ),
 	                          QKeySequence( "Ctrl+Enter" ) );

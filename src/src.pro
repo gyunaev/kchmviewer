@@ -23,7 +23,6 @@ CONFIG += debug \
 		 qt \
 		 precompile_header
 TEMPLATE = app
-QT +=  qt3support
 FORMS += tab_bookmarks.ui \
 tab_index.ui \
 tab_contents.ui \

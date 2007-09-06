@@ -109,12 +109,12 @@ void KCHMBookmarkWindow::onAddBookmarkPressed( )
 	QString url = ::mainWindow->currentBrowser()->getOpenedPage();
 	QString title = ::mainWindow->chmFile()->getTopicByUrl(url);
 	QString name = QInputDialog::getText( 
+	        this,
 			i18n( "%1 - add a bookmark") . arg(APP_NAME),
 			i18n( "Enter the name for this bookmark:" ),
 			QLineEdit::Normal,
 			title,
-			&ok, 
-			this);
+			&ok );
     
 	if ( !ok || name.isEmpty() )
 		return;
@@ -151,12 +151,12 @@ void KCHMBookmarkWindow::onEditBookmarkPressed( )
 	{
 	    bool ok;
 		QString name = QInputDialog::getText( 
-			i18n( "%1 - edit the bookmark name") . arg(APP_NAME),
+			this,
+		    i18n( "%1 - edit the bookmark name") . arg(APP_NAME),
 			i18n( "Enter the name for this bookmark:" ),
 			QLineEdit::Normal,
 			item->m_name, 
-			&ok, 
-			this);
+			&ok );
     
 		if ( !ok || name.isEmpty() )
 			return;

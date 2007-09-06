@@ -97,8 +97,8 @@
 class KQMainWindow : public KQ_CLASSNAME(MainWindow)
 {
 public:
-	KQMainWindow ( QWidget * parent, const char * name, Qt::WFlags f )
-		: KQ_CLASSNAME(MainWindow) (parent, name, f) {};
+	KQMainWindow ( QWidget * parent, Qt::WFlags f )
+		: KQ_CLASSNAME(MainWindow) (parent, f) {};
 };
 
 

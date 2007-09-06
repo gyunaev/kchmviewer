@@ -35,12 +35,12 @@ const char * APP_PATHINUSERDIR = ".kchmviewer";
 KCHMConfig::KCHMConfig()
 {
 	QDir dir;
-	m_datapath = QDir::homeDirPath() + "/" + APP_PATHINUSERDIR;
+	m_datapath = QDir::homePath () + "/" + APP_PATHINUSERDIR;
 	 
 	dir.setPath (m_datapath);
 	
 	if ( !dir.exists() && !dir.mkdir(m_datapath) )
-		qWarning ("Could not create directory %s", m_datapath.ascii());
+		qWarning( "Could not create directory %s", qPrintable( m_datapath ));
 
 	m_LoadLatestFileOnStartup = false;
 	m_onNewChmClick = ACTION_ASK_USER;
@@ -80,7 +80,7 @@ bool KCHMConfig::load()
 	
 	while ( file.readLine( readbuf, sizeof(readbuf) - 1 ) > 0 )
 	{
-		line = QString::fromUtf8( readbuf ).stripWhiteSpace();
+		line = QString::fromUtf8( readbuf ).trimmed();
 		
 		// skip empty lines and comments
 		if ( line.isEmpty() || line[0] == '#' )
@@ -88,18 +88,18 @@ bool KCHMConfig::load()
 		
 		QRegExp rxsection ("^\\[(\\w+)\\]$"), rxkeypair ("^(\\w+)\\s*=\\s*(.*)$");
 		
-		if ( rxsection.search ( line ) != -1 )
+		if ( rxsection.indexIn( line ) != -1 )
 		{
 			if ( rxsection.cap (1) == "settings" )
 				getting_history = false;
 			else if ( rxsection.cap (1) == "history" )
 				getting_history = true;
 			else
-				qWarning ("Unknown configuration section: %s", rxsection.cap (1).ascii());
+				qWarning ("Unknown configuration section: %s", qPrintable( rxsection.cap(1) ));
 			
 			continue;
 		}
-		else if ( !getting_history && rxkeypair.search ( line ) != -1 )
+		else if ( !getting_history && rxkeypair.indexIn( line ) != -1 )
 		{
 			QString key (rxkeypair.cap (1)), value (rxkeypair.cap(2));
 			
@@ -134,7 +134,7 @@ bool KCHMConfig::load()
 			else if ( key == "useSearchEngine" )
 				m_useSearchEngine = (use_search_engine) value.toInt();
 			else
-				qWarning ("Unknown key=value pair: %s", line.ascii());
+				qWarning ("Unknown key=value pair: %s", qPrintable( line ));
 		}
 		else if ( getting_history )
 		{
@@ -142,7 +142,7 @@ bool KCHMConfig::load()
 				addRecentFile( line );
 		}
 		else
-			qWarning ("Unknown line in configuration: %s", line.ascii());
+			qWarning ("Unknown line in configuration: %s", qPrintable( line ));
 	}
 
 	return true;
@@ -150,15 +150,17 @@ bool KCHMConfig::load()
 
 bool KCHMConfig::save( )
 {
-	QFile file (m_datapath + "/config");
+	QFile file( m_datapath + "/config" );
 	if ( !file.open (QIODevice::WriteOnly) )
 	{
-		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());
+		qWarning( "Could not write settings into file %s: %s", 
+		          qPrintable( file.fileName() ), 
+		          qPrintable(  file.errorString() ) );
 		return false;
 	}
 	
 	QTextStream stream( &file );
-	stream.setEncoding( QTextStream::UnicodeUTF8 );
+	stream.setCodec( "UTF-8" );
 	stream << "[settings]\n";
 	stream << "LoadLatestFileOnStartup=" << m_LoadLatestFileOnStartup << "\n";
 

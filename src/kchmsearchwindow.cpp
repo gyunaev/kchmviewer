@@ -164,7 +164,7 @@ void KCHMSearchWindow::onDoubleClicked( QTreeWidgetItem * item, int )
 void KCHMSearchWindow::restoreSettings( const KCHMSettings::search_saved_settings_t & settings )
 {
 	for ( int i = 0; i < settings.size(); i++ )
-		searchBox->insertItem (settings[i]);
+		searchBox->addItem (settings[i]);
 }
 
 void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & settings )
@@ -172,7 +172,7 @@ void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & set
 	settings.clear();
 
 	for ( int i = 0; i < searchBox->count(); i++ )
-		settings.push_back (searchBox->text(i));
+		settings.push_back( searchBox->itemText(i) );
 }
 
 

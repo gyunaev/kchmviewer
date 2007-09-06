@@ -98,7 +98,7 @@ void KCHMViewWindowMgr::invalidate()
 
 KCHMViewWindow * KCHMViewWindowMgr::current()
 {
-	TabData& tab = findTab( tabWidget->currentPage() );
+	TabData& tab = findTab( tabWidget->currentWidget() );
 	return tab.window;
 }
 
@@ -138,7 +138,7 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 		
 	// Set active if it is the first tab
 	if ( set_active || m_Windows.size() == 1 )
-		tabWidget->showPage( tabdata.widget );
+		tabWidget->setCurrentWidget( tabdata.widget );
 	
 	// Handle clicking on link in browser window
 	connect( viewvnd->getQObject(), 
@@ -173,7 +173,7 @@ void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 	if ( title.length() > 25 )
 		title = title.left( 22 ) + "...";
 
-	tabWidget->setTabLabel( window->getQWidget(), title );
+	tabWidget->setTabText( tabWidget->indexOf( window->getQWidget() ), title );
 	tab.action->setText( title );
 	
 	updateCloseButtons();
@@ -185,7 +185,7 @@ void KCHMViewWindowMgr::onCloseCurrentWindow( )
 	if ( m_Windows.size() == 1 )
 		return;
 			
-	TabData& tab = findTab( tabWidget->currentPage() );
+	TabData& tab = findTab( tabWidget->currentWidget() );
 	closeWindow( tab );
 }
 
@@ -202,11 +202,11 @@ void KCHMViewWindowMgr::closeWindow( const TabData & tab )
 
 	m_menuWindow->removeAction( tab.action );
 	
-	tabWidget->removePage( tab.widget );
+	tabWidget->removeTab( tabWidget->indexOf( tab.widget ) );
 	delete tab.window;
 	delete tab.action;
 	
-	m_Windows.remove( it );
+	m_Windows.erase( it );
 	updateCloseButtons();
 	
 	// Change the accelerators, as we might have removed the item in the middle
@@ -237,7 +237,7 @@ void KCHMViewWindowMgr::saveSettings( KCHMSettings::viewindow_saved_settings_t &
 	
 	for ( int i = 0; i < tabWidget->count(); i++ )
 	{
-		QWidget * p = tabWidget->page( i );
+		QWidget * p = tabWidget->widget( i );
 		TabData& tab = findTab( p );
 			
 		settings.push_back( 
@@ -282,7 +282,7 @@ void KCHMViewWindowMgr::activateWindow()
 			continue;
 		
 		QWidget *widget = (*it).widget;
-		tabWidget->showPage(widget);
+		tabWidget->setCurrentWidget(widget);
 		break;
 	}
 }
@@ -299,12 +299,12 @@ KCHMViewWindowMgr::TabData & KCHMViewWindowMgr::findTab(QWidget * widget)
 
 void KCHMViewWindowMgr::setCurrentPage(int index)
 {
-	tabWidget->setCurrentPage( index );
+	tabWidget->setCurrentIndex( index );
 }
 
 int KCHMViewWindowMgr::currentPageIndex() const
 {
-	return tabWidget->currentPageIndex();
+	return tabWidget->currentIndex();
 }
 
 

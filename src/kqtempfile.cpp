@@ -57,7 +57,7 @@ bool KQTempFileKeeper::generateTempFile( QFile & file, const QString & tempdir )
 		char fnbuf[128];
 		sprintf( fnbuf, "KQTEMPFILE%d-%d-%d.tmp", (int) getpid(), (int) time(0), m_fileNumber++ );
 				
-		file.setName( usetempdir + (QString) fnbuf );
+		file.setFileName( usetempdir + (QString) fnbuf );
 		if ( file.open( QIODevice::WriteOnly ) )
 			break;
 	}
@@ -67,6 +67,6 @@ bool KQTempFileKeeper::generateTempFile( QFile & file, const QString & tempdir )
 
 void KQTempFileKeeper::destroyTempFiles( )
 {
-	for ( unsigned int i = 0; i < m_tempFiles.size(); i++ )
+	for ( int i = 0; i < m_tempFiles.size(); i++ )
 		QFile::remove( m_tempFiles[i] );
 }

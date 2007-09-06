@@ -33,7 +33,7 @@ KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
 	m_zoomfactor = 0;
 	invalidate();
 	
-	setTextFormat ( Qt::RichText );
+//	setTextFormat ( Qt::RichText );
 	connect( this, SIGNAL( anchorClicked ( const QUrl& ) ), this, SLOT( onAnchorClicked ( const QUrl& ) ) );
 }
 
@@ -191,7 +191,7 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	if ( !chm )
 		return 0;
 
-	int pos = path.find ('#');
+	int pos = path.indexOf('#');
 	if ( pos != -1 )
 		path = path.left (pos);
 	
@@ -206,7 +206,7 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	if ( type == QTextDocument::HtmlResource || type == QTextDocument::StyleSheetResource )
 	{
 		if ( !chm->getFileContentAsString( &data, path ) )
-			qWarning( "Could not resolve file %s\n", path.ascii() );
+			qWarning( "Could not resolve file %s\n", qPrintable( path ) );
 		
 		return QVariant( QString( data ) );
 	}
@@ -220,7 +220,7 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 		if ( chm->getFileContentAsBinary( &buf, fpath ) )
 		{
 			if ( !img.loadFromData ( (const uchar *) buf.data(), buf.size() ) )
-				qWarning( "Could not resolve file %s\n", path.ascii() );
+				qWarning( "Could not resolve file %s\n", qPrintable( path ) );
 		}
 		
 		return QVariant( img );

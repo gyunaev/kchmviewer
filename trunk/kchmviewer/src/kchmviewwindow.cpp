@@ -70,22 +70,22 @@ QString KCHMViewWindow::makeURLabsolute ( const QString & url, bool set_as_base 
 	&& !LCHMUrlFactory::isJavascriptURL (url)
 	&& !LCHMUrlFactory::isNewChmURL (url, p1, p2) )
 	{
-		newurl = QDir::cleanDirPath (url);
+		newurl = QDir::cleanPath (url);
 
 		// Normalize url, so it becomes absolute
 		if ( newurl[0] != '/' )
 			newurl = m_base_url + "/" + newurl;
 	
-		newurl = QDir::cleanDirPath (newurl);
+		newurl = QDir::cleanPath (newurl);
 
 		if ( set_as_base )
 		{
 			m_base_url = newurl;
 		
 			// and set up new baseurl
-			int i = newurl.findRev('/');
+			int i = newurl.lastIndexOf('/');
 			if ( i != -1 )
-				m_base_url = QDir::cleanDirPath (newurl.left (i + 1));
+				m_base_url = QDir::cleanPath (newurl.left (i + 1));
 		}
 	}
 
@@ -107,7 +107,8 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 		// If a new chm file is opened here, and we do not use KCHMLPart, we better abort
 		if ( chmfile != ::mainWindow->getOpenedFileName() && appConfig.m_kdeUseQTextBrowser )
 			qFatal("KCHMViewWindow::openUrl(): opened new chm file %s while current is %s",
-				   chmfile.ascii(), ::mainWindow->getOpenedFileName().ascii() );
+				   qPrintable( chmfile ),
+				   qPrintable( ::mainWindow->getOpenedFileName() ) );
 
 		// It is OK to have a new file in chm for KHTMLPart
 		newurl = page;
@@ -131,11 +132,11 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 void KCHMViewWindow::handleStartPageAsImage( QString & link )
 {
 	// Handle pics
-	if ( link.endsWith( ".jpg", false )
-	|| link.endsWith( ".jpeg", false )
-	|| link.endsWith( ".gif", false )
-	|| link.endsWith( ".png", false )
-	|| link.endsWith( ".bmp", false ) )
+	if ( link.endsWith( ".jpg", Qt::CaseInsensitive )
+	|| link.endsWith( ".jpeg", Qt::CaseInsensitive )
+	|| link.endsWith( ".gif", Qt::CaseInsensitive )
+	|| link.endsWith( ".png", Qt::CaseInsensitive )
+	|| link.endsWith( ".bmp", Qt::CaseInsensitive ) )
 		link += LCHMUrlFactory::getInternalUriExtension();
 }
 
@@ -144,8 +145,8 @@ QMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
 {
 	QMenu * contextMenu = new QMenu( parent );
 	
-	contextMenu->insertItem ( "&Copy", ::mainWindow, SLOT(slotBrowserCopy()) );
-	contextMenu->insertItem ( "&Select all", ::mainWindow, SLOT(slotBrowserSelectAll()) );
+	contextMenu->addAction( "&Copy", ::mainWindow, SLOT(slotBrowserCopy()) );
+	contextMenu->addAction( "&Select all", ::mainWindow, SLOT(slotBrowserSelectAll()) );
 		
 	return contextMenu;
 }
@@ -168,11 +169,11 @@ QMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
 		if ( !m_contextMenuLink )
 		{
 			m_contextMenuLink = createStandardContextMenu( parent );
-			m_contextMenuLink->insertSeparator();
+			m_contextMenuLink->addSeparator();
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new tab", ::mainWindow, SLOT(onOpenPageInNewTab()), QKeySequence("Shift+Enter") );
+			m_contextMenuLink->addAction( "&Open this link in a new tab", ::mainWindow, SLOT(onOpenPageInNewTab()), QKeySequence("Shift+Enter") );
 			
-			m_contextMenuLink->insertItem ( "&Open this link in a new background tab", ::mainWindow, SLOT(onOpenPageInNewBackgroundTab()), QKeySequence("Ctrl+Enter") );
+			m_contextMenuLink->addAction( "&Open this link in a new background tab", ::mainWindow, SLOT(onOpenPageInNewBackgroundTab()), QKeySequence("Ctrl+Enter") );
 		}
 		
 		setTabKeeper( link );
@@ -287,7 +288,7 @@ void KCHMViewWindow::setTabKeeper( const QString & link )
 	if ( m_newTabLinkKeeper[0] == '#' && !m_openedPage.isEmpty() )
 	{
 			// Clean up opened page URL
-		int pos = m_openedPage.find ('#');
+		int pos = m_openedPage.indexOf('#');
 		QString fixedpath = pos == -1 ? m_openedPage : m_openedPage.left (pos);
 		m_newTabLinkKeeper = fixedpath + m_newTabLinkKeeper;
 	}

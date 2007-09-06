@@ -41,11 +41,11 @@ KCHMIndTocItem::KCHMIndTocItem( QTreeWidget * parent, QTreeWidgetItem * after, c
 
 QString KCHMIndTocItem::getUrl( ) const
 {
-	if ( m_url.find ('|') == -1 )
+	if ( m_url.indexOf ('|') == -1 )
 		return m_url;
 
 	// Create a dialog with URLs, and show it, so user can select an URL he/she wants.
-	QStringList urls = QStringList::split ('|', m_url);
+	QStringList urls = m_url.split( '|' );
 	QStringList titles;
 	LCHMFile * xchm = ::mainWindow->chmFile();
 
@@ -55,7 +55,7 @@ QString KCHMIndTocItem::getUrl( ) const
 		
 		if ( title.isEmpty() )
 		{
-			qWarning ("Could not get item name for url '%s'", urls[i].ascii());
+			qWarning( "Could not get item name for url '%s'", qPrintable( urls[i] ) );
 			titles.push_back(QString::null);
 		}
 		else

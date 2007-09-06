@@ -48,8 +48,8 @@ KCHMSearchEngine::~KCHMSearchEngine()
 void KCHMSearchEngine::processEvents( )
 {
 	// Do it twice; some events generate other events
-	qApp->processEvents( QEventLoop::ExcludeUserInput );
-	qApp->processEvents( QEventLoop::ExcludeUserInput );	
+	qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+	qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
 }
 
 
@@ -81,13 +81,13 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 	QFile f( indexfiledict );
 	if ( !f.exists() )
 	{
-		::mainWindow->statusBar()->message( tr( "Generating search index..." ) );
+		::mainWindow->statusBar()->showMessage( tr( "Generating search index..." ) );
 		
 		// Get the list of files in CHM archive
 		QStringList alldocuments;
 		
-		m_progressDlg->setCaption( tr( "Generating search index..." ) );
-		m_progressDlg->setLabelText( tr( "Generating search index..." ) );
+		m_progressDlg->setWindowTitle( i18n( "Generating search index..." ) );
+		m_progressDlg->setLabelText( i18n( "Generating search index..." ) );
 		m_progressDlg->setMaximum( 100 );
 		m_progressDlg->reset();
 		m_progressDlg->show();
@@ -102,7 +102,8 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 		
 		// Process the list keeping only HTML documents there
 		for ( int i = 0; i < alldocuments.size(); i++ )
-			if ( alldocuments[i].endsWith( ".html", false ) || alldocuments[i].endsWith( ".htm", false ) )
+			if ( alldocuments[i].endsWith( ".html", Qt::CaseInsensitive )
+			|| alldocuments[i].endsWith( ".htm", Qt::CaseInsensitive ) )
 				documents.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
 
 		m_Index->setDocList( documents );
@@ -117,13 +118,13 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 	}
 	else
 	{
-		::mainWindow->statusBar()->message( tr( "Reading dictionary..." ) );
+		::mainWindow->statusBar()->showMessage( i18n( "Reading dictionary..." ) );
 		processEvents();
 		
 		m_Index->readDict();
 	}
 	
-	::mainWindow->statusBar()->message( tr( "Done" ), 3000 );
+	::mainWindow->statusBar()->showMessage( tr( "Done" ), 3000 );
 	delete m_progressDlg;
 	m_progressDlg = 0;
 	
@@ -201,7 +202,7 @@ bool KCHMSearchEngine::searchQuery( const QString & query, QStringList * results
 
 	for ( int i = 0; i < query.length(); i++ )
 	{
-		QChar ch = query[i].lower();
+		QChar ch = query[i].toLower();
 		
 		// a quote either begins or ends the phrase
 		if ( ch == '"' )
@@ -217,14 +218,14 @@ bool KCHMSearchEngine::searchQuery( const QString & query, QStringList * results
 		}
 		
 		// If new char does not stop the word, add ot and continue
-		if ( ch.isLetterOrNumber() || partOfWordChars.find( ch ) != -1 )
+		if ( ch.isLetterOrNumber() || partOfWordChars.indexOf( ch ) != -1 )
 		{
 			term.append( ch );
 			continue;
 		}
 		
 		// If it is a split char, add this term and split char as separate term
-		if ( splitChars.find( ch ) != -1 )
+		if ( splitChars.indexOf( ch ) != -1 )
 		{
 			// Add existing term if present
 			keeper.addTerm( term );

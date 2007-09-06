@@ -55,8 +55,8 @@ QDataStream &operator>>( QDataStream &s, Document &l )
 
 QDataStream &operator<<( QDataStream &s, const Document &l )
 {
-	s << (Q_INT16)l.docNumber;
-	s << (Q_INT16)l.frequency;
+	s << (short)l.docNumber;
+	s << (short)l.frequency;
 	return s;
 }
 
@@ -155,13 +155,13 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 	
 	if ( !::mainWindow->chmFile()->getFileContentAsString( &text, filename ) )
 	{
-		qWarning( "Index::parseDocument: Could not retrieve the content at %s", filename.ascii() );
+		qWarning( "Index::parseDocument: Could not retrieve the content at %s", qPrintable( filename ) );
 		return false;
 	}
 	
 	if ( text.isNull() )
 	{
-		qWarning( "Index::parseDocument: Retrieved content for %s is empty", filename.ascii() );
+		qWarning( "Index::parseDocument: Retrieved content for %s is empty", qPrintable( filename ) );
 		return false;
 	}
 
@@ -187,7 +187,7 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 		QChar ch = text[j];
 		
 		if ( (j % 20000) == 0 )
-			qApp->processEvents( QEventLoop::ExcludeUserInput );
+			qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
 		
 		if ( state == STATE_IN_HTML_TAG )
 		{
@@ -235,14 +235,14 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 					parsedbuf += "&";
 				}
 				else
-					qWarning( "Index::parseDocument: incorrectly terminated HTML entity '&%s%c', ignoring", parseentity.ascii(), ch.latin1() );
+					qWarning( "Index::parseDocument: incorrectly terminated HTML entity '&%s%c', ignoring", qPrintable( parseentity ), ch.toLatin1() );
 				
 				j--; // parse this character again, but in different state
 				continue;
 			}
 			
 			// Don't we have a space?
-			if ( parseentity.lower() != "nbsp" )
+			if ( parseentity.toLower() != "nbsp" )
 			{
 				QString entity = ::mainWindow->chmFile()->impl()->decodeEntity( parseentity );
 			
@@ -285,19 +285,19 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 		
 		// Ok, we have a valid character outside HTML tags, and probably some in buffer already.
 		// If it is char or letter, add it and continue
-		if ( ch.isLetterOrNumber() || m_charsword.find( ch ) != -1 )
+		if ( ch.isLetterOrNumber() || m_charsword.indexOf( ch ) != -1 )
 		{
 			parsedbuf.append( ch );
 			continue;
 		}
 		
 		// If it is a split char, add the word to the dictionary, and then add the char itself.
-		if ( m_charssplit.find( ch ) != -1 )
+		if ( m_charssplit.indexOf( ch ) != -1 )
 		{
 			if ( !parsedbuf.isEmpty() )
-				tokenlist.push_back( parsedbuf.lower() );
+				tokenlist.push_back( parsedbuf.toLower() );
 			
-			tokenlist.push_back( ch.lower() );
+			tokenlist.push_back( ch.toLower() );
 			parsedbuf = QString::null;
 			continue;
 		}
@@ -306,14 +306,14 @@ tokenize_buf:
 		// Just add the word; it is most likely a space or terminated by tokenizer.
 		if ( !parsedbuf.isEmpty() )
 		{
-			tokenlist.push_back( parsedbuf.lower() );
+			tokenlist.push_back( parsedbuf.toLower() );
 			parsedbuf = QString::null;
 		}
 	}
 	
 	// Add the last word if still here - for broken htmls.
 	if ( !parsedbuf.isEmpty() )
-		tokenlist.push_back( parsedbuf.lower() );
+		tokenlist.push_back( parsedbuf.toLower() );
 	
 	return true;
 }
@@ -337,7 +337,7 @@ void Index::writeDict()
 	
 	if ( !f.open( QIODevice::WriteOnly ) )
 	{
-		qWarning( "Index::writeDict: could not write dictionary file %s", dictFile.ascii() );
+		qWarning( "Index::writeDict: could not write dictionary file %s", qPrintable( dictFile ) );
 		return;
 	}
 	
@@ -362,7 +362,7 @@ void Index::writeDocumentList()
 	QFile f( docListFile );
 	if ( !f.open( QIODevice::WriteOnly ) )
 	{
-		qWarning( "Index::writeDocumentList: could not write dictionary file %s", docListFile.ascii() );
+		qWarning( "Index::writeDocumentList: could not write dictionary file %s", qPrintable( docListFile ) );
 		return;
 	}
 	QDataStream s( &f );
@@ -517,7 +517,7 @@ bool Index::searchForPhrases( const QStringList &phrases, const QStringList &wor
 	
 	for ( QStringList::ConstIterator phrase_it = phrases.begin(); phrase_it != phrases.end(); phrase_it++ )
 	{
-		QStringList phrasewords = QStringList::split( ' ', *phrase_it );
+		QStringList phrasewords = phrase_it->split( ' ' );
 		first_word_positions = miniDict[ phrasewords[0] ]->positions;
 		
 		for ( int j = 1; j < phrasewords.count(); ++j )
@@ -527,13 +527,13 @@ bool Index::searchForPhrases( const QStringList &phrases, const QStringList &wor
 			
 			while ( dict_it != first_word_positions.end() )
 			{
-				if ( next_word_it.find( *dict_it + 1 ) != next_word_it.end() )
+				if ( next_word_it.indexOf( *dict_it + 1 ) != -1 )
 				{
 					(*dict_it)++;
 					++dict_it;
 				}
 				else
-					dict_it = first_word_positions.remove( dict_it );
+					dict_it = first_word_positions.erase( dict_it );
 			}
 		}
 	}

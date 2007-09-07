@@ -107,11 +107,11 @@ class LCHMFileImpl
 		size_t RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize) const;
 		
 		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
-		inline QString encodeWithCurrentCodec (const QString& str) const
+		inline QString encodeWithCurrentCodec( const QByteArray& str) const
 		{
-			return (m_textCodec ? m_textCodec->toUnicode( qPrintable(str) ) : str);
+			return (m_textCodec ? m_textCodec->toUnicode( str.constData () ) : str);
 		}
-
+	
 		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
 		inline QString encodeWithCurrentCodec (const char * str) const
 		{
@@ -239,16 +239,16 @@ class LCHMFileImpl
 		QString  	m_filename;
 	
 		//! Home url, got from CHM file
-		QString  	m_home;
+		QByteArray  m_home;
 
 		//! Context tree filename. Got from CHM file
-		QString  	m_topicsFile;
+		QByteArray 	m_topicsFile;
 
 		//! Index filename. Got from CHM file
-		QString 	m_indexFile;
+		QByteArray	m_indexFile;
 
 		//! Chm Title. Got from CHM file
-		QString		m_title;
+		QByteArray	m_title;
 
 		// Localization stuff
 		//! LCID from CHM file, used in encoding detection

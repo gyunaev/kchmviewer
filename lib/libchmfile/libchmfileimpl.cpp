@@ -57,7 +57,8 @@ class KCHMShowWaitCursor
 LCHMFileImpl::LCHMFileImpl( )
 {
 	m_chmFile = NULL;
-	m_home = m_filename = m_home = m_topicsFile = m_indexFile = m_font = QString::null;
+	m_filename = m_font = QString::null;
+	
 	m_entityDecodeMap.clear();
 	m_textCodec = 0;
 	m_textCodecForSpecialFiles = 0;
@@ -132,7 +133,12 @@ void LCHMFileImpl::closeAll( )
 	chm_close( m_chmFile );
 	
 	m_chmFile = NULL;
-	m_home = m_filename = m_home = m_topicsFile = m_indexFile = m_font = QString::null;
+	m_filename = m_font = QString::null;
+	
+	m_home.clear();
+	m_topicsFile.clear();
+	m_indexFile.clear();
+	
 	m_entityDecodeMap.clear();
 	m_textCodec = 0;
 	m_textCodecForSpecialFiles = 0;
@@ -709,7 +715,7 @@ bool LCHMFileImpl::getInfoFromWindows()
 				size = RetrieveObject(&ui, buffer, factor * 4096, BUF_SIZE);
 
 			if ( size && off_title )
-				m_title = QString ((const char*) (buffer + off_title % 4096));
+				m_title = QByteArray( (const char*) (buffer + off_title % 4096) );
 
 			if ( factor != off_home / 4096)
 			{
@@ -718,7 +724,7 @@ bool LCHMFileImpl::getInfoFromWindows()
 			}
 			
 			if ( size && off_home )
-				m_home = QString("/") + QString( (const char*) buffer + off_home % 4096);
+				m_home = QByteArray("/") + QByteArray( (const char*) buffer + off_home % 4096);
 
 			if ( factor != off_hhc / 4096)
 			{
@@ -727,7 +733,7 @@ bool LCHMFileImpl::getInfoFromWindows()
 			}
 		
 			if ( size && off_hhc )
-				m_topicsFile = QString("/") + QString ((const char*) buffer + off_hhc % 4096);
+				m_topicsFile = QByteArray("/") + QByteArray((const char*) buffer + off_hhc % 4096);
 
 			if ( factor != off_hhk / 4096)
 			{
@@ -736,7 +742,7 @@ bool LCHMFileImpl::getInfoFromWindows()
 			}
 
 			if ( size && off_hhk )
-				m_indexFile = QString("/") + QString((const char*) buffer + off_hhk % 4096);
+				m_indexFile = QByteArray("/") + QByteArray((const char*) buffer + off_hhk % 4096);
 		}
 	}
 	return true;
@@ -778,7 +784,7 @@ bool LCHMFileImpl::getInfoFromSystem()
 				cursor = buffer + index;
 			
 				if(m_topicsFile.isEmpty())
-					m_topicsFile = QString("/") + QString((const char*) buffer + index + 2);
+					m_topicsFile = QByteArray("/") + QByteArray((const char*) buffer + index + 2);
 				
 				break;
 			
@@ -787,7 +793,7 @@ bool LCHMFileImpl::getInfoFromSystem()
 				cursor = buffer + index;
 
 				if(m_indexFile.isEmpty())
-					m_indexFile = QString("/") + QString ((const char*)buffer + index + 2);
+					m_indexFile = QByteArray("/") + QByteArray((const char*)buffer + index + 2);
 				break;
 		
 			case 2:
@@ -795,13 +801,13 @@ bool LCHMFileImpl::getInfoFromSystem()
 				cursor = buffer + index;
 				
 				if(m_home.isEmpty() || m_home == "/")
-					m_home = QString("/") + QString ((const char*) buffer + index + 2);
+					m_home = QByteArray("/") + QByteArray((const char*) buffer + index + 2);
 				break;
 			
 			case 3:
 				index += 2;
 				cursor = buffer + index;
-				m_title = QString((const char*) (buffer + index + 2));
+				m_title = QByteArray( (const char*) (buffer + index + 2) );
 				break;
 
 			case 4:
@@ -817,19 +823,20 @@ bool LCHMFileImpl::getInfoFromSystem()
 				index += 2;
 				cursor = buffer + index;
 
-				if(m_topicsFile.isEmpty()) {
+				if ( m_topicsFile.isEmpty() )
+				{
 					QString topicAttempt = "/", tmp;
 					topicAttempt += QString ((const char*) buffer +index +2);
 
 					tmp = topicAttempt + ".hhc";
 				
 					if ( ResolveObject( tmp, &ui) )
-						m_topicsFile = tmp;
+						m_topicsFile = qPrintable( tmp );
 
 					tmp = topicAttempt + ".hhk";
 				
 					if ( ResolveObject( tmp, &ui) )
-						m_indexFile = tmp;
+						m_indexFile = qPrintable( tmp );
 				}
 				break;
 
@@ -1129,7 +1136,7 @@ bool LCHMFileImpl::getFileContentAsString( QString * str, const QString & url, b
 			buf.resize( length + 1 );
 			buf [length] = '\0';
 			
-			*str = internal_encoding ? (QString)((const char*) buf) :  encodeWithCurrentCodec((const char*) buf);
+			*str = internal_encoding ? (QString)( buf.constData() ) :  encodeWithCurrentCodec( buf.constData() );
 			return true;
 		}
 	}

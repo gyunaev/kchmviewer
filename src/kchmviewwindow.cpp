@@ -122,6 +122,11 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 		m_newTabLinkKeeper = QString::null;
 		m_openedPage = newurl;
 		
+		// If m_openedPage contains #, strip it, and everything after it
+		int hash = m_openedPage.indexOf( '#' );
+		if ( hash != -1 )
+			m_openedPage = m_openedPage.left( hash );
+			
 		mainWindow->viewWindowMgr()->setTabName( this );
 		return true;
 	}

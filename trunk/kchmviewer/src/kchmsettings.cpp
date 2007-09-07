@@ -27,8 +27,8 @@
 #include "kchmsettings.h"
 #include "kchmconfig.h"
 
-static Q_INT32 SETTINGS_MAGIC = 0xD8AB4E76;
-static Q_INT32 SETTINGS_VERSION = 4;
+static qint32 SETTINGS_MAGIC = 0xD8AB4E76;
+static qint32 SETTINGS_VERSION = 4;
 
 /*
  * The order is important!
@@ -87,7 +87,7 @@ static inline QDataStream& operator<< ( QDataStream& s, const KCHMSettings::Save
 
 static inline QDataStream& operator>> ( QDataStream& s, KCHMSettings::SavedViewWindow& b )
 {
-	Q_INT32 version;
+	qint32 version;
 	
 	s >> version; 
 	s >> b.url;
@@ -142,20 +142,20 @@ bool KCHMSettings::loadSettings( const QString & filename )
     QDataStream stream (&file);
 
 	// Read and check header
-	Q_INT32 data;
+	qint32 data;
 	bool complete_read = false;
 	stream >> data; // magic
 	
 	if ( data != SETTINGS_MAGIC )
 	{
-		qWarning ("file %s has bad magic value, ignoring it.", file.name().ascii());
+		qWarning ("file %s has bad magic value, ignoring it.", qPrintable( file.fileName()) );
 		return false;
 	}
 	
 	stream >> data; // version
 	if ( data > SETTINGS_VERSION )
 	{
-		qWarning ("file %s has unsupported data version %d,  ignoring it.", file.name().ascii(), data);
+		qWarning ("file %s has unsupported data version %d, ignoring it.", qPrintable( file.fileName()), data);
 		return false;
 	}
 
@@ -235,7 +235,9 @@ bool KCHMSettings::saveSettings( )
 	QFile file( m_settingsFile );
     if ( !file.open (QIODevice::WriteOnly) )
 	{
-		qWarning ("Could not write settings into file %s: %s", file.name().ascii(), file.errorString().ascii());
+		qWarning ("Could not write settings into file %s: %s", 
+		          qPrintable( file.fileName()), 
+		          qPrintable( file.errorString() ));
 		return false;
 	}
 	

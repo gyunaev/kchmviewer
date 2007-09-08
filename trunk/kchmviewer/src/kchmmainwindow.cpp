@@ -196,9 +196,7 @@ bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 			m_tabWidget->setCurrentIndex( m_currentSettings->m_activetabsystem );
 			
 			if ( encoding )
-			{
 				setTextEncoding( encoding );
-			}
 			
 			if ( m_searchTab )
 				m_searchTab->restoreSettings (m_currentSettings->m_searchhistory);
@@ -209,6 +207,9 @@ bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 			{
 				m_viewWindowMgr->restoreSettings( m_currentSettings->m_viewwindows );
 				m_viewWindowMgr->setCurrentPage( m_currentSettings->m_activetabwindow );
+				
+				if ( m_tabContextPage != -1 && m_tabContextPage == m_currentSettings->m_activetabwindow )
+					actionLocateInContentsTab();
 			}
 			
 			// Restore the main window size
@@ -829,7 +830,12 @@ void KCHMMainWindow::actionOpenFile()
 #if defined (USE_KDE)
 	QString fn = KFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("*.chm|Compressed Help Manual (*.chm)"), this);
 #else
-	QString fn = QFileDialog::getOpenFileName( this, appConfig.m_lastOpenedDir, i18n("Compressed Help Manual (*.chm)") );
+	QString fn = QFileDialog::getOpenFileName( this, 
+	                                           i18n( "Open a chm file"), 
+	                                           appConfig.m_lastOpenedDir, 
+	                                           i18n("Compressed Help Manual (*.chm)"),
+	                                           0,
+	                                           QFileDialog::DontResolveSymlinks );
 #endif
 
 	if ( !fn.isEmpty() )
@@ -1011,7 +1017,7 @@ void KCHMMainWindow::actionExtractCHM()
 		this,
 		i18n("Choose a directory to store CHM content"),
 		QString::null,
-		QFileDialog::ShowDirsOnly );
+		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
 #endif
 	
 	if ( outdir.isEmpty() )

@@ -419,7 +419,10 @@
     <iconset resource="resources/images.qrc" >:/images/icon_prev_page.png</iconset>
    </property>
    <property name="text" >
-    <string>PreviousPage</string>
+    <string>Previous page in Table of Context</string>
+   </property>
+   <property name="iconText" >
+    <string>Previous page in TOC</string>
    </property>
    <property name="toolTip" >
     <string>Go to the previous page in the Table of Contents</string>
@@ -433,7 +436,10 @@
     <iconset resource="resources/images.qrc" >:/images/icon_next_page.png</iconset>
    </property>
    <property name="text" >
-    <string>NextPageToc</string>
+    <string>Next page in Table of Context</string>
+   </property>
+   <property name="iconText" >
+    <string>Next page in TOC</string>
    </property>
    <property name="toolTip" >
     <string>Go to the next page in the Table of Contents</string>

@@ -1261,7 +1261,7 @@ void LCHMFileImpl::fillTopicsUrlMap()
 
 		QString url = LCHMUrlFactory::makeURLabsoluteIfNeeded( (const char*) urlstr.data() + off_url );
 
-		if ( (int) off_title < strings.size() )
+		if ( off_title < (u_int32_t)strings.size() )
 			m_url2topics[url] = encodeWithCurrentCodec ( (const char*) strings.data() + off_title );
 		else
 			m_url2topics[url] = "Untitled";

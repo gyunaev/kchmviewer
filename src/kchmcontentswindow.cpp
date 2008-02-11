@@ -120,3 +120,17 @@ void KCHMContentsWindow::onContextMenuRequested(const QPoint & point)
 		::mainWindow->tabItemsContextMenu()->popup( tree->viewport()->mapToGlobal( point ) );
 	}
 }
+
+
+void KCHMContentsWindow::search( const QString & text )
+{
+	QList<QTreeWidgetItem*> items = tree->findItems( text, Qt::MatchWildcard | Qt::MatchRecursive );
+	bool unused;	
+	qDebug("found %d items of %d", items.size(), tree->
+			topLevelItemCount() );	
+	if ( items.isEmpty() )
+		return;
+			
+	KCHMIndTocItem * treeitem = (KCHMIndTocItem *) items.first();
+	::mainWindow->activateLink( treeitem->getUrl(), unused );
+}

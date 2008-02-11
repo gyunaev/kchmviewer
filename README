@@ -1,21 +1,20 @@
 1. OVERVIEW
 
   KchmViewer is a chm (MS HTML help file format) viewer, written in C++. Unlike most existing CHM viewers for Unix,
-  it uses Trolltech Qt widget library, and does not depend on KDE or Gnome. However, it may be compiled with full 
-  KDE support, including KDE widgets and KIO/KHTML. 
+  it uses Trolltech Qt widget library, and does not depend on KDE or Gnome. When KDE4 is released, full KDE support
+  will be made available. 
 
   The main advantage of KchmViewer is extended support for non-English languages. Unlike others, KchmViewer in most 
   cases correctly detects chm file encoding, correctly shows tables of context of Russian, Korean, Chinese and 
-  Japanese help files, and correctly searches in non-English help files (search for MBCS languages - ja/ko/ch is 
-  still in progress). 
+  Japanese help files. It also correctly searches text in non-English help files, including Korean, Chinese and 
+  Japanese. 
 
   KchmViewer is written by Georgy Yunaev (gyunaev@ulduzsoft.com), and is licensed under GNU GPL license. Please 
   do NOT use this email for bug reporting; see below.
 
 2. FEATURES
 
-  - Standalone viewer, depends on Qt only. Does not require KDE, Gnome or wxWindows toolkit. 
-  - A KDE viewer can be compiled optionally, with KIO slave, KHTML and K*Widget support. 
+  - Standalone viewer, depends on Qt4 only. Does not require KDE, Gnome or wxWindows toolkit. 
   - Completely safe and harmless. Does not support JavaScript in any way, optionally warns you before opening an 
     external web page, or switching to another help file. 
   - Correctly detects and shows encoding of any valid chm file. 
@@ -31,53 +30,27 @@
   - Allows to increase or decrease the font size, so physically handicapped people can read texts easily. 
   - Has standard Back/Forward/Home navigation. 
   - Can print the opened pages on a standard printer (usually via CUPS). 
-  - Has complex search query support. You can use search queries like "lazy people" + learn -not.
+  - Has complex search query support. You can use search queries like "lazy people" +learn -not.
 
 
 3. INSTALLATION
 
-  Usually kchmviewer is distributed in source code archive, so you need to compile it first. It compiles with Qt 3.x,
-  but recommended Qt version is 3.3.4 and above. This is due to font resizing bug existing in previous Qt versions,
-  so if you use pre-3.3.4, you will have problems with font sizes. Note that you need to install qt3-devel package,
-  not only qt package.
+  Usually kchmviewer is distributed in source code archive, so you need to compile it first. It requires Qt version 
+  4.2 or higher due to bugs and missed functionality in previous versions. Note that you need to install qt4-devel 
+  and qt4-tools packages (the last one might be included in qt4-devel in your distribution), not just qt package.
 
 3.1. Qt-only version
 
   To compile Qt-only version of kchmviewer, follow the simple procedure:
 
-  > tar zxf kchmviewer-<version>.tar.gzi
+  > tar zxf kchmviewer-<version>.tar.gz
   > cd kchmviewer-<version>
-  > ./configure
+  > qmake
   > make
-  > sudo make install
+  
+  the binary is in bin/kchmviewer
 
   The last step is optional; you can use kchmviewer binary without installation.
-
-3.2 KDE version
-
-  This procedure will create the Qt-only executable, which does not use KDE. If you want to compile executable 
-  for KDE, add --with-kde to configure options. For KDE version, 'make install' is required to work with KHTML
-  browser. Note that you need kdelibs-devel package installed.
-
-  > tar zxf kchmviewer-<version>.tar.gz
-  > cd kchmviewer-<version>
-  > ./configure --with-kde
-  > make
-  > sudo make install
-
-3.3 x86-64 version
-
-  To compile kchmviewer version for x86-64, make sure that you have installed 64-bit qt and qt-devel libraries,
-  and specify the path to them with --with-qt-libraries= configure switch:
-
-  > tar zxf kchmviewer-<version>.tar.gz
-  > cd kchmviewer-<version>
-  > ./configure --with-qt-libraries=/usr/lib/qt3/lib64 [--with-kde (optional)]
-  > make
-  > sudo make install
-
-  If you experience any link error, make sure you have all 64bit libraries installed. Look careful on error
-  messages; usually they point you to right direction. 
 
 
 4. USAGE

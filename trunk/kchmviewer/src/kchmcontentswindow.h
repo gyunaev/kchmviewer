@@ -36,6 +36,7 @@ class KCHMContentsWindow : public QWidget, public Ui::TabContents
 		
 		void	refillTableOfContents();
 		void	showItem( KCHMIndTocItem * item );
+		void	search( const QString& text );
 		
 		KCHMIndTocItem *	getTreeItem( const QString& url );
 		

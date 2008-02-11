@@ -484,7 +484,7 @@ void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 bool KCHMMainWindow::parseCmdLineArgs( )
 {
 	QString filename = QString::null, search_query = QString::null;
-	QString search_index = QString::null, search_bookmark = QString::null;
+	QString search_index = QString::null, search_bookmark = QString::null, search_toc = QString::null;
 	bool do_autotest = false;
 
 #if defined (USE_KDE)
@@ -498,6 +498,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 	search_query = args->getOption ("search");
 	search_index = args->getOption ("sindex");
+	search_toc = args->getOption ("stoc");
 	
 	if ( args->count() > 0 )
 		filename = args->arg(0);
@@ -507,7 +508,13 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	{
 		if ( !strcmp (qApp->argv()[i], "-h") || !strcmp (qApp->argv()[i], "--help") )
 		{
-			fprintf (stderr, "Usage: %s [chmfile]\n", qApp->argv()[0]);
+			fprintf (stderr, "Usage: %s [options] [chmfile]\n"
+					"    The following options supported:\n"
+					"  --search <query> specifies the search query to search, and activate the first entry if found\n"
+					"  --sindex <word>  specifies the word to find in index, and activate if found\n"
+					"  --stoc <word(s)> specifies the word(s) to find in TOC, and activate if found. Wildcards allowed\n",
+	 				qApp->argv()[0] );
+			
 			exit (1);
 		}
 #if defined (ENABLE_AUTOTEST_SUPPORT)
@@ -520,6 +527,8 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 			search_query = qApp->argv()[++i];
 		else if ( !strcmp (qApp->argv()[i], "--sindex") )
 			search_index = qApp->argv()[++i];
+		else if ( !strcmp (qApp->argv()[i], "--stoc") )
+			search_toc = qApp->argv()[++i];
 		else
 			filename = qApp->argv()[i];
 	}
@@ -542,6 +551,13 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 			QStringList event_args;
 			event_args.push_back( search_query );
 			qApp->postEvent( this, new KCHMUserEvent( "searchQuery", event_args ) );
+		}
+		
+		if ( !search_toc.isEmpty() )	
+		{
+			QStringList event_args;
+			event_args.push_back( search_toc );
+			qApp->postEvent( this, new KCHMUserEvent( "findInToc", event_args ) );
 		}
 		
 		if ( do_autotest )
@@ -727,13 +743,25 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 	else if ( event->m_action == "findInIndex" )
 	{
 		if ( event->m_args.size() != 1 )
-			qFatal( "handleUserEvent: event searchQuery must receive 1 arg" );
+			qFatal( "handleUserEvent: event findInIndex must receive 1 arg" );
 		
 		if ( m_tabIndexPage == -1 )
 			return false;
 
 		actionSwitchToIndexTab();
 		m_indexTab->search( event->m_args[0] );
+		return true;
+	}
+	else if ( event->m_action == "findInToc" )
+	{
+		if ( event->m_args.size() != 1 )
+			qFatal( "handleUserEvent: event findInToc must receive 1 arg" );
+		
+		if ( m_tabContextPage == -1 )
+			return false;
+
+		actionSwitchToContentTab();
+		m_contentsTab->search( event->m_args[0] );
 		return true;
 	}
 	else if ( event->m_action == "searchQuery" )

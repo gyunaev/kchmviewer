@@ -30,8 +30,6 @@
 	#include <dcopclient.h>
 	
 	#include "kde/kchmdcopiface.h"
-//Added by qt3to4:
-#include <Q3CString>
 #endif
 
 KCHMMainWindow * mainWindow;
@@ -47,6 +45,7 @@ int main( int argc, char ** argv )
 		{ "+[chmfile]", "A CHM file to show", 0 },
 		{ "search <query>", I18N_NOOP("'--search <query>' specifies the search query to search, and activate the first entry if found"), 0 },
 		{ "sindex <word>", I18N_NOOP("'--sindex <word>' specifies the word to find in index, and activate if found"), 0 },
+		{ "stoc <word>", I18N_NOOP("'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if found. Wildcards allowed."), 0 },
 		KCmdLineLastOption
  	};
 
@@ -81,7 +80,7 @@ int main( int argc, char ** argv )
 	if ( !client->attach() )
 		qWarning("DCOP attach failed");
 	
-	Q3CString realAppId = client->registerAs( "kchmviewer" );
+	QString realAppId = client->registerAs( "kchmviewer" );
 #endif
 						
 	mainWindow = new KCHMMainWindow();

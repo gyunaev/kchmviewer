@@ -159,6 +159,7 @@ bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 		// Qt's 'dirname' does not work well
 		QFileInfo qf ( m_chmFilename );
 		appConfig.m_lastOpenedDir = qf.dir().path();
+		m_chmFileBasename = qf.fileName();
 
 		// Order the tabulations
 		int number_of_pages = 0;
@@ -345,26 +346,31 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 		return false;
 	}
 
-	if ( LCHMUrlFactory::isNewChmURL (url, p1, p2) && p1 != m_chmFilename )
+	if ( LCHMUrlFactory::isNewChmURL (url, p1, p2) )
 	{
-   		if ( QMessageBox::question( this,
-			i18n( "%1 - link to a new CHM file clicked"). arg(APP_NAME),
-			i18n( "You have clicked a link, which leads to a new CHM file %1.\nThe current file will be closed.\n\nDo you want to continue?").arg( p1 ),
-			i18n( "&Yes" ), i18n( "&No" ),
-			QString::null, 0, 1 ) )
-				return false;
-
-		// Because chm file always contain relative link, and current filename is not changed,
-		// we need to form a new path
-		QFileInfo qfi( m_chmFilename );
-		QString newfilename = qfi.dir().path() + "/" + p1;
-		
-		QStringList event_args;
-		event_args.push_back( newfilename );
-		event_args.push_back( p2 ); // url
-		
-		qApp->postEvent( this, new KCHMUserEvent( "loadAndOpen", event_args ) );
-		return false;
+		if ( p1 != m_chmFileBasename )
+		{
+			if ( QMessageBox::question( this,
+				i18n( "%1 - link to a new CHM file clicked"). arg(APP_NAME),
+				i18n( "You have clicked a link, which leads to a new CHM file %1.\nThe current file will be closed.\n\nDo you want to continue?").arg( p1 ),
+				i18n( "&Yes" ), i18n( "&No" ),
+				QString::null, 0, 1 ) )
+					return false;
+	
+			// Because chm file always contain relative link, and current filename is not changed,
+			// we need to form a new path
+			QFileInfo qfi( m_chmFilename );
+			QString newfilename = qfi.dir().path() + "/" + p1;
+			
+			QStringList event_args;
+			event_args.push_back( newfilename );
+			event_args.push_back( p2 ); // url
+			
+			qApp->postEvent( this, new KCHMUserEvent( "loadAndOpen", event_args ) );
+			return false;
+		}
+		else
+			url = p2;
 	}
 	
 	KCHMViewWindow * vwnd = currentBrowser();

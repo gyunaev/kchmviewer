@@ -133,6 +133,7 @@ void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMPars
 {
 	QVector< KCHMIndTocItem *> lastchild;
 	QVector< KCHMIndTocItem *> rootentry;
+	bool warning_shown = false;
 	
 	if ( map )
 		map->clear();
@@ -142,14 +143,36 @@ void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMPars
 	for ( int i = 0; i < data.size(); i++ )
 	{
 		int indent = data[i].indent;
-		
+
 		// Do we need to add another indent?
-		if ( indent >= lastchild.size() )
+		if ( indent >= rootentry.size() )
 		{
-			lastchild.resize( indent + 1 );
-			lastchild[indent] = 0;
+			int maxindent = rootentry.size() - 1;
 			
+			// Resize the arrays
+			lastchild.resize( indent + 1 );
 			rootentry.resize( indent + 1 );
+			
+			if ( indent > 0 && maxindent < 0 )
+				qFatal("Invalid fisrt TOC indent (first entry has no root entry), aborting.");
+			
+			// And init the rest if needed
+			if ( (indent - maxindent) > 1 )
+			{
+				if ( !warning_shown )
+				{
+					qWarning("Invalid TOC step, applying workaround. Results may vary.");
+					warning_shown = true;
+				}
+				
+				for ( int j = maxindent; j < indent; j++ )
+				{
+					lastchild[j+1] = lastchild[j];
+					rootentry[j+1] = rootentry[j];
+				}
+			}
+			
+			lastchild[indent] = 0;
 			rootentry[indent] = 0;
 		}
 		

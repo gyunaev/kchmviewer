@@ -1018,6 +1018,9 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 						qWarning("CHM has improper index; root indent offset is %d", root_indent_offset);
 				}
 
+				// Trim the entry name
+				entry.name = entry.name.trimmed();
+				
 				int real_indent = indent - root_indent_offset;
 				
 				entry.indent = real_indent;
@@ -1026,9 +1029,9 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 			else
 			{
 				if ( !entry.urls.isEmpty() )
-					qDebug ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", qPrintable( entry.urls[0] ));
+					qWarning ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", qPrintable( entry.urls[0] ));
 				else
-					qDebug ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag is parsed, but both name and url are empty.");	
+					qWarning ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag is parsed, but both name and url are empty.");	
 			}
 
 			entry.name = QString::null;

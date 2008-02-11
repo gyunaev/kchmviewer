@@ -5,6 +5,7 @@
     - Fixed crash on incorrectly compressed CHM file (thanks Albert Astals Cid);
     - Fixed kio-msits so it now works with KDE4 (thanks Albert Astals Cid);
     - Fixed FSF mailing address everywhere (thanks Albert Astals Cid);
+    - Fixed handling of improperly formatted CHM files like Audigy help;
 
 2007-08-26 tim <gyunaev@ulduzsoft.com>
     - Application ported to Qt4.

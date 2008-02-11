@@ -8,6 +8,7 @@
     - Fixed handling of improperly formatted CHM files like Audigy help;
     - Added heuristics to support for improperly formatted CHMs which have toc and index,
       but do not specify so in the project file;
+    - Fixed handling of CHM files which have local links in form of MS-ITS: urls;
 
 2007-08-26 tim <gyunaev@ulduzsoft.com>
     - Application ported to Qt4.

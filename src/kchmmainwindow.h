@@ -70,6 +70,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		
 		LCHMFile *	chmFile() const	{ return m_chmFile; }
 		const QString&	getOpenedFileName () { return m_chmFilename; }
+		const QString&	getOpenedFileBaseName () { return m_chmFileBasename; }
 		
 		KCHMViewWindow * currentBrowser() const;
 		KCHMContentsWindow  * contentsWindow() const { return m_contentsTab; }
@@ -162,6 +163,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		
 	private:		
 		QString 				m_chmFilename;
+		QString 				m_chmFileBasename;
 		QString					m_aboutDlgMenuText;	// to show in KDE or Qt about dialogs
 		
 		KCHMViewWindowMgr	*	m_viewWindowMgr;

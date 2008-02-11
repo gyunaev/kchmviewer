@@ -19,33 +19,27 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <qapplication.h>
-//Added by qt3to4:
-#include <QEventLoop>
+#include <QApplication>
 
-#include "kchmmainwindow.h"
-#include "kchmsearchengine.h"
-#include "kchmconfig.h"
-#include "kchmsettings.h"
+#include "lchmsearchengine.h"
 #include "libchmurlfactory.h"
+#include "lchmsearchengine_impl.h"
 
-#include "kchmsearchengine_impl.h"
 
-
-KCHMSearchEngine::KCHMSearchEngine()
+LCHMSearchEngine::LCHMSearchEngine()
 {
 	m_Index = 0;
 	m_progressDlg = 0;
 }
 
 
-KCHMSearchEngine::~KCHMSearchEngine()
+LCHMSearchEngine::~LCHMSearchEngine()
 {
 	delete m_Index;
 	delete m_progressDlg;
 }
 
-void KCHMSearchEngine::processEvents( )
+void LCHMSearchEngine::processEvents( )
 {
 	// Do it twice; some events generate other events
 	qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
@@ -53,13 +47,13 @@ void KCHMSearchEngine::processEvents( )
 }
 
 
-void KCHMSearchEngine::cancelButtonPressed( )
+void LCHMSearchEngine::cancelButtonPressed( )
 {
 	m_Index->setLastWinClosed();
 }
 
 
-bool KCHMSearchEngine::loadOrGenerateIndex( )
+bool LCHMSearchEngine::loadOrGenerateIndex( )
 {
 	if ( m_Index )
 		return true;
@@ -132,7 +126,7 @@ bool KCHMSearchEngine::loadOrGenerateIndex( )
 }
 
 
-void KCHMSearchEngine::setIndexingProgress( int progress )
+void LCHMSearchEngine::setIndexingProgress( int progress )
 {
 	if ( progress <= 100 )
 		m_progressDlg->setValue( progress );
@@ -187,7 +181,7 @@ class SearchDataKeeper
 };
 
 
-bool KCHMSearchEngine::searchQuery( const QString & query, QStringList * results, unsigned int limit )
+bool LCHMSearchEngine::searchQuery( const QString & query, QStringList * results, unsigned int limit )
 {
 	// Characters which split the words. We need to make them separate tokens
 	QString splitChars = m_Index->getCharsSplit();

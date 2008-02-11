@@ -1,0 +1,816 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-03-13 20:31-0700\n"
+"PO-Revision-Date: 2007-09-09 23:11+0100\n"
+"Last-Translator: Emilio Scalise <emisca(at)email.it>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. i18n: file kchmsetupdialog.ui line 24
+#: rc.cpp:3
+#, no-c-format
+msgid "KchmViewer settings"
+msgstr "Settaggi di KchmViewer"
+
+#. i18n: file kchmsetupdialog.ui line 54
+#: rc.cpp:6
+#, no-c-format
+msgid "General behavior"
+msgstr "Comportamento Generale"
+
+#. i18n: file kchmsetupdialog.ui line 73
+#: rc.cpp:9
+#, no-c-format
+msgid "If no arguments given on load"
+msgstr "Se nessun parametro è stato passato all'avvio"
+
+#. i18n: file kchmsetupdialog.ui line 84
+#: rc.cpp:12
+#, no-c-format
+msgid "Open the 'open CHM file' dialog"
+msgstr "Arpi la finestra di dialogo 'Apri file CHM'"
+
+#. i18n: file kchmsetupdialog.ui line 92
+#: rc.cpp:15
+#, fuzzy, no-c-format
+msgid "Open the &last used CHM file, if exist"
+msgstr "Apri il l'u&ltimo CHM file usato, se esiste"
+
+#. i18n: file kchmsetupdialog.ui line 95
+#: rc.cpp:18
+#, no-c-format
+msgid "Alt+L"
+msgstr "Alt+L"
+
+#. i18n: file kchmsetupdialog.ui line 105
+#: rc.cpp:21
+#, no-c-format
+msgid "History"
+msgstr "Cronologia"
+
+#. i18n: file kchmsetupdialog.ui line 124
+#: rc.cpp:24
+#, no-c-format
+msgid "Store history information for"
+msgstr "Salva la cronologia per"
+
+#. i18n: file kchmsetupdialog.ui line 143
+#: rc.cpp:28
+#, no-c-format
+msgid "latest files"
+msgstr "ultimi files"
+
+#. i18n: file kchmsetupdialog.ui line 153
+#: rc.cpp:31
+#, fuzzy, no-c-format
+msgid "R&emember extra information for history files"
+msgstr "Ricorda informazioni aggiuntiv&e per i files della cronologia"
+
+#. i18n: file kchmsetupdialog.ui line 156
+#: rc.cpp:34
+#, no-c-format
+msgid "Alt+E"
+msgstr "Alt+E"
+
+#. i18n: file kchmsetupdialog.ui line 159
+#: rc.cpp:37
+#, no-c-format
+msgid "Remembers the information about the files, which were opened. Remembers last opened page, search history, font size, bookmarks and so on."
+msgstr "Ricorda le informazioni riguardo i files che sono stati aperti. Ricorda l'ultima pagina visualizzata, la cronologia delle ricerche, dimensione dei font ecc."
+
+#. i18n: file kchmsetupdialog.ui line 171
+#: rc.cpp:40
+#, no-c-format
+msgid "CHM security settings"
+msgstr "Settaggi di sicurezza CHM"
+
+#. i18n: file kchmsetupdialog.ui line 182
+#: rc.cpp:43
+#, no-c-format
+msgid "When external link clicked"
+msgstr "Quando è cliccato un link esterno"
+
+#. i18n: file kchmsetupdialog.ui line 193
+#: rc.cpp:46
+#, fuzzy, no-c-format
+msgid "Alwa&ys open it in external browser"
+msgstr "Apri sempre in un browser esterno"
+
+#. i18n: file kchmsetupdialog.ui line 196
+#: rc.cpp:49
+#, no-c-format
+msgid "Alt+Y"
+msgstr "Alt+Y"
+
+#. i18n: file kchmsetupdialog.ui line 204
+#. i18n: file kchmsetupdialog.ui line 244
+#: rc.cpp:52
+#: rc.cpp:65
+#, no-c-format
+msgid "Ask for confirmation"
+msgstr "Chiedi conferma"
+
+#. i18n: file kchmsetupdialog.ui line 212
+#: rc.cpp:55
+#, no-c-format
+msgid "Do not open the link"
+msgstr "Non aprire il link"
+
+#. i18n: file kchmsetupdialog.ui line 225
+#: rc.cpp:59
+#, no-c-format
+msgid "When link pointed to a new CHM file clicked"
+msgstr "Quando si clicca un link che punta ad un file CHM aperto"
+
+#. i18n: file kchmsetupdialog.ui line 236
+#: rc.cpp:62
+#, no-c-format
+msgid "Always open a new CHM file"
+msgstr "Apri sempre un nuovo file CHM"
+
+#. i18n: file kchmsetupdialog.ui line 252
+#: rc.cpp:68
+#, no-c-format
+msgid "Do not open a new CHM file"
+msgstr "Non aprire un nuovo file CHM"
+
+#. i18n: file kchmsetupdialog.ui line 266
+#: rc.cpp:71
+#, no-c-format
+msgid "Version-specific settings"
+msgstr "Settaggi specifici della versione"
+
+#. i18n: file kchmsetupdialog.ui line 277
+#: rc.cpp:74
+#, no-c-format
+msgid "Qt version settings"
+msgstr "Settaggi della versione Qt"
+
+#. i18n: file kchmsetupdialog.ui line 299
+#: rc.cpp:77
+#, no-c-format
+msgid "Enter the path to the program, which will be used as a browser for external links.  A <i>%s</i> symbol will be replaced by the URL clicked."
+msgstr "Inserisci il path del programma che sarà usato come browser per i link esterni. Il simbolo <i>%s</i> sarà sostituito dalla URL cliccata."
+
+#. i18n: file kchmsetupdialog.ui line 325
+#: rc.cpp:80
+#, no-c-format
+msgid "KDE version settings"
+msgstr "Settaggi della versione KDE"
+
+#. i18n: file kchmsetupdialog.ui line 336
+#: rc.cpp:83
+#, no-c-format
+msgid "To show HTML content, use"
+msgstr "Per visualizzare contenuto HTML, usa"
+
+#. i18n: file kchmsetupdialog.ui line 347
+#: rc.cpp:86
+#, no-c-format
+msgid "&QTextBrowser-based widget"
+msgstr "Componente basato su &QTextBrowser"
+
+#. i18n: file kchmsetupdialog.ui line 350
+#: rc.cpp:89
+#, no-c-format
+msgid "Alt+Q"
+msgstr "Alt+Q"
+
+#. i18n: file kchmsetupdialog.ui line 358
+#: rc.cpp:92
+#, no-c-format
+msgid "&KHTMLPart-based widget"
+msgstr "Componente basato su &KHTMLPart"
+
+#. i18n: file kchmsetupdialog.ui line 361
+#: rc.cpp:95
+#, no-c-format
+msgid "Alt+K"
+msgstr "Alt+K"
+
+#. i18n: file kchmsetupdialog.ui line 371
+#: rc.cpp:98
+#, no-c-format
+msgid "KHTMLPart security"
+msgstr "Sicurezza KHTMLPart"
+
+#. i18n: file kchmsetupdialog.ui line 382
+#: rc.cpp:101
+#, no-c-format
+msgid "Enable Java&Script"
+msgstr "Abilita Java&Script"
+
+#. i18n: file kchmsetupdialog.ui line 385
+#: rc.cpp:104
+#, no-c-format
+msgid "Alt+S"
+msgstr "Alt+S"
+
+#. i18n: file kchmsetupdialog.ui line 393
+#: rc.cpp:107
+#, no-c-format
+msgid "Enable &plugins"
+msgstr "Abilita $plugins"
+
+#. i18n: file kchmsetupdialog.ui line 396
+#: rc.cpp:110
+#, no-c-format
+msgid "Alt+P"
+msgstr "Alt+P"
+
+#. i18n: file kchmsetupdialog.ui line 404
+#: rc.cpp:113
+#, no-c-format
+msgid "Enable &Java"
+msgstr "Abilita &Java"
+
+#. i18n: file kchmsetupdialog.ui line 407
+#: rc.cpp:116
+#, no-c-format
+msgid "Alt+J"
+msgstr "Alt+J"
+
+#. i18n: file kchmsetupdialog.ui line 415
+#: rc.cpp:119
+#, no-c-format
+msgid "Enable &refresh"
+msgstr "Abilita &refresh"
+
+#. i18n: file kchmsetupdialog.ui line 418
+#: rc.cpp:122
+#, no-c-format
+msgid "Alt+R"
+msgstr "Alt+R"
+
+#. i18n: file kchmsetupdialog.ui line 432
+#: rc.cpp:125
+#, no-c-format
+msgid "Advanced"
+msgstr "Avanzate"
+
+#. i18n: file kchmsetupdialog.ui line 443
+#: rc.cpp:128
+#, no-c-format
+msgid "View HTML source command uses"
+msgstr "Il comando 'vedi sorgente' usa"
+
+#. i18n: file kchmsetupdialog.ui line 454
+#: rc.cpp:131
+#, no-c-format
+msgid "Built-in HTML source viewer"
+msgstr "visualizzatore di sorgente HTML incorporato"
+
+#. i18n: file kchmsetupdialog.ui line 465
+#: rc.cpp:135
+#, fuzzy, no-c-format
+msgid "E&xternal program, specified below"
+msgstr "Programma esterno, specificato qui sotto"
+
+#. i18n: file kchmsetupdialog.ui line 468
+#: rc.cpp:138
+#, no-c-format
+msgid "Alt+X"
+msgstr "Alt+X"
+
+#. i18n: file kchmsetupdialog.ui line 484
+#: rc.cpp:141
+#, no-c-format
+msgid "External program:"
+msgstr "Programma esterno:"
+
+#. i18n: file kchmsetupdialog.ui line 501
+#: rc.cpp:144
+#, no-c-format
+msgid "Search engine to use"
+msgstr "Motore di ricerca da utilizzare:"
+
+#. i18n: file kchmsetupdialog.ui line 528
+#: rc.cpp:148
+#, no-c-format
+msgid "Use the search based on internal CHM index. This engine cannot search for any symbols except underscode, does not support multibyte languages, and is not always available."
+msgstr "Usa il motore di ricerca basato sull'indice interno del file CHM. Questo motore non permette di cercare simboli a parte dell'underscore, non supporta i linguaggi multibyte, e non è sempre disponibile."
+
+#. i18n: file kchmsetupdialog.ui line 555
+#: rc.cpp:152
+#, no-c-format
+msgid "Use new kchmviewer internal  search engine (recommended). This engine indexes symbols, so it is possible to search for special symbols (like \"C++\"). All languages are supported. The index will be generated before the first search."
+msgstr "Usa il nuovo motore di ricerca interno di kchviewer (raccomandato). Questo motore indicizza tutti i simboli, affinchè sia possibile ricercarli (es. \"C++\"). Tutte le lingue sono supportate. L'indice sarà generato alla prima ricerca."
+
+#. i18n: file kchmsetupdialog.ui line 588
+#: rc.cpp:158
+#, no-c-format
+msgid "F1"
+msgstr "F1"
+
+#: _translatorinfo.cpp:1
+#, fuzzy
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+
+#: _translatorinfo.cpp:3
+#, fuzzy
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+
+#: kchmbookmarkwindow.cpp:44
+msgid "&Add"
+msgstr "&Aggiungi"
+
+#: kchmbookmarkwindow.cpp:46
+#, fuzzy
+msgid "&Del"
+msgstr "Cancella"
+
+#: kchmbookmarkwindow.cpp:88
+msgid "%1 - add a bookmark"
+msgstr "%1 - Aggiungi un bookmark"
+
+#: kchmbookmarkwindow.cpp:89
+#: kchmbookmarkwindow.cpp:131
+msgid "Enter the name for this bookmark:"
+msgstr "Inserisci il nome per il bookmark:"
+
+#: kchmbookmarkwindow.cpp:130
+msgid "%1 - edit the bookmark name"
+msgstr "%1 - modifica il nome del bookmark"
+
+#: kchmbookmarkwindow.cpp:201
+msgid "&Add bookmark"
+msgstr "&Aggiungi bookmark"
+
+#: kchmdialogchooseurlfromlist.cpp:34
+msgid "Topics"
+msgstr "Argomenti"
+
+#: kchmdialogchooseurlfromlist.cpp:39
+msgid "Please select one of the topics below:"
+msgstr "Per favore scegli uno degli argomenti seguenti:"
+
+#: kchmdialogchooseurlfromlist.cpp:43
+msgid "&Ok"
+msgstr "&Ok"
+
+#: kchmmainwindow.cpp:122
+msgid ""
+"%1 version %2\n"
+"\n"
+"Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2004-2007\n"
+"http://www.kchmviewer.net\n"
+"\n"
+"Licensed under GNU GPL license.\n"
+"\n"
+"Please check my another project, http://www.transientmail.com - temporary e-mail address, which expires automatically."
+msgstr ""
+"%1 version %2\n"
+"\n"
+"Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2004-2007\n"
+"http://www.kchmviewer.net\n"
+"\n"
+"Sotto licenza GNU GPL.\n"
+"\n"
+"Per favore visita anche il mio progetto, http://www.transientmail.com - indirizzi email temporanei, che scadono automaticamente."
+
+#: kchmmainwindow.cpp:139
+msgid "*.chm|Compressed Help Manual (*.chm)"
+msgstr "*.chm|Manuale Help Compresso (*.chm)"
+
+#: kchmmainwindow.cpp:141
+msgid "Compressed Help Manual (*.chm)"
+msgstr "Manuale Help Compresso (*.chm)"
+
+#: kchmmainwindow.cpp:151
+msgid "Loading aborted"
+msgstr "Caricamento annullato"
+
+#: kchmmainwindow.cpp:261
+msgid "%1 - failed to load the chm file"
+msgstr "%1 - caricamento del file chm fallito"
+
+#: kchmmainwindow.cpp:262
+msgid "Unable to load the chm file %1"
+msgstr "Non riesco a caricare il file chm %1"
+
+#: kchmmainwindow.cpp:272
+msgid "Could not load file %1"
+msgstr "Non posso caricare il file %1"
+
+#: kchmmainwindow.cpp:288
+msgid "About %1"
+msgstr "Informazioni su %1"
+
+#: kchmmainwindow.cpp:374
+msgid "%1 - remote link clicked - %2"
+msgstr "%1 - link remoto cliccato - %2"
+
+#: kchmmainwindow.cpp:375
+msgid ""
+"A remote link %1 will start the external program to open it.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Il link remoto %1 causera' l'esecuzione di un programma esterno.\n"
+"\n"
+"Vuoi continuare?"
+
+#: kchmmainwindow.cpp:376
+#: kchmmainwindow.cpp:411
+#, fuzzy
+msgid "&Yes"
+msgstr "&Si"
+
+#: kchmmainwindow.cpp:376
+#: kchmmainwindow.cpp:411
+msgid "&No"
+msgstr "&No"
+
+#: kchmmainwindow.cpp:400
+msgid "%1 - JavsScript link clicked"
+msgstr "%1 - link JavaScript cliccato"
+
+#: kchmmainwindow.cpp:401
+msgid ""
+"You have clicked a JavaScript link.\n"
+"To prevent security-related issues JavaScript URLs are disabled in CHM files."
+msgstr ""
+"Hai cliccato un link JavaScript.\n"
+" Per prevenire potenziali problemi di sicurezza le URL JavaScript sono disabilitate nei file CHM."
+
+#: kchmmainwindow.cpp:409
+msgid "%1 - link to a new CHM file clicked"
+msgstr "%1 - link ad un nuovo file chm cliccato"
+
+#: kchmmainwindow.cpp:410
+msgid ""
+"You have clicked a link, which leads to a new CHM file %1.\n"
+"The current file will be closed.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Hai cliccato un link, che punta ad un altro file CHM %1.\n"
+"Il file corrente sara' chiuso.\n"
+"Vuoi continuare?"
+
+#: kchmmainwindow.cpp:474
+msgid "File Operations"
+msgstr "Operazioni sui file"
+
+#: kchmmainwindow.cpp:478
+msgid "Open File"
+msgstr "Apri file"
+
+#: kchmmainwindow.cpp:484
+msgid "Click this button to open an existing chm file."
+msgstr "Clicca questo bottone per aprire un file chm esistente."
+
+#: kchmmainwindow.cpp:489
+msgid "Print File"
+msgstr "Stampa file"
+
+#: kchmmainwindow.cpp:495
+msgid "Click this button to print the current page"
+msgstr "Clicca per stampare la pagina corrente"
+
+#: kchmmainwindow.cpp:510
+#, fuzzy
+msgid "E&xtract CHM content..."
+msgstr "Estrai contenuto CHM..."
+
+#: kchmmainwindow.cpp:511
+msgid "Click this button to extract the whole CHM file content into a specific directory"
+msgstr "Clicca questo bottone per estrarre tutto il contenuto del file CHM in una directory specifica"
+
+#: kchmmainwindow.cpp:517
+msgid "&Recent files"
+msgstr "File &Recenti"
+
+#: kchmmainwindow.cpp:526
+msgid "&Select all"
+msgstr "&Scegli tutto"
+
+#: kchmmainwindow.cpp:544
+msgid "&Change settings..."
+msgstr "&Cambia settaggi..."
+
+#: kchmmainwindow.cpp:551
+msgid "About &Qt"
+msgstr "Informazioni su &Qt"
+
+#: kchmmainwindow.cpp:553
+#, fuzzy
+msgid "What's &This"
+msgstr "Che cos'è?"
+
+#: kchmmainwindow.cpp:836
+msgid ""
+"Changing browser view options or search engine used\n"
+"requires restarting the application to take effect."
+msgstr ""
+"Il cambiamento delle impostazioni di visualizzazione o del motore di ricerca usato\n"
+"richiede il restart dell'applicazione per avere effetto."
+
+#: kchmmainwindow.cpp:954
+msgid "Index"
+msgstr "Indice"
+
+#: kchmmainwindow.cpp:977
+#: kchmsearchengine.cpp:246
+msgid "Search"
+msgstr "Ricerca"
+
+#: kchmmainwindow.cpp:1044
+msgid "Could not locate opened topic in content window"
+msgstr "Non posso trovare l'argomento aperto nella finestra dei contenuti"
+
+#: kchmmainwindow.cpp:1056
+#: kchmmainwindow.cpp:1062
+msgid "Choose a directory to store CHM content"
+msgstr "Scegli una directory per salvare il contenuto del CHM"
+
+#: kchmmainwindow.cpp:1075
+msgid "Extracting CHM content"
+msgstr "Estrazione del contenuto del CHM"
+
+#: kchmmainwindow.cpp:1075
+msgid "Extracting files..."
+msgstr "Estrazione dei file in corso..."
+
+#: kchmmainwindow.cpp:1075
+msgid "Abort"
+msgstr "Annulla"
+
+#: kchmnavtoolbar.cpp:33
+msgid "Navigation"
+msgstr "Navigazione"
+
+#: kchmnavtoolbar.cpp:37
+msgid "Move backward in history"
+msgstr "Vai indietro nella cronologia"
+
+#: kchmnavtoolbar.cpp:42
+msgid "Click this button to move backward in browser history"
+msgstr "Clicca questo bottone per tornare indietro nella cronologia del browser"
+
+#: kchmnavtoolbar.cpp:46
+msgid "Move forward in history"
+msgstr "Vai avanti nella cronologia"
+
+#: kchmnavtoolbar.cpp:51
+msgid "Click this button to move forward in browser history"
+msgstr "Clicca questo bottone per andare avanti nella cronologia del browser"
+
+#: kchmnavtoolbar.cpp:55
+msgid "Go to the home page"
+msgstr "Vai alla pagina iniziale."
+
+#: kchmnavtoolbar.cpp:60
+msgid "Click this button to move to the home page"
+msgstr "Clicca questo bottone per andare alla pagina iniziale"
+
+#: kchmsearchengine.cpp:246
+#, fuzzy
+msgid "A closing quote character is missing."
+msgstr "Il carattere di chiusura virgolette è mancante."
+
+#: kchmsearchtoolbar.cpp:50
+msgid "Find in page"
+msgstr "Trova nella pagina"
+
+#: kchmsearchtoolbar.cpp:67
+msgid "Enter here the text to search in the current page."
+msgstr "Immetti qui il testo da cercare nella pagina corrente."
+
+#: kchmsearchtoolbar.cpp:74
+msgid "Previous search result"
+msgstr "Risultato della ricerca precedente"
+
+#: kchmsearchtoolbar.cpp:79
+msgid "Click this button to find previous search result."
+msgstr "Clicca questo bottone per andare al risultato della ricerca precedente."
+
+#: kchmsearchtoolbar.cpp:83
+msgid "Next search result"
+msgstr "Prossimo risultato della ricerca"
+
+#: kchmsearchtoolbar.cpp:88
+msgid "Click this button to find next search result."
+msgstr "Clicca questo bottone per trovare il prossimo risultato della ricerca."
+
+#: kchmsearchtoolbar.cpp:92
+msgid "Locate this topic in content window"
+msgstr "Trova questo argomento nella finestra dei contenuti"
+
+#: kchmsearchtoolbar.cpp:97
+msgid "Click this button to find current topic in the content window, and open it."
+msgstr "Clicca questo bottone per trovare l'argomento corrente nella finestra dei contenuti e aprirlo."
+
+#: kchmsearchtoolbar.cpp:101
+msgid "Increase font size"
+msgstr "Aumenta la dimensione del font"
+
+#: kchmsearchtoolbar.cpp:106
+msgid "Click this button to increase the font size."
+msgstr "Clicca questo bottone per aumentare la dimensione del font."
+
+#: kchmsearchtoolbar.cpp:110
+msgid "Decrease font size"
+msgstr "Diminuisci la dimensione del font"
+
+#: kchmsearchtoolbar.cpp:115
+msgid "Click this button to decrease the font size."
+msgstr "Clicca questo bottone per diminuire la dimensione del font."
+
+#: kchmsearchtoolbar.cpp:119
+msgid "View HTML source"
+msgstr "Vedi il sorgente HTML"
+
+#: kchmsearchtoolbar.cpp:124
+msgid "Click this button to open a separate window with the page HTML source."
+msgstr "Clicca questo bottone per aprire una finestra separata con il sorgente della pagina HTML."
+
+#: kchmsearchtoolbar.cpp:128
+msgid "Add to bookmarks"
+msgstr "Aggiungi ai bookmarks"
+
+#: kchmsearchtoolbar.cpp:133
+msgid "Click this button to add the current page to the bookmarks list."
+msgstr "Clicca questo bottone per aggiungere la pagina corrente alla lista dei bookmarks."
+
+#: kchmsearchtoolbar.cpp:136
+msgid "Prev page in TOC"
+msgstr "Pagina precedente nell'indice"
+
+#: kchmsearchtoolbar.cpp:141
+msgid "Click this button to go to previous page in Table Of Content."
+msgstr "Clicca questo bottone per andare alla pagina precedente nell'indice."
+
+#: kchmsearchtoolbar.cpp:144
+msgid "Next page in TOC"
+msgstr "Pagina successiva nell'indice"
+
+#: kchmsearchtoolbar.cpp:149
+msgid "Click this button to go to next page in Table of Content."
+msgstr "Clicca questo bottone per andare alla pagina successiva nell'indice."
+
+#: kchmsearchtoolbar.cpp:155
+#, fuzzy
+msgid "&Increase font"
+msgstr "Aumenta font"
+
+#: kchmsearchtoolbar.cpp:156
+#, fuzzy
+msgid "&Decrease font"
+msgstr "Diminuisci font"
+
+#: kchmsearchtoolbar.cpp:157
+msgid "&View HTML source"
+msgstr "&Vedi il sorgente HTML"
+
+#: kchmsearchtoolbar.cpp:160
+msgid "&Bookmark this page"
+msgstr "Aggiungi la pagina ai &Bookmark"
+
+#: kchmsearchtoolbar.cpp:163
+#, fuzzy
+msgid "&Full screen"
+msgstr "Schermo intero"
+
+#: kchmsearchtoolbar.cpp:165
+#, fuzzy
+msgid "&Show contents window"
+msgstr "Visualizza la finestra dei contenuti"
+
+#: kchmsearchtoolbar.cpp:167
+#, fuzzy
+msgid "&Locate in contents window"
+msgstr "Trova nella pagina dei contenuti"
+
+#: kchmsearchtoolbar.cpp:220
+#, fuzzy
+msgid "&Set language"
+msgstr "Imposta lingua"
+
+#: kchmsearchtoolbar.cpp:243
+#, fuzzy
+msgid "&Set codepage"
+msgstr "Imposta codifica"
+
+#: kchmsearchwindow.cpp:43
+msgid "Type in word(s) to search for:"
+msgstr "Scrivi delle parole da cercare:"
+
+#: kchmsearchwindow.cpp:46
+msgid "<a href=\"q\"><b>Help</b></a>"
+msgstr "<a href=\"q\"><b>Aiuto</b></a>"
+
+#: kchmsearchwindow.cpp:58
+msgid "Go"
+msgstr "Vai"
+
+#: kchmsearchwindow.cpp:66
+msgid "Title"
+msgstr "Titolo"
+
+#: kchmsearchwindow.cpp:67
+msgid "Location"
+msgstr "Posizione"
+
+#: kchmsearchwindow.cpp:130
+msgid "Search returned %1 result(s)"
+msgstr "La ricerca ha restituito %1 risultato(i)"
+
+#: kchmsearchwindow.cpp:133
+msgid "Search returned no results"
+msgstr "La ricerca non ha restituito risultati"
+
+#: kchmsearchwindow.cpp:136
+#: kchmviewwindow_qtextbrowser.cpp:211
+msgid "Search failed"
+msgstr "Ricerca fallita"
+
+#: kchmsearchwindow.cpp:169
+#: kchmsearchwindow.cpp:175
+msgid "How to use search"
+msgstr "Come usare la ricerca"
+
+#: kchmsearchwindow.cpp:170
+msgid "<html><p>The improved search engine allows you to search for a word, symbol or phrase, which is set of words and symbols included in quotes. Only the documents which include all the terms speficide in th search query are shown; no prefixes needed.<p>Unlike MS CHM internal search index, my improved search engine indexes everything, including special symbols. Therefore it is possible to search (and find!) for something like <i>$q = new ChmFile();</i>. This search also fully supports Unicode, which means that you can search in non-English documents.<p>If you want to search for a quote symbol, use quotation mark instead. The engine treats a quote and a quotation mark as the same symbol, which allows to use them in phrases.</html>"
+msgstr ""
+
+#: kchmsearchwindow.cpp:176
+msgid ""
+"The search query can contain a few prefixes.\n"
+"A set of words inside the quote marks mean that you are searching for exact phrase.\n"
+"A word with minus sign means that it should be absent in the search result.\n"
+"A word with plus mark or without any mark means that it must be present in the search result.\n"
+"\n"
+"Note that only letters and digits are indexed.\n"
+"You cannot search for non-character symbols other than underscope, and those symbols will be removed from the search query.\n"
+"For example, search for 'C' will give the same result as searching for 'C++'."
+msgstr ""
+
+#: kchmsearchwindow.cpp:226
+msgid "Search is not available"
+msgstr "La ricerca non è disponibile"
+
+#: kchmsearchwindow.cpp:227
+msgid "<p>The search feature is not avaiable for this chm file.<p>The old search engine depends on indexes present in chm files itself. Not every chm file has an index; it is set up during chm file creation. Therefore if the search index was not created during chm file creation, this makes search impossible.<p>Solution: use new search engine (menu Settings/Advanced), which generates its own index."
+msgstr ""
+
+#: kchmviewwindow_qtextbrowser.cpp:171
+msgid "Printing (page %1)..."
+msgstr "Stampa in corso (pagina %1)..."
+
+#: kchmviewwindow_qtextbrowser.cpp:179
+msgid "Printing completed"
+msgstr "Stampa completata"
+
+#: kchmviewwindow_qtextbrowser.cpp:183
+msgid "Printing aborted"
+msgstr "Stampa annullata"
+
+#: kchmviewwindow_qtextbrowser.cpp:189
+msgid "%1 - could not print"
+msgstr "%1 - non posso stampare"
+
+#: kchmviewwindow_qtextbrowser.cpp:190
+msgid ""
+"Could not print.\n"
+"Your Qt library has been compiled without printing support"
+msgstr ""
+"Non posso stampare.\n"
+"La tua libreria Qt e' stata compilata senza supporto alla stampa"
+
+#: kchmviewwindowmgr.cpp:65
+#, fuzzy
+msgid "&Window"
+msgstr "Finestra"
+
+#: main.cpp:46
+#, fuzzy
+msgid "'--search <query>' specifies the search query to search, and activate the first entry if found"
+msgstr "'--search <query>' specifica la query di ricerca da cercarem e seleziona il primo valore se trovato"
+
+#: main.cpp:47
+msgid "'--sindex <word>' specifies the word to find in index, and activate if found"
+msgstr "'--sindex <word>' specifica la prima parola da trovare nell'indice, e la seleziona se trovata"
+
+#: main.cpp:54
+msgid "CHM file viewer"
+msgstr "visualizzatore di file CHM"
+

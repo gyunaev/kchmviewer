@@ -1,7 +1,8 @@
 2008-02-10 tim <gyunaev@ulduzsoft.com>
     - Added a command-line option to search through table of contents (--stoc);
-    - Version changed to 4.0b2
-    - Added Italian translation (thanks to Emilio Scalise)
+    - Version changed to 4.0b2;
+    - Added Italian translation (thanks to Emilio Scalise);
+    - Fixed crash on incorrectly compressed CHM file (thanks Albert Astals Cid);
 
 2007-08-26 tim <gyunaev@ulduzsoft.com>
     - Application ported to Qt4.

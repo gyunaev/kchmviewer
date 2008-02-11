@@ -16,7 +16,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
 #ifndef MSITS_H
@@ -26,8 +26,8 @@
 #include <kio/slavebase.h>
 #include <kurl.h>
 
+#include <qbytearray.h>
 #include <qstring.h>
-#include <qcstring.h>
 
 #include "config.h"
 #include "chm_lib.h"
@@ -36,24 +36,24 @@
 class ProtocolMSITS : public KIO::SlaveBase
 {
 public:
-    ProtocolMSITS ( const QCString&, const QCString& );
+    ProtocolMSITS ( const QByteArray&, const QByteArray& );
     virtual ~ProtocolMSITS();
 
-    virtual void	get ( const KURL& );
-	virtual void	listDir (const KURL & url);
-	virtual void	stat (const KURL & url);
+    virtual void	get ( const KUrl& );
+	virtual void	listDir (const KUrl & url);
+	virtual void	stat (const KUrl & url);
 
 private:
 	// This function does next thing:
 	// - parses the URL to get a file name and URL inside the file;
 	// - loads a new CHM file, if needed;
 	// - returns the parsed URL inside the file;
-	bool	parseLoadAndLookup ( const KURL&, QString& abspath );
+	bool	parseLoadAndLookup ( const KUrl&, QString& abspath );
 
 	// Resolve an object inside a CHM file
 	inline bool ResolveObject (const QString& fileName, chmUnitInfo *ui)
 	{
-		return m_chmFile != NULL && ::chm_resolve_object(m_chmFile, fileName.utf8(), ui) == CHM_RESOLVE_SUCCESS;
+		return m_chmFile != NULL && ::chm_resolve_object(m_chmFile, fileName.toUtf8().constData(), ui) == CHM_RESOLVE_SUCCESS;
 	}
 
 	// Retrieve an object from the CHM file

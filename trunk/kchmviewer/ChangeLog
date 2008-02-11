@@ -3,6 +3,7 @@
     - Version changed to 4.0b2;
     - Added Italian translation (thanks to Emilio Scalise);
     - Fixed crash on incorrectly compressed CHM file (thanks Albert Astals Cid);
+    - Fixed kio-msits so it now works with KDE4 (thanks Albert Astals Cid);
 
 2007-08-26 tim <gyunaev@ulduzsoft.com>
     - Application ported to Qt4.
@@ -33,7 +34,7 @@
 2007-03-09 tim <gyunaev@ulduzsoft.com>
     - Added improved custom search engine.
     - Added DCOP support for KDE version.
-    
+
 2007-03-08 tim <gyunaev@ulduzsoft.com>
     - KDE version now shows KDE about dialog
     - Fixed 'copy' in KDE browser

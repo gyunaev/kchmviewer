@@ -16,7 +16,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
 #include <stdio.h>
@@ -25,13 +25,12 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kinstance.h>
 #include <kurl.h>
-#include <kmimemagic.h>
+#include <kmimetype.h>
 
 #include <qfile.h>
 #include <qbitarray.h>
-#include <qvaluevector.h>
+#include <qvector.h>
 
 #include "msits.h"
 #include "libchmurlfactory.h"
@@ -40,27 +39,27 @@ using namespace KIO;
 
 extern "C"
 {
-    int kdemain( int argc, char **argv )
+    int KDE_EXPORT kdemain( int argc, char **argv )
     {
-		kdDebug() << "*** kio_msits Init" << endl;
+		kDebug() << "*** kio_msits Init";
 
-        KInstance instance( "kio_msits" );
+        KComponentData instance( "kio_msits" );
 
         if ( argc != 4 )
 		{
-            kdDebug() << "Usage: kio_msits protocol domain-socket1 domain-socket2" << endl;
+            kDebug() << "Usage: kio_msits protocol domain-socket1 domain-socket2";
             exit (-1);
         }
 
         ProtocolMSITS slave ( argv[2], argv[3] );
         slave.dispatchLoop();
 
-        kdDebug() << "*** kio_msits Done" << endl;
+        kDebug() << "*** kio_msits Done";
         return 0;
     }
 }
 
-ProtocolMSITS::ProtocolMSITS (const QCString &pool_socket, const QCString &app_socket)
+ProtocolMSITS::ProtocolMSITS (const QByteArray &pool_socket, const QByteArray &app_socket)
 	: SlaveBase ("kio_msits", pool_socket, app_socket)
 {
 	m_chmFile = 0;
@@ -78,40 +77,40 @@ ProtocolMSITS::~ProtocolMSITS()
 // A simple stat() wrapper
 static bool isDirectory ( const QString & filename )
 {
-	return filename[filename.length() - 1] == '/';
+    return filename.endsWith( '/' );
 }
 
 
-void ProtocolMSITS::get( const KURL& url )
+void ProtocolMSITS::get( const KUrl& url )
 {
 	QString htmdata, fileName;
 	chmUnitInfo ui;
 	QByteArray buf;
 
-    kdDebug() << "kio_msits::get() " << url.path() << endl;
+    kDebug() << "kio_msits::get() " << url.path();
 
 	if ( !parseLoadAndLookup ( url, fileName ) )
 		return;	// error() has been called by parseLoadAndLookup
 
-	kdDebug() << "kio_msits::get: parseLoadAndLookup returned " << fileName << endl;
+	kDebug() << "kio_msits::get: parseLoadAndLookup returned " << fileName;
 
 	if ( LCHMUrlFactory::handleFileType( url.path(), htmdata ) )
 	{
-		buf = htmdata.utf8();
-		kdDebug() << "Using special handling for image pages: " << htmdata << endl;
+		buf = htmdata.toUtf8();
+		kDebug() << "Using special handling for image pages: " << htmdata;
 	}
 	else
 	{
 		if ( isDirectory (fileName) )
 		{
-			error( KIO::ERR_IS_DIRECTORY, url.prettyURL() );
+			error( KIO::ERR_IS_DIRECTORY, url.prettyUrl() );
 			return;
 		}
 
 		if ( !ResolveObject ( fileName, &ui) )
 		{
-			kdDebug() << "kio_msits::get: could not resolve filename " << fileName << endl;
-        	error( KIO::ERR_DOES_NOT_EXIST, url.prettyURL() );
+			kDebug() << "kio_msits::get: could not resolve filename " << fileName;
+        	error( KIO::ERR_DOES_NOT_EXIST, url.prettyUrl() );
 			return;
 		}
 
@@ -119,17 +118,17 @@ void ProtocolMSITS::get( const KURL& url )
 
 		if ( RetrieveObject (&ui, (unsigned char*) buf.data(), 0, ui.length) == 0 )
 		{
-			kdDebug() << "kio_msits::get: could not retrieve filename " << fileName << endl;
-        	error( KIO::ERR_NO_CONTENT, url.prettyURL() );
+			kDebug() << "kio_msits::get: could not retrieve filename " << fileName;
+        	error( KIO::ERR_NO_CONTENT, url.prettyUrl() );
 			return;
 		}
 	}
 
     totalSize( buf.size() );
-    KMimeMagicResult * result = KMimeMagic::self()->findBufferFileType( buf, fileName );
-    kdDebug() << "Emitting mimetype " << result->mimeType() << endl;
+    KMimeType::Ptr result = KMimeType::findByNameAndContent( fileName, buf );
+    kDebug() << "Emitting mimetype " << result->name();
 
-	mimeType( result->mimeType() );
+	mimeType( result->name() );
     data( buf );
 	processedSize( buf.size() );
 
@@ -137,15 +136,15 @@ void ProtocolMSITS::get( const KURL& url )
 }
 
 
-bool ProtocolMSITS::parseLoadAndLookup ( const KURL& url, QString& abspath )
+bool ProtocolMSITS::parseLoadAndLookup ( const KUrl& url, QString& abspath )
 {
-	kdDebug() << "ProtocolMSITS::parseLoadAndLookup (const KURL&) " << url.path() << endl;
+	kDebug() << "ProtocolMSITS::parseLoadAndLookup (const KUrl&) " << url.path();
 
-	int pos = url.path().find ("::");
+	int pos = url.path().indexOf ("::");
 
 	if ( pos == -1 )
 	{
-		error( KIO::ERR_MALFORMED_URL, url.prettyURL() );
+		error( KIO::ERR_MALFORMED_URL, url.prettyUrl() );
 		return false;
 	}
 
@@ -156,11 +155,11 @@ bool ProtocolMSITS::parseLoadAndLookup ( const KURL& url, QString& abspath )
 	if ( abspath.startsWith( "ms-its:" ) )
 		abspath = abspath.mid( 7 );
 			
-	kdDebug() << "ProtocolMSITS::parseLoadAndLookup: filename " << filename << ", path " << abspath << endl;
+	kDebug() << "ProtocolMSITS::parseLoadAndLookup: filename " << filename << ", path " << abspath;
 
     if ( filename.isEmpty() )
     {
-		error( KIO::ERR_MALFORMED_URL, url.prettyURL() );
+		error( KIO::ERR_MALFORMED_URL, url.prettyUrl() );
         return false;
     }
 
@@ -168,14 +167,14 @@ bool ProtocolMSITS::parseLoadAndLookup ( const KURL& url, QString& abspath )
 	if ( m_chmFile && filename == m_openedFile )
 		return true;
 
-    kdDebug() << "Opening a new CHM file " << filename << endl;
+    kDebug() << "Opening a new CHM file " << filename;
 
 	// First try to open a temporary file
 	chmFile * tmpchm;
 
 	if ( (tmpchm = chm_open ( QFile::encodeName (filename))) == 0 )
 	{
-		error( KIO::ERR_COULD_NOT_READ, url.prettyURL() );
+		error( KIO::ERR_COULD_NOT_READ, url.prettyUrl() );
         return false;
 	}
 
@@ -186,7 +185,7 @@ bool ProtocolMSITS::parseLoadAndLookup ( const KURL& url, QString& abspath )
 	m_chmFile = tmpchm;
 	m_openedFile = filename;
     
-	kdDebug() << "A CHM file " << filename << " has beed opened successfully" << endl;
+	kDebug() << "A CHM file " << filename << " has beed opened successfully";
     return true;
 }
 
@@ -195,19 +194,13 @@ bool ProtocolMSITS::parseLoadAndLookup ( const KURL& url, QString& abspath )
  */
 static void app_entry(UDSEntry& e, unsigned int uds, const QString& str)
 {
-	UDSAtom a;
-	a.m_uds = uds;
-	a.m_str = str;
-	e.append(a);
+	e.insert(uds, str);
 }
 
  // appends an int with the UDS-ID uds
  static void app_entry(UDSEntry& e, unsigned int uds, long l)
  {
- 	UDSAtom a;
- 	a.m_uds = uds;
- 	a.m_long = l;
-	e.append(a);
+	e.insert(uds, l);
 }
 
 // internal function
@@ -215,9 +208,9 @@ static void app_entry(UDSEntry& e, unsigned int uds, const QString& str)
 static void app_dir(UDSEntry& e, const QString & name)
 {
 	e.clear();
-	app_entry(e, KIO::UDS_NAME, name);
-	app_entry(e, KIO::UDS_FILE_TYPE, S_IFDIR);
-	app_entry(e, KIO::UDS_SIZE, 1);
+	app_entry(e, KIO::UDSEntry::UDS_NAME, name);
+	app_entry(e, KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+	app_entry(e, KIO::UDSEntry::UDS_SIZE, 1);
 }
 
 // internal function
@@ -225,28 +218,28 @@ static void app_dir(UDSEntry& e, const QString & name)
 static void app_file(UDSEntry& e, const QString & name, size_t size)
 {
 	e.clear();
-	app_entry(e, KIO::UDS_NAME, name);
-	app_entry(e, KIO::UDS_FILE_TYPE, S_IFREG);
-	app_entry(e, KIO::UDS_SIZE, size);
+	app_entry(e, KIO::UDSEntry::UDS_NAME, name);
+	app_entry(e, KIO::UDSEntry::UDS_FILE_TYPE, S_IFREG);
+	app_entry(e, KIO::UDSEntry::UDS_SIZE, size);
 }
 
-void ProtocolMSITS::stat (const KURL & url)
+void ProtocolMSITS::stat (const KUrl & url)
 {
 	QString fileName;
 	chmUnitInfo ui;
 
-    kdDebug() << "kio_msits::stat (const KURL& url) " << url.path() << endl;
+    kDebug() << "kio_msits::stat (const KUrl& url) " << url.path();
 
 	if ( !parseLoadAndLookup ( url, fileName ) )
 		return;	// error() has been called by parseLoadAndLookup
 
 	if ( !ResolveObject ( fileName, &ui ) )
 	{
-        error( KIO::ERR_DOES_NOT_EXIST, url.prettyURL() );
+        error( KIO::ERR_DOES_NOT_EXIST, url.prettyUrl() );
 		return;
 	}
 
-	kdDebug() << "kio_msits::stat: adding an entry for " << fileName << endl;
+	kDebug() << "kio_msits::stat: adding an entry for " << fileName;
 	UDSEntry entry;
 
 	if ( isDirectory ( fileName ) )
@@ -263,21 +256,21 @@ void ProtocolMSITS::stat (const KURL & url)
 // A local CHMLIB enumerator
 static int chmlib_enumerator (struct chmFile *, struct chmUnitInfo *ui, void *context)
 {
-	((QValueVector<QString> *) context)->push_back (QString::fromLocal8Bit (ui->path));
+	((QVector<QString> *) context)->push_back (QString::fromLocal8Bit (ui->path));
 	return CHM_ENUMERATOR_CONTINUE;
 }
 
 
-void ProtocolMSITS::listDir (const KURL & url)
+void ProtocolMSITS::listDir (const KUrl & url)
 {
 	QString filepath;
 
-    kdDebug() << "kio_msits::listDir (const KURL& url) " << url.path() << endl;
+    kDebug() << "kio_msits::listDir (const KUrl& url) " << url.path();
 
 	if ( !parseLoadAndLookup ( url, filepath ) )
 		return;	// error() has been called by parseLoadAndLookup
 
-	filepath += "/";
+	filepath += '/';
 
 	if ( !isDirectory (filepath) )
 	{
@@ -285,12 +278,12 @@ void ProtocolMSITS::listDir (const KURL & url)
 		return;
 	}
 
-    kdDebug() << "kio_msits::listDir: enumerating directory " << filepath << endl;
+    kDebug() << "kio_msits::listDir: enumerating directory " << filepath;
 
-	QValueVector<QString> listing;
+	QVector<QString> listing;
 
 	if ( chm_enumerate_dir ( m_chmFile,
-							filepath.local8Bit(),
+							filepath.toLocal8Bit(),
 							CHM_ENUMERATE_NORMAL | CHM_ENUMERATE_FILES | CHM_ENUMERATE_DIRS,
 							chmlib_enumerator,
 							&listing ) != 1 )
@@ -300,9 +293,9 @@ void ProtocolMSITS::listDir (const KURL & url)
 	}
 
 	UDSEntry entry;
-	unsigned int striplength = filepath.length();
+	int striplength = filepath.length();
 
-	for ( unsigned int i = 0; i < listing.size(); i++ )
+	for ( int i = 0; i < listing.size(); i++ )
 	{
 		// Strip the direcroty name
 		QString ename = listing[i].mid (striplength);

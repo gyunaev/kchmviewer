@@ -121,6 +121,16 @@ bool LCHMFileImpl::loadFile( const QString & archiveName )
 	else
 		m_searchAvailable = false;
 	
+	// Some CHM files have toc and index files, but do not set the name properly.
+	// Some heuristics here.
+	chmUnitInfo tui;
+	
+	if ( m_topicsFile.isEmpty() && ResolveObject("/toc.hhc", &tui) )
+		m_topicsFile = "/toc.hhc";
+	
+	if ( m_indexFile.isEmpty() && ResolveObject("/index.hhk", &tui) )
+		m_indexFile = "/index.hhk";
+	
 	return true;
 }
 

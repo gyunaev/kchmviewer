@@ -6,6 +6,8 @@
     - Fixed kio-msits so it now works with KDE4 (thanks Albert Astals Cid);
     - Fixed FSF mailing address everywhere (thanks Albert Astals Cid);
     - Fixed handling of improperly formatted CHM files like Audigy help;
+    - Added heuristics to support for improperly formatted CHMs which have toc and index,
+      but do not specify so in the project file;
 
 2007-08-26 tim <gyunaev@ulduzsoft.com>
     - Application ported to Qt4.

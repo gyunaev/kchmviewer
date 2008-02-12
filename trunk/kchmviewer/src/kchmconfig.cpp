@@ -48,7 +48,6 @@ KCHMConfig::KCHMConfig()
 	m_numOfRecentFiles = 10;
 	m_HistoryStoreExtra = true;
 	
-	m_QtBrowserPath = "viewurl-netscape.sh '%s'";
 	m_kdeUseQTextBrowser = false;
 	m_kdeEnableJS = false;
 	m_kdeEnableJava = false;
@@ -56,7 +55,7 @@ KCHMConfig::KCHMConfig()
 	m_kdeEnableRefresh = false;
 	
 	m_advUseInternalEditor = true;
-	m_advExternalEditorPath = "kate '%s'";
+	m_advExternalEditorPath = "/usr/bin/kate";
 	
 	m_lastOpenedDir = "";
 }
@@ -112,8 +111,6 @@ bool KCHMConfig::load()
 				m_numOfRecentFiles = value.toInt();
 			else if ( key == "HistoryStoreExtra" )
 				m_HistoryStoreExtra = value.toInt() ? true : false;
-			else if ( key == "QtBrowserPath" )
-				m_QtBrowserPath = value;
 			else if ( key == "kdeUseQTextBrowser" )
 				m_kdeUseQTextBrowser = value.toInt() ? true : false;
 			else if ( key == "kdeEnableJS" )
@@ -130,7 +127,7 @@ bool KCHMConfig::load()
 				m_advUseInternalEditor = value.toInt() ? true : false;
 			else if ( key == "advExternalEditorPath" )
 				m_advExternalEditorPath = value;
-			else if ( key == "useSearchEngine" )
+			else if ( key == "useSearchEngine" || key == "QtBrowserPath" )
 				// Do nothing; not used anymore
 				;
 			else
@@ -169,7 +166,6 @@ bool KCHMConfig::save( )
 	stream << "HistorySize=" << m_numOfRecentFiles << "\n";
 	stream << "HistoryStoreExtra=" << m_HistoryStoreExtra << "\n";
 
-	stream << "QtBrowserPath=" << m_QtBrowserPath << "\n";
 	stream << "kdeUseQTextBrowser=" << m_kdeUseQTextBrowser << "\n";
 	stream << "kdeEnableJS=" << m_kdeEnableJS << "\n";
 	stream << "kdeEnableJava=" << m_kdeEnableJava << "\n";

@@ -360,62 +360,6 @@
         <number>9</number>
        </property>
        <item>
-        <widget class="QGroupBox" name="m_groupQtsettings" >
-         <property name="title" >
-          <string>Qt version settings</string>
-         </property>
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <property name="leftMargin" >
-           <number>9</number>
-          </property>
-          <property name="topMargin" >
-           <number>9</number>
-          </property>
-          <property name="rightMargin" >
-           <number>9</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>9</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="textLabel1_2" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="lineWidth" >
-             <number>1</number>
-            </property>
-            <property name="text" >
-             <string>Enter the path to the program, which will be used as a browser for external links.  A &lt;i>%s&lt;/i> symbol will be replaced by the URL clicked.</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignVCenter</set>
-            </property>
-            <property name="wordWrap" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="m_qtBrowserPath" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
         <widget class="QGroupBox" name="m_groupKDEsettings" >
          <property name="title" >
           <string>KDE version settings</string>
@@ -656,6 +600,13 @@
             <item>
              <widget class="QLineEdit" name="m_advExternalProgramName" />
             </item>
+            <item>
+             <widget class="QPushButton" name="btnBrowse" >
+              <property name="text" >
+               <string>&amp;Browse</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -703,7 +654,6 @@
   <tabstop>m_radioNewChmOpenAlways</tabstop>
   <tabstop>m_radioNewChmAsk</tabstop>
   <tabstop>m_radioNewChmOpenNever</tabstop>
-  <tabstop>m_qtBrowserPath</tabstop>
   <tabstop>m_radioUseQtextBrowser</tabstop>
   <tabstop>m_radioUseKHTMLPart</tabstop>
   <tabstop>m_enableJS</tabstop>

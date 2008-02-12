@@ -81,6 +81,7 @@
 #include <QString>
 #include <QTextEdit>
 #include <QFile>
+#include <QTemporaryFile>
 #include <QDir>
 #include <QRegExp>
 #include <QTimer>

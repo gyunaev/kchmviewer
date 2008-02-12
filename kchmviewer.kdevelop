@@ -156,7 +156,7 @@
       <envvars/>
     </run>
     <general>
-      <activedir>lib/libchmfile</activedir>
+      <activedir>src</activedir>
     </general>
     <make>
       <abortonerror>true</abortonerror>

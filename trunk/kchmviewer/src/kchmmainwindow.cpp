@@ -47,6 +47,7 @@
 #include "kchmkeyeventfilter.h"
 #include "kchmcontentswindow.h"
 #include "kchmsetupdialog.h"
+#include "version.h"
 
 
 KCHMMainWindow::KCHMMainWindow()
@@ -114,11 +115,11 @@ KCHMMainWindow::KCHMMainWindow()
 	statusBar()->show();
 	qApp->setWindowIcon( QPixmap(":/images/application.png") );
 
-	m_aboutDlgMenuText = i18n( "%1 version %2\n\nCopyright (C) George Yunaev,"
-			"gyunaev@ulduzsoft.com, 2004-2007\nhttp://www.kchmviewer.net\n\n"
-			"Licensed under GNU GPL license.\n\n"
-			"Please check my another project, http://www.transientmail.com - temporary "
-			"e-mail address, which expires automatically." )
+	m_aboutDlgMenuText = i18n( "<html><b>%1 version %2</b><br><br>"
+			"Copyright (C) George Yunaev, 2004-2008<br>"
+			"<a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</a><br>"
+			"<a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</a><br><br>"
+			"Licensed under GNU GPL license.</html>" )
 			. arg(APP_NAME) . arg(APP_VERSION);
 }
 

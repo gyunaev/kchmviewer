@@ -22,6 +22,7 @@
 #include "kde-qt.h"
 #include "kchmconfig.h"
 #include "kchmsetupdialog.h"
+#include "version.h"
 
 
 KCHMSetupDialog::KCHMSetupDialog(QWidget *parent)

@@ -19,6 +19,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#ifndef LIBCHMURLFACTORY_H
+#define LIBCHMURLFACTORY_H
+
 #include <QDir>
 #include <QString>
 #include <QRegExp>
@@ -121,3 +124,5 @@ static inline bool handleFileType( const QString& link, QString& generated )
 
 
 };
+
+#endif // LIBCHMURLFACTORY_H

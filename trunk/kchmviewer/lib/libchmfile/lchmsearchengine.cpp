@@ -19,179 +19,100 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <QApplication>
-
+#include "libchmfile.h"
 #include "lchmsearchengine.h"
-#include "libchmurlfactory.h"
 #include "lchmsearchengine_impl.h"
+#include "lchmsearchengine_indexing.h"
+#include "libchmurlfactory.h"
 
 
 LCHMSearchEngine::LCHMSearchEngine()
 {
-	m_Index = 0;
-	m_progressDlg = 0;
+	impl = new LCHMSearchEngineImpl();
 }
 
 
-LCHMSearchEngine::~LCHMSearchEngine()
+LCHMSearchEngine::~ LCHMSearchEngine()
 {
-	delete m_Index;
-	delete m_progressDlg;
-}
-
-void LCHMSearchEngine::processEvents( )
-{
-	// Do it twice; some events generate other events
-	qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
-	qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+	delete impl;
 }
 
 
-void LCHMSearchEngine::cancelButtonPressed( )
+bool LCHMSearchEngine::loadIndex( QDataStream & stream )
 {
-	m_Index->setLastWinClosed();
+	if ( impl->m_Index )
+		delete impl->m_Index;
+
+	impl->m_Index = new QtAs::Index();
+	return impl->m_Index->readDict( stream );
 }
 
 
-bool LCHMSearchEngine::loadOrGenerateIndex( )
+bool LCHMSearchEngine::generateIndex( LCHMFile * chmFile, QDataStream & stream )
 {
-	if ( m_Index )
-		return true;
-
-	QString indexfiledict = ::mainWindow->currentSettings()->searchIndexDictFilename();
-	QString indexfiledoc = ::mainWindow->currentSettings()->searchIndexDocFilename();
 	QStringList documents;
+	QStringList alldocuments;
 	
-	m_Index = new QtAs::Index( documents, appConfig.m_datapath );
-	m_Index->setDictionaryFile( indexfiledict );
-	m_Index->setDocListFile( indexfiledoc );
+	emit progressSetup( 100 );
+	emit progressStep( 0, "Generating the list of documents" );
+	impl->processEvents();
 
-	m_progressDlg = new QProgressDialog( 0 );
-	connect( m_progressDlg, SIGNAL( canceled() ), this, SLOT( cancelButtonPressed() ) );
+	// Enumerate the documents
+	if ( !chmFile->enumerateFiles( &alldocuments ) )
+		return false;
+			
+	if ( impl->m_Index )
+		delete impl->m_Index;
+
+	impl->m_Index = new QtAs::Index();
+	connect( impl->m_Index, SIGNAL( indexingProgress( int, const QString& ) ), this, SLOT( updateProgress( int, const QString& ) ) );
 	
-	connect( m_Index, SIGNAL( indexingProgress( int ) ),  this, SLOT( setIndexingProgress( int ) ) );
-	KCHMShowWaitCursor waitcursor;
-		
-	QFile f( indexfiledict );
-	if ( !f.exists() )
-	{
-		::mainWindow->statusBar()->showMessage( tr( "Generating search index..." ) );
-		
-		// Get the list of files in CHM archive
-		QStringList alldocuments;
-		
-		m_progressDlg->setWindowTitle( i18n( "Generating search index..." ) );
-		m_progressDlg->setLabelText( i18n( "Generating search index..." ) );
-		m_progressDlg->setMaximum( 100 );
-		m_progressDlg->reset();
-		m_progressDlg->show();
-		processEvents();
-		
-		if ( !::mainWindow->chmFile()->enumerateFiles( &alldocuments ) )
-		{
-			delete m_progressDlg;
-			m_progressDlg = 0;
-			return false;
-		}
-		
-		// Process the list keeping only HTML documents there
-		for ( int i = 0; i < alldocuments.size(); i++ )
-			if ( alldocuments[i].endsWith( ".html", Qt::CaseInsensitive )
-			|| alldocuments[i].endsWith( ".htm", Qt::CaseInsensitive ) )
-				documents.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
+	// Process the list of files in CHM archive and keep only HTML document files from there
+	for ( int i = 0; i < alldocuments.size(); i++ )
+		if ( alldocuments[i].endsWith( ".html", Qt::CaseInsensitive )
+		|| alldocuments[i].endsWith( ".htm", Qt::CaseInsensitive ) )
+			documents.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
 
-		m_Index->setDocList( documents );
-
-		if ( m_Index->makeIndex() != -1 )
-		{
-			m_Index->writeDict();
-			m_keywordDocuments.clear();
-		}
-		else
-			return false;
-	}
-	else
+	if ( impl->m_Index->makeIndex( documents, chmFile ) == -1 )
 	{
-		::mainWindow->statusBar()->showMessage( i18n( "Reading dictionary..." ) );
-		processEvents();
-		
-		m_Index->readDict();
+		delete impl->m_Index;
+		impl->m_Index = 0;
+		return false;
 	}
 	
-	::mainWindow->statusBar()->showMessage( tr( "Done" ), 3000 );
-	delete m_progressDlg;
-	m_progressDlg = 0;
+	impl->m_Index->writeDict( stream );
+	impl->m_keywordDocuments.clear();
 	
 	return true;
 }
 
 
-void LCHMSearchEngine::setIndexingProgress( int progress )
+void LCHMSearchEngine::cancelIndexGeneration()
 {
-	if ( progress <= 100 )
-		m_progressDlg->setValue( progress );
-	
-	processEvents();
+	impl->m_Index->setLastWinClosed();
 }
 
-// Helper class to simplity state management and data keeping
-class SearchDataKeeper
+
+void LCHMSearchEngine::updateProgress(int value, const QString & stepName)
 {
-	public:
-		SearchDataKeeper() { m_inPhrase = false; }
-				
-		void beginPhrase()
-		{
-			phrase_terms.clear();
-			m_inPhrase = true;
-		}
-		
-		void endPhrase()
-		{
-			m_inPhrase = false;
-			phrasewords += phrase_terms;
-			phrases.push_back( phrase_terms.join(" ") );
-		}
-		
-		bool isInPhrase() const { return m_inPhrase; }
-		
-		void addTerm( const QString& term )
-		{
-			if ( !term.isEmpty() )
-			{
-				terms.push_back( term );
-				
-				if ( m_inPhrase )
-					phrase_terms.push_back( term );
-			}
-		}
-		
-		// Should contain all the search terms present in query, includind those from phrases. One element - one term .
-		QStringList terms;
-	
-		// Should contain phrases present in query without quotes. One element - one phrase.
-		QStringList phrases;
-	
-		// Should contain all the terms present in all the phrases (but not outside).
-		QStringList phrasewords;
-
-	private:		
-		bool		m_inPhrase;
-		QStringList phrase_terms;
-};
+	emit progressStep( value, stepName );
+}
 
 
-bool LCHMSearchEngine::searchQuery( const QString & query, QStringList * results, unsigned int limit )
+bool LCHMSearchEngine::searchQuery(const QString & query, QStringList * results, LCHMFile * chmFile, unsigned int limit)
 {
+	// We should have index
+	if ( !impl->m_Index )
+		return false;
+	
 	// Characters which split the words. We need to make them separate tokens
-	QString splitChars = m_Index->getCharsSplit();
+	QString splitChars = impl->m_Index->getCharsSplit();
 	
 	// Characters which are part of the word. We should keep them apart.
-	QString partOfWordChars = m_Index->getCharsPartOfWord();
+	QString partOfWordChars = impl->m_Index->getCharsPartOfWord();
 	
-	SearchDataKeeper keeper;
-	
-	// State machine variables
+	// Variables to store current state
+	SearchDataKeeper keeper;	
 	QString term;
 
 	for ( int i = 0; i < query.length(); i++ )
@@ -236,16 +157,17 @@ bool LCHMSearchEngine::searchQuery( const QString & query, QStringList * results
 	keeper.addTerm( term );
 	
 	if ( keeper.isInPhrase() )
-	{
-		QMessageBox::warning( 0, i18n( "Search" ), i18n( "A closing quote character is missing." ) );
 		return false;
-	}
 	
-	KCHMShowWaitCursor waitcursor;
-	QStringList foundDocs = m_Index->query( keeper.terms, keeper.phrases, keeper.phrasewords );
+	QStringList foundDocs = impl->m_Index->query( keeper.terms, keeper.phrases, keeper.phrasewords, chmFile );
 	
 	for ( QStringList::iterator it = foundDocs.begin(); it != foundDocs.end() && limit > 0; ++it, limit-- )
 		results->push_back( *it );
 
 	return true;
+}
+
+bool LCHMSearchEngine::hasIndex() const
+{
+	return impl->m_Index != 0;
 }

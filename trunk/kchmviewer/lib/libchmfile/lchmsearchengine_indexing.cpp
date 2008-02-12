@@ -28,11 +28,13 @@
 #include <QApplication>
 #include <QEventLoop>
 
-#include <ctype.h>
+//#include <ctype.h>
 
-#include "kchmsearchengine_impl.h"
-#include "kchmmainwindow.h"
 #include "libchmfileimpl.h"
+#include "lchmsearchengine_indexing.h"
+
+
+static const int DICT_VERSION = 3;
 
 
 namespace QtAs {
@@ -60,21 +62,11 @@ QDataStream &operator<<( QDataStream &s, const Document &l )
 	return s;
 }
 
-Index::Index( const QString &dp, const QString & )
-	: QObject( 0 ), docPath( dp )
-{
-	lastWindowClosed = false;
-	connect( qApp, SIGNAL( lastWindowClosed() ),
-			 this, SLOT( setLastWinClosed() ) );
-}
-
-Index::Index( const QStringList &dl, const QString & )
+Index::Index()
 	: QObject( 0 )
 {
-	docList = dl;
 	lastWindowClosed = false;
-	connect( qApp, SIGNAL( lastWindowClosed() ),
-			 this, SLOT( setLastWinClosed() ) );
+	connect( qApp, SIGNAL( lastWindowClosed() ), this, SLOT( setLastWinClosed() ) );
 }
 
 void Index::setLastWinClosed()
@@ -82,27 +74,13 @@ void Index::setLastWinClosed()
 	lastWindowClosed = true;
 }
 
-void Index::setDictionaryFile( const QString &f )
-{
-	dictFile = f;
-}
 
-void Index::setDocListFile( const QString &f )
-{
-	docListFile = f;
-}
-
-void Index::setDocList( const QStringList &lst )
-{
-	docList = lst;
-}
-
-bool Index::makeIndex()
+bool Index::makeIndex( const QStringList& docList, LCHMFile * chmFile )
 {
 	if ( docList.isEmpty() )
 		return false;
 	
-	QStringList::Iterator it = docList.begin();
+	QStringList::ConstIterator it = docList.begin();
 	int steps = docList.count() / 100;
 	
 	if ( !steps )
@@ -115,12 +93,19 @@ bool Index::makeIndex()
 		if ( lastWindowClosed )
 			return false;
 
-		parseDocument( *it, i );
+		QString filename = *it;
+		QStringList terms;
+		
+		if ( parseDocumentToStringlist( chmFile, filename, terms ) )
+		{
+			for ( QStringList::ConstIterator tit = terms.begin(); tit != terms.end(); ++tit )
+				insertInDict( *tit, i );
+		}
 		
 		if ( i%steps == 0 )
 		{
 			prog++;
-			emit indexingProgress( prog );
+			emit indexingProgress( prog, tr("Processing document %1") .arg( *it ) );
 		}
 	}
 	
@@ -148,20 +133,14 @@ void Index::insertInDict( const QString &str, int docNum )
 }
 
 
-bool Index::parseDocumentToStringlist( const QString & filename, QStringList & tokenlist )
+bool Index::parseDocumentToStringlist( LCHMFile * chmFile, const QString& filename, QStringList& tokenlist )
 {
-	QString parsedbuf, parseentity;
-	QString text;
+	QString parsedbuf, parseentity, text;
 	
-	if ( !::mainWindow->chmFile()->getFileContentAsString( &text, filename ) )
+	if ( !chmFile->getFileContentAsString( &text, filename )
+	|| text.isEmpty() )
 	{
-		qWarning( "Index::parseDocument: Could not retrieve the content at %s", qPrintable( filename ) );
-		return false;
-	}
-	
-	if ( text.isNull() )
-	{
-		qWarning( "Index::parseDocument: Retrieved content for %s is empty", qPrintable( filename ) );
+		qWarning( "Search index generator: could not retrieve the document content for %s", qPrintable( filename ) );
 		return false;
 	}
 
@@ -244,7 +223,7 @@ bool Index::parseDocumentToStringlist( const QString & filename, QStringList & t
 			// Don't we have a space?
 			if ( parseentity.toLower() != "nbsp" )
 			{
-				QString entity = ::mainWindow->chmFile()->impl()->decodeEntity( parseentity );
+				QString entity = chmFile->impl()->decodeEntity( parseentity );
 			
 				if ( entity.isNull() )
 				{
@@ -319,100 +298,60 @@ tokenize_buf:
 }
 
 
-void Index::parseDocument( const QString &filename, int docNum )
+void Index::writeDict( QDataStream& stream )
 {
-	QStringList terms;
+	stream << DICT_VERSION;
+	stream << m_charssplit;
+	stream << m_charsword;
 	
-	if ( !parseDocumentToStringlist( filename, terms ) )
-		return;
+	// Document list
+	stream << docList;
 	
-	for ( QStringList::Iterator it = terms.begin(); it != terms.end(); ++it )
-		insertInDict( *it, docNum );
+	// Dictionary
+	for( QHash<QString, Entry *>::ConstIterator it = dict.begin(); it != dict.end(); ++it )
+	{
+		stream << it.key();
+		stream << (int) it.value()->documents.count();
+		stream << it.value()->documents;
+	}
 }
 
 
-void Index::writeDict()
+bool Index::readDict( QDataStream& stream )
 {
-	QFile f( dictFile );
-	
-	if ( !f.open( QIODevice::WriteOnly ) )
-	{
-		qWarning( "Index::writeDict: could not write dictionary file %s", qPrintable( dictFile ) );
-		return;
-	}
-	
-	QDataStream s( &f );
-	s << (int) 2; // version
-	s << m_charssplit;
-	s << m_charsword;
-	
-	for(QHash<QString, Entry *>::Iterator it = dict.begin(); it != dict.end(); ++it)
-	{
-		s << it.key();
-		s << (int) it.value()->documents.count();
-		s << it.value()->documents;
-	}
-
-	f.close();
-	writeDocumentList();
-}
-
-void Index::writeDocumentList()
-{
-	QFile f( docListFile );
-	if ( !f.open( QIODevice::WriteOnly ) )
-	{
-		qWarning( "Index::writeDocumentList: could not write dictionary file %s", qPrintable( docListFile ) );
-		return;
-	}
-	QDataStream s( &f );
-	s << docList;
-}
-
-bool Index::readDict()
-{
-	QFile f( dictFile );
-	if ( !f.open( QIODevice::ReadOnly ) )
-		return false;
-
 	dict.clear();
-	QDataStream s( &f );
+	docList.clear();
+	
 	QString key;
 	int version, numOfDocs;
-	QVector<Document> docs;
 	
-	s >> version;
+	stream >> version;
 	
 	if ( version < 2 )
 		return false;
 	
-	s >> m_charssplit;
-	s >> m_charsword;
+	stream >> m_charssplit;
+	stream >> m_charsword;
 	
-	while ( !s.atEnd() )
+	// Read the document list
+	stream >> docList;
+	
+	while ( !stream.atEnd() )
 	{
-		s >> key;
-		s >> numOfDocs;
-		docs.resize(numOfDocs);
-		s >> docs;
+		stream >> key;
+		stream >> numOfDocs;
+		
+		QVector<Document> docs( numOfDocs );
+		
+		stream >> docs;
 		dict.insert( key, new Entry( docs ) );
 	}
 	
-	f.close();
-	return dict.size() > 0 && readDocumentList();
+	return dict.size() > 0;
 }
 
-bool Index::readDocumentList()
-{
-	QFile f( docListFile );
-	if ( !f.open( QIODevice::ReadOnly ) )
-		return false;
-	QDataStream s( &f );
-	s >> docList;
-	return true;
-}
 
-QStringList Index::query( const QStringList &terms, const QStringList &termSeq, const QStringList &seqWords )
+QStringList Index::query( const QStringList &terms, const QStringList &termSeq, const QStringList &seqWords, LCHMFile * chmFile )
 {
 	QList<Term> termList;
 
@@ -468,7 +407,7 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 	QString fileName;
 	for(QVector<Document>::Iterator it = minDocs.begin(); it != minDocs.end(); ++it) {
 		fileName =  docList[ (int)(*it).docNumber ];
-		if ( searchForPhrases( termSeq, seqWords, fileName ) )
+		if ( searchForPhrases( termSeq, seqWords, fileName, chmFile ) )
 			results << fileName;
 	}
 	
@@ -476,11 +415,11 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 }
 
 
-bool Index::searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename )
+bool Index::searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename, LCHMFile * chmFile )
 {
 	QStringList parsed_document;
-	
-	if ( !parseDocumentToStringlist( filename, parsed_document ) )
+
+	if ( !parseDocumentToStringlist( chmFile, filename, parsed_document ) )
 		return false;
 
 	miniDict.clear();

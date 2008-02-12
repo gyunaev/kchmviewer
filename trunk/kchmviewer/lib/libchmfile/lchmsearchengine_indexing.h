@@ -23,7 +23,14 @@
 #ifndef QASSISTANTINDEX_H
 #define QASSISTANTINDEX_H
 
-#include "kde-qt.h"
+#include <QHash>
+#include <QVector>
+#include <QDataStream>
+#include <QStringList>
+
+//#include "libchmurlfactory.h"
+
+class LCHMFile;
 
 namespace QtAs
 {
@@ -63,6 +70,7 @@ class Index : public QObject
 {
     Q_OBJECT
 	public:
+//TODO: private		
 		struct Entry
 		{
 			Entry( int d ) { documents.append( Document( d, 1 ) ); }
@@ -76,48 +84,43 @@ class Index : public QObject
 			QList<uint> positions;
 		};
 
-		Index( const QString &dp, const QString &hp );
-		Index( const QStringList &dl, const QString &hp );
+		Index();
 		
-		void 		writeDict();
-		bool 		readDict();
-		bool 		makeIndex();
-		QStringList query( const QStringList&, const QStringList&, const QStringList& );
+		void 		writeDict( QDataStream& stream );
 		
-		void 		setDictionaryFile( const QString& );
-		void 		setDocListFile( const QString& );
-		void 		setDocList( const QStringList & );
+		bool 		readDict( QDataStream& stream );
+		
+		bool 		makeIndex( const QStringList& docs, LCHMFile * chmFile );
+		
+		QStringList query( const QStringList&, const QStringList&, const QStringList&, LCHMFile * chmFile );
+		
 		QString 	getCharsSplit() const { return m_charssplit; }
+		
 		QString 	getCharsPartOfWord() const { return m_charsword; }
 
 	signals:
-		void indexingProgress( int );
+		void indexingProgress( int, const QString& );
 
 	public slots:
 		void setLastWinClosed();
 
 	private:
-		void	setupDocumentList();
-		bool	parseDocumentToStringlist( const QString& filename, QStringList& tokenlist );
-		void	parseDocument( const QString& filename, int docnum );
+		bool	parseDocumentToStringlist( LCHMFile * chmFile, const QString& filename, QStringList& tokenlist );
 		void	insertInDict( const QString&, int );
-		
-		void	writeDocumentList();
-		bool	readDocumentList();
 		
 		QStringList				getWildcardTerms( const QString& );
 		QStringList				split( const QString& );
 		QList<Document> 		setupDummyTerm( const QStringList& );
-		bool 					searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename );
+		bool 					searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename, LCHMFile * chmFile );
 		
 		QStringList 			docList;
 		QHash<QString, Entry*> 	dict;
 		QHash<QString,PosEntry*>miniDict;
-		QString 				docPath;
-		QString 				dictFile;
-		QString 				docListFile;
 		bool 					lastWindowClosed;
 	
+		// used during index generation
+
+		
 		// Those characters are splitters (i.e. split the word), but added themselves into dictionary too.
 		// This makes the dictionary MUCH larger, but ensure that for the piece of "window->print" both 
 		// search for "print" and "->print" will find it.

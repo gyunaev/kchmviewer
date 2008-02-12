@@ -19,14 +19,14 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KCHMSEARCHENGINE_H
-#define KCHMSEARCHENGINE_H
+#ifndef LCHMSEARCHENGINE_H
+#define LCHMSEARCHENGINE_H
 
-#include "kde-qt.h"
-#include "libchmfile.h"
+#include <QDataStream>
 
-namespace QtAs { class Index; };
-
+// forward declaration
+class LCHMFile;
+class LCHMSearchEngineImpl;
 
 class LCHMSearchEngine : public QObject
 {
@@ -40,8 +40,8 @@ class LCHMSearchEngine : public QObject
 		//! The index should be previously saved with generateIndex().
 		bool	loadIndex( QDataStream& stream );
 		
-		//! Generates the search index, and saves it to the data stream \param stream 
-		//! which should be writeable.
+		//! Generates the search index from the opened CHM file \param chmFile,
+		//! and saves it to the data stream \param stream which should be writeable.
 		//!
 		//! To show the progress, this procedure emits two signals.
 		//!  * The progressSetup() will be emitted before the index generation started,
@@ -51,33 +51,39 @@ class LCHMSearchEngine : public QObject
 		//!  * After signal emission, the following event processing function will be called:
 		//!         qApp->processEvents( QEventLoop::ExcludeUserInputEvents )
 		//!    to make sure the dialogs (if any) are properly updated.
-		
+		//!
 		//! If \param progressDls is not null, it will be used to display progress.
 		//! Returns true if the index has been generated and saved, or false if internal
-		//! error occurs, or (most likely) the "Cancel" button has been pressed.
-		bool	generateIndex( QDataStream& stream );
+		//! error occurs, or (most likely) the cancelIndexGeneration() slot has been called.
+		bool	generateIndex( LCHMFile * chmFile, QDataStream& stream );
 		
 		//! Executes the search query. The \param query is a string like <i>"C++ language" class</i>,
-		//! \param results is a pointer to empty QStringList, and \param limit limits the number of
+		//! \param results is a pointer to QStringList, and \param limit limits the number of
 		//! results in case the query is too generic (like \a "a" ).
-		//! The return value is false only if the index is not generated or loaded. If search returns
-		//! no results, the return value is true, but the \param results list will be empty.
-		bool	searchQuery ( const QString& query, QStringList * results, unsigned int limit = 100 );
+		//! The \param chmFile is used to get the current encoding information.
+		//! The return value is false only if the index is not generated, or if a closing quote character 
+		//! is missing. Call hasIndex() to clarify. If search returns no results, the return value is 
+		//! true, but the \param results list will be empty.
+		//!
+		//! Note that the function does not clear \param results before adding search results, so if you are
+		//! not merging search results, make sure it's empty.
+		bool	searchQuery ( const QString& query, QStringList * results, LCHMFile * chmFile, unsigned int limit = 100 );
+		
+		//! Returns true if a valid search index is present, and therefore search could be executed
+		bool	hasIndex() const;
 		
 	signals:
 		void	progressSetup( int max );
-		void	progressStep( int value );
+		void	progressStep( int value, const QString& stepName );
 		
 	public slots:
 		void	cancelIndexGeneration();
 		
+	private slots:
+		void	updateProgress( int value, const QString& stepName );
+		
 	private:
-		void	processEvents();
-
-		// Used during the index generation
-		QProgressDialog			*	m_progressDlg;
-		QStringList 				m_keywordDocuments;
-		QtAs::Index 			*	m_Index;
+		LCHMSearchEngineImpl * impl;
 };
 
 #endif

@@ -43,12 +43,9 @@ class LCHMSearchEngine : public QObject
 		//! Generates the search index from the opened CHM file \param chmFile,
 		//! and saves it to the data stream \param stream which should be writeable.
 		//!
-		//! To show the progress, this procedure emits two signals.
-		//!  * The progressSetup() will be emitted before the index generation started,
-		//!    and sets up the maximum value the progressStep() will use;
-		//!  * The progressStep() will be emitted periodically to update the progress. The 
-		//!    value will be increased linearly until reaching the maximal value set in progressSetup().
-		//!  * After signal emission, the following event processing function will be called:
+		//! To show the progress, this procedure emits a progressStep() signal periodically 
+		//! with the value showing current progress in percentage (i.e. from 0 to 100)
+		//! After signal emission, the following event processing function will be called:
 		//!         qApp->processEvents( QEventLoop::ExcludeUserInputEvents )
 		//!    to make sure the dialogs (if any) are properly updated.
 		//!
@@ -73,7 +70,6 @@ class LCHMSearchEngine : public QObject
 		bool	hasIndex() const;
 		
 	signals:
-		void	progressSetup( int max );
 		void	progressStep( int value, const QString& stepName );
 		
 	public slots:

@@ -122,8 +122,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 	QFileInfo finfo ( filename );
 
 	m_settingsFile = QString::null;
-	m_searchDictFile = QString::null;
-	m_searchDocFile = QString::null;
+	m_searchIndex = QString::null;
 	
 	if ( !finfo.size() )
 		return false;
@@ -132,7 +131,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 	m_currentfilesize = finfo.size();
 	m_currentfiledate = finfo.lastModified().toTime_t();
 	
-	getFilenames( filename, &m_settingsFile, &m_searchDictFile, &m_searchDocFile );
+	getFilenames( filename, &m_settingsFile, &m_searchIndex );
 	
 	QFile file( m_settingsFile );
 
@@ -287,22 +286,20 @@ bool KCHMSettings::saveSettings( )
 
 void KCHMSettings::removeSettings( const QString & filename )
 {
-	QString settingsfile, dictfile, doclistfile;
+	QString settingsfile, idxfile;
 	
-	getFilenames( filename, &settingsfile, &dictfile, &doclistfile );
+	getFilenames( filename, &settingsfile, &idxfile );
 	
 	QFile::remove( settingsfile );
-	QFile::remove( dictfile );
-	QFile::remove( doclistfile );
+	QFile::remove( idxfile );
 }
 
 
-void KCHMSettings::getFilenames(const QString & helpfilename, QString * settingsfile, QString * dictfile, QString * doclistfile )
+void KCHMSettings::getFilenames(const QString & helpfilename, QString * settingsfile, QString * indexfile )
 {
 	QFileInfo finfo ( helpfilename );
 	QString prefix = appConfig.m_datapath + "/" + finfo.baseName();
 
 	*settingsfile = prefix + ".kchmviewer";
-	*dictfile = prefix + ".dict";
-	*doclistfile  = prefix + ".doclist";
+	*indexfile = prefix + ".idx";
 }

@@ -39,6 +39,17 @@ static const char SPLIT_CHARACTERS[] = "!()*&^%#@[]{}':;,.?/|/?<>\\-+=~`";
 // Those characters are parts of word - for example, '_' is here, and search for _debug will find only _debug.
 static const char WORD_CHARACTERS[] = "$_";
 
+
+struct Term
+{
+	Term() : frequency(-1) {}
+	Term( const QString &t, int f, QVector<Document> l ) : term( t ), frequency( f ), documents( l ) {}
+	QString term;
+	int frequency;
+	QVector<Document>documents;
+	bool operator<( const Term &i2 ) const { return frequency < i2.frequency; }
+};
+
 	
 QDataStream &operator>>( QDataStream &s, Document &l )
 {
@@ -67,10 +78,12 @@ void Index::setLastWinClosed()
 }
 
 
-bool Index::makeIndex( const QStringList& docList, LCHMFile * chmFile )
+bool Index::makeIndex( const QStringList& docs, LCHMFile * chmFile )
 {
-	if ( docList.isEmpty() )
+	if ( docs.isEmpty() )
 		return false;
+	
+	docList = docs;
 	
 	QStringList::ConstIterator it = docList.begin();
 	int steps = docList.count() / 100;
@@ -97,10 +110,12 @@ bool Index::makeIndex( const QStringList& docList, LCHMFile * chmFile )
 		if ( i%steps == 0 )
 		{
 			prog++;
+			prog = qMin( prog, 99 );
 			emit indexingProgress( prog, tr("Processing document %1") .arg( *it ) );
 		}
 	}
 	
+	emit indexingProgress( 100, tr("Processing completed") );
 	return true;
 }
 

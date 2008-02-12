@@ -942,14 +942,6 @@ void KCHMMainWindow::actionChangeSettings()
 	dlg.m_advViewSourceExternal->setChecked ( !appConfig.m_advUseInternalEditor );
 	dlg.m_advViewSourceInternal->setChecked ( appConfig.m_advUseInternalEditor );
 	
-	// Search engine
-	dlg.m_useSearchEngineInternal->setChecked( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_CHM );
-	dlg.m_useSearchEngineNew->setChecked( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE );
-	
-	// Connect buddies
-	dlg.m_labelUseSearchEngineInternal->setBuddy( dlg.m_useSearchEngineInternal );
-	dlg.m_labelUseSearchEngineNew->setBuddy( dlg.m_useSearchEngineNew );
-	
 	if ( dlg.exec() == QDialog::Accepted )
 	{
 		appConfig.m_LoadLatestFileOnStartup = dlg.m_radioOnBeginOpenLast->isChecked();
@@ -1005,20 +997,6 @@ void KCHMMainWindow::actionChangeSettings()
 			appConfig.m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
 		}
 		
-		if ( dlg.m_useSearchEngineNew->isChecked() 
-				   && appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_CHM )
-		{
-			appConfig.m_useSearchEngine = KCHMConfig::SEARCH_USE_MINE;
-			m_searchTab->invalidate();
-		}
-		
-		if ( dlg.m_useSearchEngineInternal->isChecked() 
-				   && appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
-		{
-			appConfig.m_useSearchEngine = KCHMConfig::SEARCH_USE_CHM;
-			m_searchTab->invalidate();
-		}
-					
 		appConfig.m_advExternalEditorPath = dlg.m_advExternalProgramName->text();
 		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceExternal->isChecked();
 		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceInternal->isChecked();

@@ -70,7 +70,23 @@ class Index : public QObject
 {
     Q_OBJECT
 	public:
-//TODO: private		
+
+		Index();
+		
+		void 		writeDict( QDataStream& stream );
+		bool 		readDict( QDataStream& stream );
+		bool 		makeIndex( const QStringList& docs, LCHMFile * chmFile );
+		QStringList query( const QStringList&, const QStringList&, const QStringList&, LCHMFile * chmFile );
+		QString 	getCharsSplit() const { return m_charssplit; }
+		QString 	getCharsPartOfWord() const { return m_charsword; }
+
+	signals:
+		void indexingProgress( int, const QString& );
+
+	public slots:
+		void setLastWinClosed();
+
+	private:
 		struct Entry
 		{
 			Entry( int d ) { documents.append( Document( d, 1 ) ); }
@@ -83,28 +99,7 @@ class Index : public QObject
 			PosEntry( int p ) { positions.append( p ); }
 			QList<uint> positions;
 		};
-
-		Index();
 		
-		void 		writeDict( QDataStream& stream );
-		
-		bool 		readDict( QDataStream& stream );
-		
-		bool 		makeIndex( const QStringList& docs, LCHMFile * chmFile );
-		
-		QStringList query( const QStringList&, const QStringList&, const QStringList&, LCHMFile * chmFile );
-		
-		QString 	getCharsSplit() const { return m_charssplit; }
-		
-		QString 	getCharsPartOfWord() const { return m_charsword; }
-
-	signals:
-		void indexingProgress( int, const QString& );
-
-	public slots:
-		void setLastWinClosed();
-
-	private:
 		bool	parseDocumentToStringlist( LCHMFile * chmFile, const QString& filename, QStringList& tokenlist );
 		void	insertInDict( const QString&, int );
 		
@@ -118,9 +113,6 @@ class Index : public QObject
 		QHash<QString,PosEntry*>miniDict;
 		bool 					lastWindowClosed;
 	
-		// used during index generation
-
-		
 		// Those characters are splitters (i.e. split the word), but added themselves into dictionary too.
 		// This makes the dictionary MUCH larger, but ensure that for the piece of "window->print" both 
 		// search for "print" and "->print" will find it.
@@ -128,16 +120,6 @@ class Index : public QObject
 
 		// Those characters are parts of word - for example, '_' is here, and search for _debug will find only _debug.
 		QString 				m_charsword;
-};
-
-struct Term
-{
-	Term() : frequency(-1) {}
-	Term( const QString &t, int f, QVector<Document> l ) : term( t ), frequency( f ), documents( l ) {}
-	QString term;
-	int frequency;
-	QVector<Document>documents;
-	bool operator<( const Term &i2 ) const { return frequency < i2.frequency; }
 };
 
 };

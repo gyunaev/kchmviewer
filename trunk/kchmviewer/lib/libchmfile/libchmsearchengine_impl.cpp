@@ -19,56 +19,28 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KCHMCONFIG_H
-#define KCHMCONFIG_H
+#include <QApplication>
 
-#include <QString>
-#include <QStringList>
-
-extern const char * APP_PATHINUSERDIR;
+#include "libchmurlfactory.h"
+#include "libchmsearchengine_impl.h"
+#include "libchmsearchengine_indexing.h"
 
 
-class KCHMConfig
+LCHMSearchEngineImpl::LCHMSearchEngineImpl()
 {
-	public:
-		enum choose_action_t
-		{
-			ACTION_ALWAYS_OPEN,
-			ACTION_ASK_USER,
-			ACTION_DONT_OPEN
-		};
-		
-		KCHMConfig();
-		~KCHMConfig();
-		
-		bool	load();
-		bool	save();
-	
-		void	addRecentFile( const QString& file );
-				
-	public:
-		QString				m_datapath;
-		QString				m_lastOpenedDir;
-		
-		bool				m_LoadLatestFileOnStartup;
-		choose_action_t		m_onNewChmClick;
-		choose_action_t		m_onExternalLinkClick;
-		int					m_numOfRecentFiles;
-		bool				m_HistoryStoreExtra;
-				
-		QString				m_QtBrowserPath;
-		bool				m_kdeUseQTextBrowser;
-		bool				m_kdeEnableJS;
-		bool				m_kdeEnableJava;
-		bool				m_kdeEnablePlugins;
-		bool				m_kdeEnableRefresh;
-		
-		bool				m_advUseInternalEditor;
-		QString				m_advExternalEditorPath;
-		
-		QStringList			m_recentFiles;
-};
+	m_Index = 0;
+}
 
-extern KCHMConfig appConfig;
 
-#endif
+LCHMSearchEngineImpl::~LCHMSearchEngineImpl()
+{
+	delete m_Index;
+}
+
+
+void LCHMSearchEngineImpl::processEvents( )
+{
+	// Do it twice; some events generate other events
+	qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+	qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+}

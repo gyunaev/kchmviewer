@@ -10,9 +10,7 @@
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>1</hsizetype>
-    <vsizetype>1</vsizetype>
+   <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -27,11 +25,20 @@
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
+   </property>
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget" >
@@ -43,19 +50,37 @@
        <string>General behavior</string>
       </attribute>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
        </property>
+       <property name="leftMargin" >
+        <number>9</number>
+       </property>
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>9</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>9</number>
+       </property>
        <item>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QGroupBox" name="buttonGroup1" >
@@ -63,11 +88,20 @@
             <string>If no arguments given on load</string>
            </property>
            <layout class="QVBoxLayout" >
-            <property name="margin" >
-             <number>9</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>9</number>
+            </property>
+            <property name="topMargin" >
+             <number>9</number>
+            </property>
+            <property name="rightMargin" >
+             <number>9</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>9</number>
             </property>
             <item>
              <widget class="QRadioButton" name="m_radioOnBeginOpenDialog" >
@@ -95,19 +129,37 @@
             <string>History</string>
            </property>
            <layout class="QVBoxLayout" >
-            <property name="margin" >
-             <number>9</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
             </property>
+            <property name="leftMargin" >
+             <number>9</number>
+            </property>
+            <property name="topMargin" >
+             <number>9</number>
+            </property>
+            <property name="rightMargin" >
+             <number>9</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>9</number>
+            </property>
             <item>
              <layout class="QHBoxLayout" >
-              <property name="margin" >
-               <number>0</number>
-              </property>
               <property name="spacing" >
                <number>6</number>
+              </property>
+              <property name="leftMargin" >
+               <number>0</number>
+              </property>
+              <property name="topMargin" >
+               <number>0</number>
+              </property>
+              <property name="rightMargin" >
+               <number>0</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>0</number>
               </property>
               <item>
                <widget class="QLabel" name="textLabel1" >
@@ -162,9 +214,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox1" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>5</vsizetype>
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>4</verstretch>
           </sizepolicy>
@@ -173,11 +223,20 @@
           <string>CHM security settings</string>
          </property>
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>9</number>
+          </property>
+          <property name="topMargin" >
+           <number>9</number>
+          </property>
+          <property name="rightMargin" >
+           <number>9</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>9</number>
           </property>
           <item>
            <widget class="QGroupBox" name="buttonGroup4" >
@@ -185,11 +244,20 @@
              <string>When external link clicked</string>
             </property>
             <layout class="QVBoxLayout" >
-             <property name="margin" >
-              <number>9</number>
-             </property>
              <property name="spacing" >
               <number>6</number>
+             </property>
+             <property name="leftMargin" >
+              <number>9</number>
+             </property>
+             <property name="topMargin" >
+              <number>9</number>
+             </property>
+             <property name="rightMargin" >
+              <number>9</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>9</number>
              </property>
              <item>
               <widget class="QRadioButton" name="m_radioExtLinkOpenAlways" >
@@ -227,11 +295,20 @@
              <string>When link pointed to a new CHM file clicked</string>
             </property>
             <layout class="QVBoxLayout" >
-             <property name="margin" >
-              <number>9</number>
-             </property>
              <property name="spacing" >
               <number>6</number>
+             </property>
+             <property name="leftMargin" >
+              <number>9</number>
+             </property>
+             <property name="topMargin" >
+              <number>9</number>
+             </property>
+             <property name="rightMargin" >
+              <number>9</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>9</number>
              </property>
              <item>
               <widget class="QRadioButton" name="m_radioNewChmOpenAlways" >
@@ -267,11 +344,20 @@
        <string>Version-specific settings</string>
       </attribute>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
+       </property>
+       <property name="leftMargin" >
+        <number>9</number>
+       </property>
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>9</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>9</number>
        </property>
        <item>
         <widget class="QGroupBox" name="m_groupQtsettings" >
@@ -279,18 +365,25 @@
           <string>Qt version settings</string>
          </property>
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>9</number>
+          </property>
+          <property name="topMargin" >
+           <number>9</number>
+          </property>
+          <property name="rightMargin" >
+           <number>9</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>9</number>
           </property>
           <item>
            <widget class="QLabel" name="textLabel1_2" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>5</hsizetype>
-              <vsizetype>7</vsizetype>
+             <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -312,9 +405,7 @@
           <item>
            <widget class="QLineEdit" name="m_qtBrowserPath" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -330,11 +421,20 @@
           <string>KDE version settings</string>
          </property>
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>9</number>
+          </property>
+          <property name="topMargin" >
+           <number>9</number>
+          </property>
+          <property name="rightMargin" >
+           <number>9</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>9</number>
           </property>
           <item>
            <widget class="QGroupBox" name="buttonGroup5_2" >
@@ -342,11 +442,20 @@
              <string>To show HTML content, use</string>
             </property>
             <layout class="QVBoxLayout" >
-             <property name="margin" >
-              <number>9</number>
-             </property>
              <property name="spacing" >
               <number>6</number>
+             </property>
+             <property name="leftMargin" >
+              <number>9</number>
+             </property>
+             <property name="topMargin" >
+              <number>9</number>
+             </property>
+             <property name="rightMargin" >
+              <number>9</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>9</number>
              </property>
              <item>
               <widget class="QRadioButton" name="m_radioUseQtextBrowser" >
@@ -377,10 +486,22 @@
              <string>KHTMLPart security</string>
             </property>
             <layout class="QGridLayout" >
-             <property name="margin" >
+             <property name="leftMargin" >
               <number>9</number>
              </property>
-             <property name="spacing" >
+             <property name="topMargin" >
+              <number>9</number>
+             </property>
+             <property name="rightMargin" >
+              <number>9</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>9</number>
+             </property>
+             <property name="horizontalSpacing" >
+              <number>6</number>
+             </property>
+             <property name="verticalSpacing" >
               <number>6</number>
              </property>
              <item row="1" column="1" >
@@ -449,11 +570,20 @@
        <string>Advanced</string>
       </attribute>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
+       </property>
+       <property name="leftMargin" >
+        <number>9</number>
+       </property>
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>9</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>9</number>
        </property>
        <item>
         <widget class="QGroupBox" name="buttonGroup7" >
@@ -461,11 +591,20 @@
           <string>View HTML source command uses</string>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>9</number>
+          </property>
+          <property name="topMargin" >
+           <number>9</number>
+          </property>
+          <property name="rightMargin" >
+           <number>9</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>9</number>
           </property>
           <item>
            <widget class="QRadioButton" name="m_advViewSourceInternal" >
@@ -489,11 +628,20 @@
           </item>
           <item>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="textLabel1_3" >
@@ -510,102 +658,18 @@
             </item>
            </layout>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox6" >
-         <property name="title" >
-          <string>Search engine to use</string>
-         </property>
-         <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
           <item>
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
             </property>
-            <property name="spacing" >
-             <number>6</number>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
             </property>
-            <item>
-             <widget class="QRadioButton" name="m_useSearchEngineNew" >
-              <property name="text" >
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="m_labelUseSearchEngineNew" >
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>5</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>10</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text" >
-               <string>Use new kchmviewer internal  search engine (recommended). This engine indexes symbols, so it is possible to search for special symbols (like "C++"). All languages are supported. The index will be generated before the first search.</string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap" >
-               <bool>true</bool>
-              </property>
-              <property name="buddy" >
-               <cstring>m_useSearchEngineNew</cstring>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QRadioButton" name="m_useSearchEngineInternal" >
-              <property name="text" >
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="m_labelUseSearchEngineInternal" >
-              <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>5</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>10</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text" >
-               <string>Use the search based on internal CHM index. This engine cannot search for any symbols except underscode, does not support multibyte languages, and is not always available.</string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignVCenter</set>
-              </property>
-              <property name="wordWrap" >
-               <bool>true</bool>
-              </property>
-              <property name="buddy" >
-               <cstring>m_useSearchEngineInternal</cstring>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -649,8 +713,6 @@
   <tabstop>m_advViewSourceInternal</tabstop>
   <tabstop>m_advViewSourceExternal</tabstop>
   <tabstop>m_advExternalProgramName</tabstop>
-  <tabstop>m_useSearchEngineNew</tabstop>
-  <tabstop>m_useSearchEngineInternal</tabstop>
   <tabstop>buttonBox</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>

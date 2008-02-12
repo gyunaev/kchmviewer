@@ -26,7 +26,7 @@
 #include "kchmsettings.h"
 #include "ui_tab_search.h"
 
-class KCHMSearchEngine;
+#include "libchmsearchengine.h"
 
 
 class KCHMSearchWindow : public QWidget, public Ui::TabSearch
@@ -37,7 +37,7 @@ class KCHMSearchWindow : public QWidget, public Ui::TabSearch
 	
 		void	invalidate();
 		void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
-		void	saveSettings (KCHMSettings::search_saved_settings_t& settings);
+		void	saveSettings( KCHMSettings::search_saved_settings_t& settings );
 		void	execSearchQueryInGui( const QString& query );
 		bool	searchQuery( const QString& query, QStringList * results );
 		
@@ -46,13 +46,20 @@ class KCHMSearchWindow : public QWidget, public Ui::TabSearch
 		void	onHelpClicked( const QString & );
 		void 	onReturnPressed ();
 		void	onDoubleClicked( QTreeWidgetItem * item, int );
+		
+		// For index generation
+		void	onProgressStep( int value, const QString& stepName );
 	
 	private:
 		bool	initSearchEngine();
 		
 	private:
 		QMenu			* 	m_contextMenu;
-		KCHMSearchEngine*	m_searchEngine;
+		LCHMSearchEngine*	m_searchEngine;
+		bool				m_searchEngineInitDone;
+		
+		// For index generation
+		QProgressDialog *	m_genIndexProgress;
 };
 
 #endif

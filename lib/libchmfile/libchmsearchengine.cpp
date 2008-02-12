@@ -53,7 +53,6 @@ bool LCHMSearchEngine::generateIndex( LCHMFile * chmFile, QDataStream & stream )
 	QStringList documents;
 	QStringList alldocuments;
 	
-	emit progressSetup( 100 );
 	emit progressStep( 0, "Generating the list of documents" );
 	impl->processEvents();
 

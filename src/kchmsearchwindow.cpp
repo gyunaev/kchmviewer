@@ -27,8 +27,6 @@
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
 #include "kchmtreeviewitem.h"
-#include "kchmsearchengine.h"
-
 
 
 class KCMSearchTreeViewItem : public QTreeWidgetItem
@@ -108,8 +106,13 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
 	searchBox->setFocus();
 	
 	m_contextMenu = 0;
-	m_searchEngine = 0;
+	m_genIndexProgress = 0;
+	m_searchEngineInitDone = false;
+	
+	m_searchEngine = new LCHMSearchEngine();
+	connect( m_searchEngine, SIGNAL( progressStep( int, const QString& ) ), this, SLOT( onProgressStep( int, const QString& ) ) );
 }
+
 
 void KCHMSearchWindow::invalidate( )
 {
@@ -117,9 +120,12 @@ void KCHMSearchWindow::invalidate( )
 	searchBox->clear();
 	searchBox->lineEdit()->clear();
 	
-	delete m_searchEngine;
-	m_searchEngine = 0;
+	delete m_genIndexProgress;
+	m_genIndexProgress = 0;
+	
+	m_searchEngineInitDone = false;
 }
+
 
 void KCHMSearchWindow::onReturnPressed( )
 {
@@ -161,11 +167,13 @@ void KCHMSearchWindow::onDoubleClicked( QTreeWidgetItem * item, int )
 	::mainWindow->openPage( treeitem->getUrl(), KCHMMainWindow::OPF_ADD2HISTORY );
 }
 
+
 void KCHMSearchWindow::restoreSettings( const KCHMSettings::search_saved_settings_t & settings )
 {
 	for ( int i = 0; i < settings.size(); i++ )
 		searchBox->addItem (settings[i]);
 }
+
 
 void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & settings )
 {
@@ -178,32 +186,74 @@ void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & set
 
 void KCHMSearchWindow::onHelpClicked( const QString & )
 {
-	if ( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
-	{
-		QToolTip::showText ( mapToGlobal( lblHelp->pos() ),
-		                     i18n( "<html><p>The improved search engine allows you to search for a word, symbol or phrase, which is set of words and symbols included in quotes. Only the documents which include all the terms speficide in th search query are shown; no prefixes needed.<p>Unlike MS CHM internal search index, my improved search engine indexes everything, including special symbols. Therefore it is possible to search (and find!) for something like <i>$q = new ChmFile();</i>. This search also fully supports Unicode, which means that you can search in non-English documents.<p>If you want to search for a quote symbol, use quotation mark instead. The engine treats a quote and a quotation mark as the same symbol, which allows to use them in phrases.</html>") );
-	}
-	else
-	{
-		QMessageBox::information ( this, 
-			i18n( "How to use search"), 
-			i18n( "The search query can contain a few prefixes.\nA set of words inside the quote marks mean that you are searching for exact phrase.\nA word with minus sign means that it should be absent in the search result.\nA word with plus mark or without any mark means that it must be present in the search result.\n\nNote that only letters and digits are indexed.\nYou cannot search for non-character symbols other than underscope, and those symbols will be removed from the search query.\nFor example, search for 'C' will give the same result as searching for 'C++'.") );
-	}
+	QWhatsThis::showText ( mapToGlobal( lblHelp->pos() ),
+		i18n( "<html><p>The improved search engine allows you to search for a word, symbol or phrase, which is set of words and symbols included in quotes. Only the documents which include all the terms speficide in th search query are shown; no prefixes needed.<p>Unlike MS CHM internal search index, my improved search engine indexes everything, including special symbols. Therefore it is possible to search (and find!) for something like <i>$q = new ChmFile();</i>. This search also fully supports Unicode, which means that you can search in non-English documents.<p>If you want to search for a quote symbol, use quotation mark instead. The engine treats a quote and a quotation mark as the same symbol, which allows to use them in phrases.</html>") );
 }
 
 
 bool KCHMSearchWindow::initSearchEngine( )
 {
-	m_searchEngine = new KCHMSearchEngine();
+	KCHMShowWaitCursor waitcursor;
 	
-	if ( !m_searchEngine->loadOrGenerateIndex() )
+	QString indexfile = ::mainWindow->currentSettings()->searchIndexFile();
+	
+	// First try to read the index if exists
+	QFile file( indexfile );
+	
+	if ( file.open( QIODevice::ReadOnly ) )
 	{
-		delete m_searchEngine;
-		m_searchEngine = 0;
+		QDataStream stream( &file );
+		
+		::mainWindow->statusBar()->showMessage( i18n( "Reading dictionary..." ) );
+		qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+		
+		if ( m_searchEngine->loadIndex( stream ) )
+		{
+			m_searchEngineInitDone = true;
+			return true;
+		}
+	}
+	
+	// So the index cannot be read or does not exist. Create a new one.
+	
+	// Show the user what we gonna do
+	m_genIndexProgress = new QProgressDialog( this );
+	m_genIndexProgress->setWindowTitle( i18n( "Generating search index..." ) );
+	m_genIndexProgress->setLabelText( i18n( "Generating search index..." ) );
+	m_genIndexProgress->setMaximum( 100 );
+	m_genIndexProgress->reset();
+	m_genIndexProgress->show();
+	
+	::mainWindow->statusBar()->showMessage( tr( "Generating search index..." ) );
+	
+	// Show 'em
+	qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+		
+	// Since we gonna save it, reopen the file
+	file.close();
+	
+	if ( !file.open( QIODevice::WriteOnly ) )
+	{
+		QMessageBox::critical( 0, "Cannot save index", tr("The index cannot be saved into file %1") .arg( file.fileName() ) );
 		return false;
 	}
 	
-	return true;
+	// Run the generation
+	QDataStream stream( &file );
+	
+	m_searchEngine->generateIndex( ::mainWindow->chmFile(), stream );
+	
+	delete m_genIndexProgress;
+	m_genIndexProgress = 0;
+	
+	if ( m_searchEngine->hasIndex() )
+	{
+		m_searchEngineInitDone = true;
+		return true;
+	}
+	
+	m_searchEngineInitDone = false;
+	return false;
 }
 
 
@@ -216,33 +266,25 @@ void KCHMSearchWindow::execSearchQueryInGui( const QString & query )
 
 bool KCHMSearchWindow::searchQuery( const QString & query, QStringList * results )
 {
-	if ( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
+	if ( !m_searchEngineInitDone )
 	{
-		if ( !m_searchEngine && !initSearchEngine() )
+		if ( !initSearchEngine() )
 			return false;
 	}
-	else if ( !::mainWindow->chmFile()->hasSearchTable() )
+	
+	if ( !m_searchEngine->hasIndex() )
 	{
-		QMessageBox::information ( this, 
-					i18n( "Search is not available" ),
-					i18n( "<p>The search feature is not avaiable for this chm file."
-					"<p>The old search engine depends on indexes present in chm files itself. Not every chm file has an index; it is set up"
-					" during chm file creation. Therefore if the search index was not created during chm file creation, this makes search "
-					"impossible.<p>Solution: use new search engine (menu Settings/Advanced), which generates its own index.") );
+		QMessageBox::information ( this, "No index present", "The index is not present" );
 		return false;
 	}
-	
+		
 	if ( query.isEmpty() )
 		return false;
 
 	KCHMShowWaitCursor waitcursor;
 	bool result;
 	
-	if ( appConfig.m_useSearchEngine == KCHMConfig::SEARCH_USE_MINE )
-		result = m_searchEngine->searchQuery( query, results );
-	else
-		result = ::mainWindow->chmFile()->searchQuery( query, results );
-
+	result = m_searchEngine->searchQuery( query, results, ::mainWindow->chmFile() );
 	return result;
 }
 
@@ -255,5 +297,15 @@ void KCHMSearchWindow::onContextMenuRequested( const QPoint & point )
 	{
 		::mainWindow->currentBrowser()->setTabKeeper( treeitem->getUrl() );
 		::mainWindow->tabItemsContextMenu()->popup( tree->viewport()->mapToGlobal( point ) );
+	}
+}
+
+
+void KCHMSearchWindow::onProgressStep(int value, const QString & stepName)
+{
+	if ( m_genIndexProgress )
+	{
+		m_genIndexProgress->setLabelText( stepName );
+		m_genIndexProgress->setValue( value );
 	}
 }

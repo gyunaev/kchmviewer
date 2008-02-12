@@ -9,17 +9,17 @@ HEADERS += 	bitfiddle.h \
 			libchmtextencoding.h \
 			libchmtocimage.h \
 			libchmurlfactory.h \
- 	lchmsearchengine.h \
- 	lchmsearchengine_impl.h \
- 	lchmsearchengine_indexing.h
+ 	libchmsearchengine.h \
+ 	libchmsearchengine_impl.h \
+ 	libchmsearchengine_indexing.h
 SOURCES +=  libchmfile.cpp \
 			libchmfileimpl.cpp \
 			libchmfile_search.cpp \
 			libchmtextencoding.cpp \
 			libchmtocimage.cpp \
-  lchmsearchengine.cpp \
-  lchmsearchengine_impl.cpp \
-  lchmsearchengine_indexing.cpp
+  libchmsearchengine.cpp \
+  libchmsearchengine_impl.cpp \
+  libchmsearchengine_indexing.cpp
 TARGET = chmfile
 CONFIG += warn_on \
 		  qt \

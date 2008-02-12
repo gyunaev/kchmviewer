@@ -20,18 +20,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-
-#include <QFile>
-#include <QDir>
-#include <QStringList>
-#include <QHash>
 #include <QApplication>
-#include <QEventLoop>
-
-//#include <ctype.h>
 
 #include "libchmfileimpl.h"
-#include "lchmsearchengine_indexing.h"
+#include "libchmsearchengine_indexing.h"
 
 
 static const int DICT_VERSION = 3;

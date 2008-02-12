@@ -20,10 +20,10 @@
  ***************************************************************************/
 
 #include "libchmfile.h"
-#include "lchmsearchengine.h"
-#include "lchmsearchengine_impl.h"
-#include "lchmsearchengine_indexing.h"
 #include "libchmurlfactory.h"
+#include "libchmsearchengine.h"
+#include "libchmsearchengine_impl.h"
+#include "libchmsearchengine_indexing.h"
 
 
 LCHMSearchEngine::LCHMSearchEngine()

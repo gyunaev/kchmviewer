@@ -4,7 +4,8 @@ HEADERS += kchmsettings.h kchmbookmarkwindow.h kchmconfig.h kchmtreeviewitem.h \
 			kchmdialogchooseurlfromlist.h kchmviewwindow.h kchmindexwindow.h \
 			kchmmainwindow.h kchmviewwindow_qtextbrowser.h kde-qt.h \
 			kchmsearchwindow.h kchmviewwindowmgr.h \
-			kchmkeyeventfilter.h kchmcontentswindow.h kchmsetupdialog.h
+			kchmkeyeventfilter.h kchmcontentswindow.h kchmsetupdialog.h \
+ version.h
 SOURCES += kchmbookmarkwindow.cpp kchmconfig.cpp \
 			kchmindexwindow.cpp kchmmainwindow.cpp kchmsearchwindow.cpp \
 			kchmsettings.cpp kchmtreeviewitem.cpp kchmviewwindow.cpp main.cpp \

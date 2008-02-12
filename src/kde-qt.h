@@ -22,8 +22,6 @@
 #ifndef KDE_QT_H
 #define KDE_QT_H
 
-#include "config.h"
-
 #if defined (USE_KDE)
 	
 	#define KQ_CLASSNAME(name)			K##name

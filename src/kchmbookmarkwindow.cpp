@@ -23,7 +23,7 @@
 #include "kchmmainwindow.h"
 #include "kchmviewwindow.h"
 #include "kchmtreeviewitem.h"
-
+#include "version.h"
 
 class KCHMBookmarkItem : public QListWidgetItem
 {

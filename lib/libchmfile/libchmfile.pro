@@ -18,7 +18,6 @@ SOURCES +=  libchmfile.cpp \
 TARGET = chmfile
 CONFIG += warn_on \
 		  qt \
-		  debug \
 		  staticlib
 TEMPLATE = lib
 INCLUDEPATH += ../../src

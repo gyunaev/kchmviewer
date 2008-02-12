@@ -29,7 +29,6 @@
 #include <QPixmap>
 #include <QVector>
 
-#include "config.h"
 #include "chm_lib.h"
 #include "bitfiddle.h"
 #include "libchmfile.h"

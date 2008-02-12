@@ -26,6 +26,9 @@
 #include <errno.h>
 #include <unistd.h>
 
+#include <QProcess>
+#include <QDesktopServices>
+
 #include "kde-qt.h"
 
 #include "libchmfile.h"
@@ -44,11 +47,6 @@
 #include "kchmkeyeventfilter.h"
 #include "kchmcontentswindow.h"
 #include "kchmsetupdialog.h"
-
-#if !defined (USE_KDE)
-	#include "kqrunprocess.h"
-#endif
-
 
 
 KCHMMainWindow::KCHMMainWindow()
@@ -127,6 +125,9 @@ KCHMMainWindow::KCHMMainWindow()
 
 KCHMMainWindow::~KCHMMainWindow()
 {
+	// Temporary files cleanup
+	while ( !m_tempFileKeeper.isEmpty() )
+		delete m_tempFileKeeper.takeFirst();
 }
 
 
@@ -327,7 +328,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 #if defined (USE_KDE)
 			new KRun ( url );
 #else
-			run_process( appConfig.m_QtBrowserPath, url );
+			QDesktopServices::openUrl( url );
 #endif
 		}
 		break;
@@ -589,6 +590,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 
 void KCHMMainWindow::setupSignals( )
 {
+#if !defined (_WIN32)
 #if defined(HAVE_SIGACTION)
 	struct sigaction sa;
     memset ((char *)&sa, 0, sizeof(sa));
@@ -604,6 +606,7 @@ void KCHMMainWindow::setupSignals( )
 #else /* !HAVE_SIGACTION */
 	signal (SIGCHLD, SIG_IGN);
 #endif /* HAVE_SIGACTION */
+#endif /* !defined (_WIN32) */
 }
 
 
@@ -907,113 +910,9 @@ void KCHMMainWindow::actionChangeSettings()
 {
 	KCHMSetupDialog dlg ( this );
 	
-	// Set up the parameters
-	dlg.m_radioOnBeginOpenDialog->setChecked ( !appConfig.m_LoadLatestFileOnStartup );
-	dlg.m_radioOnBeginOpenLast->setChecked ( appConfig.m_LoadLatestFileOnStartup );
-	dlg.m_historySize->setValue ( appConfig.m_numOfRecentFiles );
-	dlg.m_rememberHistoryInfo->setChecked ( appConfig.m_HistoryStoreExtra );
-	
-	dlg.m_radioExtLinkOpenAlways->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_ALWAYS_OPEN );
-	dlg.m_radioExtLinkAsk->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_ASK_USER );
-	dlg.m_radioExtLinkOpenNever->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_DONT_OPEN );
-	
-	dlg.m_radioNewChmOpenAlways->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_ALWAYS_OPEN );
-	dlg.m_radioNewChmAsk->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_ASK_USER );
-	dlg.m_radioNewChmOpenNever->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_DONT_OPEN );
-
-#if defined (USE_KDE)
-	dlg.m_groupQtsettings->setEnabled ( false );
-	dlg.m_groupKDEsettings->setEnabled ( true );
-#else
-	dlg.m_groupQtsettings->setEnabled ( true );
-	dlg.m_groupKDEsettings->setEnabled ( false );
-#endif
-
-	dlg.m_qtBrowserPath->setText ( appConfig.m_QtBrowserPath );
-	dlg.m_radioUseQtextBrowser->setChecked ( appConfig.m_kdeUseQTextBrowser );
-	dlg.m_radioUseKHTMLPart->setChecked ( !appConfig.m_kdeUseQTextBrowser );
-	
-	dlg.m_enableJS->setChecked ( appConfig.m_kdeEnableJS );
-	dlg.m_enablePlugins->setChecked ( appConfig.m_kdeEnablePlugins );
-	dlg.m_enableJava->setChecked ( appConfig.m_kdeEnableJava );
-	dlg.m_enableRefresh->setChecked ( appConfig.m_kdeEnableRefresh );
-	
-	dlg.m_advExternalProgramName->setText( appConfig.m_advExternalEditorPath );
-	dlg.m_advViewSourceExternal->setChecked ( !appConfig.m_advUseInternalEditor );
-	dlg.m_advViewSourceInternal->setChecked ( appConfig.m_advUseInternalEditor );
-	
-	if ( dlg.exec() == QDialog::Accepted )
-	{
-		appConfig.m_LoadLatestFileOnStartup = dlg.m_radioOnBeginOpenLast->isChecked();
-		appConfig.m_numOfRecentFiles = dlg.m_historySize->value();
-		appConfig.m_HistoryStoreExtra = dlg.m_rememberHistoryInfo->isChecked();
-
-		if ( dlg.m_radioExtLinkOpenAlways->isChecked () )
-			appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_ALWAYS_OPEN;
-		else if ( dlg.m_radioExtLinkAsk->isChecked () )
-			appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_ASK_USER;
-		else
-			appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_DONT_OPEN;
-
-		if ( dlg.m_radioNewChmOpenAlways->isChecked () )
-			appConfig.m_onNewChmClick = KCHMConfig::ACTION_ALWAYS_OPEN;
-		else if ( dlg.m_radioNewChmAsk->isChecked () )
-			appConfig.m_onNewChmClick = KCHMConfig::ACTION_ASK_USER;
-		else
-			appConfig.m_onNewChmClick = KCHMConfig::ACTION_DONT_OPEN;
-
-		appConfig.m_QtBrowserPath = dlg.m_qtBrowserPath->text();
-		
-		// Check the changes
-		bool need_restart = false;
-		
-		if ( appConfig.m_kdeEnableJS != dlg.m_enableJS->isChecked() )
-		{
-			need_restart = true;
-			appConfig.m_kdeEnableJS = dlg.m_enableJS->isChecked();
-		}
-		
-		if ( appConfig.m_kdeEnablePlugins != dlg.m_enablePlugins->isChecked() )
-		{
-			need_restart = true;
-			appConfig.m_kdeEnablePlugins = dlg.m_enablePlugins->isChecked();
-		}
-		
-		if ( appConfig.m_kdeEnableJava != dlg.m_enableJava->isChecked() )
-		{
-			need_restart = true;
-			appConfig.m_kdeEnableJava = dlg.m_enableJava->isChecked();
-		}
-		
-		if ( appConfig.m_kdeEnableRefresh != dlg.m_enableRefresh->isChecked() )
-		{
-			need_restart = true;
-			appConfig.m_kdeEnableRefresh = dlg.m_enableRefresh->isChecked();
-		}
-		
-		if ( appConfig.m_kdeUseQTextBrowser != dlg.m_radioUseQtextBrowser->isChecked() )
-		{
-			need_restart = true;
-			appConfig.m_kdeUseQTextBrowser = dlg.m_radioUseQtextBrowser->isChecked();
-		}
-		
-		appConfig.m_advExternalEditorPath = dlg.m_advExternalProgramName->text();
-		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceExternal->isChecked();
-		appConfig.m_advUseInternalEditor = dlg.m_advViewSourceInternal->isChecked();
-		
-		if ( appConfig.m_numOfRecentFiles != m_numOfRecentFiles )
-			need_restart = true;
-		
-		appConfig.save();
-		
-		if ( need_restart )
-			QMessageBox::information( 
-			                          this,
-			                          APP_NAME,
-			                          i18n( "Changing browser view options, search engine used or recent "
-			                                "files size requires restarting the application to take effect." )	);
-	}
+	dlg.exec();
 }
+
 
 void KCHMMainWindow::actionExtractCHM()
 {
@@ -1134,7 +1033,7 @@ void KCHMMainWindow::actionViewHTMLsource()
 {
 	QString text;
 
-	if ( !m_chmFile->getFileContentAsString( &text, currentBrowser()->getOpenedPage() ) )
+	if ( !m_chmFile->getFileContentAsString( &text, currentBrowser()->getOpenedPage() ) || text.isEmpty() )
 		return;
 
 	if ( appConfig.m_advUseInternalEditor )
@@ -1147,11 +1046,29 @@ void KCHMMainWindow::actionViewHTMLsource()
 	}
 	else
 	{
-		QFile file;
-		m_tempFileKeeper.generateTempFile( file );
+		QTemporaryFile * tf = new QTemporaryFile();
+		m_tempFileKeeper.append( tf );
+
+		if ( !tf->open() )
+		{
+			qWarning("Cannot open created QTemporaryFile: something is wrong with your system");
+			return;
+		}
 		
-		file.write( text.toUtf8() );
-		run_process( appConfig.m_advExternalEditorPath, file.fileName() );
+		tf->write( text.toUtf8() );
+		tf->seek( 0 );
+		
+		// Run the external editor
+		QStringList arguments;
+		arguments.push_back( tf->fileName() );
+		
+		if ( !QProcess::startDetached( appConfig.m_advExternalEditorPath, arguments, "." ) )
+		{
+			QMessageBox::warning( 0,
+								  "Cannot start external editor", 
+		  						  tr("Cannot start external editor %1.\nMake sure the path is absolute!") .arg( appConfig.m_advExternalEditorPath ) );
+			delete m_tempFileKeeper.takeLast();
+		}
 	}
 }
 

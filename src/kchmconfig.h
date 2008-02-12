@@ -56,7 +56,6 @@ class KCHMConfig
 		int					m_numOfRecentFiles;
 		bool				m_HistoryStoreExtra;
 				
-		QString				m_QtBrowserPath;
 		bool				m_kdeUseQTextBrowser;
 		bool				m_kdeEnableJS;
 		bool				m_kdeEnableJava;

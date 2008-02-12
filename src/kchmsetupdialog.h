@@ -33,6 +33,13 @@ class KCHMSetupDialog : public QDialog, public Ui::DialogSetup
 	public:
     	KCHMSetupDialog( QWidget *parent = 0 );
     	~KCHMSetupDialog();
+		
+	public slots:
+		void	browseExternalEditor();
+		void	accept();
+		
+	private:
+		int		m_numOfRecentFiles;
 };
 
 #endif

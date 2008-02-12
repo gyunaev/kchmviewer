@@ -26,7 +26,6 @@
 
 #include "kde-qt.h"
 #include "kchmviewwindow.h"
-#include "kqtempfile.h"
 
 #include "ui_window_main.h"
 
@@ -184,7 +183,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		int						m_tabSearchPage;
 		int						m_tabBookmarkPage;
 	
-		KQTempFileKeeper		m_tempFileKeeper;
+		QList<QTemporaryFile*>	m_tempFileKeeper;
 
 		int						m_numOfRecentFiles;
 		QVector<QAction*>		m_recentFiles;

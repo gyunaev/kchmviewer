@@ -325,14 +325,12 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 			// no break! should continue to open.
 
 		case KCHMConfig::ACTION_ALWAYS_OPEN:
-		{
 #if defined (USE_KDE)
 			new KRun ( url );
 #else
 			QDesktopServices::openUrl( url );
 #endif
-		}
-		break;
+			break;
 		}
 
 		return false; // do not change the current page.
@@ -1219,97 +1217,97 @@ void KCHMMainWindow::setupActions()
 {
 	// Connect actions to slots
 	connect( file_Open_action, 
-			 SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 			 this,
 			 SLOT( actionOpenFile() ) );
 			
 	connect( file_Print_action, 
-			 SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 			 this,
 			 SLOT( actionPrint() ) );
 	
 	connect( edit_Copy_action,
-			 SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 			 this,
 			 SLOT( actionEditCopy() ) );
 	
 	connect( edit_SelectAll_action,
-			 SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 			 this,
 			 SLOT( actionEditSelectAll() ) );
 
 	connect( edit_FindAction,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionFindInPage() ) );
 	
 	connect( file_ExtractCHMAction,
-			 SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionExtractCHM() ) );
 
 	connect( settings_SettingsAction,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionChangeSettings() ) );
 	
 	connect( bookmark_AddAction,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionAddBookmark() ) );
 	
 	connect( view_Increase_font_size_action,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionFontSizeIncrease() ) );
 	
 	connect( view_Decrease_font_size_action,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionFontSizeDecrease() ) );
 	
 	connect( view_View_HTML_source_action,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionViewHTMLsource() ) );
 	
 	connect( view_Toggle_fullscreen_action,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionToggleFullScreen() ) );
 	
 	connect( view_Toggle_contents_action,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionToggleContentsTab() ) );
 	
 	connect( view_Locate_in_contents_action,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionLocateInContentsTab() ) );
 	
 	connect( nav_action_Back,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionNavigateBack() ) );
 	
 	connect( nav_actionForward,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionNavigateForward() ) );
 	
 	connect( nav_actionHome,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionNavigateHome() ) );
 	
 	connect( nav_actionPreviousPage,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionNavigatePrevInToc() ) );
 	
 	connect( nav_actionNextPageToc,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionNavigateNextInToc() ) );
 	
@@ -1321,12 +1319,12 @@ void KCHMMainWindow::setupActions()
 	
 	// Close Window goes directly to the window manager
 	connect( action_Close_window,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( actionNavigateNextInToc() ) );
 	
 	connect( file_exit_action, 
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         qApp,
 	         SLOT( closeAllWindows() ) );
 	

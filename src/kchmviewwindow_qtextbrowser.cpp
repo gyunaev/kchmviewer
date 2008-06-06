@@ -34,6 +34,9 @@ KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
 	invalidate();
 	
 //	setTextFormat ( Qt::RichText );
+#if QT_VERSION >= 0x040300
+	setOpenLinks( false );
+#endif
 	connect( this, SIGNAL( anchorClicked ( const QUrl& ) ), this, SLOT( onAnchorClicked ( const QUrl& ) ) );
 }
 
@@ -96,7 +99,12 @@ void KCHMViewWindow_QTextBrowser::addZoomFactor( int value )
 
 void KCHMViewWindow_QTextBrowser::onAnchorClicked(const QUrl & url)
 {
+#if QT_VERSION < 0x040300
 	emit linkClicked( url.toString(), m_allowSourceChange );
+#else
+	bool q;
+	emit linkClicked( url.toString(), q );
+#endif
 }
 
 
@@ -196,7 +204,7 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 		path = path.left (pos);
 	
 	path = makeURLabsolute( path, false );
-	
+
 	// To handle a single-image pages, we need to generate the HTML page to show 
 	// this image. We did it in KCHMViewWindow::handleStartPageAsImage; now we need
 	// to generate the HTML page, and set it.

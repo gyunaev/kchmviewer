@@ -37,6 +37,12 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	// UIC
 	setupUi( this );
 	
+	// Remove the UIC-generated tab if it's there.
+	// Do it right here before the signals are connected, since after Qt 4.4.0 it triggers 
+	// the currentChanged signal.
+	if ( tabWidget->count() > 0 )
+		tabWidget->removeTab ( 0 );
+	
 	// on current tab changed
 	connect( tabWidget, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
 	
@@ -98,8 +104,12 @@ void KCHMViewWindowMgr::invalidate()
 
 KCHMViewWindow * KCHMViewWindowMgr::current()
 {
-	TabData& tab = findTab( tabWidget->currentWidget() );
-	return tab.window;
+	TabData * tab = findTab( tabWidget->currentWidget() );
+	
+	if ( !tab )
+		abort();
+	
+	return tab->window;
 }
 
 KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
@@ -122,18 +132,12 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 	tabdata.widget = viewvnd->getQWidget();
 	
 	connect( tabdata.action,
-	         SIGNAL( activated() ),
+			 SIGNAL( triggered() ),
 	         this,
 	         SLOT( activateWindow() ) );
 	
-	// The UIC-generated TabWidget already has a tab, so replace it instead of adding
-	// if this is the first window added
-	if ( m_Windows.size() == 0 )
-		tabWidget->removeTab ( 0 );
-	
-	tabWidget->addTab( tabdata.widget, "" );
-
 	m_Windows.push_back( tabdata );
+	tabWidget->addTab( tabdata.widget, "" );	
 	Q_ASSERT( m_Windows.size() == tabWidget->count() );
 		
 	// Set active if it is the first tab
@@ -160,23 +164,26 @@ void KCHMViewWindowMgr::closeAllWindows( )
 {
 	// No it++ - we removing the window by every closeWindow call
 	while ( m_Windows.begin() != m_Windows.end() )
-		closeWindow( m_Windows.first() );
+		closeWindow( m_Windows.first().widget );
 }
 
 void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 {
-	TabData& tab = findTab( window->getQWidget() );
+	TabData * tab = findTab( window->getQWidget() );
 	
-	QString title = window->getTitle();
+	if ( tab )
+	{
+		QString title = window->getTitle();
+		
+		// Trim too long string
+		if ( title.length() > 25 )
+			title = title.left( 22 ) + "...";
 	
-	// Trim too long string
-	if ( title.length() > 25 )
-		title = title.left( 22 ) + "...";
-
-	tabWidget->setTabText( tabWidget->indexOf( window->getQWidget() ), title );
-	tab.action->setText( title );
-	
-	updateCloseButtons();
+		tabWidget->setTabText( tabWidget->indexOf( window->getQWidget() ), title );
+		tab->action->setText( title );
+		
+		updateCloseButtons();
+	}
 }
 
 void KCHMViewWindowMgr::onCloseCurrentWindow( )
@@ -185,26 +192,26 @@ void KCHMViewWindowMgr::onCloseCurrentWindow( )
 	if ( m_Windows.size() == 1 )
 		return;
 			
-	TabData& tab = findTab( tabWidget->currentWidget() );
-	closeWindow( tab );
+	TabData * tab = findTab( tabWidget->currentWidget() );
+	closeWindow( tab->widget );
 }
 
-void KCHMViewWindowMgr::closeWindow( const TabData & tab )
+void KCHMViewWindowMgr::closeWindow( QWidget * widget )
 {
 	WindowsIterator it;
 	
 	for ( it = m_Windows.begin(); it != m_Windows.end(); ++it )
-		if ( (*it).widget == tab.widget )
+		if ( it->widget == widget )
 			break;
 	
 	if ( it == m_Windows.end() )
 		qFatal( "KCHMViewWindowMgr::closeWindow called with unknown widget!" );
 
-	m_menuWindow->removeAction( tab.action );
+	m_menuWindow->removeAction( it->action );
 	
-	tabWidget->removeTab( tabWidget->indexOf( tab.widget ) );
-	delete tab.window;
-	delete tab.action;
+	tabWidget->removeTab( tabWidget->indexOf( it->widget ) );
+	delete it->window;
+	delete it->action;
 	
 	m_Windows.erase( it );
 	updateCloseButtons();
@@ -218,8 +225,8 @@ void KCHMViewWindowMgr::closeWindow( const TabData & tab )
 
 void KCHMViewWindowMgr::restoreSettings( const KCHMSettings::viewindow_saved_settings_t & settings )
 {
-	// Destroy pre-created tab
-	closeWindow( m_Windows.first() );
+	// Destroy automatically created tab
+	closeWindow( m_Windows.first().widget );
 	
 	for ( int i = 0; i < settings.size(); i++ )
 	{
@@ -238,13 +245,16 @@ void KCHMViewWindowMgr::saveSettings( KCHMSettings::viewindow_saved_settings_t &
 	for ( int i = 0; i < tabWidget->count(); i++ )
 	{
 		QWidget * p = tabWidget->widget( i );
-		TabData& tab = findTab( p );
+		TabData * tab = findTab( p );
 			
+		if ( !tab )
+			abort();
+		
 		settings.push_back( 
 		                    KCHMSettings::SavedViewWindow( 
-			                    tab.window->getOpenedPage(), 
-			                    tab.window->getScrollbarPosition(), 
-			                    tab.window->getZoomFactor()) );
+			                    tab->window->getOpenedPage(), 
+			                    tab->window->getScrollbarPosition(), 
+			                    tab->window->getZoomFactor()) );
 	}
 }
 
@@ -258,11 +268,14 @@ void KCHMViewWindowMgr::updateCloseButtons( )
 
 void KCHMViewWindowMgr::onTabChanged( QWidget * newtab )
 {
-	TabData& tab = findTab( newtab );
-
-	tab.window->updateNavigationToolbar();
-	mainWindow->browserChanged( tab.window );
-	tab.widget->setFocus();
+	TabData * tab = findTab( newtab );
+	
+	if ( tab )
+	{
+		tab->window->updateNavigationToolbar();
+		mainWindow->browserChanged( tab->window );
+		tab->widget->setFocus();
+	}
 }
 
 
@@ -278,23 +291,22 @@ void KCHMViewWindowMgr::activateWindow()
 	
 	for ( WindowsIterator it = m_Windows.begin(); it != m_Windows.end(); ++it )
 	{
-		if ( (*it).action != action )
+		if ( it->action != action )
 			continue;
 		
-		QWidget *widget = (*it).widget;
+		QWidget *widget = it->widget;
 		tabWidget->setCurrentWidget(widget);
 		break;
 	}
 }
 
-KCHMViewWindowMgr::TabData & KCHMViewWindowMgr::findTab(QWidget * widget)
+KCHMViewWindowMgr::TabData * KCHMViewWindowMgr::findTab(QWidget * widget)
 {
-	for ( QList< TabData >::iterator it = m_Windows.begin(); it != m_Windows.end(); ++it )
-		if ( (*it).widget == widget )
-			return *it;
+	for ( WindowsIterator it = m_Windows.begin(); it != m_Windows.end(); ++it )
+		if ( it->widget == widget )
+			return (it.operator->());
 		
-	qFatal( "KCHMViewWindowMgr::findTab did not find tab" );
-	abort(); // to satisfy gcc
+	return 0;
 }
 
 void KCHMViewWindowMgr::setCurrentPage(int index)

@@ -38,7 +38,7 @@ class KCHMBookmarkItem : public QListWidgetItem
 			m_action->setData( qVariantFromValue( (void*) this ) );
 			
 			QObject::connect( m_action,
-			         SIGNAL( activated() ),
+			         SIGNAL( triggered() ),
 			         widget,
 			         SLOT( actionBookmarkActivated() ) );
 		}

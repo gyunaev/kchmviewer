@@ -88,11 +88,10 @@ class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 			QAction			*	action;
 		} TabData;
 		
-		void	closeWindow( const TabData& tab );
 		void	closeAllWindows();
-	
-		TabData & findTab( QWidget * widget );
-		
+		void	closeWindow( QWidget * widget );		
+		TabData * findTab( QWidget * widget );
+				
 		// Storage of all available windows
 		QList< TabData >	m_Windows;
 		typedef QList< TabData >::iterator WindowsIterator;

@@ -16,6 +16,7 @@ TARGETDEPS += ../lib/libchmfile/libchmfile.a
 LIBS +=       ../lib/libchmfile/libchmfile.a -lchm
 TARGET = ../bin/kchmviewer
 CONFIG += debug \
+         ordered \
 		 warn_on \
 		 qt \
 		 precompile_header

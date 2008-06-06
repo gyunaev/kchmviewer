@@ -1,3 +1,13 @@
+2008-06-06 tim <gyunaev@ulduzsoft.com>
+    - Version changed to 4.0b3 (this is Qt4-only release);
+    - Fixed several compatibility issues with qt-4.4.0;
+    - Added keyboard shortcuts to move to the next and previous entries in TOC: Ctrl+Right arrow
+      and Ctrl+Left arrow;
+    - Added manifest for the Windows version (thanks Cristian Adam);
+    - Windows version should not rely on mingw DLL anymore;
+    
+      
+    
 2008-02-10 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0b2 (this is Qt4-only release);
     - Added a command-line option to search through table of contents (--stoc);

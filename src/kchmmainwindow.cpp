@@ -1391,6 +1391,20 @@ void KCHMMainWindow::setupActions()
 	                      SLOT( onFindNext() ),
 	                      Qt::ApplicationShortcut );
 
+	// Open next page in TOC global shortcut
+	(void) new QShortcut( QKeySequence( i18n("Ctrl+Right") ),
+	                      this,
+	                      SLOT( actionNavigateNextInToc() ),
+						  SLOT( actionNavigateNextInToc() ),
+	                      Qt::ApplicationShortcut );
+	
+	// Open next page in TOC global shortcut
+	(void) new QShortcut( QKeySequence( i18n("Ctrl+Left") ),
+	                      this,
+	                      SLOT( actionNavigatePrevInToc() ),
+						  SLOT( actionNavigatePrevInToc() ),
+	                      Qt::ApplicationShortcut );
+	
 	// Context menu
 	m_contextMenu = new QMenu( this );
 	

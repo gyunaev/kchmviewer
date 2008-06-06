@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>873</width>
-     <height>28</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Settings" >
@@ -86,7 +86,10 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="file_Open_action" />
    <addaction name="file_Print_action" />
@@ -96,7 +99,10 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="nav_actionHome" />
    <addaction name="nav_action_Back" />
@@ -107,7 +113,10 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="view_Locate_in_contents_action" />
    <addaction name="view_Increase_font_size_action" />
@@ -428,7 +437,7 @@
     <string>Go to the previous page in the Table of Contents</string>
    </property>
    <property name="whatsThis" >
-    <string>Go to the previous page in the &lt;b>Table of Contents&lt;/b></string>
+    <string>Go to the previous page in the &lt;b>Table of Contents&lt;/b>&lt;br>&lt;br>&lt;i>Shortcut: Ctrl+Left Arrow&lt;/i></string>
    </property>
   </action>
   <action name="nav_actionNextPageToc" >
@@ -445,7 +454,7 @@
     <string>Go to the next page in the Table of Contents</string>
    </property>
    <property name="whatsThis" >
-    <string>Go to the next page in the &lt;b>Table of Contents&lt;/b></string>
+    <string>Go to the next page in the &lt;b>Table of Contents&lt;/b>&lt;br>&lt;br>&lt;i>Shortcut: Ctrl+Right Arrow&lt;/i></string>
    </property>
   </action>
   <action name="action_Close_window" >

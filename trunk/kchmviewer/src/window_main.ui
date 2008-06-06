@@ -82,6 +82,9 @@
    <addaction name="menu_Settings" />
   </widget>
   <widget class="QToolBar" name="mainToolbar" >
+   <property name="windowTitle" >
+    <string>general toolbar</string>
+   </property>
    <property name="orientation" >
     <enum>Qt::Horizontal</enum>
    </property>
@@ -95,6 +98,9 @@
    <addaction name="file_Print_action" />
   </widget>
   <widget class="QToolBar" name="navToolbar" >
+   <property name="windowTitle" >
+    <string>navigation toolbar</string>
+   </property>
    <property name="orientation" >
     <enum>Qt::Horizontal</enum>
    </property>
@@ -109,6 +115,9 @@
    <addaction name="nav_actionForward" />
   </widget>
   <widget class="QToolBar" name="viewToolbar" >
+   <property name="windowTitle" >
+    <string>action toolbar</string>
+   </property>
    <property name="orientation" >
     <enum>Qt::Horizontal</enum>
    </property>

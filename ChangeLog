@@ -5,7 +5,7 @@
       and Ctrl+Left arrow;
     - Added manifest for the Windows version (thanks Cristian Adam);
     - Windows version should not rely on mingw DLL anymore;
-    
+    - Toolbars are now named;
       
     
 2008-02-10 tim <gyunaev@ulduzsoft.com>

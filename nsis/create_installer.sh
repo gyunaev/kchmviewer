@@ -13,6 +13,7 @@ QTLIBS=/mnt/disk_c/Qt/4.3.2/bin/
 ln -s $BINARY kchmviewer.exe
 ln -s $QTLIBS/QtGui4.dll QtGui4.dll  
 ln -s $QTLIBS/QtCore4.dll QtCore4.dll
+ln -s /mnt/disk_c/Qt/MinGW/bin/mingwm10.dll mingwm10.dll
 
 export NSISDIR=/home/tim/bin/nsis
 
@@ -28,5 +29,7 @@ makensis installer.nsis
 rm kchmviewer.exe
 rm QtGui4.dll  
 rm QtCore4.dll
+rm mingwm10.dll
 
 mv InstallKchmViewer.exe $INSTNAME
+

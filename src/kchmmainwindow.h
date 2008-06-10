@@ -131,10 +131,13 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		// Link activation. MainWindow decides whether we should follow this link or not
 		// by setting up follow_link appropriately.
 		void 		activateLink( const QString & link, bool& follow_link );
+
+	protected slots:
+		// Called from the timer in main constructor
+		void 		firstShow();
 		
 	protected:
 		// Reimplemented functions
-		void 		showEvent( QShowEvent * );
 		void		closeEvent ( QCloseEvent * e );
 		bool		event ( QEvent * e );
 		
@@ -176,7 +179,6 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 	
 		KCHMSettings		*	m_currentSettings;
 		LCHMFile			*	m_chmFile;
-		bool					m_FirstTimeShow;
 		
 		int						m_tabContextPage;	
 		int						m_tabIndexPage;

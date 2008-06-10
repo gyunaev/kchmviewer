@@ -1,11 +1,11 @@
 [Desktop Entry]
+Name=KchmViewer
 Categories=Qt;KDE;Utility;
 Encoding=UTF-8
+Terminal=false
 Type=Application
 Exec=kchmviewer %U
-Icon=kchmviewer.png
-Comment=
-Terminal=0
-Name=KchmViewer
+Icon=kchmviewer
+GenericName=A viewer for CHM files
 Comment=A viewer of CHM (MS-Help) files
 MimeType=application/chm

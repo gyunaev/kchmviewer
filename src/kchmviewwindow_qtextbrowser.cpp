@@ -19,6 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#include <QPrinter>
+#include <QPrintDialog>
 
 #include "kde-qt.h"
 #include "libchmurlfactory.h"
@@ -51,12 +53,12 @@ bool KCHMViewWindow_QTextBrowser::openPage (const QString& url)
 	return true;
 }
 
-void KCHMViewWindow_QTextBrowser::setSource ( const QString & name )
+void KCHMViewWindow_QTextBrowser::setSource ( const QUrl & name )
 {
 	if ( m_allowSourceChange )
 	{
 		// Do URI decoding, qtextbrowser does stupid job.
-		QString fixedname = decodeUrl( name );
+		QString fixedname = decodeUrl( name.toString() );
 		QTextBrowser::setSource (fixedname);
 	}
 	else

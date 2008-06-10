@@ -22,93 +22,84 @@
 #ifndef KCHMVIEWWINDOW_KHTMLPART_H
 #define KCHMVIEWWINDOW_KHTMLPART_H
 
+#include <kurl.h>
 #include "kde-qt.h"
 
 #include "kchmviewwindow.h"
-#include "kchmsourcefactory.h"
 #include "libchmtextencoding.h"
 
 
 /**
 @author Georgy Yunaev
-*/
-/*
- * For Qt-only version, we cannot compile KCHMViewWindow_KHTMLPart. However,
- * we cannot just exclude it, because it would not generate a MOC file for a KDE
- * version. Therefore we declare it, and compile the .moc file, but do not provide
- * the class methods.
  */
-#if defined (USE_KDE)
 class KCHMViewWindow_KHTMLPart : public KHTMLPart, public KCHMViewWindow
 {
-Q_OBJECT
-public:
-	KCHMViewWindow_KHTMLPart( QTabWidget * parent );
-	~KCHMViewWindow_KHTMLPart();
-
-	//! Open a page from current chm archive
-	virtual bool	openPage (const QString& url);
+	Q_OBJECT
+	public:
+		KCHMViewWindow_KHTMLPart( QTabWidget * parent );
+		~KCHMViewWindow_KHTMLPart();
 	
-	//! Invalidate current view, doing all the cleanups etc.
-	virtual void	invalidate();
-
-	//! Return current ZoomFactor.
-	virtual int		getZoomFactor() const { return m_zoomfactor; }
-	
-	//! Sets ZoomFactor. The value returned by getZoomFactor(), given to this function, should give the same result.
-	virtual void	setZoomFactor (int zoom);
-	
-	//! Relatively changes ZoomFactor. Most common values are -1 and 1.
-	virtual void	addZoomFactor (int value);
-
-	//! Popups the print dialog, and prints the current page on the printer.
-	virtual bool	printCurrentPage();
-
-	//! Initiates the find-in-page search, if succeed, cursor moved to the first entry
-	virtual void	searchWord( const QString & word, bool forward = true, bool casesensitive = false );
-
-	//! Select the content of the whole page
-	virtual void	clipSelectAll();
-
-	//! Copies the selected content to the clipboard
-	virtual void	clipCopy();
-	
-	/*!
-	 * Return current scrollbar position in view window. Saved on program exit. 
-	 * There is no restriction on returned value, except that giving this value to 
-	 * setScrollbarPosition() should move the scrollbar in the same position.
-	 */
-	virtual int		getScrollbarPosition();
-	
-	//! Sets the scrollbar position.
-	virtual void	setScrollbarPosition(int pos);
-
-	virtual QObject *	getQObject() { return this; }
-	virtual QWidget *	getQWidget();
-
-signals:
-	/*!
-	 * Emitted when the user clicked on the link, before the page changed.
- 	 * If linkClicked() sets follow_link to false, the current page should NOT change.
-	 * Otherwise it should be changed to the new link value.
-	 */
-	void	linkClicked ( const QString & newlink, bool& follow_link );
-
-private slots:
-	virtual void	slotLinkClicked ( const QString & newlink);
-	virtual void	onOpenURLRequest( const KURL &, const KParts::URLArgs & );
-	virtual void 	onPopupMenu   	( const QString & url, const QPoint & point );
-	
-private:
-	void setSource ( const QString & name );
-			
-	int			m_zoomfactor;
-	bool		m_searchForward;
-	QString		m_searchText;
+		//! Open a page from current chm archive
+		virtual bool	openPage (const QString& url);
 		
-	const LCHMTextEncoding *	m_currentEncoding;
+		//! Invalidate current view, doing all the cleanups etc.
+		virtual void	invalidate();
+	
+		//! Return current ZoomFactor.
+		virtual int		getZoomFactor() const { return m_zoomfactor; }
+		
+		//! Sets ZoomFactor. The value returned by getZoomFactor(), given to this function, should give the same result.
+		virtual void	setZoomFactor (int zoom);
+		
+		//! Relatively changes ZoomFactor. Most common values are -1 and 1.
+		virtual void	addZoomFactor (int value);
+	
+		//! Popups the print dialog, and prints the current page on the printer.
+		virtual bool	printCurrentPage();
+	
+		//! Select the content of the whole page
+		virtual void	clipSelectAll();
+	
+		//! Copies the selected content to the clipboard
+		virtual void	clipCopy();
+		
+		//! Implements "find in page" functionality
+		virtual void	find( const QString& text, int flags );
+		virtual void	onFindNext();
+		virtual void	onFindPrevious();
+		
+		/*!
+		* Return current scrollbar position in view window. Saved on program exit. 
+		* There is no restriction on returned value, except that giving this value to 
+		* setScrollbarPosition() should move the scrollbar in the same position.
+		*/
+		virtual int		getScrollbarPosition();
+		
+		//! Sets the scrollbar position.
+		virtual void	setScrollbarPosition(int pos);
+	
+		virtual QObject *	getQObject() { return this; }
+		virtual QWidget *	getQWidget();
+	
+	signals:
+		/*!
+		* Emitted when the user clicked on the link, before the page changed.
+		* If linkClicked() sets follow_link to false, the current page should NOT change.
+		* Otherwise it should be changed to the new link value.
+		*/
+		void	linkClicked ( const QString & newlink, bool& follow_link );
+	
+	private slots:
+		virtual void	slotLinkClicked ( const QString & newlink);
+		virtual void	onOpenURLRequest( const KUrl &, const KParts::OpenUrlArguments &, const KParts::BrowserArguments&  );
+		virtual void 	onPopupMenu   	( const QString & url, const QPoint & point );
+		
+	private:
+		void setSource ( const QString & name );
+				
+		int			m_zoomfactor;
+		
+		const LCHMTextEncoding *	m_currentEncoding;
 };
-
-#endif /* USE_KDE */
 
 #endif /* KCHMVIEWWINDOW_KHTMLPART_H */

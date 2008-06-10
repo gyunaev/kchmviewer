@@ -33,14 +33,15 @@
 	#include <kmenubar.h>
 	#include <kcmdlineargs.h>
 	#include <klocale.h>
-	#include <klistview.h>
 	#include <kfiledialog.h>
 	#include <khtml_part.h>
 	#include <ktabwidget.h>
-	#include <kpopupmenu.h>
+	#include <kmenu.h>
 	#include <kmessagebox.h>
-	#include <kprogress.h>
+	#include <kprogressdialog.h>
 	#include <krun.h>
+
+	#include <QProgressDialog>
 
 #else /* !USE_KDE */
 
@@ -108,11 +109,11 @@ class KQProgressModalDialog : public KQ_CLASSNAME(ProgressDialog)
 		
 		// Seems like people have fun making classes incompatible
 #if defined (USE_KDE)		
-		void   setTotalSteps( int totalSteps ) { progressBar ()->setTotalSteps( totalSteps ); }
-		void   setProgress( int progress ) { progressBar ()->setProgress( progress ); }
+		void   setValue( int value ) { progressBar()->setValue( value ); }
 #else
 		bool   wasCancelled() { return wasCanceled(); }
 #endif
+
 };
 
 class KQTabWidget : public KQ_CLASSNAME(TabWidget)

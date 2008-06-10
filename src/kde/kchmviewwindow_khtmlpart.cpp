@@ -40,15 +40,14 @@ KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QTabWidget * parent )
 {
 	m_zoomfactor = 0;
 	m_currentEncoding = 0;
-	m_searchForward = true;
 
 	invalidate();
 
-	connect( browserExtension(), SIGNAL( openURLRequest( const KURL &, const KParts::URLArgs & ) ),
-		this, SLOT ( onOpenURLRequest( const KURL &, const KParts::URLArgs & )) );
+	connect( browserExtension(), SIGNAL( openUrlRequest( const KUrl&, const KParts::OpenUrlArguments&, const KParts::BrowserArguments& ) ),
+			 this, SLOT ( onOpenURLRequest( const KUrl &, const KParts::OpenUrlArguments &, const KParts::BrowserArguments& )) );
 	
 	connect( this, SIGNAL ( popupMenu ( const QString &, const QPoint &) ),
-		this, SLOT ( onPopupMenu ( const QString &, const QPoint &) ) );
+			this, SLOT ( onPopupMenu ( const QString &, const QPoint &) ) );
 }
 
 
@@ -66,7 +65,7 @@ bool KCHMViewWindow_KHTMLPart::openPage (const QString& url)
 	}
 	
 	QString fullurl = "ms-its:" + ::mainWindow->getOpenedFileName() + "::" + url;
-	openURL ( KURL(fullurl) );
+	KHTMLPart::openUrl ( KUrl(fullurl) );
 	
 	return true;
 }
@@ -82,8 +81,6 @@ void KCHMViewWindow_KHTMLPart::setZoomFactor( int zoom )
 void KCHMViewWindow_KHTMLPart::invalidate( )
 {
 	m_zoomfactor = 0;
-	m_searchForward = true;
-	m_searchText = QString::null;
 
 	setJScriptEnabled ( appConfig.m_kdeEnableJS );
 	setJavaEnabled ( appConfig.m_kdeEnableJava );
@@ -114,23 +111,10 @@ bool KCHMViewWindow_KHTMLPart::printCurrentPage()
 	return true;
 }
 
-void KCHMViewWindow_KHTMLPart::searchWord( const QString & word, bool forward, bool )
+void KCHMViewWindow_KHTMLPart::onOpenURLRequest( const KUrl &url, const KParts::OpenUrlArguments &, const KParts::BrowserArguments&  )
 {
-	if ( word != m_searchText || forward != m_searchForward )
-	{
-		m_searchText = word;
-		m_searchForward = forward;
-		
-		findText ( word, forward ? 0 : KFindDialog::FindBackwards, ::mainWindow, 0 );
-	}
-	
-	findTextNext ();
-}
-
-void KCHMViewWindow_KHTMLPart::onOpenURLRequest( const KURL & url, const KParts::URLArgs & )
-{
-	bool sourcechange = true;
-	emit linkClicked ( url.prettyURL(), sourcechange );
+	bool notused;
+	emit linkClicked ( url.prettyUrl(), notused );
 }
 
 void KCHMViewWindow_KHTMLPart::slotLinkClicked( const QString & newlink )
@@ -153,9 +137,32 @@ void KCHMViewWindow_KHTMLPart::clipCopy()
 		QApplication::clipboard()->setText( text );
 }
 
-void  KCHMViewWindow_KHTMLPart::onPopupMenu ( const QString &url, const QPoint & point )
+void KCHMViewWindow_KHTMLPart::onPopupMenu ( const QString &url, const QPoint & point )
 {
-	KQPopupMenu * menu = getContextMenu( url, view() );
+	QMenu * menu = getContextMenu( url, view() );
 	menu->exec( point );
 }
 
+
+void KCHMViewWindow_KHTMLPart::find( const QString& text, int flags )
+{
+	long options = 0;
+	
+	if ( flags & SEARCH_CASESENSITIVE )
+		options |= KFind::CaseSensitive;
+ 
+	if ( flags & SEARCH_WHOLEWORDS )
+		options |= KFind::WholeWordsOnly;
+		
+	findText ( text, options, ::mainWindow, 0 );
+}
+
+void KCHMViewWindow_KHTMLPart::onFindNext()
+{
+	findTextNext( false );
+}
+
+void KCHMViewWindow_KHTMLPart::onFindPrevious()
+{
+	findTextNext( true );
+}

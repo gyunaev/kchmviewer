@@ -19,40 +19,70 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef KCHMDCOPIFACE_H
-#define KCHMDCOPIFACE_H
+#include <QDBusConnection>
 
-#include <qobject.h>
-#include <dcopobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include "kchmdbusiface.h"
+#include "kchmmainwindow.h"
+#include "kchmsearchwindow.h"
 
-class KCHMDCOPIface : public QObject, public DCOPObject
+
+KCHMDBusIface::KCHMDBusIface( QObject *parent )
+	: QObject( parent )
 {
-	Q_OBJECT
-	K_DCOP
-			
-	public:
-    	KCHMDCOPIface( QObject *parent = 0, const char *name = 0 );
-		~KCHMDCOPIface();
-		
-	k_dcop:
-		//! Loads a CHM file \a filename , and opens the URL \a url. Use URL "/" to open default homepage
-		void		loadHelpFile( const QString& filename, const QString& url );
-	
-		//! Opens a specific \a url inside the loaded CHM file
-		void		openPage( const QString& url );
-		
-		//! Tries to find word in index, opening the index window and scrolling it there
-		void		guiFindInIndex( const QString& word );
-		
-		//! Executes a search in GUI. \a query contains the complete search query.
-		void		guiSearchQuery( const QString& query );
-		
-		//! Executes a search; GUI is not involved and user sees nothing.
-		//! \a query contains the complete search query.
-		//! Returns a list of URLs, or empty array if nothing os
-		QStringList	searchQuery( const QString& query );
-};
+	QDBusConnection::sessionBus().registerObject( "/application",
+												  this,
+												  QDBusConnection::ExportScriptableSlots );
+}
 
-#endif
+
+KCHMDBusIface::~KCHMDBusIface()
+{
+}
+
+
+void KCHMDBusIface::loadHelpFile( const QString & filename, const QString & page2open )
+{
+	QStringList args;
+	
+	args.push_back( filename );
+	args.push_back( page2open );
+	
+	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "loadAndOpen", args ) );
+}
+
+
+void KCHMDBusIface::openPage( const QString & page2open )
+{
+	QStringList args;
+	
+	args.push_back( page2open );
+	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "openPage", args ) );
+}
+
+
+void KCHMDBusIface::guiFindInIndex( const QString & word )
+{
+	QStringList args;
+	
+	args.push_back( word );
+	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "findInIndex", args ) );
+}
+
+
+void KCHMDBusIface::guiSearchQuery( const QString & query )
+{
+	QStringList args;
+	
+	args.push_back( query );
+	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "searchQuery", args ) );
+}
+
+QStringList KCHMDBusIface::searchQuery( const QString & query )
+{
+	QStringList results;
+	
+	if ( ::mainWindow->searchWindow()->searchQuery( query, &results ) )
+		return results;
+	else
+		return QStringList();
+}

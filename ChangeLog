@@ -1,12 +1,13 @@
 2008-06-06 tim <gyunaev@ulduzsoft.com>
-    - Version changed to 4.0b3 (this is Qt4-only release);
+    - Version changed to 4.0b3;
+    - Added KDE4 support;
     - Fixed several compatibility issues with qt-4.4.0;
     - Added keyboard shortcuts to move to the next and previous entries in TOC: Ctrl+Right arrow
       and Ctrl+Left arrow;
     - Added manifest for the Windows version (thanks Cristian Adam);
     - Windows version should not rely on mingw DLL anymore;
     - Toolbars are now named;
-      
+    - Fixed parallel build (thanks Patrice Dumas);
     
 2008-02-10 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0b2 (this is Qt4-only release);

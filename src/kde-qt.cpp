@@ -23,13 +23,13 @@
 
 #if defined (USE_KDE)
 KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
-	: KProgressDialog( creator, 0, captionText, labelText, true )
+	: KProgressDialog( creator, captionText, labelText )
 {
 	setAllowCancel( true );
 	showCancelButton( true );
 	setAutoClose( true );
 	setButtonText( cancelButtonText );
-	setTotalSteps( totalSteps );
+	progressBar()->setMaximum( totalSteps );
 	setMinimumDuration( 1 );
 }
 #else

@@ -24,12 +24,13 @@
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
 #include "kchmkeyeventfilter.h"
+#include "version.h"
+
 
 #if defined (USE_KDE)
 	#include <kaboutdata.h>
-	#include <dcopclient.h>
 	
-	#include "kde/kchmdcopiface.h"
+	#include "kde/kchmdbusiface.h"
 #endif
 
 KCHMMainWindow * mainWindow;
@@ -38,28 +39,25 @@ KCHMMainWindow * mainWindow;
 int main( int argc, char ** argv )
 {
 #if defined (USE_KDE)
- 	static KCmdLineOptions options[] =
- 	{
-    	{ "autotestmode", "Perform auto testing", 0 },
-		{ "shortautotestmode", "Perform short auto testing", 0 },
-		{ "+[chmfile]", "A CHM file to show", 0 },
-		{ "search <query>", I18N_NOOP("'--search <query>' specifies the search query to search, and activate the first entry if found"), 0 },
-		{ "sindex <word>", I18N_NOOP("'--sindex <word>' specifies the word to find in index, and activate if found"), 0 },
-		{ "stoc <word>", I18N_NOOP("'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if found. Wildcards allowed."), 0 },
-		KCmdLineLastOption
- 	};
+ 	KCmdLineOptions options;
+	options.add( "autotestmode", ki18n("Perform auto testing") );
+	options.add( "shortautotestmode", ki18n("Perform short auto testing") );
+	options.add( "+[chmfile]", ki18n("A CHM file to show") );
+	options.add( "search <query>", ki18n("'--search <query>' specifies the search query to search, and activate the first entry if found") );
+	options.add( "sindex <word>", ki18n("'--sindex <word>' specifies the word to find in index, and activate if found") );
+	options.add( "stoc <word>", ki18n("'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if found. Wildcards allowed.") );
 
 	KAboutData aboutdata ( "kchmviewer",
-				APP_NAME,
+				QByteArray(),
+				ki18n(APP_NAME),
 				APP_VERSION,
-				I18N_NOOP("CHM file viewer"),
+				ki18n("CHM file viewer"),
 				KAboutData::License_GPL,
-				"(c) 2004-2007 George Yunaev, gyunaev@ulduzsoft.com",
-				0,
+				ki18n("(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"),
+				ki18n("Please report bugs to kchmviewer@ulduzsoft.com"),
 				"http://www.kchmviewer.net",
-				"gyunaev@ulduzsoft.com");
+				"kchmviewer@ulduzsoft.com");
 
-	KLocale::setMainCatalogue( "kchmviewer" );
 	KCmdLineArgs::init (argc, argv, &aboutdata);
 	KCmdLineArgs::addCmdLineOptions( options );
 
@@ -72,25 +70,14 @@ int main( int argc, char ** argv )
 	app.installEventFilter( &gKeyEventFilter );
 	
 #if defined(USE_KDE)	
-	// DCOP stuff
-	KCHMDCOPIface iface;
-	
-	DCOPClient *client = kapp->dcopClient();
-	
-	if ( !client->attach() )
-		qWarning("DCOP attach failed");
-	
-	QString realAppId = client->registerAs( "kchmviewer" );
+	// DBus stuff
+	KCHMDBusIface iface;
 #endif
-						
 	mainWindow = new KCHMMainWindow();
 	mainWindow->show();
 	
-#if !defined(USE_KDE)
 	app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );
-#else
-	app.setMainWidget( mainWindow );
-#endif
 	
 	return app.exec();
 }
+

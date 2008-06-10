@@ -545,13 +545,8 @@ bool LCHMFileImpl::ResolveObject(const QString& fileName, chmUnitInfo *ui) const
 size_t LCHMFileImpl::RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer,
 								LONGUINT64 fileOffset, LONGINT64 bufferSize) const
 {
-#if USE_BUILTIN_CHMLIB
-	return ::chm_retrieve_object(m_chmFile, ui, buffer, 
-								 fileOffset, bufferSize);
-#else
 	return ::chm_retrieve_object(m_chmFile, const_cast<chmUnitInfo*>(ui),
 								 buffer, fileOffset, bufferSize);
-#endif
 }
 
 

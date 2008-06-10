@@ -58,6 +58,7 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 		//! Copies the selected content to the clipboard
 		virtual void	clipCopy();
 	
+		//! Implements "find in page" functionality
 		virtual void	find( const QString& text, int flags );
 		virtual void	onFindNext();
 		virtual void	onFindPrevious();
@@ -97,7 +98,7 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 		QMenu * 		createPopupMenu ( const QPoint & pos );
 		
 		// Overriden to change the source
-		void			setSource ( const QString & name );
+		void			setSource ( const QUrl & name );
 		
 		// Overriden to load resources
 		QVariant 		loadResource ( int type, const QUrl & name );

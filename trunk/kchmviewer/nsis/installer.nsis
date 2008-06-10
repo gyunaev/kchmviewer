@@ -69,6 +69,7 @@
 		File kchmviewer.exe
 		File QtGui4.dll  
 		File QtCore4.dll
+		File mingwm10.dll
 		File kchmviewer.exe.manifest
 		
 		;Store installation folder

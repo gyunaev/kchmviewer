@@ -63,7 +63,6 @@ KCHMMainWindow::KCHMMainWindow()
 	// UIC stuff
 	setupUi( this );
 	
-	m_FirstTimeShow = true;
 	m_chmFile = 0;
 	
 	m_indexTab = 0;
@@ -121,6 +120,8 @@ KCHMMainWindow::KCHMMainWindow()
 			"<a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</a><br><br>"
 			"Licensed under GNU GPL license.</html>" )
 			. arg(APP_NAME) . arg(APP_VERSION);
+	
+	QTimer::singleShot( 0, this, SLOT( firstShow()) );
 }
 
 
@@ -302,12 +303,12 @@ void KCHMMainWindow::activateLink ( const QString & link, bool& follow_link )
 
 bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 {
-	QString p1, p2, url = srcurl;
+	QString otherlink, otherfile, url = srcurl;
 	
 	if ( url == "/" )
 		url = m_chmFile->homeUrl();
 
-	if ( LCHMUrlFactory::isRemoteURL (url, p1) )
+	if ( LCHMUrlFactory::isRemoteURL (url, otherlink) )
 	{
 		switch ( appConfig.m_onExternalLinkClick )
 		{
@@ -316,7 +317,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 
 		case KCHMConfig::ACTION_ASK_USER:
 	   		if ( QMessageBox::question(this,
-				 i18n("%1 - remote link clicked - %2") . arg(APP_NAME) . arg(p1),
+				 i18n("%1 - remote link clicked - %2") . arg(APP_NAME) . arg(otherlink),
 				 i18n("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
 				 i18n("&Yes"), i18n("&No"),
 				 QString::null, 0, 1 ) )
@@ -326,7 +327,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 
 		case KCHMConfig::ACTION_ALWAYS_OPEN:
 #if defined (USE_KDE)
-			new KRun ( url );
+			new KRun ( url, 0 );
 #else
 			QDesktopServices::openUrl( url );
 #endif
@@ -346,31 +347,37 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 		return false;
 	}
 
-	if ( LCHMUrlFactory::isNewChmURL (url, p1, p2) )
+	if ( LCHMUrlFactory::isNewChmURL (url, otherfile, otherlink) )
 	{
-		if ( p1 != m_chmFileBasename )
+		// If new filename has relative path, convert it to absolute.
+		QFileInfo finfo( otherfile );
+		
+		if ( !finfo.isAbsolute() )
+		{
+			QFileInfo chmfinfo( m_chmFilename );
+			otherfile = chmfinfo.absolutePath() + QDir::separator() + otherfile;
+		}
+		
+		if ( otherfile != m_chmFilename )
 		{
 			if ( QMessageBox::question( this,
 				i18n( "%1 - link to a new CHM file clicked"). arg(APP_NAME),
-				i18n( "You have clicked a link, which leads to a new CHM file %1.\nThe current file will be closed.\n\nDo you want to continue?").arg( p1 ),
+				i18n( "You have clicked a link, which leads to a new CHM file %1.\nThe current file will be closed.\n\nDo you want to continue?").arg( otherfile ),
 				i18n( "&Yes" ), i18n( "&No" ),
 				QString::null, 0, 1 ) )
 					return false;
 	
 			// Because chm file always contain relative link, and current filename is not changed,
 			// we need to form a new path
-			QFileInfo qfi( m_chmFilename );
-			QString newfilename = qfi.dir().path() + "/" + p1;
-			
 			QStringList event_args;
-			event_args.push_back( newfilename );
-			event_args.push_back( p2 ); // url
+			event_args.push_back( otherfile );
+			event_args.push_back( otherlink ); // url
 			
 			qApp->postEvent( this, new KCHMUserEvent( "loadAndOpen", event_args ) );
 			return false;
 		}
 		else
-			url = p2;
+			url = otherlink;
 	}
 	
 	KCHMViewWindow * vwnd = currentBrowser();
@@ -395,13 +402,8 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 }
 
 
-void KCHMMainWindow::showEvent( QShowEvent * )
+void KCHMMainWindow::firstShow()
 {
-	if ( !m_FirstTimeShow )
-		return;
-
-	m_FirstTimeShow = false;
-	
 	if ( !parseCmdLineArgs( ) )
 	{
 		if ( appConfig.m_LoadLatestFileOnStartup && appConfig.m_recentFiles.size() > 0 )
@@ -500,7 +502,12 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 		do_autotest = true;
 	
 	if ( args->isSet("shortautotestmode") )
-		do_autotest = m_useShortAutotest = true;
+	{
+		do_autotest = true;
+#if defined (ENABLE_AUTOTEST_SUPPORT)
+		m_useShortAutotest = true;
+#endif
+	}
 
 	search_query = args->getOption ("search");
 	search_index = args->getOption ("sindex");
@@ -919,7 +926,7 @@ void KCHMMainWindow::actionExtractCHM()
 	
 #if defined (USE_KDE)
 	QString outdir = KFileDialog::getExistingDirectory (
-		QString::null,
+		KUrl(),
 		this,
 		i18n("Choose a directory to store CHM content") );
 #else
@@ -1335,9 +1342,6 @@ void KCHMMainWindow::setupActions()
 	menu_File->addSeparator();	
 	menu_File->addAction( file_exit_action );
 	
-#if defined(USE_KDE)
-	QMenu *help = helpMenu( m_aboutDlgMenuText );
-#else
 	QMenu * help = new QMenu( i18n( "&Help"), this );
 	help->addAction( i18n( "&About"), this, SLOT( actionAboutApp() ), QKeySequence( "F1" ) );
 	help->addAction( i18n( "About &Qt"), this, SLOT( actionAboutQt() ) );
@@ -1347,7 +1351,6 @@ void KCHMMainWindow::setupActions()
 	QAction * whatsthis = QWhatsThis::createAction( this );
 	help->addAction( whatsthis );
 	viewToolbar->addAction( whatsthis );
-#endif
 		
 	menuBar()->addMenu( help );
 	recentFilesUpdate();

@@ -29,50 +29,44 @@
 #include <qbytearray.h>
 #include <qstring.h>
 
-#include "config.h"
 #include "chm_lib.h"
 
 
 class ProtocolMSITS : public KIO::SlaveBase
 {
-public:
-    ProtocolMSITS ( const QByteArray&, const QByteArray& );
-    virtual ~ProtocolMSITS();
-
-    virtual void	get ( const KUrl& );
-	virtual void	listDir (const KUrl & url);
-	virtual void	stat (const KUrl & url);
-
-private:
-	// This function does next thing:
-	// - parses the URL to get a file name and URL inside the file;
-	// - loads a new CHM file, if needed;
-	// - returns the parsed URL inside the file;
-	bool	parseLoadAndLookup ( const KUrl&, QString& abspath );
-
-	// Resolve an object inside a CHM file
-	inline bool ResolveObject (const QString& fileName, chmUnitInfo *ui)
-	{
-		return m_chmFile != NULL && ::chm_resolve_object(m_chmFile, fileName.toUtf8().constData(), ui) == CHM_RESOLVE_SUCCESS;
-	}
-
-	// Retrieve an object from the CHM file
-	inline size_t RetrieveObject (const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize)
-	{
-#if USE_BUILTIN_CHMLIB
-		return ::chm_retrieve_object(m_chmFile, ui, buffer, 
-			fileOffset, bufferSize);
-#else
-		return ::chm_retrieve_object(m_chmFile, const_cast<chmUnitInfo*>(ui),
-			buffer, fileOffset, bufferSize);
-#endif
-	}
-
-	// An opened file name, if presend
-    QString         m_openedFile;
-
-	// a CHM structure file pointer (from chmlib)
-	chmFile		*	m_chmFile;
+	public:
+		ProtocolMSITS ( const QByteArray&, const QByteArray& );
+		virtual ~ProtocolMSITS();
+	
+		virtual void	get ( const KUrl& );
+		virtual void	listDir (const KUrl & url);
+		virtual void	stat (const KUrl & url);
+	
+	private:
+		// This function does next thing:
+		// - parses the URL to get a file name and URL inside the file;
+		// - loads a new CHM file, if needed;
+		// - returns the parsed URL inside the file;
+		bool	parseLoadAndLookup ( const KUrl&, QString& abspath );
+	
+		// Resolve an object inside a CHM file
+		inline bool ResolveObject (const QString& fileName, chmUnitInfo *ui)
+		{
+			return m_chmFile != NULL && ::chm_resolve_object(m_chmFile, fileName.toUtf8().constData(), ui) == CHM_RESOLVE_SUCCESS;
+		}
+	
+		// Retrieve an object from the CHM file
+		inline size_t RetrieveObject (const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize)
+		{
+			return ::chm_retrieve_object(m_chmFile, const_cast<chmUnitInfo*>(ui),
+				buffer, fileOffset, bufferSize);
+		}
+	
+		// An opened file name, if presend
+		QString         m_openedFile;
+	
+		// a CHM structure file pointer (from chmlib)
+		chmFile		*	m_chmFile;
 };
 
 

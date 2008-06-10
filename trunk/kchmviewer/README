@@ -14,7 +14,8 @@
 
 2. FEATURES
 
-  - Standalone viewer, depends on Qt4 only. Does not require KDE, Gnome or wxWindows toolkit. 
+  - Standalone viewer, depends on Qt4 only. Does not require KDE, Gnome or wxWindows toolkit.
+  - Could be optionally built with KDE4 support, using KHTML and KDE dialogs.
   - Completely safe and harmless. Does not support JavaScript in any way, optionally warns you before opening an 
     external web page, or switching to another help file. 
   - Correctly detects and shows encoding of any valid chm file. 
@@ -39,18 +40,31 @@
   4.2 or higher due to bugs and missed functionality in previous versions. Note that you need to install qt4-devel 
   and qt4-tools packages (the last one might be included in qt4-devel in your distribution), not just qt package.
 
+  Also make sure you have chmlib-devel (some distros have it as libchm-devel) package installed. If Missing chm_lib.h is yo
+
 3.1. Qt-only version
 
-  To compile Qt-only version of kchmviewer, follow the simple procedure:
+  To compile Qt-only version of kchmviewer, follow the procedure:
 
   > tar zxf kchmviewer-<version>.tar.gz
   > cd kchmviewer-<version>
   > qmake
   > make
   
-  the binary is in bin/kchmviewer
+  The compiled binary is in bin/kchmviewer. You could copy it somewhere, or use it as-is. It does not require installation.
+  
+3.2 KDE4 version
 
-  The last step is optional; you can use kchmviewer binary without installation.
+  To compile the version of kchmviewer with KDE4 support, follow the procedure:
+
+  > tar zxf kchmviewer-<version>.tar.gz
+  > mkdir build
+  > cd build
+  > cmake <path to unpacked kchmviewer source>
+  > make
+  > sudo make install
+
+  For KDE version the installation is required, since the KHTML KIO slave cannot be used in place.
 
 
 4. USAGE
@@ -71,7 +85,8 @@
 
   Thanks to:
   - Jed Wing, the author of chmlib. This library is used by kchmviewer to access chm content.
-  - Razvan Cojocaru, the author of xchm. I used some ideas and chm processing code from xchm. 
+  - Razvan Cojocaru, the author of xchm. I used some ideas and chm processing code from xchm.
+  - Peter Volkov for various bug reports and improverment suggestions. 
   - All the users, who report bugs, and suggest features. You help making kchnviewer better.
 
 

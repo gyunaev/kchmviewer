@@ -46,14 +46,32 @@ KCHMSetupDialog::KCHMSetupDialog(QWidget *parent)
 	m_radioNewChmAsk->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_ASK_USER );
 	m_radioNewChmOpenNever->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_DONT_OPEN );
 
-#if defined (USE_KDE)
-	m_groupKDEsettings->setEnabled ( true );
-#else
-	m_groupKDEsettings->setEnabled ( false );
+#if !defined (USE_KDE)
+	m_radioUseKHTMLPart->setEnabled ( false );
 #endif
 
-	m_radioUseQtextBrowser->setChecked ( appConfig.m_kdeUseQTextBrowser );
-	m_radioUseKHTMLPart->setChecked ( !appConfig.m_kdeUseQTextBrowser );
+#if !defined (QT_WEBKIT_LIB)
+	m_radioUseQtWebkit->setEnabled ( false );
+#endif
+
+	switch ( appConfig.m_usedBrowser )
+	{
+		default:
+			m_radioUseQtextBrowser->setChecked ( true );
+			break;
+
+#if defined (USE_KDE)			
+		case KCHMConfig::BROWSER_KHTMLPART:
+			m_radioUseKHTMLPart->setChecked( true );
+			break;
+#endif			
+			
+#if defined (QT_WEBKIT_LIB)
+		case KCHMConfig::BROWSER_QTWEBKIT:
+			m_radioUseQtWebkit->setChecked( true );
+			break;
+#endif			
+	}
 	
 	m_enableJS->setChecked ( appConfig.m_kdeEnableJS );
 	m_enablePlugins->setChecked ( appConfig.m_kdeEnablePlugins );
@@ -118,11 +136,18 @@ void KCHMSetupDialog::accept()
 		need_restart = true;
 		appConfig.m_kdeEnableRefresh = m_enableRefresh->isChecked();
 	}
-		
-	if ( appConfig.m_kdeUseQTextBrowser != m_radioUseQtextBrowser->isChecked() )
+
+	int new_browser = KCHMConfig::BROWSER_QTEXTBROWSER;
+	
+	if ( m_radioUseKHTMLPart->isChecked() )
+		new_browser = KCHMConfig::BROWSER_KHTMLPART;
+	else if ( m_radioUseQtWebkit->isChecked() )
+		new_browser = KCHMConfig::BROWSER_QTWEBKIT;
+
+	if ( new_browser != appConfig.m_usedBrowser )
 	{
 		need_restart = true;
-		appConfig.m_kdeUseQTextBrowser = m_radioUseQtextBrowser->isChecked();
+		appConfig.m_usedBrowser = new_browser;
 	}
 		
 	appConfig.m_advExternalEditorPath = m_advExternalProgramName->text();

@@ -30,6 +30,10 @@
 	#include "kde/kchmviewwindow_khtmlpart.h"
 #endif
 
+#if defined (QT_WEBKIT_LIB)
+	#include "kchmviewwindow_qtwebkit.h"
+#endif
+
 
 KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	: QWidget( parent ), Ui::TabbedBrowser()
@@ -116,13 +120,25 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 {
 	KCHMViewWindow * viewvnd;
 	
-#if defined (USE_KDE)
-	if ( !appConfig.m_kdeUseQTextBrowser )
-		viewvnd = new KCHMViewWindow_KHTMLPart( tabWidget );
-	else
-#endif
-		viewvnd = new KCHMViewWindow_QTextBrowser( tabWidget );
+	switch ( appConfig.m_usedBrowser )
+	{
+		default:
+			viewvnd = new KCHMViewWindow_QTextBrowser( tabWidget );
+			break;
 
+#if defined (USE_KDE)			
+		case KCHMConfig::BROWSER_KHTMLPART:
+			viewvnd = new KCHMViewWindow_KHTMLPart( tabWidget );
+			break;
+#endif			
+			
+#if defined (QT_WEBKIT_LIB)
+		case KCHMConfig::BROWSER_QTWEBKIT:
+			viewvnd = new KCHMViewWindow_QtWebKit( tabWidget );
+			break;
+#endif			
+	}
+	
 	editFind->installEventFilter( this );
 	
 	// Create the tab data structure

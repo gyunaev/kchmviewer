@@ -48,7 +48,13 @@ KCHMConfig::KCHMConfig()
 	m_numOfRecentFiles = 10;
 	m_HistoryStoreExtra = true;
 	
-	m_kdeUseQTextBrowser = false;
+	// Webkit only present in 4.4+
+#if defined (QT_WEBKIT_LIB)
+	m_usedBrowser = BROWSER_QTWEBKIT;
+#else
+	m_usedBrowser = BROWSER_QTEXTBROWSER;
+#endif
+		
 	m_kdeEnableJS = false;
 	m_kdeEnableJava = false;
 	m_kdeEnablePlugins = true;
@@ -111,8 +117,8 @@ bool KCHMConfig::load()
 				m_numOfRecentFiles = value.toInt();
 			else if ( key == "HistoryStoreExtra" )
 				m_HistoryStoreExtra = value.toInt() ? true : false;
-			else if ( key == "kdeUseQTextBrowser" )
-				m_kdeUseQTextBrowser = value.toInt() ? true : false;
+			else if ( key == "UsedBrowser" )
+				m_usedBrowser = value.toInt();
 			else if ( key == "kdeEnableJS" )
 				m_kdeEnableJS = value.toInt() ? true : false;
 			else if ( key == "kdeEnableJava" )
@@ -142,6 +148,12 @@ bool KCHMConfig::load()
 			qWarning ("Unknown line in configuration: %s", qPrintable( line ));
 	}
 
+	// Reset webkit browser to qtextbrowser when older version is running
+#if !defined (QT_WEBKIT_LIB)
+	if ( m_usedBrowser == BROWSER_QTWEBKIT )
+		m_usedBrowser = BROWSER_QTEXTBROWSER;
+#endif
+	
 	return true;
 }
 
@@ -165,8 +177,8 @@ bool KCHMConfig::save( )
 	stream << "onExternalLinkClick=" << m_onExternalLinkClick << "\n";
 	stream << "HistorySize=" << m_numOfRecentFiles << "\n";
 	stream << "HistoryStoreExtra=" << m_HistoryStoreExtra << "\n";
-
-	stream << "kdeUseQTextBrowser=" << m_kdeUseQTextBrowser << "\n";
+	stream << "UsedBrowser=" << m_usedBrowser << "\n";
+	
 	stream << "kdeEnableJS=" << m_kdeEnableJS << "\n";
 	stream << "kdeEnableJava=" << m_kdeEnableJava << "\n";
 	stream << "kdeEnablePlugins=" << m_kdeEnablePlugins << "\n";

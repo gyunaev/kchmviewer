@@ -38,6 +38,13 @@ class KCHMConfig
 			ACTION_DONT_OPEN
 		};
 		
+		enum UsedBrowser
+		{
+			BROWSER_QTEXTBROWSER = 0,
+   			BROWSER_KHTMLPART,
+	  		BROWSER_QTWEBKIT
+		};
+		
 		KCHMConfig();
 		~KCHMConfig();
 		
@@ -55,8 +62,8 @@ class KCHMConfig
 		choose_action_t		m_onExternalLinkClick;
 		int					m_numOfRecentFiles;
 		bool				m_HistoryStoreExtra;
-				
-		bool				m_kdeUseQTextBrowser;
+		int					m_usedBrowser;
+		
 		bool				m_kdeEnableJS;
 		bool				m_kdeEnableJava;
 		bool				m_kdeEnablePlugins;

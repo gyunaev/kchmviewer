@@ -35,7 +35,6 @@ KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
 	m_zoomfactor = 0;
 	invalidate();
 	
-//	setTextFormat ( Qt::RichText );
 #if QT_VERSION >= 0x040300
 	setOpenLinks( false );
 #endif

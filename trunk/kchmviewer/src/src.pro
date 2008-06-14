@@ -5,13 +5,15 @@ HEADERS += kchmsettings.h kchmbookmarkwindow.h kchmconfig.h kchmtreeviewitem.h \
 			kchmmainwindow.h kchmviewwindow_qtextbrowser.h kde-qt.h \
 			kchmsearchwindow.h kchmviewwindowmgr.h \
 			kchmkeyeventfilter.h kchmcontentswindow.h kchmsetupdialog.h \
- version.h
+ version.h \
+ kchmviewwindow_qtwebkit.h
 SOURCES += kchmbookmarkwindow.cpp kchmconfig.cpp \
 			kchmindexwindow.cpp kchmmainwindow.cpp kchmsearchwindow.cpp \
 			kchmsettings.cpp kchmtreeviewitem.cpp kchmviewwindow.cpp main.cpp \
 			kchmdialogchooseurlfromlist.cpp kde-qt.cpp kchmviewwindow_qtextbrowser.cpp \
 			kchmviewwindowmgr.cpp \
-			kchmkeyeventfilter.cpp kchmcontentswindow.cpp kchmsetupdialog.cpp
+			kchmkeyeventfilter.cpp kchmcontentswindow.cpp kchmsetupdialog.cpp \
+ kchmviewwindow_qtwebkit.cpp
 TARGETDEPS += ../lib/libchmfile/libchmfile.a 
 LIBS +=       ../lib/libchmfile/libchmfile.a -lchm
 TARGET = ../bin/kchmviewer
@@ -30,3 +32,7 @@ dialog_topicselector.ui \
 window_main.ui \
 window_browser.ui
 RESOURCES += resources/images.qrc
+QT += webkit net \
+ network
+CONFIG -= release
+

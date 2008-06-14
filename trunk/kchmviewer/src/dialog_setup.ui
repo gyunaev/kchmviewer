@@ -421,6 +421,13 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QRadioButton" name="m_radioUseQtWebkit" >
+               <property name="text" >
+                <string>Qt &amp;Webkit (requires Qt 4.4 or higher)</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>

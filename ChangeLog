@@ -1,3 +1,9 @@
+2008-18-06 tim <gyunaev@ulduzsoft.com>
+    - Version changed to 4.0b4;
+    - Added WebKit support (requires QtWebKit module). WebKit browser is default for a system where QtWebKit is present;
+    - Added support for Right-To-Left application and text layouts;
+    - Added support for disabling automatic encoding detection for browsers which could detect it themselves (KHTMLPart and Webkit);
+
 2008-06-06 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0b3;
     - Added KDE4 support;

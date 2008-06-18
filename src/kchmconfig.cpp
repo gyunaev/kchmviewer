@@ -191,8 +191,8 @@ bool KCHMConfig::save( )
 	stream << "kdeEnableRefresh=" << m_kdeEnableRefresh << "\n";
 	stream << "advUseInternalEditor=" << m_advUseInternalEditor << "\n";
 	stream << "advExternalEditorPath=" << m_advExternalEditorPath << "\n";
-	stream << "advLayoutDirectionRL" << m_advLayoutDirectionRL << "\n";
-	stream << "advAutodetectEncoding" << m_advAutodetectEncoding << "\n";
+	stream << "advLayoutDirectionRL=" << m_advLayoutDirectionRL << "\n";
+	stream << "advAutodetectEncoding=" << m_advAutodetectEncoding << "\n";
 	
 	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
 	

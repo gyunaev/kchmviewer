@@ -241,7 +241,7 @@ void KCHMViewWindow_QtWebKit::addZoomFactor( int value )
 
 void KCHMViewWindow_QtWebKit::onAnchorClicked(const QUrl & url)
 {
-	emit linkClicked( url.toString(), m_allowSourceChange );
+	emit linkClicked( url.path(), m_allowSourceChange );
 }
 
 
@@ -386,7 +386,11 @@ void KCHMViewWindow_QtWebKit::contextMenuEvent(QContextMenuEvent * e)
 QString KCHMViewWindow_QtWebKit::anchorAt(const QPoint & pos)
 {
 	QWebHitTestResult res = page()->currentFrame()->hitTestContent( pos );
-	return res.linkUrl().isValid() ? res.linkUrl().toString() : QString::null;
+	
+	if ( !res.linkUrl().isValid() )
+		return QString::null;
+	
+	return  res.linkUrl().path();
 }
 
 #endif // #if defined (QT_WEBKIT_LIB)

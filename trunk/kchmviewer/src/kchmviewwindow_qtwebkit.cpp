@@ -174,7 +174,7 @@ class KCHMNetworkAccessManager : public QNetworkAccessManager
 KCHMViewWindow_QtWebKit::KCHMViewWindow_QtWebKit( QTabWidget * parent )
 	: QWebView ( parent ), KCHMViewWindow ( parent )
 {
-	m_zoomfactor = 0;
+	m_zoomfactor = 1;
 	invalidate();
 	
 	page()->setNetworkAccessManager(new KCHMNetworkAccessManager(this));
@@ -210,13 +210,13 @@ bool KCHMViewWindow_QtWebKit::openPage (const QString& url)
 
 void KCHMViewWindow_QtWebKit::setZoomFactor( int zoom )
 {
-	m_zoomfactor = zoom;
-	setTextSizeMultiplier ( 1.0 + zoom * 0.5 );
+	m_zoomfactor += zoom;
+	setTextSizeMultiplier ( 1.0 + m_zoomfactor * 0.5 );
 }
 
 void KCHMViewWindow_QtWebKit::invalidate( )
 {
-	m_zoomfactor = 0;
+	m_zoomfactor = 1;
 	m_allowSourceChange = true;
 	setTextSizeMultiplier( 1.0 );
 	reload();
@@ -386,7 +386,7 @@ void KCHMViewWindow_QtWebKit::contextMenuEvent(QContextMenuEvent * e)
 QString KCHMViewWindow_QtWebKit::anchorAt(const QPoint & pos)
 {
 	QWebHitTestResult res = page()->currentFrame()->hitTestContent( pos );
-	return !res.linkUrl().isValid() ? res.linkUrl().toString() : QString::null;
+	return res.linkUrl().isValid() ? res.linkUrl().toString() : QString::null;
 }
 
 #endif // #if defined (QT_WEBKIT_LIB)

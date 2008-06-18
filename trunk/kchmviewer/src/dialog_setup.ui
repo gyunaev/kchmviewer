@@ -627,7 +627,7 @@
           <item>
            <widget class="QCheckBox" name="boxAutodetectEncoding" >
             <property name="text" >
-             <string>Do not automatically detect encoding for KHTMLPart and WebKit browsers</string>
+             <string>Automatically detect encoding for KHTMLPart and WebKit browsers</string>
             </property>
            </widget>
           </item>

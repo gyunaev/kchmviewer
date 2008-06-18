@@ -19,6 +19,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+// Only compile this file if Qt WEBKIT is present
 #if defined (QT_WEBKIT_LIB)
 
 #include <QPrinter>
@@ -31,6 +32,7 @@
 
 #include "kde-qt.h"
 #include "libchmurlfactory.h"
+#include "kchmconfig.h"
 #include "kchmmainwindow.h"
 #include "kchmviewwindowmgr.h"
 #include "kchmviewwindow_qtwebkit.h"
@@ -99,27 +101,39 @@ class KCHMNetworkReply : public QNetworkReply
 			if ( LCHMUrlFactory::handleFileType( path, data ) )
 				return qPrintable( data );
 	
+			QByteArray buf;
+			
 			if ( path.endsWith( ".html", Qt::CaseInsensitive ) 
 			|| path.endsWith( ".htm", Qt::CaseInsensitive ) )
 			{
-				if ( !chm->getFileContentAsString( &data, path ) )
-					qWarning( "Could not resolve file %s\n", qPrintable( path ) );
+				// If encoding autodetection is enabled, decode it. Otherwise pass as binary.
+				if ( appConfig.m_advAutodetectEncoding )
+				{
+					if ( !chm->getFileContentAsString( &data, path ) )
+						qWarning( "Could not resolve file %s\n", qPrintable( path ) );
 		
-				setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
-				return qPrintable( data );
+					setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
+					buf = qPrintable( data );
+				}
+				else
+				{
+					if ( !chm->getFileContentAsBinary( &buf, path ) )
+						qWarning( "Could not resolve file %s\n", qPrintable( path ) );
+		
+					setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
+				}
 			}
 			else
 			{
-				QByteArray buf;
-		
 				QString fpath = KCHMViewWindow_QtWebKit::decodeUrl( path );
 		
 				if ( !chm->getFileContentAsBinary( &buf, fpath ) )
 					qWarning( "Could not resolve file %s\n", qPrintable( path ) );
 		
 				setHeader( QNetworkRequest::ContentTypeHeader, "binary/octet" );
-				return buf;
 			}
+			
+			return buf;			
 		}
 		
 	private:

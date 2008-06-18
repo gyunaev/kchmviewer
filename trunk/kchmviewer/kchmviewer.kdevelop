@@ -37,7 +37,7 @@
       <version>4</version>
       <includestyle>4</includestyle>
       <designerintegration>ExternalDesigner</designerintegration>
-      <qmake>/usr/bin/qmake</qmake>
+      <qmake>/home/tim/bin/qt-4.4.0/bin/qmake</qmake>
       <designer>/usr/bin/designer</designer>
       <root>/usr/lib/qt4</root>
       <designerpluginpaths/>
@@ -143,17 +143,26 @@
   </kdevdebugger>
   <kdevtrollproject>
     <run>
-      <mainprogram/>
+      <mainprogram>/home/tim/work/my/kchmviewer</mainprogram>
       <programargs/>
       <directoryradio>executable</directoryradio>
       <globaldebugarguments/>
-      <globalcwd/>
+      <globalcwd>/home/tim/work/my/kchmviewer</globalcwd>
       <useglobalprogram>false</useglobalprogram>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
       <envvars/>
+      <runarguments>
+        <kchmviewer></kchmviewer>
+      </runarguments>
+      <cwd>
+        <kchmviewer>/home/tim/work/my/kchmviewer</kchmviewer>
+      </cwd>
+      <debugarguments>
+        <kchmviewer></kchmviewer>
+      </debugarguments>
     </run>
     <general>
       <activedir>src</activedir>
@@ -172,6 +181,8 @@
       <replacePaths>false</replacePaths>
       <disableDefaultOpts>true</disableDefaultOpts>
       <enableFilenamesOnly>false</enableFilenamesOnly>
+      <showVariablesInTree>true</showVariablesInTree>
+      <showParseErrors>true</showParseErrors>
     </qmake>
     <subclassing/>
   </kdevtrollproject>

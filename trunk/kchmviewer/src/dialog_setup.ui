@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>607</width>
-    <height>348</height>
+    <height>362</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -213,12 +213,6 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox1" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
-           <verstretch>4</verstretch>
-          </sizepolicy>
-         </property>
          <property name="title" >
           <string>CHM security settings</string>
          </property>
@@ -336,6 +330,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -521,21 +528,6 @@
        <string>Advanced</string>
       </attribute>
       <layout class="QVBoxLayout" >
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <property name="leftMargin" >
-        <number>9</number>
-       </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
        <item>
         <widget class="QGroupBox" name="buttonGroup7" >
          <property name="title" >
@@ -616,21 +608,44 @@
             </item>
            </layout>
           </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox" >
+         <property name="title" >
+          <string>Other</string>
+         </property>
+         <layout class="QVBoxLayout" >
           <item>
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Vertical</enum>
+           <widget class="QCheckBox" name="boxLayoutDirectionRL" >
+            <property name="text" >
+             <string>Use right-to-left layout direction (Arabic adn Hebrew layouts)</string>
             </property>
-            <property name="sizeHint" >
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="boxAutodetectEncoding" >
+            <property name="text" >
+             <string>Do not automatically detect encoding for KHTMLPart and WebKit browsers</string>
             </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>567</width>
+           <height>21</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

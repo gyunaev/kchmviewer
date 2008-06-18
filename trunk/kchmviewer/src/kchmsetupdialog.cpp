@@ -83,6 +83,9 @@ KCHMSetupDialog::KCHMSetupDialog(QWidget *parent)
 	m_advViewSourceInternal->setChecked ( appConfig.m_advUseInternalEditor );
 	
 	m_numOfRecentFiles = appConfig.m_numOfRecentFiles;
+
+	boxAutodetectEncoding->setChecked( appConfig.m_advAutodetectEncoding );
+	boxLayoutDirectionRL->setChecked( appConfig.m_advLayoutDirectionRL );
 }
 
 KCHMSetupDialog::~KCHMSetupDialog()
@@ -156,14 +159,28 @@ void KCHMSetupDialog::accept()
 		
 	if ( appConfig.m_numOfRecentFiles != m_numOfRecentFiles )
 		need_restart = true;
+	
+	// Autodetect encoding
+	if ( appConfig.m_advAutodetectEncoding != boxAutodetectEncoding->isChecked() )
+		need_restart = true;
+	
+	appConfig.m_advAutodetectEncoding = boxAutodetectEncoding->isChecked();
+			
+	// Layout direction management
+	bool layout_rl = boxLayoutDirectionRL->isChecked();
+	
+	if ( layout_rl != appConfig.m_advLayoutDirectionRL )
+	{
+		appConfig.m_advLayoutDirectionRL = layout_rl;
+		need_restart = true;
+	}
 		
 	appConfig.save();
 		
 	if ( need_restart )
 		QMessageBox::information( this,
 		 						  APP_NAME,
-   								  i18n( "Changing browser view options, search engine used or recent "
-		   						  "files size requires restarting the application to take effect." )	);
+   								  i18n( "Changing those options requires restarting the application to take effect." )	);
 
 	QDialog::accept();
 }

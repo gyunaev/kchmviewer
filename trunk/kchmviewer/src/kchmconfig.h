@@ -71,6 +71,8 @@ class KCHMConfig
 		
 		bool				m_advUseInternalEditor;
 		QString				m_advExternalEditorPath;
+		bool				m_advLayoutDirectionRL;
+		bool				m_advAutodetectEncoding;
 		
 		QStringList			m_recentFiles;
 };

@@ -63,6 +63,12 @@ KCHMMainWindow::KCHMMainWindow()
 	// UIC stuff
 	setupUi( this );
 	
+	// Set up layout direction
+	if ( appConfig.m_advLayoutDirectionRL )
+		qApp->setLayoutDirection( Qt::RightToLeft );
+	else
+		qApp->setLayoutDirection( Qt::LeftToRight );
+	
 	m_chmFile = 0;
 	
 	m_indexTab = 0;

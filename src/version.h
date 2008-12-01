@@ -23,6 +23,6 @@
 #define INCLUDE_VERSION_H
 
 #define APP_NAME		"kchmviewer"
-#define APP_VERSION		"4.0beta4"
+#define APP_VERSION		"4.0"
 
 #endif /* INCLUDE_VERSION_H */

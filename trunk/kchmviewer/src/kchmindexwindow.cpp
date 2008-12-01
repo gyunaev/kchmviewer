@@ -145,6 +145,7 @@ void KCHMIndexWindow::onDoubleClicked ( QTreeWidgetItem * item, int )
 
 void KCHMIndexWindow::refillIndex( )
 {
+	KCHMShowWaitCursor wc;
 	QVector< LCHMParsedEntry > data;
 	
 	if ( !::mainWindow->chmFile()->parseIndex( &data )

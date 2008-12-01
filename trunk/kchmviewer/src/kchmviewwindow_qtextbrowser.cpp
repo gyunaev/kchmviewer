@@ -216,7 +216,11 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	{
 		if ( !chm->getFileContentAsString( &data, path ) )
 			qWarning( "Could not resolve file %s\n", qPrintable( path ) );
-		
+
+		// A "fix" (actually hack) for CHM files people sent to me. I have no idea why QTextBrowser cannot show it.
+		if ( type == QTextDocument::HtmlResource )
+			data.remove( "<META http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">" );
+
 		return QVariant( QString( data ) );
 	}
 	else if ( type == QTextDocument::ImageResource )

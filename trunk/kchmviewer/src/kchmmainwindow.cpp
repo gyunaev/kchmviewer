@@ -203,7 +203,8 @@ bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
 			const LCHMTextEncoding * encoding = 
 					m_chmFile->impl()->lookupByQtCodec(  m_currentSettings->m_activeEncoding );
 
-			m_tabWidget->setCurrentIndex( m_currentSettings->m_activetabsystem );
+			// tim: this one triggers loading Index if the chm file was closed when the index was opened
+			//m_tabWidget->setCurrentIndex( m_currentSettings->m_activetabsystem );
 			
 			if ( encoding )
 				setTextEncoding( encoding );

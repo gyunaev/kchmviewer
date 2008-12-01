@@ -60,6 +60,7 @@ KCHMContentsWindow::~KCHMContentsWindow()
 
 void KCHMContentsWindow::refillTableOfContents( )
 {
+	KCHMShowWaitCursor wc;
 	QVector< LCHMParsedEntry > data;
 	
 	if ( !::mainWindow->chmFile()->parseTableOfContents( &data )

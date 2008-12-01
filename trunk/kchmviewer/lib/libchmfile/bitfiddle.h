@@ -22,9 +22,23 @@
 */
 
 
-#define UINT16ARRAY(x) ((unsigned char)(x)[0] | ((u_int16_t)(x)[1] << 8))
-#define UINT32ARRAY(x) (UINT16ARRAY(x) | ((u_int32_t)(x)[2] << 16) \
-		| ((u_int32_t)(x)[3] << 24))
+inline unsigned short UINT16ARRAY( const void * x )
+{
+	unsigned char * p = (unsigned char *) x;
+	return p[0] | (p[1] << 8);
+}
+
+inline unsigned int UINT32ARRAY( const void * x )
+{
+	unsigned char * p = (unsigned char *) x;
+	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
+}
+
+inline int INT32ARRAY( const void * x )
+{
+	char * p = (char *) x;
+	return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
+}
 
 inline unsigned int get_int32_le( void *addr)
 {

@@ -28,6 +28,7 @@
 #include <QByteArray>
 #include <QPixmap>
 #include <QVector>
+#include <QTextStream>
 
 #include "chm_lib.h"
 #include "bitfiddle.h"
@@ -55,6 +56,7 @@ class KCHMShowWaitCursor
 
 LCHMFileImpl::LCHMFileImpl( )
 {
+	m_envOptions = getenv("KCHMVIEWEROPTS");
 	m_chmFile = NULL;
 	m_filename = m_font = QString::null;
 	
@@ -122,13 +124,21 @@ bool LCHMFileImpl::loadFile( const QString & archiveName )
 	
 	// Some CHM files have toc and index files, but do not set the name properly.
 	// Some heuristics here.
-	chmUnitInfo tui;
-	
-	if ( m_topicsFile.isEmpty() && ResolveObject("/toc.hhc", &tui) )
+	if ( m_topicsFile.isEmpty() && hasFile( "/toc.hhc" ) )
 		m_topicsFile = "/toc.hhc";
 	
-	if ( m_indexFile.isEmpty() && ResolveObject("/index.hhk", &tui) )
+	if ( m_indexFile.isEmpty() && hasFile( "/index.hhk" ) )
 		m_indexFile = "/index.hhk";
+
+	if ( !m_topicsFile.isEmpty() || ( m_lookupTablesValid && hasFile( "/#TOCIDX" ) ) )
+		m_tocAvailable = true;
+	else
+		m_tocAvailable = false;
+		
+	if ( !m_indexFile.isEmpty() || ( m_lookupTablesValid && hasFile( "/$WWKeywordLinks/BTree" ) ) )
+		m_indexAvailable = true;
+	else
+		m_indexAvailable = false;
 	
 	return true;
 }
@@ -434,18 +444,18 @@ bool LCHMFileImpl::searchWord (const QString& text,
 	}
 
 	unsigned char* cursor32 = header + 0x14;
-	u_int32_t node_offset = UINT32ARRAY(cursor32);
+	unsigned int node_offset = UINT32ARRAY(cursor32);
 
 	cursor32 = header + 0x2e;
-	u_int32_t node_len = UINT32ARRAY(cursor32);
+	unsigned int node_len = UINT32ARRAY(cursor32);
 
 	unsigned char* cursor16 = header + 0x18;
-	u_int16_t tree_depth = UINT16ARRAY(cursor16);
+	unsigned short tree_depth = UINT16ARRAY(cursor16);
 
 	unsigned char word_len, pos;
 	QString word;
-	u_int32_t i = sizeof(u_int16_t);
-	u_int16_t free_space;
+	unsigned int i = sizeof(unsigned short);
+	unsigned short free_space;
 
 	QVector<unsigned char> buffer(node_len);
 
@@ -463,9 +473,9 @@ bool LCHMFileImpl::searchWord (const QString& text,
 		cursor16 = buffer.data() + 6;
 		free_space = UINT16ARRAY(cursor16);
 
-		i = sizeof(u_int32_t) + sizeof(u_int16_t) + sizeof(u_int16_t);
+		i = sizeof(unsigned int) + sizeof(unsigned short) + sizeof(unsigned short);
 		u_int64_t wlc_count, wlc_size;
-		u_int32_t wlc_offset;
+		unsigned int wlc_offset;
 
 		while (i < node_len - free_space)
 		{
@@ -493,7 +503,7 @@ bool LCHMFileImpl::searchWord (const QString& text,
 			cursor32 = buffer.data() + i;
 			wlc_offset = UINT32ARRAY(cursor32);
 
-			i += sizeof(u_int32_t) + sizeof(u_int16_t);
+			i += sizeof(unsigned int) + sizeof(unsigned short);
 			wlc_size =  be_encint (buffer.data() + i, encsz);
 			i += encsz;
 
@@ -542,6 +552,16 @@ bool LCHMFileImpl::ResolveObject(const QString& fileName, chmUnitInfo *ui) const
 }
 
 
+bool LCHMFileImpl::hasFile(const QString & fileName) const
+{
+	chmUnitInfo ui;
+	
+	return m_chmFile != NULL
+			&& ::chm_resolve_object(m_chmFile, qPrintable( fileName ), &ui) ==
+			CHM_RESOLVE_SUCCESS;
+}
+
+
 size_t LCHMFileImpl::RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer,
 								LONGUINT64 fileOffset, LONGINT64 bufferSize) const
 {
@@ -550,15 +570,15 @@ size_t LCHMFileImpl::RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer
 }
 
 
-inline u_int32_t LCHMFileImpl::GetLeafNodeOffset(const QString& text,
-											 u_int32_t initialOffset,
-			u_int32_t buffSize,
-   u_int16_t treeDepth)
+inline unsigned int LCHMFileImpl::GetLeafNodeOffset(const QString& text,
+											 unsigned int initialOffset,
+			unsigned int buffSize,
+   unsigned short treeDepth)
 {
-	u_int32_t test_offset = 0;
+	unsigned int test_offset = 0;
 	unsigned char* cursor16, *cursor32;
 	unsigned char word_len, pos;
-	u_int32_t i = sizeof(u_int16_t);
+	unsigned int i = sizeof(unsigned short);
 	QVector<unsigned char> buffer(buffSize);
 	QString word;
 	
@@ -572,7 +592,7 @@ inline u_int32_t LCHMFileImpl::GetLeafNodeOffset(const QString& text,
 			return 0;
 
 		cursor16 = buffer.data();
-		u_int16_t free_space = UINT16ARRAY(cursor16);
+		unsigned short free_space = UINT16ARRAY(cursor16);
 
 		while (i < buffSize - free_space )
 		{
@@ -598,7 +618,7 @@ inline u_int32_t LCHMFileImpl::GetLeafNodeOffset(const QString& text,
 			}
 
 			i += word_len + sizeof(unsigned char) +
-					sizeof(u_int32_t) + sizeof(u_int16_t);
+					sizeof(unsigned int) + sizeof(unsigned short);
 		}
 	}
 
@@ -610,7 +630,7 @@ inline u_int32_t LCHMFileImpl::GetLeafNodeOffset(const QString& text,
 
 
 inline bool LCHMFileImpl::ProcessWLC (u_int64_t wlc_count, u_int64_t wlc_size,
-								    u_int32_t wlc_offset, unsigned char ds,
+								    unsigned int wlc_offset, unsigned char ds,
 		  							unsigned char dr, unsigned char cs,
 									unsigned char cr, unsigned char ls,
  									unsigned char lr,
@@ -692,8 +712,8 @@ bool LCHMFileImpl::getInfoFromWindows()
 		if ( !RetrieveObject(&ui, buffer, 0, WIN_HEADER_LEN) )
 			return false;
 
-		u_int32_t entries = get_int32_le( (u_int32_t *)(buffer) );
-		u_int32_t entry_size = get_int32_le( (u_int32_t *)(buffer + 0x04) );
+		unsigned int entries = get_int32_le( (unsigned int *)(buffer) );
+		unsigned int entry_size = get_int32_le( (unsigned int *)(buffer + 0x04) );
 		
 		QVector<unsigned char> uptr(entries * entry_size);
 		unsigned char* raw = (unsigned char*) uptr.data();
@@ -704,14 +724,14 @@ bool LCHMFileImpl::getInfoFromWindows()
 		if( !ResolveObject ("/#STRINGS", &ui) )
 			return false;
 
-		for ( u_int32_t i = 0; i < entries; ++i )
+		for ( unsigned int i = 0; i < entries; ++i )
 		{
-			u_int32_t offset = i * entry_size;
+			unsigned int offset = i * entry_size;
 			
-			u_int32_t off_title = get_int32_le( (u_int32_t *)(raw + offset + 0x14) );
-			u_int32_t off_home = get_int32_le( (u_int32_t *)(raw + offset + 0x68) );
-			u_int32_t off_hhc = get_int32_le( (u_int32_t *)(raw + offset + 0x60) );
-			u_int32_t off_hhk = get_int32_le( (u_int32_t *)(raw + offset + 0x64) );
+			unsigned int off_title = get_int32_le( (unsigned int *)(raw + offset + 0x14) );
+			unsigned int off_home = get_int32_le( (unsigned int *)(raw + offset + 0x68) );
+			unsigned int off_hhc = get_int32_le( (unsigned int *)(raw + offset + 0x60) );
+			unsigned int off_hhk = get_int32_le( (unsigned int *)(raw + offset + 0x64) );
 
 			factor = off_title / 4096;
 
@@ -761,7 +781,7 @@ bool LCHMFileImpl::getInfoFromSystem()
 	
 	int index = 0;
 	unsigned char* cursor = NULL, *p;
-	u_int16_t value = 0;
+	unsigned short value = 0;
 	long size = 0;
 
 	// Run the first loop to detect the encoding. We need this, because title could be
@@ -776,7 +796,7 @@ bool LCHMFileImpl::getInfoFromSystem()
 	buffer[size - 1] = 0;
 
 	// First loop to detect the encoding
-	for ( index = 0; index < (size - 1 - (long)sizeof(u_int16_t)) ;)
+	for ( index = 0; index < (size - 1 - (long)sizeof(unsigned short)) ;)
 	{
 		cursor = buffer + index;
 		value = UINT16ARRAY(cursor);
@@ -869,13 +889,13 @@ QByteArray LCHMFileImpl::convertSearchWord( const QString & src )
 	static const char * searchwordtable[128] =
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "s", 0, "oe", 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "s", 0, "oe", 0, 0, "y",
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  "a", "a", "a", "a", "a", "a", "ae", "c", "e", "e", "e", "e", "i", "i", "i", "i",
-  "d", "n", "o", "o", "o", "o", "o", 0, "o", "u", "u", "u", "u", "y", "\xDE", "ss",
-  "a", "a", "a", "a", "a", "a", "ae", "c", "e", "e", "e", "e", "i", "i", "i", "i",
-  "o", "n", "o", "o", "o", "o", "o", 0, "o", "u", "u", "u", "u", "y", "\xFE", "y"
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "s", 0, "oe", 0, 0, "y",
+  		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  		"a", "a", "a", "a", "a", "a", "ae", "c", "e", "e", "e", "e", "i", "i", "i", "i",
+  		"d", "n", "o", "o", "o", "o", "o", 0, "o", "u", "u", "u", "u", "y", "\xDE", "ss",
+  		"a", "a", "a", "a", "a", "a", "ae", "c", "e", "e", "e", "e", "i", "i", "i", "i",
+  		"o", "n", "o", "o", "o", "o", "o", 0, "o", "u", "u", "u", "u", "y", "\xFE", "y"
 	};
 
 	if ( !m_textCodec )
@@ -905,7 +925,7 @@ void LCHMFileImpl::getSearchResults( const LCHMSearchProgressResults& tempres,
 		  							 unsigned int limit_results )
 {
 	unsigned char combuf [COMMON_BUF_LEN];
-	QMap<u_int32_t, u_int32_t> urlsmap;  // used to prevent duplicated urls
+	QMap<unsigned int, unsigned int> urlsmap;  // used to prevent duplicated urls
 	
 	for ( int i = 0; i < tempres.size(); i++ )
 	{
@@ -953,7 +973,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 	// Save the index for debugging purposes
 	QFile outfile( "parsed.htm" );
 	
-	if ( outfile.open( IO_WriteOnly ) )
+	if ( outfile.open( QIODevice::WriteOnly ) )
 	{
 		QTextStream textstream( &outfile );
 		textstream << src;
@@ -1071,6 +1091,25 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 				if ( !pvalue.isEmpty() )
 					entry.name = pvalue;
 			}
+			else if ( pname == "merge" )
+			{
+				// MERGE implementation is experimental
+				QString mergeurl = LCHMUrlFactory::makeURLabsoluteIfNeeded( pvalue );
+				QString mergecontent;
+
+				if ( getFileContentAsString( &mergecontent, mergeurl ) && !mergecontent.isEmpty() )
+				{
+					qWarning( "MERGE is used in index; the implementation is experimental. Please let me know if it works" );
+
+					// Merge the read value into the current parsed file.
+					// To save memory it is done in a kinda hacky way:
+					src = mergecontent + src.mid( i );
+					pos = 0;
+					stringlen = src.length();
+				}
+				else
+					qWarning( "MERGE is used in index but file %s was not found in CHM archive", qPrintable(mergeurl) );
+			}
 			else if ( pname == "local" )
 			{
 				// Check for URL duplication
@@ -1121,14 +1160,20 @@ bool LCHMFileImpl::getFileContentAsBinary( QByteArray * data, const QString & ur
 	if( !ResolveObject( url, &ui ) )
 		return false;
 
-	data->resize( ui.length );
+	return getFileContentAsBinary( data, &ui );
+}
+
+
+bool LCHMFileImpl::getFileContentAsBinary(QByteArray * data, const chmUnitInfo * ui) const
+{
+	data->resize( ui->length );
 			
-	if ( RetrieveObject( &ui, (unsigned char*) data->data(), 0, ui.length ) )
+	if ( RetrieveObject( ui, (unsigned char*) data->data(), 0, ui->length ) )
 		return true;
 	else
 		return false;
 }
-
+	
 	
 bool LCHMFileImpl::getFileContentAsString( QString * str, const QString & url, bool internal_encoding )
 {
@@ -1262,13 +1307,13 @@ void LCHMFileImpl::fillTopicsUrlMap()
 	
 	for ( unsigned int i = 0; i < m_chmTOPICS.length; i += TOPICS_ENTRY_LEN )
 	{
-		u_int32_t off_title = get_int32_le( (u_int32_t *)(topics.data() + i + 4) );
-		u_int32_t off_url = get_int32_le( (u_int32_t *)(topics.data() + i + 8) );
-		off_url = get_int32_le( (u_int32_t *)( urltbl.data() + off_url + 8) ) + 8;
+		unsigned int off_title = get_int32_le( (unsigned int *)(topics.data() + i + 4) );
+		unsigned int off_url = get_int32_le( (unsigned int *)(topics.data() + i + 8) );
+		off_url = get_int32_le( (unsigned int *)( urltbl.data() + off_url + 8) ) + 8;
 
 		QString url = LCHMUrlFactory::makeURLabsoluteIfNeeded( (const char*) urlstr.data() + off_url );
 
-		if ( off_title < (u_int32_t)strings.size() )
+		if ( off_title < (unsigned int)strings.size() )
 			m_url2topics[url] = encodeWithCurrentCodec ( (const char*) strings.data() + off_title );
 		else
 			m_url2topics[url] = "Untitled";
@@ -1285,4 +1330,340 @@ bool LCHMFileImpl::getFileSize(unsigned int * size, const QString & url)
 
 	*size = ui.length;
 	return true;
+}
+
+
+bool LCHMFileImpl::parseBinaryTOC( QVector< LCHMParsedEntry > * toc ) const
+{
+	if ( hasOption("nobintables") )
+		return false;
+	
+	if ( !m_lookupTablesValid )
+		return false;
+
+	QByteArray tocidx, topics, urltbl, urlstr, strings;
+	
+	// Read the index tables
+	if ( !getFileContentAsBinary( &tocidx, "/#TOCIDX" )
+	|| !getFileContentAsBinary( &topics, "/#TOPICS" )
+	|| !getFileContentAsBinary( &urltbl, "/#URLTBL" )
+	|| !getFileContentAsBinary( &urlstr, "/#URLSTR" )
+	|| !getFileContentAsBinary( &strings, "/#STRINGS" ) )
+		return false;
+
+	// Shamelessly stolen from xchm
+	if ( !RecurseLoadBTOC( tocidx, topics, urltbl, urlstr, strings, UINT32ARRAY( tocidx.data() ),  toc, 0 ) )
+	{
+		qWarning("Failed to parse binary TOC, fallback to text-based TOC");
+		toc->clear();
+		return false;
+	}
+
+	return true;
+}
+
+
+//
+// This piece of code was based on the one in xchm written by  Razvan Cojocaru <razvanco@gmx.net>
+//
+bool LCHMFileImpl::RecurseLoadBTOC( const QByteArray& tocidx,
+									const QByteArray& topics,
+									const QByteArray& urltbl,
+									const QByteArray& urlstr,
+									const QByteArray& strings,
+									int offset,
+		 							QVector< LCHMParsedEntry > * entries,
+		  							int level ) const
+{
+	while ( offset )
+	{
+		// If this is end of TOCIDX, return.
+		if ( tocidx.size() < offset + 20 )
+			return true;
+
+		unsigned int flags = UINT32ARRAY( tocidx.data() + offset + 4 );
+		int index = UINT32ARRAY( tocidx.data() + offset + 8 );
+	
+		if ( (flags & 0x04) || (flags & 0x08))
+		{
+			QString name, value;
+
+			if ( (flags & 0x08) == 0 )
+			{
+				if ( strings.size() < index + 1 )
+				{
+					qWarning("LCHMFile::RecurseLoadBTOC: invalid name index (%d) for book TOC entry!", index );
+					return false;
+				}
+
+				name = encodeWithCurrentCodec( strings.data() + index);
+			}
+			else
+			{
+				if ( topics.size() < (index * 16) + 12 )
+				{
+					qWarning("LCHMFile::RecurseLoadBTOC: invalid name index (%d) for local TOC entry!", index );
+					return false;
+				}
+
+				unsigned int tocoffset = UINT32ARRAY(topics.data()+ (index * 16) + 4);
+				long test = (long)tocoffset;
+
+				if ( (unsigned) strings.size() < tocoffset + 1 )
+				{
+					qWarning("LCHMFile::RecurseLoadBTOC: invalid name tocoffset (%d) for TOC entry!", tocoffset );
+					return false;
+				}
+
+				if ( test == -1 )
+				{
+					qWarning("LCHMFile::RecurseLoadBTOC: invalid name offset (%d) for TOC entry!", tocoffset );
+					return false;
+				}
+
+				name = encodeWithCurrentCodec( strings.data() + tocoffset );
+
+				// #URLTBL index
+				tocoffset = UINT32ARRAY( topics.data() + (index * 16) + 8 );
+			
+				if ( (unsigned) urltbl.size() < tocoffset + 12 )
+				{
+					qWarning("LCHMFile::RecurseLoadBTOC: invalid url index (%d) for TOC entry!", tocoffset );
+					return false;
+				}
+
+				tocoffset = UINT32ARRAY(urltbl.data() + tocoffset + 8);
+				
+				if ( (unsigned) urlstr.size() < tocoffset )
+				{
+					qWarning("LCHMFile::RecurseLoadBTOC: invalid url offset (%d) for TOC entry!", tocoffset );
+					return false;
+				}
+
+				value = encodeWithCurrentCodec( urlstr.data() + tocoffset + 8 );
+			}
+
+			LCHMParsedEntry entry;
+			entry.name = name.trimmed();
+
+			if ( !entry.name.isEmpty() )
+			{
+				if ( !value.isEmpty() )
+					entry.urls.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( value ) );
+
+				entry.imageid = LCHMBookIcons::IMAGE_AUTO;
+				entry.indent = level;
+				entries->push_back( entry );
+			}
+		}
+
+		if ( flags & 0x04 )
+		{
+			// book
+			if ( tocidx.size() < offset + 24 )
+			{
+				qWarning("LCHMFile::RecurseLoadBTOC: invalid child entry offset (%d)", offset );
+				return false;
+			}
+
+			unsigned int childoffset = UINT32ARRAY( tocidx.data() + offset + 20 );
+			
+			if ( childoffset )
+			{
+				if ( !RecurseLoadBTOC( tocidx, topics, urltbl, urlstr, strings, childoffset, entries, level + 1 ) )
+					return false;
+			}
+		}
+		
+		offset = UINT32ARRAY( tocidx.data() + offset + 0x10 );
+	}
+
+	return true;
+}
+
+
+
+bool LCHMFileImpl::hasOption(const QString & name) const
+{
+	if ( !m_envOptions.isEmpty() && m_envOptions.contains( name ) )
+		return true;
+
+	return false;
+}
+
+
+//
+// This piece of code was based on the one in xchm written by Razvan Cojocaru <razvanco@gmx.net>
+//
+bool LCHMFileImpl::parseBinaryIndex( QVector< LCHMParsedEntry > * entries ) const
+{
+	if ( !m_lookupTablesValid )
+		return false;
+
+	if ( hasOption("nobintables") )
+		return false;
+	
+	if ( !loadBinaryIndex( entries ) )
+	{
+		qWarning("Failed to parse binary index, fallback to text-based index");
+		entries->clear();
+		return false;
+	}
+
+	return true;
+}
+
+
+inline QString getBtreeString( const QByteArray& btidx, unsigned long * offset, unsigned short * spaceLeft )
+{
+	QString string;
+	unsigned short tmp;
+	
+	while ( 1 )
+	{
+		// accumulate the name
+		if ( (unsigned) btidx.size() < *offset + sizeof(unsigned short) )
+			return QString();
+				
+		tmp = UINT16ARRAY( btidx.data() + *offset );
+		*offset += sizeof(unsigned short);
+		*spaceLeft -= sizeof(unsigned short);
+
+		if ( tmp == 0x00 )
+			break;
+
+		string.append( QChar( tmp ) );
+	}
+
+	return string.trimmed();
+}
+
+
+bool LCHMFileImpl::loadBinaryIndex( QVector< LCHMParsedEntry > * entries ) const
+{
+	QByteArray btidx, topics, urltbl, urlstr, strings;
+	
+	// Read the index tables
+	if ( !getFileContentAsBinary( &btidx, "/$WWKeywordLinks/BTree" )
+	|| !getFileContentAsBinary( &topics, "/#TOPICS" )
+	|| !getFileContentAsBinary( &urltbl, "/#URLTBL" )
+	|| !getFileContentAsBinary( &urlstr, "/#URLSTR" )
+	|| !getFileContentAsBinary( &strings, "/#STRINGS" ) )
+		return false;
+
+	// Make sure we have enough entries in tree
+	if ( btidx.size() < 88 )
+	{
+		qWarning("LCHMFile::loadBinaryIndex: BTree is too small" );
+		return false;
+	}
+
+	unsigned long offset = 0x4c;
+	int next = -1;
+	unsigned short freeSpace, spaceLeft;
+	const short blockSize = 2048;
+	bool found_item = false;
+
+	do
+	{
+		if ( (unsigned) btidx.size() < offset + 12 )
+			break;
+
+		freeSpace = UINT16ARRAY( btidx.data() + offset );
+		next = INT32ARRAY( btidx.data() + offset + 8 );
+		spaceLeft = blockSize - 12;
+		offset += 12;
+
+		while ( spaceLeft > freeSpace )
+		{
+			QString value;
+			LCHMParsedEntry entry;
+
+			entry.name = getBtreeString( btidx, &offset, &spaceLeft );
+
+			if ( entry.name.isEmpty() )
+			{
+				qWarning("LCHMFile::loadBinaryIndex: cannot parse name" );
+				return false;
+			}
+			
+			if ( (unsigned) btidx.size() < offset + 16 )
+			{
+				qWarning("LCHMFile::loadBinaryIndex: index is terminated by name" );
+				return false;
+			}
+
+			unsigned short seeAlso = UINT16ARRAY(btidx.data() + offset);
+			unsigned int numTopics = UINT32ARRAY(btidx.data() + offset + 0xc);
+			offset += 16;
+			spaceLeft -= 16;
+
+			if ( seeAlso )
+			{
+				QString seealso = getBtreeString( btidx, &offset, &spaceLeft );
+				
+				if ( entry.name != seealso )
+					entry.urls.push_back( ":" + seealso );
+			}
+			else
+			{
+				for ( unsigned int i = 0; i < numTopics && spaceLeft > freeSpace; ++i )
+				{
+					if ( (unsigned) btidx.size() < offset + sizeof(unsigned int) )
+					{
+						qWarning("LCHMFile::loadBinaryIndex: premature url termination" );
+						return false;
+					}
+
+					unsigned int index = UINT32ARRAY( btidx.data() + offset );
+
+					// #URLTBL index
+					unsigned int tocoffset = UINT32ARRAY( topics.data() + (index * 16) + 8 );
+			
+					if ( (unsigned) urltbl.size() < tocoffset + 12 )
+					{
+						qWarning("LCHMFile::loadBinaryIndex: invalid url index (%d) for TOC entry!", tocoffset );
+						return false;
+					}
+
+					tocoffset = UINT32ARRAY(urltbl.data() + tocoffset + 8);
+				
+					if ( (unsigned) urlstr.size() < tocoffset )
+					{
+						qWarning("LCHMFile::loadBinaryIndex: invalid url offset (%d) for TOC entry!", tocoffset );
+						return false;
+					}
+
+					QString url = encodeWithCurrentCodec( urlstr.data() + tocoffset + 8 );
+					entry.urls.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( url ) );
+					offset += sizeof(unsigned int);
+					spaceLeft -= sizeof(unsigned int);
+				}
+			}
+
+			entry.name = entry.name.trimmed();
+
+			if ( !entry.name.isEmpty() )
+			{
+				entry.imageid = LCHMBookIcons::IMAGE_INDEX;
+				entry.indent = 0;
+				found_item = true;
+				entries->push_back( entry );
+			}
+					
+			if ( (unsigned) btidx.size() < offset + 8 )
+			{
+				qWarning("LCHMFile::loadBinaryIndex: binary index is gone" );
+				return false;
+			}
+
+			offset += 8;
+			spaceLeft -= 8;
+		}
+		
+		offset += spaceLeft;
+
+	} while ( next != -1 );
+
+	return found_item;
 }

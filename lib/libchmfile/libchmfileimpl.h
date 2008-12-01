@@ -61,6 +61,7 @@ class LCHMFileImpl
 		
 		bool 		getFileContentAsString( QString * str, const QString& url, bool internal_encoding = false );
 		bool 		getFileContentAsBinary( QByteArray * data, const QString& url ) const;
+		bool		getFileContentAsBinary( QByteArray * data, const chmUnitInfo *ui ) const;
 		bool 		getFileSize( unsigned int * size, const QString& url );
 				
 		bool		enumerateFiles( QStringList * files );
@@ -101,11 +102,14 @@ class LCHMFileImpl
 		  					   unsigned int limit_results = 500 );
 
 		//! Looks up fileName in the archive.
+		bool hasFile( const QString& fileName ) const;
+		
+		//! Looks up fileName in the archive.
 		bool ResolveObject( const QString& fileName, chmUnitInfo *ui ) const;
 
 		//!  Retrieves an uncompressed chunk of a file in the .chm.
-		size_t RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize) const;
-		
+		size_t RetrieveObject( const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize) const;
+
 		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
 		inline QString encodeWithCurrentCodec( const QByteArray& str) const
 		{
@@ -229,7 +233,36 @@ class LCHMFileImpl
 		 */
 		QString normalizeUrl (const QString& path ) const;
 
+		/*!
+		 * Parse binary TOC
+		 */
+		bool parseBinaryTOC( QVector< LCHMParsedEntry > * topics ) const;
 		
+		/*!
+		 * Parse binary index
+		 */
+		bool parseBinaryIndex( QVector< LCHMParsedEntry > * topics ) const;
+
+		//! Internal loader
+		bool loadBinaryIndex( QVector< LCHMParsedEntry > * entries ) const;
+				
+		/*!
+		 * Recursively parse and fill binary TOC
+		 */
+		bool RecurseLoadBTOC( const QByteArray& tocidx,
+							  const QByteArray& topics,
+		 					  const QByteArray& urltbl,
+		  					  const QByteArray& urlstr,
+		   					  const QByteArray& strings,
+  							  int offset,
+  							  QVector< LCHMParsedEntry > * entries,
+  							  int level ) const;
+
+		/*!
+		 * Check if an option was set in environment
+		 */
+		bool	hasOption( const QString& name ) const;
+
 		// Members		
 		
 		//! Pointer to the chmlib structure
@@ -282,6 +315,12 @@ class LCHMFileImpl
 		//! pointer to /#URLSTR
 		chmUnitInfo	m_chmURLSTR;
 
+		//! Indicates whether TOC, either binary or text, is available.
+		bool			m_tocAvailable;
+		
+		//! Indicates whether index, either binary or text, is available.
+		bool			m_indexAvailable;
+		
 		//! Indicates whether the built-in search is available. This is true only when m_lookupTablesValid
 		//! is TRUE, and m_chmFIftiMain is resolved.
 		bool			m_searchAvailable;
@@ -294,4 +333,7 @@ class LCHMFileImpl
 		
 		//! Map url->topic
 		QMap< QString, QString >	m_url2topics;
+
+		//! KCHMViewer debug options from environment
+		QString			m_envOptions;
 };

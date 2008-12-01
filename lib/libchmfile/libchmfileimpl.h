@@ -20,6 +20,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#ifndef INCLUDE_LIBCHMFILEIMPL_H
+#define INCLUDE_LIBCHMFILEIMPL_H
+
 #include <sys/types.h>
 
 #include "chm_lib.h"
@@ -28,6 +31,7 @@
 #include "libchmtocimage.h"
 
 #include <QPixmap>
+
 
 //! Keeps the intermediate search result
 class LCHMSearchProgressResult
@@ -337,3 +341,5 @@ class LCHMFileImpl
 		//! KCHMViewer debug options from environment
 		QString			m_envOptions;
 };
+
+#endif // INCLUDE_LIBCHMFILEIMPL_H

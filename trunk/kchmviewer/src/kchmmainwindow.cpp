@@ -140,8 +140,14 @@ KCHMMainWindow::~KCHMMainWindow()
 
 
 
-bool KCHMMainWindow::loadFile ( const QString &fileName, bool call_open_page )
+bool KCHMMainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 {
+	QString fileName = loadFileName;
+
+	// Strip file:// prefix if any
+	if ( fileName.startsWith( "file://" ) )
+		fileName.remove( 0, 7 );
+			
 	LCHMFile * new_chmfile = new LCHMFile();
 	
 	if ( new_chmfile->loadFile( fileName ) )

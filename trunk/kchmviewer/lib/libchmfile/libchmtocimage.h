@@ -21,7 +21,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#ifndef INCLUDE_LIBCHMTOCIMAGE_H
+#define INCLUDE_LIBCHMTOCIMAGE_H
+
+
 #include <QPixmap>
+
 
 //! This class is used to retrieve the book TOC icons associated with images
 class LCHMTocImageKeeper
@@ -33,3 +38,6 @@ class LCHMTocImageKeeper
 	private:
 		QPixmap	m_images[LCHMBookIcons::MAX_BUILTIN_ICONS];
 };
+
+
+#endif // INCLUDE_LIBCHMTOCIMAGE_H

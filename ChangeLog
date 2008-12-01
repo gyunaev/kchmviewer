@@ -1,6 +1,9 @@
 2008-30-11 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0 (release);
 	- Integrate Fedora .desktop fixes (thx. Patrice Dumas)
+	- Implemented binary TOC and index tables (thx. Razvan Cojocaru <razvanco@gmx.net>, the author of xchm). Speed up loading files more than twice!
+	- Now showing 'waiting' cursor while loading chm table of contents or index.
+	- Fixed QTextBrowser by providing workaround for "empty" books.
 
 2008-18-06 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0b4;

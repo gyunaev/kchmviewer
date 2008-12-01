@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=KchmViewer
 Categories=Qt;KDE;Utility;
-Encoding=UTF-8
 Terminal=false
 Type=Application
 Exec=kchmviewer %f

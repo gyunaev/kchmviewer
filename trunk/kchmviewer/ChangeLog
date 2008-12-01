@@ -1,3 +1,7 @@
+2008-30-11 tim <gyunaev@ulduzsoft.com>
+    - Version changed to 4.0 (release);
+	- Integrate Fedora .desktop fixes (thx. Patrice Dumas)
+
 2008-18-06 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0b4;
     - Added WebKit support (requires QtWebKit module). WebKit browser is default for a system where QtWebKit is present;

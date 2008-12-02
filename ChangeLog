@@ -11,6 +11,7 @@
     - Added Swedish translation (thx Daniel Nylander)
     - Fixed handling files with file:// prefix.
     - Added D-BUS support for Qt and KDE builds, the application could now be controlled remotely from other applications or scripts.
+    - Restored KDE translations.
 
 2008-06-18 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0b4;

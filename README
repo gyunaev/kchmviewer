@@ -11,6 +11,7 @@
   KchmViewer is written by Georgy Yunaev (gyunaev@ulduzsoft.com), and is licensed under GNU GPL license. Please 
   do NOT use this email for bug reporting; see below.
 
+
 2. FEATURES
 
   - Standalone viewer, depends on Qt4 only. Does not require KDE, Gnome or wxWindows toolkit.
@@ -43,6 +44,7 @@
   for its presense, but qmake does not have necessary functionality to do so. If you are getting errors regarding missing 
   chm_lib.h file this means chmlib-devel is not installed.
 
+
 3.1. Qt-only version
 
   To compile Qt-only version of kchmviewer, follow the procedure:
@@ -53,6 +55,13 @@
   > make
   
   The compiled binary is in bin/kchmviewer. You could copy it somewhere, or use it as-is. It does not require installation.
+
+  If QtWebKit module is not found, you will get the following error:
+
+  > kchmviewwindow_qtwebkit.h:25:21: error: QWebView: No such file or directory
+
+  Either install QtWebKit module, or remove "webkit" from QT+= line in src/src.pro
+
   
 3.2 KDE4 version
 

@@ -19,7 +19,7 @@ TARGET = chmfile
 CONFIG += warn_on \
 		  qt \
 		  staticlib \
- debug
+ release
 TEMPLATE = lib
 INCLUDEPATH += ../../src
 CONFIG -= release

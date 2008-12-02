@@ -1,6 +1,6 @@
-kchmviewer supports the following DCOP bindings:
+kchmviewer supports the following DBUS bindings:
 
-Interface name: KCHMDCOPIface
+Interface path: net.kchmviewer.application
 
 Bingings:
 

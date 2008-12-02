@@ -192,9 +192,9 @@ void KCHMSetupDialog::browseExternalEditor()
         QString exec = KFileDialog::getOpenFileName( KUrl(), i18n("*|Executables"), this, i18n("Choose an editor executable"));
 #else
 	QString exec = QFileDialog::getOpenFileName(this,
-								tr("Choose an editor executable"), 
+								i18n("Choose an editor executable"), 
 			   					QString::null, 
-	  							tr( "Executables (*)") );
+	  							i18n( "Executables (*)") );
 #endif
 
 	if ( !exec.isEmpty() )

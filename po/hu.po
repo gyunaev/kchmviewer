@@ -1,36 +1,39 @@
+# translation of hu1.po to
+# translation of hu.po to
 # translation of kchmviewer.po to
 # This file is put in the public domain.
 #
-# Hynek Fabian <hynek.fabian@mobilbonus.cz>, 2006.
+# Csaba Zakarias <csaba.zakarias@gmail.hu>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: kchmviewer\n"
+"Project-Id-Version: hu1\n"
 "Report-Msgid-Bugs-To: kchmviewer@ulduzsoft.com\n"
 "POT-Creation-Date: 2008-12-01 18:25-0800\n"
-"PO-Revision-Date: 2006-08-31 20:54+0200\n"
-"Last-Translator: Hynek Fabian <hynek.fabian@mobilbonus.cz>\n"
-"Language-Team:  <cs@li.org>\n"
+"PO-Revision-Date: 2006-04-11 13:44+0200\n"
+"Last-Translator: Csaba Zakarias <csaba.zakarias@gmail.hu>\n"
+"Language-Team:  <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.11.1\n"
+"Plural-Forms:  nplurals=1; plural=0;\n"
 
 #: kchmbookmarkwindow.cpp:113
 msgid "%1 - add a bookmark"
-msgstr "%1 - vložení záložky"
+msgstr "%1 - hozzáadás a könyvjelzőhöz"
 
 #: kchmbookmarkwindow.cpp:114 kchmbookmarkwindow.cpp:156
 msgid "Enter the name for this bookmark:"
-msgstr "Zadejte jméno záložky"
+msgstr "Adja meg a könyvjelző nevét:"
 
 #: kchmbookmarkwindow.cpp:155
 msgid "%1 - edit the bookmark name"
-msgstr "%1 - změna názvu záložky"
+msgstr "%1 - könyvjelző név szerkesztése"
 
 #: kchmmainwindow.cpp:96
 #, fuzzy
 msgid "Bookmarks"
-msgstr "&Přidat záložku"
+msgstr "&Oldal berakása a könyvjelzőbe"
 
 #: kchmmainwindow.cpp:121
 msgid ""
@@ -46,19 +49,19 @@ msgstr ""
 
 #: kchmmainwindow.cpp:254
 msgid "%1 - failed to load the chm file"
-msgstr "%1 - načtení souboru s nápovědou se nezdařilo"
+msgstr "%1 - hiba a chm fájl betöltésekor"
 
 #: kchmmainwindow.cpp:255
 msgid "Unable to load the chm file %1"
-msgstr "Nepovedlo se načíst soubor nápovědy %1"
+msgstr "%1 chm fájl nem tölthető be"
 
 #: kchmmainwindow.cpp:263
 msgid "Could not load file %1"
-msgstr "Nelze číst soubor %1"
+msgstr "%1 fájl nem tölthető be"
 
 #: kchmmainwindow.cpp:331
 msgid "%1 - remote link clicked - %2"
-msgstr "%1 - aktivován externí odkaz - %2"
+msgstr "%1 - távoli kapcsolatra kattintás - %2"
 
 #: kchmmainwindow.cpp:332
 msgid ""
@@ -66,34 +69,33 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Odkaz %1 bude otevřen v externím prohlížeči.\n"
+"%1 távoli kapcsolat megnyitásához külső programot indít.\n"
 "\n"
-"Přejete si pokračovat?"
+"Akarja folytatni?"
 
 #: kchmmainwindow.cpp:333 kchmmainwindow.cpp:377
 msgid "&Yes"
-msgstr "&Ano"
+msgstr "&Igen"
 
 #: kchmmainwindow.cpp:333 kchmmainwindow.cpp:377
 msgid "&No"
-msgstr "&Ne"
+msgstr "&Nem"
 
 #: kchmmainwindow.cpp:355
 msgid "%1 - JavsScript link clicked"
-msgstr "%1 - aktivován JavaScript odkaz"
+msgstr "%1 - JavaSzkriptre kattintás"
 
 #: kchmmainwindow.cpp:356
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
 msgstr ""
-"Kliknuli jste na JavaScriptový odkaz\n"
-"Z bezpečnostních důvodů je použití JavaScriptových adres v souborech "
-"nápovědy potlačeno."
+"JavaSzkriptet akart elindítani.\n"
+"Biztonsági okoból a JavaSzkript le van tiltva a CHM fájlokban."
 
 #: kchmmainwindow.cpp:375
 msgid "%1 - link to a new CHM file clicked"
-msgstr "%1 - aktivován odkaz na CHM soubor"
+msgstr "%1 - új CHM fájlra mutató kapcsolatra kattintás"
 
 #: kchmmainwindow.cpp:376
 msgid ""
@@ -102,10 +104,10 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Kliknuli jste na odkaz ukazující na soubor nápovědy %1.\n"
-"Aktuální soubor bude uzavřen.\n"
+"A %1 új CHM fájlra mutató kapcsolatra kattintott.\n"
+"A jelenlegi fájl bezárul.\n"
 "\n"
-"Přejete si pokračovat ?"
+"Akarja folytatni?"
 
 #: kchmmainwindow.cpp:639
 msgid "Contents"
@@ -113,66 +115,67 @@ msgstr ""
 
 #: kchmmainwindow.cpp:664
 msgid "Index"
-msgstr "Obsah"
+msgstr "Index"
 
 #: kchmmainwindow.cpp:687
 msgid "Search"
-msgstr "Hledání"
+msgstr "Keresés"
 
 #: kchmmainwindow.cpp:855
 msgid "*.chm|Compressed Help Manual (*.chm)"
-msgstr "*.chm|Soubory nápovědy (*.chm)"
+msgstr "Tömörített Súgó Kézikönyv (*.chm)"
 
 #: kchmmainwindow.cpp:858
 #, fuzzy
 msgid "Open a chm file"
-msgstr "Otevřít"
+msgstr "Fájl megnyitása"
 
 #: kchmmainwindow.cpp:860
 msgid "Compressed Help Manual (*.chm)"
-msgstr "Soubory nápovědy (*.chm)"
+msgstr "Tömörített Súgó Kézikönyv (*.chm)"
 
 #: kchmmainwindow.cpp:872
 msgid "Loading aborted"
-msgstr "Načítaní přerušeno"
+msgstr "Betöltés sikertelen"
 
 #: kchmmainwindow.cpp:912 kchmmainwindow.cpp:916
 msgid "Choose a directory to store CHM content"
-msgstr "Zvolte cílový adresář"
+msgstr ""
 
 #: kchmmainwindow.cpp:930
 msgid "Extracting CHM content"
-msgstr "Rozbaluji soubor nápovědy"
+msgstr ""
 
 #: kchmmainwindow.cpp:931
 msgid "Extracting files..."
-msgstr "Extrakce souborů..."
+msgstr ""
 
 #: kchmmainwindow.cpp:932
+#, fuzzy
 msgid "Abort"
-msgstr "Přerušit"
+msgstr "%1 névjegye"
 
 #: kchmmainwindow.cpp:1122
 msgid "Could not locate opened topic in content window"
-msgstr "Téma nebylo nalezeno"
+msgstr "Nem található a megnyitott téma a tartalom albakban"
 
 #: kchmmainwindow.cpp:1164
 msgid "About %1"
-msgstr "O aplikaci %1"
+msgstr "%1 névjegye"
 
 #: kchmmainwindow.cpp:1326
 #, fuzzy
 msgid "&Help"
-msgstr "O&dstranit"
+msgstr "&Törlés"
 
 #: kchmmainwindow.cpp:1327
 #, fuzzy
 msgid "&About"
-msgstr "Přerušit"
+msgstr "%1 névjegye"
 
 #: kchmmainwindow.cpp:1328
 msgid "About &Qt"
-msgstr "O &Qt"
+msgstr "&Qt névjegye"
 
 #: kchmmainwindow.cpp:1340
 msgid "Ctrl+1"
@@ -212,15 +215,15 @@ msgstr ""
 
 #: kchmsearchwindow.cpp:151
 msgid "Search returned %1 result(s)"
-msgstr "Nalezeno %1 výsledků"
+msgstr "Keresés %1 eredményt adott"
 
 #: kchmsearchwindow.cpp:154
 msgid "Search returned no results"
-msgstr "Hledání nevedlo k žádnému výsledku"
+msgstr "Keresés nem adott vissza eredményt"
 
 #: kchmsearchwindow.cpp:157
 msgid "Search failed"
-msgstr "Hledání se nezdařilo"
+msgstr "Keresés érvénytelen"
 
 #: kchmsearchwindow.cpp:190
 msgid ""
@@ -269,20 +272,21 @@ msgstr ""
 #: kchmviewwindowmgr.cpp:70
 #, fuzzy
 msgid "Add page"
-msgstr "Hledání na stránce"
+msgstr "Keresés az oldalon"
 
 #: kchmviewwindowmgr.cpp:171 kchmviewwindowmgr.cpp:238
+#, fuzzy
 msgid "Alt+%1"
-msgstr ""
+msgstr "Alt+L"
 
 #: kchmviewwindow_qtextbrowser.cpp:121 kchmviewwindow_qtwebkit.cpp:256
 msgid "Printing aborted"
-msgstr "Tisk přerušen"
+msgstr "Nyomtatás megszakítva"
 
 #: kchmviewwindow_qtextbrowser.cpp:126 kchmviewwindow_qtwebkit.cpp:261
 #, fuzzy
 msgid "Printing finished"
-msgstr "Tisk přerušen"
+msgstr "Nyomtatás megszakítva"
 
 #: kchmviewwindow_qtextbrowser.cpp:317 kchmviewwindow_qtwebkit.cpp:375
 msgid "Open Link in a new tab\tShift+LMB"
@@ -303,7 +307,7 @@ msgstr ""
 #: main.cpp:45
 #, fuzzy
 msgid "A CHM file to show"
-msgstr "Prohlížeč CHM souborů"
+msgstr "CHM fájl megjelenítő"
 
 #: main.cpp:46
 msgid ""
@@ -324,7 +328,7 @@ msgstr ""
 
 #: main.cpp:54
 msgid "CHM file viewer"
-msgstr "Prohlížeč CHM souborů"
+msgstr "CHM fájl megjelenítő"
 
 #: main.cpp:56
 msgid "(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"
@@ -345,363 +349,360 @@ msgid "Your emails"
 msgstr ""
 
 #~ msgid "KchmViewer settings"
-#~ msgstr "Nastavení KchmViewer"
+#~ msgstr "KchmViewer beállítások"
 
 #~ msgid "General behavior"
-#~ msgstr "Běžné chovaní"
+#~ msgstr "Általános beállítások"
 
 #~ msgid "If no arguments given on load"
-#~ msgstr "Bez parametrů při spučtení"
+#~ msgstr "Ha nem ad meg jellemzőt a betöltéskor"
 
 #~ msgid "Open the 'open CHM file' dialog"
-#~ msgstr "Ukaž dialog 'Výběr CHM souboru'"
+#~ msgstr "A 'CHM fájl megnyitása' dialógus ablak megnyitása"
 
 #~ msgid "Open the &last used CHM file, if exist"
-#~ msgstr "Otevři pos&lední používaný CHM soubor"
+#~ msgstr "&Legutóbbi CHM fájl megnyitása, ha létezik"
 
 #~ msgid "History"
-#~ msgstr "Historie"
+#~ msgstr "Előzmények"
 
 #~ msgid "Store history information for"
-#~ msgstr "Uschovat informace o historii posledních"
+#~ msgstr "Előzmény információ tárolása"
 
 #~ msgid "latest files"
-#~ msgstr "souborů"
+#~ msgstr "legutóbbi fájlok"
 
 #~ msgid "R&emember extra information for history files"
-#~ msgstr "Pamatovat si &extra informace souborů historie"
+#~ msgstr "&Emlékezzen az előzmények fájlok különleges információira"
+
+#~ msgid "Alt+E"
+#~ msgstr "Alt+E"
 
 #~ msgid ""
 #~ "Remembers the information about the files, which were opened. Remembers "
 #~ "last opened page, search history, font size, bookmarks and so on."
 #~ msgstr ""
-#~ "Pamatuje si poslední otevřenou stránku, historii hledání, velikost písma, "
-#~ "záložky a podobné informace o prohlížených souborech."
+#~ "Emlékezzen a megnyitott fájlok információira. Emlékezzen az utoljára "
+#~ "megnyitott oldalra, keresési előzményekre, betűméretre, könyvjelzőkre és "
+#~ "így tovább."
 
 #~ msgid "CHM security settings"
-#~ msgstr "Bezpečnostní volby"
+#~ msgstr "CHM biztonsági beállítások"
 
 #~ msgid "When external link clicked"
-#~ msgstr "Při kliknutí na externí odkaz"
+#~ msgstr "Külső kapcsolatra kattintáskor"
 
 #~ msgid "Alwa&ys open it in external browser"
-#~ msgstr "Vžd&y otevřít v externím prohlížeči"
+#~ msgstr "&Mindig külső böngészőben nyissa meg"
+
+#~ msgid "Alt+Y"
+#~ msgstr "Alt+Y"
 
 #~ msgid "Ask for confirmation"
-#~ msgstr "Vyžádat si potvrzení"
+#~ msgstr "Megerősítés kérése"
 
 #~ msgid "Do not open the link"
-#~ msgstr "Neotevírat odkaz"
-
-#~ msgid "When link pointed to a new CHM file clicked"
-#~ msgstr "Při kliknutí na odkaz na jiný CHM soubor"
+#~ msgstr "Kapcsolatot ne nyissa meg"
 
 #~ msgid "Always open a new CHM file"
-#~ msgstr "Otevřít odkazovaný CHM soubor"
+#~ msgstr "Mindig nyissa meg azúj CHM fájlt"
 
 #~ msgid "Do not open a new CHM file"
-#~ msgstr "Neotvírat odkazovaný soubor"
+#~ msgstr "Ne nyissa meg az új CHM fájlt"
 
 #~ msgid "Version-specific settings"
-#~ msgstr "Zvláštní nastavení verzí"
+#~ msgstr "Verzió függő beállítások"
 
 #~ msgid "Qt version settings"
-#~ msgstr "Nastavení Qt verze"
+#~ msgstr "Qt verzió beállítások"
 
 #~ msgid ""
 #~ "Enter the path to the program, which will be used as a browser for "
 #~ "external links.  A <i>%s</i> symbol will be replaced by the URL clicked."
 #~ msgstr ""
-#~ "Cesta k externímu prohlížeči. Symbol <i>%s</i> bude nahrazen volanou URL."
+#~ "Adja meg a program elérési útját a belső linkek megnyitásához egy "
+#~ "böngésző ablakban. <i>%s</i> szimbólumot lecseréljük az URL-re "
+#~ "kattintáskor."
 
 #~ msgid "KDE version settings"
-#~ msgstr "Nastavení KDE verze"
+#~ msgstr "KDE verzió beállítások"
 
 #~ msgid "To show HTML content, use"
-#~ msgstr "HTML obsah zobrazit pomocí"
+#~ msgstr "HTML tartalom megjelenítéséhez használja"
 
 #~ msgid "&QTextBrowser-based widget"
-#~ msgstr "&QTextBrowser prvku"
+#~ msgstr "&QTextBrowser-alapú widget"
+
+#~ msgid "Alt+Q"
+#~ msgstr "Alt+Q"
 
 #~ msgid "&KHTMLPart-based widget"
-#~ msgstr "&KHTMLPart prvku"
+#~ msgstr "&KHTMLPart-alapú widget"
+
+#~ msgid "Alt+K"
+#~ msgstr "Alt+K"
 
 #~ msgid "KHTMLPart security"
-#~ msgstr "Zabezpečení KHTMLPart"
+#~ msgstr "KHTMLPart biztonság"
 
 #~ msgid "Enable Java&Script"
-#~ msgstr "Povolit Java&Script"
+#~ msgstr "Java&Szkript engedélyezése"
+
+#~ msgid "Alt+S"
+#~ msgstr "Alt+S"
 
 #~ msgid "Enable &plugins"
-#~ msgstr "&Povolit moduly"
+#~ msgstr "&Beépülő modulok engedélyezése"
+
+#~ msgid "Alt+P"
+#~ msgstr "Alt+P"
 
 #~ msgid "Enable &Java"
-#~ msgstr "Povolit &Javu"
+#~ msgstr "&Java engedélyezése"
+
+#~ msgid "Alt+J"
+#~ msgstr "Alt+J"
 
 #~ msgid "Enable &refresh"
-#~ msgstr "Povolit obnovení"
+#~ msgstr "&Frissítés engedélyezése"
+
+#~ msgid "Alt+R"
+#~ msgstr "Alt+R"
 
 #~ msgid "Advanced"
-#~ msgstr "Rozšířené nastavení"
+#~ msgstr "További"
 
 #~ msgid "View HTML source command uses"
-#~ msgstr "Prohlížeč zdrojového kódu HTML"
+#~ msgstr "HTML forrás parancsok megtekintése"
 
 #~ msgid "Built-in HTML source viewer"
-#~ msgstr "Zabudovaný prohlížeč zdrojového kódu"
+#~ msgstr "Beépített HTML forrás megjelenítő"
 
 #~ msgid "E&xternal program, specified below"
-#~ msgstr "E&xterní program uvedený níže"
+#~ msgstr "&Külső program, alább adaj meg"
+
+#~ msgid "Alt+X"
+#~ msgstr "Alt+X"
 
 #~ msgid "External program:"
-#~ msgstr "Externí prohlížeč:"
+#~ msgstr "Külső program:"
 
-#, fuzzy
-#~ msgid "Search engine to use"
-#~ msgstr "Hledání nevedlo k žádnému výsledku"
+#~ msgid "F1"
+#~ msgstr "F1"
 
 #~ msgid ""
 #~ "_: NAME OF TRANSLATORS\n"
 #~ "Your names"
-#~ msgstr "Hynek Fabian"
+#~ msgstr "Zakariás Csaba"
 
 #~ msgid ""
 #~ "_: EMAIL OF TRANSLATORS\n"
 #~ "Your emails"
-#~ msgstr "radonek@gmail.com"
+#~ msgstr "csaba.zakarias@gmail.com"
 
 #~ msgid "&Add"
-#~ msgstr "Přid&at"
-
-#~ msgid "&Add bookmark"
-#~ msgstr "Přid&at záložku"
+#~ msgstr "&Hozzáadás"
 
 #~ msgid "Topics"
-#~ msgstr "Témata"
+#~ msgstr "Témák"
 
 #~ msgid "Please select one of the topics below:"
-#~ msgstr "Zvolte si jedno z níže uvedených témat:"
+#~ msgstr "Jelölje ki az egyik alábbi témát:"
 
-#, fuzzy
+#~ msgid "&Ok"
+#~ msgstr "&OK"
+
 #~ msgid ""
 #~ "%1 version %2\n"
-#~ "\n"
-#~ "Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2004-2007\n"
-#~ "http://www.kchmviewer.net\n"
-#~ "\n"
-#~ "Licensed under GNU GPL license.\n"
-#~ "\n"
-#~ "Please check my another project, http://www.transientmail.com - temporary "
-#~ "e-mail address, which expires automatically."
-#~ msgstr ""
-#~ "%1 verze %2\n"
 #~ "\n"
 #~ "Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
 #~ "www.kchmviewer.net\n"
 #~ "\n"
-#~ "Licencováno GNU GPL.\n"
+#~ "Licensed under GNU GPL license.\n"
 #~ "\n"
-#~ "Zkuste náš další projekt, www.transientmail.com - dočasná adresa "
-#~ "elektronické pošty která časem sama zaniká."
+#~ "Please try our another project, www.transientmail.com - temporary e-mail "
+#~ "address, which expires automatically."
+#~ msgstr ""
+#~ "%1 verzió %2\n"
+#~ "\n"
+#~ "Copyright (C) George Yunaev,gyunaev@ulduzsoft.com, 2005-2006\n"
+#~ "www.kchmviewer.net\n"
+#~ "\n"
+#~ "GNU GPL licensz.\n"
+#~ "\n"
+#~ "Kérem, próbálja ki más projektünket is, ww.transientmail.com."
 
 #~ msgid "File Operations"
-#~ msgstr "Práce se soubory"
+#~ msgstr "Fájl műveletek"
 
 #~ msgid "Click this button to open an existing chm file."
-#~ msgstr "Výběr existujícího souboru nápovědy k prohlížení"
+#~ msgstr "Létező chm fájl megnyitásához kattintson erre a gombra."
 
 #~ msgid "Print File"
-#~ msgstr "Tisk"
+#~ msgstr "Fájl nyomtatása"
 
 #~ msgid "Click this button to print the current page"
-#~ msgstr "Stiskem toho tlačítka vytisknete současnou stránku"
-
-#~ msgid "E&xtract CHM content..."
-#~ msgstr "Ro&zbalit..."
-
-#~ msgid ""
-#~ "Click this button to extract the whole CHM file content into a specific "
-#~ "directory"
-#~ msgstr ""
-#~ "Tímto tlačítkem extrahujete obsah souboru nápovědy do zadaného adresáře"
-
-#~ msgid "&Recent files"
-#~ msgstr "Ot&evřít nedávný"
-
-#~ msgid "&Select all"
-#~ msgstr "&Vybrat vše"
-
-#~ msgid "&Change settings..."
-#~ msgstr "&Změnit nastavení"
-
-#~ msgid "What's &This"
-#~ msgstr "Co je &tohle ?"
+#~ msgstr "Az aktuális oldal kinyomtatásához kattintson erre a gombra."
 
 #~ msgid "Navigation"
-#~ msgstr "Navigace"
+#~ msgstr "Navigáció"
 
 #~ msgid "Move backward in history"
-#~ msgstr "Předchozí"
+#~ msgstr "Az előzményekben hátrébb mozgatása"
 
 #~ msgid "Click this button to move backward in browser history"
-#~ msgstr "Přesun v historii o krok zpět"
+#~ msgstr ""
+#~ "A böngésző előzmények közötti visszafelé mozgáshoz kattintson erre a "
+#~ "gombra."
 
 #~ msgid "Move forward in history"
-#~ msgstr "Vpřed"
+#~ msgstr "Az előzményekben előrébb mozgatása"
 
 #~ msgid "Click this button to move forward in browser history"
-#~ msgstr "Přesun v historii o krok vpřed"
+#~ msgstr ""
+#~ "A böngésző előzmények közötti előrefelé mozgáshoz kattintson erre a "
+#~ "gombra."
 
 #~ msgid "Go to the home page"
-#~ msgstr "Úvodní stránka"
+#~ msgstr "Alapoldalra ugrás"
 
 #~ msgid "Click this button to move to the home page"
-#~ msgstr "Přesun na úvodní stranu"
+#~ msgstr "Az alapoldalra ugráshoz kattintson erre a gombra."
+
+#~ msgid "&Recent files"
+#~ msgstr "&Legutóbbi fájlok"
+
+#~ msgid "&Select all"
+#~ msgstr "&Minden kijelölése"
+
+#~ msgid "&Setup"
+#~ msgstr "&Beállítás"
+
+#~ msgid "&Change settings..."
+#~ msgstr "&Beállítások megváltoztatása"
+
+#~ msgid "What's &This"
+#~ msgstr "&Mi ez?"
 
 #~ msgid "Enter here the text to search in the current page."
-#~ msgstr "Zde zadaný text bude vyhledán na aktuální stránce"
+#~ msgstr "Adja meg az aktuális oldalon keresendő szöveget."
 
 #~ msgid "Previous search result"
-#~ msgstr "Předešlý výsledek hledání"
+#~ msgstr "Előző keresési eredmény"
 
 #~ msgid "Click this button to find previous search result."
-#~ msgstr "Stiskem toho tlačítka se vrátíte předešlý nalezený výraz"
+#~ msgstr ""
+#~ "Az előző keresési eredmény megjelenítéséhez kattintson erre a gombra."
 
 #~ msgid "Next search result"
-#~ msgstr "Další výsledek hledání"
+#~ msgstr "Következő keresési eredmény"
 
 #~ msgid "Click this button to find next search result."
 #~ msgstr ""
-#~ "Stiskem tohoto tlačítka se přesunete na další výskyt hledaného výrazu"
-
-#~ msgid "Locate this topic in content window"
-#~ msgstr "Vyhledej toto téma"
+#~ "A következő keresési eredmény megjelenítéséhez kattintson erre a gombra."
 
 #~ msgid ""
 #~ "Click this button to find current topic in the content window, and open "
 #~ "it."
-#~ msgstr "Stiskem tohoto tlačítka otevřete okno s obsahem na aktuálním tématu"
+#~ msgstr ""
+#~ "Kattintson a gombra a jelenlegi témának a tartalom ablakban történő "
+#~ "megkereséséhez és megnyitásához."
 
 #~ msgid "Increase font size"
-#~ msgstr "Zvětšit písmo"
+#~ msgstr "Betűméret növelése"
 
 #~ msgid "Click this button to increase the font size."
-#~ msgstr "Toto tlačítko zvětší velikost použitého písma"
+#~ msgstr "A betűméret növeléséhez kattinson erre a gombra."
 
 #~ msgid "Decrease font size"
-#~ msgstr "Zmenšit písmo"
+#~ msgstr "Betűméret csökkentése"
 
 #~ msgid "Click this button to decrease the font size."
-#~ msgstr "Toto tlačítko zmenší velikost použítého písma"
+#~ msgstr "A betűméret csökkentéséhez kattinson erre a gombra."
 
 #~ msgid "View HTML source"
-#~ msgstr "Zobrazit zdrojový kód"
+#~ msgstr "HTML forrás megtekintése"
 
 #~ msgid ""
 #~ "Click this button to open a separate window with the page HTML source."
 #~ msgstr ""
-#~ "Stisknutím tohoto tlačítka otevřete okno s HTML zdrojovým kódem stránky"
+#~ "Az oldal HTML forrásának külön ablakban történő megnyitásához kattintson "
+#~ "erre a gombra."
 
 #~ msgid "Add to bookmarks"
-#~ msgstr "Přidat k záložkám"
+#~ msgstr "Hozzáadás a könyvjelzőhöz"
 
 #~ msgid "Click this button to add the current page to the bookmarks list."
-#~ msgstr "Tímto čudlíkem přidáte aktuální stránku mezi záložky"
+#~ msgstr ""
+#~ "Kattintson a gomba az aktuális oldal könyvjelző listához való "
+#~ "hozzáadására."
 
 #~ msgid "Prev page in TOC"
-#~ msgstr "Předchozí stránka"
+#~ msgstr "Előző oldal a tartalomjegyzékben"
 
 #~ msgid "Click this button to go to previous page in Table Of Content."
-#~ msgstr "Přesun na obsahově předcházející stránku"
+#~ msgstr ""
+#~ "A tartalomjegyzékben az előző oldalra ugráshoz kattintson erre a gombra."
 
 #~ msgid "Next page in TOC"
-#~ msgstr "Následující stránka"
+#~ msgstr "Következő oldal a tartalomjegyzékben"
 
 #~ msgid "Click this button to go to next page in Table of Content."
-#~ msgstr "Přesun na obsahově následující stránku"
+#~ msgstr ""
+#~ "A tartalomjegyzékben a következő oldalra ugráshoz kattintson erre a "
+#~ "gombra."
 
 #~ msgid "&Increase font"
-#~ msgstr "Z&většit písmo"
+#~ msgstr "&Betűméret növelése"
 
 #~ msgid "&Decrease font"
-#~ msgstr "Z&menšit písmo"
+#~ msgstr "&Betűméret csökkentése"
 
 #~ msgid "&View HTML source"
-#~ msgstr "&Zobrazit zdroj"
+#~ msgstr "&HTML forrás megtekintése"
 
 #~ msgid "&Full screen"
-#~ msgstr "&Celá obrazovka"
+#~ msgstr "&Teljes képernyő"
 
 #~ msgid "&Show contents window"
-#~ msgstr "&Okno obsahu"
-
-#~ msgid "&Locate in contents window"
-#~ msgstr "&Najít v obsahu"
+#~ msgstr "&Tartalom ablak mutatása"
 
 #~ msgid "&Set language"
-#~ msgstr "Vybrat &jazyk"
+#~ msgstr "&Nyelv beállítása"
 
 #~ msgid "&Set codepage"
-#~ msgstr "Vybrat &kódování"
+#~ msgstr "&Kódlap beállítása"
 
 #~ msgid "Type in word(s) to search for:"
-#~ msgstr "Zadejte hledaná slova:"
+#~ msgstr "Adja meg a keresendő szavakat:"
 
 #~ msgid "Title"
-#~ msgstr "Titul"
+#~ msgstr "Cím"
 
 #~ msgid "Location"
-#~ msgstr "Umístění"
+#~ msgstr "Hely"
+
+#~ msgid "Match similar words"
+#~ msgstr "Hasonló szavak keresése"
 
 #~ msgid "How to use search"
-#~ msgstr "Jak používat vyhledávání"
+#~ msgstr "Hogyan használja a keresőt"
 
-#~ msgid ""
-#~ "The search query can contain a few prefixes.\n"
-#~ "A set of words inside the quote marks mean that you are searching for "
-#~ "exact phrase.\n"
-#~ "A word with minus sign means that it should be absent in the search "
-#~ "result.\n"
-#~ "A word with plus mark or without any mark means that it must be present "
-#~ "in the search result.\n"
-#~ "\n"
-#~ "Note that only letters and digits are indexed.\n"
-#~ "You cannot search for non-character symbols other than underscope, and "
-#~ "those symbols will be removed from the search query.\n"
-#~ "For example, search for 'C' will give the same result as searching for 'C+"
-#~ "+'."
-#~ msgstr ""
-#~ "Hledaný výraz může obsahovat několik prefixů.\n"
-#~ "Vložení několika slov do uvozovek značí že chcete najít přesnou frázi.\n"
-#~ "Slovo se znaménkem minus se ve výsledku nebude vyskytovat.\n"
-#~ "Slovo se znaménkem plus nebo bez znaménka musí být ve výsledku přítomno.\n"
-#~ "\n"
-#~ "Hledání bere v úvahu pouze písmena, číslice a znak podtržítka.\n"
-#~ "Ostatní znaky budou z hledaného výrazu odstraněny.\n"
-#~ "Například hledání 'C' povede ke stejným výsledkům jako hledaní 'C++'."
-
-#, fuzzy
-#~ msgid "Search is not available"
-#~ msgstr "Hledání se nezdařilo"
+#~ msgid "Editor"
+#~ msgstr "Szerkesztő"
 
 #~ msgid "Printing (page %1)..."
-#~ msgstr "Probíhá tisk strany %1 ..."
+#~ msgstr "Nyomtatás (%1 oldal)..."
 
 #~ msgid "Printing completed"
-#~ msgstr "Tisk dokončen"
+#~ msgstr "Nyomtatás kész"
 
 #~ msgid "%1 - could not print"
-#~ msgstr "%1 - nelze tisknout"
+#~ msgstr "%1 - nem nyomtatható"
 
 #~ msgid ""
 #~ "Could not print.\n"
 #~ "Your Qt library has been compiled without printing support"
 #~ msgstr ""
-#~ "Není možné tisknout.\n"
-#~ "Vaše knihovna Qt byla přeložena bez podpory tisku."
-
-#~ msgid "&Window"
-#~ msgstr "&Okno"
-
-#~ msgid "Match similar words"
-#~ msgstr "Podobná slova"
+#~ "Nem nyomtatható.\n"
+#~ "A Qt könyvtár nyomtatás támogatás nélkül lett lefordítva."

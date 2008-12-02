@@ -112,9 +112,7 @@ KCHMMainWindow::KCHMMainWindow()
 	resize( WND_X_SIZE, WND_Y_SIZE );	
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
-	m_autotestlistiterator = 0;
 	m_autoteststate = STATE_OFF;
-	m_useShortAutotest = false;
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
 	statusBar()->show();
@@ -511,16 +509,8 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 #if defined (USE_KDE)
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-	if ( args->isSet("autotestmode") )
+	if ( args->isSet("autotestmode") || args->isSet("shortautotestmode") )
 		do_autotest = true;
-	
-	if ( args->isSet("shortautotestmode") )
-	{
-		do_autotest = true;
-#if defined (ENABLE_AUTOTEST_SUPPORT)
-		m_useShortAutotest = true;
-#endif
-	}
 
 	search_query = args->getOption ("search");
 	search_index = args->getOption ("sindex");
@@ -544,9 +534,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 			exit (1);
 		}
 #if defined (ENABLE_AUTOTEST_SUPPORT)
-		else if ( !strcmp (qApp->argv()[i], "--autotestmode") )
-			do_autotest = m_useShortAutotest = true;
-		else if ( !strcmp (qApp->argv()[i], "--shortautotestmode") )
+		else if ( !strcmp (qApp->argv()[i], "--autotestmode") || !strcmp (qApp->argv()[i], "--shortautotestmode") )
 			do_autotest = true;
 #endif		
 		else if ( !strcmp (qApp->argv()[i], "--search") )
@@ -814,34 +802,14 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 void KCHMMainWindow::runAutoTest()
 {
-	KCHMIndTocItem * item;
-
 	switch (m_autoteststate)
 	{
 	case STATE_INITIAL:
-		if ( m_contentsTab && !m_useShortAutotest )
-		{
-			m_autotestlistiterator = Q3ListViewItemIterator (m_contentsTab);
-			m_autoteststate = STATE_CONTENTS_OPENNEXTPAGE;
-		}
-		else
-			m_autoteststate = STATE_OPEN_INDEX;
+		m_autoteststate = STATE_OPEN_INDEX;
 		
 		QTimer::singleShot (500, this, SLOT(runAutoTest()) );
 		break; // allow to finish the initialization sequence
 		
-	case STATE_CONTENTS_OPENNEXTPAGE:
-		if ( (item = (KCHMIndTocItem *) m_autotestlistiterator.current()) != 0 )
-		{
-			openPage( item->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-			m_autotestlistiterator++;
-		}
-		else
-			m_autoteststate = STATE_OPEN_INDEX;
-		
-		QTimer::singleShot (50, this, SLOT(runAutoTest()) );
-		break;
-
 	case STATE_OPEN_INDEX:
 		if ( m_indexTab )
 			m_tabWidget->setCurrentIndex (1);

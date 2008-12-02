@@ -24,13 +24,13 @@
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
 #include "kchmkeyeventfilter.h"
+#include "kchmdbusiface.h"
 #include "version.h"
 
+#include <QtDBus/QtDBus>
 
 #if defined (USE_KDE)
 	#include <kaboutdata.h>
-	
-	#include "kde/kchmdbusiface.h"
 #endif
 
 KCHMMainWindow * mainWindow;
@@ -69,10 +69,19 @@ int main( int argc, char ** argv )
 	appConfig.load();
 	app.installEventFilter( &gKeyEventFilter );
 	
-#if defined(USE_KDE)	
-	// DBus stuff
-	KCHMDBusIface iface;
-#endif
+	if ( QDBusConnection::sessionBus().isConnected() )
+	{
+		if ( QDBusConnection::sessionBus().registerService(SERVICE_NAME) )
+		{
+			KCHMDBusIface * dbusiface = new KCHMDBusIface();
+			QDBusConnection::sessionBus().registerObject( "/", dbusiface, QDBusConnection::ExportAllSlots );
+		}
+		else
+			qWarning( "Cannot register service %s on session bus. Going without D-BUS support.", SERVICE_NAME );
+	}
+	else
+		qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
+
 	mainWindow = new KCHMMainWindow();
 	mainWindow->show();
 	

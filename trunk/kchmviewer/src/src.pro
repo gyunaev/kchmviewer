@@ -6,22 +6,23 @@ HEADERS += kchmsettings.h kchmbookmarkwindow.h kchmconfig.h kchmtreeviewitem.h \
 			kchmsearchwindow.h kchmviewwindowmgr.h \
 			kchmkeyeventfilter.h kchmcontentswindow.h kchmsetupdialog.h \
  version.h \
- kchmviewwindow_qtwebkit.h
+ kchmviewwindow_qtwebkit.h kchmdbusiface.h
 SOURCES += kchmbookmarkwindow.cpp kchmconfig.cpp \
 			kchmindexwindow.cpp kchmmainwindow.cpp kchmsearchwindow.cpp \
 			kchmsettings.cpp kchmtreeviewitem.cpp kchmviewwindow.cpp main.cpp \
 			kchmdialogchooseurlfromlist.cpp kde-qt.cpp kchmviewwindow_qtextbrowser.cpp \
 			kchmviewwindowmgr.cpp \
 			kchmkeyeventfilter.cpp kchmcontentswindow.cpp kchmsetupdialog.cpp \
- kchmviewwindow_qtwebkit.cpp
+ kchmviewwindow_qtwebkit.cpp kchmdbusiface.cpp
 TARGETDEPS += ../lib/libchmfile/libchmfile.a 
 LIBS +=       ../lib/libchmfile/libchmfile.a -lchm
 TARGET = ../bin/kchmviewer
-CONFIG += debug \
+CONFIG += release \
          ordered \
 		 warn_on \
 		 qt \
-		 precompile_header
+		 precompile_header \
+ dbus
 TEMPLATE = app
 FORMS += tab_bookmarks.ui \
 tab_index.ui \
@@ -32,7 +33,4 @@ dialog_topicselector.ui \
 window_main.ui \
 window_browser.ui
 RESOURCES += resources/images.qrc
-QT += webkit net \
- network
-CONFIG -= release
-
+QT += webkit dbus network

@@ -29,7 +29,7 @@
 
 #include "ui_window_main.h"
 
-//#define ENABLE_AUTOTEST_SUPPORT
+#define ENABLE_AUTOTEST_SUPPORT
 
 //! OpenPage extra flags, specifying extra behavior
 
@@ -199,14 +199,11 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		{
 			STATE_OFF,
 			STATE_INITIAL,
-			STATE_CONTENTS_OPENNEXTPAGE,
 			STATE_OPEN_INDEX,
 			STATE_SHUTDOWN
 		};
 		
-		bool						m_useShortAutotest;
 		auto_test_state_t			m_autoteststate;
-		QTreeWidgetItemIterator	*	m_autotestlistiterator;
 	
 	private slots:
 		void	runAutoTest();

@@ -18,8 +18,8 @@ SET( kchmviewerSources
 	kchmkeyeventfilter.cpp 
 	kchmcontentswindow.cpp 
 	kchmsetupdialog.cpp
+	kchmdbusiface.cpp
 	kde/kchmviewwindow_khtmlpart.cpp
-	kde/kchmdbusiface.cpp
   )
 
 # UI files

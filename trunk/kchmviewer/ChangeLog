@@ -1,13 +1,18 @@
-2008-30-11 tim <gyunaev@ulduzsoft.com>
+2008-12-01 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0 (release);
-	- Integrate Fedora .desktop fixes (thx Patrice Dumas)
-	- Implemented binary TOC and index tables (thx Razvan Cojocaru <razvanco@gmx.net>, the author of xchm). Speed up loading files more than twice!
-	- Now showing 'waiting' cursor while loading chm table of contents or index.
-	- Fixed QTextBrowser by providing workaround for "empty" books.
-	- More compatibility fixes with KDE 4.1 
-	- Added Swedish translation (thx Daniel Nylander)
+    - Released version 4.0.
 
-2008-18-06 tim <gyunaev@ulduzsoft.com>
+2008-11-30 tim <gyunaev@ulduzsoft.com>
+    - Integrate Fedora .desktop fixes (thx Patrice Dumas)
+    - Implemented binary TOC and index tables (thx Razvan Cojocaru <razvanco@gmx.net>, the author of xchm). Speed up loading files more than twice!
+    - Now showing 'waiting' cursor while loading chm table of contents or index.
+    - Fixed QTextBrowser by providing workaround for "empty" books.
+    - More compatibility fixes with KDE 4.1 
+    - Added Swedish translation (thx Daniel Nylander)
+    - Fixed handling files with file:// prefix.
+    - Added D-BUS support for Qt and KDE builds, the application could now be controlled remotely from other applications or scripts.
+
+2008-06-18 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0b4;
     - Added WebKit support (requires QtWebKit module). WebKit browser is default for a system where QtWebKit is present;
     - Added support for Right-To-Left application and text layouts;

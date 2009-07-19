@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,481 +10,496 @@
     <height>591</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>kchmviewer</string>
   </property>
-  <widget class="QWidget" name="widget" />
-  <widget class="QMenuBar" name="menubar" >
-   <property name="geometry" >
+  <widget class="QWidget" name="widget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>873</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_Settings" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_Settings">
+    <property name="title">
      <string>&amp;Settings</string>
     </property>
-    <addaction name="settings_SettingsAction" />
+    <addaction name="settings_SettingsAction"/>
    </widget>
-   <widget class="QMenu" name="menu_Bookmarks" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_Bookmarks">
+    <property name="title">
      <string>&amp;Bookmarks</string>
     </property>
-    <addaction name="bookmark_AddAction" />
-    <addaction name="separator" />
+    <addaction name="bookmark_AddAction"/>
+    <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menu_File" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="file_Open_action" />
-    <addaction name="file_Print_action" />
-    <addaction name="separator" />
-    <addaction name="file_ExtractCHMAction" />
+    <addaction name="file_Open_action"/>
+    <addaction name="file_Print_action"/>
+    <addaction name="separator"/>
+    <addaction name="file_ExtractCHMAction"/>
    </widget>
-   <widget class="QMenu" name="menu_Edit" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="edit_Copy_action" />
-    <addaction name="edit_SelectAll_action" />
-    <addaction name="separator" />
-    <addaction name="edit_FindAction" />
+    <addaction name="edit_Copy_action"/>
+    <addaction name="edit_SelectAll_action"/>
+    <addaction name="separator"/>
+    <addaction name="edit_FindAction"/>
    </widget>
-   <widget class="QMenu" name="menu_View" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="view_Increase_font_size_action" />
-    <addaction name="view_Decrease_font_size_action" />
-    <addaction name="view_View_HTML_source_action" />
-    <addaction name="separator" />
-    <addaction name="view_Toggle_fullscreen_action" />
-    <addaction name="view_Toggle_contents_action" />
-    <addaction name="view_Locate_in_contents_action" />
-    <addaction name="separator" />
-    <addaction name="view_Set_encoding_action" />
+    <addaction name="view_Increase_font_size_action"/>
+    <addaction name="view_Decrease_font_size_action"/>
+    <addaction name="view_View_HTML_source_action"/>
+    <addaction name="separator"/>
+    <addaction name="view_Toggle_fullscreen_action"/>
+    <addaction name="view_Toggle_contents_action"/>
+    <addaction name="view_Locate_in_contents_action"/>
+    <addaction name="separator"/>
+    <addaction name="view_Set_encoding_action"/>
    </widget>
-   <widget class="QMenu" name="menu_Windows" >
-    <property name="title" >
+   <widget class="QMenu" name="menu_Windows">
+    <property name="title">
      <string>&amp;Windows</string>
     </property>
-    <addaction name="action_Close_window" />
-    <addaction name="separator" />
+    <addaction name="action_Close_window"/>
+    <addaction name="separator"/>
    </widget>
-   <addaction name="menu_File" />
-   <addaction name="menu_Edit" />
-   <addaction name="menu_View" />
-   <addaction name="menu_Bookmarks" />
-   <addaction name="menu_Windows" />
-   <addaction name="menu_Settings" />
+   <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
+   <addaction name="menu_View"/>
+   <addaction name="menu_Bookmarks"/>
+   <addaction name="menu_Windows"/>
+   <addaction name="menu_Settings"/>
   </widget>
-  <widget class="QToolBar" name="mainToolbar" >
-   <property name="windowTitle" >
+  <widget class="QToolBar" name="mainToolbar">
+   <property name="windowTitle">
     <string>general toolbar</string>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
-   <attribute name="toolBarArea" >
+   <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak" >
+   <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="file_Open_action" />
-   <addaction name="file_Print_action" />
+   <addaction name="file_Open_action"/>
+   <addaction name="file_Print_action"/>
   </widget>
-  <widget class="QToolBar" name="navToolbar" >
-   <property name="windowTitle" >
+  <widget class="QToolBar" name="navToolbar">
+   <property name="windowTitle">
     <string>navigation toolbar</string>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
-   <attribute name="toolBarArea" >
+   <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak" >
+   <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="nav_actionHome" />
-   <addaction name="nav_action_Back" />
-   <addaction name="nav_actionForward" />
+   <addaction name="nav_actionHome"/>
+   <addaction name="nav_action_Back"/>
+   <addaction name="nav_actionForward"/>
   </widget>
-  <widget class="QToolBar" name="viewToolbar" >
-   <property name="windowTitle" >
+  <widget class="QToolBar" name="viewToolbar">
+   <property name="windowTitle">
     <string>action toolbar</string>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
-   <attribute name="toolBarArea" >
+   <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak" >
+   <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="view_Locate_in_contents_action" />
-   <addaction name="view_Increase_font_size_action" />
-   <addaction name="view_Decrease_font_size_action" />
-   <addaction name="view_View_HTML_source_action" />
-   <addaction name="bookmark_AddAction" />
-   <addaction name="nav_actionPreviousPage" />
-   <addaction name="nav_actionNextPageToc" />
+   <addaction name="view_Locate_in_contents_action"/>
+   <addaction name="view_Decrease_font_size_action"/>
+   <addaction name="view_Increase_font_size_action"/>
+   <addaction name="view_View_HTML_source_action"/>
+   <addaction name="bookmark_AddAction"/>
+   <addaction name="nav_actionPreviousPage"/>
+   <addaction name="nav_actionNextPageToc"/>
   </widget>
-  <widget class="QStatusBar" name="mainStatusBar" />
-  <action name="file_Print_action" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_print.png</iconset>
+  <widget class="QStatusBar" name="mainStatusBar"/>
+  <action name="file_Print_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_print.png</normaloff>:/images/icon_print.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Print...</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Print</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Print current page</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Prints currently opened page.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+P</string>
    </property>
   </action>
-  <action name="file_exit_action" >
-   <property name="text" >
+  <action name="file_exit_action">
+   <property name="text">
     <string>&amp;Quit</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Exit</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Exits the application</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="edit_Copy_action" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_copy.png</iconset>
+  <action name="edit_Copy_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_copy.png</normaloff>:/images/icon_copy.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>C&amp;opy</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Copy</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Copies selected content to clipboard</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="edit_SelectAll_action" >
-   <property name="icon" >
-    <iconset>image8</iconset>
+  <action name="edit_SelectAll_action">
+   <property name="icon">
+    <iconset>
+     <normaloff>image8</normaloff>image8</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Select All</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Paste</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Selects everything in the document</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+V</string>
    </property>
   </action>
-  <action name="edit_FindAction" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_find.png</iconset>
+  <action name="edit_FindAction">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_find.png</normaloff>:/images/icon_find.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Find...</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Find</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Find text in currently opened page</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Enters the Find in page mode</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="file_ExtractCHMAction" >
-   <property name="text" >
+  <action name="file_ExtractCHMAction">
+   <property name="text">
     <string>E&amp;xtract CHM content...</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Extract the CHM content to the directory</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Exctracts the CHM archive content to the specified directory. All the files are extracted.</string>
    </property>
   </action>
-  <action name="settings_SettingsAction" >
-   <property name="text" >
+  <action name="settings_SettingsAction">
+   <property name="text">
     <string>&amp;Application settings...</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Change the application settings</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Change the application settings</string>
    </property>
   </action>
-  <action name="bookmark_AddAction" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_add_bookmark.png</iconset>
+  <action name="bookmark_AddAction">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_add_bookmark.png</normaloff>:/images/icon_add_bookmark.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Add bookmark</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Adds a bookmark for currently opened page</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Adds a bookmark for currently opened page. Remembers the opened page, and scroll position. Bookmarks are accessible through Bookmarks menu or tab.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="view_Increase_font_size_action" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_font_increase.png</iconset>
+  <action name="view_Increase_font_size_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_font_increase.png</normaloff>:/images/icon_font_increase.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Increase font size</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Increase the font size</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Increases the document font size. The new font size will be stored.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl++</string>
    </property>
   </action>
-  <action name="view_Decrease_font_size_action" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_font_decrease.png</iconset>
+  <action name="view_Decrease_font_size_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_font_decrease.png</normaloff>:/images/icon_font_decrease.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Decrease font size</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Decrease the font size</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Decreases the document font size. The new font size will be stored.</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+-</string>
    </property>
   </action>
-  <action name="view_View_HTML_source_action" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_view_source.png</iconset>
+  <action name="view_View_HTML_source_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_view_source.png</normaloff>:/images/icon_view_source.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;View HTML source</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>View HTML source of current page</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Shows the HTML source of currently opened page</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+U</string>
    </property>
   </action>
-  <action name="view_Toggle_fullscreen_action" >
-   <property name="checkable" >
+  <action name="view_Toggle_fullscreen_action">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Enable &amp;full screen mode</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Enters or leaves the fullscreen mode</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>F11</string>
    </property>
-   <property name="autoRepeat" >
+   <property name="autoRepeat">
     <bool>false</bool>
    </property>
   </action>
-  <action name="view_Toggle_contents_action" >
-   <property name="checkable" >
+  <action name="view_Toggle_contents_action">
+   <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="checked" >
+   <property name="checked">
     <bool>true</bool>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Enable &amp;side window</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Shows or hides the size window (with Content, Index, Search and Bookmark tabs)</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>F9</string>
    </property>
-   <property name="autoRepeat" >
+   <property name="autoRepeat">
     <bool>false</bool>
    </property>
   </action>
-  <action name="view_Locate_in_contents_action" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_locate_in_content.png</iconset>
+  <action name="view_Locate_in_contents_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_locate_in_content.png</normaloff>:/images/icon_locate_in_content.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Locate in contents window</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Locate the current page in contents window</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>If the current page is present in the Table of Contents, locate it there. </string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+</string>
    </property>
   </action>
-  <action name="view_Set_encoding_action" >
-   <property name="text" >
+  <action name="view_Set_encoding_action">
+   <property name="text">
     <string>Set &amp;encoding</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Changes the current document encoding. </string>
    </property>
   </action>
-  <action name="file_Open_action" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_open_file.png</iconset>
+  <action name="file_Open_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_open_file.png</normaloff>:/images/icon_open_file.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>&amp;Open...</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Open a CHM file</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Opens a new CHM file</string>
    </property>
   </action>
-  <action name="nav_action_Back" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_back.png</iconset>
+  <action name="nav_action_Back">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_back.png</normaloff>:/images/icon_back.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Back</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Navigate back</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Navigate back in navigation history</string>
    </property>
   </action>
-  <action name="nav_actionForward" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_forward.png</iconset>
+  <action name="nav_actionForward">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_forward.png</normaloff>:/images/icon_forward.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Forward</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Navigate forward</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Navigate forward in navigation history</string>
    </property>
   </action>
-  <action name="nav_actionHome" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_home.png</iconset>
+  <action name="nav_actionHome">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_home.png</normaloff>:/images/icon_home.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Home</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Navigate home</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Navigate to the document Home page, as specified in the document.</string>
    </property>
   </action>
-  <action name="nav_actionPreviousPage" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_prev_page.png</iconset>
+  <action name="nav_actionPreviousPage">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_prev_page.png</normaloff>:/images/icon_prev_page.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Previous page in Table of Context</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Previous page in TOC</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Go to the previous page in the Table of Contents</string>
    </property>
-   <property name="whatsThis" >
-    <string>Go to the previous page in the &lt;b>Table of Contents&lt;/b>&lt;br>&lt;br>&lt;i>Shortcut: Ctrl+Left Arrow&lt;/i></string>
+   <property name="whatsThis">
+    <string>Go to the previous page in the &lt;b&gt;Table of Contents&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;i&gt;Shortcut: Ctrl+Left Arrow&lt;/i&gt;</string>
    </property>
   </action>
-  <action name="nav_actionNextPageToc" >
-   <property name="icon" >
-    <iconset resource="resources/images.qrc" >:/images/icon_next_page.png</iconset>
+  <action name="nav_actionNextPageToc">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_next_page.png</normaloff>:/images/icon_next_page.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Next page in Table of Context</string>
    </property>
-   <property name="iconText" >
+   <property name="iconText">
     <string>Next page in TOC</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Go to the next page in the Table of Contents</string>
    </property>
-   <property name="whatsThis" >
-    <string>Go to the next page in the &lt;b>Table of Contents&lt;/b>&lt;br>&lt;br>&lt;i>Shortcut: Ctrl+Right Arrow&lt;/i></string>
+   <property name="whatsThis">
+    <string>Go to the next page in the &lt;b&gt;Table of Contents&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;i&gt;Shortcut: Ctrl+Right Arrow&lt;/i&gt;</string>
    </property>
   </action>
-  <action name="action_Close_window" >
-   <property name="text" >
+  <action name="action_Close_window">
+   <property name="text">
     <string>&amp;Close window</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Close current window</string>
    </property>
-   <property name="whatsThis" >
+   <property name="whatsThis">
     <string>Closes currently opened window</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Ctrl+W</string>
    </property>
   </action>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resources/images.qrc" />
+  <include location="resources/images.qrc"/>
  </resources>
  <connections/>
 </ui>

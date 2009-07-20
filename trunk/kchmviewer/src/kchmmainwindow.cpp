@@ -544,13 +544,13 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 		else if ( !strcmp (qApp->argv()[i], "--stoc") )
 			search_toc = qApp->argv()[++i];
 		else
-			filename = qApp->argv()[i];
+			filename = QString::fromLocal8Bit( qApp->argv()[i] );
 	}
 #endif
 
 	if ( !filename.isEmpty() )
 	{
-		if ( !loadFile( QString::fromLocal8Bit( qPrintable( filename ) )) )
+		if ( !loadFile( filename ) )
 			return true; // skip the latest checks, but do not exit from the program
 
 		if ( !search_index.isEmpty() )

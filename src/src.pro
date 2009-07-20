@@ -34,3 +34,10 @@ window_main.ui \
 window_browser.ui
 RESOURCES += resources/images.qrc
 QT += webkit dbus network
+
+win32-mingw-g++: {
+	QT -= dbus
+	HEADERS -= kchmdbusiface.h
+	SOURCES -= kchmdbusiface.cpp
+	CONFIG -= dbus
+}

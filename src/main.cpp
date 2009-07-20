@@ -27,7 +27,9 @@
 #include "kchmdbusiface.h"
 #include "version.h"
 
-#include <QtDBus/QtDBus>
+#if !defined (WIN32)
+	#include <QtDBus/QtDBus>
+#endif
 
 #if defined (USE_KDE)
 	#include <kaboutdata.h>
@@ -69,6 +71,7 @@ int main( int argc, char ** argv )
 	appConfig.load();
 	app.installEventFilter( &gKeyEventFilter );
 	
+#if !defined (WIN32)	
 	if ( QDBusConnection::sessionBus().isConnected() )
 	{
 		if ( QDBusConnection::sessionBus().registerService(SERVICE_NAME) )
@@ -81,6 +84,7 @@ int main( int argc, char ** argv )
 	}
 	else
 		qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
+#endif
 
 	mainWindow = new KCHMMainWindow();
 	mainWindow->show();

@@ -2,6 +2,7 @@
 
 # Path to (cross-platform) mingw compiler
 MINGWPATH=/home/tim/bin/mingw/bin
+QTPATH=/home/tim/bin/qt-4.4.0
 
 BUILDDIR="build.win32"
 
@@ -16,5 +17,4 @@ cd "$BUILDDIR"
 
 # Compile it
 export PATH=$MINGWPATH:$PATH
-qmake -r -spec win32-mingwnt-g++ && make || exit 1
-
+$QTPATH/bin/qmake -r -spec win32-mingw-g++ && make || exit 1

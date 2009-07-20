@@ -1,10 +1,12 @@
 2009-19-07 tim <gyunaev@ulduzsoft.com>
-    - Version changed to 4.01
-    - Added Dutch translation (thanks to Sander Pientka)
+    - Version changed to 4.1
+    - Updated Dutch translation (thanks to Sander Pientka)
+    - Updated Turkish translation (thanks to Ozan Caglayan)
     - Default toolbar button order changed to standard -/+
     - Automatic encoding detection for KHTMLPart/WebKit is now disabled by default.
     - Fixed incorrest index string encoding for non-English strings.
     - Fixed text size auto-increase each time the file is loaded for WebKit browser.
+    - Fixed Windows mingw build issues.
 
 2008-12-01 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0 (release);

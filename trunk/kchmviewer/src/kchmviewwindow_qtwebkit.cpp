@@ -210,7 +210,7 @@ bool KCHMViewWindow_QtWebKit::openPage (const QString& url)
 
 void KCHMViewWindow_QtWebKit::setZoomFactor( int zoom )
 {
-	m_zoomfactor += zoom;
+	m_zoomfactor = zoom;
 	setTextSizeMultiplier ( 1.0 + m_zoomfactor * 0.5 );
 }
 
@@ -236,7 +236,7 @@ void KCHMViewWindow_QtWebKit::setScrollbarPosition( int pos )
 
 void KCHMViewWindow_QtWebKit::addZoomFactor( int value )
 {
-	setZoomFactor( value);
+	setZoomFactor( m_zoomfactor + value );
 }
 
 void KCHMViewWindow_QtWebKit::onAnchorClicked(const QUrl & url)

@@ -2,6 +2,7 @@
     - Version changed to 4.01
     - Added Dutch translation (thanks to Sander Pientka)
     - Default toolbar button order changed to standard -/+
+    - Automatic encoding detection for KHTMLPart/WebKit is now disabled by default.
 
 2008-12-01 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0 (release);

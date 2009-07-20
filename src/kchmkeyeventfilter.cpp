@@ -19,10 +19,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "kchmkeyeventfilter.h"
-//Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
+
+#include "kchmkeyeventfilter.h"
 
 KCHMKeyEventFilter	gKeyEventFilter;
 

@@ -249,7 +249,10 @@ class LCHMFileImpl
 
 		//! Internal loader
 		bool loadBinaryIndex( QVector< LCHMParsedEntry > * entries ) const;
-				
+
+		//! btree string parser
+		QString getBtreeString( const QByteArray& btidx, unsigned long * offset, unsigned short * spaceLeft ) const;
+		
 		/*!
 		 * Recursively parse and fill binary TOC
 		 */

@@ -1514,9 +1514,9 @@ bool LCHMFileImpl::parseBinaryIndex( QVector< LCHMParsedEntry > * entries ) cons
 }
 
 
-inline QString getBtreeString( const QByteArray& btidx, unsigned long * offset, unsigned short * spaceLeft )
+QString LCHMFileImpl::getBtreeString( const QByteArray& btidx, unsigned long * offset, unsigned short * spaceLeft ) const
 {
-	QString string;
+	QByteArray string;
 	unsigned short tmp;
 	
 	while ( 1 )
@@ -1532,10 +1532,10 @@ inline QString getBtreeString( const QByteArray& btidx, unsigned long * offset, 
 		if ( tmp == 0x00 )
 			break;
 
-		string.append( QChar( tmp ) );
+		string.push_back( tmp );
 	}
 
-	return string.trimmed();
+	return encodeWithCurrentCodec( string ).trimmed();
 }
 
 

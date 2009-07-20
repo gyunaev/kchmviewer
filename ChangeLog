@@ -7,6 +7,7 @@
     - Fixed incorrest index string encoding for non-English strings.
     - Fixed text size auto-increase each time the file is loaded for WebKit browser.
     - Fixed Windows mingw build issues.
+    - Fixed Windows command line parser being unable to open the file with non-English characters.
 
 2008-12-01 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0 (release);

@@ -137,7 +137,7 @@ bool KCHMConfig::load()
 				m_advExternalEditorPath = value;
 			else if ( key == "advLayoutDirectionRL" )
 				m_advLayoutDirectionRL = value.toInt() ? true : false;
-			else if ( key == "advAutodetectEncoding" )
+			else if ( key == "advAutoDetectEncoding" )
 				m_advAutodetectEncoding = value.toInt() ? true : false;
 			else if ( key == "useSearchEngine" || key == "QtBrowserPath" )
 				// Do nothing; not used anymore
@@ -192,7 +192,7 @@ bool KCHMConfig::save( )
 	stream << "advUseInternalEditor=" << m_advUseInternalEditor << "\n";
 	stream << "advExternalEditorPath=" << m_advExternalEditorPath << "\n";
 	stream << "advLayoutDirectionRL=" << m_advLayoutDirectionRL << "\n";
-	stream << "advAutodetectEncoding=" << m_advAutodetectEncoding << "\n";
+	stream << "advAutoDetectEncoding=" << m_advAutodetectEncoding << "\n";
 	
 	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
 	

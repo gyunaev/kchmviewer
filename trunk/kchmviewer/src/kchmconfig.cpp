@@ -62,7 +62,7 @@ KCHMConfig::KCHMConfig()
 	
 	m_advUseInternalEditor = true;
 	m_advLayoutDirectionRL = false;
-	m_advAutodetectEncoding = true;
+	m_advAutodetectEncoding = false;
 	m_advExternalEditorPath = "/usr/bin/kate";
 	
 	m_lastOpenedDir = "";

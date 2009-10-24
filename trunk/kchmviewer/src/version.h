@@ -5,7 +5,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
+ *   the Free Software Foundation; either version 3 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
@@ -23,6 +23,6 @@
 #define INCLUDE_VERSION_H
 
 #define APP_NAME		"kchmviewer"
-#define APP_VERSION		"4.1"
+#define APP_VERSION		"4.2"
 
 #endif /* INCLUDE_VERSION_H */

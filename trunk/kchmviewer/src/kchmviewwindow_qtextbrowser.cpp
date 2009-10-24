@@ -317,11 +317,25 @@ void KCHMViewWindow_QTextBrowser::contextMenuEvent(QContextMenuEvent * e)
 		m->addAction( i18n("Open Link in a new tab\tShift+LMB"), ::mainWindow, SLOT( onOpenPageInNewTab() ) );
 		m->addAction( i18n("Open Link in a new background tab\tCtrl+LMB"), ::mainWindow, SLOT( onOpenPageInNewBackgroundTab() ) );
 		m->addSeparator();
-		m_newTabLinkKeeper = makeURLabsolute( link, false );
+		setTabKeeper( link );
 	}
 	
 	::mainWindow->setupPopupMenu( m );
 	m->exec( e->globalPos() );
 	delete m;
 	
+}
+
+void KCHMViewWindow_QTextBrowser::mouseReleaseEvent ( QMouseEvent * event )
+{
+	if ( event->button() == Qt::MidButton )
+	{
+		QString link = anchorAt( event->pos() );
+
+		if ( !link.isEmpty() )
+		{
+			setTabKeeper( link );
+			::mainWindow->onOpenPageInNewBackgroundTab();
+		}
+	}
 }

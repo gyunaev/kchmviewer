@@ -23,9 +23,13 @@
 #ifndef INCLUDE_LIBCHMFILEIMPL_H
 #define INCLUDE_LIBCHMFILEIMPL_H
 
-#include <sys/types.h>
+#if defined (USE_CHMLIB_WIN32)
+	#include "chmlib-win32/chm_lib.h"
+#else
+	#include "chm_lib.h"
+#endif
 
-#include "chm_lib.h"
+#include <sys/types.h>
 
 #include "libchmfile.h"
 #include "libchmtocimage.h"
@@ -38,7 +42,7 @@ class LCHMSearchProgressResult
 {
 	public:
 		inline LCHMSearchProgressResult() {}
-		inline LCHMSearchProgressResult( u_int32_t t, u_int32_t u ) : titleoff(t),urloff(u) {}
+		inline LCHMSearchProgressResult( unsigned int t, unsigned int u ) : titleoff(t),urloff(u) {}
 		
 		QVector<u_int64_t>		offsets;
 		u_int32_t				titleoff;

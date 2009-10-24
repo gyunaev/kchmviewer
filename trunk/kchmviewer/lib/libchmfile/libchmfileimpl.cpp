@@ -30,7 +30,12 @@
 #include <QVector>
 #include <QTextStream>
 
-#include "chm_lib.h"
+#if defined (USE_CHMLIB_WIN32)
+	#include "chmlib-win32/chm_lib.h"
+#else
+	#include "chm_lib.h"
+#endif
+
 #include "bitfiddle.h"
 #include "libchmfile.h"
 #include "libchmurlfactory.h"
@@ -87,7 +92,12 @@ bool LCHMFileImpl::loadFile( const QString & archiveName )
 	if( m_chmFile )
 		closeAll();
 
+#if defined (WIN32)
+	//&& defined (HAS_CHMOPENW)
+	m_chmFile = chm_openW( filename.utf16() );
+#else
 	m_chmFile = chm_open( QFile::encodeName(filename) );
+#endif
 	
 	if ( m_chmFile == NULL )
 		return false;

@@ -24,3 +24,7 @@ TEMPLATE = lib
 INCLUDEPATH += ../../src
 CONFIG -= release
 
+win32-mingw-g++: {
+	SOURCES += chmlib-win32/chm_lib.c chmlib-win32/lzx.c
+	DEFINES += USE_CHMLIB_WIN32
+}

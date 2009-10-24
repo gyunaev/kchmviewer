@@ -317,7 +317,7 @@ void KCHMViewWindow_QTextBrowser::contextMenuEvent(QContextMenuEvent * e)
 		m->addAction( i18n("Open Link in a new tab\tShift+LMB"), ::mainWindow, SLOT( onOpenPageInNewTab() ) );
 		m->addAction( i18n("Open Link in a new background tab\tCtrl+LMB"), ::mainWindow, SLOT( onOpenPageInNewBackgroundTab() ) );
 		m->addSeparator();
-		m_newTabLinkKeeper = link;
+		m_newTabLinkKeeper = makeURLabsolute( link, false );
 	}
 	
 	::mainWindow->setupPopupMenu( m );

@@ -30,7 +30,7 @@
 #include <QVector>
 #include <QTextStream>
 
-#if defined (USE_CHMLIB_WIN32)
+#if defined (USE_PATCHED_CHMLIB)
 	#include "chmlib-win32/chm_lib.h"
 #else
 	#include "chm_lib.h"
@@ -92,9 +92,8 @@ bool LCHMFileImpl::loadFile( const QString & archiveName )
 	if( m_chmFile )
 		closeAll();
 
-#if defined (WIN32)
-	//&& defined (HAS_CHMOPENW)
-	m_chmFile = chm_openW( filename.utf16() );
+#if defined (USE_PATCHED_CHMLIB)
+	m_chmFile = chm_open( (WCHAR*) filename.utf16() );
 #else
 	m_chmFile = chm_open( QFile::encodeName(filename) );
 #endif
@@ -484,7 +483,7 @@ bool LCHMFileImpl::searchWord (const QString& text,
 		free_space = UINT16ARRAY(cursor16);
 
 		i = sizeof(unsigned int) + sizeof(unsigned short) + sizeof(unsigned short);
-		u_int64_t wlc_count, wlc_size;
+		quint64 wlc_count, wlc_size;
 		unsigned int wlc_offset;
 
 		while (i < node_len - free_space)
@@ -581,9 +580,9 @@ size_t LCHMFileImpl::RetrieveObject(const chmUnitInfo *ui, unsigned char *buffer
 
 
 inline unsigned int LCHMFileImpl::GetLeafNodeOffset(const QString& text,
-											 unsigned int initialOffset,
-			unsigned int buffSize,
-   unsigned short treeDepth)
+													unsigned int initialOffset,
+													unsigned int buffSize,
+													unsigned short treeDepth)
 {
 	unsigned int test_offset = 0;
 	unsigned char* cursor16, *cursor32;
@@ -639,7 +638,7 @@ inline unsigned int LCHMFileImpl::GetLeafNodeOffset(const QString& text,
 }
 
 
-inline bool LCHMFileImpl::ProcessWLC (u_int64_t wlc_count, u_int64_t wlc_size,
+inline bool LCHMFileImpl::ProcessWLC (quint64 wlc_count, quint64 wlc_size,
 								    unsigned int wlc_offset, unsigned char ds,
 		  							unsigned char dr, unsigned char cs,
 									unsigned char cr, unsigned char ls,
@@ -648,7 +647,7 @@ inline bool LCHMFileImpl::ProcessWLC (u_int64_t wlc_count, u_int64_t wlc_size,
  									bool phrase_search)
 {
 	int wlc_bit = 7;
-	u_int64_t index = 0, count;
+	quint64 index = 0, count;
 	size_t length, off = 0;
 	QVector<unsigned char> buffer (wlc_size);
 	unsigned char *cursor32;
@@ -659,7 +658,7 @@ inline bool LCHMFileImpl::ProcessWLC (u_int64_t wlc_count, u_int64_t wlc_size,
 	if ( RetrieveObject (&m_chmFIftiMain, buffer.data(), wlc_offset, wlc_size) == 0 )
 		return false;
 
-	for ( u_int64_t i = 0; i < wlc_count; ++i )
+	for ( quint64 i = 0; i < wlc_count; ++i )
 	{
 		if ( wlc_bit != 7 )
 		{
@@ -693,9 +692,9 @@ inline bool LCHMFileImpl::ProcessWLC (u_int64_t wlc_count, u_int64_t wlc_size,
 		if ( phrase_search )
 			progres.offsets.reserve (count);
 		
-		for (u_int64_t j = 0; j < count; ++j)
+		for (quint64 j = 0; j < count; ++j)
 		{
-			u_int64_t lcode = sr_int (buffer.data() + off, &wlc_bit, ls, lr, length);
+			quint64 lcode = sr_int (buffer.data() + off, &wlc_bit, ls, lr, length);
 			off += length;
 			
 			if ( phrase_search )

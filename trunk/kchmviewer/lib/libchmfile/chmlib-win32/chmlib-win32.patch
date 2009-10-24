@@ -1,0 +1,42 @@
+diff -ur chmlib-0.40/src/chm_lib.c chmlib-0.40.mod/src/chm_lib.c
+--- chmlib-0.40/src/chm_lib.c	2009-05-23 07:43:31.000000000 -0700
++++ chmlib-0.40.mod/src/chm_lib.c	2009-10-24 15:50:08.000000000 -0700
+@@ -750,6 +750,8 @@
+ #ifdef PPC_BSTR
+ /* RWE 6/12/2003 */
+ struct chmFile *chm_open(BSTR filename)
++#elif defined (WIN32)
++struct chmFile* chm_open(const WCHAR *filename)
+ #else
+ struct chmFile *chm_open(const char *filename)
+ #endif
+@@ -791,7 +793,7 @@
+         return NULL;
+     }
+ #else
+-    if ((newHandle->fd=CreateFileA(filename,
++    if ((newHandle->fd=CreateFileW(filename,
+                                    GENERIC_READ,
+                                    0,
+                                    NULL,
+Only in chmlib-0.40.mod/src: chm_lib.c~
+diff -ur chmlib-0.40/src/chm_lib.h chmlib-0.40.mod/src/chm_lib.h
+--- chmlib-0.40/src/chm_lib.h	2009-05-23 07:43:31.000000000 -0700
++++ chmlib-0.40.mod/src/chm_lib.h	2009-10-24 15:49:48.000000000 -0700
+@@ -52,6 +52,7 @@
+ #endif
+ 
+ #ifdef WIN32
++#include <windows.h>
+ #ifdef __MINGW32__
+ #define __int64 long long
+ #endif
+@@ -86,6 +87,8 @@
+ #ifdef PPC_BSTR
+ /* RWE 6/12/2003 */
+ struct chmFile* chm_open(BSTR filename);
++#elif defined (WIN32)
++struct chmFile* chm_open(const WCHAR *filename);
+ #else
+ struct chmFile* chm_open(const char *filename);
+ #endif

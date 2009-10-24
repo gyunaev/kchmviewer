@@ -47,9 +47,9 @@ inline unsigned int get_int32_le( void *addr)
 }
 
 
-inline u_int64_t be_encint(unsigned char* buffer, size_t& length)
+inline quint64 be_encint(unsigned char* buffer, size_t& length)
 {
-	u_int64_t result = 0;
+	quint64 result = 0;
 	int shift=0;
 	length = 0;
 
@@ -95,17 +95,17 @@ inline int ffus(unsigned char* byte, int* bit, size_t& length)
 }
 
 
-inline u_int64_t sr_int(unsigned char* byte, int* bit,
+inline quint64 sr_int(unsigned char* byte, int* bit,
 			unsigned char s, unsigned char r, size_t& length)
 {
-	u_int64_t ret; 
+	quint64 ret;
 	unsigned char mask;
 	int n, n_bits, num_bits, base, count;
 	length = 0;
 	size_t fflen;
 
 	if(!bit || *bit > 7 || s != 2)
-		return ~(u_int64_t)0;
+		return ~(quint64)0;
 	ret = 0;
 
 	count = ffus(byte, bit, fflen);
@@ -150,7 +150,7 @@ inline u_int64_t sr_int(unsigned char* byte, int* bit,
 
 		mask <<= base;
 		ret = (ret << (num_bits+1)) | 
-			(u_int64_t)((*byte & mask) >> base);
+			(quint64)((*byte & mask) >> base);
 		
 		if( n > *bit ){
 			++byte;
@@ -164,7 +164,7 @@ inline u_int64_t sr_int(unsigned char* byte, int* bit,
 	}
 
 	if(count) 
-		ret |= (u_int64_t)1 << n_bits;
+		ret |= (quint64)1 << n_bits;
 
 	return ret;
 }

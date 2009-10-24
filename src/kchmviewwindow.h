@@ -118,6 +118,7 @@ class KCHMViewWindow
 		QMenu * 		getContextMenu( const QString& link, QWidget * parent );
 		QMenu * 		createStandardContextMenu( QWidget * parent );
 		
+	private:
 		//! History
 		class KCHMUrlHistory
 		{
@@ -140,17 +141,17 @@ class KCHMViewWindow
 		QMenu 				*	m_contextMenu;
 		QMenu 				*	m_contextMenuLink;
 		QList<KCHMUrlHistory>	m_history;
-			
-		// This member keeps a "open new tab" link between getContextMenu()
-		// call and appropriate slot call
-		QString					m_newTabLinkKeeper;
-		
+
 		QString 				m_openedPage;
 		QString 				m_lastOpenedPage;
 		QString					m_base_url;
 	
 		// The parent tab browser
 		QTabWidget			*	m_parentTabWidget;
+
+		// This member keeps a "open new tab" link between getContextMenu()
+		// call and appropriate slot call
+		QString					m_newTabLinkKeeper;
 };
 
 #endif

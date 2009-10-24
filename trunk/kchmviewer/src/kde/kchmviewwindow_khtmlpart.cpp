@@ -76,7 +76,7 @@ void KCHMViewWindow_KHTMLPart::setZoomFactor( int zoom )
 	m_zoomfactor = zoom;
 	
 	// Default ZoomFactor is 100, any increase or decrease should modify this value.
-	KHTMLPart::setZoomFactor ( 100 + (m_zoomfactor * 10) );
+	KHTMLPart::setFontScaleFactor ( 100 + (m_zoomfactor * 10) );
 }
 
 void KCHMViewWindow_KHTMLPart::invalidate( )

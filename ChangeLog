@@ -1,3 +1,7 @@
+2009-24-10 tim <gyunaev@ulduzsoft.com>
+    - Version changed to 4.2
+    - Fixed font size change on KHTMLPart (thanks to Jure Repinc)
+
 2009-19-07 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.1
     - Updated Dutch translation (thanks to Sander Pientka)
@@ -8,6 +12,7 @@
     - Fixed text size auto-increase each time the file is loaded for WebKit browser.
     - Fixed Windows mingw build issues.
     - Fixed Windows command line parser being unable to open the file with non-English characters.
+    - License changed from GPLv2 to GPLv3.
 
 2008-12-01 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.0 (release);

@@ -69,6 +69,8 @@
 		File kchmviewer.exe
 		File QtGui4.dll  
 		File QtCore4.dll
+		File QtNetwork4.dll
+		File QtWebKit4.dll
 		File mingwm10.dll
 		File kchmviewer.exe.manifest
 		
@@ -96,6 +98,8 @@
 		Delete "$INSTDIR\kchmviewer.exe"
 		Delete "$INSTDIR\QtGui4.dll"
 		Delete "$INSTDIR\QtCore4.dll"
+		Delete "$INSTDIR\QtNetwork4.dll"
+		Delete "$INSTDIR\QtWebKit4.dll"
 
 		Delete "$INSTDIR\Uninstall.exe"
 

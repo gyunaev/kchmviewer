@@ -36,7 +36,7 @@ class KCHMViewWindow_KHTMLPart : public KHTMLPart, public KCHMViewWindow
 {
 	Q_OBJECT
 	public:
-		KCHMViewWindow_KHTMLPart( QTabWidget * parent );
+		KCHMViewWindow_KHTMLPart( KCHMViewWindowTabs * parent );
 		~KCHMViewWindow_KHTMLPart();
 	
 		//! Open a page from current chm archive

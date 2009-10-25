@@ -35,21 +35,44 @@
 #endif
 
 
+
+// A small overriden class to handle a middle click
+KCHMViewWindowTabs::KCHMViewWindowTabs( QWidget * parent )
+			: QTabWidget( parent )
+{
+}
+
+KCHMViewWindowTabs::~KCHMViewWindowTabs()
+{
+}
+
+void KCHMViewWindowTabs::mouseReleaseEvent ( QMouseEvent * event )
+{
+	if ( event->button() == Qt::MidButton)
+	{
+		int tab = tabBar()->tabAt( event->pos() );
+
+		if ( tab != -1 )
+			emit mouseMiddleClickTab( tab );
+	}
+}
+
+
+
 KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	: QWidget( parent ), Ui::TabbedBrowser()
 {
 	// UIC
 	setupUi( this );
 	
-	// Remove the UIC-generated tab if it's there.
-	// Do it right here before the signals are connected, since after Qt 4.4.0 it triggers 
-	// the currentChanged signal.
-	if ( tabWidget->count() > 0 )
-		tabWidget->removeTab ( 0 );
-	
+	// Create the tab widget
+	m_tabWidget = new KCHMViewWindowTabs( this );
+	verticalLayout->insertWidget( 0, m_tabWidget, 10 );
+
 	// on current tab changed
-	connect( tabWidget, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
-	
+	connect( m_tabWidget, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
+	connect( m_tabWidget, SIGNAL( mouseMiddleClickTab( int ) ), this, SLOT( onCloseWindow(int) ) );
+
 	// Create a close button
 	m_closeButton = new QToolButton( this );
 	m_closeButton->setCursor( Qt::ArrowCursor );
@@ -60,7 +83,7 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( onCloseCurrentWindow() ) );
 	
 	// Put it there
-	tabWidget->setCornerWidget( m_closeButton, Qt::TopRightCorner );
+	m_tabWidget->setCornerWidget( m_closeButton, Qt::TopRightCorner );
 	
 	// Create a "new tab" button
 	QToolButton * newButton = new QToolButton( this );
@@ -71,7 +94,7 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	connect( newButton, SIGNAL( clicked() ), this, SLOT( openNewTab() ) );
 	
 	// Put it there
-	tabWidget->setCornerWidget( newButton, Qt::TopLeftCorner );
+	m_tabWidget->setCornerWidget( newButton, Qt::TopLeftCorner );
 	
 	// Hide the search frame
 	frameFind->setVisible( false );
@@ -108,7 +131,7 @@ void KCHMViewWindowMgr::invalidate()
 
 KCHMViewWindow * KCHMViewWindowMgr::current()
 {
-	TabData * tab = findTab( tabWidget->currentWidget() );
+	TabData * tab = findTab( m_tabWidget->currentWidget() );
 	
 	if ( !tab )
 		abort();
@@ -123,18 +146,18 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 	switch ( appConfig.m_usedBrowser )
 	{
 		default:
-			viewvnd = new KCHMViewWindow_QTextBrowser( tabWidget );
+			viewvnd = new KCHMViewWindow_QTextBrowser( m_tabWidget );
 			break;
 
 #if defined (USE_KDE)			
 		case KCHMConfig::BROWSER_KHTMLPART:
-			viewvnd = new KCHMViewWindow_KHTMLPart( tabWidget );
+			viewvnd = new KCHMViewWindow_KHTMLPart( m_tabWidget );
 			break;
 #endif			
 			
 #if defined (QT_WEBKIT_LIB)
 		case KCHMConfig::BROWSER_QTWEBKIT:
-			viewvnd = new KCHMViewWindow_QtWebKit( tabWidget );
+			viewvnd = new KCHMViewWindow_QtWebKit( m_tabWidget );
 			break;
 #endif			
 	}
@@ -153,12 +176,12 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 	         SLOT( activateWindow() ) );
 	
 	m_Windows.push_back( tabdata );
-	tabWidget->addTab( tabdata.widget, "" );	
-	Q_ASSERT( m_Windows.size() == tabWidget->count() );
+	m_tabWidget->addTab( tabdata.widget, "" );
+	Q_ASSERT( m_Windows.size() == m_tabWidget->count() );
 		
 	// Set active if it is the first tab
 	if ( set_active || m_Windows.size() == 1 )
-		tabWidget->setCurrentWidget( tabdata.widget );
+		m_tabWidget->setCurrentWidget( tabdata.widget );
 	
 	// Handle clicking on link in browser window
 	connect( viewvnd->getQObject(), 
@@ -195,7 +218,7 @@ void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 		if ( title.length() > 25 )
 			title = title.left( 22 ) + "...";
 	
-		tabWidget->setTabText( tabWidget->indexOf( window->getQWidget() ), title );
+		m_tabWidget->setTabText( m_tabWidget->indexOf( window->getQWidget() ), title );
 		tab->action->setText( title );
 		
 		updateCloseButtons();
@@ -208,8 +231,21 @@ void KCHMViewWindowMgr::onCloseCurrentWindow( )
 	if ( m_Windows.size() == 1 )
 		return;
 			
-	TabData * tab = findTab( tabWidget->currentWidget() );
+	TabData * tab = findTab( m_tabWidget->currentWidget() );
 	closeWindow( tab->widget );
+}
+
+
+void KCHMViewWindowMgr::onCloseWindow( int num )
+{
+	// Do not allow to close the last window
+	if ( m_Windows.size() == 1 )
+		return;
+
+	TabData * tab = findTab( m_tabWidget->widget( num ));
+
+	if ( tab )
+		closeWindow( tab->widget );
 }
 
 void KCHMViewWindowMgr::closeWindow( QWidget * widget )
@@ -225,7 +261,7 @@ void KCHMViewWindowMgr::closeWindow( QWidget * widget )
 
 	m_menuWindow->removeAction( it->action );
 	
-	tabWidget->removeTab( tabWidget->indexOf( it->widget ) );
+	m_tabWidget->removeTab( m_tabWidget->indexOf( it->widget ) );
 	delete it->window;
 	delete it->action;
 	
@@ -258,9 +294,9 @@ void KCHMViewWindowMgr::saveSettings( KCHMSettings::viewindow_saved_settings_t &
 {
 	settings.clear();
 	
-	for ( int i = 0; i < tabWidget->count(); i++ )
+	for ( int i = 0; i < m_tabWidget->count(); i++ )
 	{
-		QWidget * p = tabWidget->widget( i );
+		QWidget * p = m_tabWidget->widget( i );
 		TabData * tab = findTab( p );
 			
 		if ( !tab )
@@ -311,7 +347,7 @@ void KCHMViewWindowMgr::activateWindow()
 			continue;
 		
 		QWidget *widget = it->widget;
-		tabWidget->setCurrentWidget(widget);
+		m_tabWidget->setCurrentWidget(widget);
 		break;
 	}
 }
@@ -327,12 +363,12 @@ KCHMViewWindowMgr::TabData * KCHMViewWindowMgr::findTab(QWidget * widget)
 
 void KCHMViewWindowMgr::setCurrentPage(int index)
 {
-	tabWidget->setCurrentIndex( index );
+	m_tabWidget->setCurrentIndex( index );
 }
 
 int KCHMViewWindowMgr::currentPageIndex() const
 {
-	return tabWidget->currentIndex();
+	return m_tabWidget->currentIndex();
 }
 
 

@@ -29,7 +29,7 @@
 #include "kchmviewwindow_qtextbrowser.h"
 
 
-KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( QTabWidget * parent )
+KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( KCHMViewWindowTabs * parent )
 	: QTextBrowser ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 0;

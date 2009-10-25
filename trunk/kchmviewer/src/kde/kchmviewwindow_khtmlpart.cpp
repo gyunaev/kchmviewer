@@ -35,7 +35,7 @@ QWidget * KCHMViewWindow_KHTMLPart::getQWidget()
 	 return view();
 }
 
-KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( QTabWidget * parent )
+KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( KCHMViewWindowTabs * parent )
 	: KHTMLPart ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 0;

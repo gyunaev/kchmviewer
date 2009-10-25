@@ -171,7 +171,7 @@ class KCHMNetworkAccessManager : public QNetworkAccessManager
 //
 // Webkit browser
 //
-KCHMViewWindow_QtWebKit::KCHMViewWindow_QtWebKit( QTabWidget * parent )
+KCHMViewWindow_QtWebKit::KCHMViewWindow_QtWebKit( KCHMViewWindowTabs * parent )
 	: QWebView ( parent ), KCHMViewWindow ( parent )
 {
 	m_zoomfactor = 1;

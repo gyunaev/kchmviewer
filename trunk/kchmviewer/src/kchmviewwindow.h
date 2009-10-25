@@ -25,6 +25,7 @@
 
 #include "kde-qt.h"
 
+class KCHMViewWindowTabs;
 
 class KCHMViewWindow
 {
@@ -35,7 +36,7 @@ class KCHMViewWindow
 			SEARCH_WHOLEWORDS = 0x20
 		};
 	
-		KCHMViewWindow ( QTabWidget * parent );
+		KCHMViewWindow ( KCHMViewWindowTabs * parent );
 		virtual ~KCHMViewWindow();
 	
 		//! Open a page from current chm archive
@@ -147,7 +148,7 @@ class KCHMViewWindow
 		QString					m_base_url;
 	
 		// The parent tab browser
-		QTabWidget			*	m_parentTabWidget;
+		KCHMViewWindowTabs	*	m_parentTabWidget;
 
 		// This member keeps a "open new tab" link between getContextMenu()
 		// call and appropriate slot call

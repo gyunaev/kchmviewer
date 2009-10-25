@@ -27,6 +27,7 @@
 #include "kde-qt.h"
 #include "kchmmainwindow.h"
 #include "kchmconfig.h"
+#include "kchmviewwindowmgr.h"
 #include "kchmviewwindow_khtmlpart.h"
 
 

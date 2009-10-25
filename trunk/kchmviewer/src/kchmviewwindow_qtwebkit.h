@@ -94,6 +94,8 @@ class KCHMViewWindow_QtWebKit : public QWebView, public KCHMViewWindow
 		// Overloaded to provide custom context menu
 		void 			contextMenuEvent( QContextMenuEvent *e );
 		
+		void			mouseReleaseEvent ( QMouseEvent * event );
+
 		void			find( bool forward, bool backward );
 		
 		QMenu * 		createPopupMenu ( const QPoint & pos );

@@ -336,6 +336,9 @@ void KCHMViewWindow_QTextBrowser::mouseReleaseEvent ( QMouseEvent * event )
 		{
 			setTabKeeper( link );
 			::mainWindow->onOpenPageInNewBackgroundTab();
+			return;
 		}
 	}
+
+	QTextBrowser::mouseReleaseEvent( event );
 }

@@ -393,5 +393,23 @@ QString KCHMViewWindow_QtWebKit::anchorAt(const QPoint & pos)
 	return  res.linkUrl().path();
 }
 
+
+void KCHMViewWindow_QtWebKit::mouseReleaseEvent ( QMouseEvent * event )
+{
+	if ( event->button() == Qt::MidButton )
+	{
+		QString link = anchorAt( event->pos() );
+
+		if ( !link.isEmpty() )
+		{
+			setTabKeeper( link );
+			::mainWindow->onOpenPageInNewBackgroundTab();
+			return;
+		}
+	}
+
+	QWebView::mouseReleaseEvent( event );
+}
+
 #endif // #if defined (QT_WEBKIT_LIB)
 

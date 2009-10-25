@@ -3,7 +3,7 @@
     - Fixed font size change on KHTMLPart (thanks to Jure Repinc)
     - Fixed Windows file opener being unable to open the file with non-English characters.
     - Fixed "Open in new tab" for QTextBrowser opening an empty page.
-    - Middle button in QTextBrowser now opens the link in new tab in background.
+    - Middle button in QTextBrowser and WebKit now opens the link in new tab in background.
     - Middle button now closes opened tabs in the tab bar.
 
 2009-19-07 tim <gyunaev@ulduzsoft.com>

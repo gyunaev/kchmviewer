@@ -34,7 +34,7 @@
 #include "kchmviewwindowmgr.h"
 
 
-KCHMViewWindow::KCHMViewWindow( QTabWidget * parent )
+KCHMViewWindow::KCHMViewWindow( KCHMViewWindowTabs * parent )
 {
 	invalidate();
 	m_contextMenu = 0;

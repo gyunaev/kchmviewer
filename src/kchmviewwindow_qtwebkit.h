@@ -32,7 +32,7 @@ class KCHMViewWindow_QtWebKit : public QWebView, public KCHMViewWindow
 {
 	Q_OBJECT
 	public:
-		KCHMViewWindow_QtWebKit( QTabWidget * parent );
+		KCHMViewWindow_QtWebKit( KCHMViewWindowTabs * parent );
 		~KCHMViewWindow_QtWebKit();
 
 		//! Open a page from current chm archive

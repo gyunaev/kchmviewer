@@ -26,6 +26,23 @@
 #include "kchmsettings.h"
 #include "ui_window_browser.h"
 
+// A small overriden class to handle a middle click
+class KCHMViewWindowTabs : public QTabWidget
+{
+	Q_OBJECT
+
+	public:
+		KCHMViewWindowTabs( QWidget * parent );
+
+		virtual ~KCHMViewWindowTabs();
+
+	signals:
+		void mouseMiddleClickTab( int tab );
+
+	protected:
+		void mouseReleaseEvent ( QMouseEvent * event );
+};
+
 
 class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 {
@@ -65,6 +82,7 @@ class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 	
 	public slots:
 		void	onCloseCurrentWindow();
+		void	onCloseWindow( int num );
 		void	onActivateFind();
 		void	onFindNext();
 		void	onFindPrevious();
@@ -104,6 +122,8 @@ class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		// linked permanently - if a middle window is deleted, all the following
 		// actions will be relinked and replaced.
 		QList< QAction* >		m_actions;
+
+		KCHMViewWindowTabs *	m_tabWidget;
 };
 
 #endif /* INCLUDE_KCHMVIEWWINDOWMGR_H */

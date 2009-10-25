@@ -31,7 +31,7 @@ class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
 {
 	Q_OBJECT
 	public:
-		KCHMViewWindow_QTextBrowser( QTabWidget * parent );
+		KCHMViewWindow_QTextBrowser( KCHMViewWindowTabs * parent );
 		~KCHMViewWindow_QTextBrowser();
 
 		//! Open a page from current chm archive

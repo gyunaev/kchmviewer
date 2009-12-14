@@ -27,12 +27,13 @@
 #include <QNetworkReply> 
 #include <QNetworkRequest> 
 
-#include "kde-qt.h"
 #include "libchmurlfactory.h"
-#include "kchmconfig.h"
-#include "kchmmainwindow.h"
-#include "kchmviewwindowmgr.h"
-#include "kchmviewwindow_qtwebkit.h"
+
+#include "kde-qt.h"
+#include "config.h"
+#include "mainwindow.h"
+#include "viewwindowmgr.h"
+#include "viewwindow_qtwebkit.h"
 
 
 //

@@ -16,38 +16,47 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
+#ifndef KCHMSEARCHWINDOW_H
+#define KCHMSEARCHWINDOW_H
+
 #include "kde-qt.h"
+#include "settings.h"
+#include "ui_tab_search.h"
 
-#include "kchmdialogchooseurlfromlist.h"
-#include "kchmtreeviewitem.h"
+#include "libchmsearchengine.h"
 
 
-KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList( QWidget* parent )
-	: QDialog( parent ), Ui::DialogTopicSelector()
+class KCHMSearchWindow : public QWidget, public Ui::TabSearch
 {
-	setupUi( this );
+	Q_OBJECT
+	public:
+		KCHMSearchWindow ( QWidget * parent = 0 );
 	
-	// List doubleclick
-	connect( list, 
-			 SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ),
-			 this,
-	         SLOT( onDoubleClicked( QListWidgetItem * ) ) );
-}
-
-void KCHMDialogChooseUrlFromList::onDoubleClicked( QListWidgetItem * item )
-{
-	if ( item )
-		accept();
-}
-
-
-QString KCHMDialogChooseUrlFromList::getSelectedItemUrl( const QStringList & urls, const QStringList & titles )
-{
-	for ( int i = 0; i < urls.size(); i++ )
-		list->addItem( titles[i] );
+		void	invalidate();
+		void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
+		void	saveSettings( KCHMSettings::search_saved_settings_t& settings );
+		void	execSearchQueryInGui( const QString& query );
+		bool	searchQuery( const QString& query, QStringList * results );
+		
+	private slots:
+		void	onContextMenuRequested ( const QPoint &point );
+		void	onHelpClicked( const QString & );
+		void 	onReturnPressed ();
+		void	onDoubleClicked( QTreeWidgetItem * item, int );
+		
+		// For index generation
+		void	onProgressStep( int value, const QString& stepName );
 	
-	if ( exec() == QDialog::Accepted && list->currentRow() != -1 )
-		return urls[ list->currentRow() ];
-	
-	return QString::null;
-}
+	private:
+		bool	initSearchEngine();
+		
+	private:
+		QMenu			* 	m_contextMenu;
+		LCHMSearchEngine*	m_searchEngine;
+		bool				m_searchEngineInitDone;
+		
+		// For index generation
+		QProgressDialog *	m_genIndexProgress;
+};
+
+#endif

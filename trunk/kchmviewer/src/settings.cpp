@@ -21,8 +21,8 @@
 #include <QDataStream>
 #include <QDateTime>
  
-#include "kchmsettings.h"
-#include "kchmconfig.h"
+#include "settings.h"
+#include "config.h"
 
 static qint32 SETTINGS_MAGIC = 0xD8AB4E76;
 static qint32 SETTINGS_VERSION = 4;

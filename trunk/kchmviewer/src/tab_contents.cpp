@@ -20,9 +20,9 @@
 
 #include "libchmfile.h"
 
-#include "kchmcontentswindow.h"
-#include "kchmmainwindow.h"
-#include "kchmtreeviewitem.h"
+#include "mainwindow.h"
+#include "treeviewitem.h"
+#include "tab_contents.h"
 
 
 KCHMContentsWindow::KCHMContentsWindow( QWidget *parent )

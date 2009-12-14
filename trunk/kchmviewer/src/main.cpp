@@ -18,10 +18,10 @@
 
 #include "kde-qt.h"
 
-#include "kchmmainwindow.h"
-#include "kchmconfig.h"
-#include "kchmkeyeventfilter.h"
-#include "kchmdbusiface.h"
+#include "mainwindow.h"
+#include "config.h"
+#include "keyeventfilter.h"
+#include "dbus_interface.h"
 #include "version.h"
 
 #if !defined (WIN32)

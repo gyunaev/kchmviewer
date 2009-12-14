@@ -17,8 +17,8 @@
  **************************************************************************/
 
 #include "kde-qt.h"
-#include "kchmconfig.h"
-#include "kchmsetupdialog.h"
+#include "config.h"
+#include "dialog_setup.h"
 #include "version.h"
 
 

@@ -19,9 +19,9 @@
 #include <QTextStream>
 
 #include "kde-qt.h"
-#include "kchmconfig.h"
-#include "kchmsettings.h"
-#include "kchmmainwindow.h"
+#include "config.h"
+#include "settings.h"
+#include "mainwindow.h"
 
 
 KCHMConfig appConfig;

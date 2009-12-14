@@ -18,9 +18,9 @@
 
 #include <QtDBus/QtDBus>
 
-#include "kchmdbusiface.h"
-#include "kchmmainwindow.h"
-#include "kchmsearchwindow.h"
+#include "dbus_interface.h"
+#include "mainwindow.h"
+#include "tab_search.h"
 
 
 KCHMDBusIface::KCHMDBusIface( QObject *parent )

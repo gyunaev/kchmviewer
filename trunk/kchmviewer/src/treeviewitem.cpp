@@ -16,13 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#include <qstringlist.h>
-#include <qstyle.h>
+#include <QStringList>
 #include <QPixmap>
 
-#include "kchmtreeviewitem.h"
-#include "kchmmainwindow.h"
-#include "kchmdialogchooseurlfromlist.h"
+#include "treeviewitem.h"
+#include "mainwindow.h"
+#include "dialog_chooseurlfromlist.h"
 
 
 KCHMIndTocItem::KCHMIndTocItem( QTreeWidgetItem * parent, QTreeWidgetItem * after, const QString& name, const QString& aurl, int image) 

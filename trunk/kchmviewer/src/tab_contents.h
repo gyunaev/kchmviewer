@@ -16,47 +16,39 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMSEARCHWINDOW_H
-#define KCHMSEARCHWINDOW_H
+#ifndef INCLUDE_KCHMCONTENTSWINDOW_H
+#define INCLUDE_KCHMCONTENTSWINDOW_H
 
 #include "kde-qt.h"
-#include "kchmsettings.h"
-#include "ui_tab_search.h"
-
-#include "libchmsearchengine.h"
+#include "treeviewitem.h"
+#include "ui_tab_contents.h"
 
 
-class KCHMSearchWindow : public QWidget, public Ui::TabSearch
+class KCHMContentsWindow : public QWidget, public Ui::TabContents
 {
 	Q_OBJECT
 	public:
-		KCHMSearchWindow ( QWidget * parent = 0 );
-	
-		void	invalidate();
-		void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
-		void	saveSettings( KCHMSettings::search_saved_settings_t& settings );
-		void	execSearchQueryInGui( const QString& query );
-		bool	searchQuery( const QString& query, QStringList * results );
+    	KCHMContentsWindow( QWidget *parent = 0 );
+		~KCHMContentsWindow();
 		
-	private slots:
+		void	refillTableOfContents();
+		void	showItem( KCHMIndTocItem * item );
+		void	search( const QString& text );
+		
+		KCHMIndTocItem *	getTreeItem( const QString& url );
+		
+	public slots:
 		void	onContextMenuRequested ( const QPoint &point );
-		void	onHelpClicked( const QString & );
-		void 	onReturnPressed ();
-		void	onDoubleClicked( QTreeWidgetItem * item, int );
-		
-		// For index generation
-		void	onProgressStep( int value, const QString& stepName );
+		void	onClicked ( QTreeWidgetItem * item, int column );
 	
 	private:
-		bool	initSearchEngine();
-		
+		virtual void showEvent ( QShowEvent * );
+	
 	private:
-		QMenu			* 	m_contextMenu;
-		LCHMSearchEngine*	m_searchEngine;
-		bool				m_searchEngineInitDone;
-		
-		// For index generation
-		QProgressDialog *	m_genIndexProgress;
+		bool		m_contentFilled;
+		QMenu 	*	m_contextMenu;
+		QMap<QString, KCHMIndTocItem*>	m_urlListMap;
 };
 
-#endif
+
+#endif /* INCLUDE_KCHMCONTENTSWINDOW_H */

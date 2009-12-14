@@ -30,10 +30,7 @@ NavigationPanel::NavigationPanel( QWidget * parent )
 {
 	setupUi( this );
 
-	m_indexTab = 0;
-	m_searchTab = 0;
-	m_contentsTab = 0;
-
+	// There are tabs in UI-creared widget
 	m_tabWidget->clear();
 
 	// Add the required tabs

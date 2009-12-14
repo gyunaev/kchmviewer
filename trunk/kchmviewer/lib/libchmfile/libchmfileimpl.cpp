@@ -995,7 +995,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 	
 	// Split the HHC file by HTML tags
 	int stringlen = src.length();
-	
+
 	while ( pos < stringlen && (pos = src.indexOf ('<', pos)) != -1 )
 	{
 		int i, word_end = 0;
@@ -1028,7 +1028,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 		else
 			tagword = tag.toLower();
 
-		//qDebug ("tag: '%s', tagword: '%s'\n", qPrintable( tag ), qPrintable( tagword ) );
+//		qDebug ("tag: '%s', tagword: '%s'\n", qPrintable( tag ), qPrintable( tagword ) );
 						
 		// <OBJECT type="text/sitemap"> - a topic entry
 		if ( tagword == "object" && tag.indexOf ("text/sitemap", 0, Qt::CaseInsensitive ) != -1 )

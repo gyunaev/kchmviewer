@@ -54,4 +54,4 @@ class DBusInterface : public QObject
 		Q_SCRIPTABLE QStringList searchQuery( const QString& query );
 };
 
-#endif // KCHMDBUSIFACE_H
+#endif // DBUSIFACE_H

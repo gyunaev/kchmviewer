@@ -46,6 +46,7 @@ class UserEvent : public QEvent
 
 
 class ConfigRecentFiles;
+class NavigationPanel;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -72,11 +73,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		const QString&	getOpenedFileBaseName () { return m_chmFileBasename; }
 		
 		ViewWindow * currentBrowser() const;
-		TabContents * contentsWindow() const { return m_contentsTab; }
 		Settings   * currentSettings() const { return m_currentSettings; }
 		ViewWindowMgr*	viewWindowMgr() const { return m_viewWindowMgr; }
-		TabSearch * searchWindow() const { return m_searchTab; }
-		
+		NavigationPanel * navigator() const { return m_navPanel; }
+
 		void		showInStatusBar (const QString& text);
 		void		setTextEncoding (const LCHMTextEncoding * enc);
 		QMenu * 	tabItemsContextMenu();
@@ -87,6 +87,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		// Adds some main window actions to the provided popup menu
 		void		setupPopupMenu( QMenu * menu );	
 	
+		// Returns true if currently opened file has TOC/index
+		bool		hasTableOfContents() const;
+		bool		hasIndex() const;
+
 	public slots:
 		// Navigation toolbar icons
 		void		navSetBackEnabled( bool enabled );
@@ -103,19 +107,17 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		actionFindInPage();
 		void		actionExtractCHM();
 		void		actionChangeSettings();
-		void		actionAddBookmark();		
 		void		actionFontSizeIncrease();
 		void		actionFontSizeDecrease();
 		void		actionViewHTMLsource();
 		void		actionToggleFullScreen();
-		void		actionToggleContentsTab();
+		void		actionShowHideNavigator(bool);
+		void		navigatorVisibilityChanged( bool visible );
 		void		actionLocateInContentsTab();
 
 		void		actionNavigateBack();
 		void		actionNavigateForward();
 		void		actionNavigateHome();
-		void		actionNavigatePrevInToc();
-		void		actionNavigateNextInToc();
 		
 		void		actionAboutApp();
 		void		actionAboutQt();
@@ -150,41 +152,25 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		closeFile();	
 		void		refreshCurrentBrowser();
 		
-		void		showOrHideContextWindow( int tabindex );
-		void		showOrHideIndexWindow( int tabindex );
-		void		showOrHideSearchWindow( int tabindex );
-		
 		bool		handleUserEvent( const UserEvent * event );
-		void		locateInContentTree( const QString& url );
 		
 	private:		
 		QString 				m_chmFilename;
 		QString 				m_chmFileBasename;
 		QString					m_aboutDlgMenuText;	// to show in KDE or Qt about dialogs
 		
-		ViewWindowMgr		*	m_viewWindowMgr;
-		KQTabWidget			*	m_tabWidget;
-		QSplitter 			*	m_windowSplitter;
-
-		TabIndex			*	m_indexTab;
-		TabSearch			*	m_searchTab;
-		TabBookmarks		*	m_bookmarksTab;
-		TabContents			*	m_contentsTab;
-		
 		Settings			*	m_currentSettings;
 		LCHMFile			*	m_chmFile;
 		
-		int						m_tabContextPage;	
-		int						m_tabIndexPage;
-		int						m_tabSearchPage;
-		int						m_tabBookmarkPage;
-	
 		QList<QTemporaryFile*>	m_tempFileKeeper;
 
 		QActionGroup		*	m_encodingActions;
 		QMenu				*	m_contextMenu;
 
 		ConfigRecentFiles	*	m_recentFiles;
+
+		ViewWindowMgr		*	m_viewWindowMgr;
+		NavigationPanel		*	m_navPanel;
 	
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 		enum	auto_test_state_t
@@ -205,4 +191,4 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 extern MainWindow * mainWindow;
 
-#endif // KCHMMAINWINDOW_H
+#endif // MAINWINDOW_H

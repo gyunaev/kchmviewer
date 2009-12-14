@@ -61,7 +61,6 @@
 #endif /* USE_KDE */
 
 // common non-wrapped UI classes
-#include <QSplitter>
 #include <QToolButton>
 #include <QHeaderView>
 #include <QTextBrowser>

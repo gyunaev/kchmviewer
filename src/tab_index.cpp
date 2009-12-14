@@ -100,6 +100,7 @@ void TabIndex::invalidate( )
 {
 	tree->clear();
 	m_indexListFilled = false;
+	m_lastSelectedItem = 0;
 }
 
 void TabIndex::onDoubleClicked ( QTreeWidgetItem * item, int )

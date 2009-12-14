@@ -131,3 +131,10 @@ void TabContents::search( const QString & text )
 	IndexTocItem * treeitem = (IndexTocItem *) items.first();
 	::mainWindow->activateLink( treeitem->getUrl(), unused );
 }
+
+void TabContents::invalidate()
+{
+	m_contentFilled = false;
+	m_urlListMap.clear();
+	tree->clear();
+}

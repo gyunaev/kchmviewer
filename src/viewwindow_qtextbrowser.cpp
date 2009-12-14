@@ -19,11 +19,12 @@
 #include <QPrinter>
 #include <QPrintDialog>
 
-#include "kde-qt.h"
 #include "libchmurlfactory.h"
-#include "kchmmainwindow.h"
-#include "kchmviewwindowmgr.h"
-#include "kchmviewwindow_qtextbrowser.h"
+
+#include "kde-qt.h"
+#include "mainwindow.h"
+#include "viewwindowmgr.h"
+#include "viewwindow_qtextbrowser.h"
 
 
 KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( KCHMViewWindowTabs * parent )

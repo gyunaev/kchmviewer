@@ -16,19 +16,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#include "kchmconfig.h"
-#include "kchmmainwindow.h"
-#include "kchmviewwindow.h"
-#include "kchmviewwindowmgr.h"
+#include "config.h"
+#include "mainwindow.h"
+#include "viewwindow.h"
+#include "viewwindowmgr.h"
 
-#include "kchmviewwindow_qtextbrowser.h"
+#include "viewwindow_qtextbrowser.h"
 
 #if defined (USE_KDE)
-	#include "kde/kchmviewwindow_khtmlpart.h"
+	#include "kde/viewwindow_khtmlpart.h"
 #endif
 
 #if defined (QT_WEBKIT_LIB)
-	#include "kchmviewwindow_qtwebkit.h"
+	#include "viewwindow_qtwebkit.h"
 #endif
 
 

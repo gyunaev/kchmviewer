@@ -32,18 +32,20 @@
 #include "libchmfileimpl.h"
 #include "libchmurlfactory.h"
 
-#include "kchmmainwindow.h"
-#include "kchmconfig.h"
-#include "kchmindexwindow.h"
-#include "kchmsearchwindow.h"
-#include "kchmbookmarkwindow.h"
-#include "kchmtreeviewitem.h"
-#include "kchmsettings.h"
-#include "kchmviewwindow.h"
-#include "kchmviewwindowmgr.h"
-#include "kchmkeyeventfilter.h"
-#include "kchmcontentswindow.h"
-#include "kchmsetupdialog.h"
+#include "mainwindow.h"
+#include "config.h"
+#include "treeviewitem.h"
+#include "settings.h"
+#include "viewwindow.h"
+#include "viewwindowmgr.h"
+#include "keyeventfilter.h"
+#include "dialog_setup.h"
+
+#include "tab_contents.h"
+#include "tab_index.h"
+#include "tab_search.h"
+#include "tab_bookmarks.h"
+
 #include "version.h"
 
 

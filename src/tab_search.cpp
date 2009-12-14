@@ -20,10 +20,10 @@
 
 #include "libchmfile.h"
 
-#include "kchmsearchwindow.h"
-#include "kchmmainwindow.h"
-#include "kchmconfig.h"
-#include "kchmtreeviewitem.h"
+#include "mainwindow.h"
+#include "config.h"
+#include "treeviewitem.h"
+#include "tab_search.h"
 
 
 class KCMSearchTreeViewItem : public QTreeWidgetItem

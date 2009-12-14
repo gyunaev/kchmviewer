@@ -21,7 +21,7 @@
 
 #include "kde-qt.h"
 
-#include "kchmviewwindow.h"
+#include "viewwindow.h"
 
 
 class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow

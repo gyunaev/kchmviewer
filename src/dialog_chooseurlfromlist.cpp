@@ -16,39 +16,38 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef INCLUDE_KCHMCONTENTSWINDOW_H
-#define INCLUDE_KCHMCONTENTSWINDOW_H
-
 #include "kde-qt.h"
-#include "kchmtreeviewitem.h"
-#include "ui_tab_contents.h"
+
+#include "dialog_chooseurlfromlist.h"
+#include "treeviewitem.h"
 
 
-class KCHMContentsWindow : public QWidget, public Ui::TabContents
+KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList( QWidget* parent )
+	: QDialog( parent ), Ui::DialogTopicSelector()
 {
-	Q_OBJECT
-	public:
-    	KCHMContentsWindow( QWidget *parent = 0 );
-		~KCHMContentsWindow();
-		
-		void	refillTableOfContents();
-		void	showItem( KCHMIndTocItem * item );
-		void	search( const QString& text );
-		
-		KCHMIndTocItem *	getTreeItem( const QString& url );
-		
-	public slots:
-		void	onContextMenuRequested ( const QPoint &point );
-		void	onClicked ( QTreeWidgetItem * item, int column );
+	setupUi( this );
 	
-	private:
-		virtual void showEvent ( QShowEvent * );
-	
-	private:
-		bool		m_contentFilled;
-		QMenu 	*	m_contextMenu;
-		QMap<QString, KCHMIndTocItem*>	m_urlListMap;
-};
+	// List doubleclick
+	connect( list, 
+			 SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ),
+			 this,
+	         SLOT( onDoubleClicked( QListWidgetItem * ) ) );
+}
+
+void KCHMDialogChooseUrlFromList::onDoubleClicked( QListWidgetItem * item )
+{
+	if ( item )
+		accept();
+}
 
 
-#endif /* INCLUDE_KCHMCONTENTSWINDOW_H */
+QString KCHMDialogChooseUrlFromList::getSelectedItemUrl( const QStringList & urls, const QStringList & titles )
+{
+	for ( int i = 0; i < urls.size(); i++ )
+		list->addItem( titles[i] );
+	
+	if ( exec() == QDialog::Accepted && list->currentRow() != -1 )
+		return urls[ list->currentRow() ];
+	
+	return QString::null;
+}

@@ -20,7 +20,7 @@
 #define INCLUDE_KCHMVIEWWINDOWMGR_H
 
 #include "kde-qt.h"
-#include "kchmsettings.h"
+#include "settings.h"
 #include "ui_window_browser.h"
 
 // A small overriden class to handle a middle click

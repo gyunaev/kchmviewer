@@ -18,17 +18,17 @@
 
 // Do not use tr() or i18n() in this file - this class is not derived from QObject.
 
-#include <qregexp.h>
-#include <qstring.h>
-#include <qdir.h>
+#include <QRegExp>
+#include <QString>
+#include <QDir>
 
 #include "libchmfile.h"
 #include "libchmurlfactory.h"
 
-#include "kchmconfig.h"
-#include "kchmviewwindow.h"
-#include "kchmmainwindow.h"
-#include "kchmviewwindowmgr.h"
+#include "config.h"
+#include "viewwindow.h"
+#include "mainwindow.h"
+#include "viewwindowmgr.h"
 
 
 KCHMViewWindow::KCHMViewWindow( KCHMViewWindowTabs * parent )

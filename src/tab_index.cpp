@@ -18,9 +18,9 @@
 
 #include "libchmfile.h"
 
-#include "kchmmainwindow.h"
-#include "kchmindexwindow.h"
-#include "kchmtreeviewitem.h"
+#include "mainwindow.h"
+#include "treeviewitem.h"
+#include "tab_index.h"
 
 
 KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent )

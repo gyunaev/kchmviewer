@@ -19,7 +19,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 
-#include "kchmkeyeventfilter.h"
+#include "keyeventfilter.h"
 
 KCHMKeyEventFilter	gKeyEventFilter;
 

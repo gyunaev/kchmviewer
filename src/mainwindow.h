@@ -22,9 +22,9 @@
 #include "libchmfile.h"
 
 #include "kde-qt.h"
-#include "kchmviewwindow.h"
+#include "viewwindow.h"
 
-#include "ui_window_main.h"
+#include "ui_mainwindow.h"
 
 #define ENABLE_AUTOTEST_SUPPORT
 

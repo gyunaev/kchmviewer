@@ -20,7 +20,7 @@
 #define KCHMBOOKMARKWINDOW_H
 
 #include "kde-qt.h"
-#include "kchmsettings.h"
+#include "settings.h"
 
 #include "ui_tab_bookmarks.h"
 

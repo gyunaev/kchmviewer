@@ -16,11 +16,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#include "kchmbookmarkwindow.h"
-#include "kchmmainwindow.h"
-#include "kchmviewwindow.h"
-#include "kchmtreeviewitem.h"
+#include "mainwindow.h"
+#include "viewwindow.h"
+#include "treeviewitem.h"
 #include "version.h"
+#include "tab_bookmarks.h"
 
 class KCHMBookmarkItem : public QListWidgetItem
 {

@@ -32,7 +32,7 @@
 	#include <kaboutdata.h>
 #endif
 
-KCHMMainWindow * mainWindow;
+MainWindow * mainWindow;
 
 
 int main( int argc, char ** argv )
@@ -73,7 +73,7 @@ int main( int argc, char ** argv )
 	{
 		if ( QDBusConnection::sessionBus().registerService(SERVICE_NAME) )
 		{
-			KCHMDBusIface * dbusiface = new KCHMDBusIface();
+			DBusInterface * dbusiface = new DBusInterface();
 			QDBusConnection::sessionBus().registerObject( "/", dbusiface, QDBusConnection::ExportAllSlots );
 		}
 		else
@@ -83,7 +83,7 @@ int main( int argc, char ** argv )
 		qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
 #endif
 
-	mainWindow = new KCHMMainWindow();
+	mainWindow = new MainWindow();
 	mainWindow->show();
 	
 	app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );

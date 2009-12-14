@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMMAINWINDOW_H
-#define KCHMMAINWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include "libchmfile.h"
 
@@ -32,11 +32,13 @@
 
 
 //! Those events could be sent to main window to do useful things. See handleUserEvents()
-class KCHMUserEvent : public QEvent
+class UserEvent : public QEvent
 {
 	public:
-		KCHMUserEvent( const QString& action, const QStringList& args = QStringList()) 
-			: QEvent( QEvent::User ), m_action(action), m_args(args) {};
+		UserEvent( const QString& action, const QStringList& args = QStringList() )
+			: QEvent( QEvent::User ), m_action(action), m_args(args)
+		{
+		}
 	
 		QString			m_action;
 		QStringList		m_args;
@@ -44,7 +46,7 @@ class KCHMUserEvent : public QEvent
 
 
 
-class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
+class MainWindow : public QMainWindow, public Ui::MainWindow
 {
 	Q_OBJECT
 	
@@ -59,8 +61,8 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		};
 		
 	public:
-		KCHMMainWindow();
-		~KCHMMainWindow();
+		MainWindow();
+		~MainWindow();
 	
 		bool		openPage ( const QString &url, unsigned int flags = OPF_CONTENT_TREE );
 		
@@ -68,18 +70,18 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		const QString&	getOpenedFileName () { return m_chmFilename; }
 		const QString&	getOpenedFileBaseName () { return m_chmFileBasename; }
 		
-		KCHMViewWindow * currentBrowser() const;
-		KCHMContentsWindow  * contentsWindow() const { return m_contentsTab; }
-		KCHMSettings   * currentSettings() const { return m_currentSettings; }
-		KCHMViewWindowMgr*	viewWindowMgr() const { return m_viewWindowMgr; }
-		KCHMSearchWindow * searchWindow() const { return m_searchTab; }
+		ViewWindow * currentBrowser() const;
+		TabContents * contentsWindow() const { return m_contentsTab; }
+		Settings   * currentSettings() const { return m_currentSettings; }
+		ViewWindowMgr*	viewWindowMgr() const { return m_viewWindowMgr; }
+		TabSearch * searchWindow() const { return m_searchTab; }
 		
 		void		showInStatusBar (const QString& text);
 		void		setTextEncoding (const LCHMTextEncoding * enc);
 		QMenu * 	tabItemsContextMenu();
 	
 		// Called from WindowMgr when another browser tab is activated
-		void		browserChanged( KCHMViewWindow * newbrowser );
+		void		browserChanged( ViewWindow * newbrowser );
 	
 		// Adds some main window actions to the provided popup menu
 		void		setupPopupMenu( QMenu * menu );	
@@ -140,7 +142,6 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		
 	private:
 		bool		parseCmdLineArgs();
-		void		setupSignals ();
 		void 		setupActions();
 		void		setupLangEncodingMenu();
 		
@@ -157,7 +158,7 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		void		recentFilesInit( QMenu * menu );
 		void		recentFilesUpdate();
 	
-		bool		handleUserEvent( const KCHMUserEvent * event );
+		bool		handleUserEvent( const UserEvent * event );
 		void		locateInContentTree( const QString& url );
 		
 	private:		
@@ -165,16 +166,16 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		QString 				m_chmFileBasename;
 		QString					m_aboutDlgMenuText;	// to show in KDE or Qt about dialogs
 		
-		KCHMViewWindowMgr	*	m_viewWindowMgr;
-		KCHMIndexWindow		*	m_indexTab;
-		KCHMSearchWindow	*	m_searchTab;
-		KCHMBookmarkWindow	*	m_bookmarkWindow;
-		KCHMContentsWindow	*	m_contentsTab;
-	
+		ViewWindowMgr		*	m_viewWindowMgr;
 		KQTabWidget			*	m_tabWidget;
 		QSplitter 			*	m_windowSplitter;
-	
-		KCHMSettings		*	m_currentSettings;
+
+		TabIndex			*	m_indexTab;
+		TabSearch			*	m_searchTab;
+		TabBookmarks		*	m_bookmarksTab;
+		TabContents			*	m_contentsTab;
+		
+		Settings			*	m_currentSettings;
 		LCHMFile			*	m_chmFile;
 		
 		int						m_tabContextPage;	
@@ -208,6 +209,6 @@ class KCHMMainWindow : public QMainWindow, public Ui::MainWindow
 		
 };
 
-extern KCHMMainWindow * mainWindow;
+extern MainWindow * mainWindow;
 
 #endif // KCHMMAINWINDOW_H

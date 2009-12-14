@@ -23,7 +23,7 @@
 #include "tab_search.h"
 
 
-KCHMDBusIface::KCHMDBusIface( QObject *parent )
+DBusInterface::DBusInterface( QObject *parent )
 	: QObject( parent )
 {
 	QDBusConnection::sessionBus().registerObject( "/application",
@@ -32,49 +32,49 @@ KCHMDBusIface::KCHMDBusIface( QObject *parent )
 }
 
 
-KCHMDBusIface::~KCHMDBusIface()
+DBusInterface::~DBusInterface()
 {
 }
 
 
-void KCHMDBusIface::loadHelpFile( const QString & filename, const QString & page2open )
+void DBusInterface::loadHelpFile( const QString & filename, const QString & page2open )
 {
 	QStringList args;
 	
 	args.push_back( filename );
 	args.push_back( page2open );
 	
-	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "loadAndOpen", args ) );
+	qApp->postEvent( ::mainWindow, new UserEvent( "loadAndOpen", args ) );
 }
 
 
-void KCHMDBusIface::openPage( const QString & page2open )
+void DBusInterface::openPage( const QString & page2open )
 {
 	QStringList args;
 	
 	args.push_back( page2open );
-	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "openPage", args ) );
+	qApp->postEvent( ::mainWindow, new UserEvent( "openPage", args ) );
 }
 
 
-void KCHMDBusIface::guiFindInIndex( const QString & word )
+void DBusInterface::guiFindInIndex( const QString & word )
 {
 	QStringList args;
 	
 	args.push_back( word );
-	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "findInIndex", args ) );
+	qApp->postEvent( ::mainWindow, new UserEvent( "findInIndex", args ) );
 }
 
 
-void KCHMDBusIface::guiSearchQuery( const QString & query )
+void DBusInterface::guiSearchQuery( const QString & query )
 {
 	QStringList args;
 	
 	args.push_back( query );
-	qApp->postEvent( ::mainWindow, new KCHMUserEvent( "searchQuery", args ) );
+	qApp->postEvent( ::mainWindow, new UserEvent( "searchQuery", args ) );
 }
 
-QStringList KCHMDBusIface::searchQuery( const QString & query )
+QStringList DBusInterface::searchQuery( const QString & query )
 {
 	QStringList results;
 	

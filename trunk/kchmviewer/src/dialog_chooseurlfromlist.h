@@ -16,19 +16,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMDIALOGCHOOSEURLFROMLIST_H
-#define KCHMDIALOGCHOOSEURLFROMLIST_H
+#ifndef DIALOG_CHOOSEURLFROMLIST_H
+#define DIALOG_CHOOSEURLFROMLIST_H
 
 #include <QDialog>
 #include "ui_dialog_topicselector.h"
 
 
-class KCHMDialogChooseUrlFromList : public QDialog, public Ui::DialogTopicSelector
+class DialogChooseUrlFromList : public QDialog, public Ui::DialogTopicSelector
 {
 	Q_OBJECT
 	
 	public:
-    	KCHMDialogChooseUrlFromList( QWidget* parent );
+		DialogChooseUrlFromList( QWidget* parent );
 		
 		// Shows the dialog with titles, and let the user to select the title.
 		// Obviously urls.size() == titles.size(). Returns the appropriate URL

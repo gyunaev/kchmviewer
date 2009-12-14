@@ -24,12 +24,12 @@
 #include "mainwindow.h"
 
 
-KCHMConfig appConfig;
+Config appConfig;
 
 const char * APP_PATHINUSERDIR = ".kchmviewer";
 
 
-KCHMConfig::KCHMConfig()
+Config::Config()
 {
 	QDir dir;
 	m_datapath = QDir::homePath () + "/" + APP_PATHINUSERDIR;
@@ -66,11 +66,11 @@ KCHMConfig::KCHMConfig()
 }
 
 
-KCHMConfig::~KCHMConfig()
+Config::~Config()
 {
 }
 
-bool KCHMConfig::load()
+bool Config::load()
 {
 	QFile file (m_datapath + "/config");
 	if ( !file.open (QIODevice::ReadOnly) )
@@ -160,7 +160,7 @@ bool KCHMConfig::load()
 	return true;
 }
 
-bool KCHMConfig::save( )
+bool Config::save( )
 {
 	QFile file( m_datapath + "/config" );
 	if ( !file.open (QIODevice::WriteOnly) )
@@ -202,7 +202,7 @@ bool KCHMConfig::save( )
 	return true;
 }
 
-void KCHMConfig::addRecentFile( const QString & filename )
+void Config::addRecentFile( const QString & filename )
 {
 	m_recentFiles.removeAll( filename );
 	m_recentFiles.prepend( filename );

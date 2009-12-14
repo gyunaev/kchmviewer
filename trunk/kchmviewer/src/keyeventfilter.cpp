@@ -21,16 +21,16 @@
 
 #include "keyeventfilter.h"
 
-KCHMKeyEventFilter	gKeyEventFilter;
+KeyEventFilter	gKeyEventFilter;
 
-KCHMKeyEventFilter::KCHMKeyEventFilter()
- : QObject()
+KeyEventFilter::KeyEventFilter()
+	: QObject()
 {
 	m_shiftPressed = false;
 	m_ctrlPressed = false;
 }
 
-bool KCHMKeyEventFilter::eventFilter( QObject *, QEvent *e )
+bool KeyEventFilter::eventFilter( QObject *, QEvent *e )
 {
 	// Handle KeyPress and KeyRelease events
 	if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )

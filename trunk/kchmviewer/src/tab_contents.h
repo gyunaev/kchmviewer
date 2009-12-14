@@ -16,26 +16,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef INCLUDE_KCHMCONTENTSWINDOW_H
-#define INCLUDE_KCHMCONTENTSWINDOW_H
+#ifndef TAB_CONTENTS_H
+#define TAB_CONTENTS_H
 
 #include "kde-qt.h"
 #include "treeviewitem.h"
 #include "ui_tab_contents.h"
 
 
-class KCHMContentsWindow : public QWidget, public Ui::TabContents
+class TabContents : public QWidget, public Ui::TabContents
 {
 	Q_OBJECT
 	public:
-    	KCHMContentsWindow( QWidget *parent = 0 );
-		~KCHMContentsWindow();
+		TabContents( QWidget *parent = 0 );
+		~TabContents();
 		
 		void	refillTableOfContents();
-		void	showItem( KCHMIndTocItem * item );
+		void	showItem( IndexTocItem * item );
 		void	search( const QString& text );
 		
-		KCHMIndTocItem *	getTreeItem( const QString& url );
+		IndexTocItem *	getTreeItem( const QString& url );
 		
 	public slots:
 		void	onContextMenuRequested ( const QPoint &point );
@@ -47,7 +47,7 @@ class KCHMContentsWindow : public QWidget, public Ui::TabContents
 	private:
 		bool		m_contentFilled;
 		QMenu 	*	m_contextMenu;
-		QMap<QString, KCHMIndTocItem*>	m_urlListMap;
+		QMap<QString, IndexTocItem*>	m_urlListMap;
 };
 
 

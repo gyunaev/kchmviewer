@@ -22,7 +22,7 @@
 #include "treeviewitem.h"
 
 
-KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList( QWidget* parent )
+DialogChooseUrlFromList::DialogChooseUrlFromList( QWidget* parent )
 	: QDialog( parent ), Ui::DialogTopicSelector()
 {
 	setupUi( this );
@@ -34,14 +34,14 @@ KCHMDialogChooseUrlFromList::KCHMDialogChooseUrlFromList( QWidget* parent )
 	         SLOT( onDoubleClicked( QListWidgetItem * ) ) );
 }
 
-void KCHMDialogChooseUrlFromList::onDoubleClicked( QListWidgetItem * item )
+void DialogChooseUrlFromList::onDoubleClicked( QListWidgetItem * item )
 {
 	if ( item )
 		accept();
 }
 
 
-QString KCHMDialogChooseUrlFromList::getSelectedItemUrl( const QStringList & urls, const QStringList & titles )
+QString DialogChooseUrlFromList::getSelectedItemUrl( const QStringList & urls, const QStringList & titles )
 {
 	for ( int i = 0; i < urls.size(); i++ )
 		list->addItem( titles[i] );

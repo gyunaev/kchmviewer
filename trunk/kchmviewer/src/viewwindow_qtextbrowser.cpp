@@ -27,8 +27,8 @@
 #include "viewwindow_qtextbrowser.h"
 
 
-KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( KCHMViewWindowTabs * parent )
-	: QTextBrowser ( parent ), KCHMViewWindow ( parent )
+ViewWindow_QTextBrowser::ViewWindow_QTextBrowser( ViewWindowTabs * parent )
+	: QTextBrowser ( parent ), ViewWindow ( parent )
 {
 	m_zoomfactor = 0;
 	invalidate();
@@ -40,17 +40,17 @@ KCHMViewWindow_QTextBrowser::KCHMViewWindow_QTextBrowser( KCHMViewWindowTabs * p
 }
 
 
-KCHMViewWindow_QTextBrowser::~KCHMViewWindow_QTextBrowser()
+ViewWindow_QTextBrowser::~ViewWindow_QTextBrowser()
 {
 }
 
-bool KCHMViewWindow_QTextBrowser::openPage (const QString& url)
+bool ViewWindow_QTextBrowser::openPage (const QString& url)
 {
 	setSource (url);
 	return true;
 }
 
-void KCHMViewWindow_QTextBrowser::setSource ( const QUrl & name )
+void ViewWindow_QTextBrowser::setSource ( const QUrl & name )
 {
 	if ( m_allowSourceChange )
 	{
@@ -62,7 +62,7 @@ void KCHMViewWindow_QTextBrowser::setSource ( const QUrl & name )
 		m_allowSourceChange = true;
 }
 
-void KCHMViewWindow_QTextBrowser::setZoomFactor( int zoom )
+void ViewWindow_QTextBrowser::setZoomFactor( int zoom )
 {
 	m_zoomfactor = zoom;
 	
@@ -72,31 +72,31 @@ void KCHMViewWindow_QTextBrowser::setZoomFactor( int zoom )
 		QTextBrowser::zoomIn( zoom);
 }
 
-void KCHMViewWindow_QTextBrowser::invalidate( )
+void ViewWindow_QTextBrowser::invalidate( )
 {
 	m_zoomfactor = 0;
 	m_allowSourceChange = true;
 	reload();
 	
-	KCHMViewWindow::invalidate( );
+	ViewWindow::invalidate( );
 }
 
-int KCHMViewWindow_QTextBrowser::getScrollbarPosition( )
+int ViewWindow_QTextBrowser::getScrollbarPosition( )
 {
 	return verticalScrollBar()->sliderPosition();
 }
 
-void KCHMViewWindow_QTextBrowser::setScrollbarPosition( int pos )
+void ViewWindow_QTextBrowser::setScrollbarPosition( int pos )
 {
 	verticalScrollBar()->setSliderPosition( pos);
 }
 
-void KCHMViewWindow_QTextBrowser::addZoomFactor( int value )
+void ViewWindow_QTextBrowser::addZoomFactor( int value )
 {
 	setZoomFactor( value);
 }
 
-void KCHMViewWindow_QTextBrowser::onAnchorClicked(const QUrl & url)
+void ViewWindow_QTextBrowser::onAnchorClicked(const QUrl & url)
 {
 #if QT_VERSION < 0x040300
 	emit linkClicked( url.toString(), m_allowSourceChange );
@@ -107,7 +107,7 @@ void KCHMViewWindow_QTextBrowser::onAnchorClicked(const QUrl & url)
 }
 
 
-bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
+bool ViewWindow_QTextBrowser::printCurrentPage( )
 {
 	QPrinter printer( QPrinter::HighResolution );
 	//printer.setFullPage(true);
@@ -125,19 +125,19 @@ bool KCHMViewWindow_QTextBrowser::printCurrentPage( )
 	return true;
 }
 
-void KCHMViewWindow_QTextBrowser::clipSelectAll( )
+void ViewWindow_QTextBrowser::clipSelectAll( )
 {
 	selectAll();
 }
 
-void KCHMViewWindow_QTextBrowser::clipCopy( )
+void ViewWindow_QTextBrowser::clipCopy( )
 {
 	copy ();
 }
 
 
 // Shamelessly stolen from Qt
-QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
+QString ViewWindow_QTextBrowser::decodeUrl( const QString &input )
 {
 	QString temp;
 
@@ -180,7 +180,7 @@ QString KCHMViewWindow_QTextBrowser::decodeUrl( const QString &input )
     return temp;
 }
 
-QMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
+QMenu * ViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
 {
 	QMenu * menu = getContextMenu( anchorAt( pos ), this );
 	menu->exec( viewport()->mapToGlobal( pos ) );
@@ -188,7 +188,7 @@ QMenu * KCHMViewWindow_QTextBrowser::createPopupMenu( const QPoint & pos )
 	return 0;
 }
 
-QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
+QVariant ViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 {
 	QString data, file, path = name.toString( QUrl::StripTrailingSlash );
 
@@ -241,7 +241,7 @@ QVariant KCHMViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	return QVariant();
 }
 
-void KCHMViewWindow_QTextBrowser::find(const QString & text, int flags)
+void ViewWindow_QTextBrowser::find(const QString & text, int flags)
 {
 	m_searchText = text;
 	m_flags = flags;
@@ -249,23 +249,23 @@ void KCHMViewWindow_QTextBrowser::find(const QString & text, int flags)
 	find( false, false );
 }
 
-void KCHMViewWindow_QTextBrowser::onFindNext()
+void ViewWindow_QTextBrowser::onFindNext()
 {
 	find( true, false );
 }
 
-void KCHMViewWindow_QTextBrowser::onFindPrevious()
+void ViewWindow_QTextBrowser::onFindPrevious()
 {
 	find( false, true );
 }
 
-void KCHMViewWindow_QTextBrowser::find( bool forward, bool backward )
+void ViewWindow_QTextBrowser::find( bool forward, bool backward )
 {
 	QTextDocument *doc = document();
 	QTextCursor c = textCursor();
 	QTextDocument::FindFlags options;
 	
-	::mainWindow->viewWindowMgr()->indicateFindResultStatus( KCHMViewWindowMgr::SearchResultFound );
+	::mainWindow->viewWindowMgr()->indicateFindResultStatus( ViewWindowMgr::SearchResultFound );
 	
 	if ( c.hasSelection() )
 		c.setPosition( forward ? c.position() : c.anchor(), QTextCursor::MoveAnchor );
@@ -293,18 +293,18 @@ void KCHMViewWindow_QTextBrowser::find( bool forward, bool backward )
 			newCursor = doc->find( m_searchText, ac, options );
 			if ( newCursor.isNull() )
 			{
-				::mainWindow->viewWindowMgr()->indicateFindResultStatus( KCHMViewWindowMgr::SearchResultNotFound );
+				::mainWindow->viewWindowMgr()->indicateFindResultStatus( ViewWindowMgr::SearchResultNotFound );
 				newCursor = c;
 			} 
 			else
-				::mainWindow->viewWindowMgr()->indicateFindResultStatus( KCHMViewWindowMgr::SearchResultFoundWrapped );
+				::mainWindow->viewWindowMgr()->indicateFindResultStatus( ViewWindowMgr::SearchResultFoundWrapped );
 		}
 	}
 	
 	setTextCursor( newCursor );
 }
 
-void KCHMViewWindow_QTextBrowser::contextMenuEvent(QContextMenuEvent * e)
+void ViewWindow_QTextBrowser::contextMenuEvent(QContextMenuEvent * e)
 {
 	// From Qt Assistant
 	QMenu *m = new QMenu(0);
@@ -324,7 +324,7 @@ void KCHMViewWindow_QTextBrowser::contextMenuEvent(QContextMenuEvent * e)
 	
 }
 
-void KCHMViewWindow_QTextBrowser::mouseReleaseEvent ( QMouseEvent * event )
+void ViewWindow_QTextBrowser::mouseReleaseEvent ( QMouseEvent * event )
 {
 	if ( event->button() == Qt::MidButton )
 	{

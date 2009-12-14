@@ -117,7 +117,7 @@ class KQTabWidget : public KQ_CLASSNAME(TabWidget)
 {
 public:
 	KQTabWidget (QWidget *parent = 0 )
-		: KQ_CLASSNAME(TabWidget) (parent) {};
+		: KQ_CLASSNAME(TabWidget) (parent) {}
 };
 
 
@@ -134,25 +134,24 @@ public:
 #include <QPixmap>
 				 				 
 
-class KCHMShowWaitCursor
+class ShowWaitCursor
 {
 	public:
-		KCHMShowWaitCursor() { QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) ); }
-		~KCHMShowWaitCursor() { QApplication::restoreOverrideCursor(); }
+		ShowWaitCursor() { QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) ); }
+		~ShowWaitCursor() { QApplication::restoreOverrideCursor(); }
 };
 
 
 // Forward declarations
-class KCHMMainWindow;
-class KCHMViewWindow;
-class KCHMIndexWindow;
-class KCHMSearchWindow;
-class KCHMBookmarkWindow;
-class KCHMSettings;
-class KCHMSearchAndViewToolbar;
-class KCHMViewWindow;
-class KCHMViewWindowMgr;
-class KCHMContentsWindow;
+class MainWindow;
+class ViewWindow;
+class TabIndex;
+class TabSearch;
+class TabBookmarks;
+class TabContents;
+class Settings;
+class ViewWindow;
+class ViewWindowMgr;
 
 				 
 #endif /* KDE_QT_H */

@@ -31,7 +31,7 @@
 #include "viewwindowmgr.h"
 
 
-KCHMViewWindow::KCHMViewWindow( KCHMViewWindowTabs * parent )
+ViewWindow::ViewWindow( ViewWindowTabs * parent )
 {
 	invalidate();
 	m_contextMenu = 0;
@@ -41,11 +41,11 @@ KCHMViewWindow::KCHMViewWindow( KCHMViewWindowTabs * parent )
 	m_parentTabWidget = parent;
 }
 
-KCHMViewWindow::~KCHMViewWindow()
+ViewWindow::~ViewWindow()
 {
 }
 
-void KCHMViewWindow::invalidate( )
+void ViewWindow::invalidate( )
 {
 	m_base_url = "/";
 	m_openedPage = QString::null;
@@ -59,7 +59,7 @@ void KCHMViewWindow::invalidate( )
 
 
 
-QString KCHMViewWindow::makeURLabsolute ( const QString & url, bool set_as_base )
+QString ViewWindow::makeURLabsolute ( const QString & url, bool set_as_base )
 {
 	QString p1, p2, newurl = url;
 
@@ -86,11 +86,11 @@ QString KCHMViewWindow::makeURLabsolute ( const QString & url, bool set_as_base 
 		}
 	}
 
-	//qDebug ("KCHMViewWindow::makeURLabsolute (%s) -> (%s)", url.ascii(), newurl.ascii());
+	//qDebug ("ViewWindow::makeURLabsolute (%s) -> (%s)", url.ascii(), newurl.ascii());
 	return newurl;
 }
 
-bool KCHMViewWindow::openUrl ( const QString& origurl )
+bool ViewWindow::openUrl ( const QString& origurl )
 {
 	QString chmfile, page, newurl = origurl;
 
@@ -102,8 +102,8 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 	if ( LCHMUrlFactory::isNewChmURL( newurl, chmfile, page ) )
 	{
 		// If a new chm file is opened here, and we do not use KCHMLPart, we better abort
-		if ( chmfile != ::mainWindow->getOpenedFileBaseName() && appConfig.m_usedBrowser != KCHMConfig::BROWSER_KHTMLPART )
-			qFatal("KCHMViewWindow::openUrl(): opened new chm file %s while current is %s",
+		if ( chmfile != ::mainWindow->getOpenedFileBaseName() && appConfig.m_usedBrowser != Config::BROWSER_KHTMLPART )
+			qFatal("ViewWindow::openUrl(): opened new chm file %s while current is %s",
 				   qPrintable( chmfile ),
 				   qPrintable( ::mainWindow->getOpenedFileName() ) );
 
@@ -131,7 +131,7 @@ bool KCHMViewWindow::openUrl ( const QString& origurl )
 	return false;
 }
 
-void KCHMViewWindow::handleStartPageAsImage( QString & link )
+void ViewWindow::handleStartPageAsImage( QString & link )
 {
 	// Handle pics
 	if ( link.endsWith( ".jpg", Qt::CaseInsensitive )
@@ -143,7 +143,7 @@ void KCHMViewWindow::handleStartPageAsImage( QString & link )
 }
 
 
-QMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
+QMenu * ViewWindow::createStandardContextMenu( QWidget * parent )
 {
 	QMenu * contextMenu = new QMenu( parent );
 	
@@ -154,7 +154,7 @@ QMenu * KCHMViewWindow::createStandardContextMenu( QWidget * parent )
 }
 
 
-QMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
+QMenu * ViewWindow::getContextMenu( const QString & link, QWidget * parent )
 {
 	if ( link.isEmpty() )
 	{
@@ -183,7 +183,7 @@ QMenu * KCHMViewWindow::getContextMenu( const QString & link, QWidget * parent )
 	}
 }
 
-QString KCHMViewWindow::getTitle() const
+QString ViewWindow::getTitle() const
 {
 	QString title = ::mainWindow->chmFile()->getTopicByUrl( m_openedPage );
 	
@@ -194,7 +194,7 @@ QString KCHMViewWindow::getTitle() const
 }
 
 
-void KCHMViewWindow::navigateForward()
+void ViewWindow::navigateForward()
 {
 	if ( m_historyCurrentPos < m_history.size() )
 	{
@@ -217,7 +217,7 @@ void KCHMViewWindow::navigateForward()
 	updateNavigationToolbar();
 }
 
-void KCHMViewWindow::navigateBack( )
+void ViewWindow::navigateBack( )
 {
 	if ( m_historyCurrentPos > 0 )
 	{
@@ -226,7 +226,7 @@ void KCHMViewWindow::navigateBack( )
 		if ( m_historyCurrentPos == m_history.size() )
 		{
 			if ( m_history[m_historyCurrentPos-1].getUrl() != m_openedPage )
-				m_history.push_back( KCHMUrlHistory( m_openedPage, getScrollbarPosition() ) );
+				m_history.push_back( UrlHistory( m_openedPage, getScrollbarPosition() ) );
 			else
 			{
 				// part 2 of the navigation hack - see navigateForward() comment
@@ -244,12 +244,12 @@ void KCHMViewWindow::navigateBack( )
 	updateNavigationToolbar();
 }
 
-void KCHMViewWindow::navigateHome( )
+void ViewWindow::navigateHome( )
 {
 	::mainWindow->openPage( ::mainWindow->chmFile()->homeUrl() );
 }
 
-void KCHMViewWindow::addNavigationHistory( const QString & url, int scrollpos )
+void ViewWindow::addNavigationHistory( const QString & url, int scrollpos )
 {
 	// shred the 'forward' history
 	if ( m_historyCurrentPos < m_history.size() )
@@ -259,13 +259,13 @@ void KCHMViewWindow::addNavigationHistory( const QString & url, int scrollpos )
 	if ( m_history.size() >= m_historyMaxSize )
 		m_history.pop_front();
 
-	m_history.push_back( KCHMUrlHistory( url, scrollpos ) );
+	m_history.push_back( UrlHistory( url, scrollpos ) );
 	m_historyCurrentPos = m_history.size();
 			
 	updateNavigationToolbar();
 }
 
-void KCHMViewWindow::updateNavigationToolbar( )
+void ViewWindow::updateNavigationToolbar( )
 {
 	// Dump navigation for debugging
 #if 0
@@ -282,7 +282,7 @@ void KCHMViewWindow::updateNavigationToolbar( )
 }
 
 
-void KCHMViewWindow::setTabKeeper( const QString & link )
+void ViewWindow::setTabKeeper( const QString & link )
 {
 	// If we clicked on relative link, make sure we convert it to absolute right now,
 	// because later we will not have access to this view window variables

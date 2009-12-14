@@ -26,17 +26,17 @@
 #include "tab_search.h"
 
 
-class KCMSearchTreeViewItem : public QTreeWidgetItem
+class SearchTreeViewItem : public QTreeWidgetItem
 {
 	public:
-		KCMSearchTreeViewItem( QTreeWidget * tree, const QString& name, const QString& url )
-			:	QTreeWidgetItem( tree ), m_name( name ), m_url( url ) {};
+		SearchTreeViewItem( QTreeWidget * tree, const QString& name, const QString& url )
+			:	QTreeWidgetItem( tree ), m_name( name ), m_url( url ) {}
 	
 		QString		getUrl() const { return m_url; }
 	
 	protected:
 		// Overriden members
-	int columnCount () const	{ return 2; }
+		int columnCount () const	{ return 2; }
 	
 		// Overriden member
 		QVariant data ( int column, int role ) const
@@ -63,7 +63,7 @@ class KCMSearchTreeViewItem : public QTreeWidgetItem
 
 
 
-KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
+TabSearch::TabSearch( QWidget * parent )
 	: QWidget( parent ), Ui::TabSearch()
 {
 	// UIC stuff
@@ -111,7 +111,7 @@ KCHMSearchWindow::KCHMSearchWindow( QWidget * parent )
 }
 
 
-void KCHMSearchWindow::invalidate( )
+void TabSearch::invalidate( )
 {
 	tree->clear();
 	searchBox->clear();
@@ -124,7 +124,7 @@ void KCHMSearchWindow::invalidate( )
 }
 
 
-void KCHMSearchWindow::onReturnPressed( )
+void TabSearch::onReturnPressed( )
 {
 	QStringList results;
 	QString text = searchBox->lineEdit()->text();
@@ -140,9 +140,9 @@ void KCHMSearchWindow::onReturnPressed( )
 		{
 			for ( int i = 0; i < results.size(); i++ )
 			{
-				new KCMSearchTreeViewItem ( tree,
-				                            ::mainWindow->chmFile()->getTopicByUrl( results[i] ),
-										 	results[i] );
+				new SearchTreeViewItem ( tree,
+										 ::mainWindow->chmFile()->getTopicByUrl( results[i] ),
+										 results[i] );
 			}
 
 			::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" ) . arg(results.size()) );
@@ -155,24 +155,24 @@ void KCHMSearchWindow::onReturnPressed( )
 }
 
 
-void KCHMSearchWindow::onDoubleClicked( QTreeWidgetItem * item, int )
+void TabSearch::onDoubleClicked( QTreeWidgetItem * item, int )
 {
 	if ( !item )
 		return;
 	
-	KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) item;
-	::mainWindow->openPage( treeitem->getUrl(), KCHMMainWindow::OPF_ADD2HISTORY );
+	SearchTreeViewItem * treeitem = (SearchTreeViewItem *) item;
+	::mainWindow->openPage( treeitem->getUrl(), MainWindow::OPF_ADD2HISTORY );
 }
 
 
-void KCHMSearchWindow::restoreSettings( const KCHMSettings::search_saved_settings_t & settings )
+void TabSearch::restoreSettings( const Settings::search_saved_settings_t & settings )
 {
 	for ( int i = 0; i < settings.size(); i++ )
 		searchBox->addItem (settings[i]);
 }
 
 
-void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & settings )
+void TabSearch::saveSettings( Settings::search_saved_settings_t & settings )
 {
 	settings.clear();
 
@@ -181,16 +181,16 @@ void KCHMSearchWindow::saveSettings( KCHMSettings::search_saved_settings_t & set
 }
 
 
-void KCHMSearchWindow::onHelpClicked( const QString & )
+void TabSearch::onHelpClicked( const QString & )
 {
 	QWhatsThis::showText ( mapToGlobal( lblHelp->pos() ),
 		i18n( "<html><p>The improved search engine allows you to search for a word, symbol or phrase, which is set of words and symbols included in quotes. Only the documents which include all the terms speficide in th search query are shown; no prefixes needed.<p>Unlike MS CHM internal search index, my improved search engine indexes everything, including special symbols. Therefore it is possible to search (and find!) for something like <i>$q = new ChmFile();</i>. This search also fully supports Unicode, which means that you can search in non-English documents.<p>If you want to search for a quote symbol, use quotation mark instead. The engine treats a quote and a quotation mark as the same symbol, which allows to use them in phrases.</html>") );
 }
 
 
-bool KCHMSearchWindow::initSearchEngine( )
+bool TabSearch::initSearchEngine( )
 {
-	KCHMShowWaitCursor waitcursor;
+	ShowWaitCursor waitcursor;
 	
 	QString indexfile = ::mainWindow->currentSettings()->searchIndexFile();
 	
@@ -254,14 +254,14 @@ bool KCHMSearchWindow::initSearchEngine( )
 }
 
 
-void KCHMSearchWindow::execSearchQueryInGui( const QString & query )
+void TabSearch::execSearchQueryInGui( const QString & query )
 {
 	searchBox->lineEdit()->setText( query );
 	onReturnPressed();
 }
 
 
-bool KCHMSearchWindow::searchQuery( const QString & query, QStringList * results )
+bool TabSearch::searchQuery( const QString & query, QStringList * results )
 {
 	if ( !m_searchEngineInitDone )
 	{
@@ -278,7 +278,7 @@ bool KCHMSearchWindow::searchQuery( const QString & query, QStringList * results
 	if ( query.isEmpty() )
 		return false;
 
-	KCHMShowWaitCursor waitcursor;
+	ShowWaitCursor waitcursor;
 	bool result;
 	
 	result = m_searchEngine->searchQuery( query, results, ::mainWindow->chmFile() );
@@ -286,9 +286,9 @@ bool KCHMSearchWindow::searchQuery( const QString & query, QStringList * results
 }
 
 
-void KCHMSearchWindow::onContextMenuRequested( const QPoint & point )
+void TabSearch::onContextMenuRequested( const QPoint & point )
 {
-	KCMSearchTreeViewItem * treeitem = (KCMSearchTreeViewItem *) tree->itemAt( point );
+	SearchTreeViewItem * treeitem = (SearchTreeViewItem *) tree->itemAt( point );
 	
 	if( treeitem )
 	{
@@ -298,7 +298,7 @@ void KCHMSearchWindow::onContextMenuRequested( const QPoint & point )
 }
 
 
-void KCHMSearchWindow::onProgressStep(int value, const QString & stepName)
+void TabSearch::onProgressStep(int value, const QString & stepName)
 {
 	if ( m_genIndexProgress )
 	{

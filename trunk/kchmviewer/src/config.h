@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMCONFIG_H
-#define KCHMCONFIG_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #include <QString>
 #include <QStringList>
@@ -25,7 +25,7 @@
 extern const char * APP_PATHINUSERDIR;
 
 
-class KCHMConfig
+class Config
 {
 	public:
 		enum choose_action_t
@@ -42,8 +42,8 @@ class KCHMConfig
 	  		BROWSER_QTWEBKIT
 		};
 		
-		KCHMConfig();
-		~KCHMConfig();
+		Config();
+		~Config();
 		
 		bool	load();
 		bool	save();
@@ -74,6 +74,6 @@ class KCHMConfig
 		QStringList			m_recentFiles;
 };
 
-extern KCHMConfig appConfig;
+extern Config appConfig;
 
 #endif

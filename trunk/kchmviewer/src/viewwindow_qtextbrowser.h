@@ -16,20 +16,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMVIEWWINDOW_QTEXTBROWSER_H
-#define KCHMVIEWWINDOW_QTEXTBROWSER_H
+#ifndef VIEWWINDOW_QTEXTBROWSER_H
+#define VIEWWINDOW_QTEXTBROWSER_H
 
 #include "kde-qt.h"
 
 #include "viewwindow.h"
 
 
-class KCHMViewWindow_QTextBrowser : public QTextBrowser, public KCHMViewWindow
+class ViewWindow_QTextBrowser : public QTextBrowser, public ViewWindow
 {
 	Q_OBJECT
 	public:
-		KCHMViewWindow_QTextBrowser( KCHMViewWindowTabs * parent );
-		~KCHMViewWindow_QTextBrowser();
+		ViewWindow_QTextBrowser( ViewWindowTabs * parent );
+		~ViewWindow_QTextBrowser();
 
 		//! Open a page from current chm archive
 		virtual bool	openPage (const QString& url);

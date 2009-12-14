@@ -16,15 +16,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMVIEWWINDOW_H
-#define KCHMVIEWWINDOW_H
+#ifndef VIEWWINDOW_H
+#define VIEWWINDOW_H
 
 
 #include "kde-qt.h"
 
-class KCHMViewWindowTabs;
+class ViewWindowTabs;
 
-class KCHMViewWindow
+class ViewWindow
 {
 	public:
 		enum
@@ -33,8 +33,8 @@ class KCHMViewWindow
 			SEARCH_WHOLEWORDS = 0x20
 		};
 	
-		KCHMViewWindow ( KCHMViewWindowTabs * parent );
-		virtual ~KCHMViewWindow();
+		ViewWindow ( ViewWindowTabs * parent );
+		virtual ~ViewWindow();
 	
 		//! Open a page from current chm archive
 		bool	openUrl (const QString& url );
@@ -118,12 +118,12 @@ class KCHMViewWindow
 		
 	private:
 		//! History
-		class KCHMUrlHistory
+		class UrlHistory
 		{
 			public:
-				KCHMUrlHistory() { scrollbarpos = 0; }
-				KCHMUrlHistory( const QString& _url, int _scrollbarpos )
-				: url(_url), scrollbarpos(_scrollbarpos) {};
+				UrlHistory() { scrollbarpos = 0; }
+				UrlHistory( const QString& _url, int _scrollbarpos )
+					: url(_url), scrollbarpos(_scrollbarpos) {}
 			
 				const QString&  getUrl() const { return url; }
 				int 			getScrollPosition() const { return scrollbarpos; }
@@ -138,14 +138,14 @@ class KCHMViewWindow
 		int						m_historyCurrentPos;
 		QMenu 				*	m_contextMenu;
 		QMenu 				*	m_contextMenuLink;
-		QList<KCHMUrlHistory>	m_history;
+		QList<UrlHistory>		m_history;
 
 		QString 				m_openedPage;
 		QString 				m_lastOpenedPage;
 		QString					m_base_url;
 	
 		// The parent tab browser
-		KCHMViewWindowTabs	*	m_parentTabWidget;
+		ViewWindowTabs		*	m_parentTabWidget;
 
 		// This member keeps a "open new tab" link between getContextMenu()
 		// call and appropriate slot call

@@ -24,18 +24,18 @@
 #include "dialog_chooseurlfromlist.h"
 
 
-KCHMIndTocItem::KCHMIndTocItem( QTreeWidgetItem * parent, QTreeWidgetItem * after, const QString& name, const QString& aurl, int image) 
+IndexTocItem::IndexTocItem( QTreeWidgetItem * parent, QTreeWidgetItem * after, const QString& name, const QString& aurl, int image)
 	: QTreeWidgetItem( parent, after ), m_name(name), m_url(aurl), m_image_number(image)
 {
 }
 
-KCHMIndTocItem::KCHMIndTocItem( QTreeWidget * parent, QTreeWidgetItem * after, const QString& name, const QString& aurl, int image) 
+IndexTocItem::IndexTocItem( QTreeWidget * parent, QTreeWidgetItem * after, const QString& name, const QString& aurl, int image)
 	: QTreeWidgetItem( parent, after ), m_name(name), m_url(aurl), m_image_number(image)
 {
 }
 
 
-QString KCHMIndTocItem::getUrl( ) const
+QString IndexTocItem::getUrl( ) const
 {
 	if ( m_url.indexOf ('|') == -1 )
 		return m_url;
@@ -58,17 +58,17 @@ QString KCHMIndTocItem::getUrl( ) const
 			titles.push_back(title);
 	}
 
-	KCHMDialogChooseUrlFromList dlg( ::mainWindow );
+	DialogChooseUrlFromList dlg( ::mainWindow );
 	return dlg.getSelectedItemUrl( urls, titles );
 }
 
 
-int KCHMIndTocItem::columnCount() const
+int IndexTocItem::columnCount() const
 {
 	return 1;
 }
 
-QVariant KCHMIndTocItem::data(int column, int role) const
+QVariant IndexTocItem::data(int column, int role) const
 {
 	int imagenum;
 	
@@ -125,10 +125,10 @@ QVariant KCHMIndTocItem::data(int column, int role) const
 }
 
 
-void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map )
+void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, IndexTocItem*> * map )
 {
-	QVector< KCHMIndTocItem *> lastchild;
-	QVector< KCHMIndTocItem *> rootentry;
+	QVector< IndexTocItem *> lastchild;
+	QVector< IndexTocItem *> rootentry;
 	bool warning_shown = false;
 	
 	if ( map )
@@ -173,11 +173,11 @@ void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMPars
 		}
 		
 		// Create the node
-		KCHMIndTocItem * item;
+		IndexTocItem * item;
 		QString url = data[i].urls.join ("|");
 		
 		if ( indent == 0 )
-			item = new KCHMIndTocItem( list, lastchild[indent], data[i].name, url, data[i].imageid );
+			item = new IndexTocItem( list, lastchild[indent], data[i].name, url, data[i].imageid );
 		else
 		{
 			// New non-root entry. It is possible (for some buggy CHMs) that there is no previous entry: previoous entry had indent 1,
@@ -185,7 +185,7 @@ void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMPars
 			if ( rootentry[indent-1] == 0 )
 				qFatal("Child entry indented as %d with no root entry!", indent);
 			
-			item = new KCHMIndTocItem( rootentry[indent-1], lastchild[indent], data[i].name, url, data[i].imageid );
+			item = new IndexTocItem( rootentry[indent-1], lastchild[indent], data[i].name, url, data[i].imageid );
 		}
 		
 		// Hack: if map is 0, we have index, so make it open

@@ -23,7 +23,7 @@
 #include "tab_index.h"
 
 
-KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent )
+TabIndex::TabIndex ( QWidget * parent )
 	: QWidget( parent ), Ui::TabIndex()
 {
 	// UIC stuff
@@ -60,7 +60,7 @@ KCHMIndexWindow::KCHMIndexWindow ( QWidget * parent )
 	text->setFocus();
 }
 
-void KCHMIndexWindow::onTextChanged ( const QString & newvalue)
+void TabIndex::onTextChanged ( const QString & newvalue)
 {
 	QList<QTreeWidgetItem *> items = tree->findItems( newvalue, Qt::MatchStartsWith );
 	
@@ -75,7 +75,7 @@ void KCHMIndexWindow::onTextChanged ( const QString & newvalue)
 }
 
 
-void KCHMIndexWindow::showEvent( QShowEvent * )
+void TabIndex::showEvent( QShowEvent * )
 {
 	if ( !::mainWindow->chmFile() || m_indexListFilled )
 		return;
@@ -84,30 +84,30 @@ void KCHMIndexWindow::showEvent( QShowEvent * )
 	refillIndex();
 }
 
-void KCHMIndexWindow::onReturnPressed( )
+void TabIndex::onReturnPressed( )
 {
 	bool unused;
 	
 	if ( !m_lastSelectedItem )
 		return;
 	
-	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) m_lastSelectedItem;
+	IndexTocItem * treeitem = (IndexTocItem*) m_lastSelectedItem;
 	::mainWindow->activateLink( treeitem->getUrl(), unused );
 }
 
 
-void KCHMIndexWindow::invalidate( )
+void TabIndex::invalidate( )
 {
 	tree->clear();
 	m_indexListFilled = false;
 }
 
-void KCHMIndexWindow::onDoubleClicked ( QTreeWidgetItem * item, int )
+void TabIndex::onDoubleClicked ( QTreeWidgetItem * item, int )
 {
 	if ( !item )
 		return;
 	
-	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
+	IndexTocItem * treeitem = (IndexTocItem*) item;
 	
 	// Prevent opened index tree item from closing; because the tree open/close 
 	// procedure will be triggered after the slots are called, we change the tree
@@ -134,13 +134,13 @@ void KCHMIndexWindow::onDoubleClicked ( QTreeWidgetItem * item, int )
 			m_lastSelectedItem = 0;
 	}
 	else
-		::mainWindow->openPage( url, KCHMMainWindow::OPF_CONTENT_TREE | KCHMMainWindow::OPF_ADD2HISTORY );
+		::mainWindow->openPage( url, MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
 }
 
 
-void KCHMIndexWindow::refillIndex( )
+void TabIndex::refillIndex( )
 {
-	KCHMShowWaitCursor wc;
+	ShowWaitCursor wc;
 	QVector< LCHMParsedEntry > data;
 	
 	if ( !::mainWindow->chmFile()->parseIndex( &data )
@@ -153,7 +153,7 @@ void KCHMIndexWindow::refillIndex( )
 	kchmFillListViewWithParsedData( tree, data, 0 );
 }
 
-void KCHMIndexWindow::search( const QString & index )
+void TabIndex::search( const QString & index )
 {
 	if ( !::mainWindow->chmFile() )
 		return;
@@ -168,9 +168,9 @@ void KCHMIndexWindow::search( const QString & index )
 	onTextChanged( index );
 }
 
-void KCHMIndexWindow::onContextMenuRequested(const QPoint & point)
+void TabIndex::onContextMenuRequested(const QPoint & point)
 {
-	KCHMIndTocItem * treeitem = (KCHMIndTocItem *) tree->itemAt( point );
+	IndexTocItem * treeitem = (IndexTocItem *) tree->itemAt( point );
 	
 	if( treeitem )
 	{

@@ -16,20 +16,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMSETUPDIALOG_H
-#define KCHMSETUPDIALOG_H
+#ifndef DIALOG_SETUP_H
+#define DIALOG_SETUP_H
 
 #include <QDialog>
 #include <ui_dialog_setup.h>
 
 
-class KCHMSetupDialog : public QDialog, public Ui::DialogSetup
+class DialogSetup : public QDialog, public Ui::DialogSetup
 {
 	Q_OBJECT
 			
 	public:
-    	KCHMSetupDialog( QWidget *parent = 0 );
-    	~KCHMSetupDialog();
+		DialogSetup( QWidget *parent = 0 );
+		~DialogSetup();
 		
 	public slots:
 		void	browseExternalEditor();

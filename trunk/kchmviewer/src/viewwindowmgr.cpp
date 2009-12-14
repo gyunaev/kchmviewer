@@ -34,16 +34,16 @@
 
 
 // A small overriden class to handle a middle click
-KCHMViewWindowTabs::KCHMViewWindowTabs( QWidget * parent )
+ViewWindowTabs::ViewWindowTabs( QWidget * parent )
 			: QTabWidget( parent )
 {
 }
 
-KCHMViewWindowTabs::~KCHMViewWindowTabs()
+ViewWindowTabs::~ViewWindowTabs()
 {
 }
 
-void KCHMViewWindowTabs::mouseReleaseEvent ( QMouseEvent * event )
+void ViewWindowTabs::mouseReleaseEvent ( QMouseEvent * event )
 {
 	if ( event->button() == Qt::MidButton)
 	{
@@ -56,14 +56,14 @@ void KCHMViewWindowTabs::mouseReleaseEvent ( QMouseEvent * event )
 
 
 
-KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
+ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 	: QWidget( parent ), Ui::TabbedBrowser()
 {
 	// UIC
 	setupUi( this );
 	
 	// Create the tab widget
-	m_tabWidget = new KCHMViewWindowTabs( this );
+	m_tabWidget = new ViewWindowTabs( this );
 	verticalLayout->insertWidget( 0, m_tabWidget, 10 );
 
 	// on current tab changed
@@ -109,24 +109,24 @@ KCHMViewWindowMgr::KCHMViewWindowMgr( QWidget *parent )
 	connect( toolNext, SIGNAL(clicked()), this, SLOT( onFindNext()) );
 }
 
-KCHMViewWindowMgr::~KCHMViewWindowMgr( )
+ViewWindowMgr::~ViewWindowMgr( )
 {
 }
 	
-void KCHMViewWindowMgr::createMenu( KCHMMainWindow *, QMenu * menuWindow, QAction * actionCloseWindow )
+void ViewWindowMgr::createMenu( MainWindow *, QMenu * menuWindow, QAction * actionCloseWindow )
 {
 	m_menuWindow = menuWindow;
 	m_actionCloseWindow = actionCloseWindow; 
 }
 
-void KCHMViewWindowMgr::invalidate()
+void ViewWindowMgr::invalidate()
 {
 	closeAllWindows();
 	addNewTab( true );
 }
 
 
-KCHMViewWindow * KCHMViewWindowMgr::current()
+ViewWindow * ViewWindowMgr::current()
 {
 	TabData * tab = findTab( m_tabWidget->currentWidget() );
 	
@@ -136,25 +136,25 @@ KCHMViewWindow * KCHMViewWindowMgr::current()
 	return tab->window;
 }
 
-KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
+ViewWindow * ViewWindowMgr::addNewTab( bool set_active )
 {
-	KCHMViewWindow * viewvnd;
+	ViewWindow * viewvnd;
 	
 	switch ( appConfig.m_usedBrowser )
 	{
 		default:
-			viewvnd = new KCHMViewWindow_QTextBrowser( m_tabWidget );
+			viewvnd = new ViewWindow_QTextBrowser( m_tabWidget );
 			break;
 
 #if defined (USE_KDE)			
-		case KCHMConfig::BROWSER_KHTMLPART:
-			viewvnd = new KCHMViewWindow_KHTMLPart( m_tabWidget );
+		case Config::BROWSER_KHTMLPART:
+			viewvnd = new ViewWindow_KHTMLPart( m_tabWidget );
 			break;
 #endif			
 			
 #if defined (QT_WEBKIT_LIB)
-		case KCHMConfig::BROWSER_QTWEBKIT:
-			viewvnd = new KCHMViewWindow_QtWebKit( m_tabWidget );
+		case Config::BROWSER_QTWEBKIT:
+			viewvnd = new ViewWindow_QtWebKit( m_tabWidget );
 			break;
 #endif			
 	}
@@ -196,14 +196,14 @@ KCHMViewWindow * KCHMViewWindowMgr::addNewTab( bool set_active )
 	return viewvnd;
 }
 
-void KCHMViewWindowMgr::closeAllWindows( )
+void ViewWindowMgr::closeAllWindows( )
 {
 	// No it++ - we removing the window by every closeWindow call
 	while ( m_Windows.begin() != m_Windows.end() )
 		closeWindow( m_Windows.first().widget );
 }
 
-void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
+void ViewWindowMgr::setTabName( ViewWindow * window )
 {
 	TabData * tab = findTab( window->getQWidget() );
 	
@@ -222,7 +222,7 @@ void KCHMViewWindowMgr::setTabName( KCHMViewWindow * window )
 	}
 }
 
-void KCHMViewWindowMgr::onCloseCurrentWindow( )
+void ViewWindowMgr::onCloseCurrentWindow( )
 {
 	// Do not allow to close the last window
 	if ( m_Windows.size() == 1 )
@@ -233,7 +233,7 @@ void KCHMViewWindowMgr::onCloseCurrentWindow( )
 }
 
 
-void KCHMViewWindowMgr::onCloseWindow( int num )
+void ViewWindowMgr::onCloseWindow( int num )
 {
 	// Do not allow to close the last window
 	if ( m_Windows.size() == 1 )
@@ -245,7 +245,7 @@ void KCHMViewWindowMgr::onCloseWindow( int num )
 		closeWindow( tab->widget );
 }
 
-void KCHMViewWindowMgr::closeWindow( QWidget * widget )
+void ViewWindowMgr::closeWindow( QWidget * widget )
 {
 	WindowsIterator it;
 	
@@ -254,7 +254,7 @@ void KCHMViewWindowMgr::closeWindow( QWidget * widget )
 			break;
 	
 	if ( it == m_Windows.end() )
-		qFatal( "KCHMViewWindowMgr::closeWindow called with unknown widget!" );
+		qFatal( "ViewWindowMgr::closeWindow called with unknown widget!" );
 
 	m_menuWindow->removeAction( it->action );
 	
@@ -272,14 +272,14 @@ void KCHMViewWindowMgr::closeWindow( QWidget * widget )
 }
 
 
-void KCHMViewWindowMgr::restoreSettings( const KCHMSettings::viewindow_saved_settings_t & settings )
+void ViewWindowMgr::restoreSettings( const Settings::viewindow_saved_settings_t & settings )
 {
 	// Destroy automatically created tab
 	closeWindow( m_Windows.first().widget );
 	
 	for ( int i = 0; i < settings.size(); i++ )
 	{
-		KCHMViewWindow * window = addNewTab( false );
+		ViewWindow * window = addNewTab( false );
 		window->openUrl( settings[i].url ); // will call setTabName()
 		window->setScrollbarPosition( settings[i].scroll_y );
 		window->setZoomFactor( settings[i].zoom );
@@ -287,7 +287,7 @@ void KCHMViewWindowMgr::restoreSettings( const KCHMSettings::viewindow_saved_set
 }
 
 
-void KCHMViewWindowMgr::saveSettings( KCHMSettings::viewindow_saved_settings_t & settings )
+void ViewWindowMgr::saveSettings( Settings::viewindow_saved_settings_t & settings )
 {
 	settings.clear();
 	
@@ -299,15 +299,13 @@ void KCHMViewWindowMgr::saveSettings( KCHMSettings::viewindow_saved_settings_t &
 		if ( !tab )
 			abort();
 		
-		settings.push_back( 
-		                    KCHMSettings::SavedViewWindow( 
-			                    tab->window->getOpenedPage(), 
-			                    tab->window->getScrollbarPosition(), 
-			                    tab->window->getZoomFactor()) );
+		settings.push_back( Settings::SavedViewWindow( tab->window->getOpenedPage(),
+													   tab->window->getScrollbarPosition(),
+													   tab->window->getZoomFactor()) );
 	}
 }
 
-void KCHMViewWindowMgr::updateCloseButtons( )
+void ViewWindowMgr::updateCloseButtons( )
 {
 	bool enabled = m_Windows.size() > 1;
 	
@@ -315,7 +313,7 @@ void KCHMViewWindowMgr::updateCloseButtons( )
 	m_closeButton->setEnabled( enabled );
 }
 
-void KCHMViewWindowMgr::onTabChanged( QWidget * newtab )
+void ViewWindowMgr::onTabChanged( QWidget * newtab )
 {
 	TabData * tab = findTab( newtab );
 	
@@ -328,13 +326,13 @@ void KCHMViewWindowMgr::onTabChanged( QWidget * newtab )
 }
 
 
-void KCHMViewWindowMgr::openNewTab()
+void ViewWindowMgr::openNewTab()
 {
 	::mainWindow->openPage( current()->getOpenedPage(), 
-	                        KCHMMainWindow::OPF_NEW_TAB | KCHMMainWindow::OPF_CONTENT_TREE | KCHMMainWindow::OPF_ADD2HISTORY );
+							MainWindow::OPF_NEW_TAB | MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
 }
 
-void KCHMViewWindowMgr::activateWindow()
+void ViewWindowMgr::activateWindow()
 {
 	QAction *action = qobject_cast< QAction * >(sender());
 	
@@ -349,7 +347,7 @@ void KCHMViewWindowMgr::activateWindow()
 	}
 }
 
-KCHMViewWindowMgr::TabData * KCHMViewWindowMgr::findTab(QWidget * widget)
+ViewWindowMgr::TabData * ViewWindowMgr::findTab(QWidget * widget)
 {
 	for ( WindowsIterator it = m_Windows.begin(); it != m_Windows.end(); ++it )
 		if ( it->widget == widget )
@@ -358,18 +356,18 @@ KCHMViewWindowMgr::TabData * KCHMViewWindowMgr::findTab(QWidget * widget)
 	return 0;
 }
 
-void KCHMViewWindowMgr::setCurrentPage(int index)
+void ViewWindowMgr::setCurrentPage(int index)
 {
 	m_tabWidget->setCurrentIndex( index );
 }
 
-int KCHMViewWindowMgr::currentPageIndex() const
+int ViewWindowMgr::currentPageIndex() const
 {
 	return m_tabWidget->currentIndex();
 }
 
 
-void KCHMViewWindowMgr::indicateFindResultStatus( SearchResultStatus status )
+void ViewWindowMgr::indicateFindResultStatus( SearchResultStatus status )
 {
 	QPalette p = editFind->palette();
 	
@@ -383,7 +381,7 @@ void KCHMViewWindowMgr::indicateFindResultStatus( SearchResultStatus status )
 }
 
 
-void KCHMViewWindowMgr::onActivateFind()
+void ViewWindowMgr::onActivateFind()
 {
 	frameFind->show();
 	labelWrapped->setVisible( false );
@@ -392,15 +390,15 @@ void KCHMViewWindowMgr::onActivateFind()
 }
 
 
-void KCHMViewWindowMgr::find()
+void ViewWindowMgr::find()
 {
 	int flags = 0;
 	
 	if ( checkCase->isChecked() )
-		flags |= KCHMViewWindow::SEARCH_CASESENSITIVE;
+		flags |= ViewWindow::SEARCH_CASESENSITIVE;
 	
 	if ( checkWholeWords->isChecked() )
-		flags |= KCHMViewWindow::SEARCH_WHOLEWORDS;
+		flags |= ViewWindow::SEARCH_WHOLEWORDS;
 
 	current()->find( editFind->text(), flags );
 		
@@ -409,17 +407,17 @@ void KCHMViewWindowMgr::find()
 }
 
 
-void KCHMViewWindowMgr::editTextEdited(const QString &)
+void ViewWindowMgr::editTextEdited(const QString &)
 {
 	find();
 }
 
-void KCHMViewWindowMgr::onFindNext()
+void ViewWindowMgr::onFindNext()
 {
 	current()->onFindNext();
 }
 
-void KCHMViewWindowMgr::onFindPrevious()
+void ViewWindowMgr::onFindPrevious()
 {
 	current()->onFindPrevious();
 }

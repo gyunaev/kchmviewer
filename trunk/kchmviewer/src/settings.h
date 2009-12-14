@@ -16,17 +16,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMSETTINGS_H
-#define KCHMSETTINGS_H
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
 #include <QString>
 #include <QList>
 
 
-class KCHMSettings
+class Settings
 {
 	public:
-		KCHMSettings ();
+		Settings();
 		
 		bool	loadSettings (const QString& filename);
 		bool	saveSettings ( );

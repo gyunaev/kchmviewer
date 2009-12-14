@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMSEARCHWINDOW_H
-#define KCHMSEARCHWINDOW_H
+#ifndef TAB_SEARCH_H
+#define TAB_SEARCH_H
 
 #include "kde-qt.h"
 #include "settings.h"
@@ -26,15 +26,15 @@
 #include "libchmsearchengine.h"
 
 
-class KCHMSearchWindow : public QWidget, public Ui::TabSearch
+class TabSearch : public QWidget, public Ui::TabSearch
 {
 	Q_OBJECT
 	public:
-		KCHMSearchWindow ( QWidget * parent = 0 );
+		TabSearch( QWidget * parent = 0 );
 	
 		void	invalidate();
-		void	restoreSettings (const KCHMSettings::search_saved_settings_t& settings);
-		void	saveSettings( KCHMSettings::search_saved_settings_t& settings );
+		void	restoreSettings (const Settings::search_saved_settings_t& settings);
+		void	saveSettings( Settings::search_saved_settings_t& settings );
 		void	execSearchQueryInGui( const QString& query );
 		bool	searchQuery( const QString& query, QStringList * results );
 		

@@ -134,6 +134,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		// by setting up follow_link appropriately.
 		void 		activateLink( const QString & link, bool& follow_link );
 
+		void		updateToolbars();
+
 	protected slots:
 		// Called from the timer in main constructor
 		void 		firstShow();

@@ -40,6 +40,7 @@
 #include "viewwindowmgr.h"
 #include "keyeventfilter.h"
 #include "dialog_setup.h"
+#include "recentfiles.h"
 
 #include "tab_contents.h"
 #include "tab_index.h"
@@ -47,6 +48,28 @@
 #include "tab_bookmarks.h"
 
 #include "version.h"
+
+
+// Our implemenation of RecentFiles which uses different storage
+class ConfigRecentFiles : public RecentFiles
+{
+	public:
+		ConfigRecentFiles( QMenu * menu, QAction * before, int maxfiles = 5 )
+			: RecentFiles( menu, before, maxfiles )
+		{
+		}
+
+	protected:
+		QStringList loadRecentFiles()
+		{
+			return appConfig.m_recentFilesList;
+		}
+
+		void saveRecentFiles( const QStringList& files )
+		{
+			appConfig.m_recentFilesList = files;
+		}
+};
 
 
 MainWindow::MainWindow()
@@ -121,7 +144,10 @@ MainWindow::MainWindow()
 			"<a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</a><br><br>"
 			"Licensed under GNU GPL license.</html>" )
 			. arg(APP_NAME) . arg(APP_VERSION);
-	
+
+	m_recentFiles = new ConfigRecentFiles( menu_File, file_exit_action, appConfig.m_numOfRecentFiles );
+	connect( m_recentFiles, SIGNAL(openRecentFile(QString)), this, SLOT(actionOpenRecentFile(QString)) );
+
 	QTimer::singleShot( 0, this, SLOT( firstShow()) );
 }
 
@@ -241,8 +267,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 				openPage( m_chmFile->homeUrl() );
 		}
 
-		appConfig.addRecentFile( m_chmFilename );
-		recentFilesUpdate();
+		m_recentFiles->setCurrentFile( m_chmFilename );
 		return true;
 	}
 	else
@@ -414,9 +439,9 @@ void MainWindow::firstShow()
 {
 	if ( !parseCmdLineArgs( ) )
 	{
-		if ( appConfig.m_LoadLatestFileOnStartup && appConfig.m_recentFiles.size() > 0 )
+		if ( appConfig.m_LoadLatestFileOnStartup && !m_recentFiles->latestFile().isEmpty() )
 		{
-			if ( loadFile( appConfig.m_recentFiles[0] ) )
+			if ( loadFile( m_recentFiles->latestFile() ) )
 				return;
 		}
 		
@@ -1289,13 +1314,6 @@ void MainWindow::setupActions()
 	         qApp,
 	         SLOT( closeAllWindows() ) );
 	
-	// Set up recent files
-	recentFilesInit( menu_File );
-	
-	// Quit
-	menu_File->addSeparator();	
-	menu_File->addAction( file_exit_action );
-	
 	QMenu * help = new QMenu( i18n( "&Help"), this );
 	help->addAction( i18n( "&About"), this, SLOT( actionAboutApp() ), QKeySequence( "F1" ) );
 	help->addAction( i18n( "About &Qt"), this, SLOT( actionAboutQt() ) );
@@ -1307,7 +1325,6 @@ void MainWindow::setupActions()
 	viewToolbar->addAction( whatsthis );
 		
 	menuBar()->addMenu( help );
-	recentFilesUpdate();
 	
 	// Tab switching actions
 	(void) new QShortcut( QKeySequence( i18n("Ctrl+1") ),
@@ -1387,62 +1404,9 @@ void MainWindow::navSetForwardEnabled(bool enabled)
 	nav_actionForward->setEnabled( enabled );
 }
 
-
-void MainWindow::recentFilesInit( QMenu * menu )
+void MainWindow::actionOpenRecentFile( const QString& file )
 {
-	m_numOfRecentFiles = appConfig.m_numOfRecentFiles;
-	
-	if ( !m_recentFiles.isEmpty() )
-	{
-		for ( int i = 0; i < m_recentFiles.size(); i++ )
-			delete m_recentFiles[i];
-		
-		m_recentFiles.clear();
-	}
-	
-	m_recentFiles.resize( m_numOfRecentFiles );
-	
-	// Initialize the recent file actions
-	for ( int i = 0; i < m_numOfRecentFiles; ++i )
-	{
-		m_recentFiles[i] = new QAction( this );
-		m_recentFiles[i]->setVisible( false );
-		connect( m_recentFiles[i], SIGNAL( triggered() ), this, SLOT( actionOpenRecentFile()) );
-	}
-	
-	// Add the separator, and actions
-	m_recentFileSeparator = menu->addSeparator();
-	
-	for ( int i = 0; i < m_numOfRecentFiles; ++i )
-		menu->addAction( m_recentFiles[i] );
-	
-}
-
-void MainWindow::recentFilesUpdate()
-{
-	// Set the actions
-	for ( int i = 0; i < m_numOfRecentFiles; ++i )
-	{
-		if ( i < appConfig.m_recentFiles.size() )
-		{
-			QString text = tr("&%1 %2").arg(i + 1).arg( QFileInfo( appConfig.m_recentFiles[i] ).fileName() );
-			m_recentFiles[i]->setText( text );
-			m_recentFiles[i]->setData( appConfig.m_recentFiles[i] );
-			m_recentFiles[i]->setVisible( true );
-		}
-		else
-			m_recentFiles[i]->setVisible( false );
-	}
-	
-	m_recentFileSeparator->setVisible( !appConfig.m_recentFiles.isEmpty() );
-}
-
-void MainWindow::actionOpenRecentFile()
-{
-	QAction *action = qobject_cast<QAction *>(sender());
-	
-	if ( action )
-		loadFile( action->data().toString() );
+	loadFile( file );
 }
 
 void MainWindow::setupLangEncodingMenu()

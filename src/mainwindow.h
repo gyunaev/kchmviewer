@@ -45,6 +45,7 @@ class UserEvent : public QEvent
 };
 
 
+class ConfigRecentFiles;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -124,7 +125,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		actionSwitchToSearchTab();
 		void		actionSwitchToBookmarkTab();
 		
-		void		actionOpenRecentFile();
+		void		actionOpenRecentFile( const QString& file );
 		void		actionEncodingChanged( QAction * action );
 	
 		// Link activation. MainWindow decides whether we should follow this link or not
@@ -153,11 +154,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		showOrHideIndexWindow( int tabindex );
 		void		showOrHideSearchWindow( int tabindex );
 		
-		// Creates and initializes the recent files array, and adds the 
-		// entries logic to the menu
-		void		recentFilesInit( QMenu * menu );
-		void		recentFilesUpdate();
-	
 		bool		handleUserEvent( const UserEvent * event );
 		void		locateInContentTree( const QString& url );
 		
@@ -185,12 +181,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	
 		QList<QTemporaryFile*>	m_tempFileKeeper;
 
-		int						m_numOfRecentFiles;
-		QVector<QAction*>		m_recentFiles;
-		QAction 			*	m_recentFileSeparator;
-	
 		QActionGroup		*	m_encodingActions;
 		QMenu				*	m_contextMenu;
+
+		ConfigRecentFiles	*	m_recentFiles;
 	
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 		enum	auto_test_state_t

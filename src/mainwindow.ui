@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>873</width>
-     <height>24</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Settings">
@@ -44,6 +44,8 @@
     <addaction name="file_Print_action"/>
     <addaction name="separator"/>
     <addaction name="file_ExtractCHMAction"/>
+    <addaction name="separator"/>
+    <addaction name="file_exit_action"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">

@@ -22,8 +22,9 @@
 #include <QString>
 #include <QStringList>
 
-extern const char * APP_PATHINUSERDIR;
+#include "recentfiles.h"
 
+extern const char * APP_PATHINUSERDIR;
 
 class Config
 {
@@ -47,8 +48,6 @@ class Config
 		
 		bool	load();
 		bool	save();
-	
-		void	addRecentFile( const QString& file );
 				
 	public:
 		QString				m_datapath;
@@ -71,7 +70,7 @@ class Config
 		bool				m_advLayoutDirectionRL;
 		bool				m_advAutodetectEncoding;
 		
-		QStringList			m_recentFiles;
+		QStringList			m_recentFilesList;
 };
 
 extern Config appConfig;

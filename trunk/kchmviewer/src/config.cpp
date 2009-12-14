@@ -79,7 +79,7 @@ bool Config::load()
 	QString line;
 	char readbuf[4096];
 	bool getting_history = false;
-	m_recentFiles.clear();
+	m_recentFilesList.clear();
 	
 	while ( file.readLine( readbuf, sizeof(readbuf) - 1 ) > 0 )
 	{
@@ -144,8 +144,8 @@ bool Config::load()
 		}
 		else if ( getting_history )
 		{
-			if ( m_recentFiles.size() < m_numOfRecentFiles )
-				addRecentFile( line );
+			if ( m_recentFilesList.size() < m_numOfRecentFiles )
+				m_recentFilesList.prepend( line );
 		}
 		else
 			qWarning ("Unknown line in configuration: %s", qPrintable( line ));
@@ -196,21 +196,8 @@ bool Config::save( )
 	stream << "\n[history]\n";
 	
 	// Do not write all the history, but only the needed amount
-	for ( int i = 0; i < m_recentFiles.size(); i++ )
-		stream << m_recentFiles[m_recentFiles.size() - 1 - i] << "\n";
+	for ( int i = 0; i < m_recentFilesList.size(); i++ )
+		stream << m_recentFilesList[m_recentFilesList.size() - 1 - i] << "\n";
 	
 	return true;
-}
-
-void Config::addRecentFile( const QString & filename )
-{
-	m_recentFiles.removeAll( filename );
-	m_recentFiles.prepend( filename );
-	
-	while( m_recentFiles.size() > m_numOfRecentFiles )
-	{
-		// Remove the appropriate history file
-		mainWindow->currentSettings()->removeSettings( m_recentFiles.last() );
-		m_recentFiles.removeLast();
-	}
 }

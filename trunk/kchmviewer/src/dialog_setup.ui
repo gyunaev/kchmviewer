@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>624</width>
-    <height>443</height>
+    <width>675</width>
+    <height>461</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -493,6 +493,66 @@
              <string>Automatically detect encoding for KHTMLPart and WebKit browsers (not recommended)</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbCheckForUpdates">
+            <property name="whatsThis">
+             <string>If this option is enabled, the application will check for updates (when new version of application is released). If a new version is available, the program will show a messagebox dialog informing you about new version. This check will only performed once in 24 hours. No user information is requested or transmitted from your computer during this check.</string>
+            </property>
+            <property name="text">
+             <string>Perform a check whether a new version is available (once a day)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Toolbars</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QRadioButton" name="rbToolbarSmall">
+            <property name="text">
+             <string>Small icons</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbToolbarLarge">
+            <property name="text">
+             <string>Large icons</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbToolbarLargeText">
+            <property name="text">
+             <string>Large icons and text</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbToolbarText">
+            <property name="text">
+             <string>Just text</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>

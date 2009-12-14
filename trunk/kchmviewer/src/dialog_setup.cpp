@@ -19,6 +19,7 @@
 #include "kde-qt.h"
 #include "config.h"
 #include "dialog_setup.h"
+#include "mainwindow.h"
 #include "version.h"
 
 
@@ -83,6 +84,25 @@ DialogSetup::DialogSetup(QWidget *parent)
 
 	boxAutodetectEncoding->setChecked( appConfig.m_advAutodetectEncoding );
 	boxLayoutDirectionRL->setChecked( appConfig.m_advLayoutDirectionRL );
+
+	switch ( appConfig.m_toolbarMode )
+	{
+		case Config::TOOLBAR_SMALLICONS:
+			rbToolbarSmall->setChecked( true );
+			break;
+
+		case Config::TOOLBAR_LARGEICONS:
+			rbToolbarLarge->setChecked( true );
+			break;
+
+		case Config::TOOLBAR_LARGEICONSTEXT:
+			rbToolbarLargeText->setChecked( true );
+			break;
+
+		case Config::TOOLBAR_TEXTONLY:
+			rbToolbarText->setChecked( true );
+			break;
+	}
 }
 
 DialogSetup::~DialogSetup()
@@ -149,7 +169,24 @@ void DialogSetup::accept()
 		need_restart = true;
 		appConfig.m_usedBrowser = new_browser;
 	}
-		
+
+	Config::ToolbarMode newmode;
+
+	if ( rbToolbarSmall->isChecked() )
+		newmode = Config::TOOLBAR_SMALLICONS;
+	else if ( rbToolbarLarge->isChecked() )
+		newmode = Config::TOOLBAR_LARGEICONS;
+	else if ( rbToolbarLargeText->isChecked() )
+		newmode = Config::TOOLBAR_LARGEICONSTEXT;
+	else
+		newmode = Config::TOOLBAR_TEXTONLY;
+
+	if ( newmode != appConfig.m_toolbarMode )
+	{
+		appConfig.m_toolbarMode = newmode;
+		::mainWindow->updateToolbars();
+	}
+
 	appConfig.m_advExternalEditorPath = m_advExternalProgramName->text();
 	appConfig.m_advUseInternalEditor = m_advViewSourceExternal->isChecked();
 	appConfig.m_advUseInternalEditor = m_advViewSourceInternal->isChecked();

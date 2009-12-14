@@ -103,6 +103,7 @@ MainWindow::MainWindow()
 
 	// Set up things
 	setupActions();
+	updateToolbars();
 	setupLangEncodingMenu();
 
 	// Resize main window and dock
@@ -1188,6 +1189,38 @@ void MainWindow::setupActions()
 	                          this, 
 	                          SLOT( onOpenPageInNewBackgroundTab() ),
 	                          QKeySequence( "Ctrl+Enter" ) );
+}
+
+void MainWindow::updateToolbars()
+{
+	// Toolbars configuration
+	Qt::ToolButtonStyle buttonstyle = Qt::ToolButtonIconOnly;
+	QSize iconsize = QSize( 32, 32 );
+
+	switch ( appConfig.m_toolbarMode )
+	{
+		case Config::TOOLBAR_SMALLICONS:
+			iconsize = QSize( 16, 16 );
+			break;
+
+		case Config::TOOLBAR_LARGEICONS:
+			break;
+
+		case Config::TOOLBAR_LARGEICONSTEXT:
+			buttonstyle = Qt::ToolButtonTextUnderIcon;
+			break;
+
+		case Config::TOOLBAR_TEXTONLY:
+			buttonstyle = Qt::ToolButtonTextOnly;
+			break;
+	}
+
+	mainToolbar->setIconSize( iconsize );
+	mainToolbar->setToolButtonStyle( buttonstyle );
+	navToolbar->setIconSize( iconsize );
+	navToolbar->setToolButtonStyle( buttonstyle );
+	viewToolbar->setIconSize( iconsize );
+	viewToolbar->setToolButtonStyle( buttonstyle );
 }
 
 

@@ -63,6 +63,7 @@ Config::Config()
 	m_advExternalEditorPath = "/usr/bin/kate";
 	
 	m_lastOpenedDir = "";
+	m_toolbarMode = TOOLBAR_LARGEICONSTEXT;
 }
 
 
@@ -136,6 +137,8 @@ bool Config::load()
 				m_advLayoutDirectionRL = value.toInt() ? true : false;
 			else if ( key == "advAutoDetectEncoding" )
 				m_advAutodetectEncoding = value.toInt() ? true : false;
+			else if ( key == "toolbarMode" )
+				m_toolbarMode = (ToolbarMode) value.toInt();
 			else if ( key == "useSearchEngine" || key == "QtBrowserPath" )
 				// Do nothing; not used anymore
 				;
@@ -190,7 +193,8 @@ bool Config::save( )
 	stream << "advExternalEditorPath=" << m_advExternalEditorPath << "\n";
 	stream << "advLayoutDirectionRL=" << m_advLayoutDirectionRL << "\n";
 	stream << "advAutoDetectEncoding=" << m_advAutodetectEncoding << "\n";
-	
+	stream << "toolbarMode=" << m_toolbarMode << "\n";
+
 	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
 	
 	stream << "\n[history]\n";

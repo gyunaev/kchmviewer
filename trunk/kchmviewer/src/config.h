@@ -42,6 +42,14 @@ class Config
    			BROWSER_KHTMLPART,
 	  		BROWSER_QTWEBKIT
 		};
+
+		enum ToolbarMode
+		{
+			TOOLBAR_SMALLICONS,
+			TOOLBAR_LARGEICONS,
+			TOOLBAR_LARGEICONSTEXT,
+			TOOLBAR_TEXTONLY
+		};
 		
 		Config();
 		~Config();
@@ -59,6 +67,7 @@ class Config
 		int					m_numOfRecentFiles;
 		bool				m_HistoryStoreExtra;
 		int					m_usedBrowser;
+		ToolbarMode			m_toolbarMode;
 		
 		bool				m_kdeEnableJS;
 		bool				m_kdeEnableJava;

@@ -218,9 +218,6 @@
    <property name="text">
     <string>&amp;Find...</string>
    </property>
-   <property name="iconText">
-    <string>Find</string>
-   </property>
    <property name="toolTip">
     <string>Find text in currently opened page</string>
    </property>
@@ -277,7 +274,7 @@
      <normaloff>:/images/icon_font_increase.png</normaloff>:/images/icon_font_increase.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Increase font size</string>
+    <string>&amp;Larger</string>
    </property>
    <property name="toolTip">
     <string>Increase the font size</string>
@@ -295,7 +292,7 @@
      <normaloff>:/images/icon_font_decrease.png</normaloff>:/images/icon_font_decrease.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Decrease font size</string>
+    <string>&amp;Smaller</string>
    </property>
    <property name="toolTip">
     <string>Decrease the font size</string>
@@ -313,7 +310,7 @@
      <normaloff>:/images/icon_view_source.png</normaloff>:/images/icon_view_source.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;View HTML source</string>
+    <string>See &amp;HTML</string>
    </property>
    <property name="toolTip">
     <string>View HTML source of current page</string>
@@ -371,7 +368,7 @@
      <normaloff>:/images/icon_locate_in_content.png</normaloff>:/images/icon_locate_in_content.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Locate in contents window</string>
+    <string>&amp;Locate</string>
    </property>
    <property name="toolTip">
     <string>Locate the current page in contents window</string>
@@ -457,10 +454,7 @@
      <normaloff>:/images/icon_prev_page.png</normaloff>:/images/icon_prev_page.png</iconset>
    </property>
    <property name="text">
-    <string>Previous page in Table of Context</string>
-   </property>
-   <property name="iconText">
-    <string>Previous page in TOC</string>
+    <string>Previous</string>
    </property>
    <property name="toolTip">
     <string>Go to the previous page in the Table of Contents</string>
@@ -475,10 +469,7 @@
      <normaloff>:/images/icon_next_page.png</normaloff>:/images/icon_next_page.png</iconset>
    </property>
    <property name="text">
-    <string>Next page in Table of Context</string>
-   </property>
-   <property name="iconText">
-    <string>Next page in TOC</string>
+    <string>Next</string>
    </property>
    <property name="toolTip">
     <string>Go to the next page in the Table of Contents</string>

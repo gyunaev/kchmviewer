@@ -41,12 +41,7 @@
 #include "keyeventfilter.h"
 #include "dialog_setup.h"
 #include "recentfiles.h"
-
-#include "tab_contents.h"
-#include "tab_index.h"
-#include "tab_search.h"
-#include "tab_bookmarks.h"
-
+#include "navigationpanel.h"
 #include "version.h"
 
 
@@ -93,43 +88,26 @@ MainWindow::MainWindow()
 	
 	m_chmFile = 0;
 	
-	m_indexTab = 0;
-	m_searchTab = 0;
-	m_contentsTab = 0;
-	m_viewWindowMgr = 0;
-
-	m_tabContextPage = -1;
-	m_tabIndexPage = -1;
-	m_tabSearchPage = -1;
-	m_tabBookmarkPage = -1;
-	
 	m_currentSettings = new Settings();
 		
-	// Create the initial layout - a splitter with tab window in left, and text browser in right
-	m_windowSplitter = new QSplitter(this);
-	m_tabWidget = new KQTabWidget( m_windowSplitter );
-	m_viewWindowMgr = new ViewWindowMgr( m_windowSplitter );
+	// Create the view window, which is a central widget
+	m_viewWindowMgr = new ViewWindowMgr( this );
+	setCentralWidget( m_viewWindowMgr );
 	
-	m_bookmarksTab = new TabBookmarks( m_tabWidget );
+	// Create a navigation panel
+	m_navPanel = new NavigationPanel( this );
 
-	// Add the tabs
-	m_tabWidget->addTab( m_bookmarksTab, i18n("Bookmarks") );
+	// Add navigation dock
+	m_navPanel->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
+	addDockWidget( Qt::LeftDockWidgetArea, m_navPanel, Qt::Vertical );
 
-	// Splitter is a central widget
-	setCentralWidget( m_windowSplitter );
-	
-	// Setting up splitter sizes
-	QList<int> sizes;
-	sizes.push_back( SPLT_X_SIZE );
-	sizes.push_back( WND_X_SIZE - SPLT_X_SIZE );
-	m_windowSplitter->setSizes( sizes );
-	
 	// Set up things
 	setupActions();
 	setupLangEncodingMenu();
 
-	// Resize main window
+	// Resize main window and dock
 	resize( WND_X_SIZE, WND_Y_SIZE );	
+	m_navPanel->resize( SPLT_X_SIZE, m_navPanel->height() );
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
 	m_autoteststate = STATE_OFF;
@@ -197,31 +175,16 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		appConfig.m_lastOpenedDir = qf.dir().path();
 		m_chmFileBasename = qf.fileName();
 
-		// Order the tabulations
-		int number_of_pages = 0;
-		
-		if ( m_chmFile->hasTableOfContents() )
-			m_tabContextPage = number_of_pages++;
-		else
-			m_tabContextPage = -1;
+		// Apply settings to the navigation dock
+		m_navPanel->updateTabs( m_chmFile );
 
-		if ( m_chmFile->hasIndexTable() )
-			m_tabIndexPage = number_of_pages++;
-		else
-			m_tabIndexPage = -1;
+		// and to navigation buttons
+		nav_actionPreviousPage->setEnabled( m_chmFile->hasTableOfContents() );
+		nav_actionNextPageToc->setEnabled( m_chmFile->hasTableOfContents() );
 
-		// We always show search
-		m_tabSearchPage = number_of_pages++;
-
-		m_tabBookmarkPage = number_of_pages;
-
-		showOrHideContextWindow( m_tabContextPage );
-		showOrHideIndexWindow( m_tabIndexPage );
-		showOrHideSearchWindow( m_tabSearchPage );
-		
-		m_bookmarksTab->invalidate();
 		navSetBackEnabled( false );
 		navSetForwardEnabled( false );
+
 		m_viewWindowMgr->invalidate();
 		refreshCurrentBrowser();
 
@@ -230,37 +193,27 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 			const LCHMTextEncoding * encoding = 
 					m_chmFile->impl()->lookupByQtCodec(  m_currentSettings->m_activeEncoding );
 
-			// tim: this one triggers loading Index if the chm file was closed when the index was opened
-			//m_tabWidget->setCurrentIndex( m_currentSettings->m_activetabsystem );
-			
 			if ( encoding )
 				setTextEncoding( encoding );
-			
-			if ( m_searchTab )
-				m_searchTab->restoreSettings (m_currentSettings->m_searchhistory);
-				
-			m_bookmarksTab->restoreSettings (m_currentSettings->m_bookmarks);
 
+			m_navPanel->applySettings( m_currentSettings );
+			
 			if ( call_open_page )
 			{
 				m_viewWindowMgr->restoreSettings( m_currentSettings->m_viewwindows );
 				m_viewWindowMgr->setCurrentPage( m_currentSettings->m_activetabwindow );
 				
-				if ( m_tabContextPage != -1 && m_tabContextPage == m_currentSettings->m_activetabwindow )
+				if ( m_chmFile->hasTableOfContents() )
 					actionLocateInContentsTab();
 			}
 			
 			// Restore the main window size
-			QList<int> sizes;
-			sizes.push_back( m_currentSettings->m_window_size_splitter );
-			sizes.push_back( m_currentSettings->m_window_size_x - m_currentSettings->m_window_size_splitter );
-			
-			m_windowSplitter->setSizes( sizes );
 			resize( m_currentSettings->m_window_size_x, m_currentSettings->m_window_size_y );
+			m_navPanel->resize( m_currentSettings->m_window_size_splitter, m_navPanel->height() );
 		}
 		else
 		{
-			m_tabWidget->setCurrentIndex( 0 );
+			m_navPanel->setActive( NavigationPanel::TAB_CONTENTS );
 			setTextEncoding( m_chmFile->currentEncoding() );
 			
 			if ( call_open_page )
@@ -307,8 +260,7 @@ void MainWindow::refreshCurrentBrowser( )
 	
 	currentBrowser()->invalidate();
 	
-	if ( m_contentsTab )
-		m_contentsTab->refillTableOfContents();
+	m_navPanel->refresh();
 }
 
 
@@ -425,7 +377,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	{
 		// Open all the tree items to show current item (if needed)
 		if ( (flags & OPF_CONTENT_TREE) != 0 )
-			locateInContentTree( vwnd->getOpenedPage() );
+			m_navPanel->findUrlInContents( vwnd->getOpenedPage() );
 		
 		if ( flags & OPF_ADD2HISTORY )
 			currentBrowser()->addNavigationHistory( hist_url, hist_scrollpos );
@@ -488,17 +440,13 @@ void MainWindow::closeFile( )
 	if ( appConfig.m_HistoryStoreExtra )
 	{
 		m_currentSettings->m_activeEncoding = m_chmFile->currentEncoding()->qtcodec;
-		m_currentSettings->m_activetabsystem = m_tabWidget->currentIndex( );
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
 		
 		m_currentSettings->m_window_size_x = width();
 		m_currentSettings->m_window_size_y = height();
-		m_currentSettings->m_window_size_splitter = m_windowSplitter->sizes()[0];
-		
-		if ( m_searchTab )
-			m_searchTab->saveSettings (m_currentSettings->m_searchhistory);
-				
-		m_bookmarksTab->saveSettings( m_currentSettings->m_bookmarks );
+		m_currentSettings->m_window_size_splitter = m_navPanel->width();
+
+		m_navPanel->getSettings( m_currentSettings );
 
 		m_viewWindowMgr->saveSettings( m_currentSettings->m_viewwindows );
 
@@ -615,81 +563,6 @@ bool MainWindow::parseCmdLineArgs( )
 	return false;
 }
 
-void MainWindow::showOrHideContextWindow( int tabindex )
-{
-	if ( tabindex == -1 )
-	{
-		if ( m_contentsTab )
-		{
-			m_tabWidget->removeTab( m_tabWidget->indexOf( m_contentsTab ) );
-			delete m_contentsTab;
-			m_contentsTab = 0;
-		}
-		
-		nav_actionPreviousPage->setEnabled( false );
-		nav_actionNextPageToc->setEnabled( false );
-	}
-	else
-	{
-		if ( !m_contentsTab )
-		{
-			m_contentsTab = new TabContents( m_tabWidget );
-			m_tabWidget->insertTab( tabindex, m_contentsTab, i18n( "Contents" ) );
-		}
-	
-		nav_actionPreviousPage->setEnabled( true );
-		nav_actionNextPageToc->setEnabled( true );
-	}
-}
-
-void MainWindow::showOrHideIndexWindow( int tabindex )
-{
-	// Test whether to show/invalidate the index window
-	if ( tabindex == -1 )
-	{
-		if ( m_indexTab )
-		{
-			m_tabWidget->removeTab( m_tabWidget->indexOf( m_indexTab ) );
-			delete m_indexTab;
-			m_indexTab = 0;
-		}
-	}
-	else
-	{
-		if ( !m_indexTab )
-		{
-			m_indexTab = new TabIndex(m_tabWidget);
-			m_tabWidget->insertTab( tabindex, m_indexTab, i18n( "Index" ) );
-		}
-		else
-			m_indexTab->invalidate();
-	}
-}
-
-void MainWindow::showOrHideSearchWindow( int tabindex )
-{
-	if ( tabindex == -1 )
-	{
-		if ( m_searchTab )
-		{
-			m_tabWidget->removeTab( m_tabWidget->indexOf( m_searchTab ) );
-			delete m_searchTab;
-			m_searchTab = 0;
-		}
-	}
-	else
-	{
-		if ( !m_searchTab )
-		{
-			m_searchTab = new TabSearch(m_tabWidget);
-			m_tabWidget->insertTab( tabindex, m_searchTab, i18n( "Search" ) );
-		}
-		else
-			m_searchTab->invalidate();
-	}
-}
-
-
 ViewWindow * MainWindow::currentBrowser( ) const
 {
 	return m_viewWindowMgr->current();
@@ -707,24 +580,7 @@ void MainWindow::onOpenPageInNewBackgroundTab( )
 
 void MainWindow::browserChanged( ViewWindow * newbrowser )
 {
-	locateInContentTree( newbrowser->getOpenedPage() );
-}
-
-void MainWindow::locateInContentTree( const QString & url )
-{
-	if ( !m_contentsTab )
-		return;
-	
-	IndexTocItem * treeitem = m_contentsTab->getTreeItem( url );
-	
-	if ( treeitem )
-	{
-		IndexTocItem * itemparent = treeitem;
-		while ( (itemparent = (IndexTocItem*) itemparent->parent()) != 0 )
-			itemparent->setExpanded(true);
-			
-		m_contentsTab->showItem( treeitem );
-	}
+	m_navPanel->findUrlInContents( newbrowser->getOpenedPage() );
 }
 
 bool MainWindow::event( QEvent * e )
@@ -759,11 +615,11 @@ bool MainWindow::handleUserEvent( const UserEvent * event )
 		if ( event->m_args.size() != 1 )
 			qFatal( "handleUserEvent: event findInIndex must receive 1 arg" );
 		
-		if ( m_tabIndexPage == -1 )
+		if ( !hasIndex() )
 			return false;
 
 		actionSwitchToIndexTab();
-		m_indexTab->search( event->m_args[0] );
+		m_navPanel->findInIndex( event->m_args[0] );
 		return true;
 	}
 	else if ( event->m_action == "findInToc" )
@@ -771,11 +627,11 @@ bool MainWindow::handleUserEvent( const UserEvent * event )
 		if ( event->m_args.size() != 1 )
 			qFatal( "handleUserEvent: event findInToc must receive 1 arg" );
 		
-		if ( m_tabContextPage == -1 )
+		if ( !hasTableOfContents() )
 			return false;
 
 		actionSwitchToContentTab();
-		m_contentsTab->search( event->m_args[0] );
+		m_navPanel->findTextInContents( event->m_args[0] );
 		return true;
 	}
 	else if ( event->m_action == "searchQuery" )
@@ -783,11 +639,8 @@ bool MainWindow::handleUserEvent( const UserEvent * event )
 		if ( event->m_args.size() != 1 )
 			qFatal( "handleUserEvent: event searchQuery must receive 1 arg" );
 		
-		if ( m_tabSearchPage == -1 )
-			return false;
-
 		actionSwitchToSearchTab();
-		m_searchTab->execSearchQueryInGui( event->m_args[0] );
+		m_navPanel->executeQueryInSearch( event->m_args[0] );
 		return true;
 	}
 	else
@@ -809,8 +662,8 @@ void MainWindow::runAutoTest()
 		break; // allow to finish the initialization sequence
 		
 	case STATE_OPEN_INDEX:
-		if ( m_indexTab )
-			m_tabWidget->setCurrentIndex (1);
+		if ( hasIndex() )
+			m_navPanel->setActive( NavigationPanel::TAB_INDEX );
 		
 		m_autoteststate = STATE_SHUTDOWN;
 		QTimer::singleShot (500, this, SLOT(runAutoTest()) );
@@ -999,11 +852,6 @@ void MainWindow::actionExtractCHM()
 	progress.setValue( files.size() );
 }
 
-void MainWindow::actionAddBookmark()
-{
-	m_bookmarksTab->onAddBookmarkPressed();
-}
-
 void MainWindow::actionFontSizeIncrease()
 {
 	currentBrowser()->addZoomFactor( 1 );
@@ -1083,79 +931,27 @@ void MainWindow::actionToggleFullScreen()
 	}
 }
 
-void MainWindow::actionToggleContentsTab()
+void MainWindow::actionShowHideNavigator( bool toggle )
 {
-	bool show = view_Toggle_contents_action->isChecked();
-
-	if ( show )
-		m_tabWidget->show();
+	if ( toggle )
+		m_navPanel->show();
 	else
-		m_tabWidget->hide();
+		m_navPanel->hide();
+}
+
+void MainWindow::navigatorVisibilityChanged( bool visible )
+{
+	view_Show_navigator_window->setChecked( visible );
 }
 
 void MainWindow::actionLocateInContentsTab()
 {
-	// There may be no content tab at all
-	if ( !m_contentsTab || m_tabContextPage == -1 )
-		return;
-	
-	// Activate a content tab
-	m_tabWidget->setCurrentIndex( m_tabContextPage );
-	
-	if ( m_contentsTab )
-	{
-		// Open all the tree items to show current item (if needed)
-		IndexTocItem * treeitem = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
-	
-		if ( treeitem )
-		{
-			IndexTocItem * itemparent = treeitem;
-			
-			while ( (itemparent = (IndexTocItem*) itemparent->parent()) != 0 )
-				itemparent->setExpanded(true);
-			
-			m_contentsTab->showItem( treeitem );
-		}
-		else
-			statusBar()->showMessage( i18n( "Could not locate opened topic in content window"), 2000 );
-	}
+	if ( m_navPanel->findUrlInContents( currentBrowser()->getOpenedPage() ) )
+		m_navPanel->setActive( NavigationPanel::TAB_CONTENTS );
+	else
+		statusBar()->showMessage( i18n( "Could not locate opened topic in content window"), 2000 );
 }
 
-void MainWindow::actionNavigatePrevInToc()
-{
-	if ( !m_contentsTab )
-		return;
-	
-	// Try to find current list item
-	IndexTocItem * current = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
-	
-	if ( !current )
-		return;
-
-	QTreeWidgetItemIterator lit( current );
-	lit--;
-	
-	if ( *lit )
-		::mainWindow->openPage( ((IndexTocItem *) (*lit) )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-}
-
-void MainWindow::actionNavigateNextInToc()
-{
-	if ( !m_contentsTab )
-		return;
-	
-	// Try to find current list item
-	IndexTocItem * current = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
-
-	if ( !current )
-		return;
-	
-	QTreeWidgetItemIterator lit( current );
-	lit++;
-	
-	if ( *lit )
-		::mainWindow->openPage( ((IndexTocItem *) (*lit) )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
-}
 
 void MainWindow::actionAboutApp()
 {
@@ -1177,25 +973,22 @@ void MainWindow::actionAboutQt()
 
 void MainWindow::actionSwitchToContentTab()
 {
-	if ( m_tabContextPage != -1 ) 
-		m_tabWidget->setCurrentIndex( m_tabContextPage );
+	m_navPanel->setActive( NavigationPanel::TAB_CONTENTS );
 }
 
 void MainWindow::actionSwitchToIndexTab()
 {
-	if ( m_tabIndexPage != -1 ) 
-		m_tabWidget->setCurrentIndex( m_tabIndexPage );
+	m_navPanel->setActive( NavigationPanel::TAB_INDEX );
 }
 
 void MainWindow::actionSwitchToSearchTab()
 {
-	if ( m_tabSearchPage != -1 ) 
-		m_tabWidget->setCurrentIndex( m_tabSearchPage );
+	m_navPanel->setActive( NavigationPanel::TAB_SEARCH );
 }
 
 void MainWindow::actionSwitchToBookmarkTab()
 {
-	m_tabWidget->setCurrentIndex( m_tabBookmarkPage );
+	m_navPanel->setActive( NavigationPanel::TAB_BOOKMARK );
 }
 
 
@@ -1239,8 +1032,8 @@ void MainWindow::setupActions()
 	
 	connect( bookmark_AddAction,
 			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionAddBookmark() ) );
+			 m_navPanel,
+			 SLOT( addBookmark()) );
 	
 	connect( view_Increase_font_size_action,
 			 SIGNAL( triggered() ),
@@ -1262,10 +1055,10 @@ void MainWindow::setupActions()
 	         this,
 	         SLOT( actionToggleFullScreen() ) );
 	
-	connect( view_Toggle_contents_action,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionToggleContentsTab() ) );
+	connect( view_Show_navigator_window,
+			 SIGNAL( triggered(bool) ),
+			 this,
+			 SLOT( actionShowHideNavigator(bool) ) );
 	
 	connect( view_Locate_in_contents_action,
 			 SIGNAL( triggered() ),
@@ -1289,19 +1082,18 @@ void MainWindow::setupActions()
 	
 	connect( nav_actionPreviousPage,
 			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionNavigatePrevInToc() ) );
+			 m_navPanel,
+			 SLOT( showPrevInToc() ) );
 	
 	connect( nav_actionNextPageToc,
 			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionNavigateNextInToc() ) );
-	
-	// m_bookmarksTab fills and maintains 'Bookmarks' menu
-	m_bookmarksTab->createMenu( menu_Bookmarks );
+			 m_navPanel,
+			 SLOT( showNextInToc() ) );
 	
 	// m_viewWindowMgr fills and maintains 'Window' menu
 	m_viewWindowMgr->createMenu( this, menu_Windows, action_Close_window );
+
+	m_navPanel->setBookmarkMenu( menu_Bookmarks );
 	
 	// Close Window goes directly to the window manager
 	connect( action_Close_window,
@@ -1314,6 +1106,11 @@ void MainWindow::setupActions()
 	         qApp,
 	         SLOT( closeAllWindows() ) );
 	
+	connect( m_navPanel,
+			 SIGNAL(visibilityChanged(bool)),
+			 this,
+			 SLOT( navigatorVisibilityChanged(bool) ) );
+
 	QMenu * help = new QMenu( i18n( "&Help"), this );
 	help->addAction( i18n( "&About"), this, SLOT( actionAboutApp() ), QKeySequence( "F1" ) );
 	help->addAction( i18n( "About &Qt"), this, SLOT( actionAboutQt() ) );
@@ -1477,4 +1274,14 @@ void MainWindow::setupPopupMenu( QMenu * menu )
 	menu->addSeparator();
 	menu->addAction( edit_Copy_action );
 	menu->addAction( edit_FindAction );
+}
+
+bool MainWindow::hasTableOfContents() const
+{
+	return m_chmFile && m_chmFile->hasTableOfContents();
+}
+
+bool MainWindow::hasIndex() const
+{
+	return m_chmFile && m_chmFile->hasIndexTable();
 }

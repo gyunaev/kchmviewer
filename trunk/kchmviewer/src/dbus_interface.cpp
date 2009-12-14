@@ -20,6 +20,7 @@
 
 #include "dbus_interface.h"
 #include "mainwindow.h"
+#include "navigationpanel.h"
 #include "tab_search.h"
 
 
@@ -76,10 +77,5 @@ void DBusInterface::guiSearchQuery( const QString & query )
 
 QStringList DBusInterface::searchQuery( const QString & query )
 {
-	QStringList results;
-	
-	if ( ::mainWindow->searchWindow()->searchQuery( query, &results ) )
-		return results;
-	else
-		return QStringList();
+	return ::mainWindow->navigator()->searchQuery( query );
 }

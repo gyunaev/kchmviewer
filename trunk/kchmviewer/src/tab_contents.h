@@ -31,6 +31,7 @@ class TabContents : public QWidget, public Ui::TabContents
 		TabContents( QWidget *parent = 0 );
 		~TabContents();
 		
+		void	invalidate();
 		void	refillTableOfContents();
 		void	showItem( IndexTocItem * item );
 		void	search( const QString& text );

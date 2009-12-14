@@ -65,7 +65,7 @@
     <addaction name="view_View_HTML_source_action"/>
     <addaction name="separator"/>
     <addaction name="view_Toggle_fullscreen_action"/>
-    <addaction name="view_Toggle_contents_action"/>
+    <addaction name="view_Show_navigator_window"/>
     <addaction name="view_Locate_in_contents_action"/>
     <addaction name="separator"/>
     <addaction name="view_Set_encoding_action"/>
@@ -342,7 +342,7 @@
     <bool>false</bool>
    </property>
   </action>
-  <action name="view_Toggle_contents_action">
+  <action name="view_Show_navigator_window">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -350,7 +350,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Enable &amp;side window</string>
+    <string>Show &amp;navigator window</string>
+   </property>
+   <property name="toolTip">
+    <string>Show navigator dock window</string>
    </property>
    <property name="whatsThis">
     <string>Shows or hides the size window (with Content, Index, Search and Bookmark tabs)</string>

@@ -1098,8 +1098,8 @@ void MainWindow::setupActions()
 	// Close Window goes directly to the window manager
 	connect( action_Close_window,
 			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionNavigateNextInToc() ) );
+			 m_viewWindowMgr,
+			 SLOT( onCloseCurrentWindow() ) );
 	
 	connect( file_exit_action, 
 			 SIGNAL( triggered() ),
@@ -1164,16 +1164,16 @@ void MainWindow::setupActions()
 
 	// Open next page in TOC global shortcut
 	(void) new QShortcut( QKeySequence( i18n("Ctrl+Right") ),
-	                      this,
-	                      SLOT( actionNavigateNextInToc() ),
-						  SLOT( actionNavigateNextInToc() ),
+						  m_navPanel,
+						  SLOT( showNextInToc() ),
+						  SLOT( showNextInToc() ),
 	                      Qt::ApplicationShortcut );
 	
 	// Open next page in TOC global shortcut
 	(void) new QShortcut( QKeySequence( i18n("Ctrl+Left") ),
-	                      this,
-	                      SLOT( actionNavigatePrevInToc() ),
-						  SLOT( actionNavigatePrevInToc() ),
+						  m_navPanel,
+						  SLOT( showPrevInToc() ),
+						  SLOT( showPrevInToc() ),
 	                      Qt::ApplicationShortcut );
 	
 	// Context menu

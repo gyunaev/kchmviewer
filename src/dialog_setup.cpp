@@ -22,7 +22,7 @@
 #include "version.h"
 
 
-KCHMSetupDialog::KCHMSetupDialog(QWidget *parent)
+DialogSetup::DialogSetup(QWidget *parent)
 	: QDialog(parent), Ui::DialogSetup()
 {
 	setupUi( this );
@@ -35,13 +35,13 @@ KCHMSetupDialog::KCHMSetupDialog(QWidget *parent)
 	m_historySize->setValue ( appConfig.m_numOfRecentFiles );
 	m_rememberHistoryInfo->setChecked ( appConfig.m_HistoryStoreExtra );
 	
-	m_radioExtLinkOpenAlways->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_ALWAYS_OPEN );
-	m_radioExtLinkAsk->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_ASK_USER );
-	m_radioExtLinkOpenNever->setChecked ( appConfig.m_onExternalLinkClick == KCHMConfig::ACTION_DONT_OPEN );
+	m_radioExtLinkOpenAlways->setChecked ( appConfig.m_onExternalLinkClick == Config::ACTION_ALWAYS_OPEN );
+	m_radioExtLinkAsk->setChecked ( appConfig.m_onExternalLinkClick == Config::ACTION_ASK_USER );
+	m_radioExtLinkOpenNever->setChecked ( appConfig.m_onExternalLinkClick == Config::ACTION_DONT_OPEN );
 	
-	m_radioNewChmOpenAlways->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_ALWAYS_OPEN );
-	m_radioNewChmAsk->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_ASK_USER );
-	m_radioNewChmOpenNever->setChecked ( appConfig.m_onNewChmClick == KCHMConfig::ACTION_DONT_OPEN );
+	m_radioNewChmOpenAlways->setChecked ( appConfig.m_onNewChmClick == Config::ACTION_ALWAYS_OPEN );
+	m_radioNewChmAsk->setChecked ( appConfig.m_onNewChmClick == Config::ACTION_ASK_USER );
+	m_radioNewChmOpenNever->setChecked ( appConfig.m_onNewChmClick == Config::ACTION_DONT_OPEN );
 
 #if !defined (USE_KDE)
 	m_radioUseKHTMLPart->setEnabled ( false );
@@ -58,13 +58,13 @@ KCHMSetupDialog::KCHMSetupDialog(QWidget *parent)
 			break;
 
 #if defined (USE_KDE)			
-		case KCHMConfig::BROWSER_KHTMLPART:
+		case Config::BROWSER_KHTMLPART:
 			m_radioUseKHTMLPart->setChecked( true );
 			break;
 #endif			
 			
 #if defined (QT_WEBKIT_LIB)
-		case KCHMConfig::BROWSER_QTWEBKIT:
+		case Config::BROWSER_QTWEBKIT:
 			m_radioUseQtWebkit->setChecked( true );
 			break;
 #endif			
@@ -85,30 +85,30 @@ KCHMSetupDialog::KCHMSetupDialog(QWidget *parent)
 	boxLayoutDirectionRL->setChecked( appConfig.m_advLayoutDirectionRL );
 }
 
-KCHMSetupDialog::~KCHMSetupDialog()
+DialogSetup::~DialogSetup()
 {
 }
 
 
-void KCHMSetupDialog::accept()
+void DialogSetup::accept()
 {
 	appConfig.m_LoadLatestFileOnStartup = m_radioOnBeginOpenLast->isChecked();
 	appConfig.m_numOfRecentFiles = m_historySize->value();
 	appConfig.m_HistoryStoreExtra = m_rememberHistoryInfo->isChecked();
 
 	if ( m_radioExtLinkOpenAlways->isChecked () )
-		appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_ALWAYS_OPEN;
+		appConfig.m_onExternalLinkClick = Config::ACTION_ALWAYS_OPEN;
 	else if ( m_radioExtLinkAsk->isChecked () )
-		appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_ASK_USER;
+		appConfig.m_onExternalLinkClick = Config::ACTION_ASK_USER;
 	else
-		appConfig.m_onExternalLinkClick = KCHMConfig::ACTION_DONT_OPEN;
+		appConfig.m_onExternalLinkClick = Config::ACTION_DONT_OPEN;
 
 	if ( m_radioNewChmOpenAlways->isChecked () )
-		appConfig.m_onNewChmClick = KCHMConfig::ACTION_ALWAYS_OPEN;
+		appConfig.m_onNewChmClick = Config::ACTION_ALWAYS_OPEN;
 	else if ( m_radioNewChmAsk->isChecked () )
-		appConfig.m_onNewChmClick = KCHMConfig::ACTION_ASK_USER;
+		appConfig.m_onNewChmClick = Config::ACTION_ASK_USER;
 	else
-		appConfig.m_onNewChmClick = KCHMConfig::ACTION_DONT_OPEN;
+		appConfig.m_onNewChmClick = Config::ACTION_DONT_OPEN;
 
 		// Check the changes
 	bool need_restart = false;
@@ -137,12 +137,12 @@ void KCHMSetupDialog::accept()
 		appConfig.m_kdeEnableRefresh = m_enableRefresh->isChecked();
 	}
 
-	int new_browser = KCHMConfig::BROWSER_QTEXTBROWSER;
+	int new_browser = Config::BROWSER_QTEXTBROWSER;
 	
 	if ( m_radioUseKHTMLPart->isChecked() )
-		new_browser = KCHMConfig::BROWSER_KHTMLPART;
+		new_browser = Config::BROWSER_KHTMLPART;
 	else if ( m_radioUseQtWebkit->isChecked() )
-		new_browser = KCHMConfig::BROWSER_QTWEBKIT;
+		new_browser = Config::BROWSER_QTWEBKIT;
 
 	if ( new_browser != appConfig.m_usedBrowser )
 	{
@@ -183,7 +183,7 @@ void KCHMSetupDialog::accept()
 }
 
 
-void KCHMSetupDialog::browseExternalEditor()
+void DialogSetup::browseExternalEditor()
 {
 #if defined (USE_KDE)
         QString exec = KFileDialog::getOpenFileName( KUrl(), i18n("*|Executables"), this, i18n("Choose an editor executable"));

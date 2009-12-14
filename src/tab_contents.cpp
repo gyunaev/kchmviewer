@@ -25,7 +25,7 @@
 #include "tab_contents.h"
 
 
-KCHMContentsWindow::KCHMContentsWindow( QWidget *parent )
+TabContents::TabContents( QWidget *parent )
 	: QWidget( parent ), Ui::TabContents()
 {
 	setupUi( this );
@@ -50,13 +50,13 @@ KCHMContentsWindow::KCHMContentsWindow( QWidget *parent )
 	         SLOT( onContextMenuRequested( const QPoint & ) ) );
 }
 
-KCHMContentsWindow::~KCHMContentsWindow()
+TabContents::~TabContents()
 {
 }
 
-void KCHMContentsWindow::refillTableOfContents( )
+void TabContents::refillTableOfContents( )
 {
-	KCHMShowWaitCursor wc;
+	ShowWaitCursor wc;
 	QVector< LCHMParsedEntry > data;
 	
 	if ( !::mainWindow->chmFile()->parseTableOfContents( &data )
@@ -70,10 +70,10 @@ void KCHMContentsWindow::refillTableOfContents( )
 }
 
 
-KCHMIndTocItem * KCHMContentsWindow::getTreeItem( const QString & url )
+IndexTocItem * TabContents::getTreeItem( const QString & url )
 {
 	QString fixedstr = ::mainWindow->chmFile()->normalizeUrl( url );
-	QMap<QString, KCHMIndTocItem*>::const_iterator it = m_urlListMap.find( fixedstr );
+	QMap<QString, IndexTocItem*>::const_iterator it = m_urlListMap.find( fixedstr );
 	
 	if ( it == m_urlListMap.end() )
 		return 0;
@@ -81,13 +81,13 @@ KCHMIndTocItem * KCHMContentsWindow::getTreeItem( const QString & url )
 	return *it;
 }
 
-void KCHMContentsWindow::showItem(KCHMIndTocItem * item)
+void TabContents::showItem( IndexTocItem * item )
 {
 	tree->setCurrentItem( item );
 	tree->scrollToItem( item );
 }
 
-void KCHMContentsWindow::showEvent(QShowEvent *)
+void TabContents::showEvent(QShowEvent *)
 {
 	if ( !::mainWindow->chmFile() || m_contentFilled )
 		return;
@@ -96,20 +96,20 @@ void KCHMContentsWindow::showEvent(QShowEvent *)
 	refillTableOfContents();
 }
 
-void KCHMContentsWindow::onClicked(QTreeWidgetItem * item, int)
+void TabContents::onClicked(QTreeWidgetItem * item, int)
 {
 	bool unused;
 	
 	if ( !item )
 		return;
 	
-	KCHMIndTocItem * treeitem = (KCHMIndTocItem*) item;
+	IndexTocItem * treeitem = (IndexTocItem*) item;
 	::mainWindow->activateLink( treeitem->getUrl(), unused );
 }
 
-void KCHMContentsWindow::onContextMenuRequested(const QPoint & point)
+void TabContents::onContextMenuRequested(const QPoint & point)
 {
-	KCHMIndTocItem * treeitem = (KCHMIndTocItem *) tree->itemAt( point );
+	IndexTocItem * treeitem = (IndexTocItem *) tree->itemAt( point );
 	
 	if( treeitem )
 	{
@@ -119,7 +119,7 @@ void KCHMContentsWindow::onContextMenuRequested(const QPoint & point)
 }
 
 
-void KCHMContentsWindow::search( const QString & text )
+void TabContents::search( const QString & text )
 {
 	QList<QTreeWidgetItem*> items = tree->findItems( text, Qt::MatchWildcard | Qt::MatchRecursive );
 	bool unused;	
@@ -128,6 +128,6 @@ void KCHMContentsWindow::search( const QString & text )
 	if ( items.isEmpty() )
 		return;
 			
-	KCHMIndTocItem * treeitem = (KCHMIndTocItem *) items.first();
+	IndexTocItem * treeitem = (IndexTocItem *) items.first();
 	::mainWindow->activateLink( treeitem->getUrl(), unused );
 }

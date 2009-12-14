@@ -55,7 +55,7 @@ enum marker_t
 };
 
 // Helpers for serialization of SavedBookmark through QDataStream
-static inline QDataStream& operator<< ( QDataStream& s, const KCHMSettings::SavedBookmark& b )
+static inline QDataStream& operator<< ( QDataStream& s, const Settings::SavedBookmark& b )
 {
 	s << b.name;	
 	s << b.url;
@@ -63,7 +63,7 @@ static inline QDataStream& operator<< ( QDataStream& s, const KCHMSettings::Save
 	return s;
 }
 
-static inline QDataStream& operator>> ( QDataStream& s, KCHMSettings::SavedBookmark& b )
+static inline QDataStream& operator>> ( QDataStream& s, Settings::SavedBookmark& b )
 {
 	s >> b.name;
 	s >> b.url;
@@ -72,7 +72,7 @@ static inline QDataStream& operator>> ( QDataStream& s, KCHMSettings::SavedBookm
 }
 
 // Helpers for serialization of SavedViewWindow through QDataStream
-static inline QDataStream& operator<< ( QDataStream& s, const KCHMSettings::SavedViewWindow& b )
+static inline QDataStream& operator<< ( QDataStream& s, const Settings::SavedViewWindow& b )
 {
 	// Store the version first. Later we can increase it when adding new members.
 	s << 1;
@@ -82,7 +82,7 @@ static inline QDataStream& operator<< ( QDataStream& s, const KCHMSettings::Save
 	return s;
 }
 
-static inline QDataStream& operator>> ( QDataStream& s, KCHMSettings::SavedViewWindow& b )
+static inline QDataStream& operator>> ( QDataStream& s, Settings::SavedViewWindow& b )
 {
 	qint32 version;
 	
@@ -94,7 +94,7 @@ static inline QDataStream& operator>> ( QDataStream& s, KCHMSettings::SavedViewW
 }
 
 
-KCHMSettings::KCHMSettings( )
+Settings::Settings()
 {
 	m_activetabsystem = 0;
 	m_activetabwindow = 0;
@@ -106,7 +106,7 @@ KCHMSettings::KCHMSettings( )
 }
 
 
-bool KCHMSettings::loadSettings( const QString & filename )
+bool Settings::loadSettings( const QString & filename )
 {
 	m_activetabsystem = 0;
 	m_activetabwindow = 0;
@@ -226,7 +226,7 @@ bool KCHMSettings::loadSettings( const QString & filename )
 }
 
 
-bool KCHMSettings::saveSettings( )
+bool Settings::saveSettings( )
 {
 	QFile file( m_settingsFile );
     if ( !file.open (QIODevice::WriteOnly) )
@@ -281,7 +281,7 @@ bool KCHMSettings::saveSettings( )
 }
 
 
-void KCHMSettings::removeSettings( const QString & filename )
+void Settings::removeSettings( const QString & filename )
 {
 	QString settingsfile, idxfile;
 	
@@ -292,7 +292,7 @@ void KCHMSettings::removeSettings( const QString & filename )
 }
 
 
-void KCHMSettings::getFilenames(const QString & helpfilename, QString * settingsfile, QString * indexfile )
+void Settings::getFilenames(const QString & helpfilename, QString * settingsfile, QString * indexfile )
 {
 	QFileInfo finfo ( helpfilename );
 	QString prefix = appConfig.m_datapath + "/" + finfo.baseName();

@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMTREEVIEWITEM_H
-#define KCHMTREEVIEWITEM_H
+#ifndef TREEVIEWITEM_H
+#define TREEVIEWITEM_H
 
 #include <QVector>
 #include <QPixmap>
@@ -29,11 +29,11 @@
 
 
 //! This is a list item used both in Index and Table Of Content trees
-class KCHMIndTocItem : public QTreeWidgetItem
+class IndexTocItem : public QTreeWidgetItem
 {
 	public:
-		KCHMIndTocItem( QTreeWidgetItem* parent, QTreeWidgetItem* after, const QString& name, const QString& aurl, int image); 
-		KCHMIndTocItem( QTreeWidget* parent, QTreeWidgetItem* after, const QString& name, const QString& url, int image);
+		IndexTocItem( QTreeWidgetItem* parent, QTreeWidgetItem* after, const QString& name, const QString& aurl, int image);
+		IndexTocItem( QTreeWidget* parent, QTreeWidgetItem* after, const QString& name, const QString& url, int image);
 		
 		QString			getUrl() const;
 	
@@ -49,6 +49,6 @@ class KCHMIndTocItem : public QTreeWidgetItem
 
 
 
-void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, KCHMIndTocItem*> * map );
+void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, IndexTocItem*> * map );
 
 #endif

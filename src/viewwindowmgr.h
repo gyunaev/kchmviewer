@@ -16,22 +16,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef INCLUDE_KCHMVIEWWINDOWMGR_H
-#define INCLUDE_KCHMVIEWWINDOWMGR_H
+#ifndef VIEWWINDOWMGR_H
+#define VIEWWINDOWMGR_H
 
 #include "kde-qt.h"
 #include "settings.h"
 #include "ui_window_browser.h"
 
 // A small overriden class to handle a middle click
-class KCHMViewWindowTabs : public QTabWidget
+class ViewWindowTabs : public QTabWidget
 {
 	Q_OBJECT
 
 	public:
-		KCHMViewWindowTabs( QWidget * parent );
+		ViewWindowTabs( QWidget * parent );
 
-		virtual ~KCHMViewWindowTabs();
+		virtual ~ViewWindowTabs();
 
 	signals:
 		void mouseMiddleClickTab( int tab );
@@ -40,8 +40,10 @@ class KCHMViewWindowTabs : public QTabWidget
 		void mouseReleaseEvent ( QMouseEvent * event );
 };
 
+//FIXME
+//class ViewWindowTabs;
 
-class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
+class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 {
 	Q_OBJECT
 	public:
@@ -52,27 +54,27 @@ class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 			SearchResultFoundWrapped
 		};
 	
-		KCHMViewWindowMgr( QWidget *parent );
-		~KCHMViewWindowMgr( );
+		ViewWindowMgr( QWidget *parent );
+		~ViewWindowMgr( );
 		
 		// Returns a handle to a currently viewed window.
 		// Guaranteeed to return a valid handle, or aborts.
-		KCHMViewWindow	* 	current();
+		ViewWindow	* 	current();
 		
 		// Adds a new tab, creating a new browser window
-		KCHMViewWindow	*	addNewTab( bool set_active );
+		ViewWindow	*	addNewTab( bool set_active );
 		
 		// Sets the tab name and updates Windows menu
-		void	setTabName( KCHMViewWindow* window );
+		void	setTabName( ViewWindow* window );
 		
 		void 	invalidate();
 		
 		// Creates a Window menu
-		void 	createMenu( KCHMMainWindow * parent, QMenu * menuWindow, QAction * actionCloseWindow );
+		void 	createMenu( MainWindow * parent, QMenu * menuWindow, QAction * actionCloseWindow );
 		
 		// Saves and restores current settings between sessions
-		void	restoreSettings( const KCHMSettings::viewindow_saved_settings_t& settings );
-		void	saveSettings( KCHMSettings::viewindow_saved_settings_t& settings );
+		void	restoreSettings( const Settings::viewindow_saved_settings_t& settings );
+		void	saveSettings( Settings::viewindow_saved_settings_t& settings );
 		
 		void	setCurrentPage( int index );
 		int		currentPageIndex() const;
@@ -99,7 +101,7 @@ class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		typedef struct
 		{
 			QWidget			*	widget;
-			KCHMViewWindow	*	window;
+			ViewWindow		*	window;
 			QAction			*	action;
 		} TabData;
 		
@@ -120,7 +122,7 @@ class KCHMViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		// actions will be relinked and replaced.
 		QList< QAction* >		m_actions;
 
-		KCHMViewWindowTabs *	m_tabWidget;
+		ViewWindowTabs		*	m_tabWidget;
 };
 
 #endif /* INCLUDE_KCHMVIEWWINDOWMGR_H */

@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMBOOKMARKWINDOW_H
-#define KCHMBOOKMARKWINDOW_H
+#ifndef TAB_BOOKMARK_H
+#define TAB_BOOKMARK_H
 
 #include "kde-qt.h"
 #include "settings.h"
@@ -25,17 +25,16 @@
 #include "ui_tab_bookmarks.h"
 
 
-class KCHMBookmarkWindow : public QWidget, public Ui::TabBookmarks
+class TabBookmarks : public QWidget, public Ui::TabBookmarks
 {
 	Q_OBJECT
 	public:
-		KCHMBookmarkWindow( QWidget *parent );
-		virtual ~KCHMBookmarkWindow() {};
+		TabBookmarks( QWidget *parent );
 	
 		void 	createMenu( QMenu * menuBookmarks );
 		
-		void	restoreSettings (const KCHMSettings::bookmark_saved_settings_t& settings);
-		void	saveSettings (KCHMSettings::bookmark_saved_settings_t& settings);
+		void	restoreSettings ( const Settings::bookmark_saved_settings_t& settings );
+		void	saveSettings ( Settings::bookmark_saved_settings_t& settings );
 		void	invalidate();
 		
 	public slots:

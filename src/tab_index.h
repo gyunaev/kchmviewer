@@ -16,19 +16,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMINDEXWINDOW_H
-#define KCHMINDEXWINDOW_H
+#ifndef TAB_INDEX_H
+#define TAB_INDEX_H
 
 
 #include "kde-qt.h"
 #include "ui_tab_index.h"
 
 
-class KCHMIndexWindow : public QWidget, public Ui::TabIndex
+class TabIndex : public QWidget, public Ui::TabIndex
 {
 	Q_OBJECT
 	public:
-		KCHMIndexWindow ( QWidget * parent = 0 );
+		TabIndex( QWidget * parent = 0 );
 	
 		void	invalidate();
 		void	search( const QString& index );

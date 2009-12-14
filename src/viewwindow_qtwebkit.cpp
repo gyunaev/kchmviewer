@@ -123,7 +123,7 @@ class KCHMNetworkReply : public QNetworkReply
 			}
 			else
 			{
-				QString fpath = KCHMViewWindow_QtWebKit::decodeUrl( path );
+				QString fpath = ViewWindow_QtWebKit::decodeUrl( path );
 		
 				if ( !chm->getFileContentAsBinary( &buf, fpath ) )
 					qWarning( "Could not resolve file %s\n", qPrintable( path ) );
@@ -169,8 +169,8 @@ class KCHMNetworkAccessManager : public QNetworkAccessManager
 //
 // Webkit browser
 //
-KCHMViewWindow_QtWebKit::KCHMViewWindow_QtWebKit( KCHMViewWindowTabs * parent )
-	: QWebView ( parent ), KCHMViewWindow ( parent )
+ViewWindow_QtWebKit::ViewWindow_QtWebKit( ViewWindowTabs * parent )
+	: QWebView ( parent ), ViewWindow ( parent )
 {
 	m_zoomfactor = 1;
 	invalidate();
@@ -182,12 +182,12 @@ KCHMViewWindow_QtWebKit::KCHMViewWindow_QtWebKit( KCHMViewWindowTabs * parent )
 }
 
 
-KCHMViewWindow_QtWebKit::~KCHMViewWindow_QtWebKit()
+ViewWindow_QtWebKit::~ViewWindow_QtWebKit()
 {
 }
 
 
-bool KCHMViewWindow_QtWebKit::openPage (const QString& url)
+bool ViewWindow_QtWebKit::openPage (const QString& url)
 {
 	if ( m_allowSourceChange )
 	{
@@ -206,44 +206,44 @@ bool KCHMViewWindow_QtWebKit::openPage (const QString& url)
 }
 
 
-void KCHMViewWindow_QtWebKit::setZoomFactor( int zoom )
+void ViewWindow_QtWebKit::setZoomFactor( int zoom )
 {
 	m_zoomfactor = zoom;
 	setTextSizeMultiplier ( 1.0 + m_zoomfactor * 0.5 );
 }
 
-void KCHMViewWindow_QtWebKit::invalidate( )
+void ViewWindow_QtWebKit::invalidate( )
 {
 	m_zoomfactor = 1;
 	m_allowSourceChange = true;
 	setTextSizeMultiplier( 1.0 );
 	reload();
 	
-	KCHMViewWindow::invalidate( );
+	ViewWindow::invalidate( );
 }
 
-int KCHMViewWindow_QtWebKit::getScrollbarPosition( )
+int ViewWindow_QtWebKit::getScrollbarPosition( )
 {
 	return page()->currentFrame()->scrollBarValue( Qt::Vertical );
 }
 
-void KCHMViewWindow_QtWebKit::setScrollbarPosition( int pos )
+void ViewWindow_QtWebKit::setScrollbarPosition( int pos )
 {
 	page()->currentFrame()->setScrollBarValue( Qt::Vertical, pos );
 }
 
-void KCHMViewWindow_QtWebKit::addZoomFactor( int value )
+void ViewWindow_QtWebKit::addZoomFactor( int value )
 {
 	setZoomFactor( m_zoomfactor + value );
 }
 
-void KCHMViewWindow_QtWebKit::onAnchorClicked(const QUrl & url)
+void ViewWindow_QtWebKit::onAnchorClicked(const QUrl & url)
 {
 	emit linkClicked( url.path(), m_allowSourceChange );
 }
 
 
-bool KCHMViewWindow_QtWebKit::printCurrentPage( )
+bool ViewWindow_QtWebKit::printCurrentPage( )
 {
 	QPrinter printer( QPrinter::HighResolution );
 	
@@ -261,21 +261,21 @@ bool KCHMViewWindow_QtWebKit::printCurrentPage( )
 }
 
 
-void KCHMViewWindow_QtWebKit::clipSelectAll( )
+void ViewWindow_QtWebKit::clipSelectAll( )
 {
 	QMessageBox::information( 0, "Not implemented", "Not implemented" );
 //	selectAll();
 }
 
 
-void KCHMViewWindow_QtWebKit::clipCopy( )
+void ViewWindow_QtWebKit::clipCopy( )
 {
 	triggerPageAction( QWebPage::Copy );
 }
 
 
 // Shamelessly stolen from Qt
-QString KCHMViewWindow_QtWebKit::decodeUrl( const QString &input )
+QString ViewWindow_QtWebKit::decodeUrl( const QString &input )
 {
 	QString temp;
 
@@ -319,7 +319,7 @@ QString KCHMViewWindow_QtWebKit::decodeUrl( const QString &input )
 }
 
 
-QMenu * KCHMViewWindow_QtWebKit::createPopupMenu( const QPoint & pos )
+QMenu * ViewWindow_QtWebKit::createPopupMenu( const QPoint & pos )
 {
 	QMenu * menu = getContextMenu( anchorAt( pos ), this );
 	menu->exec( pos );
@@ -328,7 +328,7 @@ QMenu * KCHMViewWindow_QtWebKit::createPopupMenu( const QPoint & pos )
 }
 
 
-void KCHMViewWindow_QtWebKit::find(const QString & text, int flags)
+void ViewWindow_QtWebKit::find(const QString & text, int flags)
 {
 	m_searchText = text;
 	m_flags = flags;
@@ -336,17 +336,17 @@ void KCHMViewWindow_QtWebKit::find(const QString & text, int flags)
 	find( false, false );
 }
 
-void KCHMViewWindow_QtWebKit::onFindNext()
+void ViewWindow_QtWebKit::onFindNext()
 {
 	find( true, false );
 }
 
-void KCHMViewWindow_QtWebKit::onFindPrevious()
+void ViewWindow_QtWebKit::onFindPrevious()
 {
 	find( false, true );
 }
 
-void KCHMViewWindow_QtWebKit::find( bool , bool backward )
+void ViewWindow_QtWebKit::find( bool , bool backward )
 {
 	QWebPage::FindFlags flags = QWebPage::FindWrapsAroundDocument;
 	
@@ -357,12 +357,12 @@ void KCHMViewWindow_QtWebKit::find( bool , bool backward )
 		flags |= QWebPage::FindCaseSensitively;
 	
 	if ( findText( m_searchText, flags ) )
-		::mainWindow->viewWindowMgr()->indicateFindResultStatus( KCHMViewWindowMgr::SearchResultFound );
+		::mainWindow->viewWindowMgr()->indicateFindResultStatus( ViewWindowMgr::SearchResultFound );
 	else
-		::mainWindow->viewWindowMgr()->indicateFindResultStatus( KCHMViewWindowMgr::SearchResultNotFound );
+		::mainWindow->viewWindowMgr()->indicateFindResultStatus( ViewWindowMgr::SearchResultNotFound );
 }
 
-void KCHMViewWindow_QtWebKit::contextMenuEvent(QContextMenuEvent * e)
+void ViewWindow_QtWebKit::contextMenuEvent(QContextMenuEvent * e)
 {
 	// From Qt Assistant
 	QMenu *m = new QMenu(0);
@@ -381,7 +381,7 @@ void KCHMViewWindow_QtWebKit::contextMenuEvent(QContextMenuEvent * e)
 	delete m;
 }
 
-QString KCHMViewWindow_QtWebKit::anchorAt(const QPoint & pos)
+QString ViewWindow_QtWebKit::anchorAt(const QPoint & pos)
 {
 	QWebHitTestResult res = page()->currentFrame()->hitTestContent( pos );
 	
@@ -392,7 +392,7 @@ QString KCHMViewWindow_QtWebKit::anchorAt(const QPoint & pos)
 }
 
 
-void KCHMViewWindow_QtWebKit::mouseReleaseEvent ( QMouseEvent * event )
+void ViewWindow_QtWebKit::mouseReleaseEvent ( QMouseEvent * event )
 {
 	if ( event->button() == Qt::MidButton )
 	{

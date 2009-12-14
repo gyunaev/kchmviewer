@@ -49,7 +49,7 @@
 #include "version.h"
 
 
-KCHMMainWindow::KCHMMainWindow()
+MainWindow::MainWindow()
 	: QMainWindow ( 0 ), Ui::MainWindow()
 {
 	const unsigned int WND_X_SIZE = 700;
@@ -80,19 +80,17 @@ KCHMMainWindow::KCHMMainWindow()
 	m_tabSearchPage = -1;
 	m_tabBookmarkPage = -1;
 	
-	setupSignals();
-
-	m_currentSettings = new KCHMSettings;
+	m_currentSettings = new Settings();
 		
 	// Create the initial layout - a splitter with tab window in left, and text browser in right
 	m_windowSplitter = new QSplitter(this);
 	m_tabWidget = new KQTabWidget( m_windowSplitter );
-	m_viewWindowMgr = new KCHMViewWindowMgr( m_windowSplitter );
+	m_viewWindowMgr = new ViewWindowMgr( m_windowSplitter );
 	
-	m_bookmarkWindow = new KCHMBookmarkWindow( m_tabWidget );
+	m_bookmarksTab = new TabBookmarks( m_tabWidget );
 
 	// Add the tabs
-	m_tabWidget->addTab( m_bookmarkWindow, i18n("Bookmarks") );
+	m_tabWidget->addTab( m_bookmarksTab, i18n("Bookmarks") );
 
 	// Splitter is a central widget
 	setCentralWidget( m_windowSplitter );
@@ -128,7 +126,7 @@ KCHMMainWindow::KCHMMainWindow()
 }
 
 
-KCHMMainWindow::~KCHMMainWindow()
+MainWindow::~MainWindow()
 {
 	// Temporary files cleanup
 	while ( !m_tempFileKeeper.isEmpty() )
@@ -137,7 +135,7 @@ KCHMMainWindow::~KCHMMainWindow()
 
 
 
-bool KCHMMainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
+bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 {
 	QString fileName = loadFileName;
 
@@ -195,7 +193,7 @@ bool KCHMMainWindow::loadFile ( const QString &loadFileName, bool call_open_page
 		showOrHideIndexWindow( m_tabIndexPage );
 		showOrHideSearchWindow( m_tabSearchPage );
 		
-		m_bookmarkWindow->invalidate();
+		m_bookmarksTab->invalidate();
 		navSetBackEnabled( false );
 		navSetForwardEnabled( false );
 		m_viewWindowMgr->invalidate();
@@ -215,7 +213,7 @@ bool KCHMMainWindow::loadFile ( const QString &loadFileName, bool call_open_page
 			if ( m_searchTab )
 				m_searchTab->restoreSettings (m_currentSettings->m_searchhistory);
 				
-			m_bookmarkWindow->restoreSettings (m_currentSettings->m_bookmarks);
+			m_bookmarksTab->restoreSettings (m_currentSettings->m_bookmarks);
 
 			if ( call_open_page )
 			{
@@ -268,7 +266,7 @@ bool KCHMMainWindow::loadFile ( const QString &loadFileName, bool call_open_page
 
 
 
-void KCHMMainWindow::refreshCurrentBrowser( )
+void MainWindow::refreshCurrentBrowser( )
 {
 	QString title = m_chmFile->title();
 	
@@ -290,7 +288,7 @@ void KCHMMainWindow::refreshCurrentBrowser( )
 
 
 
-void KCHMMainWindow::activateLink ( const QString & link, bool& follow_link )
+void MainWindow::activateLink ( const QString & link, bool& follow_link )
 {
 	if ( link.isEmpty() )
 		return;
@@ -311,7 +309,7 @@ void KCHMMainWindow::activateLink ( const QString & link, bool& follow_link )
 }
 
 
-bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
+bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 {
 	QString otherlink, otherfile, url = srcurl;
 	
@@ -322,10 +320,10 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 	{
 		switch ( appConfig.m_onExternalLinkClick )
 		{
-		case KCHMConfig::ACTION_DONT_OPEN:
+		case Config::ACTION_DONT_OPEN:
 			break;
 
-		case KCHMConfig::ACTION_ASK_USER:
+		case Config::ACTION_ASK_USER:
 	   		if ( QMessageBox::question(this,
 				 i18n("%1 - remote link clicked - %2") . arg(APP_NAME) . arg(otherlink),
 				 i18n("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
@@ -335,7 +333,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 				
 			// no break! should continue to open.
 
-		case KCHMConfig::ACTION_ALWAYS_OPEN:
+		case Config::ACTION_ALWAYS_OPEN:
 #if defined (USE_KDE)
 			new KRun ( url, 0 );
 #else
@@ -383,14 +381,14 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 			event_args.push_back( otherfile );
 			event_args.push_back( otherlink ); // url
 			
-			qApp->postEvent( this, new KCHMUserEvent( "loadAndOpen", event_args ) );
+			qApp->postEvent( this, new UserEvent( "loadAndOpen", event_args ) );
 			return false;
 		}
 		else
 			url = otherlink;
 	}
 	
-	KCHMViewWindow * vwnd = currentBrowser();
+	ViewWindow * vwnd = currentBrowser();
 	if ( flags & OPF_NEW_TAB )
 		vwnd = m_viewWindowMgr->addNewTab( !(flags & OPF_BACKGROUND) );
 	
@@ -412,7 +410,7 @@ bool KCHMMainWindow::openPage( const QString & srcurl, unsigned int flags )
 }
 
 
-void KCHMMainWindow::firstShow()
+void MainWindow::firstShow()
 {
 	if ( !parseCmdLineArgs( ) )
 	{
@@ -427,7 +425,7 @@ void KCHMMainWindow::firstShow()
 }
 
 
-void KCHMMainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
+void MainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
 {
 	m_chmFile->setCurrentEncoding( encoding );
 	
@@ -459,7 +457,7 @@ void KCHMMainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
 	currentBrowser()->openUrl( url );
 }
 
-void KCHMMainWindow::closeFile( )
+void MainWindow::closeFile( )
 {
 	// Prepare the settings
 	if ( appConfig.m_HistoryStoreExtra )
@@ -475,7 +473,7 @@ void KCHMMainWindow::closeFile( )
 		if ( m_searchTab )
 			m_searchTab->saveSettings (m_currentSettings->m_searchhistory);
 				
-		m_bookmarkWindow->saveSettings( m_currentSettings->m_bookmarks );
+		m_bookmarksTab->saveSettings( m_currentSettings->m_bookmarks );
 
 		m_viewWindowMgr->saveSettings( m_currentSettings->m_viewwindows );
 
@@ -486,7 +484,7 @@ void KCHMMainWindow::closeFile( )
 }
 
 
-void KCHMMainWindow::closeEvent ( QCloseEvent * e )
+void MainWindow::closeEvent ( QCloseEvent * e )
 {
 	// Save the settings if we have something opened
 	if ( m_chmFile )
@@ -499,7 +497,7 @@ void KCHMMainWindow::closeEvent ( QCloseEvent * e )
 	QMainWindow::closeEvent ( e );
 }
 
-bool KCHMMainWindow::parseCmdLineArgs( )
+bool MainWindow::parseCmdLineArgs( )
 {
 	QString filename = QString::null, search_query = QString::null;
 	QString search_index = QString::null, search_bookmark = QString::null, search_toc = QString::null;
@@ -556,21 +554,21 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 		{
 			QStringList event_args;
 			event_args.push_back( search_index );
-			qApp->postEvent( this, new KCHMUserEvent( "findInIndex", event_args ) );
+			qApp->postEvent( this, new UserEvent( "findInIndex", event_args ) );
 		}
 		
 		if ( !search_query.isEmpty() )	
 		{
 			QStringList event_args;
 			event_args.push_back( search_query );
-			qApp->postEvent( this, new KCHMUserEvent( "searchQuery", event_args ) );
+			qApp->postEvent( this, new UserEvent( "searchQuery", event_args ) );
 		}
 		
 		if ( !search_toc.isEmpty() )	
 		{
 			QStringList event_args;
 			event_args.push_back( search_toc );
-			qApp->postEvent( this, new KCHMUserEvent( "findInToc", event_args ) );
+			qApp->postEvent( this, new UserEvent( "findInToc", event_args ) );
 		}
 		
 		if ( do_autotest )
@@ -592,31 +590,7 @@ bool KCHMMainWindow::parseCmdLineArgs( )
 	return false;
 }
 
-
-
-void KCHMMainWindow::setupSignals( )
-{
-#if !defined (_WIN32)
-#if defined(HAVE_SIGACTION)
-	struct sigaction sa;
-    memset ((char *)&sa, 0, sizeof(sa));
-	sigemptyset (&sa.sa_mask);
-	sigaddset (&sa.sa_mask, SIGCHLD);
-
-#ifdef SA_RESTART
-	sa.sa_flags = SA_RESTART;
-#endif
-	
-	sa.sa_handler = SIG_IGN;
-	sigaction (SIGCHLD, &sa, (struct sigaction *)0);
-#else /* !HAVE_SIGACTION */
-	signal (SIGCHLD, SIG_IGN);
-#endif /* HAVE_SIGACTION */
-#endif /* !defined (_WIN32) */
-}
-
-
-void KCHMMainWindow::showOrHideContextWindow( int tabindex )
+void MainWindow::showOrHideContextWindow( int tabindex )
 {
 	if ( tabindex == -1 )
 	{
@@ -634,7 +608,7 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 	{
 		if ( !m_contentsTab )
 		{
-			m_contentsTab = new KCHMContentsWindow( m_tabWidget );
+			m_contentsTab = new TabContents( m_tabWidget );
 			m_tabWidget->insertTab( tabindex, m_contentsTab, i18n( "Contents" ) );
 		}
 	
@@ -643,7 +617,7 @@ void KCHMMainWindow::showOrHideContextWindow( int tabindex )
 	}
 }
 
-void KCHMMainWindow::showOrHideIndexWindow( int tabindex )
+void MainWindow::showOrHideIndexWindow( int tabindex )
 {
 	// Test whether to show/invalidate the index window
 	if ( tabindex == -1 )
@@ -659,7 +633,7 @@ void KCHMMainWindow::showOrHideIndexWindow( int tabindex )
 	{
 		if ( !m_indexTab )
 		{
-			m_indexTab = new KCHMIndexWindow (m_tabWidget);
+			m_indexTab = new TabIndex(m_tabWidget);
 			m_tabWidget->insertTab( tabindex, m_indexTab, i18n( "Index" ) );
 		}
 		else
@@ -667,7 +641,7 @@ void KCHMMainWindow::showOrHideIndexWindow( int tabindex )
 	}
 }
 
-void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
+void MainWindow::showOrHideSearchWindow( int tabindex )
 {
 	if ( tabindex == -1 )
 	{
@@ -682,7 +656,7 @@ void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
 	{
 		if ( !m_searchTab )
 		{
-			m_searchTab = new KCHMSearchWindow (m_tabWidget);
+			m_searchTab = new TabSearch(m_tabWidget);
 			m_tabWidget->insertTab( tabindex, m_searchTab, i18n( "Search" ) );
 		}
 		else
@@ -691,52 +665,52 @@ void KCHMMainWindow::showOrHideSearchWindow( int tabindex )
 }
 
 
-KCHMViewWindow * KCHMMainWindow::currentBrowser( ) const
+ViewWindow * MainWindow::currentBrowser( ) const
 {
 	return m_viewWindowMgr->current();
 }
 
-void KCHMMainWindow::onOpenPageInNewTab( )
+void MainWindow::onOpenPageInNewTab( )
 {
 	openPage( currentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_CONTENT_TREE );
 }
 
-void KCHMMainWindow::onOpenPageInNewBackgroundTab( )
+void MainWindow::onOpenPageInNewBackgroundTab( )
 {
 	openPage( currentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_BACKGROUND );
 }
 
-void KCHMMainWindow::browserChanged( KCHMViewWindow * newbrowser )
+void MainWindow::browserChanged( ViewWindow * newbrowser )
 {
 	locateInContentTree( newbrowser->getOpenedPage() );
 }
 
-void KCHMMainWindow::locateInContentTree( const QString & url )
+void MainWindow::locateInContentTree( const QString & url )
 {
 	if ( !m_contentsTab )
 		return;
 	
-	KCHMIndTocItem * treeitem = m_contentsTab->getTreeItem( url );
+	IndexTocItem * treeitem = m_contentsTab->getTreeItem( url );
 	
 	if ( treeitem )
 	{
-		KCHMIndTocItem * itemparent = treeitem;
-		while ( (itemparent = (KCHMIndTocItem*) itemparent->parent()) != 0 )
+		IndexTocItem * itemparent = treeitem;
+		while ( (itemparent = (IndexTocItem*) itemparent->parent()) != 0 )
 			itemparent->setExpanded(true);
 			
 		m_contentsTab->showItem( treeitem );
 	}
 }
 
-bool KCHMMainWindow::event( QEvent * e )
+bool MainWindow::event( QEvent * e )
 {
 	if ( e->type() == QEvent::User )
-		return handleUserEvent( (KCHMUserEvent*) e );
+		return handleUserEvent( (UserEvent*) e );
 	
 	return QWidget::event( e );
 }
 
-bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
+bool MainWindow::handleUserEvent( const UserEvent * event )
 {
 	if ( event->m_action == "loadAndOpen" )
 	{
@@ -799,7 +773,7 @@ bool KCHMMainWindow::handleUserEvent( const KCHMUserEvent * event )
 
 
 #if defined (ENABLE_AUTOTEST_SUPPORT)
-void KCHMMainWindow::runAutoTest()
+void MainWindow::runAutoTest()
 {
 	switch (m_autoteststate)
 	{
@@ -828,27 +802,27 @@ void KCHMMainWindow::runAutoTest()
 #endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 
 
-void KCHMMainWindow::showInStatusBar(const QString & text)
+void MainWindow::showInStatusBar(const QString & text)
 {
 	statusBar()->showMessage( text, 2000 );
 }
 
-void KCHMMainWindow::actionNavigateBack()
+void MainWindow::actionNavigateBack()
 {
 	currentBrowser()->navigateBack();
 }
 
-void KCHMMainWindow::actionNavigateForward()
+void MainWindow::actionNavigateForward()
 {
 	currentBrowser()->navigateForward();
 }
 
-void KCHMMainWindow::actionNavigateHome()
+void MainWindow::actionNavigateHome()
 {
 	currentBrowser()->navigateHome();
 }
 
-void KCHMMainWindow::actionOpenFile()
+void MainWindow::actionOpenFile()
 {
 #if defined (USE_KDE)
 	QString fn = KFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("*.chm|Compressed Help Manual (*.chm)"), this);
@@ -872,35 +846,35 @@ void KCHMMainWindow::actionOpenFile()
 	}
 }
 
-void KCHMMainWindow::actionPrint()
+void MainWindow::actionPrint()
 {
 	currentBrowser()->printCurrentPage();
 }
 
-void KCHMMainWindow::actionEditCopy()
+void MainWindow::actionEditCopy()
 {
 	currentBrowser()->clipCopy();
 }
 
-void KCHMMainWindow::actionEditSelectAll()
+void MainWindow::actionEditSelectAll()
 {
 	currentBrowser()->clipSelectAll();
 }
 
-void KCHMMainWindow::actionFindInPage()
+void MainWindow::actionFindInPage()
 {
 	m_viewWindowMgr->onActivateFind();
 }
 
-void KCHMMainWindow::actionChangeSettings()
+void MainWindow::actionChangeSettings()
 {
-	KCHMSetupDialog dlg ( this );
+	DialogSetup dlg ( this );
 	
 	dlg.exec();
 }
 
 
-void KCHMMainWindow::actionExtractCHM()
+void MainWindow::actionExtractCHM()
 {
 	QStringList files;
 	
@@ -1000,22 +974,22 @@ void KCHMMainWindow::actionExtractCHM()
 	progress.setValue( files.size() );
 }
 
-void KCHMMainWindow::actionAddBookmark()
+void MainWindow::actionAddBookmark()
 {
-	m_bookmarkWindow->onAddBookmarkPressed();
+	m_bookmarksTab->onAddBookmarkPressed();
 }
 
-void KCHMMainWindow::actionFontSizeIncrease()
+void MainWindow::actionFontSizeIncrease()
 {
 	currentBrowser()->addZoomFactor( 1 );
 }
 
-void KCHMMainWindow::actionFontSizeDecrease()
+void MainWindow::actionFontSizeDecrease()
 {
 	currentBrowser()->addZoomFactor( -1 );
 }
 
-void KCHMMainWindow::actionViewHTMLsource()
+void MainWindow::actionViewHTMLsource()
 {
 	QString text;
 
@@ -1058,7 +1032,7 @@ void KCHMMainWindow::actionViewHTMLsource()
 	}
 }
 
-void KCHMMainWindow::actionToggleFullScreen()
+void MainWindow::actionToggleFullScreen()
 {
 	bool fullscreen = view_Toggle_fullscreen_action->isChecked();
 	
@@ -1084,7 +1058,7 @@ void KCHMMainWindow::actionToggleFullScreen()
 	}
 }
 
-void KCHMMainWindow::actionToggleContentsTab()
+void MainWindow::actionToggleContentsTab()
 {
 	bool show = view_Toggle_contents_action->isChecked();
 
@@ -1094,7 +1068,7 @@ void KCHMMainWindow::actionToggleContentsTab()
 		m_tabWidget->hide();
 }
 
-void KCHMMainWindow::actionLocateInContentsTab()
+void MainWindow::actionLocateInContentsTab()
 {
 	// There may be no content tab at all
 	if ( !m_contentsTab || m_tabContextPage == -1 )
@@ -1106,13 +1080,13 @@ void KCHMMainWindow::actionLocateInContentsTab()
 	if ( m_contentsTab )
 	{
 		// Open all the tree items to show current item (if needed)
-		KCHMIndTocItem * treeitem = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
+		IndexTocItem * treeitem = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
 	
 		if ( treeitem )
 		{
-			KCHMIndTocItem * itemparent = treeitem;
+			IndexTocItem * itemparent = treeitem;
 			
-			while ( (itemparent = (KCHMIndTocItem*) itemparent->parent()) != 0 )
+			while ( (itemparent = (IndexTocItem*) itemparent->parent()) != 0 )
 				itemparent->setExpanded(true);
 			
 			m_contentsTab->showItem( treeitem );
@@ -1122,13 +1096,13 @@ void KCHMMainWindow::actionLocateInContentsTab()
 	}
 }
 
-void KCHMMainWindow::actionNavigatePrevInToc()
+void MainWindow::actionNavigatePrevInToc()
 {
 	if ( !m_contentsTab )
 		return;
 	
 	// Try to find current list item
-	KCHMIndTocItem * current = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
+	IndexTocItem * current = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
 	
 	if ( !current )
 		return;
@@ -1137,16 +1111,16 @@ void KCHMMainWindow::actionNavigatePrevInToc()
 	lit--;
 	
 	if ( *lit )
-		::mainWindow->openPage( ((KCHMIndTocItem *) (*lit) )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+		::mainWindow->openPage( ((IndexTocItem *) (*lit) )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
-void KCHMMainWindow::actionNavigateNextInToc()
+void MainWindow::actionNavigateNextInToc()
 {
 	if ( !m_contentsTab )
 		return;
 	
 	// Try to find current list item
-	KCHMIndTocItem * current = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
+	IndexTocItem * current = m_contentsTab->getTreeItem( currentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
@@ -1155,10 +1129,10 @@ void KCHMMainWindow::actionNavigateNextInToc()
 	lit++;
 	
 	if ( *lit )
-		::mainWindow->openPage( ((KCHMIndTocItem *) (*lit) )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+		::mainWindow->openPage( ((IndexTocItem *) (*lit) )->getUrl(), OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
-void KCHMMainWindow::actionAboutApp()
+void MainWindow::actionAboutApp()
 {
 	QString caption = i18n( "About %1" ) . arg(APP_NAME);
 	QString text = m_aboutDlgMenuText;
@@ -1171,36 +1145,36 @@ void KCHMMainWindow::actionAboutApp()
 #endif
 }
 
-void KCHMMainWindow::actionAboutQt()
+void MainWindow::actionAboutQt()
 {
 	QMessageBox::aboutQt( this, APP_NAME);
 }
 
-void KCHMMainWindow::actionSwitchToContentTab()
+void MainWindow::actionSwitchToContentTab()
 {
 	if ( m_tabContextPage != -1 ) 
 		m_tabWidget->setCurrentIndex( m_tabContextPage );
 }
 
-void KCHMMainWindow::actionSwitchToIndexTab()
+void MainWindow::actionSwitchToIndexTab()
 {
 	if ( m_tabIndexPage != -1 ) 
 		m_tabWidget->setCurrentIndex( m_tabIndexPage );
 }
 
-void KCHMMainWindow::actionSwitchToSearchTab()
+void MainWindow::actionSwitchToSearchTab()
 {
 	if ( m_tabSearchPage != -1 ) 
 		m_tabWidget->setCurrentIndex( m_tabSearchPage );
 }
 
-void KCHMMainWindow::actionSwitchToBookmarkTab()
+void MainWindow::actionSwitchToBookmarkTab()
 {
 	m_tabWidget->setCurrentIndex( m_tabBookmarkPage );
 }
 
 
-void KCHMMainWindow::setupActions()
+void MainWindow::setupActions()
 {
 	// Connect actions to slots
 	connect( file_Open_action, 
@@ -1298,8 +1272,8 @@ void KCHMMainWindow::setupActions()
 	         this,
 	         SLOT( actionNavigateNextInToc() ) );
 	
-	// m_bookmarkWindow fills and maintains 'Bookmarks' menu
-	m_bookmarkWindow->createMenu( menu_Bookmarks );
+	// m_bookmarksTab fills and maintains 'Bookmarks' menu
+	m_bookmarksTab->createMenu( menu_Bookmarks );
 	
 	// m_viewWindowMgr fills and maintains 'Window' menu
 	m_viewWindowMgr->createMenu( this, menu_Windows, action_Close_window );
@@ -1403,18 +1377,18 @@ void KCHMMainWindow::setupActions()
 }
 
 
-void KCHMMainWindow::navSetBackEnabled(bool enabled)
+void MainWindow::navSetBackEnabled(bool enabled)
 {
 	nav_action_Back->setEnabled( enabled );
 }
 
-void KCHMMainWindow::navSetForwardEnabled(bool enabled)
+void MainWindow::navSetForwardEnabled(bool enabled)
 {
 	nav_actionForward->setEnabled( enabled );
 }
 
 
-void KCHMMainWindow::recentFilesInit( QMenu * menu )
+void MainWindow::recentFilesInit( QMenu * menu )
 {
 	m_numOfRecentFiles = appConfig.m_numOfRecentFiles;
 	
@@ -1444,7 +1418,7 @@ void KCHMMainWindow::recentFilesInit( QMenu * menu )
 	
 }
 
-void KCHMMainWindow::recentFilesUpdate()
+void MainWindow::recentFilesUpdate()
 {
 	// Set the actions
 	for ( int i = 0; i < m_numOfRecentFiles; ++i )
@@ -1463,7 +1437,7 @@ void KCHMMainWindow::recentFilesUpdate()
 	m_recentFileSeparator->setVisible( !appConfig.m_recentFiles.isEmpty() );
 }
 
-void KCHMMainWindow::actionOpenRecentFile()
+void MainWindow::actionOpenRecentFile()
 {
 	QAction *action = qobject_cast<QAction *>(sender());
 	
@@ -1471,7 +1445,7 @@ void KCHMMainWindow::actionOpenRecentFile()
 		loadFile( action->data().toString() );
 }
 
-void KCHMMainWindow::setupLangEncodingMenu()
+void MainWindow::setupLangEncodingMenu()
 {
 	// Create the language selection menu.
 	QMenu * encodings = new QMenu( this );
@@ -1511,19 +1485,19 @@ void KCHMMainWindow::setupLangEncodingMenu()
 }
 
 
-void KCHMMainWindow::actionEncodingChanged( QAction * action )
+void MainWindow::actionEncodingChanged( QAction * action )
 {
 	const LCHMTextEncoding * enc = (const LCHMTextEncoding *) action->data().value< void* > ();
 	setTextEncoding( enc );
 }
 
 
-QMenu * KCHMMainWindow::tabItemsContextMenu()
+QMenu * MainWindow::tabItemsContextMenu()
 {
 	return m_contextMenu;
 }
 
-void KCHMMainWindow::setupPopupMenu( QMenu * menu )
+void MainWindow::setupPopupMenu( QMenu * menu )
 {
 	menu->addAction( action_Close_window );
 	menu->addSeparator();

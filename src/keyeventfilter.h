@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef INCLUDE_KCHMKEYEVENTFILTER_H
-#define INCLUDE_KCHMKEYEVENTFILTER_H
+#ifndef KEYEVENTFILTER_H
+#define KEYEVENTFILTER_H
 
 #include <QObject>
 #include <QEvent>
@@ -28,10 +28,10 @@
  * is to intercept keyboard events, and store the Shift and Ctrl keys state information.
  * Unfortunately it seems to be the only way to do it in Qt.
  */
-class KCHMKeyEventFilter : public QObject
+class KeyEventFilter : public QObject
 {
 	public:
-    	KCHMKeyEventFilter();
+		KeyEventFilter();
 
 		bool	isShiftPressed() const	{	return m_shiftPressed;	}
 		bool	isCtrlPressed() const	{	return m_ctrlPressed;	}
@@ -43,6 +43,6 @@ class KCHMKeyEventFilter : public QObject
 		bool	m_ctrlPressed;
 };
 
-extern KCHMKeyEventFilter	gKeyEventFilter;
+extern KeyEventFilter	gKeyEventFilter;
 
 #endif /* INCLUDE_KCHMKEYEVENTFILTER_H */

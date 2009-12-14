@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMVIEWWINDOW_QTWEBKIT_H
-#define KCHMVIEWWINDOW_QTWEBKIT_H
+#ifndef VIEWWINDOW_QTWEBKIT_H
+#define VIEWWINDOW_QTWEBKIT_H
 
 #include <QWebView> 
 
@@ -25,12 +25,12 @@
 #include "viewwindow.h"
 
 
-class KCHMViewWindow_QtWebKit : public QWebView, public KCHMViewWindow
+class ViewWindow_QtWebKit : public QWebView, public ViewWindow
 {
 	Q_OBJECT
 	public:
-		KCHMViewWindow_QtWebKit( KCHMViewWindowTabs * parent );
-		~KCHMViewWindow_QtWebKit();
+		ViewWindow_QtWebKit( ViewWindowTabs * parent );
+		~ViewWindow_QtWebKit();
 
 		//! Open a page from current chm archive
 		virtual bool	openPage (const QString& url);

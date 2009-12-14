@@ -16,8 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef KCHMDBUSIFACE_H
-#define KCHMDBUSIFACE_H
+#ifndef DBUS_INTERFACE_H
+#define DBUS_INTERFACE_H
 
 #include <QObject>
 #include <QString>
@@ -26,14 +26,14 @@
 
 #define SERVICE_NAME            "net.kchmviewer.application"
 
-class KCHMDBusIface : public QObject
+class DBusInterface : public QObject
 {
 	Q_OBJECT
 	Q_CLASSINFO("D-Bus Interface", "net.kchmviewer.application")
 			
 	public:
-		KCHMDBusIface( QObject *parent = 0 );
-		~KCHMDBusIface();
+		DBusInterface( QObject *parent = 0 );
+		~DBusInterface();
 		
 	public Q_SLOTS:
 		//! Loads a CHM file \a filename , and opens the URL \a url. Use URL "/" to open default homepage

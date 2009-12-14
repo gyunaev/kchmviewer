@@ -24,6 +24,7 @@
 #include "ui_window_browser.h"
 
 // A small overriden class to handle a middle click
+// We cannot embed it into .cpp because of O_OBJECT :(
 class ViewWindowTabs : public QTabWidget
 {
 	Q_OBJECT
@@ -40,8 +41,8 @@ class ViewWindowTabs : public QTabWidget
 		void mouseReleaseEvent ( QMouseEvent * event );
 };
 
-//FIXME
-//class ViewWindowTabs;
+
+class ViewWindowTabs;
 
 class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 {

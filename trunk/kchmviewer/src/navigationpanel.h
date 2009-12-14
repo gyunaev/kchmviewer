@@ -20,13 +20,13 @@
 #define NAVIGATIONPANEL_H
 
 #include <QDockWidget>
-
+#include "ui_navigatorpanel.h"
 #include "kde-qt.h"
 
 class LCHMFile;
 
 // This class shows content, index, search and bookmark tabs
-class NavigationPanel : public QDockWidget
+class NavigationPanel : public QDockWidget, public Ui::NavigatorPanel
 {
 	Q_OBJECT
 
@@ -83,8 +83,6 @@ class NavigationPanel : public QDockWidget
 		void	showNextInToc();
 
 	private:
-		QTabWidget			*	m_tabWidget;
-
 		TabContents			*	m_contentsTab;
 		TabIndex			*	m_indexTab;
 		TabSearch			*	m_searchTab;

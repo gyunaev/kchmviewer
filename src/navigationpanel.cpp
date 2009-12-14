@@ -26,15 +26,15 @@
 
 
 NavigationPanel::NavigationPanel( QWidget * parent )
-	: QDockWidget( parent )
+	: QDockWidget( parent ), Ui::NavigatorPanel()
 {
+	setupUi( this );
+
 	m_indexTab = 0;
 	m_searchTab = 0;
 	m_contentsTab = 0;
 
-	m_tabWidget = new QTabWidget( this );
-	setWidget( m_tabWidget );
-	setWindowTitle( tr("Navigator") );
+	m_tabWidget->clear();
 
 	// Add the required tabs
 	m_searchTab = new TabSearch(m_tabWidget);

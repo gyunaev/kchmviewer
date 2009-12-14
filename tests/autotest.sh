@@ -2,7 +2,7 @@
 
 CHMDIR="/mnt/ebooks /mnt/disk_d/Docs"
 #KCHMVIEWER="../src/kchmviewer"
-KCHMVIEWER="../build/src/kchmviewer"
+KCHMVIEWER="../bin/kchmviewer"
 COMMONLOG="autotest.log"
 FATALLOG="fatal.log"
 CMDOPTIONS="--nocrashhandler"

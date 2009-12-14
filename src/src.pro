@@ -57,7 +57,8 @@ FORMS += tab_bookmarks.ui \
     dialog_setup.ui \
     dialog_topicselector.ui \
     mainwindow.ui \
-    window_browser.ui
+    window_browser.ui \
+    navigatorpanel.ui
 RESOURCES += resources/images.qrc
 QT += webkit \
     dbus \

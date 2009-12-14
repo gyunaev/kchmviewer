@@ -31,7 +31,6 @@ TabContents::TabContents( QWidget *parent )
 	setupUi( this );
 	
 	m_contextMenu = 0;
-	m_contentFilled = false;
 	
 	tree->setFocus();
 	tree->header()->hide();
@@ -48,6 +47,9 @@ TabContents::TabContents( QWidget *parent )
 	         SIGNAL( customContextMenuRequested ( const QPoint & ) ),
 	         this, 
 	         SLOT( onContextMenuRequested( const QPoint & ) ) );
+
+	if ( ::mainWindow->chmFile() )
+		refillTableOfContents();
 }
 
 TabContents::~TabContents()
@@ -87,14 +89,6 @@ void TabContents::showItem( IndexTocItem * item )
 	tree->scrollToItem( item );
 }
 
-void TabContents::showEvent(QShowEvent *)
-{
-	if ( !::mainWindow->chmFile() || m_contentFilled )
-		return;
-	
-	m_contentFilled = true;
-	refillTableOfContents();
-}
 
 void TabContents::onClicked(QTreeWidgetItem * item, int)
 {
@@ -130,11 +124,4 @@ void TabContents::search( const QString & text )
 			
 	IndexTocItem * treeitem = (IndexTocItem *) items.first();
 	::mainWindow->activateLink( treeitem->getUrl(), unused );
-}
-
-void TabContents::invalidate()
-{
-	m_contentFilled = false;
-	m_urlListMap.clear();
-	tree->clear();
 }

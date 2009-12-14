@@ -31,7 +31,6 @@ class TabContents : public QWidget, public Ui::TabContents
 		TabContents( QWidget *parent = 0 );
 		~TabContents();
 		
-		void	invalidate();
 		void	refillTableOfContents();
 		void	showItem( IndexTocItem * item );
 		void	search( const QString& text );
@@ -43,10 +42,6 @@ class TabContents : public QWidget, public Ui::TabContents
 		void	onClicked ( QTreeWidgetItem * item, int column );
 	
 	private:
-		virtual void showEvent ( QShowEvent * );
-	
-	private:
-		bool		m_contentFilled;
 		QMenu 	*	m_contextMenu;
 		QMap<QString, IndexTocItem*>	m_urlListMap;
 };

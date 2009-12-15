@@ -16,25 +16,25 @@
 *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
 **************************************************************************/
 
-#ifndef KCHMVIEWWINDOW_KHTMLPART_H
-#define KCHMVIEWWINDOW_KHTMLPART_H
+#ifndef VIEWWINDOW_KHTMLPART_H
+#define VIEWWINDOW_KHTMLPART_H
 
 #include <kurl.h>
 #include "kde-qt.h"
 
-#include "kchmviewwindow.h"
+#include "viewwindow.h"
 #include "libchmtextencoding.h"
 
 
 /**
 @author Georgy Yunaev
  */
-class KCHMViewWindow_KHTMLPart : public KHTMLPart, public KCHMViewWindow
+class ViewWindow_KHTMLPart : public KHTMLPart, public ViewWindow
 {
 	Q_OBJECT
 	public:
-		KCHMViewWindow_KHTMLPart( KCHMViewWindowTabs * parent );
-		~KCHMViewWindow_KHTMLPart();
+		ViewWindow_KHTMLPart( ViewWindowTabs * parent );
+		~ViewWindow_KHTMLPart();
 	
 		//! Open a page from current chm archive
 		virtual bool	openPage (const QString& url);
@@ -99,4 +99,4 @@ class KCHMViewWindow_KHTMLPart : public KHTMLPart, public KCHMViewWindow
 		const LCHMTextEncoding *	m_currentEncoding;
 };
 
-#endif /* KCHMVIEWWINDOW_KHTMLPART_H */
+#endif /* VIEWWINDOW_KHTMLPART_H */

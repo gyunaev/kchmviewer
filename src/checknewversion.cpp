@@ -123,6 +123,18 @@ void CheckNewVersion::run()
 		return;
 	}
 
+	// Win32s-specific socket initialization
+#if defined (WIN32)
+	WORD wVersionRequested = MAKEWORD (1, 1);
+	WSADATA wsaData;
+
+	if ( WSAStartup (wVersionRequested, &wsaData) != 0 )
+	{
+		fatalError( Error_System );
+		return;
+	}
+#endif
+
 	// IPv4 address resolving
 	struct sockaddr_in saddr;
 	memset( &saddr, 0, sizeof(saddr) );

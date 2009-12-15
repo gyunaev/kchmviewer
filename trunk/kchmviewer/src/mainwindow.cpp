@@ -117,12 +117,13 @@ MainWindow::MainWindow()
 
 	qApp->setWindowIcon( QPixmap(":/images/application.png") );
 
-	m_aboutDlgMenuText = i18n( "<html><b>%1 version %2</b><br><br>"
+	m_aboutDlgMenuText = "";
+	/*i18n( "<html><b>%1 version %2</b><br><br>"
 			"Copyright (C) George Yunaev, 2004-2008<br>"
 			"<a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</a><br>"
 			"<a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</a><br><br>"
 			"Licensed under GNU GPL license.</html>" )
-			. arg(APP_NAME) . arg(APP_VERSION);
+			. arg(APP_NAME) . arg(APP_VERSION);*/
 
 	m_recentFiles = new ConfigRecentFiles( menu_File, file_exit_action, appConfig.m_numOfRecentFiles );
 	connect( m_recentFiles, SIGNAL(openRecentFile(QString)), this, SLOT(actionOpenRecentFile(QString)) );
@@ -163,7 +164,6 @@ void MainWindow::checkNewVersionAvailable()
 	connect( pNewVer, SIGNAL(newVersionAvailable( NewVersionMetaMap )), this, SLOT(newVerAvailable(NewVersionMetaMap)) );
 
 	pNewVer->setUrl( "http://www.kchmviewer.net/latestversion.txt" );
-	pNewVer->setCurrentVersion( APP_VERSION );
 	pNewVer->start();
 }
 
@@ -256,7 +256,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 	else
 	{
 		QMessageBox mbox(
-				i18n("%1 - failed to load the chm file") . arg(APP_NAME),
+				i18n("%1 - failed to load the chm file") . arg(QCoreApplication::applicationName() ),
 				i18n("Unable to load the chm file %1") . arg(fileName), 
 				QMessageBox::Critical, 
 				QMessageBox::Ok, 
@@ -280,11 +280,11 @@ void MainWindow::refreshCurrentBrowser( )
 	QString title = m_chmFile->title();
 	
 	if ( title.isEmpty() )
-		title = APP_NAME;
+		title = QCoreApplication::applicationName();
 	// KDE adds application name automatically, so we don't need it here	
 #if !defined (USE_KDE)
 	else
-		title = (QString) APP_NAME + " - " + title;
+		title = (QString) QCoreApplication::applicationName() + " - " + title;
 #endif	
 	
 	setWindowTitle( title );
@@ -333,7 +333,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 
 		case Config::ACTION_ASK_USER:
 	   		if ( QMessageBox::question(this,
-				 i18n("%1 - remote link clicked - %2") . arg(APP_NAME) . arg(otherlink),
+				 i18n("%1 - remote link clicked - %2") . arg(QCoreApplication::applicationName()) . arg(otherlink),
 				 i18n("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
 				 i18n("&Yes"), i18n("&No"),
 				 QString::null, 0, 1 ) )
@@ -357,7 +357,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	if ( LCHMUrlFactory::isJavascriptURL (url) )
 	{
 		QMessageBox::information( this, 
-			i18n( "%1 - JavsScript link clicked") . arg(APP_NAME),
+			i18n( "%1 - JavsScript link clicked") . arg(QCoreApplication::applicationName()),
 			i18n( "You have clicked a JavaScript link.\nTo prevent security-related issues JavaScript URLs are disabled in CHM files.") );
 		
 		return false;
@@ -377,7 +377,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 		if ( otherfile != m_chmFilename )
 		{
 			if ( QMessageBox::question( this,
-				i18n( "%1 - link to a new CHM file clicked"). arg(APP_NAME),
+				i18n( "%1 - link to a new CHM file clicked"). arg(QCoreApplication::applicationName()),
 				i18n( "You have clicked a link, which leads to a new CHM file %1.\nThe current file will be closed.\n\nDo you want to continue?").arg( otherfile ),
 				i18n( "&Yes" ), i18n( "&No" ),
 				QString::null, 0, 1 ) )
@@ -971,7 +971,7 @@ void MainWindow::actionLocateInContentsTab()
 
 void MainWindow::actionAboutApp()
 {
-	QString caption = i18n( "About %1" ) . arg(APP_NAME);
+	QString caption = i18n( "About %1" ) . arg(QCoreApplication::applicationName());
 	QString text = m_aboutDlgMenuText;
 	
 	// It is quite funny that the argument order differs
@@ -984,7 +984,7 @@ void MainWindow::actionAboutApp()
 
 void MainWindow::actionAboutQt()
 {
-	QMessageBox::aboutQt( this, APP_NAME);
+	QMessageBox::aboutQt( this, QCoreApplication::applicationName() );
 }
 
 void MainWindow::actionSwitchToContentTab()
@@ -1367,15 +1367,25 @@ void MainWindow::newVerAvailable( NewVersionMetaMap metadata )
 {
 	QSettings().setValue( "advanced/lastupdate", QDateTime::currentDateTime() );
 
-	if ( QMessageBox::question( 0,
-			tr("New version available"),
-			tr("<html>A new version <b>%1</b> of Karaoke Lyrics Editor is available!\n\n"
-			   "Do you want to visit the application web site %2?")
-					.arg( metadata["Version"] )
-					.arg( metadata["URL"] ),
-				QMessageBox::Yes | QMessageBox::No,
-				QMessageBox::Yes ) == QMessageBox::No )
-			return;
+	// What is the latest version?
+	QString current = QString("%1.%2") .arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR);
 
-	QDesktopServices::openUrl ( QUrl(metadata["URL"]) );
+	if ( metadata["Version"] != current )
+	{
+		if ( QMessageBox::question( 0,
+				tr("New version available"),
+				tr("<html>A new version <b>%1</b> of Karaoke Lyrics Editor is available!<br><br>"
+				   "You are currently using version %3.<br>"
+				   "Do you want to visit the application web site %2?")
+						.arg( metadata["Version"] )
+						.arg( metadata["URL"] )
+						.arg( current ),
+					QMessageBox::Yes | QMessageBox::No,
+					QMessageBox::Yes ) == QMessageBox::No )
+				return;
+
+		QDesktopServices::openUrl ( QUrl(metadata["URL"]) );
+	}
+	else
+		statusBar()->showMessage( tr("Checked for updates; you are using the latest version of kchmviewer"), 2000 );
 }

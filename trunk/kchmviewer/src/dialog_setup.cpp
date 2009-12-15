@@ -235,7 +235,7 @@ void DialogSetup::accept()
 		
 	if ( need_restart )
 		QMessageBox::information( this,
-		 						  APP_NAME,
+								  QCoreApplication::applicationName(),
    								  i18n( "Changing those options requires restarting the application to take effect." )	);
 
 	QDialog::accept();

@@ -1,15 +1,8 @@
 <RCC>
     <qresource prefix="/images" >
-        <file>addtab.png</file>
         <file>closetab.png</file>
-        <file>find_close.png</file>
-        <file>find_next.png</file>
-        <file>find_previous.png</file>
-        <file>find_wrap.png</file>
         <file>icon_add_bookmark.png</file>
         <file>icon_back.png</file>
-        <file>icon_copy.png</file>
-        <file>icon_find.png</file>
         <file>icon_find_next.png</file>
         <file>icon_find_prev.png</file>
         <file>icon_font_decrease.png</file>
@@ -23,9 +16,5 @@
         <file>icon_print.png</file>
         <file>icon_view_source.png</file>
         <file>kchmviewer.png</file>
-        <file>dryicon_process.png</file>
-        <file>dryicons_replace.png</file>
-        <file>dryicons_save.png</file>
-        <file>dryicons_window.png</file>
     </qresource>
 </RCC>

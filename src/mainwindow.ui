@@ -91,6 +91,15 @@
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -106,6 +115,15 @@
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -123,6 +141,15 @@
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -161,6 +188,10 @@
    </property>
   </action>
   <action name="file_exit_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/find_close.png</normaloff>:/images/find_close.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Quit</string>
    </property>
@@ -229,6 +260,10 @@
    </property>
   </action>
   <action name="file_ExtractCHMAction">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/dryicons_save.png</normaloff>:/images/dryicons_save.png</iconset>
+   </property>
    <property name="text">
     <string>E&amp;xtract CHM content...</string>
    </property>
@@ -240,6 +275,10 @@
    </property>
   </action>
   <action name="settings_SettingsAction">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/dryicon_process.png</normaloff>:/images/dryicon_process.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Application settings...</string>
    </property>
@@ -335,6 +374,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/dryicons_window.png</normaloff>:/images/dryicons_window.png</iconset>
+   </property>
    <property name="text">
     <string>Enable &amp;full screen mode</string>
    </property>
@@ -354,6 +397,10 @@
    </property>
    <property name="checked">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/icon_locate_in_content.png</normaloff>:/images/icon_locate_in_content.png</iconset>
    </property>
    <property name="text">
     <string>Show &amp;navigator window</string>
@@ -390,6 +437,10 @@
    </property>
   </action>
   <action name="view_Set_encoding_action">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/dryicons_replace.png</normaloff>:/images/dryicons_replace.png</iconset>
+   </property>
    <property name="text">
     <string>Set &amp;encoding</string>
    </property>
@@ -488,6 +539,10 @@
    </property>
   </action>
   <action name="action_Close_window">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/closetab.png</normaloff>:/images/closetab.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Close window</string>
    </property>

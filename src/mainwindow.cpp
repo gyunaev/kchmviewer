@@ -127,6 +127,9 @@ MainWindow::MainWindow()
 	m_recentFiles = new ConfigRecentFiles( menu_File, file_exit_action, appConfig.m_numOfRecentFiles );
 	connect( m_recentFiles, SIGNAL(openRecentFile(QString)), this, SLOT(actionOpenRecentFile(QString)) );
 
+	// Basically disable everything
+	updateActions();
+
 	QTimer::singleShot( 0, this, SLOT( firstShow()) );
 }
 
@@ -160,6 +163,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		}
 	
 		m_chmFile = new_chmfile;
+		updateActions();
 		
 		// Show current encoding in status bar
 		showInStatusBar( i18n("Detected file encoding: %1 ( %2 )") 
@@ -238,7 +242,8 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		statusBar()->showMessage( 
 				i18n("Could not load file %1").arg(fileName),
 				2000 );
-		delete new_chmfile;	
+
+		delete new_chmfile;
 		return false;
 	}
 }
@@ -392,13 +397,14 @@ void MainWindow::firstShow()
 {
 	if ( !parseCmdLineArgs( ) )
 	{
-		if ( appConfig.m_LoadLatestFileOnStartup && !m_recentFiles->latestFile().isEmpty() )
+		if ( appConfig.m_startupMode == Config::STARTUP_LOAD_LAST_FILE && !m_recentFiles->latestFile().isEmpty() )
 		{
-			if ( loadFile( m_recentFiles->latestFile() ) )
-				return;
+			loadFile( m_recentFiles->latestFile() );
+			return;
 		}
 		
-		emit actionOpenFile();
+		if ( appConfig.m_startupMode == Config::STARTUP_POPUP_OPENFILE )
+			actionOpenFile();
 	}
 }
 
@@ -716,13 +722,6 @@ void MainWindow::actionOpenFile()
 
 	if ( !fn.isEmpty() )
 		loadFile( fn );
-	else
-	{
-		if ( !m_chmFile )
-			exit (1);
-			
-		statusBar()->showMessage( i18n("Loading aborted"), 2000 );
-	}
 }
 
 void MainWindow::actionPrint()
@@ -1317,4 +1316,28 @@ bool MainWindow::hasTableOfContents() const
 bool MainWindow::hasIndex() const
 {
 	return m_chmFile && m_chmFile->hasIndexTable();
+}
+
+void MainWindow::updateActions()
+{
+	bool enabled = m_chmFile != 0;
+
+	file_Print_action->setEnabled( enabled );
+	edit_Copy_action->setEnabled( enabled );
+	edit_SelectAll_action->setEnabled( enabled );
+	edit_FindAction->setEnabled( enabled );
+	file_ExtractCHMAction->setEnabled( enabled );
+	bookmark_AddAction->setEnabled( enabled );
+	view_Increase_font_size_action->setEnabled( enabled );
+	view_Decrease_font_size_action->setEnabled( enabled );
+	view_View_HTML_source_action->setEnabled( enabled );
+	view_Locate_in_contents_action->setEnabled( enabled );
+	view_Set_encoding_action->setEnabled( enabled );
+	action_Close_window->setEnabled( enabled );
+	nav_action_Back->setEnabled( enabled );
+	nav_actionForward->setEnabled( enabled );
+	nav_actionHome->setEnabled( enabled );
+	nav_actionPreviousPage->setEnabled( enabled );
+	nav_actionNextPageToc->setEnabled( enabled );
+	m_navPanel->setEnabled( enabled );
 }

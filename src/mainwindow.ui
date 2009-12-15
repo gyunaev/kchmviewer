@@ -258,6 +258,9 @@
    <property name="text">
     <string>&amp;Add bookmark</string>
    </property>
+   <property name="iconText">
+    <string>Bookmark</string>
+   </property>
    <property name="toolTip">
     <string>Adds a bookmark for currently opened page</string>
    </property>
@@ -274,7 +277,10 @@
      <normaloff>:/images/icon_font_increase.png</normaloff>:/images/icon_font_increase.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Larger</string>
+    <string>&amp;Increase font size</string>
+   </property>
+   <property name="iconText">
+    <string>Larger</string>
    </property>
    <property name="toolTip">
     <string>Increase the font size</string>
@@ -292,7 +298,10 @@
      <normaloff>:/images/icon_font_decrease.png</normaloff>:/images/icon_font_decrease.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Smaller</string>
+    <string>&amp;Decrease font size</string>
+   </property>
+   <property name="iconText">
+    <string>Smaller</string>
    </property>
    <property name="toolTip">
     <string>Decrease the font size</string>

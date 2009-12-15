@@ -53,7 +53,9 @@ rm -rf "$BUILDDIR"
 
 # win32
 sh build-win32-mingw.sh || exit 1
-(cd nsis && create_installer.sh) || exit 1
+(cd nsis && sh create_installer.sh) || exit 1
 mv nsis/InstallKchmviewer*.exe $RELEASEDIR
 
+rm -rf "$BUILDDIR"
+rm -rf "build.win32"
 echo "Done! Version $CURRENTVER released!"

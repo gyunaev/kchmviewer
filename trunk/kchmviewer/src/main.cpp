@@ -49,7 +49,7 @@ int main( int argc, char ** argv )
 	KAboutData aboutdata ( "kchmviewer",
 				QByteArray(),
 				ki18n("kchmviewer"),
-				APP_VERSION,
+				qPrintable( QString("%1.%2") .arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR) ),
 				ki18n("CHM file viewer"),
 				KAboutData::License_GPL,
 				ki18n("(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"),

@@ -22,19 +22,19 @@
 #include <kfinddialog.h>
 
 #include "kde-qt.h"
-#include "kchmmainwindow.h"
-#include "kchmconfig.h"
-#include "kchmviewwindowmgr.h"
-#include "kchmviewwindow_khtmlpart.h"
+#include "mainwindow.h"
+#include "config.h"
+#include "viewwindowmgr.h"
+#include "viewwindow_khtmlpart.h"
 
 
-QWidget * KCHMViewWindow_KHTMLPart::getQWidget()
+QWidget * ViewWindow_KHTMLPart::getQWidget()
 {
 	 return view();
 }
 
-KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( KCHMViewWindowTabs * parent )
-	: KHTMLPart ( parent ), KCHMViewWindow ( parent )
+ViewWindow_KHTMLPart::ViewWindow_KHTMLPart( ViewWindowTabs * parent )
+	: KHTMLPart ( parent ), ViewWindow ( parent )
 {
 	m_zoomfactor = 0;
 	m_currentEncoding = 0;
@@ -49,11 +49,11 @@ KCHMViewWindow_KHTMLPart::KCHMViewWindow_KHTMLPart( KCHMViewWindowTabs * parent 
 }
 
 
-KCHMViewWindow_KHTMLPart::~KCHMViewWindow_KHTMLPart()
+ViewWindow_KHTMLPart::~ViewWindow_KHTMLPart()
 {
 }
 
-bool KCHMViewWindow_KHTMLPart::openPage (const QString& url)
+bool ViewWindow_KHTMLPart::openPage (const QString& url)
 {
 	// Set or change the encoding
 	if ( m_currentEncoding != ::mainWindow->chmFile()->currentEncoding()
@@ -69,7 +69,7 @@ bool KCHMViewWindow_KHTMLPart::openPage (const QString& url)
 	return true;
 }
 
-void KCHMViewWindow_KHTMLPart::setZoomFactor( int zoom )
+void ViewWindow_KHTMLPart::setZoomFactor( int zoom )
 {
 	m_zoomfactor = zoom;
 	
@@ -77,7 +77,7 @@ void KCHMViewWindow_KHTMLPart::setZoomFactor( int zoom )
 	KHTMLPart::setFontScaleFactor ( 100 + (m_zoomfactor * 10) );
 }
 
-void KCHMViewWindow_KHTMLPart::invalidate( )
+void ViewWindow_KHTMLPart::invalidate( )
 {
 	m_zoomfactor = 0;
 
@@ -86,49 +86,49 @@ void KCHMViewWindow_KHTMLPart::invalidate( )
 	setMetaRefreshEnabled ( pConfig->m_kdeEnableRefresh );
 	setPluginsEnabled ( pConfig->m_kdeEnablePlugins );
 	
-	KCHMViewWindow::invalidate( );
+	ViewWindow::invalidate( );
 }
 
-int KCHMViewWindow_KHTMLPart::getScrollbarPosition( )
+int ViewWindow_KHTMLPart::getScrollbarPosition( )
 {
 	return view()->contentsY ();
 }
 
-void KCHMViewWindow_KHTMLPart::setScrollbarPosition( int pos )
+void ViewWindow_KHTMLPart::setScrollbarPosition( int pos )
 {
 	view()->scrollBy (0, pos);
 }
 
-void KCHMViewWindow_KHTMLPart::addZoomFactor( int value )
+void ViewWindow_KHTMLPart::addZoomFactor( int value )
 {
 	setZoomFactor( m_zoomfactor + value);
 }
 
-bool KCHMViewWindow_KHTMLPart::printCurrentPage()
+bool ViewWindow_KHTMLPart::printCurrentPage()
 {
 	view()->print();
 	return true;
 }
 
-void KCHMViewWindow_KHTMLPart::onOpenURLRequest( const KUrl &url, const KParts::OpenUrlArguments &, const KParts::BrowserArguments&  )
+void ViewWindow_KHTMLPart::onOpenURLRequest( const KUrl &url, const KParts::OpenUrlArguments &, const KParts::BrowserArguments&  )
 {
 	bool notused;
 	emit linkClicked ( url.prettyUrl(), notused );
 }
 
-void KCHMViewWindow_KHTMLPart::slotLinkClicked( const QString & newlink )
+void ViewWindow_KHTMLPart::slotLinkClicked( const QString & newlink )
 {
 	bool notused;
 	emit linkClicked (newlink, notused);
 }
 
 
-void KCHMViewWindow_KHTMLPart::clipSelectAll()
+void ViewWindow_KHTMLPart::clipSelectAll()
 {
 	selectAll ();
 }
 
-void KCHMViewWindow_KHTMLPart::clipCopy()
+void ViewWindow_KHTMLPart::clipCopy()
 {
 	QString text = selectedText();
 	
@@ -136,14 +136,14 @@ void KCHMViewWindow_KHTMLPart::clipCopy()
 		QApplication::clipboard()->setText( text );
 }
 
-void KCHMViewWindow_KHTMLPart::onPopupMenu ( const QString &url, const QPoint & point )
+void ViewWindow_KHTMLPart::onPopupMenu ( const QString &url, const QPoint & point )
 {
 	QMenu * menu = getContextMenu( url, view() );
 	menu->exec( point );
 }
 
 
-void KCHMViewWindow_KHTMLPart::find( const QString& text, int flags )
+void ViewWindow_KHTMLPart::find( const QString& text, int flags )
 {
 	long options = 0;
 	
@@ -156,12 +156,12 @@ void KCHMViewWindow_KHTMLPart::find( const QString& text, int flags )
 	findText ( text, options, ::mainWindow, 0 );
 }
 
-void KCHMViewWindow_KHTMLPart::onFindNext()
+void ViewWindow_KHTMLPart::onFindNext()
 {
 	findTextNext( false );
 }
 
-void KCHMViewWindow_KHTMLPart::onFindPrevious()
+void ViewWindow_KHTMLPart::onFindPrevious()
 {
 	findTextNext( true );
 }

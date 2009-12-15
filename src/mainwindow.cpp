@@ -16,13 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#include <stdlib.h>
-#include <signal.h>
-#include <string.h>
-#include <stdio.h>
-#include <errno.h>
-#include <unistd.h>
-
 #include <QProcess>
 #include <QDesktopServices>
 #include <QSettings>
@@ -45,6 +38,7 @@
 #include "recentfiles.h"
 #include "navigationpanel.h"
 #include "version.h"
+#include "ui_dialog_about.h"
 
 
 // Our implemenation of RecentFiles which uses different storage
@@ -116,14 +110,6 @@ MainWindow::MainWindow()
 	statusBar()->show();
 
 	qApp->setWindowIcon( QPixmap(":/images/application.png") );
-
-	m_aboutDlgMenuText = "";
-	/*i18n( "<html><b>%1 version %2</b><br><br>"
-			"Copyright (C) George Yunaev, 2004-2008<br>"
-			"<a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</a><br>"
-			"<a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</a><br><br>"
-			"Licensed under GNU GPL license.</html>" )
-			. arg(APP_NAME) . arg(APP_VERSION);*/
 
 	m_recentFiles = new ConfigRecentFiles( menu_File, file_exit_action, appConfig.m_numOfRecentFiles );
 	connect( m_recentFiles, SIGNAL(openRecentFile(QString)), this, SLOT(actionOpenRecentFile(QString)) );
@@ -971,14 +957,23 @@ void MainWindow::actionLocateInContentsTab()
 
 void MainWindow::actionAboutApp()
 {
-	QString caption = i18n( "About %1" ) . arg(QCoreApplication::applicationName());
-	QString text = m_aboutDlgMenuText;
-	
+	QString abouttext = i18n( "<html><b>kchmviewer version %1.%2</b><br><br>"
+							  "Copyright (C) George Yunaev, 2004-2010<br>"
+							  "<a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</a><br>"
+							  "<a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</a><br><br>"
+							  "Licensed under GNU GPL license version 3.</html>" )
+								.arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR);
+
 	// It is quite funny that the argument order differs
 #if defined (USE_KDE)
-	KMessageBox::about( this, text, caption );
+	KMessageBox::about( this, abouttext, i18n("About kchmviewer") );
 #else
-	QMessageBox::about( this, caption, text );
+	QDialog dlg;
+	Ui::DialogAbout ui;
+
+	ui.setupUi( &dlg );
+	ui.lblAbout->setText( abouttext );
+	dlg.exec();
 #endif
 }
 

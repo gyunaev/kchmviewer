@@ -46,7 +46,7 @@ LIBS += ../lib/libchmfile/libchmfile.a \
     -lchm
 TARGET = ../bin/kchmviewer
 CONFIG += release \
-	threads \
+    threads \
     ordered \
     warn_on \
     qt \
@@ -61,7 +61,8 @@ FORMS += tab_bookmarks.ui \
     dialog_topicselector.ui \
     mainwindow.ui \
     window_browser.ui \
-    navigatorpanel.ui
+    navigatorpanel.ui \
+    dialog_about.ui
 RESOURCES += resources/images.qrc
 QT += webkit \
     dbus \

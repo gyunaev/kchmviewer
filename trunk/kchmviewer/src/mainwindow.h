@@ -162,7 +162,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	private:		
 		QString 				m_chmFilename;
 		QString 				m_chmFileBasename;
-		QString					m_aboutDlgMenuText;	// to show in KDE or Qt about dialogs
 		
 		Settings			*	m_currentSettings;
 		LCHMFile			*	m_chmFile;

@@ -17,4 +17,4 @@ cd "$BUILDDIR"
 
 # Compile it
 export PATH=$MINGWPATH:$PATH
-$QTPATH/bin/qmake -r -spec win32-mingw-g++ && make || exit 1
+$QTPATH/bin/qmake -r -spec win32-mingw-g++ && make -j4 || exit 1

@@ -20,11 +20,15 @@
 #include <QStringList>
 #include <QMetaType>
 
-#include <sys/socket.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <errno.h>
+#if !defined (WIN32)
+	#include <sys/socket.h>
+	#include <netdb.h>
+	#include <arpa/inet.h>
+	#include <netinet/in.h>
+	#include <errno.h>
+#else
+	#include <winsock.h>
+#endif
 
 #include "checknewversion.h"
 

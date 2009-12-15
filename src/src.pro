@@ -69,7 +69,8 @@ QT += webkit \
     network
 win32-mingw-g++: { 
     QT -= dbus
-    HEADERS -= kchmdbusiface.h
-    SOURCES -= kchmdbusiface.cpp
+	HEADERS -= dbus_interface.h
+	SOURCES -= dbus_interface.cpp
     CONFIG -= dbus
+	LIBS += -lwsock32
 }

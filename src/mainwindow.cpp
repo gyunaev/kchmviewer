@@ -44,9 +44,9 @@
 MainWindow::MainWindow()
 	: QMainWindow ( 0 ), Ui::MainWindow()
 {
-	const unsigned int WND_X_SIZE = 700;
-	const unsigned int WND_Y_SIZE = 500;
-	const unsigned int SPLT_X_SIZE = 200;
+	const unsigned int WND_X_SIZE = 900;
+	const unsigned int WND_Y_SIZE = 700;
+	const unsigned int SPLT_X_SIZE = 300;
 
 	// Delete the pointer when the window is closed
 	setAttribute( Qt::WA_DeleteOnClose );

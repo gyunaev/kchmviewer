@@ -57,7 +57,7 @@ bool KCHMViewWindow_KHTMLPart::openPage (const QString& url)
 {
 	// Set or change the encoding
 	if ( m_currentEncoding != ::mainWindow->chmFile()->currentEncoding()
-	&& appConfig.m_advAutodetectEncoding )
+	&& pConfig->m_advAutodetectEncoding )
 	{
 		m_currentEncoding = ::mainWindow->chmFile()->currentEncoding();
 		setEncoding ( m_currentEncoding->qtcodec, TRUE );
@@ -81,10 +81,10 @@ void KCHMViewWindow_KHTMLPart::invalidate( )
 {
 	m_zoomfactor = 0;
 
-	setJScriptEnabled ( appConfig.m_kdeEnableJS );
-	setJavaEnabled ( appConfig.m_kdeEnableJava );
-	setMetaRefreshEnabled ( appConfig.m_kdeEnableRefresh );
-	setPluginsEnabled ( appConfig.m_kdeEnablePlugins );
+	setJScriptEnabled ( pConfig->m_kdeEnableJS );
+	setJavaEnabled ( pConfig->m_kdeEnableJava );
+	setMetaRefreshEnabled ( pConfig->m_kdeEnableRefresh );
+	setPluginsEnabled ( pConfig->m_kdeEnablePlugins );
 	
 	KCHMViewWindow::invalidate( );
 }

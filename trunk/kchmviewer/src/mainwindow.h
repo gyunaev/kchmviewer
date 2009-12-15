@@ -134,6 +134,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		updateToolbars();
 		void		updateActions();
 
+		void		checkNewVersionAvailable();
+
 	protected slots:
 		// Called from the timer in main constructor
 		void 		firstShow();
@@ -148,7 +150,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		bool		event ( QEvent * e );
 		
 	private:
-		void		checkNewVersionAvailable();
 		bool		parseCmdLineArgs();
 		void 		setupActions();
 		void		setupLangEncodingMenu();

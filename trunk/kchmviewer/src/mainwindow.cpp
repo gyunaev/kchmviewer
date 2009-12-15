@@ -119,7 +119,17 @@ MainWindow::MainWindow()
 
 	// Check for a new version if needed
 	if ( appConfig.m_advCheckNewVersion )
-		checkNewVersionAvailable();
+	{
+		QSettings settings;
+
+		if ( settings.contains( "advanced/lastupdate" ) )
+		{
+			QDateTime lastupdate = settings.value( "advanced/lastupdate" ).toDateTime();
+
+			if ( lastupdate.secsTo( QDateTime::currentDateTime() ) >= 86400 * 7 ) // seven days
+				checkNewVersionAvailable();
+		}
+	}
 
 	QTimer::singleShot( 0, this, SLOT( firstShow()) );
 }
@@ -133,16 +143,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::checkNewVersionAvailable()
 {
-	QSettings settings;
-
-	if ( settings.contains( "advanced/lastupdate" ) )
-	{
-		QDateTime lastupdate = settings.value( "advanced/lastupdate" ).toDateTime();
-
-		if ( lastupdate.secsTo( QDateTime::currentDateTime() ) < 86400 * 7 ) // seven days
-			return;
-	}
-
 	// Create a New version available object if necessary. This object will auto-delete itself
 	CheckNewVersion * pNewVer = new CheckNewVersion();
 
@@ -1005,135 +1005,60 @@ void MainWindow::actionSwitchToBookmarkTab()
 
 void MainWindow::setupActions()
 {
-	// Connect actions to slots
-	connect( file_Open_action, 
-			 SIGNAL( triggered() ),
-			 this,
-			 SLOT( actionOpenFile() ) );
-			
-	connect( file_Print_action, 
-			 SIGNAL( triggered() ),
-			 this,
-			 SLOT( actionPrint() ) );
-	
-	connect( edit_Copy_action,
-			 SIGNAL( triggered() ),
-			 this,
-			 SLOT( actionEditCopy() ) );
-	
-	connect( edit_SelectAll_action,
-			 SIGNAL( triggered() ),
-			 this,
-			 SLOT( actionEditSelectAll() ) );
+	// File menu
+	connect( file_Open_action, SIGNAL( triggered() ), this, SLOT( actionOpenFile() ) );
+	connect( file_Print_action, SIGNAL( triggered() ), this, SLOT( actionPrint() ) );
+	connect( file_ExtractCHMAction, SIGNAL( triggered() ), this, SLOT( actionExtractCHM() ) );
+	connect( file_exit_action, SIGNAL( triggered() ), qApp, SLOT( closeAllWindows() ) );
 
-	connect( edit_FindAction,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionFindInPage() ) );
+	// Edit
+	connect( edit_Copy_action, SIGNAL( triggered() ), this, SLOT( actionEditCopy() ) );
+	connect( edit_SelectAll_action, SIGNAL( triggered() ), this, SLOT( actionEditSelectAll() ) );
+	connect( edit_FindAction, SIGNAL( triggered() ), this, SLOT( actionFindInPage() ) );
 	
-	connect( file_ExtractCHMAction,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionExtractCHM() ) );
+	// Settings
+	connect( settings_SettingsAction, SIGNAL( triggered() ), this, SLOT( actionChangeSettings() ) );
+	connect( actionCheck_for_updates, SIGNAL(triggered()), this, SLOT(checkNewVersionAvailable()) );
+	
+	// Bookmarks
+	connect( bookmark_AddAction, SIGNAL( triggered() ), m_navPanel, SLOT( addBookmark()) );
+	
+	// View
+	connect( view_Increase_font_size_action, SIGNAL( triggered() ), this, SLOT( actionFontSizeIncrease() ) );
+	connect( view_Decrease_font_size_action, SIGNAL( triggered() ), this, SLOT( actionFontSizeDecrease() ) );
+	connect( view_View_HTML_source_action, SIGNAL( triggered() ), this, SLOT( actionViewHTMLsource() ) );
+	connect( view_Toggle_fullscreen_action, SIGNAL( triggered() ), this, SLOT( actionToggleFullScreen() ) );
+	connect( view_Show_navigator_window, SIGNAL( triggered(bool) ), this, SLOT( actionShowHideNavigator(bool) ) );
+	connect( view_Locate_in_contents_action, SIGNAL( triggered() ), this, SLOT( actionLocateInContentsTab() ) );
+	
+	// Navigation toolbar
+	connect( nav_action_Back, SIGNAL( triggered() ), this, SLOT( actionNavigateBack() ) );
+	connect( nav_actionForward, SIGNAL( triggered() ), this, SLOT( actionNavigateForward() ) );
+	connect( nav_actionHome, SIGNAL( triggered() ), this, SLOT( actionNavigateHome() ) );
+	connect( nav_actionPreviousPage, SIGNAL( triggered() ), m_navPanel, SLOT( showPrevInToc() ) );
+	connect( nav_actionNextPageToc, SIGNAL( triggered() ), m_navPanel, SLOT( showNextInToc() ) );
 
-	connect( settings_SettingsAction,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionChangeSettings() ) );
-	
-	connect( bookmark_AddAction,
-			 SIGNAL( triggered() ),
-			 m_navPanel,
-			 SLOT( addBookmark()) );
-	
-	connect( view_Increase_font_size_action,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionFontSizeIncrease() ) );
-	
-	connect( view_Decrease_font_size_action,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionFontSizeDecrease() ) );
-	
-	connect( view_View_HTML_source_action,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionViewHTMLsource() ) );
-	
-	connect( view_Toggle_fullscreen_action,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionToggleFullScreen() ) );
-	
-	connect( view_Show_navigator_window,
-			 SIGNAL( triggered(bool) ),
-			 this,
-			 SLOT( actionShowHideNavigator(bool) ) );
-	
-	connect( view_Locate_in_contents_action,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionLocateInContentsTab() ) );
-	
-	connect( nav_action_Back,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionNavigateBack() ) );
-	
-	connect( nav_actionForward,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionNavigateForward() ) );
-	
-	connect( nav_actionHome,
-			 SIGNAL( triggered() ),
-	         this,
-	         SLOT( actionNavigateHome() ) );
-	
-	connect( nav_actionPreviousPage,
-			 SIGNAL( triggered() ),
-			 m_navPanel,
-			 SLOT( showPrevInToc() ) );
-	
-	connect( nav_actionNextPageToc,
-			 SIGNAL( triggered() ),
-			 m_navPanel,
-			 SLOT( showNextInToc() ) );
-	
 	// m_viewWindowMgr fills and maintains 'Window' menu
 	m_viewWindowMgr->createMenu( this, menu_Windows, action_Close_window );
 
 	m_navPanel->setBookmarkMenu( menu_Bookmarks );
 	
 	// Close Window goes directly to the window manager
-	connect( action_Close_window,
-			 SIGNAL( triggered() ),
-			 m_viewWindowMgr,
-			 SLOT( onCloseCurrentWindow() ) );
+	connect( action_Close_window, SIGNAL( triggered() ), m_viewWindowMgr, SLOT( onCloseCurrentWindow() ) );
 	
-	connect( file_exit_action, 
-			 SIGNAL( triggered() ),
-	         qApp,
-	         SLOT( closeAllWindows() ) );
-	
-	connect( m_navPanel,
-			 SIGNAL(visibilityChanged(bool)),
-			 this,
-			 SLOT( navigatorVisibilityChanged(bool) ) );
+	// Navigation panel visibility
+	connect( m_navPanel, SIGNAL(visibilityChanged(bool)), this, SLOT( navigatorVisibilityChanged(bool) ) );
 
-	QMenu * help = new QMenu( i18n( "&Help"), this );
-	help->addAction( i18n( "&About"), this, SLOT( actionAboutApp() ), QKeySequence( "F1" ) );
-	help->addAction( i18n( "About &Qt"), this, SLOT( actionAboutQt() ) );
-	help->addSeparator();
+	// Help menu
+	connect( actionAbout_kchmviewer, SIGNAL(triggered()), this, SLOT(actionAboutApp()) );
+	connect( actionAbout_Qt, SIGNAL(triggered()), this, SLOT(actionAboutQt()) );
+	menuHelp->addSeparator();
 	
 	// "What's this" action
 	QAction * whatsthis = QWhatsThis::createAction( this );
-	help->addAction( whatsthis );
+	menuHelp->addAction( whatsthis );
 	viewToolbar->addAction( whatsthis );
 		
-	menuBar()->addMenu( help );
-	
 	// Tab switching actions
 	(void) new QShortcut( QKeySequence( i18n("Ctrl+1") ),
 	                      this,

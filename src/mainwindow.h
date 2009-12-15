@@ -42,7 +42,7 @@ class UserEvent : public QEvent
 };
 
 
-class ConfigRecentFiles;
+class RecentFiles;
 class NavigationPanel;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
@@ -172,7 +172,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		QActionGroup		*	m_encodingActions;
 		QMenu				*	m_contextMenu;
 
-		ConfigRecentFiles	*	m_recentFiles;
+		RecentFiles			*	m_recentFiles;
 
 		ViewWindowMgr		*	m_viewWindowMgr;
 		NavigationPanel		*	m_navPanel;

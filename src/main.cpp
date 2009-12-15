@@ -70,7 +70,9 @@ int main( int argc, char ** argv )
 	QCoreApplication::setOrganizationDomain("kchmviewer.net");
 	QCoreApplication::setApplicationName("kchmviewer");
 
-	appConfig.load();
+	// Configuration
+	pConfig = new Config();
+
 	app.installEventFilter( &gKeyEventFilter );
 	
 #if !defined (WIN32)	
@@ -95,4 +97,3 @@ int main( int argc, char ** argv )
 	
 	return app.exec();
 }
-

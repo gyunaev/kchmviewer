@@ -102,7 +102,7 @@ bool ViewWindow::openUrl ( const QString& origurl )
 	if ( LCHMUrlFactory::isNewChmURL( newurl, chmfile, page ) )
 	{
 		// If a new chm file is opened here, and we do not use KCHMLPart, we better abort
-		if ( chmfile != ::mainWindow->getOpenedFileBaseName() && appConfig.m_usedBrowser != Config::BROWSER_KHTMLPART )
+		if ( chmfile != ::mainWindow->getOpenedFileBaseName() && pConfig->m_usedBrowser != Config::BROWSER_KHTMLPART )
 			qFatal("ViewWindow::openUrl(): opened new chm file %s while current is %s",
 				   qPrintable( chmfile ),
 				   qPrintable( ::mainWindow->getOpenedFileName() ) );

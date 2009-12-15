@@ -31,7 +31,7 @@ DialogSetup::DialogSetup(QWidget *parent)
 	connect( btnBrowse, SIGNAL( clicked() ), this, SLOT( browseExternalEditor() ) );
 	
 	// Set up the parameters
-	switch ( appConfig.m_startupMode )
+	switch ( pConfig->m_startupMode )
 	{
 		case Config::STARTUP_DO_NOTHING:
 			rbStartWithNothing->setChecked( true );
@@ -46,16 +46,16 @@ DialogSetup::DialogSetup(QWidget *parent)
 			break;
 	}
 
-	m_historySize->setValue ( appConfig.m_numOfRecentFiles );
-	m_rememberHistoryInfo->setChecked ( appConfig.m_HistoryStoreExtra );
+	m_historySize->setValue ( pConfig->m_numOfRecentFiles );
+	m_rememberHistoryInfo->setChecked ( pConfig->m_HistoryStoreExtra );
 	
-	m_radioExtLinkOpenAlways->setChecked ( appConfig.m_onExternalLinkClick == Config::ACTION_ALWAYS_OPEN );
-	m_radioExtLinkAsk->setChecked ( appConfig.m_onExternalLinkClick == Config::ACTION_ASK_USER );
-	m_radioExtLinkOpenNever->setChecked ( appConfig.m_onExternalLinkClick == Config::ACTION_DONT_OPEN );
+	m_radioExtLinkOpenAlways->setChecked ( pConfig->m_onExternalLinkClick == Config::ACTION_ALWAYS_OPEN );
+	m_radioExtLinkAsk->setChecked ( pConfig->m_onExternalLinkClick == Config::ACTION_ASK_USER );
+	m_radioExtLinkOpenNever->setChecked ( pConfig->m_onExternalLinkClick == Config::ACTION_DONT_OPEN );
 	
-	m_radioNewChmOpenAlways->setChecked ( appConfig.m_onNewChmClick == Config::ACTION_ALWAYS_OPEN );
-	m_radioNewChmAsk->setChecked ( appConfig.m_onNewChmClick == Config::ACTION_ASK_USER );
-	m_radioNewChmOpenNever->setChecked ( appConfig.m_onNewChmClick == Config::ACTION_DONT_OPEN );
+	m_radioNewChmOpenAlways->setChecked ( pConfig->m_onNewChmClick == Config::ACTION_ALWAYS_OPEN );
+	m_radioNewChmAsk->setChecked ( pConfig->m_onNewChmClick == Config::ACTION_ASK_USER );
+	m_radioNewChmOpenNever->setChecked ( pConfig->m_onNewChmClick == Config::ACTION_DONT_OPEN );
 
 #if !defined (USE_KDE)
 	m_radioUseKHTMLPart->setEnabled ( false );
@@ -65,7 +65,7 @@ DialogSetup::DialogSetup(QWidget *parent)
 	m_radioUseQtWebkit->setEnabled ( false );
 #endif
 
-	switch ( appConfig.m_usedBrowser )
+	switch ( pConfig->m_usedBrowser )
 	{
 		default:
 			m_radioUseQtextBrowser->setChecked ( true );
@@ -84,21 +84,21 @@ DialogSetup::DialogSetup(QWidget *parent)
 #endif			
 	}
 	
-	m_enableJS->setChecked ( appConfig.m_kdeEnableJS );
-	m_enablePlugins->setChecked ( appConfig.m_kdeEnablePlugins );
-	m_enableJava->setChecked ( appConfig.m_kdeEnableJava );
-	m_enableRefresh->setChecked ( appConfig.m_kdeEnableRefresh );
+	m_enableJS->setChecked ( pConfig->m_kdeEnableJS );
+	m_enablePlugins->setChecked ( pConfig->m_kdeEnablePlugins );
+	m_enableJava->setChecked ( pConfig->m_kdeEnableJava );
+	m_enableRefresh->setChecked ( pConfig->m_kdeEnableRefresh );
 	
-	m_advExternalProgramName->setText( appConfig.m_advExternalEditorPath );
-	m_advViewSourceExternal->setChecked ( !appConfig.m_advUseInternalEditor );
-	m_advViewSourceInternal->setChecked ( appConfig.m_advUseInternalEditor );
+	m_advExternalProgramName->setText( pConfig->m_advExternalEditorPath );
+	m_advViewSourceExternal->setChecked ( !pConfig->m_advUseInternalEditor );
+	m_advViewSourceInternal->setChecked ( pConfig->m_advUseInternalEditor );
 	
-	m_numOfRecentFiles = appConfig.m_numOfRecentFiles;
+	m_numOfRecentFiles = pConfig->m_numOfRecentFiles;
 
-	boxAutodetectEncoding->setChecked( appConfig.m_advAutodetectEncoding );
-	boxLayoutDirectionRL->setChecked( appConfig.m_advLayoutDirectionRL );
+	boxAutodetectEncoding->setChecked( pConfig->m_advAutodetectEncoding );
+	boxLayoutDirectionRL->setChecked( pConfig->m_advLayoutDirectionRL );
 
-	switch ( appConfig.m_toolbarMode )
+	switch ( pConfig->m_toolbarMode )
 	{
 		case Config::TOOLBAR_SMALLICONS:
 			rbToolbarSmall->setChecked( true );
@@ -117,7 +117,7 @@ DialogSetup::DialogSetup(QWidget *parent)
 			break;
 	}
 
-	cbCheckForUpdates->setChecked( appConfig.m_advCheckNewVersion );
+	cbCheckForUpdates->setChecked( pConfig->m_advCheckNewVersion );
 }
 
 DialogSetup::~DialogSetup()
@@ -128,54 +128,54 @@ DialogSetup::~DialogSetup()
 void DialogSetup::accept()
 {
 	if ( rbStartWithNothing->isChecked() )
-		appConfig.m_startupMode = Config::STARTUP_DO_NOTHING;
+		pConfig->m_startupMode = Config::STARTUP_DO_NOTHING;
 	else if ( m_radioOnBeginOpenLast->isChecked() )
-		appConfig.m_startupMode = Config::STARTUP_LOAD_LAST_FILE;
+		pConfig->m_startupMode = Config::STARTUP_LOAD_LAST_FILE;
 	else
-		appConfig.m_startupMode = Config::STARTUP_POPUP_OPENFILE;
+		pConfig->m_startupMode = Config::STARTUP_POPUP_OPENFILE;
 
-	appConfig.m_numOfRecentFiles = m_historySize->value();
-	appConfig.m_HistoryStoreExtra = m_rememberHistoryInfo->isChecked();
+	pConfig->m_numOfRecentFiles = m_historySize->value();
+	pConfig->m_HistoryStoreExtra = m_rememberHistoryInfo->isChecked();
 
 	if ( m_radioExtLinkOpenAlways->isChecked () )
-		appConfig.m_onExternalLinkClick = Config::ACTION_ALWAYS_OPEN;
+		pConfig->m_onExternalLinkClick = Config::ACTION_ALWAYS_OPEN;
 	else if ( m_radioExtLinkAsk->isChecked () )
-		appConfig.m_onExternalLinkClick = Config::ACTION_ASK_USER;
+		pConfig->m_onExternalLinkClick = Config::ACTION_ASK_USER;
 	else
-		appConfig.m_onExternalLinkClick = Config::ACTION_DONT_OPEN;
+		pConfig->m_onExternalLinkClick = Config::ACTION_DONT_OPEN;
 
 	if ( m_radioNewChmOpenAlways->isChecked () )
-		appConfig.m_onNewChmClick = Config::ACTION_ALWAYS_OPEN;
+		pConfig->m_onNewChmClick = Config::ACTION_ALWAYS_OPEN;
 	else if ( m_radioNewChmAsk->isChecked () )
-		appConfig.m_onNewChmClick = Config::ACTION_ASK_USER;
+		pConfig->m_onNewChmClick = Config::ACTION_ASK_USER;
 	else
-		appConfig.m_onNewChmClick = Config::ACTION_DONT_OPEN;
+		pConfig->m_onNewChmClick = Config::ACTION_DONT_OPEN;
 
 		// Check the changes
 	bool need_restart = false;
 		
-	if ( appConfig.m_kdeEnableJS != m_enableJS->isChecked() )
+	if ( pConfig->m_kdeEnableJS != m_enableJS->isChecked() )
 	{
 		need_restart = true;
-		appConfig.m_kdeEnableJS = m_enableJS->isChecked();
+		pConfig->m_kdeEnableJS = m_enableJS->isChecked();
 	}
 		
-	if ( appConfig.m_kdeEnablePlugins != m_enablePlugins->isChecked() )
+	if ( pConfig->m_kdeEnablePlugins != m_enablePlugins->isChecked() )
 	{
 		need_restart = true;
-		appConfig.m_kdeEnablePlugins = m_enablePlugins->isChecked();
+		pConfig->m_kdeEnablePlugins = m_enablePlugins->isChecked();
 	}
 		
-	if ( appConfig.m_kdeEnableJava != m_enableJava->isChecked() )
+	if ( pConfig->m_kdeEnableJava != m_enableJava->isChecked() )
 	{
 		need_restart = true;
-		appConfig.m_kdeEnableJava = m_enableJava->isChecked();
+		pConfig->m_kdeEnableJava = m_enableJava->isChecked();
 	}
 		
-	if ( appConfig.m_kdeEnableRefresh != m_enableRefresh->isChecked() )
+	if ( pConfig->m_kdeEnableRefresh != m_enableRefresh->isChecked() )
 	{
 		need_restart = true;
-		appConfig.m_kdeEnableRefresh = m_enableRefresh->isChecked();
+		pConfig->m_kdeEnableRefresh = m_enableRefresh->isChecked();
 	}
 
 	int new_browser = Config::BROWSER_QTEXTBROWSER;
@@ -185,10 +185,10 @@ void DialogSetup::accept()
 	else if ( m_radioUseQtWebkit->isChecked() )
 		new_browser = Config::BROWSER_QTWEBKIT;
 
-	if ( new_browser != appConfig.m_usedBrowser )
+	if ( new_browser != pConfig->m_usedBrowser )
 	{
 		need_restart = true;
-		appConfig.m_usedBrowser = new_browser;
+		pConfig->m_usedBrowser = new_browser;
 	}
 
 	Config::ToolbarMode newmode;
@@ -202,36 +202,36 @@ void DialogSetup::accept()
 	else
 		newmode = Config::TOOLBAR_TEXTONLY;
 
-	if ( newmode != appConfig.m_toolbarMode )
+	if ( newmode != pConfig->m_toolbarMode )
 	{
-		appConfig.m_toolbarMode = newmode;
+		pConfig->m_toolbarMode = newmode;
 		::mainWindow->updateToolbars();
 	}
 
-	appConfig.m_advExternalEditorPath = m_advExternalProgramName->text();
-	appConfig.m_advUseInternalEditor = m_advViewSourceExternal->isChecked();
-	appConfig.m_advUseInternalEditor = m_advViewSourceInternal->isChecked();
+	pConfig->m_advExternalEditorPath = m_advExternalProgramName->text();
+	pConfig->m_advUseInternalEditor = m_advViewSourceExternal->isChecked();
+	pConfig->m_advUseInternalEditor = m_advViewSourceInternal->isChecked();
 		
-	if ( appConfig.m_numOfRecentFiles != m_numOfRecentFiles )
+	if ( pConfig->m_numOfRecentFiles != m_numOfRecentFiles )
 		need_restart = true;
 	
 	// Autodetect encoding
-	if ( appConfig.m_advAutodetectEncoding != boxAutodetectEncoding->isChecked() )
+	if ( pConfig->m_advAutodetectEncoding != boxAutodetectEncoding->isChecked() )
 		need_restart = true;
 	
-	appConfig.m_advAutodetectEncoding = boxAutodetectEncoding->isChecked();
-	appConfig.m_advCheckNewVersion = cbCheckForUpdates->isChecked();
+	pConfig->m_advAutodetectEncoding = boxAutodetectEncoding->isChecked();
+	pConfig->m_advCheckNewVersion = cbCheckForUpdates->isChecked();
 
 	// Layout direction management
 	bool layout_rl = boxLayoutDirectionRL->isChecked();
 	
-	if ( layout_rl != appConfig.m_advLayoutDirectionRL )
+	if ( layout_rl != pConfig->m_advLayoutDirectionRL )
 	{
-		appConfig.m_advLayoutDirectionRL = layout_rl;
+		pConfig->m_advLayoutDirectionRL = layout_rl;
 		need_restart = true;
 	}
 		
-	appConfig.save();
+	pConfig->save();
 		
 	if ( need_restart )
 		QMessageBox::information( this,

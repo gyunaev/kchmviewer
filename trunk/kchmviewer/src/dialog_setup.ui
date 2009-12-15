@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>675</width>
-    <height>461</height>
+    <height>476</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -59,7 +59,7 @@
          <item>
           <widget class="QGroupBox" name="buttonGroup1">
            <property name="title">
-            <string>If no arguments given on load</string>
+            <string>If started with no arguments</string>
            </property>
            <layout class="QVBoxLayout">
             <property name="spacing">
@@ -69,9 +69,16 @@
              <number>9</number>
             </property>
             <item>
+             <widget class="QRadioButton" name="rbStartWithNothing">
+              <property name="text">
+               <string>Start with nothing loaded</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QRadioButton" name="m_radioOnBeginOpenDialog">
               <property name="text">
-               <string>Open the 'open CHM file' dialog</string>
+               <string>Pop up the &quot;open file&quot; dialog</string>
               </property>
              </widget>
             </item>

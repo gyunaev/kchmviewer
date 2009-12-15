@@ -31,8 +31,21 @@ DialogSetup::DialogSetup(QWidget *parent)
 	connect( btnBrowse, SIGNAL( clicked() ), this, SLOT( browseExternalEditor() ) );
 	
 	// Set up the parameters
-	m_radioOnBeginOpenDialog->setChecked ( !appConfig.m_LoadLatestFileOnStartup );
-	m_radioOnBeginOpenLast->setChecked ( appConfig.m_LoadLatestFileOnStartup );
+	switch ( appConfig.m_startupMode )
+	{
+		case Config::STARTUP_DO_NOTHING:
+			rbStartWithNothing->setChecked( true );
+			break;
+
+		case Config::STARTUP_LOAD_LAST_FILE:
+			m_radioOnBeginOpenLast->setChecked( true );
+			break;
+
+		case Config::STARTUP_POPUP_OPENFILE:
+			m_radioOnBeginOpenDialog->setChecked( true );
+			break;
+	}
+
 	m_historySize->setValue ( appConfig.m_numOfRecentFiles );
 	m_rememberHistoryInfo->setChecked ( appConfig.m_HistoryStoreExtra );
 	
@@ -112,7 +125,13 @@ DialogSetup::~DialogSetup()
 
 void DialogSetup::accept()
 {
-	appConfig.m_LoadLatestFileOnStartup = m_radioOnBeginOpenLast->isChecked();
+	if ( rbStartWithNothing->isChecked() )
+		appConfig.m_startupMode = Config::STARTUP_DO_NOTHING;
+	else if ( m_radioOnBeginOpenLast->isChecked() )
+		appConfig.m_startupMode = Config::STARTUP_LOAD_LAST_FILE;
+	else
+		appConfig.m_startupMode = Config::STARTUP_POPUP_OPENFILE;
+
 	appConfig.m_numOfRecentFiles = m_historySize->value();
 	appConfig.m_HistoryStoreExtra = m_rememberHistoryInfo->isChecked();
 

@@ -51,6 +51,13 @@ class Config
 			TOOLBAR_TEXTONLY
 		};
 		
+		enum StartupMode
+		{
+			STARTUP_DO_NOTHING,
+			STARTUP_LOAD_LAST_FILE,
+			STARTUP_POPUP_OPENFILE
+		};
+
 		Config();
 		~Config();
 		
@@ -61,7 +68,7 @@ class Config
 		QString				m_datapath;
 		QString				m_lastOpenedDir;
 		
-		bool				m_LoadLatestFileOnStartup;
+		StartupMode			m_startupMode;
 		choose_action_t		m_onNewChmClick;
 		choose_action_t		m_onExternalLinkClick;
 		int					m_numOfRecentFiles;

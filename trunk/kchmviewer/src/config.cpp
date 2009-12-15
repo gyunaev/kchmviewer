@@ -39,7 +39,7 @@ Config::Config()
 	if ( !dir.exists() && !dir.mkdir(m_datapath) )
 		qWarning( "Could not create directory %s", qPrintable( m_datapath ));
 
-	m_LoadLatestFileOnStartup = false;
+	m_startupMode = STARTUP_DO_NOTHING;
 	m_onNewChmClick = ACTION_ASK_USER;
 	m_onExternalLinkClick = ACTION_ASK_USER;
 	m_numOfRecentFiles = 10;
@@ -108,7 +108,9 @@ bool Config::load()
 			QString key (rxkeypair.cap (1)), value (rxkeypair.cap(2));
 			
 			if ( key == "LoadLatestFileOnStartup" )
-				m_LoadLatestFileOnStartup = value.toInt() ? true : false;
+				m_startupMode = value.toInt() ? STARTUP_LOAD_LAST_FILE : STARTUP_DO_NOTHING;
+			if ( key == "startupMode" )
+				m_startupMode = (StartupMode) value.toInt();
 			else if ( key == "onNewChmClick" )
 				m_onNewChmClick = (choose_action_t) value.toInt();
 			else if ( key == "onExternalLinkClick" )
@@ -177,8 +179,7 @@ bool Config::save( )
 	QTextStream stream( &file );
 	stream.setCodec( "UTF-8" );
 	stream << "[settings]\n";
-	stream << "LoadLatestFileOnStartup=" << m_LoadLatestFileOnStartup << "\n";
-
+	stream << "startupMode=" << m_startupMode << "\n";
 	stream << "onNewChmClick=" << m_onNewChmClick << "\n";
 	stream << "onExternalLinkClick=" << m_onExternalLinkClick << "\n";
 	stream << "HistorySize=" << m_numOfRecentFiles << "\n";

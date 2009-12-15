@@ -21,7 +21,9 @@ ln -s /mnt/disk_c/Qt/MinGW/bin/mingwm10.dll mingwm10.dll
 export NSISDIR=/home/tim/bin/nsis
 
 # Get current, and save the next version
-VERSION=`sed -n 's/^\#define\s\+APP_VERSION\s\+\"\([0-9.a-zA-Z]\+\)\"/\1/p' $FILE_VERSION`
+VERSION_MAJOR=`sed -n 's/^\#define\s\+APP_VERSION_MAJOR\s\+\([0-9]\+\)/\1/p' $FILE_VERSION`
+VERSION_MINOR=`sed -n 's/^\#define\s\+APP_VERSION_MINOR\s\+\([0-9]\+\)/\1/p' $FILE_VERSION`
+VERSION="$VERSION_MAJOR.$VERSION_MINOR"
 
 INSTNAME="InstallKchmviewer-$VERSION.exe"
 echo "Creating $INSTNAME"

@@ -23,12 +23,9 @@
 
 #include "kde-qt.h"
 #include "viewwindow.h"
+#include "checknewversion.h"
 
 #include "ui_mainwindow.h"
-
-#define ENABLE_AUTOTEST_SUPPORT
-
-//! OpenPage extra flags, specifying extra behavior
 
 
 //! Those events could be sent to main window to do useful things. See handleUserEvents()
@@ -140,6 +137,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	protected slots:
 		// Called from the timer in main constructor
 		void 		firstShow();
+
+		// checknewversion
+		void		newVerAvailError( int  );
+		void		newVerAvailable( NewVersionMetaMap metadata );
 		
 	protected:
 		// Reimplemented functions
@@ -147,6 +148,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		bool		event ( QEvent * e );
 		
 	private:
+		void		checkNewVersionAvailable();
 		bool		parseCmdLineArgs();
 		void 		setupActions();
 		void		setupLangEncodingMenu();
@@ -174,8 +176,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 		ViewWindowMgr		*	m_viewWindowMgr;
 		NavigationPanel		*	m_navPanel;
-	
-#if defined (ENABLE_AUTOTEST_SUPPORT)
+
+	private:
+		// This is used for application automatic testing
 		enum	auto_test_state_t
 		{
 			STATE_OFF,
@@ -188,7 +191,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	
 	private slots:
 		void	runAutoTest();
-#endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 		
 };
 

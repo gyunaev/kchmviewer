@@ -51,7 +51,7 @@ Config::Config()
 #else
 	m_usedBrowser = BROWSER_QTEXTBROWSER;
 #endif
-		
+
 	m_kdeEnableJS = false;
 	m_kdeEnableJava = false;
 	m_kdeEnablePlugins = true;
@@ -61,6 +61,7 @@ Config::Config()
 	m_advLayoutDirectionRL = false;
 	m_advAutodetectEncoding = false;
 	m_advExternalEditorPath = "/usr/bin/kate";
+	m_advCheckNewVersion = true;
 	
 	m_lastOpenedDir = "";
 	m_toolbarMode = TOOLBAR_LARGEICONSTEXT;
@@ -141,9 +142,8 @@ bool Config::load()
 				m_advAutodetectEncoding = value.toInt() ? true : false;
 			else if ( key == "toolbarMode" )
 				m_toolbarMode = (ToolbarMode) value.toInt();
-			else if ( key == "useSearchEngine" || key == "QtBrowserPath" )
-				// Do nothing; not used anymore
-				;
+			else if ( key == "advCheckNewVersion"  )
+				m_advCheckNewVersion = value.toInt() ? true : false;
 			else
 				qWarning ("Unknown key=value pair: %s", qPrintable( line ));
 		}
@@ -195,6 +195,7 @@ bool Config::save( )
 	stream << "advLayoutDirectionRL=" << m_advLayoutDirectionRL << "\n";
 	stream << "advAutoDetectEncoding=" << m_advAutodetectEncoding << "\n";
 	stream << "toolbarMode=" << m_toolbarMode << "\n";
+	stream << "advCheckNewVersion=" << m_advCheckNewVersion << "\n";
 
 	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
 	

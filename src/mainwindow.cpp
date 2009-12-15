@@ -25,6 +25,8 @@
 
 #include <QProcess>
 #include <QDesktopServices>
+#include <QSettings>
+#include <QDateTime>
 
 #include "kde-qt.h"
 
@@ -87,7 +89,8 @@ MainWindow::MainWindow()
 		qApp->setLayoutDirection( Qt::LeftToRight );
 	
 	m_chmFile = 0;
-	
+	m_autoteststate = STATE_OFF;
+
 	m_currentSettings = new Settings();
 		
 	// Create the view window, which is a central widget
@@ -110,11 +113,8 @@ MainWindow::MainWindow()
 	resize( WND_X_SIZE, WND_Y_SIZE );	
 	m_navPanel->resize( SPLT_X_SIZE, m_navPanel->height() );
 
-#if defined (ENABLE_AUTOTEST_SUPPORT)
-	m_autoteststate = STATE_OFF;
-#endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
-
 	statusBar()->show();
+
 	qApp->setWindowIcon( QPixmap(":/images/application.png") );
 
 	m_aboutDlgMenuText = i18n( "<html><b>%1 version %2</b><br><br>"
@@ -130,9 +130,12 @@ MainWindow::MainWindow()
 	// Basically disable everything
 	updateActions();
 
+	// Check for a new version if needed
+	if ( appConfig.m_advCheckNewVersion )
+		checkNewVersionAvailable();
+
 	QTimer::singleShot( 0, this, SLOT( firstShow()) );
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -141,6 +144,28 @@ MainWindow::~MainWindow()
 		delete m_tempFileKeeper.takeFirst();
 }
 
+void MainWindow::checkNewVersionAvailable()
+{
+	QSettings settings;
+
+	if ( settings.contains( "advanced/lastupdate" ) )
+	{
+		QDateTime lastupdate = settings.value( "advanced/lastupdate" ).toDateTime();
+
+		if ( lastupdate.secsTo( QDateTime::currentDateTime() ) < 86400 * 7 ) // seven days
+			return;
+	}
+
+	// Create a New version available object if necessary. This object will auto-delete itself
+	CheckNewVersion * pNewVer = new CheckNewVersion();
+
+	connect( pNewVer, SIGNAL(error(int)), this, SLOT(newVerAvailError(int)) );
+	connect( pNewVer, SIGNAL(newVersionAvailable( NewVersionMetaMap )), this, SLOT(newVerAvailable(NewVersionMetaMap)) );
+
+	pNewVer->setUrl( "http://www.kchmviewer.net/latestversion.txt" );
+	pNewVer->setCurrentVersion( APP_VERSION );
+	pNewVer->start();
+}
 
 
 bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
@@ -510,10 +535,8 @@ bool MainWindow::parseCmdLineArgs( )
 			
 			exit (1);
 		}
-#if defined (ENABLE_AUTOTEST_SUPPORT)
 		else if ( !strcmp (qApp->argv()[i], "--autotestmode") || !strcmp (qApp->argv()[i], "--shortautotestmode") )
 			do_autotest = true;
-#endif		
 		else if ( !strcmp (qApp->argv()[i], "--search") )
 			search_query = qApp->argv()[++i];
 		else if ( !strcmp (qApp->argv()[i], "--sindex") )
@@ -553,16 +576,12 @@ bool MainWindow::parseCmdLineArgs( )
 		
 		if ( do_autotest )
 		{
-#if defined (ENABLE_AUTOTEST_SUPPORT)
 			if ( filename.isEmpty() )
 				qFatal ("Could not use Auto Test mode without a chm file!");
 
 			m_autoteststate = STATE_INITIAL;
 			showMinimized ();
 			runAutoTest();
-#else
-			qFatal ("Auto Test mode support is not compiled in.");
-#endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
 		}
 		return true;
 	}
@@ -657,7 +676,6 @@ bool MainWindow::handleUserEvent( const UserEvent * event )
 }
 
 
-#if defined (ENABLE_AUTOTEST_SUPPORT)
 void MainWindow::runAutoTest()
 {
 	switch (m_autoteststate)
@@ -684,8 +702,6 @@ void MainWindow::runAutoTest()
 		break;
 	}
 }
-#endif /* defined (ENABLE_AUTOTEST_SUPPORT) */
-
 
 void MainWindow::showInStatusBar(const QString & text)
 {
@@ -1340,4 +1356,26 @@ void MainWindow::updateActions()
 	nav_actionPreviousPage->setEnabled( enabled );
 	nav_actionNextPageToc->setEnabled( enabled );
 	m_navPanel->setEnabled( enabled );
+}
+
+void MainWindow::newVerAvailError( int  )
+{
+	statusBar()->showMessage( tr("Unable to check whether a new version is available"), 2000 );
+}
+
+void MainWindow::newVerAvailable( NewVersionMetaMap metadata )
+{
+	QSettings().setValue( "advanced/lastupdate", QDateTime::currentDateTime() );
+
+	if ( QMessageBox::question( 0,
+			tr("New version available"),
+			tr("<html>A new version <b>%1</b> of Karaoke Lyrics Editor is available!\n\n"
+			   "Do you want to visit the application web site %2?")
+					.arg( metadata["Version"] )
+					.arg( metadata["URL"] ),
+				QMessageBox::Yes | QMessageBox::No,
+				QMessageBox::Yes ) == QMessageBox::No )
+			return;
+
+	QDesktopServices::openUrl ( QUrl(metadata["URL"]) );
 }

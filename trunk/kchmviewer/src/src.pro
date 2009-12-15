@@ -18,7 +18,8 @@ HEADERS += config.h \
     viewwindowmgr.h \
     viewwindow_qtextbrowser.h \
     viewwindow_qtwebkit.h \
-    navigationpanel.h
+    navigationpanel.h \
+    checknewversion.h
 SOURCES += config.cpp \
     dbus_interface.cpp \
     dialog_chooseurlfromlist.cpp \
@@ -38,12 +39,14 @@ SOURCES += config.cpp \
     viewwindowmgr.cpp \
     viewwindow_qtextbrowser.cpp \
     viewwindow_qtwebkit.cpp \
-    navigationpanel.cpp
+    navigationpanel.cpp \
+    checknewversion.cpp
 TARGETDEPS += ../lib/libchmfile/libchmfile.a
 LIBS += ../lib/libchmfile/libchmfile.a \
     -lchm
 TARGET = ../bin/kchmviewer
 CONFIG += release \
+	threads \
     ordered \
     warn_on \
     qt \

@@ -140,7 +140,7 @@ ViewWindow * ViewWindowMgr::addNewTab( bool set_active )
 {
 	ViewWindow * viewvnd;
 	
-	switch ( appConfig.m_usedBrowser )
+	switch ( pConfig->m_usedBrowser )
 	{
 		default:
 			viewvnd = new ViewWindow_QTextBrowser( m_tabWidget );

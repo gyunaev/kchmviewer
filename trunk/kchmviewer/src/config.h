@@ -59,10 +59,8 @@ class Config
 		};
 
 		Config();
-		~Config();
-		
-		bool	load();
-		bool	save();
+		void	load();
+		void	save();
 				
 	public:
 		QString				m_datapath;
@@ -86,10 +84,8 @@ class Config
 		bool				m_advLayoutDirectionRL;
 		bool				m_advAutodetectEncoding;
 		bool				m_advCheckNewVersion;
-		
-		QStringList			m_recentFilesList;
 };
 
-extern Config appConfig;
+extern Config * pConfig;
 
 #endif

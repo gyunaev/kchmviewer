@@ -17,17 +17,16 @@
  **************************************************************************/
 
 #include <QTextStream>
+#include <QSettings>
 
 #include "kde-qt.h"
 #include "config.h"
 #include "settings.h"
 #include "mainwindow.h"
 
-
-Config appConfig;
+Config * pConfig;
 
 const char * APP_PATHINUSERDIR = ".kchmviewer";
-
 
 Config::Config()
 {
@@ -67,143 +66,54 @@ Config::Config()
 	m_toolbarMode = TOOLBAR_LARGEICONSTEXT;
 }
 
-
-Config::~Config()
+void Config::load()
 {
-}
+	QSettings settings;
 
-bool Config::load()
-{
-	QFile file (m_datapath + "/config");
-	if ( !file.open (QIODevice::ReadOnly) )
-		return false; // no error message - not actually a problem
-	
-	QString line;
-	char readbuf[4096];
-	bool getting_history = false;
-	m_recentFilesList.clear();
-	
-	while ( file.readLine( readbuf, sizeof(readbuf) - 1 ) > 0 )
-	{
-		line = QString::fromUtf8( readbuf ).trimmed();
-		
-		// skip empty lines and comments
-		if ( line.isEmpty() || line[0] == '#' )
-			continue;
-		
-		QRegExp rxsection ("^\\[(\\w+)\\]$"), rxkeypair ("^(\\w+)\\s*=\\s*(.*)$");
-		
-		if ( rxsection.indexIn( line ) != -1 )
-		{
-			if ( rxsection.cap (1) == "settings" )
-				getting_history = false;
-			else if ( rxsection.cap (1) == "history" )
-				getting_history = true;
-			else
-				qWarning ("Unknown configuration section: %s", qPrintable( rxsection.cap(1) ));
-			
-			continue;
-		}
-		else if ( !getting_history && rxkeypair.indexIn( line ) != -1 )
-		{
-			QString key (rxkeypair.cap (1)), value (rxkeypair.cap(2));
-			
-			if ( key == "LoadLatestFileOnStartup" )
-				m_startupMode = value.toInt() ? STARTUP_LOAD_LAST_FILE : STARTUP_DO_NOTHING;
-			if ( key == "startupMode" )
-				m_startupMode = (StartupMode) value.toInt();
-			else if ( key == "onNewChmClick" )
-				m_onNewChmClick = (choose_action_t) value.toInt();
-			else if ( key == "onExternalLinkClick" )
-				m_onExternalLinkClick = (choose_action_t) value.toInt();
-			else if ( key == "HistorySize" )
-				m_numOfRecentFiles = value.toInt();
-			else if ( key == "HistoryStoreExtra" )
-				m_HistoryStoreExtra = value.toInt() ? true : false;
-			else if ( key == "UsedBrowser" )
-				m_usedBrowser = value.toInt();
-			else if ( key == "kdeEnableJS" )
-				m_kdeEnableJS = value.toInt() ? true : false;
-			else if ( key == "kdeEnableJava" )
-				m_kdeEnableJava = value.toInt() ? true : false;
-			else if ( key == "kdeEnablePlugins" )
-				m_kdeEnablePlugins = value.toInt() ? true : false;
-			else if ( key == "kdeEnableRefresh" )
-				m_kdeEnableRefresh = value.toInt() ? true : false;
-			else if ( key == "LastOpenedDir" )
-				m_lastOpenedDir = value;
-			else if ( key == "advUseInternalEditor" )
-				m_advUseInternalEditor = value.toInt() ? true : false;
-			else if ( key == "advExternalEditorPath" )
-				m_advExternalEditorPath = value;
-			else if ( key == "advLayoutDirectionRL" )
-				m_advLayoutDirectionRL = value.toInt() ? true : false;
-			else if ( key == "advAutoDetectEncoding" )
-				m_advAutodetectEncoding = value.toInt() ? true : false;
-			else if ( key == "toolbarMode" )
-				m_toolbarMode = (ToolbarMode) value.toInt();
-			else if ( key == "advCheckNewVersion"  )
-				m_advCheckNewVersion = value.toInt() ? true : false;
-			else
-				qWarning ("Unknown key=value pair: %s", qPrintable( line ));
-		}
-		else if ( getting_history )
-		{
-			if ( m_recentFilesList.size() < m_numOfRecentFiles )
-				m_recentFilesList.prepend( line );
-		}
-		else
-			qWarning ("Unknown line in configuration: %s", qPrintable( line ));
-	}
+	m_startupMode = (Config::StartupMode) settings.value( "general/onstartup", STARTUP_DO_NOTHING ).toInt();
+	m_onNewChmClick = (Config::choose_action_t) settings.value( "general/onnewchm", ACTION_ASK_USER ).toInt();
+	m_onExternalLinkClick = (Config::choose_action_t) settings.value( "general/onexternal", ACTION_ASK_USER ).toInt();
+	m_numOfRecentFiles = settings.value( "general/maxrecentfiles", 10 ).toInt();
+	m_HistoryStoreExtra = settings.value( "general/extrahistory", true ).toBool();
+	m_usedBrowser = settings.value( "general/usebrowser", BROWSER_QTEXTBROWSER ).toInt();
+	m_kdeEnableJS = settings.value( "browser/enablejs", false ).toBool();
+	m_kdeEnableJava = settings.value( "browser/enablejava", false ).toBool();
+	m_kdeEnablePlugins = settings.value( "browser/enableplugins", true ).toBool();
+	m_kdeEnableRefresh = settings.value( "browser/enablerefresh", false ).toBool();
+	m_advUseInternalEditor = settings.value( "advanced/internaleditor", true ).toBool();
+	m_advLayoutDirectionRL = settings.value( "advanced/layoutltr", false ).toBool();
+	m_advAutodetectEncoding = settings.value( "advanced/autodetectenc", false ).toBool();
+	m_advExternalEditorPath = settings.value( "advanced/editorpath", "/usr/bin/kate" ).toString();
+	m_advCheckNewVersion = settings.value( "advanced/checknewver", true ).toBool();
+	m_toolbarMode = (Config::ToolbarMode) settings.value( "advanced/toolbarmode", TOOLBAR_LARGEICONSTEXT ).toInt();
+	m_lastOpenedDir = settings.value( "advanced/toolbarmode", "." ).toString();
 
 	// Reset webkit browser to qtextbrowser when older version is running
 #if !defined (QT_WEBKIT_LIB)
 	if ( m_usedBrowser == BROWSER_QTWEBKIT )
 		m_usedBrowser = BROWSER_QTEXTBROWSER;
 #endif
-	
-	return true;
 }
 
-bool Config::save( )
+void Config::save( )
 {
-	QFile file( m_datapath + "/config" );
-	if ( !file.open (QIODevice::WriteOnly) )
-	{
-		qWarning( "Could not write settings into file %s: %s", 
-		          qPrintable( file.fileName() ), 
-		          qPrintable(  file.errorString() ) );
-		return false;
-	}
-	
-	QTextStream stream( &file );
-	stream.setCodec( "UTF-8" );
-	stream << "[settings]\n";
-	stream << "startupMode=" << m_startupMode << "\n";
-	stream << "onNewChmClick=" << m_onNewChmClick << "\n";
-	stream << "onExternalLinkClick=" << m_onExternalLinkClick << "\n";
-	stream << "HistorySize=" << m_numOfRecentFiles << "\n";
-	stream << "HistoryStoreExtra=" << m_HistoryStoreExtra << "\n";
-	stream << "UsedBrowser=" << m_usedBrowser << "\n";
-	
-	stream << "kdeEnableJS=" << m_kdeEnableJS << "\n";
-	stream << "kdeEnableJava=" << m_kdeEnableJava << "\n";
-	stream << "kdeEnablePlugins=" << m_kdeEnablePlugins << "\n";
-	stream << "kdeEnableRefresh=" << m_kdeEnableRefresh << "\n";
-	stream << "advUseInternalEditor=" << m_advUseInternalEditor << "\n";
-	stream << "advExternalEditorPath=" << m_advExternalEditorPath << "\n";
-	stream << "advLayoutDirectionRL=" << m_advLayoutDirectionRL << "\n";
-	stream << "advAutoDetectEncoding=" << m_advAutodetectEncoding << "\n";
-	stream << "toolbarMode=" << m_toolbarMode << "\n";
-	stream << "advCheckNewVersion=" << m_advCheckNewVersion << "\n";
+	QSettings settings;
 
-	stream << "LastOpenedDir=" << m_lastOpenedDir << "\n";	
-	
-	stream << "\n[history]\n";
-	
-	// Do not write all the history, but only the needed amount
-	for ( int i = 0; i < m_recentFilesList.size(); i++ )
-		stream << m_recentFilesList[m_recentFilesList.size() - 1 - i] << "\n";
-	
-	return true;
+	settings.setValue( "general/onstartup", m_startupMode );
+	settings.setValue( "general/onnewchm", m_onNewChmClick );
+	settings.setValue( "general/onexternal", m_onExternalLinkClick );
+	settings.setValue( "general/maxrecentfiles", m_numOfRecentFiles );
+	settings.setValue( "general/extrahistory", m_HistoryStoreExtra );
+	settings.setValue( "general/usebrowser", m_usedBrowser );
+	settings.setValue( "browser/enablejs", m_kdeEnableJS );
+	settings.setValue( "browser/enablejava", m_kdeEnableJava );
+	settings.setValue( "browser/enableplugins", m_kdeEnablePlugins );
+	settings.setValue( "browser/enablerefresh", m_kdeEnableRefresh );
+	settings.setValue( "advanced/internaleditor", m_advUseInternalEditor );
+	settings.setValue( "advanced/layoutltr", m_advLayoutDirectionRL );
+	settings.setValue( "advanced/autodetectenc", m_advAutodetectEncoding );
+	settings.setValue( "advanced/editorpath", m_advExternalEditorPath );
+	settings.setValue( "advanced/checknewver", m_advCheckNewVersion );
+	settings.setValue( "advanced/toolbarmode", m_toolbarMode );
+	settings.setValue( "advanced/toolbarmode", m_lastOpenedDir );
 }

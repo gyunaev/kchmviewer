@@ -105,7 +105,7 @@ class KCHMNetworkReply : public QNetworkReply
 			|| path.endsWith( ".htm", Qt::CaseInsensitive ) )
 			{
 				// If encoding autodetection is enabled, decode it. Otherwise pass as binary.
-				if ( appConfig.m_advAutodetectEncoding )
+				if ( pConfig->m_advAutodetectEncoding )
 				{
 					if ( !chm->getFileContentAsString( &data, path ) )
 						qWarning( "Could not resolve file %s\n", qPrintable( path ) );

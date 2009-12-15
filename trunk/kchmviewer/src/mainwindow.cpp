@@ -41,28 +41,6 @@
 #include "ui_dialog_about.h"
 
 
-// Our implemenation of RecentFiles which uses different storage
-class ConfigRecentFiles : public RecentFiles
-{
-	public:
-		ConfigRecentFiles( QMenu * menu, QAction * before, int maxfiles = 5 )
-			: RecentFiles( menu, before, maxfiles )
-		{
-		}
-
-	protected:
-		QStringList loadRecentFiles()
-		{
-			return appConfig.m_recentFilesList;
-		}
-
-		void saveRecentFiles( const QStringList& files )
-		{
-			appConfig.m_recentFilesList = files;
-		}
-};
-
-
 MainWindow::MainWindow()
 	: QMainWindow ( 0 ), Ui::MainWindow()
 {
@@ -77,7 +55,7 @@ MainWindow::MainWindow()
 	setupUi( this );
 	
 	// Set up layout direction
-	if ( appConfig.m_advLayoutDirectionRL )
+	if ( pConfig->m_advLayoutDirectionRL )
 		qApp->setLayoutDirection( Qt::RightToLeft );
 	else
 		qApp->setLayoutDirection( Qt::LeftToRight );
@@ -111,14 +89,14 @@ MainWindow::MainWindow()
 
 	qApp->setWindowIcon( QPixmap(":/images/application.png") );
 
-	m_recentFiles = new ConfigRecentFiles( menu_File, file_exit_action, appConfig.m_numOfRecentFiles );
+	m_recentFiles = new RecentFiles( menu_File, file_exit_action, pConfig->m_numOfRecentFiles );
 	connect( m_recentFiles, SIGNAL(openRecentFile(QString)), this, SLOT(actionOpenRecentFile(QString)) );
 
 	// Basically disable everything
 	updateActions();
 
 	// Check for a new version if needed
-	if ( appConfig.m_advCheckNewVersion )
+	if ( pConfig->m_advCheckNewVersion )
 	{
 		QSettings settings;
 
@@ -188,7 +166,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		
 		// Qt's 'dirname' does not work well
 		QFileInfo qf ( m_chmFilename );
-		appConfig.m_lastOpenedDir = qf.dir().path();
+		pConfig->m_lastOpenedDir = qf.dir().path();
 		m_chmFileBasename = qf.fileName();
 
 		// Apply settings to the navigation dock
@@ -312,7 +290,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 
 	if ( LCHMUrlFactory::isRemoteURL (url, otherlink) )
 	{
-		switch ( appConfig.m_onExternalLinkClick )
+		switch ( pConfig->m_onExternalLinkClick )
 		{
 		case Config::ACTION_DONT_OPEN:
 			break;
@@ -408,13 +386,13 @@ void MainWindow::firstShow()
 {
 	if ( !parseCmdLineArgs( ) )
 	{
-		if ( appConfig.m_startupMode == Config::STARTUP_LOAD_LAST_FILE && !m_recentFiles->latestFile().isEmpty() )
+		if ( pConfig->m_startupMode == Config::STARTUP_LOAD_LAST_FILE && !m_recentFiles->latestFile().isEmpty() )
 		{
 			loadFile( m_recentFiles->latestFile() );
 			return;
 		}
 		
-		if ( appConfig.m_startupMode == Config::STARTUP_POPUP_OPENFILE )
+		if ( pConfig->m_startupMode == Config::STARTUP_POPUP_OPENFILE )
 			actionOpenFile();
 	}
 }
@@ -455,7 +433,7 @@ void MainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
 void MainWindow::closeFile( )
 {
 	// Prepare the settings
-	if ( appConfig.m_HistoryStoreExtra )
+	if ( pConfig->m_HistoryStoreExtra )
 	{
 		m_currentSettings->m_activeEncoding = m_chmFile->currentEncoding()->qtcodec;
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
@@ -471,7 +449,7 @@ void MainWindow::closeFile( )
 		m_currentSettings->saveSettings( );
 	}
 	
-	appConfig.save();
+	pConfig->save();
 }
 
 
@@ -712,11 +690,11 @@ void MainWindow::actionNavigateHome()
 void MainWindow::actionOpenFile()
 {
 #if defined (USE_KDE)
-	QString fn = KFileDialog::getOpenFileName( appConfig.m_lastOpenedDir, i18n("*.chm|Compressed Help Manual (*.chm)"), this);
+	QString fn = KFileDialog::getOpenFileName( pConfig->m_lastOpenedDir, i18n("*.chm|Compressed Help Manual (*.chm)"), this);
 #else
 	QString fn = QFileDialog::getOpenFileName( this, 
 	                                           i18n( "Open a chm file"), 
-	                                           appConfig.m_lastOpenedDir, 
+											   pConfig->m_lastOpenedDir,
 	                                           i18n("Compressed Help Manual (*.chm)"),
 	                                           0,
 	                                           QFileDialog::DontResolveSymlinks );
@@ -871,7 +849,7 @@ void MainWindow::actionViewHTMLsource()
 	if ( !m_chmFile->getFileContentAsString( &text, currentBrowser()->getOpenedPage() ) || text.isEmpty() )
 		return;
 
-	if ( appConfig.m_advUseInternalEditor )
+	if ( pConfig->m_advUseInternalEditor )
 	{
 		QTextEdit * editor = new QTextEdit ( 0 );
 		editor->setPlainText( text );
@@ -897,11 +875,11 @@ void MainWindow::actionViewHTMLsource()
 		QStringList arguments;
 		arguments.push_back( tf->fileName() );
 		
-		if ( !QProcess::startDetached( appConfig.m_advExternalEditorPath, arguments, "." ) )
+		if ( !QProcess::startDetached( pConfig->m_advExternalEditorPath, arguments, "." ) )
 		{
 			QMessageBox::warning( 0,
 								  "Cannot start external editor", 
-		  						  tr("Cannot start external editor %1.\nMake sure the path is absolute!") .arg( appConfig.m_advExternalEditorPath ) );
+								  tr("Cannot start external editor %1.\nMake sure the path is absolute!") .arg( pConfig->m_advExternalEditorPath ) );
 			delete m_tempFileKeeper.takeLast();
 		}
 	}
@@ -1132,7 +1110,7 @@ void MainWindow::updateToolbars()
 	Qt::ToolButtonStyle buttonstyle = Qt::ToolButtonIconOnly;
 	QSize iconsize = QSize( 32, 32 );
 
-	switch ( appConfig.m_toolbarMode )
+	switch ( pConfig->m_toolbarMode )
 	{
 		case Config::TOOLBAR_SMALLICONS:
 			iconsize = QSize( 16, 16 );

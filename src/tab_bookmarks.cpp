@@ -107,7 +107,7 @@ void TabBookmarks::onAddBookmarkPressed( )
 	QString title = ::mainWindow->chmFile()->getTopicByUrl(url);
 	QString name = QInputDialog::getText( 
 	        this,
-			i18n( "%1 - add a bookmark") . arg(APP_NAME),
+			i18n( "%1 - add a bookmark") . arg(QCoreApplication::applicationName()),
 			i18n( "Enter the name for this bookmark:" ),
 			QLineEdit::Normal,
 			title,
@@ -149,7 +149,7 @@ void TabBookmarks::onEditBookmarkPressed( )
 	    bool ok;
 		QString name = QInputDialog::getText( 
 			this,
-		    i18n( "%1 - edit the bookmark name") . arg(APP_NAME),
+			i18n( "%1 - edit the bookmark name") . arg(QCoreApplication::applicationName()),
 			i18n( "Enter the name for this bookmark:" ),
 			QLineEdit::Normal,
 			item->m_name, 

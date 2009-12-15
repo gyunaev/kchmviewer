@@ -19,7 +19,7 @@
 #ifndef INCLUDE_VERSION_H
 #define INCLUDE_VERSION_H
 
-#define APP_NAME		"kchmviewer"
-#define APP_VERSION		"4.3"
+#define APP_VERSION_MAJOR	4
+#define APP_VERSION_MINOR	5
 
 #endif /* INCLUDE_VERSION_H */

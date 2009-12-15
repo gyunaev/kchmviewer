@@ -48,7 +48,7 @@ int main( int argc, char ** argv )
 
 	KAboutData aboutdata ( "kchmviewer",
 				QByteArray(),
-				ki18n(APP_NAME),
+				ki18n("kchmviewer"),
 				APP_VERSION,
 				ki18n("CHM file viewer"),
 				KAboutData::License_GPL,
@@ -65,6 +65,11 @@ int main( int argc, char ** argv )
 	QApplication app( argc, argv );
 #endif
 	
+	// Set data for QSettings
+	QCoreApplication::setOrganizationName("Ulduzsoft");
+	QCoreApplication::setOrganizationDomain("kchmviewer.net");
+	QCoreApplication::setApplicationName("kchmviewer");
+
 	appConfig.load();
 	app.installEventFilter( &gKeyEventFilter );
 	

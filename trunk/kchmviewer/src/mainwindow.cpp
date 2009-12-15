@@ -589,7 +589,7 @@ bool MainWindow::event( QEvent * e )
 	if ( e->type() == QEvent::User )
 		return handleUserEvent( (UserEvent*) e );
 	
-	return QWidget::event( e );
+	return QMainWindow::event( e );
 }
 
 bool MainWindow::handleUserEvent( const UserEvent * event )

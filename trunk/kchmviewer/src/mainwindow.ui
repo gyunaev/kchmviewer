@@ -338,7 +338,7 @@
     <string>Increases the document font size. The new font size will be stored.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl++</string>
+    <string>Ctrl+=</string>
    </property>
   </action>
   <action name="view_Decrease_font_size_action">
@@ -443,7 +443,7 @@
     <string>If the current page is present in the Table of Contents, locate it there. </string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+</string>
+    <string>Ctrl+L</string>
    </property>
   </action>
   <action name="view_Set_encoding_action">

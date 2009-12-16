@@ -59,7 +59,6 @@ class Config
 		};
 
 		Config();
-		void	load();
 		void	save();
 				
 	public:

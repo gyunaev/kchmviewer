@@ -1,3 +1,22 @@
+2009-12-16 tim <gyunaev@ulduzsoft.com>
+    - Fixed application settings storage.
+
+2009-12-14 tim <gyunaev@ulduzsoft.com>
+    - Version changed to 5.0
+    - Binary index parser commented out as it seems to be buggy.
+    - Toolbar mode is now configurable through settings.
+    - Now the application can start without opening a CHM file. Startup mode is selected in settings.
+    - Added check if a new version is available.
+    - Added new icons from DryIcons
+
+2009-12-13 tim <gyunaev@ulduzsoft.com>
+    - Major code refactoring, with renamed files and classes, to make it easier to maintain
+      the code in future.
+    - Changed all license headers to GPLv3-compliant.
+    - Recent files feature now uses a separate class.
+    - The navigator tab is now a Dock widget, so can be moved and floated.
+    - Content tab is now always loaded, and the page is correctly located.
+
 2009-24-10 tim <gyunaev@ulduzsoft.com>
     - Version changed to 4.2
     - Fixed font size change on KHTMLPart (thanks to Jure Repinc)

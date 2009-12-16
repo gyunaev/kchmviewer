@@ -38,38 +38,7 @@ Config::Config()
 	if ( !dir.exists() && !dir.mkdir(m_datapath) )
 		qWarning( "Could not create directory %s", qPrintable( m_datapath ));
 
-	m_startupMode = STARTUP_DO_NOTHING;
-	m_onNewChmClick = ACTION_ASK_USER;
-	m_onExternalLinkClick = ACTION_ASK_USER;
-	m_numOfRecentFiles = 10;
-	m_HistoryStoreExtra = true;
-	
-	// Webkit only present in 4.4+
-#if defined (QT_WEBKIT_LIB)
-	m_usedBrowser = BROWSER_QTWEBKIT;
-#else
-	m_usedBrowser = BROWSER_QTEXTBROWSER;
-#endif
-
-	m_kdeEnableJS = false;
-	m_kdeEnableJava = false;
-	m_kdeEnablePlugins = true;
-	m_kdeEnableRefresh = false;
-	
-	m_advUseInternalEditor = true;
-	m_advLayoutDirectionRL = false;
-	m_advAutodetectEncoding = false;
-	m_advExternalEditorPath = "/usr/bin/kate";
-	m_advCheckNewVersion = true;
-	
-	m_lastOpenedDir = "";
-	m_toolbarMode = TOOLBAR_LARGEICONSTEXT;
-}
-
-void Config::load()
-{
 	QSettings settings;
-
 	m_startupMode = (Config::StartupMode) settings.value( "general/onstartup", STARTUP_DO_NOTHING ).toInt();
 	m_onNewChmClick = (Config::choose_action_t) settings.value( "general/onnewchm", ACTION_ASK_USER ).toInt();
 	m_onExternalLinkClick = (Config::choose_action_t) settings.value( "general/onexternal", ACTION_ASK_USER ).toInt();
@@ -94,6 +63,7 @@ void Config::load()
 		m_usedBrowser = BROWSER_QTEXTBROWSER;
 #endif
 }
+
 
 void Config::save( )
 {

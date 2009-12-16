@@ -55,7 +55,7 @@ Config::Config()
 	m_advExternalEditorPath = settings.value( "advanced/editorpath", "/usr/bin/kate" ).toString();
 	m_advCheckNewVersion = settings.value( "advanced/checknewver", true ).toBool();
 	m_toolbarMode = (Config::ToolbarMode) settings.value( "advanced/toolbarmode", TOOLBAR_LARGEICONSTEXT ).toInt();
-	m_lastOpenedDir = settings.value( "advanced/toolbarmode", "." ).toString();
+	m_lastOpenedDir = settings.value( "advanced/lastopendir", "." ).toString();
 
 	// Reset webkit browser to qtextbrowser when older version is running
 #if !defined (QT_WEBKIT_LIB)
@@ -85,5 +85,5 @@ void Config::save( )
 	settings.setValue( "advanced/editorpath", m_advExternalEditorPath );
 	settings.setValue( "advanced/checknewver", m_advCheckNewVersion );
 	settings.setValue( "advanced/toolbarmode", m_toolbarMode );
-	settings.setValue( "advanced/toolbarmode", m_lastOpenedDir );
+	settings.setValue( "advanced/lastopendir", m_lastOpenedDir );
 }

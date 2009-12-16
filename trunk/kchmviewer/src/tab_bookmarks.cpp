@@ -40,6 +40,11 @@ class BookmarkItem : public QListWidgetItem
 			         SLOT( actionBookmarkActivated() ) );
 		}
 	
+		void setName( const QString& name )
+		{
+			m_name = name;
+		}
+
 		// Visualization
 		virtual QVariant data ( int role ) const
 		{
@@ -158,9 +163,10 @@ void TabBookmarks::onEditBookmarkPressed( )
 		if ( !ok || name.isEmpty() )
 			return;
 
-		item->setText( name );
+		item->setName( name );
 		item->m_action->setText( name );
 		m_listChanged = true;
+		update();
 	}
 }
 

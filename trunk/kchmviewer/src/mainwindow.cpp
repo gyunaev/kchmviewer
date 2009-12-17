@@ -372,7 +372,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	{
 		// Open all the tree items to show current item (if needed)
 		if ( (flags & OPF_CONTENT_TREE) != 0 )
-			m_navPanel->findUrlInContents( vwnd->getOpenedPage() );
+			m_navPanel->findUrlInContents( url );
 		
 		if ( flags & OPF_ADD2HISTORY )
 			currentBrowser()->addNavigationHistory( hist_url, hist_scrollpos );

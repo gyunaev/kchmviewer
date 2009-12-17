@@ -1,8 +1,14 @@
+2009-12-17 tim <gyunaev@ulduzsoft.com>
+    - 5.1 RELEASE
+    - Trying to use non-normalized URL first to fix CHMs which use them in TOC/Index
+
 2009-12-16 tim <gyunaev@ulduzsoft.com>
     - Fixed application settings storage.
     - Fixed bookmark edit button.
+    - Version changed to 5.1
 
 2009-12-14 tim <gyunaev@ulduzsoft.com>
+    - 5.0 RELEASE
     - Version changed to 5.0
     - Binary index parser commented out as it seems to be buggy.
     - Toolbar mode is now configurable through settings.

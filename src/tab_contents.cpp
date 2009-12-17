@@ -19,6 +19,7 @@
 #include "kde-qt.h"
 
 #include "libchmfile.h"
+#include "libchmurlfactory.h"
 
 #include "mainwindow.h"
 #include "treeviewitem.h"
@@ -74,9 +75,17 @@ void TabContents::refillTableOfContents( )
 
 IndexTocItem * TabContents::getTreeItem( const QString & url )
 {
-	QString fixedstr = ::mainWindow->chmFile()->normalizeUrl( url );
-	QMap<QString, IndexTocItem*>::const_iterator it = m_urlListMap.find( fixedstr );
-	
+	QMap<QString, IndexTocItem*>::const_iterator it;
+
+	// First try to find non-normalized URL (present in some ugly CHM files)
+	it = m_urlListMap.find( LCHMUrlFactory::makeURLabsoluteIfNeeded(url) );
+
+	if ( it == m_urlListMap.end() )
+	{
+		QString fixedstr = ::mainWindow->chmFile()->normalizeUrl( url );
+		it = m_urlListMap.find( fixedstr );
+	}
+
 	if ( it == m_urlListMap.end() )
 		return 0;
 		

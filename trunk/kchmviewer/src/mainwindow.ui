@@ -28,6 +28,7 @@
      <string>&amp;Settings</string>
     </property>
     <addaction name="settings_SettingsAction"/>
+    <addaction name="actionEdit_toolbars"/>
     <addaction name="separator"/>
     <addaction name="actionCheck_for_updates"/>
    </widget>
@@ -96,7 +97,7 @@
   </widget>
   <widget class="QToolBar" name="mainToolbar">
    <property name="windowTitle">
-    <string>general toolbar</string>
+    <string>General toolbar</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -121,7 +122,7 @@
   </widget>
   <widget class="QToolBar" name="navToolbar">
    <property name="windowTitle">
-    <string>navigation toolbar</string>
+    <string>Navigation toolbar</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -147,7 +148,7 @@
   </widget>
   <widget class="QToolBar" name="viewToolbar">
    <property name="windowTitle">
-    <string>action toolbar</string>
+    <string>View toolbar</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -583,6 +584,15 @@
    </property>
    <property name="text">
     <string>Check for updates</string>
+   </property>
+  </action>
+  <action name="actionEdit_toolbars">
+   <property name="icon">
+    <iconset resource="resources/images.qrc">
+     <normaloff>:/images/dryicons_window.png</normaloff>:/images/dryicons_window.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit toolbars...</string>
    </property>
   </action>
  </widget>

@@ -37,6 +37,7 @@
 #include "dialog_setup.h"
 #include "recentfiles.h"
 #include "navigationpanel.h"
+#include "toolbarmanager.h"
 #include "version.h"
 #include "ui_dialog_about.h"
 
@@ -76,7 +77,16 @@ MainWindow::MainWindow()
 	m_navPanel->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	addDockWidget( Qt::LeftDockWidgetArea, m_navPanel, Qt::Vertical );
 
-	// Set up things
+	// Set up toolbar manager
+	m_toolbarMgr = new ToolbarManager( this );
+
+	m_toolbarMgr->queryAvailableActions( this );
+	m_toolbarMgr->addManaged( mainToolbar );
+	m_toolbarMgr->addManaged( navToolbar );
+	m_toolbarMgr->addManaged( viewToolbar );
+	m_toolbarMgr->load();
+
+	// Set up other things
 	setupActions();
 	updateToolbars();
 	setupLangEncodingMenu();
@@ -462,6 +472,9 @@ void MainWindow::closeEvent ( QCloseEvent * e )
 		delete m_chmFile;
 		m_chmFile = 0;
 	}
+
+	// Save toolbars
+	m_toolbarMgr->save();
 
 	QMainWindow::closeEvent ( e );
 }
@@ -994,10 +1007,6 @@ void MainWindow::setupActions()
 	connect( edit_SelectAll_action, SIGNAL( triggered() ), this, SLOT( actionEditSelectAll() ) );
 	connect( edit_FindAction, SIGNAL( triggered() ), this, SLOT( actionFindInPage() ) );
 	
-	// Settings
-	connect( settings_SettingsAction, SIGNAL( triggered() ), this, SLOT( actionChangeSettings() ) );
-	connect( actionCheck_for_updates, SIGNAL(triggered()), this, SLOT(checkNewVersionAvailable()) );
-	
 	// Bookmarks
 	connect( bookmark_AddAction, SIGNAL( triggered() ), m_navPanel, SLOT( addBookmark()) );
 	
@@ -1008,7 +1017,17 @@ void MainWindow::setupActions()
 	connect( view_Toggle_fullscreen_action, SIGNAL( triggered() ), this, SLOT( actionToggleFullScreen() ) );
 	connect( view_Show_navigator_window, SIGNAL( triggered(bool) ), this, SLOT( actionShowHideNavigator(bool) ) );
 	connect( view_Locate_in_contents_action, SIGNAL( triggered() ), this, SLOT( actionLocateInContentsTab() ) );
-	
+
+	// Settings
+	connect( settings_SettingsAction, SIGNAL( triggered() ), this, SLOT( actionChangeSettings() ) );
+	connect( actionEdit_toolbars, SIGNAL( triggered() ), this, SLOT( actionEditToolbars() ) );
+	connect( actionCheck_for_updates, SIGNAL(triggered()), this, SLOT(checkNewVersionAvailable()) );
+
+	// Help menu
+	connect( actionAbout_kchmviewer, SIGNAL(triggered()), this, SLOT(actionAboutApp()) );
+	connect( actionAbout_Qt, SIGNAL(triggered()), this, SLOT(actionAboutQt()) );
+	menuHelp->addSeparator();
+
 	// Navigation toolbar
 	connect( nav_action_Back, SIGNAL( triggered() ), this, SLOT( actionNavigateBack() ) );
 	connect( nav_actionForward, SIGNAL( triggered() ), this, SLOT( actionNavigateForward() ) );
@@ -1027,11 +1046,6 @@ void MainWindow::setupActions()
 	// Navigation panel visibility
 	connect( m_navPanel, SIGNAL(visibilityChanged(bool)), this, SLOT( navigatorVisibilityChanged(bool) ) );
 
-	// Help menu
-	connect( actionAbout_kchmviewer, SIGNAL(triggered()), this, SLOT(actionAboutApp()) );
-	connect( actionAbout_Qt, SIGNAL(triggered()), this, SLOT(actionAboutQt()) );
-	menuHelp->addSeparator();
-	
 	// "What's this" action
 	QAction * whatsthis = QWhatsThis::createAction( this );
 	menuHelp->addAction( whatsthis );
@@ -1272,7 +1286,7 @@ void MainWindow::newVerAvailable( NewVersionMetaMap metadata )
 	{
 		if ( QMessageBox::question( 0,
 				tr("New version available"),
-				tr("<html>A new version <b>%1</b> of Karaoke Lyrics Editor is available!<br><br>"
+				tr("<html>A new version <b>%1</b> of Kchmviewer is available!<br><br>"
 				   "You are currently using version %3.<br>"
 				   "Do you want to visit the application web site %2?")
 						.arg( metadata["Version"] )
@@ -1286,4 +1300,9 @@ void MainWindow::newVerAvailable( NewVersionMetaMap metadata )
 	}
 	else
 		statusBar()->showMessage( tr("Checked for updates; you are using the latest version of kchmviewer"), 2000 );
+}
+
+void MainWindow::actionEditToolbars()
+{
+	m_toolbarMgr->editDialog();
 }

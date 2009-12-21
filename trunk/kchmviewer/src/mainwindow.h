@@ -43,6 +43,7 @@ class UserEvent : public QEvent
 
 
 class RecentFiles;
+class ToolbarManager;
 class NavigationPanel;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
@@ -111,6 +112,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		actionShowHideNavigator(bool);
 		void		navigatorVisibilityChanged( bool visible );
 		void		actionLocateInContentsTab();
+		void		actionEditToolbars();
 
 		void		actionNavigateBack();
 		void		actionNavigateForward();
@@ -176,6 +178,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 
 		ViewWindowMgr		*	m_viewWindowMgr;
 		NavigationPanel		*	m_navPanel;
+		ToolbarManager		*	m_toolbarMgr;
 
 	private:
 		// This is used for application automatic testing

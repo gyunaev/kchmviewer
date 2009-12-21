@@ -19,7 +19,9 @@ HEADERS += config.h \
     viewwindow_qtextbrowser.h \
     viewwindow_qtwebkit.h \
     navigationpanel.h \
-    checknewversion.h
+    checknewversion.h \
+    toolbarmanager.h \
+    toolbareditor.h
 SOURCES += config.cpp \
     dbus_interface.cpp \
     dialog_chooseurlfromlist.cpp \
@@ -40,7 +42,9 @@ SOURCES += config.cpp \
     viewwindow_qtextbrowser.cpp \
     viewwindow_qtwebkit.cpp \
     navigationpanel.cpp \
-    checknewversion.cpp
+    checknewversion.cpp \
+    toolbarmanager.cpp \
+    toolbareditor.cpp
 TARGETDEPS += ../lib/libchmfile/libchmfile.a
 LIBS += ../lib/libchmfile/libchmfile.a \
     -lchm
@@ -62,15 +66,16 @@ FORMS += tab_bookmarks.ui \
     mainwindow.ui \
     window_browser.ui \
     navigatorpanel.ui \
-    dialog_about.ui
+    dialog_about.ui \
+    toolbareditor.ui
 RESOURCES += resources/images.qrc
 QT += webkit \
     dbus \
     network
 win32-mingw-g++: { 
     QT -= dbus
-	HEADERS -= dbus_interface.h
-	SOURCES -= dbus_interface.cpp
+    HEADERS -= dbus_interface.h
+    SOURCES -= dbus_interface.cpp
     CONFIG -= dbus
-	LIBS += -lwsock32
+    LIBS += -lwsock32
 }

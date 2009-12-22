@@ -197,7 +197,7 @@ bool ViewWindow_QtWebKit::openPage (const QString& url)
 		if ( !fixedname.startsWith( "ms-its://" ) )
 			fixedname = "ms-its://" + fixedname;
 		
-		setUrl( fixedname );
+		load( fixedname );
 	}
 	else
 		m_allowSourceChange = true;

@@ -1,7 +1,7 @@
 1. OVERVIEW
 
   KchmViewer is a chm (MS HTML help file format) viewer, written in C++. Unlike most existing CHM viewers for Unix,
-  it uses Trolltech Qt widget library, and does not depend on KDE or Gnome. It has full KDE4 support.
+  it uses Trolltech Qt widget library, and does not depend on KDE or GNOME. It has full KDE4 support.
 
   The main advantage of KchmViewer is extended support for non-English languages. Unlike others, KchmViewer in most 
   cases correctly detects chm file encoding, correctly shows tables of context of Russian, Korean, Chinese and 
@@ -14,12 +14,12 @@
 
 2. FEATURES
 
-  - Standalone viewer, depends on Qt4 only. Does not require KDE, Gnome or wxWindows toolkit.
+  - Standalone viewer, depends on Qt4 only. Does not require KDE, GNOME or wxWidgets toolkit.
   - Could be optionally built with KDE4 support, using KHTML and KDE dialogs.
   - Completely safe and harmless. Does not support JavaScript in any way, optionally warns you before opening an 
     external web page, or switching to another help file. 
   - Correctly detects and shows encoding of any valid chm file. 
-  - Correctly shows non-English chm files, including cyrillic, chinese, japanese and others. 
+  - Correctly shows non-English chm files, including Cyrillic, Chinese, Japanese and others. 
   - Correctly searches in non-English chm files using chm built-in search index. 
   - Shows an appropriate image for every TOC entry. 
   - Has complete chm index support, including multiple index entries, cross-links and parent/child entries in index. 
@@ -41,7 +41,7 @@
   qt4-devel in your distribution), not just qt package.
 
   Also make sure you have chmlib-devel (some distros have it as libchm-devel) package installed. KDE build will check 
-  for its presense, but qmake does not have necessary functionality to do so. If you are getting errors regarding missing 
+  for its presence, but qmake does not have necessary functionality to do so. If you are getting errors regarding missing 
   chm_lib.h file this means chmlib-devel is not installed.
 
 
@@ -96,11 +96,10 @@
   Thanks to:
   - Jed Wing, the author of chmlib. This library is used by kchmviewer to access chm content.
   - Razvan Cojocaru, the author of xchm. I used some ideas and chm processing code from xchm.
-  - Peter Volkov for various bug reports and improverment suggestions. 
-  - All the users, who report bugs, and suggest features. You help making kchnviewer better.
+  - Peter Volkov for various bug reports and improvement suggestions. 
+  - All the users, who report bugs, and suggest features. You help making kchmviewer better.
 
 
 7. LICENSE
 
     kchmviewer is distributed under GNU GPL license version 3.
-	e

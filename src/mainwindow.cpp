@@ -97,7 +97,7 @@ MainWindow::MainWindow()
 
 	statusBar()->show();
 
-	qApp->setWindowIcon( QPixmap(":/images/application.png") );
+	qApp->setWindowIcon( QPixmap(":/images/kchmviewer.png") );
 
 	m_recentFiles = new RecentFiles( menu_File, file_exit_action, pConfig->m_numOfRecentFiles );
 	connect( m_recentFiles, SIGNAL(openRecentFile(QString)), this, SLOT(actionOpenRecentFile(QString)) );

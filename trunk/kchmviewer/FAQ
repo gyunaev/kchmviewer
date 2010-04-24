@@ -19,11 +19,11 @@ Q: The book file contains spaces or non-English characters and it shows without 
 
 
 Q: The book shows without any problem using QTextWidget browser, but when I use KHTMLPart browser, I get the following error:
-	An error occurred while loading ms-its:/home/user/Symphony�FrameWork.chm::/index.html
-	The�file�or�folder�ms-its:/home/user/Symphony�FrameWork.chm::/index.html�does�not�exist.
+	An error occurred while loading ms-its:/home/user/Symphony?FrameWork.chm::/index.html
+	The?file?or?folder?ms-its:/home/user/Symphony?FrameWork.chm::/index.html?does?not?exist.
 
      A: You have kio_chm installed, and because it installs itself as KIO slave for ms-its, sometime KDE uses it instead of kio_msits. 
-     To disable it, find the file chm.protocol in your KDE directory, and remove it. Then run kdeinit to reread the configuration.
+     To disable it, find the file chm.protocol in your KDE directory, and remove it. Then run kdeinit or kdeinit4 to reread the configuration.
 
 
 Q: When I open CHM document, there is no "Contents" or "Index" tab.

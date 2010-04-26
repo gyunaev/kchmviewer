@@ -1,3 +1,10 @@
+2010-04-23 tim <gyunaev@ulduzsoft.com>
+    - 5.2 RELEASE
+    - Fixed window icon (thanks Aaron Lewis)
+    - Fixed typos in README and FAQ (thanks Martin 'Cheese' Lee)
+    - Fixed errors while building index because 'keyword' was ignored (thanks ivg)
+    
+    
 2009-12-17 tim <gyunaev@ulduzsoft.com>
     - 5.1 RELEASE
     - Trying to use non-normalized URL first to fix CHMs which use them in TOC/Index

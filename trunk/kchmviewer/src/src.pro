@@ -72,7 +72,7 @@ RESOURCES += resources/images.qrc
 QT += webkit \
     dbus \
     network
-win32-mingw-g++: { 
+win32-g++: {
     QT -= dbus
     HEADERS -= dbus_interface.h
     SOURCES -= dbus_interface.cpp

@@ -1090,7 +1090,7 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 
 			//qDebug ("<param>: name '%s', value '%s'", qPrintable( pname ), qPrintable( pvalue ));
 
-			if ( pname == "name" )
+			if ( pname == "name" || pname == "keyword" )
 			{
 				// Some help files contain duplicate names, where the second name is empty. Work it around by keeping the first one
 				if ( !pvalue.isEmpty() )

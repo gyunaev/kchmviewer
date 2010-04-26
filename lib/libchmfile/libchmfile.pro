@@ -24,6 +24,6 @@ TEMPLATE = lib
 INCLUDEPATH += ../../src
 CONFIG -= release
 
-win32-mingw-g++: {
+win32-g++: {
 	DEFINES += USE_PATCHED_CHMLIB
 }

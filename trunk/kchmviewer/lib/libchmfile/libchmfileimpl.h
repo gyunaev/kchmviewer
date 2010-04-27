@@ -19,7 +19,7 @@
 #ifndef INCLUDE_LIBCHMFILEIMPL_H
 #define INCLUDE_LIBCHMFILEIMPL_H
 
-#if defined (USE_CHMLIB_WIN32)
+#if defined (USE_PATCHED_CHMLIB)
 	#include "chmlib-win32/chm_lib.h"
 #else
 	#include "chm_lib.h"

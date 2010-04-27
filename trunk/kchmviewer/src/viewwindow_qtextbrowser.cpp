@@ -195,6 +195,21 @@ QVariant ViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	// Retreive the data from chm file
 	LCHMFile * chm = ::mainWindow->chmFile();
 
+	// Does the file point to another URL?
+	LCHMFile newfile;
+
+	if ( LCHMUrlFactory::isNewChmURL (path, mainWindow->getOpenedFileName(), file, data) )
+	{
+		if ( !newfile.loadFile( file ) )
+		{
+			qWarning( "External resource %s cannot be loaded from file %s\n", qPrintable( data ), qPrintable( file ) );
+			return QVariant();
+		}
+
+		chm = &newfile;
+		path = data;
+	}
+
 	if ( !chm )
 		return 0;
 

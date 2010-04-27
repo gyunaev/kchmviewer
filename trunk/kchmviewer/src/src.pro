@@ -46,8 +46,7 @@ SOURCES += config.cpp \
     toolbarmanager.cpp \
     toolbareditor.cpp
 TARGETDEPS += ../lib/libchmfile/libchmfile.a
-LIBS += ../lib/libchmfile/libchmfile.a \
-    -lchm
+LIBS += ../lib/libchmfile/libchmfile.a -lchm
 TARGET = ../bin/kchmviewer
 CONFIG += release \
     threads \
@@ -77,5 +76,7 @@ win32-g++: {
     HEADERS -= dbus_interface.h
     SOURCES -= dbus_interface.cpp
     CONFIG -= dbus
+    LIBS -= -lchm ../lib/libchmfile/chmlib-win32/chmlib.lib 
     LIBS += -lwsock32
+    DEFINES += USE_PATCHED_CHMLIB
 }

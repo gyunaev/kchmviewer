@@ -65,13 +65,18 @@ QString ViewWindow::makeURLabsolute ( const QString & url, bool set_as_base )
 
 	if ( !LCHMUrlFactory::isRemoteURL (url, p1)
 	&& !LCHMUrlFactory::isJavascriptURL (url)
-	&& !LCHMUrlFactory::isNewChmURL (url, p1, p2) )
+	&& !LCHMUrlFactory::isNewChmURL (url, mainWindow->getOpenedFileName(), p1, p2) )
 	{
 		newurl = QDir::cleanPath (url);
 
 		// Normalize url, so it becomes absolute
 		if ( newurl[0] != '/' )
-			newurl = m_base_url + "/" + newurl;
+		{
+			if ( m_base_url != "/" )
+				newurl = m_base_url + "/" + newurl;
+			else
+				newurl = "/" + newurl;
+		}
 	
 		newurl = QDir::cleanPath (newurl);
 
@@ -99,7 +104,7 @@ bool ViewWindow::openUrl ( const QString& origurl )
 
 	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
 	// or will be loaded (for kio slave). We care only about the path component.
-	if ( LCHMUrlFactory::isNewChmURL( newurl, chmfile, page ) )
+	if ( LCHMUrlFactory::isNewChmURL( newurl, mainWindow->getOpenedFileName(), chmfile, page ) )
 	{
 		// If a new chm file is opened here, and we do not use KCHMLPart, we better abort
 		if ( chmfile != ::mainWindow->getOpenedFileBaseName() && pConfig->m_usedBrowser != Config::BROWSER_KHTMLPART )

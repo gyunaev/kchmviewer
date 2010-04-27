@@ -81,10 +81,38 @@ class KCHMNetworkReply : public QNetworkReply
 
 		QByteArray loadResource( const QUrl &url )
 		{
-			QString data, file, path = url.path(); //toString( QUrl::StripTrailingSlash );
+			QString data, file, path = url.toString( QUrl::StripTrailingSlash );
 
 			// Retreive the data from chm file
 			LCHMFile * chm = ::mainWindow->chmFile();
+
+			// Does the file point to another URL?
+			LCHMFile newfile;
+
+			// Does the file have a file name, or just a path with ms-its prefix?
+			if ( !path.contains( "::" ) )
+			{
+				// Just the prefix, so strip it
+				path.remove( 0, 7 );
+			}
+			else if ( path.startsWith( "ms-its:", Qt::CaseInsensitive ) )
+			{
+				// A broken? implementation inserts mandatory / path before the file name here. Remove it.
+				if ( path[7] == '/' )
+					path.remove( 7, 1 );
+
+				if ( LCHMUrlFactory::isNewChmURL ( path, mainWindow->getOpenedFileName(), file, data) )
+				{
+					if ( !newfile.loadFile( file ) )
+					{
+						qWarning( "External resource %s cannot be loaded from file %s\n", qPrintable( data ), qPrintable( file ) );
+						return QByteArray();
+					}
+
+					chm = &newfile;
+					path = data;
+				}
+			}
 
 			if ( !chm )
 				return QByteArray();
@@ -194,8 +222,8 @@ bool ViewWindow_QtWebKit::openPage (const QString& url)
 		// Do URI decoding, qtextbrowser does stupid job.
 		QString fixedname = decodeUrl( url );
 		
-		if ( !fixedname.startsWith( "ms-its://" ) )
-			fixedname = "ms-its://" + fixedname;
+		if ( !fixedname.startsWith( "ms-its:", Qt::CaseInsensitive ) )
+			fixedname = "ms-its:" + fixedname;
 		
 		load( fixedname );
 	}

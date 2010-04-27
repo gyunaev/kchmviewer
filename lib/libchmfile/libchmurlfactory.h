@@ -63,7 +63,7 @@ static inline bool isJavascriptURL( const QString & url )
 }
 
 // Parse urls like "ms-its:file name.chm::/topic.htm"
-static inline bool isNewChmURL( const QString & url, QString & chmfile, QString & page )
+static inline bool isNewChmURL( const QString & url, const QString & currentFile, QString & chmfile, QString & page )
 {
 	QRegExp uriregex ( "^ms-its:(.*)::(.*)$" );
 	uriregex.setCaseSensitivity( Qt::CaseInsensitive );
@@ -72,6 +72,15 @@ static inline bool isNewChmURL( const QString & url, QString & chmfile, QString 
 	{
 		chmfile = uriregex.cap ( 1 );
 		page = uriregex.cap ( 2 );
+
+		// If new filename has relative path, convert it to absolute if we can.
+		QFileInfo finfo( chmfile );
+
+		if ( !finfo.isAbsolute() && !currentFile.isEmpty() )
+		{
+			QFileInfo chmfinfo( currentFile );
+			chmfile = chmfinfo.absolutePath() + "/" + chmfile;
+		}
 	
 		return true;
 	}
@@ -85,7 +94,7 @@ static inline QString makeURLabsoluteIfNeeded( const QString & url )
 
 	if ( !isRemoteURL (url, p1)
 	&& !isJavascriptURL (url)
-	&& !isNewChmURL (url, p1, p2) )
+	&& !isNewChmURL (url, "", p1, p2) )
 	{
 		newurl = QDir::cleanPath (url);
 

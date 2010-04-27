@@ -214,6 +214,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 			// Restore the main window size
 			resize( m_currentSettings->m_window_size_x, m_currentSettings->m_window_size_y );
 			m_navPanel->resize( m_currentSettings->m_window_size_splitter, m_navPanel->height() );
+			m_navPanel->setActive( NavigationPanel::TAB_CONTENTS );
 		}
 		else
 		{
@@ -337,17 +338,8 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 		return false;
 	}
 
-	if ( LCHMUrlFactory::isNewChmURL (url, otherfile, otherlink) )
+	if ( LCHMUrlFactory::isNewChmURL (url, getOpenedFileName(), otherfile, otherlink) )
 	{
-		// If new filename has relative path, convert it to absolute.
-		QFileInfo finfo( otherfile );
-		
-		if ( !finfo.isAbsolute() )
-		{
-			QFileInfo chmfinfo( m_chmFilename );
-			otherfile = chmfinfo.absolutePath() + QDir::separator() + otherfile;
-		}
-		
 		if ( otherfile != m_chmFilename )
 		{
 			if ( QMessageBox::question( this,

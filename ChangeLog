@@ -1,9 +1,13 @@
-2010-04-23 tim <gyunaev@ulduzsoft.com>
+2010-04-26 tim <gyunaev@ulduzsoft.com>
     - 5.2 RELEASE
+    - Fixed missing images on CHM files under Windows XP SP3;
+    - Fixed viewing CHM files which embed links to other CHM files;
+
+2010-04-23 tim <gyunaev@ulduzsoft.com>
     - Fixed window icon (thanks Aaron Lewis)
     - Fixed typos in README and FAQ (thanks Martin 'Cheese' Lee)
     - Fixed errors while building index because 'keyword' was ignored (thanks ivg)
-    
+    - Switched to use new cross-compiler from http://mingw-cross-env.nongnu.org/ to create Windows builds
     
 2009-12-17 tim <gyunaev@ulduzsoft.com>
     - 5.1 RELEASE

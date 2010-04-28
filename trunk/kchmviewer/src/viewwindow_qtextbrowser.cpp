@@ -228,7 +228,7 @@ QVariant ViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 	if ( type == QTextDocument::HtmlResource || type == QTextDocument::StyleSheetResource )
 	{
 		if ( !chm->getFileContentAsString( &data, path ) )
-			qWarning( "Needed file %s is not present in this CHM archive\n", qPrintable( path ) );
+			qWarning( "Needed page %s is not present in this CHM archive\n", qPrintable( path ) );
 
 		// A "fix" (actually hack) for CHM files people sent to me. I have no idea why QTextBrowser cannot show it.
 		if ( type == QTextDocument::HtmlResource )
@@ -242,7 +242,7 @@ QVariant ViewWindow_QTextBrowser::loadResource(int type, const QUrl & name)
 		QByteArray buf;
 		
 		QString fpath = decodeUrl( path );
-		
+
 		if ( chm->getFileContentAsBinary( &buf, fpath ) )
 		{
 			if ( !img.loadFromData ( (const uchar *) buf.data(), buf.size() ) )

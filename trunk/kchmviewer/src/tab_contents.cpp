@@ -126,8 +126,7 @@ void TabContents::search( const QString & text )
 {
 	QList<QTreeWidgetItem*> items = tree->findItems( text, Qt::MatchWildcard | Qt::MatchRecursive );
 	bool unused;	
-	qDebug("found %d items of %d", items.size(), tree->
-			topLevelItemCount() );	
+
 	if ( items.isEmpty() )
 		return;
 			

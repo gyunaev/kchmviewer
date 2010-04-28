@@ -63,6 +63,8 @@ int main( int argc, char ** argv )
 	KApplication app;
 #else
 	QApplication app( argc, argv );
+
+	app.addLibraryPath ( "qt-plugins" );
 #endif
 	
 	// Set data for QSettings

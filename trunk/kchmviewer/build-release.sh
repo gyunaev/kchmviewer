@@ -32,7 +32,7 @@ svn export . "$BUILDDIR/" || exit 1
 tar zcf "$RELEASEDIR/$PACKAGE-$CURRENTVER.tar.gz" $BUILDDIR || exit 1
 
 # Build it 
-(cd "$BUILDDIR" && qmake && make -j4) || exit 1
+(cd "$BUILDDIR" && qmake "CONGIF+=release" && make -j4) || exit 1
 
 # Making an RPM
 rm -rf "$BUILDDIR/buildroot"

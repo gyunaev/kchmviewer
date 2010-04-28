@@ -7,16 +7,41 @@ FILE_VERSION=../src/version.h
 BINARY=../build.win32/bin/kchmviewer.exe
 
 # Qt libs
-QTPATH=/home/tim/bin/qt-4.4.0
-QTLIBS=$QTPATH/dll
+QTPATH=/usr/toolchains/windows-x86-mingw/i686-pc-mingw32/lib/
+QTPLUGPATH=/usr/toolchains/windows-x86-mingw/i686-pc-mingw32/plugins/
 
 # Start the mojo
-ln -s $BINARY kchmviewer.exe
-ln -s $QTLIBS/QtGui4.dll QtGui4.dll  
-ln -s $QTLIBS/QtCore4.dll QtCore4.dll
-ln -s $QTLIBS/QtNetwork4.dll QtNetwork4.dll
-ln -s $QTLIBS/QtWebKit4.dll QtWebKit4.dll
-ln -s /mnt/disk_c/Qt/MinGW/bin/mingwm10.dll mingwm10.dll
+QTLIBS="QtGui4.dll QtCore4.dll QtNetwork4.dll QtWebKit4.dll QtXmlPatterns4.dll"
+QTPLUGINS="imageformats/qgif4.dll imageformats/qico4.dll imageformats/qjpeg4.dll imageformats/qmng4.dll imageformats/qsvg4.dll \
+	imageformats/qtiff4.dll iconengines/qsvgicon4.dll codecs/qcncodecs4.dll codecs/qjpcodecs4.dll codecs/qkrcodecs4.dll codecs/qtwcodecs4.dll"
+
+find . -type l -delete
+
+for lib in $QTLIBS; do
+	if [ ! -f "$QTPATH/$lib" ]; then
+		echo "Error: file $QTPATH/$lib not found"
+		exit 1
+	fi
+	
+	ln -s $QTPATH/$lib $lib || exit 1
+	echo "Added Qt library $lib"
+done
+
+for plug in $QTPLUGINS; do
+	
+	if [ ! -f "$QTPLUGPATH/$plug" ]; then
+		echo "Error: plugin $QTPLUGPATH/$plug not found"
+		exit 1
+	fi
+
+	file=`basename $plug`
+
+	ln -s "$QTPLUGPATH/$plug" $file || exit 1
+	echo "Added Qt plugin $plug"
+done
+
+ln -s "$QTPATH/../bin/mingwm10.dll" mingwm10.dll
+cp $BINARY kchmviewer.exe
 
 export NSISDIR=/home/tim/bin/nsis
 
@@ -28,15 +53,10 @@ VERSION="$VERSION_MAJOR.$VERSION_MINOR"
 INSTNAME="InstallKchmviewer-$VERSION.exe"
 echo "Creating $INSTNAME"
 
-makensis installer.nsis 
+makensis installer.nsis || exit 1
 
-# Remove unused
+# Remove stuff
 rm kchmviewer.exe
-rm QtGui4.dll  
-rm QtCore4.dll
-rm mingwm10.dll
-rm QtNetwork4.dll
-rm QtWebKit4.dll
+find . -type l -delete
 
 mv InstallKchmViewer.exe $INSTNAME
-

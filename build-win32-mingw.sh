@@ -19,4 +19,4 @@ cd "$BUILDDIR"
 
 # Compile it
 export PATH=$MINGWPATH:$PATH
-$QMAKE -r -spec win32-g++ && make -j4  || exit 1
+$QMAKE -r -spec win32-g++ "CONFIG += release" && make -j4  || exit 1

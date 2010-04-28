@@ -48,9 +48,7 @@ SOURCES += config.cpp \
 TARGETDEPS += ../lib/libchmfile/libchmfile.a
 LIBS += ../lib/libchmfile/libchmfile.a -lchm
 TARGET = ../bin/kchmviewer
-CONFIG += release \
-    threads \
-    ordered \
+CONFIG += threads \
     warn_on \
     qt \
     precompile_header \
@@ -76,7 +74,7 @@ win32-g++: {
     HEADERS -= dbus_interface.h
     SOURCES -= dbus_interface.cpp
     CONFIG -= dbus
-    LIBS -= -lchm ../lib/libchmfile/chmlib-win32/chmlib.lib 
-    LIBS += -lwsock32
+    LIBS -= -lchm 
+    LIBS += -lwsock32 ../lib/libchmfile/chmlib-win32/chmlib.lib
     DEFINES += USE_PATCHED_CHMLIB
 }

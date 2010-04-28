@@ -18,11 +18,9 @@ SOURCES +=  libchmfile.cpp \
 TARGET = chmfile
 CONFIG += warn_on \
 		  qt \
-		  staticlib \
- release
+		  staticlib
 TEMPLATE = lib
 INCLUDEPATH += ../../src
-CONFIG -= release
 
 win32-g++: {
 	DEFINES += USE_PATCHED_CHMLIB

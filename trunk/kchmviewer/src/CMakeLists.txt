@@ -19,6 +19,8 @@ SET( kchmviewerSources
 	tab_index.cpp
 	tab_search.cpp
 	treeviewitem.cpp
+	toolbarmanager.cpp
+	toolbareditor.cpp
 	viewwindow.cpp
 	viewwindowmgr.cpp
 	viewwindow_qtextbrowser.cpp
@@ -36,6 +38,7 @@ KDE4_ADD_UI_FILES( kchmviewerSources
 	tab_contents.ui
 	tab_index.ui
 	tab_search.ui
+	toolbareditor.ui
 	window_browser.ui
    )
 

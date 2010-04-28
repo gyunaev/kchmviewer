@@ -90,7 +90,7 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		
 	protected slots:
 		void	openNewTab();
-		void	onTabChanged( QWidget * newtab );
+		void	onTabChanged( int newtabIndex );
 		void	updateCloseButtons();
 		void	activateWindow();
 		

@@ -67,7 +67,7 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 	verticalLayout->insertWidget( 0, m_tabWidget, 10 );
 
 	// on current tab changed
-	connect( m_tabWidget, SIGNAL( currentChanged(QWidget *) ), this, SLOT( onTabChanged(QWidget *) ) );
+	connect( m_tabWidget, SIGNAL( currentChanged(int) ), this, SLOT( onTabChanged(int) ) );
 	connect( m_tabWidget, SIGNAL( mouseMiddleClickTab( int ) ), this, SLOT( onCloseWindow(int) ) );
 
 	// Create a close button
@@ -313,9 +313,12 @@ void ViewWindowMgr::updateCloseButtons( )
 	m_closeButton->setEnabled( enabled );
 }
 
-void ViewWindowMgr::onTabChanged( QWidget * newtab )
+void ViewWindowMgr::onTabChanged( int newtabIndex )
 {
-	TabData * tab = findTab( newtab );
+	if ( newtabIndex == -1 )
+		return;
+
+	TabData * tab = findTab( m_tabWidget->widget( newtabIndex ) );
 	
 	if ( tab )
 	{

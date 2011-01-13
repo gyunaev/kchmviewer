@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>675</width>
-    <height>476</height>
+    <width>704</width>
+    <height>464</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -490,7 +490,7 @@
           <item>
            <widget class="QCheckBox" name="boxLayoutDirectionRL">
             <property name="text">
-             <string>Use right-to-left layout direction (Arabic adn Hebrew layouts)</string>
+             <string>Use right-to-left layout direction (Arabic and Hebrew layouts)</string>
             </property>
            </widget>
           </item>

@@ -51,8 +51,12 @@ class KCHMNetworkReply : public QNetworkReply
 			m_length = m_data.length();
 		
 			setHeader( QNetworkRequest::ContentLengthHeader, QByteArray::number(m_data.length()) );
-			QTimer::singleShot( 0, this, SIGNAL(metaDataChanged()) );
-			QTimer::singleShot( 0, this, SIGNAL(readyRead()) );
+			QMetaObject::invokeMethod(this, "metaDataChanged", Qt::QueuedConnection);
+
+			if ( m_length )
+				QMetaObject::invokeMethod(this, "readyRead", Qt::QueuedConnection);
+
+			QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
 		}
 
 		virtual qint64 bytesAvailable() const 
@@ -74,8 +78,6 @@ class KCHMNetworkReply : public QNetworkReply
 				m_data.remove(0, len);
 			}
 			
-			if (!m_data.length())
-				QTimer::singleShot(0, this, SIGNAL(finished()));
 			return len;
 		}
 

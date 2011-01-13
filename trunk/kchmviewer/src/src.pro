@@ -78,3 +78,13 @@ win32-g++: {
     LIBS += -lwsock32 ../lib/libchmfile/chmlib-win32/chmlib.lib
     DEFINES += USE_PATCHED_CHMLIB
 }
+
+macx-g++: {
+    HEADERS -= dbus_interface.h
+    SOURCES -= dbus_interface.cpp
+    CONFIG -= dbus
+    HEADERS += kchmviewerapp.h
+    SOURCES += kchmviewerapp.cpp
+    QMAKE_INFO_PLIST=resources/Info.plist
+    QMAKE_POST_LINK += cp resources/*.icns ${DESTDIR}/kchmviewer.app/Contents/Resources;
+}

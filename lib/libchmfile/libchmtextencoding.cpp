@@ -40,7 +40,7 @@ static short lcid_centralEuropean[] =
 
 static short lcid_ChineseSimplifiedGB18030[] =
 { 
-	0x0404, 0 
+	0x0804, 0 
 };
 
 
@@ -57,12 +57,12 @@ static short lcid_ChineseSimplifiedGB2313[] =
 
 static short lcid_ChineseTraditionalBig5[] =
 {
-	0x0C04, 0x1404, 0x0404,	0
+	0x0404, 0x1404,	0
 };
 
 static short lcid_ChineseTraditionalBigHKSCS[] =
 {
-	0x0404,	0
+	0x0C04,	0
 };
 
 static short lcid_CyrillicCP1251[] =
@@ -259,6 +259,12 @@ static const LCHMTextEncoding text_encoding_table [] =
 		lcid_Hebrew
 	},
 		
+       	{	
+		"Japanese",
+		"Shift-JIS",
+		lcid_Japanese_ShiftJIS
+	},
+
 	{	
 		"Japanese",
 		"eucJP",
@@ -269,12 +275,6 @@ static const LCHMTextEncoding text_encoding_table [] =
 		"Japanese",
 		"JIS7",
 		lcid_Japanese_JIS7
-	},
-		
-	{	
-		"Japanese",
-		"Shift-JIS",
-		lcid_Japanese_ShiftJIS
 	},
 		
 	{	

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="0.9">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>kchmviewer</string>
+	<key>CFBundleIconFile</key>
+	<string>kchmviewer.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>www.kchmviewer.net</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>5.2</string>
+	<key>CFBundleName</key>
+	<string>kchmviewer</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>5.2</string>
+	<key>SUFeedURL</key>
+	<string>http://www.kchmviewer.net</string>
+		
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>chm</string>
+				<string>CHM</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>kchmviewer.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>CHM</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>CHM</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
+</dict>
+</plist>

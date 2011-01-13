@@ -32,7 +32,15 @@
 	#include <kaboutdata.h>
 #endif
 
+#if defined (Q_WS_MAC)
+        #include "kchmviewerapp.h"
+#else
+        typedef QApplication  KchmviewerApp;
+#endif
+
 MainWindow * mainWindow;
+
+
 
 
 int main( int argc, char ** argv )
@@ -62,7 +70,7 @@ int main( int argc, char ** argv )
 
 	KApplication app;
 #else
-	QApplication app( argc, argv );
+        KchmviewerApp app( argc, argv );
 
 	app.addLibraryPath ( "qt-plugins" );
 #endif
@@ -77,7 +85,7 @@ int main( int argc, char ** argv )
 
 	app.installEventFilter( &gKeyEventFilter );
 	
-#if !defined (WIN32)	
+#if !defined (WIN32) && !defined(Q_WS_MAC)
 	if ( QDBusConnection::sessionBus().isConnected() )
 	{
 		if ( QDBusConnection::sessionBus().registerService(SERVICE_NAME) )
@@ -89,10 +97,10 @@ int main( int argc, char ** argv )
 			qWarning( "Cannot register service %s on session bus. Going without D-BUS support.", SERVICE_NAME );
 	}
 	else
-		qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
+                qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
 #endif
 
-	mainWindow = new MainWindow();
+        mainWindow = new MainWindow();
 	mainWindow->show();
 	
 	app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );

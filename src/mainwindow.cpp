@@ -99,8 +99,13 @@ MainWindow::MainWindow()
 
 	qApp->setWindowIcon( QPixmap(":/images/kchmviewer.png") );
 
-	m_recentFiles = new RecentFiles( menu_File, file_exit_action, pConfig->m_numOfRecentFiles );
-	connect( m_recentFiles, SIGNAL(openRecentFile(QString)), this, SLOT(actionOpenRecentFile(QString)) );
+	if ( pConfig->m_numOfRecentFiles > 0 )
+	{
+		m_recentFiles = new RecentFiles( menu_File, file_exit_action, pConfig->m_numOfRecentFiles );
+		connect( m_recentFiles, SIGNAL(openRecentFile(QString)), this, SLOT(actionOpenRecentFile(QString)) );
+	}
+	else
+		m_recentFiles = 0;
 
 	// Basically disable everything
 	updateActions();
@@ -225,7 +230,9 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 				openPage( m_chmFile->homeUrl() );
 		}
 
-		m_recentFiles->setCurrentFile( m_chmFilename );
+		if ( m_recentFiles )
+			m_recentFiles->setCurrentFile( m_chmFilename );
+
 		return true;
 	}
 	else
@@ -386,7 +393,7 @@ void MainWindow::firstShow()
 {
 	if ( !parseCmdLineArgs( ) )
 	{
-		if ( pConfig->m_startupMode == Config::STARTUP_LOAD_LAST_FILE && !m_recentFiles->latestFile().isEmpty() )
+		if ( m_recentFiles && pConfig->m_startupMode == Config::STARTUP_LOAD_LAST_FILE && !m_recentFiles->latestFile().isEmpty() )
 		{
 			loadFile( m_recentFiles->latestFile() );
 			return;

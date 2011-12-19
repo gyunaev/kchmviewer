@@ -279,7 +279,8 @@ void MainWindow::refreshCurrentBrowser( )
 
 void MainWindow::activateUrl( const QUrl & link )
 {
-	activateLink( link.path() );
+	qDebug("url: %s", qPrintable( link.toString()) );
+	activateLink( link.toString() );
 }
 
 void MainWindow::activateLink ( const QString & link )
@@ -479,7 +480,7 @@ void MainWindow::closeEvent ( QCloseEvent * e )
 bool MainWindow::parseCmdLineArgs( )
 {
 	QString filename = QString::null, search_query = QString::null;
-	QString search_index = QString::null, search_bookmark = QString::null, search_toc = QString::null;
+	QString search_index = QString::null, open_url = QString::null, search_toc = QString::null;
 	bool do_autotest = false;
 
 #if defined (USE_KDE)
@@ -491,6 +492,7 @@ bool MainWindow::parseCmdLineArgs( )
 	search_query = args->getOption ("search");
 	search_index = args->getOption ("sindex");
 	search_toc = args->getOption ("stoc");
+	open_url = = args->getOption ("url");
 	
 	if ( args->count() > 0 )
 		filename = args->arg(0);
@@ -504,7 +506,8 @@ bool MainWindow::parseCmdLineArgs( )
 					"    The following options supported:\n"
 					"  --search <query> specifies the search query to search, and activate the first entry if found\n"
 					"  --sindex <word>  specifies the word to find in index, and activate if found\n"
-					"  --stoc <word(s)> specifies the word(s) to find in TOC, and activate if found. Wildcards allowed\n",
+					"  --stoc <word(s)> specifies the word(s) to find in TOC, and activate if found. Wildcards allowed\n"
+					"  --url <word>     specifies the URL to activate if found.",
 	 				qApp->argv()[0] );
 			
 			exit (1);
@@ -517,6 +520,8 @@ bool MainWindow::parseCmdLineArgs( )
 			search_index = qApp->argv()[++i];
 		else if ( !strcmp (qApp->argv()[i], "--stoc") )
 			search_toc = qApp->argv()[++i];
+		else if ( !strcmp (qApp->argv()[i], "--url") )
+			open_url = qApp->argv()[++i];
 		else
 			filename = QString::fromLocal8Bit( qApp->argv()[i] );
 	}
@@ -527,21 +532,25 @@ bool MainWindow::parseCmdLineArgs( )
 		if ( !loadFile( filename ) )
 			return true; // skip the latest checks, but do not exit from the program
 
-		if ( !search_index.isEmpty() )
+		if ( !open_url.isEmpty() )
+		{
+			QStringList event_args;
+			event_args.push_back( open_url );
+			qApp->postEvent( this, new UserEvent( "openPage", event_args ) );
+		}
+		else if ( !search_index.isEmpty() )
 		{
 			QStringList event_args;
 			event_args.push_back( search_index );
 			qApp->postEvent( this, new UserEvent( "findInIndex", event_args ) );
 		}
-		
-		if ( !search_query.isEmpty() )	
+		else if ( !search_query.isEmpty() )
 		{
 			QStringList event_args;
 			event_args.push_back( search_query );
 			qApp->postEvent( this, new UserEvent( "searchQuery", event_args ) );
 		}
-		
-		if ( !search_toc.isEmpty() )	
+		else if ( !search_toc.isEmpty() )
 		{
 			QStringList event_args;
 			event_args.push_back( search_toc );

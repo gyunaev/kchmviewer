@@ -58,7 +58,6 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 
 	// on current tab changed
 	connect( m_tabWidget, SIGNAL( currentChanged(int) ), this, SLOT( onTabChanged(int) ) );
-	connect( m_tabWidget, SIGNAL( mouseMiddleClickTab( int ) ), this, SLOT( onCloseWindow(int) ) );
 	connect( m_tabWidget, SIGNAL( tabCloseRequested(int) ), this, SLOT( onCloseWindow(int) ) );
 
 	// Create a "new tab" button

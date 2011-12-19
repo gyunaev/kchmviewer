@@ -53,6 +53,7 @@ int main( int argc, char ** argv )
 	options.add( "search <query>", ki18n("'--search <query>' specifies the search query to search, and activate the first entry if found") );
 	options.add( "sindex <word>", ki18n("'--sindex <word>' specifies the word to find in index, and activate if found") );
 	options.add( "stoc <word>", ki18n("'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if found. Wildcards allowed.") );
+	options.add( "url <word>", ki18n("'--url <relative url>' specifies the URL to activate if found.") );
 
 	KAboutData aboutdata ( "kchmviewer",
 				QByteArray(),
@@ -70,7 +71,7 @@ int main( int argc, char ** argv )
 
 	KApplication app;
 #else
-        KchmviewerApp app( argc, argv );
+	KchmviewerApp app( argc, argv );
 
 	app.addLibraryPath ( "qt-plugins" );
 #endif
@@ -97,10 +98,10 @@ int main( int argc, char ** argv )
 			qWarning( "Cannot register service %s on session bus. Going without D-BUS support.", SERVICE_NAME );
 	}
 	else
-                qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
+		qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
 #endif
 
-        mainWindow = new MainWindow();
+	mainWindow = new MainWindow();
 	mainWindow->show();
 	
 	app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );

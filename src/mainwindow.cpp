@@ -496,7 +496,7 @@ bool MainWindow::parseCmdLineArgs( )
 	search_query = args->getOption ("search");
 	search_index = args->getOption ("sindex");
 	search_toc = args->getOption ("stoc");
-	open_url = = args->getOption ("url");
+	open_url = args->getOption ("url");
 	
 	if ( args->count() > 0 )
 		filename = args->arg(0);

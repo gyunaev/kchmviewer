@@ -104,10 +104,6 @@ void NavigationPanel::refresh()
 {
 	if ( m_contentsTab )
 		m_contentsTab->refillTableOfContents();
-
-// gyunaev: do we need it? Not sure.
-//	if ( m_indexTab->isVisible() )
-//		m_indexTab->refillIndex();
 }
 
 bool NavigationPanel::findUrlInContents( const QString & url )
@@ -115,7 +111,13 @@ bool NavigationPanel::findUrlInContents( const QString & url )
 	if ( !m_contentsTab )
 		return false;
 
-	IndexTocItem * treeitem = m_contentsTab->getTreeItem( url );
+	IndexTocItem * treeitem;
+
+	// Strip the prefix if it is here
+	if ( url.startsWith( "ms-its:" ) )
+		treeitem = m_contentsTab->getTreeItem( url.mid( 7 ) );
+	else
+		treeitem = m_contentsTab->getTreeItem( url );
 
 	if ( treeitem )
 	{

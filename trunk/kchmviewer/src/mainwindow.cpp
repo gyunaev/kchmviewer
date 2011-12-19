@@ -279,7 +279,6 @@ void MainWindow::refreshCurrentBrowser( )
 
 void MainWindow::activateUrl( const QUrl & link )
 {
-	qDebug("url: %s", qPrintable( link.toString()) );
 	activateLink( link.toString() );
 }
 

@@ -1036,8 +1036,16 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 		else if ( tagword == "/object" && in_object ) 
 		{
 			// a topic entry closed. Add a tree item
-			if ( !entry.name.isEmpty() )
+			if ( entry.name.isEmpty() && entry.urls.isEmpty() )
 			{
+				qWarning ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag is parsed, but both name and url are empty.");
+			}
+			else
+			{
+				// If the name is empty, use the URL as name
+				if ( entry.name.isEmpty() )
+					entry.name = entry.urls[0];
+
 				if ( !root_indent_offset_set )
 				{
 					root_indent_offset_set = true;
@@ -1054,13 +1062,6 @@ bool LCHMFileImpl::parseFileAndFillArray( const QString & file, QVector< LCHMPar
 				
 				entry.indent = real_indent;
 				data->push_back( entry );
-			}
-			else
-			{
-				if ( !entry.urls.isEmpty() )
-					qWarning ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag with url \"%s\" is parsed, but name is empty.", qPrintable( entry.urls[0] ));
-				else
-					qWarning ("LCHMFileImpl::ParseAndFillTopicsTree: <object> tag is parsed, but both name and url are empty.");	
 			}
 
 			entry.name = QString::null;

@@ -16,12 +16,11 @@ HEADERS += config.h \
     version.h \
     viewwindow.h \
     viewwindowmgr.h \
-    viewwindow_qtextbrowser.h \
-    viewwindow_qtwebkit.h \
     navigationpanel.h \
     checknewversion.h \
     toolbarmanager.h \
-    toolbareditor.h
+    toolbareditor.h \
+    qwebviewnetwork.h
 SOURCES += config.cpp \
     dbus_interface.cpp \
     dialog_chooseurlfromlist.cpp \
@@ -39,13 +38,12 @@ SOURCES += config.cpp \
     treeviewitem.cpp \
     viewwindow.cpp \
     viewwindowmgr.cpp \
-    viewwindow_qtextbrowser.cpp \
-    viewwindow_qtwebkit.cpp \
     navigationpanel.cpp \
     checknewversion.cpp \
     toolbarmanager.cpp \
-    toolbareditor.cpp
-TARGETDEPS += ../lib/libchmfile/libchmfile.a
+    toolbareditor.cpp \
+    qwebviewnetwork.cpp
+POST_TARGETDEPS += ../lib/libchmfile/libchmfile.a
 LIBS += ../lib/libchmfile/libchmfile.a -lchm
 TARGET = ../bin/kchmviewer
 CONFIG += threads \
@@ -88,3 +86,5 @@ macx-g++: {
     QMAKE_INFO_PLIST=resources/Info.plist
     QMAKE_POST_LINK += cp resources/*.icns ${DESTDIR}/kchmviewer.app/Contents/Resources;
 }
+
+

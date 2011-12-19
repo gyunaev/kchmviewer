@@ -48,12 +48,12 @@ class Settings
 		class SavedViewWindow
 		{
 			public:
-				SavedViewWindow() { scroll_y = 0; zoom = 0; }
-				SavedViewWindow ( const QString& u, int y, int z) : url(u), scroll_y(y), zoom(z) {};
+				SavedViewWindow() { scroll_y = 0; zoom = 0.0; }
+				SavedViewWindow ( const QString& u, int y, qreal z) : url(u), scroll_y(y), zoom(z) {};
 			
 				QString		url;
 				int			scroll_y;
-				int			zoom;
+				qreal		zoom;
 		};
 		
 		typedef QList<QString>			search_saved_settings_t;

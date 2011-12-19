@@ -129,9 +129,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		actionOpenRecentFile( const QString& file );
 		void		actionEncodingChanged( QAction * action );
 	
-		// Link activation. MainWindow decides whether we should follow this link or not
-		// by setting up follow_link appropriately.
-		void 		activateLink( const QString & link, bool& follow_link );
+		// Link activation
+		void 		activateLink( const QString & link );
+		void 		activateUrl( const QUrl & link );
 
 		void		updateToolbars();
 		void		updateActions();

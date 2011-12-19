@@ -19,21 +19,22 @@
 #ifndef VIEWWINDOW_H
 #define VIEWWINDOW_H
 
+#include <QWebView>
 
 #include "kde-qt.h"
 
-class ViewWindowTabs;
-
-class ViewWindow
+class ViewWindow : public QWebView
 {
+	Q_OBJECT
+
 	public:
 		enum
 		{
 			SEARCH_CASESENSITIVE = 0x10,
-			SEARCH_WHOLEWORDS = 0x20
+			SEARCH_BACKWARD = 0x20
 		};
 	
-		ViewWindow ( ViewWindowTabs * parent );
+		ViewWindow( QWidget * parent );
 		virtual ~ViewWindow();
 	
 		//! Open a page from current chm archive
@@ -45,77 +46,77 @@ class ViewWindow
 		QString	makeURLabsolute ( const QString &url, bool set_as_base = true );
 		
 	public: 
-		// virtual members, which should be implemented by viewers
+		static QString decodeUrl( const QString &input );
+
 		//! Invalidate current view, doing all the cleanups etc.
-		virtual void	invalidate();
+		void	invalidate();
 	
 		//! Popups the print dialog, and prints the current page on the printer.
-		virtual bool	printCurrentPage() = 0;
+		bool	printCurrentPage();
 	
 		//! Search function. find() starts new search, onFindNext and onFindPrevious continue it
-		virtual void	find( const QString& text, int flags ) = 0;
-		virtual void	onFindNext() = 0;
-		virtual void	onFindPrevious() = 0;
+		bool	findTextInPage( const QString& text, int flags );
 	
 		//! Return current ZoomFactor.
-		virtual int		getZoomFactor() const = 0;
+		qreal	getZoomFactor() const;
 		
 		//! Sets ZoomFactor. The value returned by getZoomFactor(), given to this function, should give the same result.
-		virtual void	setZoomFactor (int zoom) = 0;
+		void	setZoomFactor( qreal zoom );
 		
-		//! Relatively changes ZoomFactor. Most common values are -1 and 1.
-		virtual void	addZoomFactor (int value) = 0;
-	
-		virtual QObject *	getQObject() = 0;
-		virtual QWidget *	getQWidget() = 0;
-	
 		/*!
 		* Return current scrollbar position in view window. Saved on program exit. 
 		* There is no restriction on returned value, except that giving this value to 
 		* setScrollbarPosition() should move the scrollbar in the same position.
 		*/
-		virtual int		getScrollbarPosition() = 0;
+		int		getScrollbarPosition();
 		
 		//! Sets the scrollbar position.
-		virtual void	setScrollbarPosition(int pos) = 0;
+		void	setScrollbarPosition(int pos);
 	
 		//! Select the content of the whole page
-		virtual void	clipSelectAll() = 0;
+		void	clipSelectAll();
 	
 		//! Copies the selected content to the clipboard
-		virtual void	clipCopy() = 0;
+		void	clipCopy();
 	
 		//! Returns the window title
-		virtual QString	getTitle() const;
+		QString	getTitle() const;
 		
 		//! Navigation stuff
-		virtual void	navigateBack();
-		virtual void	navigateHome();
-		virtual void	navigateForward();
+		void	navigateBack();
+		void	navigateHome();
+		void	navigateForward();
 		
 		//! Navigation auxiliary stuff
-		virtual void	setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
-		virtual void	addNavigationHistory( const QString & url, int scrollpos );
-		virtual void 	updateNavigationToolbar();
+		void	setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
+		void	addNavigationHistory( const QString & url, int scrollpos );
+		void 	updateNavigationToolbar();
 		
 		//! Keeps the tab URL between link following
-		void			setTabKeeper ( const QString& link );
+		void	setTabKeeper ( const QString& link );
+
+	public slots:
+		void	zoomIncrease();
+		void	zoomDecrease();
 		
-	protected: /* signals */
-		/*!
-		* Emitted when the user clicked on the link, before the page changed.
-		* If linkClicked() return false, the current page should NOT change.
-		* Otherwise it should be changed to the new link value.
-		*/
-		virtual void	linkClicked ( const QString & newlink, bool& follow_link ) = 0;
-	
 	protected:
-		virtual bool	openPage ( const QString& url ) = 0;
+		bool	openPage ( const QString& url );
 		virtual void	handleStartPageAsImage( QString& link );
 		
 		QMenu * 		getContextMenu( const QString& link, QWidget * parent );
 		QMenu * 		createStandardContextMenu( QWidget * parent );
 		
+		// Overriden to change the source
+		void			setSource ( const QUrl & name );
+		QString			anchorAt( const QPoint & pos );
+
+		// Overloaded to provide custom context menu
+		void 			contextMenuEvent( QContextMenuEvent *e );
+		void			mouseReleaseEvent ( QMouseEvent * event );
+
+	private slots:
+		void	onLoadFinished ( bool ok );
+
 	private:
 		//! History
 		class UrlHistory
@@ -144,12 +145,12 @@ class ViewWindow
 		QString 				m_lastOpenedPage;
 		QString					m_base_url;
 	
-		// The parent tab browser
-		ViewWindowTabs		*	m_parentTabWidget;
-
 		// This member keeps a "open new tab" link between getContextMenu()
 		// call and appropriate slot call
 		QString					m_newTabLinkKeeper;
+
+		// Keeps the scrollbar position to move after the page is loaded
+		int						m_storedScrollbarPosition;
 };
 
 #endif

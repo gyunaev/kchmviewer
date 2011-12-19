@@ -75,7 +75,7 @@ static inline QDataStream& operator>> ( QDataStream& s, Settings::SavedBookmark&
 static inline QDataStream& operator<< ( QDataStream& s, const Settings::SavedViewWindow& b )
 {
 	// Store the version first. Later we can increase it when adding new members.
-	s << 1;
+	s << 2;
 	s << b.url;
 	s << b.scroll_y;
 	s << b.zoom;
@@ -86,10 +86,21 @@ static inline QDataStream& operator>> ( QDataStream& s, Settings::SavedViewWindo
 {
 	qint32 version;
 	
-	s >> version; 
+	s >> version;
 	s >> b.url;
 	s >> b.scroll_y;
-	s >> b.zoom;
+
+	if ( version == 1 )
+	{
+		// Old one; convert zoom
+		int oldzoom;
+
+		s >> oldzoom;
+		b.zoom = 1.0 + oldzoom * 0.5;
+	}
+	else
+		s >> b.zoom;
+
 	return s;
 }
 

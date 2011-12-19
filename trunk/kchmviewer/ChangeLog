@@ -1,4 +1,19 @@
-2011-01-13 tim <gyunaev@ulduzsoft.com>
+2011-12-18 tim <gyunaev@ulduzsoft.com>
+    - Removed outdated and buggy QTextBrowser support.
+    - Removed unneeded KHTMLPart support. Only QWebKit is now supported.
+    - Fixed zoom and "select all".
+    - Fixed storing scrollbar position.
+    - Added browser options to control JavaScript, Java and HTML5 features, which now apply to Webkit
+
+2011-01-14 tim <gyunaev@ulduzsoft.com>
+    - Version 5.3 released.
+    - Fixed spelling error (thx Razvan Visan)
+    - Changed encodings order for Chinese and Japanese languages (thanks Kai-Chieh Ku)
+    - Added Ukrainian localization (thanks Olexander Yatsenko)
+    - Added Brazilian localization (thanks Márcio Moraes)
+    - Fixed some grammatical errors (thanks Robin 'cheese' Lee)
+    - Fixed webkit engine for buggy CHMs which do not have all content, as well as 
+      cases when external references cannot be loaded. Thanks to Kai-Chieh Ku
     - Added Mac support (thanks Serge Weinstock)
 
 2010-04-26 tim <gyunaev@ulduzsoft.com>

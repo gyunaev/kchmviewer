@@ -57,38 +57,6 @@ DialogSetup::DialogSetup(QWidget *parent)
 	m_radioNewChmAsk->setChecked ( pConfig->m_onNewChmClick == Config::ACTION_ASK_USER );
 	m_radioNewChmOpenNever->setChecked ( pConfig->m_onNewChmClick == Config::ACTION_DONT_OPEN );
 
-#if !defined (USE_KDE)
-	m_radioUseKHTMLPart->setEnabled ( false );
-#endif
-
-#if !defined (QT_WEBKIT_LIB)
-	m_radioUseQtWebkit->setEnabled ( false );
-#endif
-
-	switch ( pConfig->m_usedBrowser )
-	{
-		default:
-			m_radioUseQtextBrowser->setChecked ( true );
-			break;
-
-#if defined (USE_KDE)			
-		case Config::BROWSER_KHTMLPART:
-			m_radioUseKHTMLPart->setChecked( true );
-			break;
-#endif			
-			
-#if defined (QT_WEBKIT_LIB)
-		case Config::BROWSER_QTWEBKIT:
-			m_radioUseQtWebkit->setChecked( true );
-			break;
-#endif			
-	}
-	
-	m_enableJS->setChecked ( pConfig->m_kdeEnableJS );
-	m_enablePlugins->setChecked ( pConfig->m_kdeEnablePlugins );
-	m_enableJava->setChecked ( pConfig->m_kdeEnableJava );
-	m_enableRefresh->setChecked ( pConfig->m_kdeEnableRefresh );
-	
 	m_advExternalProgramName->setText( pConfig->m_advExternalEditorPath );
 	m_advViewSourceExternal->setChecked ( !pConfig->m_advUseInternalEditor );
 	m_advViewSourceInternal->setChecked ( pConfig->m_advUseInternalEditor );
@@ -97,6 +65,14 @@ DialogSetup::DialogSetup(QWidget *parent)
 
 	boxAutodetectEncoding->setChecked( pConfig->m_advAutodetectEncoding );
 	boxLayoutDirectionRL->setChecked( pConfig->m_advLayoutDirectionRL );
+
+	// Browser settings
+	m_enableImages->setChecked( pConfig->m_browserEnableImages );
+	m_enableJS->setChecked( pConfig->m_browserEnableJS );
+	m_enableJava->setChecked( pConfig->m_browserEnableJava );
+	m_enablePlugins->setChecked( pConfig->m_browserEnablePlugins );
+	m_enableOfflineStorage->setChecked( pConfig->m_browserEnableOfflineStorage );
+	m_enableLocalStorage->setChecked( pConfig->m_browserEnableLocalStorage );
 
 	switch ( pConfig->m_toolbarMode )
 	{
@@ -124,6 +100,15 @@ DialogSetup::~DialogSetup()
 {
 }
 
+
+static void inline Check_Need_Restart( QCheckBox * box, bool * confsetting, bool * need_restart )
+{
+	if ( *confsetting != box->isChecked() )
+	{
+		*need_restart = true;
+		*confsetting = box->isChecked();
+	}
+}
 
 void DialogSetup::accept()
 {
@@ -153,43 +138,13 @@ void DialogSetup::accept()
 
 		// Check the changes
 	bool need_restart = false;
-		
-	if ( pConfig->m_kdeEnableJS != m_enableJS->isChecked() )
-	{
-		need_restart = true;
-		pConfig->m_kdeEnableJS = m_enableJS->isChecked();
-	}
-		
-	if ( pConfig->m_kdeEnablePlugins != m_enablePlugins->isChecked() )
-	{
-		need_restart = true;
-		pConfig->m_kdeEnablePlugins = m_enablePlugins->isChecked();
-	}
-		
-	if ( pConfig->m_kdeEnableJava != m_enableJava->isChecked() )
-	{
-		need_restart = true;
-		pConfig->m_kdeEnableJava = m_enableJava->isChecked();
-	}
-		
-	if ( pConfig->m_kdeEnableRefresh != m_enableRefresh->isChecked() )
-	{
-		need_restart = true;
-		pConfig->m_kdeEnableRefresh = m_enableRefresh->isChecked();
-	}
 
-	int new_browser = Config::BROWSER_QTEXTBROWSER;
-	
-	if ( m_radioUseKHTMLPart->isChecked() )
-		new_browser = Config::BROWSER_KHTMLPART;
-	else if ( m_radioUseQtWebkit->isChecked() )
-		new_browser = Config::BROWSER_QTWEBKIT;
-
-	if ( new_browser != pConfig->m_usedBrowser )
-	{
-		need_restart = true;
-		pConfig->m_usedBrowser = new_browser;
-	}
+	Check_Need_Restart( m_enableImages, &pConfig->m_browserEnableImages, &need_restart );
+	Check_Need_Restart( m_enableJS, &pConfig->m_browserEnableJS, &need_restart );
+	Check_Need_Restart( m_enableJava, &pConfig->m_browserEnableJava, &need_restart );
+	Check_Need_Restart( m_enablePlugins, &pConfig->m_browserEnablePlugins, &need_restart );
+	Check_Need_Restart( m_enableOfflineStorage, &pConfig->m_browserEnableOfflineStorage, &need_restart );
+	Check_Need_Restart( m_enableLocalStorage, &pConfig->m_browserEnableLocalStorage, &need_restart );
 
 	Config::ToolbarMode newmode;
 
@@ -216,10 +171,7 @@ void DialogSetup::accept()
 		need_restart = true;
 	
 	// Autodetect encoding
-	if ( pConfig->m_advAutodetectEncoding != boxAutodetectEncoding->isChecked() )
-		need_restart = true;
-	
-	pConfig->m_advAutodetectEncoding = boxAutodetectEncoding->isChecked();
+	Check_Need_Restart( boxAutodetectEncoding, &pConfig->m_advAutodetectEncoding, &need_restart );
 	pConfig->m_advCheckNewVersion = cbCheckForUpdates->isChecked();
 
 	// Layout direction management

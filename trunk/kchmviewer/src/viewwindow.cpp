@@ -20,25 +20,38 @@
 
 #include <QRegExp>
 #include <QString>
-#include <QDir>
+#include <QPrinter>
+#include <QPrintDialog>
 
-#include "libchmfile.h"
+#include <QWebView>
+#include <QWebFrame>
+
 #include "libchmurlfactory.h"
 
 #include "config.h"
 #include "viewwindow.h"
 #include "mainwindow.h"
 #include "viewwindowmgr.h"
+#include "qwebviewnetwork.h"
+
+static const qreal ZOOM_FACTOR_CHANGE = 0.1;
 
 
-ViewWindow::ViewWindow( ViewWindowTabs * parent )
+ViewWindow::ViewWindow( QWidget * parent )
+	: QWebView ( parent )
 {
 	invalidate();
 	m_contextMenu = 0;
 	m_contextMenuLink = 0;
 	m_historyMaxSize = 25;
-	
-	m_parentTabWidget = parent;
+
+	// Use our network emulation layer
+	page()->setNetworkAccessManager( new KCHMNetworkAccessManager(this) );
+
+	// All links are going through us
+	page()->setLinkDelegationPolicy( QWebPage::DelegateAllLinks );
+
+	connect( this, SIGNAL( loadFinished(bool)), this, SLOT( onLoadFinished(bool)) );
 }
 
 ViewWindow::~ViewWindow()
@@ -51,12 +64,13 @@ void ViewWindow::invalidate( )
 	m_openedPage = QString::null;
 	m_newTabLinkKeeper = QString::null;
 
+	m_storedScrollbarPosition = 0;
 	m_historyCurrentPos = 0;
 	m_history.clear();
 	
+	reload();
 	updateNavigationToolbar();
 }
-
 
 
 QString ViewWindow::makeURLabsolute ( const QString & url, bool set_as_base )
@@ -106,8 +120,8 @@ bool ViewWindow::openUrl ( const QString& origurl )
 	// or will be loaded (for kio slave). We care only about the path component.
 	if ( LCHMUrlFactory::isNewChmURL( newurl, mainWindow->getOpenedFileName(), chmfile, page ) )
 	{
-		// If a new chm file is opened here, and we do not use KCHMLPart, we better abort
-		if ( chmfile != ::mainWindow->getOpenedFileBaseName() && pConfig->m_usedBrowser != Config::BROWSER_KHTMLPART )
+		// If a new chm file is opened here, we better abort
+		if ( chmfile != ::mainWindow->getOpenedFileBaseName()  )
 			qFatal("ViewWindow::openUrl(): opened new chm file %s while current is %s",
 				   qPrintable( chmfile ),
 				   qPrintable( ::mainWindow->getOpenedFileName() ) );
@@ -301,4 +315,183 @@ void ViewWindow::setTabKeeper( const QString & link )
 	}
 		
 	m_newTabLinkKeeper = makeURLabsolute( m_newTabLinkKeeper, false );
+}
+
+bool ViewWindow::openPage(const QString &url)
+{
+	// Do URI decoding, qtextbrowser does stupid job.
+	QString fixedname = decodeUrl( url );
+
+	if ( !fixedname.startsWith( "ms-its:", Qt::CaseInsensitive ) )
+		fixedname = "ms-its:" + fixedname;
+
+	load( fixedname );
+	return true;
+}
+
+bool ViewWindow::printCurrentPage()
+{
+	QPrinter printer( QPrinter::HighResolution );
+	QPrintDialog dlg( &printer, this );
+
+	if ( dlg.exec() != QDialog::Accepted )
+	{
+		::mainWindow->showInStatusBar( i18n( "Printing aborted") );
+		return false;
+	}
+
+	print( &printer );
+	::mainWindow->showInStatusBar( i18n( "Printing finished") );
+
+	return true;
+}
+
+void ViewWindow::setZoomFactor(qreal zoom)
+{
+	QWebView::setZoomFactor( zoom );
+}
+
+qreal ViewWindow::getZoomFactor() const
+{
+	return zoomFactor();
+}
+
+void ViewWindow::zoomIncrease()
+{
+	setZoomFactor( zoomFactor() + ZOOM_FACTOR_CHANGE );
+}
+
+void ViewWindow::zoomDecrease()
+{
+	setZoomFactor( zoomFactor() - ZOOM_FACTOR_CHANGE );
+}
+
+int ViewWindow::getScrollbarPosition()
+{
+	return page()->currentFrame()->scrollBarValue( Qt::Vertical );
+}
+
+void ViewWindow::setScrollbarPosition(int pos)
+{
+	m_storedScrollbarPosition = pos;
+}
+
+void ViewWindow::clipSelectAll()
+{
+	triggerPageAction( QWebPage::SelectAll );
+}
+
+void ViewWindow::clipCopy()
+{
+	triggerPageAction( QWebPage::Copy );
+}
+
+// Shamelessly stolen from Qt
+QString ViewWindow::decodeUrl( const QString &input )
+{
+	QString temp;
+
+	int i = 0;
+	int len = input.length();
+	int a, b;
+	QChar c;
+	while (i < len)
+	{
+		c = input[i];
+		if (c == '%' && i + 2 < len)
+		{
+			a = input[++i].unicode();
+			b = input[++i].unicode();
+
+			if (a >= '0' && a <= '9')
+				a -= '0';
+			else if (a >= 'a' && a <= 'f')
+				a = a - 'a' + 10;
+			else if (a >= 'A' && a <= 'F')
+				a = a - 'A' + 10;
+
+			if (b >= '0' && b <= '9')
+				b -= '0';
+			else if (b >= 'a' && b <= 'f')
+				b  = b - 'a' + 10;
+			else if (b >= 'A' && b <= 'F')
+				b  = b - 'A' + 10;
+
+			temp.append( (QChar)((a << 4) | b ) );
+		}
+		else
+		{
+			temp.append( c );
+		}
+
+		++i;
+	}
+
+	return temp;
+}
+
+
+QString ViewWindow::anchorAt(const QPoint & pos)
+{
+	QWebHitTestResult res = page()->currentFrame()->hitTestContent( pos );
+
+	if ( !res.linkUrl().isValid() )
+		return QString::null;
+
+	return  res.linkUrl().path();
+}
+
+
+void ViewWindow::mouseReleaseEvent ( QMouseEvent * event )
+{
+	if ( event->button() == Qt::MidButton )
+	{
+		QString link = anchorAt( event->pos() );
+
+		if ( !link.isEmpty() )
+		{
+			setTabKeeper( link );
+			::mainWindow->onOpenPageInNewBackgroundTab();
+			return;
+		}
+	}
+
+	QWebView::mouseReleaseEvent( event );
+}
+
+bool ViewWindow::findTextInPage(const QString &text, int flags)
+{
+	QWebPage::FindFlags webkitflags = QWebPage::FindWrapsAroundDocument;
+
+	if ( flags & ViewWindow::SEARCH_BACKWARD )
+		webkitflags |= QWebPage::FindBackward;
+
+	if ( flags & ViewWindow::SEARCH_CASESENSITIVE )
+		webkitflags |= QWebPage::FindCaseSensitively;
+
+	return findText( text, webkitflags );
+}
+
+void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
+{
+	// From Qt Assistant
+	QMenu *m = new QMenu(0);
+	QString link = anchorAt( e->pos() );
+
+	if ( !link.isEmpty() )
+	{
+		m->addAction( i18n("Open Link in a new tab\tShift+LMB"), ::mainWindow, SLOT( onOpenPageInNewTab() ) );
+		m->addAction( i18n("Open Link in a new background tab\tCtrl+LMB"), ::mainWindow, SLOT( onOpenPageInNewBackgroundTab() ) );
+		m->addSeparator();
+		setTabKeeper( link );
+	}
+
+	::mainWindow->setupPopupMenu( m );
+	m->exec( e->globalPos() );
+	delete m;
+}
+
+void ViewWindow::onLoadFinished ( bool )
+{
+	page()->currentFrame()->setScrollBarValue( Qt::Vertical, m_storedScrollbarPosition );
 }

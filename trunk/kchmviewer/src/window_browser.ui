@@ -135,13 +135,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkWholeWords">
-        <property name="text">
-         <string>Whole words</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="labelWrapped">
         <property name="minimumSize">
          <size>

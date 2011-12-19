@@ -16,10 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef VIEWWINDOW_QTWEBKIT_H
-#define VIEWWINDOW_QTWEBKIT_H
 
-#include <QWebView> 
+#if 0
 
 #include "kde-qt.h"
 #include "viewwindow.h"
@@ -76,16 +74,9 @@ class ViewWindow_QtWebKit : public QWebView, public ViewWindow
 	
 		static	QString decodeUrl( const QString &url );
 			
-	signals:
-		/*!
-		* Emitted when the user clicked on the link, before the page changed.
-		* If linkClicked() sets follow_link to false, the current page should NOT change.
-		* Otherwise it should be changed to the new link value.
-		*/
-		void	linkClicked ( const QString & newlink, bool& follow_link );
+
 	
-	private slots:
-		virtual void	onAnchorClicked ( const QUrl& url);
+
 		
 	private:
 		// Overloaded to provide custom context menu

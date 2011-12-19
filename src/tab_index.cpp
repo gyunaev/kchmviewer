@@ -86,13 +86,11 @@ void TabIndex::showEvent( QShowEvent * )
 
 void TabIndex::onReturnPressed( )
 {
-	bool unused;
-	
 	if ( !m_lastSelectedItem )
 		return;
 	
 	IndexTocItem * treeitem = (IndexTocItem*) m_lastSelectedItem;
-	::mainWindow->activateLink( treeitem->getUrl(), unused );
+	::mainWindow->activateLink( treeitem->getUrl() );
 }
 
 

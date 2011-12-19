@@ -21,38 +21,25 @@
 #include "viewwindow.h"
 #include "viewwindowmgr.h"
 
-#include "viewwindow_qtextbrowser.h"
-
-#if defined (USE_KDE)
-	#include "kde/viewwindow_khtmlpart.h"
-#endif
-
-#if defined (QT_WEBKIT_LIB)
-	#include "viewwindow_qtwebkit.h"
-#endif
-
-
 
 // A small overriden class to handle a middle click
-ViewWindowTabs::ViewWindowTabs( QWidget * parent )
-			: QTabWidget( parent )
+class ViewWindowTabWidget : public QTabWidget
 {
-}
+	public:
+		ViewWindowTabWidget( QWidget * parent ) : QTabWidget( parent ) {}
 
-ViewWindowTabs::~ViewWindowTabs()
-{
-}
+	protected:
+		void mouseReleaseEvent ( QMouseEvent * event )
+		{
+			if ( event->button() == Qt::MidButton)
+			{
+				int tab = tabBar()->tabAt( event->pos() );
 
-void ViewWindowTabs::mouseReleaseEvent ( QMouseEvent * event )
-{
-	if ( event->button() == Qt::MidButton)
-	{
-		int tab = tabBar()->tabAt( event->pos() );
-
-		if ( tab != -1 )
-			emit mouseMiddleClickTab( tab );
-	}
-}
+				if ( tab != -1 )
+					emit tabCloseRequested( tab );
+			}
+		}
+};
 
 
 
@@ -62,26 +49,18 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 	// UIC
 	setupUi( this );
 	
+	// Set up the initial settings
+	applyBrowserSettings();
+
 	// Create the tab widget
-	m_tabWidget = new ViewWindowTabs( this );
+	m_tabWidget = new ViewWindowTabWidget( this );
 	verticalLayout->insertWidget( 0, m_tabWidget, 10 );
 
 	// on current tab changed
 	connect( m_tabWidget, SIGNAL( currentChanged(int) ), this, SLOT( onTabChanged(int) ) );
 	connect( m_tabWidget, SIGNAL( mouseMiddleClickTab( int ) ), this, SLOT( onCloseWindow(int) ) );
+	connect( m_tabWidget, SIGNAL( tabCloseRequested(int) ), this, SLOT( onCloseWindow(int) ) );
 
-	// Create a close button
-	m_closeButton = new QToolButton( this );
-	m_closeButton->setCursor( Qt::ArrowCursor );
-	m_closeButton->setAutoRaise( true );
-	m_closeButton->setIcon( QIcon( ":/images/closetab.png" ) );
-	m_closeButton->setToolTip( i18n("Close current page") );
-	m_closeButton->setEnabled( false );
-	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( onCloseCurrentWindow() ) );
-	
-	// Put it there
-	m_tabWidget->setCornerWidget( m_closeButton, Qt::TopRightCorner );
-	
 	// Create a "new tab" button
 	QToolButton * newButton = new QToolButton( this );
 	newButton->setCursor( Qt::ArrowCursor );
@@ -95,7 +74,6 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 	
 	// Hide the search frame
 	frameFind->setVisible( false );
-	labelWrapped->setVisible( false );
 	
 	// Search Line edit
 	connect( editFind,
@@ -116,7 +94,7 @@ ViewWindowMgr::~ViewWindowMgr( )
 void ViewWindowMgr::createMenu( MainWindow *, QMenu * menuWindow, QAction * actionCloseWindow )
 {
 	m_menuWindow = menuWindow;
-	m_actionCloseWindow = actionCloseWindow; 
+	m_actionCloseWindow = actionCloseWindow;
 }
 
 void ViewWindowMgr::invalidate()
@@ -138,26 +116,7 @@ ViewWindow * ViewWindowMgr::current()
 
 ViewWindow * ViewWindowMgr::addNewTab( bool set_active )
 {
-	ViewWindow * viewvnd;
-	
-	switch ( pConfig->m_usedBrowser )
-	{
-		default:
-			viewvnd = new ViewWindow_QTextBrowser( m_tabWidget );
-			break;
-
-#if defined (USE_KDE)			
-		case Config::BROWSER_KHTMLPART:
-			viewvnd = new ViewWindow_KHTMLPart( m_tabWidget );
-			break;
-#endif			
-			
-#if defined (QT_WEBKIT_LIB)
-		case Config::BROWSER_QTWEBKIT:
-			viewvnd = new ViewWindow_QtWebKit( m_tabWidget );
-			break;
-#endif			
-	}
+	ViewWindow * viewvnd = new ViewWindow( m_tabWidget );
 	
 	editFind->installEventFilter( this );
 	
@@ -165,7 +124,7 @@ ViewWindow * ViewWindowMgr::addNewTab( bool set_active )
 	TabData tabdata;
 	tabdata.window = viewvnd;
 	tabdata.action = new QAction( "window", this ); // temporary name; real name is set in setTabName
-	tabdata.widget = viewvnd->getQWidget();
+	tabdata.widget = viewvnd;
 	
 	connect( tabdata.action,
 			 SIGNAL( triggered() ),
@@ -181,10 +140,10 @@ ViewWindow * ViewWindowMgr::addNewTab( bool set_active )
 		m_tabWidget->setCurrentWidget( tabdata.widget );
 	
 	// Handle clicking on link in browser window
-	connect( viewvnd->getQObject(), 
-	         SIGNAL( linkClicked (const QString &, bool &) ), 
+	connect( viewvnd,
+			 SIGNAL( linkClicked ( const QUrl& ) ),
 	         ::mainWindow, 
-	         SLOT( activateLink(const QString &, bool &) ) );
+			 SLOT( activateUrl( const QUrl& ) ) );
 	
 	// Set up the accelerator if we have room
 	if ( m_Windows.size() < 10 )
@@ -198,14 +157,13 @@ ViewWindow * ViewWindowMgr::addNewTab( bool set_active )
 
 void ViewWindowMgr::closeAllWindows( )
 {
-	// No it++ - we removing the window by every closeWindow call
 	while ( m_Windows.begin() != m_Windows.end() )
 		closeWindow( m_Windows.first().widget );
 }
 
 void ViewWindowMgr::setTabName( ViewWindow * window )
 {
-	TabData * tab = findTab( window->getQWidget() );
+	TabData * tab = findTab( window );
 	
 	if ( tab )
 	{
@@ -215,7 +173,7 @@ void ViewWindowMgr::setTabName( ViewWindow * window )
 		if ( title.length() > 25 )
 			title = title.left( 22 ) + "...";
 	
-		m_tabWidget->setTabText( m_tabWidget->indexOf( window->getQWidget() ), title );
+		m_tabWidget->setTabText( m_tabWidget->indexOf( window ), title );
 		tab->action->setText( title );
 		
 		updateCloseButtons();
@@ -310,7 +268,7 @@ void ViewWindowMgr::updateCloseButtons( )
 	bool enabled = m_Windows.size() > 1;
 	
 	m_actionCloseWindow->setEnabled( enabled );
-	m_closeButton->setEnabled( enabled );
+	m_tabWidget->setTabsClosable( enabled );
 }
 
 void ViewWindowMgr::onTabChanged( int newtabIndex )
@@ -369,21 +327,6 @@ int ViewWindowMgr::currentPageIndex() const
 	return m_tabWidget->currentIndex();
 }
 
-
-void ViewWindowMgr::indicateFindResultStatus( SearchResultStatus status )
-{
-	QPalette p = editFind->palette();
-	
-	if ( status == SearchResultNotFound )
-		p.setColor( QPalette::Active, QPalette::Base, QColor(255, 102, 102) );
-	else
-		p.setColor( QPalette::Active, QPalette::Base, Qt::white );
-	
-	editFind->setPalette( p );
-	labelWrapped->setVisible( status == SearchResultFoundWrapped );
-}
-
-
 void ViewWindowMgr::onActivateFind()
 {
 	frameFind->show();
@@ -392,21 +335,31 @@ void ViewWindowMgr::onActivateFind()
 	editFind->selectAll();
 }
 
-
-void ViewWindowMgr::find()
+void ViewWindowMgr::find( bool backward )
 {
 	int flags = 0;
 	
 	if ( checkCase->isChecked() )
 		flags |= ViewWindow::SEARCH_CASESENSITIVE;
 	
-	if ( checkWholeWords->isChecked() )
-		flags |= ViewWindow::SEARCH_WHOLEWORDS;
+	if ( backward )
+		flags |= ViewWindow::SEARCH_BACKWARD;
 
-	current()->find( editFind->text(), flags );
+	// Remember the existing selection position to check the wraps
+	bool res = current()->findTextInPage( editFind->text(), flags );
 		
 	if ( !frameFind->isVisible() )
 		frameFind->show();
+
+	QPalette p = editFind->palette();
+
+	if ( !res )
+		p.setColor( QPalette::Active, QPalette::Base, QColor(255, 102, 102) );
+	else
+		p.setColor( QPalette::Active, QPalette::Base, Qt::white );
+
+	editFind->setPalette( p );
+	//labelWrapped->setVisible( status == SearchResultFoundWrapped );
 }
 
 
@@ -417,10 +370,23 @@ void ViewWindowMgr::editTextEdited(const QString &)
 
 void ViewWindowMgr::onFindNext()
 {
-	current()->onFindNext();
+	find();
 }
 
 void ViewWindowMgr::onFindPrevious()
 {
-	current()->onFindPrevious();
+	find( true );
+}
+
+void ViewWindowMgr::applyBrowserSettings()
+{
+	QWebSettings * setup = QWebSettings::globalSettings();
+
+	setup->setAttribute( QWebSettings::AutoLoadImages, pConfig->m_browserEnableImages );
+	setup->setAttribute( QWebSettings::JavascriptEnabled, pConfig->m_browserEnableJS );
+	setup->setAttribute( QWebSettings::JavaEnabled, pConfig->m_browserEnableJava );
+	setup->setAttribute( QWebSettings::PluginsEnabled, pConfig->m_browserEnablePlugins );
+	setup->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, pConfig->m_browserEnableOfflineStorage );
+	setup->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, pConfig->m_browserEnableLocalStorage );
+	setup->setAttribute( QWebSettings::LocalStorageEnabled, pConfig->m_browserEnableLocalStorage );
 }

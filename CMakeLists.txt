@@ -18,7 +18,6 @@ ADD_DEFINITIONS( -DUSE_KDE )
 
 # Run in those subdirectories
 ADD_SUBDIRECTORY( lib/libchmfile )
-ADD_SUBDIRECTORY( lib/kio-msits )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( po )
 ADD_SUBDIRECTORY( packages )

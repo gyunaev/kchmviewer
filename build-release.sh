@@ -14,7 +14,7 @@ VERSION_MAJOR=`sed -n 's/^\#define\s\+APP_VERSION_MAJOR\s\+\([0-9]\+\)/\1/p' $FI
 VERSION_MINOR=`sed -n 's/^\#define\s\+APP_VERSION_MINOR\s\+\([0-9]\+\)/\1/p' $FILE_VERSION`
 CURRENTVER="$VERSION_MAJOR.$VERSION_MINOR"
 
-BUILDDIR="build-$CURRENTVER"
+BUILDDIR="$PACKAGE-$CURRENTVER"
 RELEASEDIR="release-$CURRENTVER"
 
 if [ -d "$BUILDDIR" ]; then
@@ -28,7 +28,7 @@ mkdir "$RELEASEDIR" || exit 1
 
 svn export . "$BUILDDIR/" || exit 1
 
-# Source package without examples
+# Source package
 tar zcf "$RELEASEDIR/$PACKAGE-$CURRENTVER.tar.gz" $BUILDDIR || exit 1
 
 # Build it 

@@ -44,11 +44,6 @@ Config::Config()
 	m_onExternalLinkClick = (Config::choose_action_t) settings.value( "general/onexternal", ACTION_ASK_USER ).toInt();
 	m_numOfRecentFiles = settings.value( "general/maxrecentfiles", 10 ).toInt();
 	m_HistoryStoreExtra = settings.value( "general/extrahistory", true ).toBool();
-	m_usedBrowser = settings.value( "general/usebrowser", BROWSER_QTEXTBROWSER ).toInt();
-	m_kdeEnableJS = settings.value( "browser/enablejs", false ).toBool();
-	m_kdeEnableJava = settings.value( "browser/enablejava", false ).toBool();
-	m_kdeEnablePlugins = settings.value( "browser/enableplugins", true ).toBool();
-	m_kdeEnableRefresh = settings.value( "browser/enablerefresh", false ).toBool();
 	m_advUseInternalEditor = settings.value( "advanced/internaleditor", true ).toBool();
 	m_advLayoutDirectionRL = settings.value( "advanced/layoutltr", false ).toBool();
 	m_advAutodetectEncoding = settings.value( "advanced/autodetectenc", false ).toBool();
@@ -57,11 +52,13 @@ Config::Config()
 	m_toolbarMode = (Config::ToolbarMode) settings.value( "advanced/toolbarmode", TOOLBAR_LARGEICONSTEXT ).toInt();
 	m_lastOpenedDir = settings.value( "advanced/lastopendir", "." ).toString();
 
-	// Reset webkit browser to qtextbrowser when older version is running
-#if !defined (QT_WEBKIT_LIB)
-	if ( m_usedBrowser == BROWSER_QTWEBKIT )
-		m_usedBrowser = BROWSER_QTEXTBROWSER;
-#endif
+	m_browserEnableJS = settings.value( "browser/enablejs", true ).toBool();
+	m_browserEnableJava = settings.value( "browser/enablejava", false ).toBool();
+	m_browserEnablePlugins = settings.value( "browser/enableplugins", true ).toBool();
+	m_browserEnableImages  = settings.value( "browser/enableimages", true ).toBool();
+	m_browserEnableOfflineStorage = settings.value( "browser/enableofflinestorage", false ).toBool();
+	m_browserEnableLocalStorage = settings.value( "browser/enablelocalstorage", false ).toBool();
+	m_browserEnableRemoteContent = settings.value( "browser/enableremotecontent", false ).toBool();
 }
 
 
@@ -74,11 +71,6 @@ void Config::save( )
 	settings.setValue( "general/onexternal", m_onExternalLinkClick );
 	settings.setValue( "general/maxrecentfiles", m_numOfRecentFiles );
 	settings.setValue( "general/extrahistory", m_HistoryStoreExtra );
-	settings.setValue( "general/usebrowser", m_usedBrowser );
-	settings.setValue( "browser/enablejs", m_kdeEnableJS );
-	settings.setValue( "browser/enablejava", m_kdeEnableJava );
-	settings.setValue( "browser/enableplugins", m_kdeEnablePlugins );
-	settings.setValue( "browser/enablerefresh", m_kdeEnableRefresh );
 	settings.setValue( "advanced/internaleditor", m_advUseInternalEditor );
 	settings.setValue( "advanced/layoutltr", m_advLayoutDirectionRL );
 	settings.setValue( "advanced/autodetectenc", m_advAutodetectEncoding );
@@ -86,4 +78,12 @@ void Config::save( )
 	settings.setValue( "advanced/checknewver", m_advCheckNewVersion );
 	settings.setValue( "advanced/toolbarmode", m_toolbarMode );
 	settings.setValue( "advanced/lastopendir", m_lastOpenedDir );
+
+	settings.setValue( "browser/enablejs", m_browserEnableJS );
+	settings.setValue( "browser/enablejava", m_browserEnableJava );
+	settings.setValue( "browser/enableplugins", m_browserEnablePlugins );
+	settings.setValue( "browser/enableimages", m_browserEnableImages );
+	settings.setValue( "browser/enableofflinestorage", m_browserEnableOfflineStorage );
+	settings.setValue( "browser/enablelocalstorage", m_browserEnableLocalStorage );
+	settings.setValue( "browser/enableremotecontent", m_browserEnableRemoteContent );
 }

@@ -107,7 +107,7 @@ void TabContents::onClicked(QTreeWidgetItem * item, int)
 		return;
 	
 	IndexTocItem * treeitem = (IndexTocItem*) item;
-	::mainWindow->activateLink( treeitem->getUrl(), unused );
+	::mainWindow->activateLink( treeitem->getUrl() );
 }
 
 void TabContents::onContextMenuRequested(const QPoint & point)
@@ -131,5 +131,5 @@ void TabContents::search( const QString & text )
 		return;
 			
 	IndexTocItem * treeitem = (IndexTocItem *) items.first();
-	::mainWindow->activateLink( treeitem->getUrl(), unused );
+	::mainWindow->activateLink( treeitem->getUrl() );
 }

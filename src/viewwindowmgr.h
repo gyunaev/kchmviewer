@@ -23,38 +23,13 @@
 #include "settings.h"
 #include "ui_window_browser.h"
 
-// A small overriden class to handle a middle click
-// We cannot embed it into .cpp because of O_OBJECT :(
-class ViewWindowTabs : public QTabWidget
-{
-	Q_OBJECT
 
-	public:
-		ViewWindowTabs( QWidget * parent );
-
-		virtual ~ViewWindowTabs();
-
-	signals:
-		void mouseMiddleClickTab( int tab );
-
-	protected:
-		void mouseReleaseEvent ( QMouseEvent * event );
-};
-
-
-class ViewWindowTabs;
+class ViewWindowTabWidget;
 
 class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 {
 	Q_OBJECT
 	public:
-		enum SearchResultStatus
-		{
-			SearchResultFound,
-			SearchResultNotFound,
-			SearchResultFoundWrapped
-		};
-	
 		ViewWindowMgr( QWidget *parent );
 		~ViewWindowMgr( );
 		
@@ -79,14 +54,19 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		
 		void	setCurrentPage( int index );
 		int		currentPageIndex() const;
-	
+
+		// Reloads all windows
+		void	reloadAllWindows();
+
+		// Set up the configuration settings
+		void	applyBrowserSettings();
+
 	public slots:
 		void	onCloseCurrentWindow();
 		void	onCloseWindow( int num );
 		void	onActivateFind();
 		void	onFindNext();
 		void	onFindPrevious();
-		void	indicateFindResultStatus( SearchResultStatus status );
 		
 	protected slots:
 		void	openNewTab();
@@ -97,7 +77,7 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		void	editTextEdited( const QString & text );
 	
 	private:
-		void	find();
+		void	find( bool backward = false );
 		
 		typedef struct
 		{
@@ -114,7 +94,6 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		QList< TabData >	m_Windows;
 		typedef QList< TabData >::iterator WindowsIterator;
 		
-		QToolButton			*	m_closeButton;
 		QMenu 				*	m_menuWindow;
 		QAction				*	m_actionCloseWindow;
 	
@@ -123,7 +102,7 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		// actions will be relinked and replaced.
 		QList< QAction* >		m_actions;
 
-		ViewWindowTabs		*	m_tabWidget;
+		ViewWindowTabWidget	*	m_tabWidget;
 };
 
 #endif /* INCLUDE_KCHMVIEWWINDOWMGR_H */

@@ -23,8 +23,7 @@ SET( kchmviewerSources
 	toolbareditor.cpp
 	viewwindow.cpp
 	viewwindowmgr.cpp
-	viewwindow_qtextbrowser.cpp
-	kde/viewwindow_khtmlpart.cpp
+	qwebviewnetwork.cpp
   )
 
 # UI files
@@ -51,7 +50,7 @@ TARGET_LINK_LIBRARIES( kchmviewer
 	chmfile 
 	${LIBCHM_LIBRARY}
 	${KDE4_KDEUI_LIBS} 
-	${KDE4_KHTML_LIBS}
+	${QT_QTWEBKIT_LIBRARY}	
 	${KDE4_KFILE_LIBS}  )
 
 INSTALL( TARGETS kchmviewer DESTINATION ${KDE4_BIN_INSTALL_DIR} )

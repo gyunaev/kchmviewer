@@ -270,25 +270,22 @@ void MainWindow::refreshCurrentBrowser( )
 }
 
 
+void MainWindow::activateUrl( const QUrl & link )
+{
+	activateLink( link.path() );
+}
 
-void MainWindow::activateLink ( const QString & link, bool& follow_link )
+void MainWindow::activateLink ( const QString & link )
 {
 	if ( link.isEmpty() )
 		return;
 	
 	if ( gKeyEventFilter.isShiftPressed() )
-	{
 		openPage( link, OPF_NEW_TAB | OPF_CONTENT_TREE );
-		follow_link = false;
-	}
 	else if ( gKeyEventFilter.isCtrlPressed() )
-	{
 		openPage( link, OPF_NEW_TAB | OPF_BACKGROUND );
-		follow_link = false;
-	}
 	else
-		// If the openPage failed, we do not need to follow the link.
-		follow_link = openPage( link, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
+		openPage( link, OPF_CONTENT_TREE | OPF_ADD2HISTORY );
 }
 
 
@@ -329,7 +326,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	}
 		
 	// Filter the URLs which do not need to be opened at all by Qt version
-	if ( LCHMUrlFactory::isJavascriptURL (url) )
+	if ( LCHMUrlFactory::isJavascriptURL(url)  )
 	{
 		QMessageBox::information( this, 
 			i18n( "%1 - JavsScript link clicked") . arg(QCoreApplication::applicationName()),
@@ -363,6 +360,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	}
 	
 	ViewWindow * vwnd = currentBrowser();
+
 	if ( flags & OPF_NEW_TAB )
 		vwnd = m_viewWindowMgr->addNewTab( !(flags & OPF_BACKGROUND) );
 	
@@ -839,12 +837,12 @@ void MainWindow::actionExtractCHM()
 
 void MainWindow::actionFontSizeIncrease()
 {
-	currentBrowser()->addZoomFactor( 1 );
+	currentBrowser()->zoomIncrease();
 }
 
 void MainWindow::actionFontSizeDecrease()
 {
-	currentBrowser()->addZoomFactor( -1 );
+	currentBrowser()->zoomDecrease();
 }
 
 void MainWindow::actionViewHTMLsource()

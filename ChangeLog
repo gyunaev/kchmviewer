@@ -1,9 +1,16 @@
 2011-12-18 tim <gyunaev@ulduzsoft.com>
+    - Version 6.0 released
     - Removed outdated and buggy QTextBrowser support.
     - Removed unneeded KHTMLPart support. Only QWebKit is now supported.
     - Fixed zoom and "select all".
     - Fixed storing scrollbar position.
     - Added browser options to control JavaScript, Java and HTML5 features, which now apply to Webkit
+    - Fixed crash on start when the number of recent files was set to zero
+    - Added support for opening the specific page on startup using the --url switch
+    - Fixed scrolling at the same page when links are clicked
+    - Fixed the "Locate in content tree" which was broken for QWebKit
+    - For CHM entries with an URL but no name use the URL as name
+    - Updated copyrights
 
 2011-01-14 tim <gyunaev@ulduzsoft.com>
     - Version 5.3 released.

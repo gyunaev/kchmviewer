@@ -1,6 +1,11 @@
 /**************************************************************************
- *  Kchmviewer - a CHM file viewer with broad language support            *
- *  Copyright (C) 2004-2010 George Yunaev, kchmviewer@ulduzsoft.com       *
+ *  Kchmviewer - a portable CHM file viewer with the best support for     *
+ *  the international languages                                           *
+ *                                                                        *
+ *  Copyright (C) 2004-2012 George Yunaev, kchmviewer@ulduzsoft.com       *
+ *                                                                        *
+ *  Please read http://www.kchmviewer.net/reportbugs.html if you want     *
+ *  to report a bug. It lists things I need to fix it!                    *
  *                                                                        *
  *  This program is free software: you can redistribute it and/or modify  *
  *  it under the terms of the GNU General Public License as published by  *

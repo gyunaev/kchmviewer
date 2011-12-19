@@ -1,6 +1,11 @@
 /**************************************************************************
- *  Kchmviewer - a CHM file viewer with broad language support            *
- *  Copyright (C) 2004-2010 George Yunaev, kchmviewer@ulduzsoft.com       *
+ *  Kchmviewer - a portable CHM file viewer with the best support for     *
+ *  the international languages                                           *
+ *                                                                        *
+ *  Copyright (C) 2004-2012 George Yunaev, kchmviewer@ulduzsoft.com       *
+ *                                                                        *
+ *  Please read http://www.kchmviewer.net/reportbugs.html if you want     *
+ *  to report a bug. It lists things I need to fix it!                    *
  *                                                                        *
  *  This program is free software: you can redistribute it and/or modify  *
  *  it under the terms of the GNU General Public License as published by  *
@@ -101,8 +106,6 @@ void TabContents::showItem( IndexTocItem * item )
 
 void TabContents::onClicked(QTreeWidgetItem * item, int)
 {
-	bool unused;
-	
 	if ( !item )
 		return;
 	
@@ -125,7 +128,6 @@ void TabContents::onContextMenuRequested(const QPoint & point)
 void TabContents::search( const QString & text )
 {
 	QList<QTreeWidgetItem*> items = tree->findItems( text, Qt::MatchWildcard | Qt::MatchRecursive );
-	bool unused;	
 
 	if ( items.isEmpty() )
 		return;

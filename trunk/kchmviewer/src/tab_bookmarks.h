@@ -41,6 +41,7 @@ class TabBookmarks : public QWidget, public Ui::TabBookmarks
 		void	restoreSettings ( const Settings::bookmark_saved_settings_t& settings );
 		void	saveSettings ( Settings::bookmark_saved_settings_t& settings );
 		void	invalidate();
+		void	focus();
 		
 	public slots:
 		void 	onAddBookmarkPressed ();
@@ -49,7 +50,7 @@ class TabBookmarks : public QWidget, public Ui::TabBookmarks
 		void	actionBookmarkActivated();
 		void	onDelBookmarkPressed( );
 		void	onEditBookmarkPressed( );
-		void	onItemDoubleClicked ( QListWidgetItem* );
+		void	onItemActivated ( QListWidgetItem* );
 		void	onContextMenuRequested ( const QPoint &point );
 
 	private:

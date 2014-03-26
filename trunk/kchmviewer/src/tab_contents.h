@@ -39,6 +39,7 @@ class TabContents : public QWidget, public Ui::TabContents
 		void	refillTableOfContents();
 		void	showItem( IndexTocItem * item );
 		void	search( const QString& text );
+		void	focus();
 		
 		IndexTocItem *	getTreeItem( const QString& url );
 		

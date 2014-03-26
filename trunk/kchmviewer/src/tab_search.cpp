@@ -94,9 +94,9 @@ TabSearch::TabSearch( QWidget * parent )
 	
 	// Clicking on tree element
 	connect( tree, 
-	         SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ), 
+			 SIGNAL( itemActivated( QTreeWidgetItem *, int ) ),
 			 this, 
-	         SLOT( onDoubleClicked( QTreeWidgetItem *, int ) ) );
+			 SLOT( onItemActivated( QTreeWidgetItem *, int ) ) );
 
 	// Activate custom context menu, and connect it
 	tree->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -105,7 +105,7 @@ TabSearch::TabSearch( QWidget * parent )
 			 this, 
 			 SLOT( onContextMenuRequested( const QPoint & ) ) );
 
-	searchBox->setFocus();
+	focus();
 	
 	m_contextMenu = 0;
 	m_genIndexProgress = 0;
@@ -145,12 +145,16 @@ void TabSearch::onReturnPressed( )
 		{
 			for ( int i = 0; i < results.size(); i++ )
 			{
-				new SearchTreeViewItem ( tree,
-										 ::mainWindow->chmFile()->getTopicByUrl( results[i] ),
-										 results[i] );
+				SearchTreeViewItem * item = new SearchTreeViewItem ( tree,
+																	 ::mainWindow->chmFile()->getTopicByUrl( results[i] ),
+																	 results[i] );
+
+				if ( i == 0 )
+					tree->setCurrentItem( item );
 			}
 
 			::mainWindow->showInStatusBar( i18n( "Search returned %1 result(s)" ) . arg(results.size()) );
+			tree->setFocus();
 		}
 		else
 			::mainWindow->showInStatusBar( i18n( "Search returned no results") );
@@ -160,7 +164,7 @@ void TabSearch::onReturnPressed( )
 }
 
 
-void TabSearch::onDoubleClicked( QTreeWidgetItem * item, int )
+void TabSearch::onItemActivated( QTreeWidgetItem * item, int )
 {
 	if ( !item )
 		return;
@@ -290,6 +294,11 @@ bool TabSearch::searchQuery( const QString & query, QStringList * results )
 	return result;
 }
 
+void TabSearch::focus()
+{
+	if ( !searchBox->hasFocus() && !tree->hasFocus() )
+		searchBox->setFocus();
+}
 
 void TabSearch::onContextMenuRequested( const QPoint & point )
 {

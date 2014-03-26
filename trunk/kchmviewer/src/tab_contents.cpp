@@ -38,12 +38,11 @@ TabContents::TabContents( QWidget *parent )
 	
 	m_contextMenu = 0;
 	
-	tree->setFocus();
 	tree->header()->hide();
 	
 	// Handle clicking on m_contentsWindow element
 	connect( tree, 
-	         SIGNAL( itemClicked ( QTreeWidgetItem *, int ) ), 
+			 SIGNAL( itemActivated ( QTreeWidgetItem *, int ) ),
 	         this, 
 	         SLOT( onClicked ( QTreeWidgetItem *, int ) ) );
 	
@@ -56,6 +55,8 @@ TabContents::TabContents( QWidget *parent )
 
 	if ( ::mainWindow->chmFile() )
 		refillTableOfContents();
+
+	focus();
 }
 
 TabContents::~TabContents()
@@ -134,4 +135,10 @@ void TabContents::search( const QString & text )
 			
 	IndexTocItem * treeitem = (IndexTocItem *) items.first();
 	::mainWindow->activateLink( treeitem->getUrl() );
+}
+
+void TabContents::focus()
+{
+	if ( !tree->hasFocus() )
+		tree->setFocus();
 }

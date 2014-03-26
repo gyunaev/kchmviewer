@@ -389,6 +389,10 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 		if ( flags & OPF_ADD2HISTORY )
 			currentBrowser()->addNavigationHistory( hist_url, hist_scrollpos );
 	}
+
+	// Focus on the view window so keyboard scroll works; do not do it for the background tabs
+	if ( (flags & OPF_BACKGROUND) == 0 )
+		vwnd->setFocus( Qt::OtherFocusReason );
 	
 	return true;
 }
@@ -1093,12 +1097,25 @@ void MainWindow::setupActions()
 	                      SLOT( onActivateFind() ),
 	                      Qt::ApplicationShortcut );
 	
-	// Find next global shortcut
+	// Find next global shortcuts
 	(void) new QShortcut( QKeySequence( i18n("F3") ),
 	                      m_viewWindowMgr,
 	                      SLOT( onFindNext() ),
 	                      SLOT( onFindNext() ),
 	                      Qt::ApplicationShortcut );
+
+	(void) new QShortcut( QKeySequence( QKeySequence::FindNext ),
+						  m_viewWindowMgr,
+						  SLOT( onFindNext() ),
+						  SLOT( onFindNext() ),
+						  Qt::ApplicationShortcut );
+
+	// Find prev global shortcut
+	(void) new QShortcut( QKeySequence( QKeySequence::FindPrevious ),
+						  m_viewWindowMgr,
+						  SLOT( onFindPrevious() ),
+						  SLOT( onFindPrevious() ),
+						  Qt::ApplicationShortcut );
 
 	// Open next page in TOC global shortcut
 	(void) new QShortcut( QKeySequence( i18n("Ctrl+Right") ),

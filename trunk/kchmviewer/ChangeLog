@@ -1,3 +1,11 @@
+2014-03-26 tim <gyunaev@ulduzsoft.com>
+    - The focus is now moved to the content page once the link is clicked, so the keyboard navigation is available immediately. You can switch the focus back by pressing Ctrl+(1-4)
+    - Added extended keyboard shortcuts for FindNext and FindPrevious; F3 still works.
+    - Navigation tab window activation (Contents, Search, Index, Bookmarks) now automatically focus the proper element.
+    - The items in the navigation page now reacts on onItemActivated, and hence act on <Return> key and follow the DE policy (such as respecting KDE single click)
+    - Upon successful search, the focus moves to the results list
+    - Titles are now space-trimmed.
+
 2011-12-18 tim <gyunaev@ulduzsoft.com>
     - Version 6.0 released
     - Removed outdated and buggy QTextBrowser support.

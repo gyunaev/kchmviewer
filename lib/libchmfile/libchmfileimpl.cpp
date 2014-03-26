@@ -1417,35 +1417,31 @@ bool LCHMFileImpl::RecurseLoadBTOC( const QByteArray& tocidx,
 					return false;
 				}
 
-				unsigned int tocoffset = UINT32ARRAY(topics.data()+ (index * 16) + 4);
-				long test = (long)tocoffset;
+				int tocoffset = (int) UINT32ARRAY(topics.data()+ (index * 16) + 4);
 
-				if ( (unsigned) strings.size() < tocoffset + 1 )
+				if ( strings.size() < tocoffset + 1 )
 				{
 					qWarning("LCHMFile::RecurseLoadBTOC: invalid name tocoffset (%d) for TOC entry!", tocoffset );
 					return false;
 				}
 
-				if ( test == -1 )
-				{
-					qWarning("LCHMFile::RecurseLoadBTOC: invalid name offset (%d) for TOC entry!", tocoffset );
-					return false;
-				}
-
-				name = encodeWithCurrentCodec( strings.data() + tocoffset );
+				if ( tocoffset < 0 )
+					name.clear();
+				else
+					name = encodeWithCurrentCodec( strings.data() + tocoffset );
 
 				// #URLTBL index
-				tocoffset = UINT32ARRAY( topics.data() + (index * 16) + 8 );
+				tocoffset = (int) UINT32ARRAY( topics.data() + (index * 16) + 8 );
 			
-				if ( (unsigned) urltbl.size() < tocoffset + 12 )
+				if ( tocoffset < 0 || urltbl.size() < tocoffset + 12 )
 				{
 					qWarning("LCHMFile::RecurseLoadBTOC: invalid url index (%d) for TOC entry!", tocoffset );
 					return false;
 				}
 
-				tocoffset = UINT32ARRAY(urltbl.data() + tocoffset + 8);
+				tocoffset = (int) UINT32ARRAY(urltbl.data() + tocoffset + 8);
 				
-				if ( (unsigned) urlstr.size() < tocoffset )
+				if ( tocoffset < 0 || urlstr.size() < tocoffset )
 				{
 					qWarning("LCHMFile::RecurseLoadBTOC: invalid url offset (%d) for TOC entry!", tocoffset );
 					return false;

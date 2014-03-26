@@ -311,7 +311,7 @@ void Settings::removeSettings( const QString & filename )
 void Settings::getFilenames(const QString & helpfilename, QString * settingsfile, QString * indexfile )
 {
 	QFileInfo finfo ( helpfilename );
-	QString prefix = pConfig->m_datapath + "/" + finfo.baseName();
+	QString prefix = pConfig->m_datapath + "/" + finfo.completeBaseName();
 
 	*settingsfile = prefix + ".kchmviewer";
 	*indexfile = prefix + ".idx";

@@ -7,7 +7,7 @@ BINARYFILE="bin/kchmviewer"
 
 FILE_VERSION="src/version.h"
 RPM_ARCH="i586"
-RPM_OUTDIR="/usr/src/packages/RPMS/$RPM_ARCH"
+RPM_OUTDIR="/home/tim/rpmbuild/RPMS/$RPM_ARCH"
 
 # Get current version
 VERSION_MAJOR=`sed -n 's/^\#define\s\+APP_VERSION_MAJOR\s\+\([0-9]\+\)/\1/p' $FILE_VERSION`

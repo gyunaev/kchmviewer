@@ -8,88 +8,133 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: kchmviewer@ulduzsoft.com\n"
-"POT-Creation-Date: 2009-07-19 20:41-0700\n"
+"POT-Creation-Date: 2013-01-12 03:51-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: kchmbookmarkwindow.cpp:113
-msgid "%1 - add a bookmark"
-msgstr ""
-
-#: kchmbookmarkwindow.cpp:114 kchmbookmarkwindow.cpp:156
-msgid "Enter the name for this bookmark:"
-msgstr ""
-
-#: kchmbookmarkwindow.cpp:155
-msgid "%1 - edit the bookmark name"
-msgstr ""
-
-#: kchmmainwindow.cpp:96
-msgid "Bookmarks"
-msgstr ""
-
-#: kchmmainwindow.cpp:121
+#: dialog_setup.cpp:196
 msgid ""
-"<html><b>%1 version %2</b><br><br>Copyright (C) George Yunaev, 2004-"
-"2008<br><a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</"
-"a><br><a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</"
-"a><br><br>Licensed under GNU GPL license.</html>"
+"Changing those options requires restarting the application to take effect."
 msgstr ""
 
-#: kchmmainwindow.cpp:163
+#: dialog_setup.cpp:205
+msgid "*|Executables"
+msgstr ""
+
+#: dialog_setup.cpp:205 dialog_setup.cpp:208
+msgid "Choose an editor executable"
+msgstr ""
+
+#: dialog_setup.cpp:210
+msgid "Executables (*)"
+msgstr ""
+
+#: main.cpp:55
+msgid "Perform auto testing"
+msgstr ""
+
+#: main.cpp:56
+msgid "Perform short auto testing"
+msgstr ""
+
+#: main.cpp:57
+msgid "A CHM file to show"
+msgstr ""
+
+#: main.cpp:58
+msgid ""
+"'--search <query>' specifies the search query to search, and activate the "
+"first entry if found"
+msgstr ""
+
+#: main.cpp:59
+msgid ""
+"'--sindex <word>' specifies the word to find in index, and activate if found"
+msgstr ""
+
+#: main.cpp:60
+msgid ""
+"'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if "
+"found. Wildcards allowed."
+msgstr ""
+
+#: main.cpp:61
+msgid "'--url <relative url>' specifies the URL to activate if found."
+msgstr ""
+
+#. i18n: file: mainwindow.ui:14
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: main.cpp:65 ui_mainwindow.h:302 rc.cpp:192
+msgid "kchmviewer"
+msgstr ""
+
+#: main.cpp:67
+msgid "CHM file viewer"
+msgstr ""
+
+#: main.cpp:69
+msgid "(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"
+msgstr ""
+
+#: main.cpp:70
+msgid "Please report bugs to kchmviewer@ulduzsoft.com"
+msgstr ""
+
+#: mainwindow.cpp:178
 msgid "Detected file encoding: %1 ( %2 )"
 msgstr ""
 
-#: kchmmainwindow.cpp:254
+#: mainwindow.cpp:246
 msgid "%1 - failed to load the chm file"
 msgstr ""
 
-#: kchmmainwindow.cpp:255
+#: mainwindow.cpp:247
 msgid "Unable to load the chm file %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:263
+#: mainwindow.cpp:255
 msgid "Could not load file %1"
 msgstr ""
 
-#: kchmmainwindow.cpp:331
+#: mainwindow.cpp:320
 msgid "%1 - remote link clicked - %2"
 msgstr ""
 
-#: kchmmainwindow.cpp:332
+#: mainwindow.cpp:321
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
 
-#: kchmmainwindow.cpp:333 kchmmainwindow.cpp:377
+#: mainwindow.cpp:322 mainwindow.cpp:357
 msgid "&Yes"
 msgstr ""
 
-#: kchmmainwindow.cpp:333 kchmmainwindow.cpp:377
+#: mainwindow.cpp:322 mainwindow.cpp:357
 msgid "&No"
 msgstr ""
 
-#: kchmmainwindow.cpp:355
+#: mainwindow.cpp:344
 msgid "%1 - JavsScript link clicked"
 msgstr ""
 
-#: kchmmainwindow.cpp:356
+#: mainwindow.cpp:345
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
 msgstr ""
 
-#: kchmmainwindow.cpp:375
+#: mainwindow.cpp:355
 msgid "%1 - link to a new CHM file clicked"
 msgstr ""
 
-#: kchmmainwindow.cpp:376
+#: mainwindow.cpp:356
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -97,119 +142,129 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: kchmmainwindow.cpp:639
-msgid "Contents"
-msgstr ""
-
-#: kchmmainwindow.cpp:664
-msgid "Index"
-msgstr ""
-
-#: kchmmainwindow.cpp:687
-msgid "Search"
-msgstr ""
-
-#: kchmmainwindow.cpp:855
+#: mainwindow.cpp:716
 msgid "*.chm|Compressed Help Manual (*.chm)"
 msgstr ""
 
-#: kchmmainwindow.cpp:858
+#: mainwindow.cpp:719
 msgid "Open a chm file"
 msgstr ""
 
-#: kchmmainwindow.cpp:860
+#: mainwindow.cpp:721
 msgid "Compressed Help Manual (*.chm)"
 msgstr ""
 
-#: kchmmainwindow.cpp:872
-msgid "Loading aborted"
-msgstr ""
-
-#: kchmmainwindow.cpp:912 kchmmainwindow.cpp:916
+#: mainwindow.cpp:766 mainwindow.cpp:770
 msgid "Choose a directory to store CHM content"
 msgstr ""
 
-#: kchmmainwindow.cpp:930
+#: mainwindow.cpp:784
 msgid "Extracting CHM content"
 msgstr ""
 
-#: kchmmainwindow.cpp:931
+#: mainwindow.cpp:785
 msgid "Extracting files..."
 msgstr ""
 
-#: kchmmainwindow.cpp:932
+#: mainwindow.cpp:786
 msgid "Abort"
 msgstr ""
 
-#: kchmmainwindow.cpp:1122
+#: mainwindow.cpp:955
 msgid "Could not locate opened topic in content window"
 msgstr ""
 
-#: kchmmainwindow.cpp:1164
-msgid "About %1"
+#: mainwindow.cpp:961
+msgid ""
+"<html><b>kchmviewer version %1.%2</b><br><br>Copyright (C) George Yunaev, "
+"2004-2010<br><a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</"
+"a><br><a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</"
+"a><br><br>Licensed under GNU GPL license version 3.</html>"
 msgstr ""
 
-#: kchmmainwindow.cpp:1326
-msgid "&Help"
+#. i18n: file: dialog_about.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, DialogAbout)
+#: mainwindow.cpp:970 ui_dialog_about.h:111 rc.cpp:3
+msgid "About kchmviewer"
 msgstr ""
 
-#: kchmmainwindow.cpp:1327
-msgid "&About"
-msgstr ""
-
-#: kchmmainwindow.cpp:1328
-msgid "About &Qt"
-msgstr ""
-
-#: kchmmainwindow.cpp:1340
+#: mainwindow.cpp:1065
 msgid "Ctrl+1"
 msgstr ""
 
-#: kchmmainwindow.cpp:1346
+#: mainwindow.cpp:1071
 msgid "Ctrl+2"
 msgstr ""
 
-#: kchmmainwindow.cpp:1352
+#: mainwindow.cpp:1077
 msgid "Ctrl+3"
 msgstr ""
 
-#: kchmmainwindow.cpp:1358
+#: mainwindow.cpp:1083
 msgid "Ctrl+4"
 msgstr ""
 
-#: kchmmainwindow.cpp:1365
+#: mainwindow.cpp:1090
 msgid "/"
 msgstr ""
 
-#: kchmmainwindow.cpp:1372
+#: mainwindow.cpp:1097
 msgid "F3"
 msgstr ""
 
-#: kchmmainwindow.cpp:1379
+#: mainwindow.cpp:1104
 msgid "Ctrl+Right"
 msgstr ""
 
-#: kchmmainwindow.cpp:1386
+#: mainwindow.cpp:1111
 msgid "Ctrl+Left"
 msgstr ""
 
-#: kchmmainwindow.cpp:1492
+#: mainwindow.cpp:1196
 msgid "%1 ( %2 )"
 msgstr ""
 
-#: kchmsearchwindow.cpp:151
+#: navigationpanel.cpp:43
+msgid "Search"
+msgstr ""
+
+#: navigationpanel.cpp:46
+msgid "Bookmarks"
+msgstr ""
+
+#: navigationpanel.cpp:86
+msgid "Index"
+msgstr ""
+
+#: navigationpanel.cpp:92
+msgid "Contents"
+msgstr ""
+
+#: tab_bookmarks.cpp:120
+msgid "%1 - add a bookmark"
+msgstr ""
+
+#: tab_bookmarks.cpp:121 tab_bookmarks.cpp:163
+msgid "Enter the name for this bookmark:"
+msgstr ""
+
+#: tab_bookmarks.cpp:162
+msgid "%1 - edit the bookmark name"
+msgstr ""
+
+#: tab_search.cpp:153
 msgid "Search returned %1 result(s)"
 msgstr ""
 
-#: kchmsearchwindow.cpp:154
+#: tab_search.cpp:156
 msgid "Search returned no results"
 msgstr ""
 
-#: kchmsearchwindow.cpp:157
+#: tab_search.cpp:159
 msgid "Search failed"
 msgstr ""
 
-#: kchmsearchwindow.cpp:190
+#: tab_search.cpp:192
 msgid ""
 "<html><p>The improved search engine allows you to search for a word, symbol "
 "or phrase, which is set of words and symbols included in quotes. Only the "
@@ -224,945 +279,1149 @@ msgid ""
 "html>"
 msgstr ""
 
-#: kchmsearchwindow.cpp:207
+#: tab_search.cpp:209
 msgid "Reading dictionary..."
 msgstr ""
 
-#: kchmsearchwindow.cpp:221 kchmsearchwindow.cpp:222
+#: tab_search.cpp:223 tab_search.cpp:224
 msgid "Generating search index..."
 msgstr ""
 
-#: kchmsetupdialog.cpp:183
+#. i18n: file: dialog_about.ui:46
+#. i18n: ectx: property (text), widget (QLabel, lblAbout)
+#: ui_dialog_about.h:113 rc.cpp:9
+msgid "About text"
+msgstr ""
+
+#. i18n: file: dialog_about.ui:24
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: ui_dialog_about.h:114 rc.cpp:6
+msgid "About appplication"
+msgstr ""
+
+#. i18n: file: dialog_about.ui:75
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui_dialog_about.h:115 rc.cpp:15
 msgid ""
-"Changing those options requires restarting the application to take effect."
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Liberation Sans'; font-size:12pt; "
+"font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600; font-style:italic;\">I would like to thank:</"
+"span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- <a href="
+"\"http://qt.nokia.com\"><span style=\" text-decoration: underline; color:"
+"#0000ff;\">Trolltech</span></a> (now Nokia) for Qt library;</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- <a href="
+"\"http://dryicons.com\"><span style=\" text-decoration: underline; color:"
+"#0000ff;\">Dryicons</span></a> for nice free icons;</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Jed "
+"Wing, the author of chmlib.</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Razvan "
+"Cojocaru, the author of xchm.</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Peter "
+"Volkov for significant QA (more than 20 reported bugs!)</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- And of "
+"course <span style=\" font-weight:600;\">everyone</span>, who report bugs,  "
+"and suggest features.</p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"></p></body></html>"
 msgstr ""
 
-#: kchmsetupdialog.cpp:192
-msgid "*|Executables"
+#. i18n: file: dialog_about.ui:57
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: ui_dialog_about.h:130 rc.cpp:12
+msgid "Thanks"
 msgstr ""
 
-#: kchmsetupdialog.cpp:192 kchmsetupdialog.cpp:195
-msgid "Choose an editor executable"
-msgstr ""
-
-#: kchmsetupdialog.cpp:197
-msgid "Executables (*)"
-msgstr ""
-
-#: kchmviewwindowmgr.cpp:58
-msgid "Close current page"
-msgstr ""
-
-#: kchmviewwindowmgr.cpp:70
-msgid "Add page"
-msgstr ""
-
-#: kchmviewwindowmgr.cpp:171 kchmviewwindowmgr.cpp:238
-msgid "Alt+%1"
-msgstr ""
-
-#: kchmviewwindow_qtextbrowser.cpp:121 kchmviewwindow_qtwebkit.cpp:256
-msgid "Printing aborted"
-msgstr ""
-
-#: kchmviewwindow_qtextbrowser.cpp:126 kchmviewwindow_qtwebkit.cpp:261
-msgid "Printing finished"
-msgstr ""
-
-#: kchmviewwindow_qtextbrowser.cpp:317 kchmviewwindow_qtwebkit.cpp:375
-msgid "Open Link in a new tab\tShift+LMB"
-msgstr ""
-
-#: kchmviewwindow_qtextbrowser.cpp:318 kchmviewwindow_qtwebkit.cpp:376
-msgid "Open Link in a new background tab\tCtrl+LMB"
-msgstr ""
-
-#: main.cpp:45
-msgid "Perform auto testing"
-msgstr ""
-
-#: main.cpp:46
-msgid "Perform short auto testing"
-msgstr ""
-
-#: main.cpp:47
-msgid "A CHM file to show"
-msgstr ""
-
-#: main.cpp:48
-msgid ""
-"'--search <query>' specifies the search query to search, and activate the "
-"first entry if found"
-msgstr ""
-
-#: main.cpp:49
-msgid ""
-"'--sindex <word>' specifies the word to find in index, and activate if found"
-msgstr ""
-
-#: main.cpp:50
-msgid ""
-"'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if "
-"found. Wildcards allowed."
-msgstr ""
-
-#: main.cpp:56
-msgid "CHM file viewer"
-msgstr ""
-
-#: main.cpp:58
-msgid "(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"
-msgstr ""
-
-#: main.cpp:59
-msgid "Please report bugs to kchmviewer@ulduzsoft.com"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 20
-#: rc.cpp:3
-#, no-c-format
+#. i18n: file: dialog_setup.ui:20
+#. i18n: ectx: property (windowTitle), widget (QDialog, DialogSetup)
+#: ui_dialog_setup.h:463 rc.cpp:30
 msgid "KchmViewer settings"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 42
-#: rc.cpp:6
-#, no-c-format
-msgid "General behavior"
+#. i18n: file: dialog_setup.ui:62
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
+#: ui_dialog_setup.h:464 rc.cpp:36
+msgid "If started with no arguments"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 62
-#: rc.cpp:9
-#, no-c-format
-msgid "If no arguments given on load"
+#. i18n: file: dialog_setup.ui:74
+#. i18n: ectx: property (text), widget (QRadioButton, rbStartWithNothing)
+#: ui_dialog_setup.h:465 rc.cpp:39
+msgid "Start with nothing loaded"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 74
-#: rc.cpp:12
-#, no-c-format
-msgid "Open the 'open CHM file' dialog"
+#. i18n: file: dialog_setup.ui:81
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOnBeginOpenDialog)
+#: ui_dialog_setup.h:466 rc.cpp:42
+msgid "Pop up the \"open file\" dialog"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 81
-#: rc.cpp:15
-#, no-c-format
+#. i18n: file: dialog_setup.ui:88
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOnBeginOpenLast)
+#: ui_dialog_setup.h:467 rc.cpp:45
 msgid "Open the &last used CHM file, if exist"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 84
-#: rc.cpp:18
-#, no-c-format
+#. i18n: file: dialog_setup.ui:91
+#. i18n: ectx: property (shortcut), widget (QRadioButton, m_radioOnBeginOpenLast)
+#: ui_dialog_setup.h:468 rc.cpp:48
 msgid "Alt+L"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 94
-#: rc.cpp:21
-#, no-c-format
+#. i18n: file: dialog_setup.ui:101
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
+#: ui_dialog_setup.h:469 rc.cpp:51
 msgid "History"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 114
-#: rc.cpp:24
-#, no-c-format
+#. i18n: file: dialog_setup.ui:121
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: ui_dialog_setup.h:470 rc.cpp:54
 msgid "Store history information for"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 134
-#: rc.cpp:27
-#, no-c-format
+#. i18n: file: dialog_setup.ui:141
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: ui_dialog_setup.h:472 rc.cpp:57
 msgid "latest files"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 146
-#: rc.cpp:30
-#, no-c-format
+#. i18n: file: dialog_setup.ui:153
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_rememberHistoryInfo)
+#: ui_dialog_setup.h:474 rc.cpp:60
 msgid ""
 "Remembers the information about the files, which were opened. Remembers last "
 "opened page, search history, font size, bookmarks and so on."
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 149
-#: rc.cpp:33
-#, no-c-format
+#. i18n: file: dialog_setup.ui:156
+#. i18n: ectx: property (text), widget (QCheckBox, m_rememberHistoryInfo)
+#: ui_dialog_setup.h:476 rc.cpp:63
 msgid "R&emember extra information for history files"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 152
-#: rc.cpp:36
-#, no-c-format
+#. i18n: file: dialog_setup.ui:159
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_rememberHistoryInfo)
+#: ui_dialog_setup.h:477 rc.cpp:66
 msgid "Alt+E"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 164
-#: rc.cpp:39
-#, no-c-format
+#. i18n: file: dialog_setup.ui:171
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui_dialog_setup.h:478 rc.cpp:69
 msgid "CHM security settings"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 176
-#: rc.cpp:42
-#, no-c-format
+#. i18n: file: dialog_setup.ui:183
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: ui_dialog_setup.h:479 rc.cpp:72
 msgid "When external link clicked"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 188
-#: rc.cpp:45
-#, no-c-format
+#. i18n: file: dialog_setup.ui:195
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioExtLinkOpenAlways)
+#: ui_dialog_setup.h:480 rc.cpp:75
 msgid "Alwa&ys open it in external browser"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 191
-#: rc.cpp:48
-#, no-c-format
+#. i18n: file: dialog_setup.ui:198
+#. i18n: ectx: property (shortcut), widget (QRadioButton, m_radioExtLinkOpenAlways)
+#: ui_dialog_setup.h:481 rc.cpp:78
 msgid "Alt+Y"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 198
-#. i18n: file ./dialog_setup.ui line 237
-#: rc.cpp:51 rc.cpp:63
-#, no-c-format
+#. i18n: file: dialog_setup.ui:205
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioExtLinkAsk)
+#. i18n: file: dialog_setup.ui:244
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioNewChmAsk)
+#: ui_dialog_setup.h:482 ui_dialog_setup.h:487 rc.cpp:81 rc.cpp:93
 msgid "Ask for confirmation"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 205
-#: rc.cpp:54
-#, no-c-format
+#. i18n: file: dialog_setup.ui:212
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioExtLinkOpenNever)
+#: ui_dialog_setup.h:483 rc.cpp:84
 msgid "Do not open the link"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 218
-#: rc.cpp:57
-#, no-c-format
+#. i18n: file: dialog_setup.ui:225
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup5)
+#: ui_dialog_setup.h:485 rc.cpp:87
 msgid "When link pointed to a new CHM file clicked"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 230
-#: rc.cpp:60
-#, no-c-format
+#. i18n: file: dialog_setup.ui:237
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioNewChmOpenAlways)
+#: ui_dialog_setup.h:486 rc.cpp:90
 msgid "Always open a new CHM file"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 244
-#: rc.cpp:66
-#, no-c-format
+#. i18n: file: dialog_setup.ui:251
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioNewChmOpenNever)
+#: ui_dialog_setup.h:488 rc.cpp:96
 msgid "Do not open a new CHM file"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 271
-#: rc.cpp:69
-#, no-c-format
-msgid "Version-specific settings"
+#. i18n: file: dialog_setup.ui:42
+#. i18n: ectx: attribute (title), widget (QWidget, Widget8)
+#: ui_dialog_setup.h:489 rc.cpp:33
+msgid "General behavior"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 283
-#: rc.cpp:72
-#, no-c-format
-msgid "KDE version settings"
+#. i18n: file: dialog_setup.ui:290
+#. i18n: ectx: property (title), widget (QGroupBox, m_groupKDEsettings)
+#: ui_dialog_setup.h:490 rc.cpp:102
+msgid "HTML browser settings"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 295
-#: rc.cpp:75
-#, no-c-format
-msgid "To show HTML content, use"
+#. i18n: file: dialog_setup.ui:296
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableImages)
+#: ui_dialog_setup.h:491 rc.cpp:105
+msgid "Load the &images"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 307
-#: rc.cpp:78
-#, no-c-format
-msgid "&QTextBrowser-based widget"
+#. i18n: file: dialog_setup.ui:303
+#. i18n: ectx: property (text), widget (QCheckBox, m_enablePlugins)
+#: ui_dialog_setup.h:492 rc.cpp:108
+msgid "Enable browser &plugins (i.e. Flash)"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 310
-#: rc.cpp:81
-#, no-c-format
-msgid "Alt+Q"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 317
-#: rc.cpp:84
-#, no-c-format
-msgid "&KHTMLPart-based widget"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 320
-#: rc.cpp:87
-#, no-c-format
-msgid "Alt+K"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 327
-#: rc.cpp:90
-#, no-c-format
-msgid "Qt &Webkit (requires Qt 4.4 or higher)"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 337
-#: rc.cpp:93
-#, no-c-format
-msgid "KHTMLPart security"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 349
-#: rc.cpp:96
-#, no-c-format
-msgid "Enable &refresh"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 352
-#: rc.cpp:99
-#, no-c-format
-msgid "Alt+R"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 359
-#: rc.cpp:102
-#, no-c-format
-msgid "Enable &Java"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 362
-#: rc.cpp:105
-#, no-c-format
-msgid "Alt+J"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 369
-#: rc.cpp:108
-#, no-c-format
-msgid "Enable &plugins"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 372
-#: rc.cpp:111
-#, no-c-format
+#. i18n: file: dialog_setup.ui:306
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_enablePlugins)
+#: ui_dialog_setup.h:493 rc.cpp:111
 msgid "Alt+P"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 379
-#: rc.cpp:114
-#, no-c-format
+#. i18n: file: dialog_setup.ui:313
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableJava)
+#: ui_dialog_setup.h:494 rc.cpp:114
+msgid "Enable &Java"
+msgstr ""
+
+#. i18n: file: dialog_setup.ui:316
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_enableJava)
+#: ui_dialog_setup.h:495 rc.cpp:117
+msgid "Alt+J"
+msgstr ""
+
+#. i18n: file: dialog_setup.ui:323
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableJS)
+#: ui_dialog_setup.h:496 rc.cpp:120
 msgid "Enable Java&Script"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 382
-#: rc.cpp:117
-#, no-c-format
+#. i18n: file: dialog_setup.ui:326
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_enableJS)
+#: ui_dialog_setup.h:497 rc.cpp:123
 msgid "Alt+S"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 409
-#: rc.cpp:120
-#, no-c-format
-msgid "Advanced"
+#. i18n: file: dialog_setup.ui:333
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableOfflineStorage)
+#: ui_dialog_setup.h:498 rc.cpp:126
+msgid "Enable &offline storage (HTML5)"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 415
-#: rc.cpp:123
-#, no-c-format
+#. i18n: file: dialog_setup.ui:336
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_enableOfflineStorage)
+#: ui_dialog_setup.h:499 rc.cpp:129
+msgid "Alt+R"
+msgstr ""
+
+#. i18n: file: dialog_setup.ui:343
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableLocalStorage)
+#: ui_dialog_setup.h:500 rc.cpp:132
+msgid "Enable &local storage (HTML5)"
+msgstr ""
+
+#. i18n: file: dialog_setup.ui:278
+#. i18n: ectx: attribute (title), widget (QWidget, Widget9)
+#: ui_dialog_setup.h:501 rc.cpp:99
+msgid "Browser"
+msgstr ""
+
+#. i18n: file: dialog_setup.ui:373
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup7)
+#: ui_dialog_setup.h:502 rc.cpp:138
 msgid "View HTML source command uses"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 427
-#: rc.cpp:126
-#, no-c-format
+#. i18n: file: dialog_setup.ui:385
+#. i18n: ectx: property (text), widget (QRadioButton, m_advViewSourceInternal)
+#: ui_dialog_setup.h:503 rc.cpp:141
 msgid "Built-in HTML source viewer"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 437
-#: rc.cpp:129
-#, no-c-format
+#. i18n: file: dialog_setup.ui:395
+#. i18n: ectx: property (text), widget (QRadioButton, m_advViewSourceExternal)
+#: ui_dialog_setup.h:505 rc.cpp:144
 msgid "E&xternal program, specified below"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 440
-#: rc.cpp:132
-#, no-c-format
+#. i18n: file: dialog_setup.ui:398
+#. i18n: ectx: property (shortcut), widget (QRadioButton, m_advViewSourceExternal)
+#: ui_dialog_setup.h:506 rc.cpp:147
 msgid "Alt+X"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 455
-#: rc.cpp:135
-#, no-c-format
+#. i18n: file: dialog_setup.ui:413
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: ui_dialog_setup.h:507 rc.cpp:150
 msgid "External program:"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 468
-#: rc.cpp:138
-#, no-c-format
+#. i18n: file: dialog_setup.ui:426
+#. i18n: ectx: property (text), widget (QPushButton, btnBrowse)
+#: ui_dialog_setup.h:508 rc.cpp:153
 msgid "&Browse"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 480
-#: rc.cpp:141
-#, no-c-format
+#. i18n: file: dialog_setup.ui:438
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui_dialog_setup.h:509 rc.cpp:156
 msgid "Other"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 486
-#: rc.cpp:144
-#, no-c-format
-msgid "Use right-to-left layout direction (Arabic adn Hebrew layouts)"
+#. i18n: file: dialog_setup.ui:444
+#. i18n: ectx: property (text), widget (QCheckBox, boxLayoutDirectionRL)
+#: ui_dialog_setup.h:510 rc.cpp:159
+msgid "Use right-to-left layout direction (Arabic and Hebrew layouts)"
 msgstr ""
 
-#. i18n: file ./dialog_setup.ui line 493
-#: rc.cpp:147
-#, no-c-format
+#. i18n: file: dialog_setup.ui:451
+#. i18n: ectx: property (text), widget (QCheckBox, boxAutodetectEncoding)
+#: ui_dialog_setup.h:511 rc.cpp:162
 msgid ""
 "Automatically detect encoding for KHTMLPart and WebKit browsers (not "
 "recommended)"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 14
-#: rc.cpp:150
-#, no-c-format
-msgid "kchmviewer"
+#. i18n: file: dialog_setup.ui:458
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, cbCheckForUpdates)
+#: ui_dialog_setup.h:513 rc.cpp:165
+msgid ""
+"If this option is enabled, the application will check for updates (when new "
+"version of application is released). If a new version is available, the "
+"program will show a messagebox dialog informing you about new version. This "
+"check will only performed once in 24 hours. No user information is requested "
+"or transmitted from your computer during this check."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 28
-#: rc.cpp:153
-#, no-c-format
-msgid "&Settings"
+#. i18n: file: dialog_setup.ui:461
+#. i18n: ectx: property (text), widget (QCheckBox, cbCheckForUpdates)
+#: ui_dialog_setup.h:515 rc.cpp:168
+msgid "Perform a check whether a new version is available (once a week)"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 34
-#: rc.cpp:156
-#, no-c-format
-msgid "&Bookmarks"
+#. i18n: file: dialog_setup.ui:471
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui_dialog_setup.h:516 rc.cpp:171
+msgid "Toolbars"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 41
-#: rc.cpp:159
-#, no-c-format
-msgid "&File"
+#. i18n: file: dialog_setup.ui:477
+#. i18n: ectx: property (text), widget (QRadioButton, rbToolbarSmall)
+#: ui_dialog_setup.h:517 rc.cpp:174
+msgid "Small icons"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 50
-#: rc.cpp:162
-#, no-c-format
-msgid "&Edit"
+#. i18n: file: dialog_setup.ui:484
+#. i18n: ectx: property (text), widget (QRadioButton, rbToolbarLarge)
+#: ui_dialog_setup.h:518 rc.cpp:177
+msgid "Large icons"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 59
-#: rc.cpp:165
-#, no-c-format
-msgid "&View"
+#. i18n: file: dialog_setup.ui:491
+#. i18n: ectx: property (text), widget (QRadioButton, rbToolbarLargeText)
+#: ui_dialog_setup.h:519 rc.cpp:180
+msgid "Large icons and text"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 73
-#: rc.cpp:168
-#, no-c-format
-msgid "&Windows"
+#. i18n: file: dialog_setup.ui:498
+#. i18n: ectx: property (text), widget (QRadioButton, rbToolbarText)
+#: ui_dialog_setup.h:520 rc.cpp:183
+msgid "Just text"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 87
-#: rc.cpp:171
-#, no-c-format
-msgid "general toolbar"
+#. i18n: file: dialog_setup.ui:367
+#. i18n: ectx: attribute (title), widget (QWidget, TabPage)
+#: ui_dialog_setup.h:521 rc.cpp:135
+msgid "Advanced"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 103
-#: rc.cpp:174
-#, no-c-format
-msgid "navigation toolbar"
+#. i18n: file: dialog_topicselector.ui:13
+#. i18n: ectx: property (windowTitle), widget (QDialog, DialogTopicSelector)
+#: ui_dialog_topicselector.h:74 rc.cpp:186
+msgid "Multiple topics"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 120
-#: rc.cpp:177
-#, no-c-format
-msgid "action toolbar"
+#. i18n: file: dialog_topicselector.ui:25
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui_dialog_topicselector.h:75 rc.cpp:189
+msgid "Please select the topic to open:"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 146
-#: rc.cpp:180
-#, no-c-format
+#. i18n: file: mainwindow.ui:186
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:303 rc.cpp:225
 msgid "&Print..."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 149
-#: rc.cpp:183
-#, no-c-format
+#. i18n: file: mainwindow.ui:189
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:304 rc.cpp:228
 msgid "Print"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 152
-#: rc.cpp:186
-#, no-c-format
+#. i18n: file: mainwindow.ui:192
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:306 rc.cpp:231
 msgid "Print current page"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 155
-#: rc.cpp:189
-#, no-c-format
+#. i18n: file: mainwindow.ui:195
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:309 rc.cpp:234
 msgid "Prints currently opened page."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 158
-#: rc.cpp:192
-#, no-c-format
+#. i18n: file: mainwindow.ui:198
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:311 rc.cpp:237
 msgid "Ctrl+P"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 163
-#: rc.cpp:195
-#, no-c-format
+#. i18n: file: mainwindow.ui:207
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:312 rc.cpp:240
 msgid "&Quit"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 166
-#: rc.cpp:198
-#, no-c-format
+#. i18n: file: mainwindow.ui:210
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:313 rc.cpp:243
 msgid "Exit"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 169
-#: rc.cpp:201
-#, no-c-format
+#. i18n: file: mainwindow.ui:213
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:315 rc.cpp:246
 msgid "Exits the application"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 172
-#: rc.cpp:204
-#, no-c-format
+#. i18n: file: mainwindow.ui:216
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:317 rc.cpp:249
 msgid "Ctrl+Q"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 181
-#: rc.cpp:207
-#, no-c-format
+#. i18n: file: mainwindow.ui:225
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:318 rc.cpp:252
 msgid "C&opy"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 184
-#: rc.cpp:210
-#, no-c-format
+#. i18n: file: mainwindow.ui:228
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:319 rc.cpp:255
 msgid "Copy"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 187
-#: rc.cpp:213
-#, no-c-format
+#. i18n: file: mainwindow.ui:231
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:321 rc.cpp:258
 msgid "Copies selected content to clipboard"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 190
-#: rc.cpp:216
-#, no-c-format
+#. i18n: file: mainwindow.ui:234
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:323 rc.cpp:261
 msgid "Ctrl+C"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 199
-#: rc.cpp:219
-#, no-c-format
+#. i18n: file: mainwindow.ui:243
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:324 rc.cpp:264
 msgid "&Select All"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 202
-#: rc.cpp:222
-#, no-c-format
+#. i18n: file: mainwindow.ui:246
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:325 rc.cpp:267
 msgid "Paste"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 205
-#: rc.cpp:225
-#, no-c-format
+#. i18n: file: mainwindow.ui:249
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:327 rc.cpp:270
 msgid "Selects everything in the document"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 208
-#: rc.cpp:228
-#, no-c-format
+#. i18n: file: mainwindow.ui:252
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:329 rc.cpp:273
 msgid "Ctrl+V"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 217
-#: rc.cpp:231
-#, no-c-format
+#. i18n: file: mainwindow.ui:261
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:330 rc.cpp:276
 msgid "&Find..."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 220
-#: rc.cpp:234
-#, no-c-format
-msgid "Find"
-msgstr ""
-
-#. i18n: file ./window_main.ui line 223
-#: rc.cpp:237
-#, no-c-format
+#. i18n: file: mainwindow.ui:264
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:332 rc.cpp:279
 msgid "Find text in currently opened page"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 226
-#: rc.cpp:240
-#, no-c-format
+#. i18n: file: mainwindow.ui:267
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:335 rc.cpp:282
 msgid "Enters the Find in page mode"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 229
-#: rc.cpp:243
-#, no-c-format
+#. i18n: file: mainwindow.ui:270
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:337 rc.cpp:285
 msgid "Ctrl+F"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 234
-#: rc.cpp:246
-#, no-c-format
+#. i18n: file: mainwindow.ui:279
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:338 rc.cpp:288
 msgid "E&xtract CHM content..."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 237
-#: rc.cpp:249
-#, no-c-format
+#. i18n: file: mainwindow.ui:282
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:340 rc.cpp:291
 msgid "Extract the CHM content to the directory"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 240
-#: rc.cpp:252
-#, no-c-format
+#. i18n: file: mainwindow.ui:285
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:343 rc.cpp:294
 msgid ""
 "Exctracts the CHM archive content to the specified directory. All the files "
 "are extracted."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 245
-#: rc.cpp:255
-#, no-c-format
+#. i18n: file: mainwindow.ui:294
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:345 rc.cpp:297
 msgid "&Application settings..."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 248
-#. i18n: file ./window_main.ui line 251
-#: rc.cpp:258 rc.cpp:261
-#, no-c-format
+#. i18n: file: mainwindow.ui:297
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#. i18n: file: mainwindow.ui:300
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:347 ui_mainwindow.h:350 rc.cpp:300 rc.cpp:303
 msgid "Change the application settings"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 260
-#: rc.cpp:264
-#, no-c-format
+#. i18n: file: mainwindow.ui:309
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:352 rc.cpp:306
 msgid "&Add bookmark"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 263
-#: rc.cpp:267
-#, no-c-format
+#. i18n: file: mainwindow.ui:312
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:353 rc.cpp:309
+msgid "Bookmark"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:315
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:355 rc.cpp:312
 msgid "Adds a bookmark for currently opened page"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 266
-#: rc.cpp:270
-#, no-c-format
+#. i18n: file: mainwindow.ui:318
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:358 rc.cpp:315
 msgid ""
 "Adds a bookmark for currently opened page. Remembers the opened page, and "
 "scroll position. Bookmarks are accessible through Bookmarks menu or tab."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 269
-#: rc.cpp:273
-#, no-c-format
+#. i18n: file: mainwindow.ui:321
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:360 rc.cpp:318
 msgid "Ctrl+B"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 278
-#: rc.cpp:276
-#, no-c-format
+#. i18n: file: mainwindow.ui:330
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:361 rc.cpp:321
 msgid "&Increase font size"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 281
-#: rc.cpp:279
-#, no-c-format
+#. i18n: file: mainwindow.ui:333
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:362 rc.cpp:324
+msgid "Larger"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:336
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:364 rc.cpp:327
 msgid "Increase the font size"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 284
-#: rc.cpp:282
-#, no-c-format
+#. i18n: file: mainwindow.ui:339
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:367 rc.cpp:330
 msgid "Increases the document font size. The new font size will be stored."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 287
-#: rc.cpp:285
-#, no-c-format
-msgid "Ctrl++"
+#. i18n: file: mainwindow.ui:342
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:369 rc.cpp:333
+msgid "Ctrl+="
 msgstr ""
 
-#. i18n: file ./window_main.ui line 296
-#: rc.cpp:288
-#, no-c-format
+#. i18n: file: mainwindow.ui:351
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:370 rc.cpp:336
 msgid "&Decrease font size"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 299
-#: rc.cpp:291
-#, no-c-format
+#. i18n: file: mainwindow.ui:354
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:371 rc.cpp:339
+msgid "Smaller"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:357
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:373 rc.cpp:342
 msgid "Decrease the font size"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 302
-#: rc.cpp:294
-#, no-c-format
+#. i18n: file: mainwindow.ui:360
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:376 rc.cpp:345
 msgid "Decreases the document font size. The new font size will be stored."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 305
-#: rc.cpp:297
-#, no-c-format
+#. i18n: file: mainwindow.ui:363
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:378 rc.cpp:348
 msgid "Ctrl+-"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 314
-#: rc.cpp:300
-#, no-c-format
-msgid "&View HTML source"
+#. i18n: file: mainwindow.ui:372
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:379 rc.cpp:351
+msgid "See &HTML"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 317
-#: rc.cpp:303
-#, no-c-format
+#. i18n: file: mainwindow.ui:375
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:381 rc.cpp:354
 msgid "View HTML source of current page"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 320
-#: rc.cpp:306
-#, no-c-format
+#. i18n: file: mainwindow.ui:378
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:384 rc.cpp:357
 msgid "Shows the HTML source of currently opened page"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 323
-#: rc.cpp:309
-#, no-c-format
+#. i18n: file: mainwindow.ui:381
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:386 rc.cpp:360
 msgid "Ctrl+U"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 331
-#: rc.cpp:312
-#, no-c-format
+#. i18n: file: mainwindow.ui:393
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:387 rc.cpp:363
 msgid "Enable &full screen mode"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 334
-#: rc.cpp:315
-#, no-c-format
+#. i18n: file: mainwindow.ui:396
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:389 rc.cpp:366
 msgid "Enters or leaves the fullscreen mode"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 337
-#: rc.cpp:318
-#, no-c-format
+#. i18n: file: mainwindow.ui:399
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:391 rc.cpp:369
 msgid "F11"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 351
-#: rc.cpp:321
-#, no-c-format
-msgid "Enable &side window"
+#. i18n: file: mainwindow.ui:417
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:392 rc.cpp:372
+msgid "Show &navigator window"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 354
-#: rc.cpp:324
-#, no-c-format
+#. i18n: file: mainwindow.ui:420
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:394 rc.cpp:375
+msgid "Show navigator dock window"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:423
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:397 rc.cpp:378
 msgid ""
 "Shows or hides the size window (with Content, Index, Search and Bookmark "
 "tabs)"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 357
-#: rc.cpp:327
-#, no-c-format
+#. i18n: file: mainwindow.ui:426
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:399 rc.cpp:381
 msgid "F9"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 369
-#: rc.cpp:330
-#, no-c-format
-msgid "&Locate in contents window"
+#. i18n: file: mainwindow.ui:438
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:400 rc.cpp:384
+msgid "&Locate"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 372
-#: rc.cpp:333
-#, no-c-format
+#. i18n: file: mainwindow.ui:441
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:402 rc.cpp:387
 msgid "Locate the current page in contents window"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 375
-#: rc.cpp:336
-#, no-c-format
+#. i18n: file: mainwindow.ui:444
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:405 rc.cpp:390
 msgid ""
 "If the current page is present in the Table of Contents, locate it there. "
 msgstr ""
 
-#. i18n: file ./window_main.ui line 378
-#: rc.cpp:339
-#, no-c-format
-msgid "Ctrl+"
+#. i18n: file: mainwindow.ui:447
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:407 rc.cpp:393
+msgid "Ctrl+L"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 383
-#: rc.cpp:342
-#, no-c-format
+#. i18n: file: mainwindow.ui:456
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:408 rc.cpp:396
 msgid "Set &encoding"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 386
-#: rc.cpp:345
-#, no-c-format
+#. i18n: file: mainwindow.ui:459
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:410 rc.cpp:399
 msgid "Changes the current document encoding. "
 msgstr ""
 
-#. i18n: file ./window_main.ui line 395
-#: rc.cpp:348
-#, no-c-format
+#. i18n: file: mainwindow.ui:468
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:412 rc.cpp:402
 msgid "&Open..."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 398
-#: rc.cpp:351
-#, no-c-format
+#. i18n: file: mainwindow.ui:471
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:414 rc.cpp:405
 msgid "Open a CHM file"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 401
-#: rc.cpp:354
-#, no-c-format
+#. i18n: file: mainwindow.ui:474
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:417 rc.cpp:408
 msgid "Opens a new CHM file"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 410
-#: rc.cpp:357
-#, no-c-format
+#. i18n: file: mainwindow.ui:483
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:419 rc.cpp:411
 msgid "Back"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 413
-#: rc.cpp:360
-#, no-c-format
+#. i18n: file: mainwindow.ui:486
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:421 rc.cpp:414
 msgid "Navigate back"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 416
-#: rc.cpp:363
-#, no-c-format
+#. i18n: file: mainwindow.ui:489
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:424 rc.cpp:417
 msgid "Navigate back in navigation history"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 425
-#: rc.cpp:366
-#, no-c-format
+#. i18n: file: mainwindow.ui:498
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:426 rc.cpp:420
 msgid "Forward"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 428
-#: rc.cpp:369
-#, no-c-format
+#. i18n: file: mainwindow.ui:501
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:428 rc.cpp:423
 msgid "Navigate forward"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 431
-#: rc.cpp:372
-#, no-c-format
+#. i18n: file: mainwindow.ui:504
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:431 rc.cpp:426
 msgid "Navigate forward in navigation history"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 440
-#: rc.cpp:375
-#, no-c-format
+#. i18n: file: mainwindow.ui:513
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:433 rc.cpp:429
 msgid "Home"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 443
-#: rc.cpp:378
-#, no-c-format
+#. i18n: file: mainwindow.ui:516
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:435 rc.cpp:432
 msgid "Navigate home"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 446
-#: rc.cpp:381
-#, no-c-format
+#. i18n: file: mainwindow.ui:519
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:438 rc.cpp:435
 msgid "Navigate to the document Home page, as specified in the document."
 msgstr ""
 
-#. i18n: file ./window_main.ui line 455
-#: rc.cpp:384
-#, no-c-format
-msgid "Previous page in Table of Context"
+#. i18n: file: mainwindow.ui:528
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#. i18n: file: window_browser.ui:90
+#. i18n: ectx: property (text), widget (QToolButton, toolPrevious)
+#: ui_mainwindow.h:440 ui_window_browser.h:169 rc.cpp:438 rc.cpp:544
+msgid "Previous"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 458
-#: rc.cpp:387
-#, no-c-format
-msgid "Previous page in TOC"
-msgstr ""
-
-#. i18n: file ./window_main.ui line 461
-#: rc.cpp:390
-#, no-c-format
+#. i18n: file: mainwindow.ui:531
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:442 rc.cpp:441
 msgid "Go to the previous page in the Table of Contents"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 464
-#: rc.cpp:393
-#, no-c-format
+#. i18n: file: mainwindow.ui:534
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:445 rc.cpp:444
 msgid ""
 "Go to the previous page in the <b>Table of Contents</b><br><br><i>Shortcut: "
 "Ctrl+Left Arrow</i>"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 473
-#: rc.cpp:396
-#, no-c-format
-msgid "Next page in Table of Context"
+#. i18n: file: mainwindow.ui:543
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#. i18n: file: window_browser.ui:113
+#. i18n: ectx: property (text), widget (QToolButton, toolNext)
+#: ui_mainwindow.h:447 ui_window_browser.h:170 rc.cpp:447 rc.cpp:547
+msgid "Next"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 476
-#: rc.cpp:399
-#, no-c-format
-msgid "Next page in TOC"
-msgstr ""
-
-#. i18n: file ./window_main.ui line 479
-#: rc.cpp:402
-#, no-c-format
+#. i18n: file: mainwindow.ui:546
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:449 rc.cpp:450
 msgid "Go to the next page in the Table of Contents"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 482
-#: rc.cpp:405
-#, no-c-format
+#. i18n: file: mainwindow.ui:549
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:452 rc.cpp:453
 msgid ""
 "Go to the next page in the <b>Table of Contents</b><br><br><i>Shortcut: Ctrl"
 "+Right Arrow</i>"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 487
-#: rc.cpp:408
-#, no-c-format
+#. i18n: file: mainwindow.ui:558
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:454 rc.cpp:456
 msgid "&Close window"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 490
-#: rc.cpp:411
-#, no-c-format
+#. i18n: file: mainwindow.ui:561
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:456 rc.cpp:459
 msgid "Close current window"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 493
-#: rc.cpp:414
-#, no-c-format
+#. i18n: file: mainwindow.ui:564
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:459 rc.cpp:462
 msgid "Closes currently opened window"
 msgstr ""
 
-#. i18n: file ./window_main.ui line 496
-#: rc.cpp:417
-#, no-c-format
+#. i18n: file: mainwindow.ui:567
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:461 rc.cpp:465
 msgid "Ctrl+W"
 msgstr ""
 
-#: rc.cpp:418
+#. i18n: file: mainwindow.ui:572
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:462 rc.cpp:468
+msgid "About kchmviewer..."
+msgstr ""
+
+#. i18n: file: mainwindow.ui:577
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:463 rc.cpp:471
+msgid "About Qt"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:586
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:464 rc.cpp:474
+msgid "Check for updates"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:595
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:465 rc.cpp:477
+msgid "Edit toolbars..."
+msgstr ""
+
+#. i18n: file: mainwindow.ui:28
+#. i18n: ectx: property (title), widget (QMenu, menu_Settings)
+#: ui_mainwindow.h:466 rc.cpp:195
+msgid "&Settings"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:37
+#. i18n: ectx: property (title), widget (QMenu, menu_Bookmarks)
+#: ui_mainwindow.h:467 rc.cpp:198
+msgid "&Bookmarks"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:44
+#. i18n: ectx: property (title), widget (QMenu, menu_File)
+#: ui_mainwindow.h:468 rc.cpp:201
+msgid "&File"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:55
+#. i18n: ectx: property (title), widget (QMenu, menu_Edit)
+#: ui_mainwindow.h:469 rc.cpp:204
+msgid "&Edit"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:64
+#. i18n: ectx: property (title), widget (QMenu, menu_View)
+#: ui_mainwindow.h:470 rc.cpp:207
+msgid "&View"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:78
+#. i18n: ectx: property (title), widget (QMenu, menu_Windows)
+#: ui_mainwindow.h:471 rc.cpp:210
+msgid "&Windows"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:85
+#. i18n: ectx: property (title), widget (QMenu, menuHelp)
+#: ui_mainwindow.h:472 rc.cpp:213
+msgid "Help"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:100
+#. i18n: ectx: property (windowTitle), widget (QToolBar, mainToolbar)
+#: ui_mainwindow.h:473 rc.cpp:216
+msgid "General toolbar"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:125
+#. i18n: ectx: property (windowTitle), widget (QToolBar, navToolbar)
+#: ui_mainwindow.h:474 rc.cpp:219
+msgid "Navigation toolbar"
+msgstr ""
+
+#. i18n: file: mainwindow.ui:151
+#. i18n: ectx: property (windowTitle), widget (QToolBar, viewToolbar)
+#: ui_mainwindow.h:475 rc.cpp:222
+msgid "View toolbar"
+msgstr ""
+
+#. i18n: file: navigatorpanel.ui:17
+#. i18n: ectx: property (windowTitle), widget (QDockWidget, NavigatorPanel)
+#: ui_navigatorpanel.h:66 rc.cpp:480
+msgid "Navigator panel"
+msgstr ""
+
+#. i18n: file: navigatorpanel.ui:28
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: ui_navigatorpanel.h:67 rc.cpp:483
+msgid "Tab 1"
+msgstr ""
+
+#. i18n: file: tab_bookmarks.ui:36
+#. i18n: ectx: property (text), widget (QPushButton, btnAdd)
+#: ui_tab_bookmarks.h:84 rc.cpp:486
+msgid "&Add"
+msgstr ""
+
+#. i18n: file: tab_bookmarks.ui:43
+#. i18n: ectx: property (text), widget (QPushButton, btnEdit)
+#: ui_tab_bookmarks.h:85 rc.cpp:489
+msgid "Edi&t"
+msgstr ""
+
+#. i18n: file: tab_bookmarks.ui:50
+#. i18n: ectx: property (text), widget (QPushButton, btnDel)
+#: ui_tab_bookmarks.h:86 rc.cpp:492
+msgid "&Del"
+msgstr ""
+
+#. i18n: file: tab_contents.ui:13
+#. i18n: ectx: property (windowTitle), widget (QWidget, TabContents)
+#. i18n: file: tab_index.ui:13
+#. i18n: ectx: property (windowTitle), widget (QWidget, TabIndex)
+#. i18n: file: tab_search.ui:13
+#. i18n: ectx: property (windowTitle), widget (QWidget, TabSearch)
+#: ui_tab_contents.h:55 ui_tab_index.h:66 ui_tab_search.h:117 rc.cpp:495
+#: rc.cpp:498 rc.cpp:504
+msgid "Form1"
+msgstr ""
+
+#. i18n: file: tab_index.ui:41
+#. i18n: ectx: property (text), widget (QTreeWidget, tree)
+#: ui_tab_index.h:68 rc.cpp:501
+msgid "1"
+msgstr ""
+
+#. i18n: file: tab_search.ui:33
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui_tab_search.h:118 rc.cpp:507
+msgid "Type in word(s) to search for:"
+msgstr ""
+
+#. i18n: file: tab_search.ui:48
+#. i18n: ectx: property (text), widget (QLabel, lblHelp)
+#: ui_tab_search.h:119 rc.cpp:510
+msgid "<a href=\"help\">Help</a>"
+msgstr ""
+
+#. i18n: file: tab_search.ui:86
+#. i18n: ectx: property (text), widget (QPushButton, btnGo)
+#: ui_tab_search.h:120 rc.cpp:513
+msgid "&Go"
+msgstr ""
+
+#. i18n: file: tab_search.ui:116
+#. i18n: ectx: property (text), widget (QTreeWidget, tree)
+#: ui_tab_search.h:122 rc.cpp:519
+msgid "Location"
+msgstr ""
+
+#. i18n: file: tab_search.ui:111
+#. i18n: ectx: property (text), widget (QTreeWidget, tree)
+#: ui_tab_search.h:123 rc.cpp:516
+msgid "Title"
+msgstr ""
+
+#. i18n: file: toolbareditor.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, ToolbarEditor)
+#: ui_toolbareditor.h:142 rc.cpp:522
+msgid "Dialog"
+msgstr ""
+
+#. i18n: file: toolbareditor.ui:20
+#. i18n: ectx: property (title), widget (QGroupBox, groupEditToolbars)
+#: ui_toolbareditor.h:143 rc.cpp:525
+msgid "Select a toolbar"
+msgstr ""
+
+#. i18n: file: toolbareditor.ui:26
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui_toolbareditor.h:144 rc.cpp:528
+msgid "Editing the toolbar "
+msgstr ""
+
+#. i18n: file: toolbareditor.ui:47
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui_toolbareditor.h:145 rc.cpp:531
+msgid ""
+"Drag the actions to the toolbar list to add them to the toolbar. \n"
+"Drag them from toolbar list to remove them from the toolbar."
+msgstr ""
+
+#. i18n: file: toolbareditor.ui:65
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui_toolbareditor.h:147 rc.cpp:535
+msgid "Available actions"
+msgstr ""
+
+#. i18n: file: toolbareditor.ui:90
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui_toolbareditor.h:148 rc.cpp:538
+msgid "Toolbar actions"
+msgstr ""
+
+#. i18n: file: window_browser.ui:36
+#. i18n: ectx: property (windowTitle), widget (QWidget, TabbedBrowser)
+#: ui_window_browser.h:167 rc.cpp:541
+msgid "TabbedBrowser"
+msgstr ""
+
+#. i18n: file: window_browser.ui:133
+#. i18n: ectx: property (text), widget (QCheckBox, checkCase)
+#: ui_window_browser.h:171 rc.cpp:550
+msgid "Case Sensitive"
+msgstr ""
+
+#. i18n: file: window_browser.ui:152
+#. i18n: ectx: property (text), widget (QLabel, labelWrapped)
+#: ui_window_browser.h:172 rc.cpp:553
+msgid "<img src=\":/images/find_wrap.png\">&nbsp;Search wrapped"
+msgstr ""
+
+#: viewwindow.cpp:342
+msgid "Printing aborted"
+msgstr ""
+
+#: viewwindow.cpp:347
+msgid "Printing finished"
+msgstr ""
+
+#: viewwindow.cpp:486
+msgid "Open Link in a new tab\tShift+LMB"
+msgstr ""
+
+#: viewwindow.cpp:487
+msgid "Open Link in a new background tab\tCtrl+LMB"
+msgstr ""
+
+#: viewwindowmgr.cpp:74
+msgid "Add page"
+msgstr ""
+
+#: viewwindowmgr.cpp:155 viewwindowmgr.cpp:234
+msgid "Alt+%1"
+msgstr ""
+
+#: rc.cpp:554
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 
-#: rc.cpp:419
+#: rc.cpp:555
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""

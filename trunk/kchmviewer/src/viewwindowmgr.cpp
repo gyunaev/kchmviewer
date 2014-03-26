@@ -86,6 +86,8 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 	         this, 
 	         SLOT( editTextEdited( const QString & ) ) );
 	
+	connect( editFind, SIGNAL(returnPressed()), this, SLOT(onFindNext()) );
+
 	// Search toolbar buttons
 	connect( toolClose, SIGNAL(clicked()), frameFind, SLOT( hide()) );
 	connect( toolPrevious, SIGNAL(clicked()), this, SLOT( onFindPrevious()) );
@@ -172,7 +174,7 @@ void ViewWindowMgr::setTabName( ViewWindow * window )
 	
 	if ( tab )
 	{
-		QString title = window->getTitle();
+		QString title = window->getTitle().trimmed();
 		
 		// Trim too long string
 		if ( title.length() > 25 )

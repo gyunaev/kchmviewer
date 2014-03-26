@@ -201,20 +201,29 @@ void NavigationPanel::setActive( int index )
 	{
 		case TAB_CONTENTS:
 			if ( m_contentsTab )
+			{
 				m_tabWidget->setCurrentWidget( m_contentsTab );
+				m_contentsTab->focus();
+			}
 			break;
 
 		case TAB_INDEX:
 			if ( m_indexTab )
+			{
 				m_tabWidget->setCurrentWidget( m_indexTab );
+				m_indexTab->focus();
+			}
+
 			break;
 
 		case TAB_SEARCH:
 			m_tabWidget->setCurrentWidget( m_searchTab );
+			m_searchTab->focus();
 			break;
 
 		case TAB_BOOKMARK:
 			m_tabWidget->setCurrentWidget( m_bookmarksTab );
+			m_bookmarksTab->focus();
 			break;
 	}
 }

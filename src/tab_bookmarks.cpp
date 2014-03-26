@@ -79,9 +79,9 @@ TabBookmarks::TabBookmarks( QWidget *parent )
 	setupUi( this );
 	
 	connect( list,
-			 SIGNAL( itemDoubleClicked ( QListWidgetItem* ) ),
+			 SIGNAL( itemActivated(QListWidgetItem*)),
 			 this, 
-	         SLOT( onItemDoubleClicked ( QListWidgetItem* ) ) );
+			 SLOT( onItemActivated( QListWidgetItem*)) );
 	
 	connect( btnAdd, 
 			 SIGNAL( clicked () ), 
@@ -104,10 +104,13 @@ TabBookmarks::TabBookmarks( QWidget *parent )
 
 	// Activate custom context menu, and connect it
 	list->setContextMenuPolicy( Qt::CustomContextMenu );
+
 	connect( list, 
 	         SIGNAL( customContextMenuRequested ( const QPoint & ) ),
 	         this, 
 	         SLOT( onContextMenuRequested( const QPoint & ) ) );
+
+	focus();
 }
 
 void TabBookmarks::onAddBookmarkPressed( )
@@ -205,12 +208,18 @@ void TabBookmarks::invalidate( )
 	list->clear();
 }
 
+void TabBookmarks::focus()
+{
+	if ( list->hasFocus() )
+		list->setFocus();
+}
+
 void TabBookmarks::createMenu( QMenu * menuBookmarks )
 {
 	m_menuBookmarks = menuBookmarks;
 }
 
-void TabBookmarks::onItemDoubleClicked(QListWidgetItem * item)
+void TabBookmarks::onItemActivated(QListWidgetItem * item)
 {
 	if ( !item )
 		return;

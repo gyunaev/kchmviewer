@@ -37,15 +37,16 @@ class TabIndex : public QWidget, public Ui::TabIndex
 	
 		void	invalidate();
 		void	search( const QString& index );
+		void	focus();
 		
 	private slots:
 		void 	onTextChanged ( const QString & newvalue);
 		void 	onReturnPressed ();
-		void	onDoubleClicked ( QTreeWidgetItem * item, int column );
+		void	onItemActivated ( QTreeWidgetItem * item, int column );
 		void	onContextMenuRequested ( const QPoint &point );
 		
 	private:
-		virtual void showEvent ( QShowEvent * );
+		void	showEvent ( QShowEvent * );
 		
 		void	refillIndex();
 		

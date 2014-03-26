@@ -42,12 +42,13 @@ class TabSearch : public QWidget, public Ui::TabSearch
 		void	saveSettings( Settings::search_saved_settings_t& settings );
 		void	execSearchQueryInGui( const QString& query );
 		bool	searchQuery( const QString& query, QStringList * results );
+		void	focus();
 		
 	private slots:
 		void	onContextMenuRequested ( const QPoint &point );
 		void	onHelpClicked( const QString & );
 		void 	onReturnPressed ();
-		void	onDoubleClicked( QTreeWidgetItem * item, int );
+		void	onItemActivated( QTreeWidgetItem * item, int );
 		
 		// For index generation
 		void	onProgressStep( int value, const QString& stepName );

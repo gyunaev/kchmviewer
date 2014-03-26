@@ -46,11 +46,12 @@ TabIndex::TabIndex ( QWidget * parent )
 			 this, 
 			 SLOT( onReturnPressed() ) );
 	
-	connect( tree, 
-			 SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ), 
-			 this, 
-			 SLOT( onDoubleClicked ( QTreeWidgetItem *, int) ) );
-	
+	connect( tree,
+			 SIGNAL( itemActivated(QTreeWidgetItem*, int)),
+			 this,
+			 SLOT( onItemActivated( QTreeWidgetItem*, int)) );
+
+
 	// Activate custom context menu, and connect it
 	tree->setContextMenuPolicy( Qt::CustomContextMenu );
 	connect( tree, 
@@ -61,8 +62,8 @@ TabIndex::TabIndex ( QWidget * parent )
 	m_indexListFilled = false;
 	m_lastSelectedItem = 0;
 	m_contextMenu = 0;
-	
-	text->setFocus();
+
+	focus();
 }
 
 void TabIndex::onTextChanged ( const QString & newvalue)
@@ -106,7 +107,7 @@ void TabIndex::invalidate( )
 	m_lastSelectedItem = 0;
 }
 
-void TabIndex::onDoubleClicked ( QTreeWidgetItem * item, int )
+void TabIndex::onItemActivated ( QTreeWidgetItem * item, int )
 {
 	if ( !item )
 		return;
@@ -170,6 +171,12 @@ void TabIndex::search( const QString & index )
 
 	text->setText( index );
 	onTextChanged( index );
+}
+
+void TabIndex::focus()
+{
+	if ( !tree->hasFocus() )
+		tree->setFocus();
 }
 
 void TabIndex::onContextMenuRequested(const QPoint & point)

@@ -3,65 +3,115 @@
 # This file is put in the public domain.
 #
 # 林俊 <demonlinjun@163.com>, 2006.
+# Henry Hu <henry.hu.sh@gmail.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: kchmviewer@ulduzsoft.com\n"
-"POT-Creation-Date: 2009-07-19 20:41-0700\n"
-"PO-Revision-Date: 2006-05-07 20:30-0400\n"
-"Last-Translator: 林俊 <demonlinjun@163.com>\n"
-"Language-Team:  <zh@li.org>\n"
+"POT-Creation-Date: 2013-01-12 03:51-0500\n"
+"PO-Revision-Date: 2013-01-12 04:27-0500\n"
+"Last-Translator: Henry Hu <henry.hu.sh@gmail.com>\n"
+"Language-Team: Chinese Simplified <kde-china@kde.org>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: kchmbookmarkwindow.cpp:113
-msgid "%1 - add a bookmark"
-msgstr "%1 - 添加书签"
-
-#: kchmbookmarkwindow.cpp:114 kchmbookmarkwindow.cpp:156
-msgid "Enter the name for this bookmark:"
-msgstr "输入书签的名称"
-
-#: kchmbookmarkwindow.cpp:155
-msgid "%1 - edit the bookmark name"
-msgstr "%1 - 编辑书签名称"
-
-#: kchmmainwindow.cpp:96
-#, fuzzy
-msgid "Bookmarks"
-msgstr "添加当前页面为书签(&B)"
-
-#: kchmmainwindow.cpp:121
+#: dialog_setup.cpp:196
 msgid ""
-"<html><b>%1 version %2</b><br><br>Copyright (C) George Yunaev, 2004-"
-"2008<br><a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</"
-"a><br><a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</"
-"a><br><br>Licensed under GNU GPL license.</html>"
-msgstr ""
+"Changing those options requires restarting the application to take effect."
+msgstr "对这些选项的修改需要重新启动应用程序才能生效。"
 
-#: kchmmainwindow.cpp:163
+#: dialog_setup.cpp:205
+msgid "*|Executables"
+msgstr "*|可执行文件"
+
+#: dialog_setup.cpp:205 dialog_setup.cpp:208
+msgid "Choose an editor executable"
+msgstr "选择编辑器的可执行文件"
+
+#: dialog_setup.cpp:210
+msgid "Executables (*)"
+msgstr "可执行文件 (*)"
+
+#: main.cpp:55
+msgid "Perform auto testing"
+msgstr "运行自动测试"
+
+#: main.cpp:56
+msgid "Perform short auto testing"
+msgstr "运行较短的自动测试"
+
+#: main.cpp:57
+msgid "A CHM file to show"
+msgstr "要显示的 CHM 文件"
+
+#: main.cpp:58
+msgid ""
+"'--search <query>' specifies the search query to search, and activate the "
+"first entry if found"
+msgstr ""
+"'--search <query>' 用于指定要进行的搜索操作，并且搜索完成后会自动显示找到的一"
+"个项目"
+
+#: main.cpp:59
+msgid ""
+"'--sindex <word>' specifies the word to find in index, and activate if found"
+msgstr "'--sindex <word>' 指定了要在索引中查找的词语，找到的话会自动显示"
+
+#: main.cpp:60
+msgid ""
+"'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if "
+"found. Wildcards allowed."
+msgstr ""
+"'--stoc <word(s)>' 指定了要在目录中查找的词语，找到的话会自动显示。可以使用通"
+"配符。"
+
+#: main.cpp:61
+msgid "'--url <relative url>' specifies the URL to activate if found."
+msgstr "'--url <relative url>' 指定找到后需要激活的 URL"
+
+#. i18n: file: mainwindow.ui:14
+#. i18n: ectx: property (windowTitle), widget (QMainWindow, MainWindow)
+#: main.cpp:65 ui_mainwindow.h:302 rc.cpp:192
+msgid "kchmviewer"
+msgstr "kchmviewer"
+
+#: main.cpp:67
+msgid "CHM file viewer"
+msgstr "CHM文件查看器"
+
+#: main.cpp:69
+msgid "(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"
+msgstr "(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"
+
+#: main.cpp:70
+msgid "Please report bugs to kchmviewer@ulduzsoft.com"
+msgstr "请将问题汇报到 kchmviewer@ulduzsoft.com"
+
+#: mainwindow.cpp:178
 msgid "Detected file encoding: %1 ( %2 )"
-msgstr ""
+msgstr "检测到的文件编码：%1 ( %2 )"
 
-#: kchmmainwindow.cpp:254
+#: mainwindow.cpp:246
 msgid "%1 - failed to load the chm file"
 msgstr "%1 - 载入CHM文件失败"
 
-#: kchmmainwindow.cpp:255
+#: mainwindow.cpp:247
 msgid "Unable to load the chm file %1"
 msgstr "无法载入CHM文件%1"
 
-#: kchmmainwindow.cpp:263
+#: mainwindow.cpp:255
 msgid "Could not load file %1"
 msgstr "无法载入文件%1"
 
-#: kchmmainwindow.cpp:331
+#: mainwindow.cpp:320
 msgid "%1 - remote link clicked - %2"
 msgstr "%1 - 点击远程链接 - %2"
 
-#: kchmmainwindow.cpp:332
+#: mainwindow.cpp:321
 msgid ""
 "A remote link %1 will start the external program to open it.\n"
 "\n"
@@ -71,19 +121,19 @@ msgstr ""
 "\n"
 "你要继续吗？"
 
-#: kchmmainwindow.cpp:333 kchmmainwindow.cpp:377
+#: mainwindow.cpp:322 mainwindow.cpp:357
 msgid "&Yes"
 msgstr "是(&Y)"
 
-#: kchmmainwindow.cpp:333 kchmmainwindow.cpp:377
+#: mainwindow.cpp:322 mainwindow.cpp:357
 msgid "&No"
 msgstr "否(&N)"
 
-#: kchmmainwindow.cpp:355
+#: mainwindow.cpp:344
 msgid "%1 - JavsScript link clicked"
 msgstr "%1 - 点击JavaScript链接"
 
-#: kchmmainwindow.cpp:356
+#: mainwindow.cpp:345
 msgid ""
 "You have clicked a JavaScript link.\n"
 "To prevent security-related issues JavaScript URLs are disabled in CHM files."
@@ -91,11 +141,11 @@ msgstr ""
 "你点击了JavaScript链接。\n"
 "为了避免安全问题，在CHM文件中不启用JavaScript URLs支持。"
 
-#: kchmmainwindow.cpp:375
+#: mainwindow.cpp:355
 msgid "%1 - link to a new CHM file clicked"
 msgstr "%1 - 点击指向新的CHM文件的链接。"
 
-#: kchmmainwindow.cpp:376
+#: mainwindow.cpp:356
 msgid ""
 "You have clicked a link, which leads to a new CHM file %1.\n"
 "The current file will be closed.\n"
@@ -107,122 +157,134 @@ msgstr ""
 "\n"
 "你要继续吗？"
 
-#: kchmmainwindow.cpp:639
-msgid "Contents"
-msgstr ""
-
-#: kchmmainwindow.cpp:664
-msgid "Index"
-msgstr "索引"
-
-#: kchmmainwindow.cpp:687
-msgid "Search"
-msgstr "搜索"
-
-#: kchmmainwindow.cpp:855
+#: mainwindow.cpp:716
 msgid "*.chm|Compressed Help Manual (*.chm)"
 msgstr "*.chm|压缩的帮助手册 (*.chm)"
 
-#: kchmmainwindow.cpp:858
-#, fuzzy
+#: mainwindow.cpp:719
 msgid "Open a chm file"
-msgstr "打开文件"
+msgstr "打开 CHM 文件"
 
-#: kchmmainwindow.cpp:860
+#: mainwindow.cpp:721
 msgid "Compressed Help Manual (*.chm)"
 msgstr "压缩的帮助手册 (*.chm)"
 
-#: kchmmainwindow.cpp:872
-msgid "Loading aborted"
-msgstr "取消载入"
-
-#: kchmmainwindow.cpp:912 kchmmainwindow.cpp:916
+#: mainwindow.cpp:766 mainwindow.cpp:770
 msgid "Choose a directory to store CHM content"
-msgstr "选择目录来保存CHM目录"
+msgstr "选择目录来保存 CHM 的内容"
 
-#: kchmmainwindow.cpp:930
+#: mainwindow.cpp:784
 msgid "Extracting CHM content"
-msgstr "提取CHM目录"
+msgstr "提取 CHM 的内容"
 
-#: kchmmainwindow.cpp:931
+#: mainwindow.cpp:785
 msgid "Extracting files..."
 msgstr "提取文件..."
 
-#: kchmmainwindow.cpp:932
+#: mainwindow.cpp:786
 msgid "Abort"
 msgstr "取消"
 
-#: kchmmainwindow.cpp:1122
+#: mainwindow.cpp:955
 msgid "Could not locate opened topic in content window"
 msgstr "无法在目录窗口定位打开的主题"
 
-#: kchmmainwindow.cpp:1164
-msgid "About %1"
-msgstr "关于%1"
+#: mainwindow.cpp:961
+msgid ""
+"<html><b>kchmviewer version %1.%2</b><br><br>Copyright (C) George Yunaev, "
+"2004-2010<br><a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</"
+"a><br><a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</"
+"a><br><br>Licensed under GNU GPL license version 3.</html>"
+msgstr ""
+"<html><b>kchmviewer 版本 %1.%2</b><br><br>版权所有 (C) George Yunaev, 2004-2010<br>"
+"<a "
+"href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</a><br><a href="
+"\"http://www.kchmviewer.net\">http://www.kchmviewer.net</a><br><br>以 GNU "
+"GPL 版本3授权。</html>"
 
-#: kchmmainwindow.cpp:1326
-#, fuzzy
-msgid "&Help"
-msgstr "删除(&D)"
+#. i18n: file: dialog_about.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, DialogAbout)
+#: mainwindow.cpp:970 ui_dialog_about.h:111 rc.cpp:3
+msgid "About kchmviewer"
+msgstr "关于kchmviewer"
 
-#: kchmmainwindow.cpp:1327
-#, fuzzy
-msgid "&About"
-msgstr "取消"
-
-#: kchmmainwindow.cpp:1328
-msgid "About &Qt"
-msgstr "关于QT(&Q)"
-
-#: kchmmainwindow.cpp:1340
+#: mainwindow.cpp:1065
 msgid "Ctrl+1"
-msgstr ""
+msgstr "Ctrl+1"
 
-#: kchmmainwindow.cpp:1346
+#: mainwindow.cpp:1071
 msgid "Ctrl+2"
-msgstr ""
+msgstr "Ctrl+2"
 
-#: kchmmainwindow.cpp:1352
+#: mainwindow.cpp:1077
 msgid "Ctrl+3"
-msgstr ""
+msgstr "Ctrl+3"
 
-#: kchmmainwindow.cpp:1358
+#: mainwindow.cpp:1083
 msgid "Ctrl+4"
-msgstr ""
+msgstr "Ctrl+4"
 
-#: kchmmainwindow.cpp:1365
+#: mainwindow.cpp:1090
 msgid "/"
-msgstr ""
+msgstr "/"
 
-#: kchmmainwindow.cpp:1372
+#: mainwindow.cpp:1097
 msgid "F3"
-msgstr ""
+msgstr "F3"
 
-#: kchmmainwindow.cpp:1379
+#: mainwindow.cpp:1104
 msgid "Ctrl+Right"
-msgstr ""
+msgstr "Ctrl+右"
 
-#: kchmmainwindow.cpp:1386
+#: mainwindow.cpp:1111
 msgid "Ctrl+Left"
-msgstr ""
+msgstr "Ctrl+左"
 
-#: kchmmainwindow.cpp:1492
+#: mainwindow.cpp:1196
 msgid "%1 ( %2 )"
-msgstr ""
+msgstr "%1 ( %2 )"
 
-#: kchmsearchwindow.cpp:151
+#: navigationpanel.cpp:43
+msgid "Search"
+msgstr "搜索"
+
+#: navigationpanel.cpp:46
+msgid "Bookmarks"
+msgstr "书签"
+
+#: navigationpanel.cpp:86
+msgid "Index"
+msgstr "索引"
+
+#: navigationpanel.cpp:92
+msgid "Contents"
+msgstr "内容"
+
+#: tab_bookmarks.cpp:120
+msgid "%1 - add a bookmark"
+msgstr "%1 - 添加书签"
+
+#: tab_bookmarks.cpp:121 tab_bookmarks.cpp:163
+msgid "Enter the name for this bookmark:"
+msgstr "输入书签的名称"
+
+#: tab_bookmarks.cpp:162
+msgid "%1 - edit the bookmark name"
+msgstr "%1 - 编辑书签名称"
+
+#: tab_search.cpp:153
 msgid "Search returned %1 result(s)"
 msgstr "搜索返回 %1 个结果"
 
-#: kchmsearchwindow.cpp:154
+#: tab_search.cpp:156
 msgid "Search returned no results"
 msgstr "搜索没有返回结果"
 
-#: kchmsearchwindow.cpp:157
+#: tab_search.cpp:159
 msgid "Search failed"
 msgstr "搜索失败"
 
-#: kchmsearchwindow.cpp:190
+#: tab_search.cpp:192
 msgid ""
 "<html><p>The improved search engine allows you to search for a word, symbol "
 "or phrase, which is set of words and symbols included in quotes. Only the "
@@ -236,957 +298,1278 @@ msgid ""
 "quotation mark as the same symbol, which allows to use them in phrases.</"
 "html>"
 msgstr ""
+"<html><p>改进了的搜索引擎使你可以搜索词语，符号，以及短语，其中短语指以引号扩"
+"起来的一组词语以及符号。只有包含查询中所有项目的文档才会被显示出来；不需要指"
+"定前缀。<p>不像 MS CHM 的内部索引，我的改进过的搜索引擎索引所有内容，包括特殊"
+"符号。因此你可以搜索(并且找到！)类似于<i>$q = new ChmFile();</i>这样的内容。"
+"搜索功能也支持 Unicode，因此你可以在非英语文档中搜索。<p>如果你想搜索双引号"
+"(\")，你可以搜索单引号(')。引擎将单引号和双引号视作同一个符号，因此它们可以被"
+"用在查询中。</html>"
 
-#: kchmsearchwindow.cpp:207
+#: tab_search.cpp:209
 msgid "Reading dictionary..."
-msgstr ""
+msgstr "读取词典中..."
 
-#: kchmsearchwindow.cpp:221 kchmsearchwindow.cpp:222
+#: tab_search.cpp:223 tab_search.cpp:224
 msgid "Generating search index..."
-msgstr ""
+msgstr "生成搜索索引..."
 
-#: kchmsetupdialog.cpp:183
+#. i18n: file: dialog_about.ui:46
+#. i18n: ectx: property (text), widget (QLabel, lblAbout)
+#: ui_dialog_about.h:113 rc.cpp:9
+msgid "About text"
+msgstr "关于文本"
+
+#. i18n: file: dialog_about.ui:24
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: ui_dialog_about.h:114 rc.cpp:6
+msgid "About appplication"
+msgstr "关于应用程序"
+
+#. i18n: file: dialog_about.ui:75
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui_dialog_about.h:115 rc.cpp:15
 msgid ""
-"Changing those options requires restarting the application to take effect."
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Liberation Sans'; font-size:12pt; "
+"font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600; font-style:italic;\">I would like to thank:</"
+"span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- <a href="
+"\"http://qt.nokia.com\"><span style=\" text-decoration: underline; color:"
+"#0000ff;\">Trolltech</span></a> (now Nokia) for Qt library;</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- <a href="
+"\"http://dryicons.com\"><span style=\" text-decoration: underline; color:"
+"#0000ff;\">Dryicons</span></a> for nice free icons;</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Jed "
+"Wing, the author of chmlib.</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Razvan "
+"Cojocaru, the author of xchm.</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Peter "
+"Volkov for significant QA (more than 20 reported bugs!)</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- And of "
+"course <span style=\" font-weight:600;\">everyone</span>, who report bugs,  "
+"and suggest features.</p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Liberation Sans'; font-size:12pt; "
+"font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-weight:600; font-style:italic;\">我希望感谢：</"
+"span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- <a href="
+"\"http://qt.nokia.com\"><span style=\" text-decoration: underline; color:"
+"#0000ff;\">Trolltech</span></a> (现在的 Nokia) 提供了 Qt 库；</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- <a href="
+"\"http://dryicons.com\"><span style=\" text-decoration: underline; color:"
+"#0000ff;\">Dryicons</span></a> 提供了精美的免费图标；</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Jed "
+"Wing，chmlib 的作者。</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Razvan "
+"Cojocaru，xchm 的作者。</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Peter "
+"Volkov 强大的质量控制 (报告了超过20个问题！)</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- 以及当然了， "
+"汇报问题，建议新功能的 <span style=\" font-weight:600;\">所有人</span>。</p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px;\"></p></body></html>"
 
-#: kchmsetupdialog.cpp:192
-msgid "*|Executables"
-msgstr ""
+#. i18n: file: dialog_about.ui:57
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: ui_dialog_about.h:130 rc.cpp:12
+msgid "Thanks"
+msgstr "感谢"
 
-#: kchmsetupdialog.cpp:192 kchmsetupdialog.cpp:195
-msgid "Choose an editor executable"
-msgstr ""
-
-#: kchmsetupdialog.cpp:197
-msgid "Executables (*)"
-msgstr ""
-
-#: kchmviewwindowmgr.cpp:58
-msgid "Close current page"
-msgstr ""
-
-#: kchmviewwindowmgr.cpp:70
-#, fuzzy
-msgid "Add page"
-msgstr "在页面中搜索"
-
-#: kchmviewwindowmgr.cpp:171 kchmviewwindowmgr.cpp:238
-#, fuzzy
-msgid "Alt+%1"
-msgstr "Alt+L"
-
-#: kchmviewwindow_qtextbrowser.cpp:121 kchmviewwindow_qtwebkit.cpp:256
-msgid "Printing aborted"
-msgstr "打印被取消"
-
-#: kchmviewwindow_qtextbrowser.cpp:126 kchmviewwindow_qtwebkit.cpp:261
-#, fuzzy
-msgid "Printing finished"
-msgstr "打印被取消"
-
-#: kchmviewwindow_qtextbrowser.cpp:317 kchmviewwindow_qtwebkit.cpp:375
-#, fuzzy
-msgid "Open Link in a new tab\tShift+LMB"
-msgstr "在新的标签页打开此链接(&O)"
-
-#: kchmviewwindow_qtextbrowser.cpp:318 kchmviewwindow_qtwebkit.cpp:376
-#, fuzzy
-msgid "Open Link in a new background tab\tCtrl+LMB"
-msgstr "在后台标签也打开此链接(&O)"
-
-#: main.cpp:45
-msgid "Perform auto testing"
-msgstr ""
-
-#: main.cpp:46
-msgid "Perform short auto testing"
-msgstr ""
-
-#: main.cpp:47
-#, fuzzy
-msgid "A CHM file to show"
-msgstr "CHM文件查看器"
-
-#: main.cpp:48
-msgid ""
-"'--search <query>' specifies the search query to search, and activate the "
-"first entry if found"
-msgstr ""
-
-#: main.cpp:49
-msgid ""
-"'--sindex <word>' specifies the word to find in index, and activate if found"
-msgstr ""
-
-#: main.cpp:50
-msgid ""
-"'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if "
-"found. Wildcards allowed."
-msgstr ""
-
-#: main.cpp:56
-msgid "CHM file viewer"
-msgstr "CHM文件查看器"
-
-#: main.cpp:58
-msgid "(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"
-msgstr ""
-
-#: main.cpp:59
-msgid "Please report bugs to kchmviewer@ulduzsoft.com"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 20
-#: rc.cpp:3
-#, no-c-format
+#. i18n: file: dialog_setup.ui:20
+#. i18n: ectx: property (windowTitle), widget (QDialog, DialogSetup)
+#: ui_dialog_setup.h:463 rc.cpp:30
 msgid "KchmViewer settings"
 msgstr "KchmViewer设置"
 
-#. i18n: file ./dialog_setup.ui line 42
-#: rc.cpp:6
-#, no-c-format
-msgid "General behavior"
-msgstr "通用行为"
+#. i18n: file: dialog_setup.ui:62
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
+#: ui_dialog_setup.h:464 rc.cpp:36
+msgid "If started with no arguments"
+msgstr "如果启动时没有指定参数"
 
-#. i18n: file ./dialog_setup.ui line 62
-#: rc.cpp:9
-#, no-c-format
-msgid "If no arguments given on load"
-msgstr "如果载入时没有参数"
+#. i18n: file: dialog_setup.ui:74
+#. i18n: ectx: property (text), widget (QRadioButton, rbStartWithNothing)
+#: ui_dialog_setup.h:465 rc.cpp:39
+msgid "Start with nothing loaded"
+msgstr "启动时不载入任何文档"
 
-#. i18n: file ./dialog_setup.ui line 74
-#: rc.cpp:12
-#, no-c-format
-msgid "Open the 'open CHM file' dialog"
-msgstr "打开'打开CHM文件'对话框"
+#. i18n: file: dialog_setup.ui:81
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOnBeginOpenDialog)
+#: ui_dialog_setup.h:466 rc.cpp:42
+msgid "Pop up the \"open file\" dialog"
+msgstr "弹出 “打开CHM文件” 对话框"
 
-#. i18n: file ./dialog_setup.ui line 81
-#: rc.cpp:15
-#, no-c-format
+#. i18n: file: dialog_setup.ui:88
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOnBeginOpenLast)
+#: ui_dialog_setup.h:467 rc.cpp:45
 msgid "Open the &last used CHM file, if exist"
-msgstr "如果存在,打开最后使用的CHM文件(&L)"
+msgstr "如果存在，打开最后使用的CHM文件(&L)"
 
-#. i18n: file ./dialog_setup.ui line 84
-#: rc.cpp:18
-#, fuzzy, no-c-format
+#. i18n: file: dialog_setup.ui:91
+#. i18n: ectx: property (shortcut), widget (QRadioButton, m_radioOnBeginOpenLast)
+#: ui_dialog_setup.h:468 rc.cpp:48
 msgid "Alt+L"
-msgstr "Alt+E"
+msgstr "Alt+L"
 
-#. i18n: file ./dialog_setup.ui line 94
-#: rc.cpp:21
-#, no-c-format
+#. i18n: file: dialog_setup.ui:101
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup2)
+#: ui_dialog_setup.h:469 rc.cpp:51
 msgid "History"
 msgstr "历史"
 
-#. i18n: file ./dialog_setup.ui line 114
-#: rc.cpp:24
-#, no-c-format
+#. i18n: file: dialog_setup.ui:121
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: ui_dialog_setup.h:470 rc.cpp:54
 msgid "Store history information for"
 msgstr "保存历史信息"
 
-#. i18n: file ./dialog_setup.ui line 134
-#: rc.cpp:27
-#, no-c-format
+#. i18n: file: dialog_setup.ui:141
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: ui_dialog_setup.h:472 rc.cpp:57
 msgid "latest files"
 msgstr "最近使用的文件"
 
-#. i18n: file ./dialog_setup.ui line 146
-#: rc.cpp:30
-#, no-c-format
+#. i18n: file: dialog_setup.ui:153
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_rememberHistoryInfo)
+#: ui_dialog_setup.h:474 rc.cpp:60
 msgid ""
 "Remembers the information about the files, which were opened. Remembers last "
 "opened page, search history, font size, bookmarks and so on."
 msgstr ""
-"记录已经打开的文件的相关信息。 记录最后打开的页面，搜索记录，字体大小，书签等"
+"记录曾经打开的文件的相关信息。 记录最后打开的页面，搜索记录，字体大小，书签等"
 "信息。"
 
-#. i18n: file ./dialog_setup.ui line 149
-#: rc.cpp:33
-#, no-c-format
+#. i18n: file: dialog_setup.ui:156
+#. i18n: ectx: property (text), widget (QCheckBox, m_rememberHistoryInfo)
+#: ui_dialog_setup.h:476 rc.cpp:63
 msgid "R&emember extra information for history files"
-msgstr "记录历史文件额外信息(&E)"
+msgstr "记录历史中文件的额外信息(&E)"
 
-#. i18n: file ./dialog_setup.ui line 152
-#: rc.cpp:36
-#, no-c-format
+#. i18n: file: dialog_setup.ui:159
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_rememberHistoryInfo)
+#: ui_dialog_setup.h:477 rc.cpp:66
 msgid "Alt+E"
 msgstr "Alt+E"
 
-#. i18n: file ./dialog_setup.ui line 164
-#: rc.cpp:39
-#, no-c-format
+#. i18n: file: dialog_setup.ui:171
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui_dialog_setup.h:478 rc.cpp:69
 msgid "CHM security settings"
 msgstr "CHM 安全设置"
 
-#. i18n: file ./dialog_setup.ui line 176
-#: rc.cpp:42
-#, no-c-format
+#. i18n: file: dialog_setup.ui:183
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: ui_dialog_setup.h:479 rc.cpp:72
 msgid "When external link clicked"
 msgstr "当点击外部链接时"
 
-#. i18n: file ./dialog_setup.ui line 188
-#: rc.cpp:45
-#, no-c-format
+#. i18n: file: dialog_setup.ui:195
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioExtLinkOpenAlways)
+#: ui_dialog_setup.h:480 rc.cpp:75
 msgid "Alwa&ys open it in external browser"
 msgstr "总在外部浏览器中打开(&Y)"
 
-#. i18n: file ./dialog_setup.ui line 191
-#: rc.cpp:48
-#, no-c-format
+#. i18n: file: dialog_setup.ui:198
+#. i18n: ectx: property (shortcut), widget (QRadioButton, m_radioExtLinkOpenAlways)
+#: ui_dialog_setup.h:481 rc.cpp:78
 msgid "Alt+Y"
 msgstr "Alt+Y"
 
-#. i18n: file ./dialog_setup.ui line 198
-#. i18n: file ./dialog_setup.ui line 237
-#: rc.cpp:51 rc.cpp:63
-#, no-c-format
+#. i18n: file: dialog_setup.ui:205
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioExtLinkAsk)
+#. i18n: file: dialog_setup.ui:244
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioNewChmAsk)
+#: ui_dialog_setup.h:482 ui_dialog_setup.h:487 rc.cpp:81 rc.cpp:93
 msgid "Ask for confirmation"
 msgstr "请求确认"
 
-#. i18n: file ./dialog_setup.ui line 205
-#: rc.cpp:54
-#, no-c-format
+#. i18n: file: dialog_setup.ui:212
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioExtLinkOpenNever)
+#: ui_dialog_setup.h:483 rc.cpp:84
 msgid "Do not open the link"
 msgstr "不打开链接"
 
-#. i18n: file ./dialog_setup.ui line 218
-#: rc.cpp:57
-#, no-c-format
+#. i18n: file: dialog_setup.ui:225
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup5)
+#: ui_dialog_setup.h:485 rc.cpp:87
 msgid "When link pointed to a new CHM file clicked"
 msgstr "当点击指向新的CHM文件的链接时"
 
-#. i18n: file ./dialog_setup.ui line 230
-#: rc.cpp:60
-#, no-c-format
+#. i18n: file: dialog_setup.ui:237
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioNewChmOpenAlways)
+#: ui_dialog_setup.h:486 rc.cpp:90
 msgid "Always open a new CHM file"
 msgstr "总打开新的CHM文件"
 
-#. i18n: file ./dialog_setup.ui line 244
-#: rc.cpp:66
-#, no-c-format
+#. i18n: file: dialog_setup.ui:251
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioNewChmOpenNever)
+#: ui_dialog_setup.h:488 rc.cpp:96
 msgid "Do not open a new CHM file"
 msgstr "不打开新的CHM文件"
 
-#. i18n: file ./dialog_setup.ui line 271
-#: rc.cpp:69
-#, no-c-format
-msgid "Version-specific settings"
-msgstr "版本指定设置"
+#. i18n: file: dialog_setup.ui:42
+#. i18n: ectx: attribute (title), widget (QWidget, Widget8)
+#: ui_dialog_setup.h:489 rc.cpp:33
+msgid "General behavior"
+msgstr "通用行为"
 
-#. i18n: file ./dialog_setup.ui line 283
-#: rc.cpp:72
-#, no-c-format
-msgid "KDE version settings"
-msgstr "KDE 版本设置"
+#. i18n: file: dialog_setup.ui:290
+#. i18n: ectx: property (title), widget (QGroupBox, m_groupKDEsettings)
+#: ui_dialog_setup.h:490 rc.cpp:102
+msgid "HTML browser settings"
+msgstr "HTML 浏览器设置"
 
-#. i18n: file ./dialog_setup.ui line 295
-#: rc.cpp:75
-#, no-c-format
-msgid "To show HTML content, use"
-msgstr "要显示HTML目录，使用"
+#. i18n: file: dialog_setup.ui:296
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableImages)
+#: ui_dialog_setup.h:491 rc.cpp:105
+msgid "Load the &images"
+msgstr "载入图像(&I)"
 
-#. i18n: file ./dialog_setup.ui line 307
-#: rc.cpp:78
-#, no-c-format
-msgid "&QTextBrowser-based widget"
-msgstr "基于QTextBrowser的组件(&Q)"
+#. i18n: file: dialog_setup.ui:303
+#. i18n: ectx: property (text), widget (QCheckBox, m_enablePlugins)
+#: ui_dialog_setup.h:492 rc.cpp:108
+msgid "Enable browser &plugins (i.e. Flash)"
+msgstr "启用浏览器插件(例如Flash)(&P)"
 
-#. i18n: file ./dialog_setup.ui line 310
-#: rc.cpp:81
-#, no-c-format
-msgid "Alt+Q"
-msgstr "Alt+Q"
-
-#. i18n: file ./dialog_setup.ui line 317
-#: rc.cpp:84
-#, no-c-format
-msgid "&KHTMLPart-based widget"
-msgstr "基于KHTMLPart的组件(&K)"
-
-#. i18n: file ./dialog_setup.ui line 320
-#: rc.cpp:87
-#, no-c-format
-msgid "Alt+K"
-msgstr "Alt+K"
-
-#. i18n: file ./dialog_setup.ui line 327
-#: rc.cpp:90
-#, no-c-format
-msgid "Qt &Webkit (requires Qt 4.4 or higher)"
-msgstr ""
-
-#. i18n: file ./dialog_setup.ui line 337
-#: rc.cpp:93
-#, no-c-format
-msgid "KHTMLPart security"
-msgstr "KHTMLPart 安全性"
-
-#. i18n: file ./dialog_setup.ui line 349
-#: rc.cpp:96
-#, no-c-format
-msgid "Enable &refresh"
-msgstr "启用刷新(&R)"
-
-#. i18n: file ./dialog_setup.ui line 352
-#: rc.cpp:99
-#, no-c-format
-msgid "Alt+R"
-msgstr "Alt+R"
-
-#. i18n: file ./dialog_setup.ui line 359
-#: rc.cpp:102
-#, no-c-format
-msgid "Enable &Java"
-msgstr "启用Java(&J)"
-
-#. i18n: file ./dialog_setup.ui line 362
-#: rc.cpp:105
-#, no-c-format
-msgid "Alt+J"
-msgstr "Alt+J"
-
-#. i18n: file ./dialog_setup.ui line 369
-#: rc.cpp:108
-#, no-c-format
-msgid "Enable &plugins"
-msgstr "启用插件(&P)"
-
-#. i18n: file ./dialog_setup.ui line 372
-#: rc.cpp:111
-#, no-c-format
+#. i18n: file: dialog_setup.ui:306
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_enablePlugins)
+#: ui_dialog_setup.h:493 rc.cpp:111
 msgid "Alt+P"
 msgstr "Alt+P"
 
-#. i18n: file ./dialog_setup.ui line 379
-#: rc.cpp:114
-#, no-c-format
+#. i18n: file: dialog_setup.ui:313
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableJava)
+#: ui_dialog_setup.h:494 rc.cpp:114
+msgid "Enable &Java"
+msgstr "启用Java(&J)"
+
+#. i18n: file: dialog_setup.ui:316
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_enableJava)
+#: ui_dialog_setup.h:495 rc.cpp:117
+msgid "Alt+J"
+msgstr "Alt+J"
+
+#. i18n: file: dialog_setup.ui:323
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableJS)
+#: ui_dialog_setup.h:496 rc.cpp:120
 msgid "Enable Java&Script"
 msgstr "启用JavaScript(&S)"
 
-#. i18n: file ./dialog_setup.ui line 382
-#: rc.cpp:117
-#, no-c-format
+#. i18n: file: dialog_setup.ui:326
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_enableJS)
+#: ui_dialog_setup.h:497 rc.cpp:123
 msgid "Alt+S"
 msgstr "Alt+S"
 
-#. i18n: file ./dialog_setup.ui line 409
-#: rc.cpp:120
-#, no-c-format
-msgid "Advanced"
-msgstr "高级"
+#. i18n: file: dialog_setup.ui:333
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableOfflineStorage)
+#: ui_dialog_setup.h:498 rc.cpp:126
+msgid "Enable &offline storage (HTML5)"
+msgstr "启用离线存储(HTML5)(&O)"
 
-#. i18n: file ./dialog_setup.ui line 415
-#: rc.cpp:123
-#, no-c-format
+#. i18n: file: dialog_setup.ui:336
+#. i18n: ectx: property (shortcut), widget (QCheckBox, m_enableOfflineStorage)
+#: ui_dialog_setup.h:499 rc.cpp:129
+msgid "Alt+R"
+msgstr "Alt+R"
+
+#. i18n: file: dialog_setup.ui:343
+#. i18n: ectx: property (text), widget (QCheckBox, m_enableLocalStorage)
+#: ui_dialog_setup.h:500 rc.cpp:132
+msgid "Enable &local storage (HTML5)"
+msgstr "启用本地存储(HTML5)(&L)"
+
+#. i18n: file: dialog_setup.ui:278
+#. i18n: ectx: attribute (title), widget (QWidget, Widget9)
+#: ui_dialog_setup.h:501 rc.cpp:99
+msgid "Browser"
+msgstr "浏览器"
+
+#. i18n: file: dialog_setup.ui:373
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup7)
+#: ui_dialog_setup.h:502 rc.cpp:138
 msgid "View HTML source command uses"
 msgstr "查看HTML源码使用"
 
-#. i18n: file ./dialog_setup.ui line 427
-#: rc.cpp:126
-#, no-c-format
+#. i18n: file: dialog_setup.ui:385
+#. i18n: ectx: property (text), widget (QRadioButton, m_advViewSourceInternal)
+#: ui_dialog_setup.h:503 rc.cpp:141
 msgid "Built-in HTML source viewer"
 msgstr "内建HTML源码查看器"
 
-#. i18n: file ./dialog_setup.ui line 437
-#: rc.cpp:129
-#, no-c-format
+#. i18n: file: dialog_setup.ui:395
+#. i18n: ectx: property (text), widget (QRadioButton, m_advViewSourceExternal)
+#: ui_dialog_setup.h:505 rc.cpp:144
 msgid "E&xternal program, specified below"
-msgstr "外部程序，在下面特别指定(&X)"
+msgstr "外部程序，在下面指定(&X)"
 
-#. i18n: file ./dialog_setup.ui line 440
-#: rc.cpp:132
-#, no-c-format
+#. i18n: file: dialog_setup.ui:398
+#. i18n: ectx: property (shortcut), widget (QRadioButton, m_advViewSourceExternal)
+#: ui_dialog_setup.h:506 rc.cpp:147
 msgid "Alt+X"
-msgstr "Alt+x"
+msgstr "Alt+X"
 
-#. i18n: file ./dialog_setup.ui line 455
-#: rc.cpp:135
-#, no-c-format
+#. i18n: file: dialog_setup.ui:413
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: ui_dialog_setup.h:507 rc.cpp:150
 msgid "External program:"
-msgstr "外部程序"
+msgstr "外部程序："
 
-#. i18n: file ./dialog_setup.ui line 468
-#: rc.cpp:138
-#, no-c-format
+#. i18n: file: dialog_setup.ui:426
+#. i18n: ectx: property (text), widget (QPushButton, btnBrowse)
+#: ui_dialog_setup.h:508 rc.cpp:153
 msgid "&Browse"
-msgstr ""
+msgstr "浏览(&B)"
 
-#. i18n: file ./dialog_setup.ui line 480
-#: rc.cpp:141
-#, no-c-format
+#. i18n: file: dialog_setup.ui:438
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui_dialog_setup.h:509 rc.cpp:156
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
-#. i18n: file ./dialog_setup.ui line 486
-#: rc.cpp:144
-#, no-c-format
-msgid "Use right-to-left layout direction (Arabic adn Hebrew layouts)"
-msgstr ""
+#. i18n: file: dialog_setup.ui:444
+#. i18n: ectx: property (text), widget (QCheckBox, boxLayoutDirectionRL)
+#: ui_dialog_setup.h:510 rc.cpp:159
+msgid "Use right-to-left layout direction (Arabic and Hebrew layouts)"
+msgstr "使用从右向左排版方向 (阿拉伯以及希伯来版式)"
 
-#. i18n: file ./dialog_setup.ui line 493
-#: rc.cpp:147
-#, no-c-format
+#. i18n: file: dialog_setup.ui:451
+#. i18n: ectx: property (text), widget (QCheckBox, boxAutodetectEncoding)
+#: ui_dialog_setup.h:511 rc.cpp:162
 msgid ""
 "Automatically detect encoding for KHTMLPart and WebKit browsers (not "
 "recommended)"
+msgstr "对于 KHTMLPart 以及 WebKit 浏览器，自动检测编码(不推荐)"
+
+#. i18n: file: dialog_setup.ui:458
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, cbCheckForUpdates)
+#: ui_dialog_setup.h:513 rc.cpp:165
+msgid ""
+"If this option is enabled, the application will check for updates (when new "
+"version of application is released). If a new version is available, the "
+"program will show a messagebox dialog informing you about new version. This "
+"check will only performed once in 24 hours. No user information is requested "
+"or transmitted from your computer during this check."
 msgstr ""
+"如果打开这个选项，应用程序会自动检查更新(当新版本应用程序发布时)。如果有新版本可用，"
+"程序会向你显示一个消息对话框，提醒你有新版本了。这个检查在24小时内只会进行一次。"
+"在这个检查过程中不会有任何用户信息被请求或者传输。"
 
-#. i18n: file ./window_main.ui line 14
-#: rc.cpp:150
-#, no-c-format
-msgid "kchmviewer"
-msgstr ""
+#. i18n: file: dialog_setup.ui:461
+#. i18n: ectx: property (text), widget (QCheckBox, cbCheckForUpdates)
+#: ui_dialog_setup.h:515 rc.cpp:168
+msgid "Perform a check whether a new version is available (once a week)"
+msgstr "检查是否有新版本可用(每周一次)"
 
-#. i18n: file ./window_main.ui line 28
-#: rc.cpp:153
-#, no-c-format
-msgid "&Settings"
-msgstr ""
+#. i18n: file: dialog_setup.ui:471
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui_dialog_setup.h:516 rc.cpp:171
+msgid "Toolbars"
+msgstr "工具栏"
 
-#. i18n: file ./window_main.ui line 34
-#: rc.cpp:156
-#, fuzzy, no-c-format
-msgid "&Bookmarks"
-msgstr "添加当前页面为书签(&B)"
+#. i18n: file: dialog_setup.ui:477
+#. i18n: ectx: property (text), widget (QRadioButton, rbToolbarSmall)
+#: ui_dialog_setup.h:517 rc.cpp:174
+msgid "Small icons"
+msgstr "小图标"
 
-#. i18n: file ./window_main.ui line 41
-#: rc.cpp:159
-#, fuzzy, no-c-format
-msgid "&File"
-msgstr "标题"
+#. i18n: file: dialog_setup.ui:484
+#. i18n: ectx: property (text), widget (QRadioButton, rbToolbarLarge)
+#: ui_dialog_setup.h:518 rc.cpp:177
+msgid "Large icons"
+msgstr "大图标"
 
-#. i18n: file ./window_main.ui line 50
-#: rc.cpp:162
-#, no-c-format
-msgid "&Edit"
-msgstr ""
+#. i18n: file: dialog_setup.ui:491
+#. i18n: ectx: property (text), widget (QRadioButton, rbToolbarLargeText)
+#: ui_dialog_setup.h:519 rc.cpp:180
+msgid "Large icons and text"
+msgstr "带文字的大图标"
 
-#. i18n: file ./window_main.ui line 59
-#: rc.cpp:165
-#, no-c-format
-msgid "&View"
-msgstr ""
+#. i18n: file: dialog_setup.ui:498
+#. i18n: ectx: property (text), widget (QRadioButton, rbToolbarText)
+#: ui_dialog_setup.h:520 rc.cpp:183
+msgid "Just text"
+msgstr "只有文字"
 
-#. i18n: file ./window_main.ui line 73
-#: rc.cpp:168
-#, fuzzy, no-c-format
-msgid "&Windows"
-msgstr "窗口(&W)"
+#. i18n: file: dialog_setup.ui:367
+#. i18n: ectx: attribute (title), widget (QWidget, TabPage)
+#: ui_dialog_setup.h:521 rc.cpp:135
+msgid "Advanced"
+msgstr "高级"
 
-#. i18n: file ./window_main.ui line 87
-#: rc.cpp:171
-#, fuzzy, no-c-format
-msgid "general toolbar"
-msgstr "通用行为"
+#. i18n: file: dialog_topicselector.ui:13
+#. i18n: ectx: property (windowTitle), widget (QDialog, DialogTopicSelector)
+#: ui_dialog_topicselector.h:74 rc.cpp:186
+msgid "Multiple topics"
+msgstr "多个主题"
 
-#. i18n: file ./window_main.ui line 103
-#: rc.cpp:174
-#, fuzzy, no-c-format
-msgid "navigation toolbar"
-msgstr "导航"
+#. i18n: file: dialog_topicselector.ui:25
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui_dialog_topicselector.h:75 rc.cpp:189
+msgid "Please select the topic to open:"
+msgstr "请选取要打开的主题："
 
-#. i18n: file ./window_main.ui line 120
-#: rc.cpp:177
-#, no-c-format
-msgid "action toolbar"
-msgstr ""
-
-#. i18n: file ./window_main.ui line 146
-#: rc.cpp:180
-#, no-c-format
+#. i18n: file: mainwindow.ui:186
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:303 rc.cpp:225
 msgid "&Print..."
-msgstr ""
+msgstr "打印...(&P)"
 
-#. i18n: file ./window_main.ui line 149
-#: rc.cpp:183
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:189
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:304 rc.cpp:228
 msgid "Print"
-msgstr "打印文件"
+msgstr "打印"
 
-#. i18n: file ./window_main.ui line 152
-#: rc.cpp:186
-#, no-c-format
+#. i18n: file: mainwindow.ui:192
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:306 rc.cpp:231
 msgid "Print current page"
-msgstr ""
+msgstr "打印当前页"
 
-#. i18n: file ./window_main.ui line 155
-#: rc.cpp:189
-#, no-c-format
+#. i18n: file: mainwindow.ui:195
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:309 rc.cpp:234
 msgid "Prints currently opened page."
-msgstr ""
+msgstr "打印现在打开的页面。"
 
-#. i18n: file ./window_main.ui line 158
-#: rc.cpp:192
-#, no-c-format
+#. i18n: file: mainwindow.ui:198
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:311 rc.cpp:237
 msgid "Ctrl+P"
-msgstr ""
+msgstr "Ctrl+P"
 
-#. i18n: file ./window_main.ui line 163
-#: rc.cpp:195
-#, no-c-format
+#. i18n: file: mainwindow.ui:207
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:312 rc.cpp:240
 msgid "&Quit"
-msgstr ""
+msgstr "退出(&Q)"
 
-#. i18n: file ./window_main.ui line 166
-#: rc.cpp:198
-#, no-c-format
+#. i18n: file: mainwindow.ui:210
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:313 rc.cpp:243
 msgid "Exit"
-msgstr ""
+msgstr "退出"
 
-#. i18n: file ./window_main.ui line 169
-#: rc.cpp:201
-#, no-c-format
+#. i18n: file: mainwindow.ui:213
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:315 rc.cpp:246
 msgid "Exits the application"
-msgstr ""
+msgstr "退出应用程序"
 
-#. i18n: file ./window_main.ui line 172
-#: rc.cpp:204
-#, no-c-format
+#. i18n: file: mainwindow.ui:216
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:317 rc.cpp:249
 msgid "Ctrl+Q"
-msgstr ""
+msgstr "Ctrl+Q"
 
-#. i18n: file ./window_main.ui line 181
-#: rc.cpp:207
-#, no-c-format
+#. i18n: file: mainwindow.ui:225
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:318 rc.cpp:252
 msgid "C&opy"
-msgstr ""
+msgstr "复制(&C)"
 
-#. i18n: file ./window_main.ui line 184
-#: rc.cpp:210
-#, no-c-format
+#. i18n: file: mainwindow.ui:228
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:319 rc.cpp:255
 msgid "Copy"
-msgstr ""
+msgstr "复制"
 
-#. i18n: file ./window_main.ui line 187
-#: rc.cpp:213
-#, no-c-format
+#. i18n: file: mainwindow.ui:231
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:321 rc.cpp:258
 msgid "Copies selected content to clipboard"
-msgstr ""
+msgstr "将选中的内容复制到剪贴板"
 
-#. i18n: file ./window_main.ui line 190
-#: rc.cpp:216
-#, no-c-format
+#. i18n: file: mainwindow.ui:234
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:323 rc.cpp:261
 msgid "Ctrl+C"
-msgstr ""
+msgstr "Ctrl+C"
 
-#. i18n: file ./window_main.ui line 199
-#: rc.cpp:219
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:243
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:324 rc.cpp:264
 msgid "&Select All"
 msgstr "选择全部(&S)"
 
-#. i18n: file ./window_main.ui line 202
-#: rc.cpp:222
-#, no-c-format
+#. i18n: file: mainwindow.ui:246
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:325 rc.cpp:267
 msgid "Paste"
-msgstr ""
+msgstr "粘帖"
 
-#. i18n: file ./window_main.ui line 205
-#: rc.cpp:225
-#, no-c-format
+#. i18n: file: mainwindow.ui:249
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:327 rc.cpp:270
 msgid "Selects everything in the document"
-msgstr ""
+msgstr "选中文档中的所有内容"
 
-#. i18n: file ./window_main.ui line 208
-#: rc.cpp:228
-#, no-c-format
+#. i18n: file: mainwindow.ui:252
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:329 rc.cpp:273
 msgid "Ctrl+V"
-msgstr ""
+msgstr "Ctrl+V"
 
-#. i18n: file ./window_main.ui line 217
-#: rc.cpp:231
-#, no-c-format
+#. i18n: file: mainwindow.ui:261
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:330 rc.cpp:276
 msgid "&Find..."
-msgstr ""
+msgstr "查找...(&F)"
 
-#. i18n: file ./window_main.ui line 220
-#: rc.cpp:234
-#, no-c-format
-msgid "Find"
-msgstr ""
-
-#. i18n: file ./window_main.ui line 223
-#: rc.cpp:237
-#, no-c-format
+#. i18n: file: mainwindow.ui:264
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:332 rc.cpp:279
 msgid "Find text in currently opened page"
-msgstr ""
+msgstr "在当前打开的页面中查找文本"
 
-#. i18n: file ./window_main.ui line 226
-#: rc.cpp:240
-#, no-c-format
+#. i18n: file: mainwindow.ui:267
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:335 rc.cpp:282
 msgid "Enters the Find in page mode"
-msgstr ""
+msgstr "进入“在页面中查找”模式"
 
-#. i18n: file ./window_main.ui line 229
-#: rc.cpp:243
-#, no-c-format
+#. i18n: file: mainwindow.ui:270
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:337 rc.cpp:285
 msgid "Ctrl+F"
-msgstr ""
+msgstr "Ctrl+F"
 
-#. i18n: file ./window_main.ui line 234
-#: rc.cpp:246
-#, no-c-format
+#. i18n: file: mainwindow.ui:279
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:338 rc.cpp:288
 msgid "E&xtract CHM content..."
-msgstr "提取CHM目录(&X)"
+msgstr "提取CHM内容(&X)"
 
-#. i18n: file ./window_main.ui line 237
-#: rc.cpp:249
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:282
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:340 rc.cpp:291
 msgid "Extract the CHM content to the directory"
-msgstr "提取CHM目录"
+msgstr "将 CHM 的内容提取到目录中"
 
-#. i18n: file ./window_main.ui line 240
-#: rc.cpp:252
-#, no-c-format
+#. i18n: file: mainwindow.ui:285
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:343 rc.cpp:294
 msgid ""
 "Exctracts the CHM archive content to the specified directory. All the files "
 "are extracted."
-msgstr ""
+msgstr "将 CHM 存档中的内容提取到指定的目录中。所有的文件都会被提取出来。"
 
-#. i18n: file ./window_main.ui line 245
-#: rc.cpp:255
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:294
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:345 rc.cpp:297
 msgid "&Application settings..."
-msgstr "更改设置(&C)"
+msgstr "应用程序设置...(&A)"
 
-#. i18n: file ./window_main.ui line 248
-#. i18n: file ./window_main.ui line 251
-#: rc.cpp:258 rc.cpp:261
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:297
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#. i18n: file: mainwindow.ui:300
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:347 ui_mainwindow.h:350 rc.cpp:300 rc.cpp:303
 msgid "Change the application settings"
-msgstr "更改设置(&C)"
+msgstr "更改应用程序设置"
 
-#. i18n: file ./window_main.ui line 260
-#: rc.cpp:264
-#, no-c-format
+#. i18n: file: mainwindow.ui:309
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:352 rc.cpp:306
 msgid "&Add bookmark"
 msgstr "添加书签(&A)"
 
-#. i18n: file ./window_main.ui line 263
-#: rc.cpp:267
-#, no-c-format
-msgid "Adds a bookmark for currently opened page"
-msgstr ""
+#. i18n: file: mainwindow.ui:312
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:353 rc.cpp:309
+msgid "Bookmark"
+msgstr "书签"
 
-#. i18n: file ./window_main.ui line 266
-#: rc.cpp:270
-#, no-c-format
+#. i18n: file: mainwindow.ui:315
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:355 rc.cpp:312
+msgid "Adds a bookmark for currently opened page"
+msgstr "把当前打开的页面加为书签"
+
+#. i18n: file: mainwindow.ui:318
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:358 rc.cpp:315
 msgid ""
 "Adds a bookmark for currently opened page. Remembers the opened page, and "
 "scroll position. Bookmarks are accessible through Bookmarks menu or tab."
 msgstr ""
+"将当前打开的页面添加为书签。记录打开的页面以及在页面中的位置。书签可以通过书"
+"签菜单以及书签分页访问。"
 
-#. i18n: file ./window_main.ui line 269
-#: rc.cpp:273
-#, no-c-format
+#. i18n: file: mainwindow.ui:321
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:360 rc.cpp:318
 msgid "Ctrl+B"
-msgstr ""
+msgstr "Ctrl+B"
 
-#. i18n: file ./window_main.ui line 278
-#: rc.cpp:276
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:330
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:361 rc.cpp:321
 msgid "&Increase font size"
-msgstr "增大字体大小"
+msgstr "增大字体大小(&I)"
 
-#. i18n: file ./window_main.ui line 281
-#: rc.cpp:279
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:333
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:362 rc.cpp:324
+msgid "Larger"
+msgstr "更大"
+
+#. i18n: file: mainwindow.ui:336
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:364 rc.cpp:327
 msgid "Increase the font size"
 msgstr "增大字体大小"
 
-#. i18n: file ./window_main.ui line 284
-#: rc.cpp:282
-#, no-c-format
+#. i18n: file: mainwindow.ui:339
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:367 rc.cpp:330
 msgid "Increases the document font size. The new font size will be stored."
-msgstr ""
+msgstr "增加文档的字体大小。新的字体大小会被保存。"
 
-#. i18n: file ./window_main.ui line 287
-#: rc.cpp:285
-#, no-c-format
-msgid "Ctrl++"
-msgstr ""
+#. i18n: file: mainwindow.ui:342
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:369 rc.cpp:333
+msgid "Ctrl+="
+msgstr "Ctrl+="
 
-#. i18n: file ./window_main.ui line 296
-#: rc.cpp:288
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:351
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:370 rc.cpp:336
 msgid "&Decrease font size"
-msgstr "缩小字体大小"
+msgstr "缩小字体大小(&D)"
 
-#. i18n: file ./window_main.ui line 299
-#: rc.cpp:291
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:354
+#. i18n: ectx: property (iconText), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:371 rc.cpp:339
+msgid "Smaller"
+msgstr "更小"
+
+#. i18n: file: mainwindow.ui:357
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:373 rc.cpp:342
 msgid "Decrease the font size"
 msgstr "缩小字体大小"
 
-#. i18n: file ./window_main.ui line 302
-#: rc.cpp:294
-#, no-c-format
+#. i18n: file: mainwindow.ui:360
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:376 rc.cpp:345
 msgid "Decreases the document font size. The new font size will be stored."
-msgstr ""
+msgstr "缩小文档的字体大小。新的字体大小会被保存。"
 
-#. i18n: file ./window_main.ui line 305
-#: rc.cpp:297
-#, no-c-format
+#. i18n: file: mainwindow.ui:363
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:378 rc.cpp:348
 msgid "Ctrl+-"
-msgstr ""
+msgstr "Ctrl+-"
 
-#. i18n: file ./window_main.ui line 314
-#: rc.cpp:300
-#, no-c-format
-msgid "&View HTML source"
-msgstr "查看HTML源码(&V)"
+#. i18n: file: mainwindow.ui:372
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:379 rc.cpp:351
+msgid "See &HTML"
+msgstr "查看 &HTML"
 
-#. i18n: file ./window_main.ui line 317
-#: rc.cpp:303
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:375
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:381 rc.cpp:354
 msgid "View HTML source of current page"
-msgstr "查看HTML源码使用"
+msgstr "查看当前页面的 HTML 源码"
 
-#. i18n: file ./window_main.ui line 320
-#: rc.cpp:306
-#, no-c-format
+#. i18n: file: mainwindow.ui:378
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:384 rc.cpp:357
 msgid "Shows the HTML source of currently opened page"
-msgstr ""
+msgstr "显示当前页面的 HTML 源码"
 
-#. i18n: file ./window_main.ui line 323
-#: rc.cpp:309
-#, no-c-format
+#. i18n: file: mainwindow.ui:381
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:386 rc.cpp:360
 msgid "Ctrl+U"
-msgstr ""
+msgstr "Ctrl+U"
 
-#. i18n: file ./window_main.ui line 331
-#: rc.cpp:312
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:393
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:387 rc.cpp:363
 msgid "Enable &full screen mode"
-msgstr "全屏(&F)"
+msgstr "进入全屏模式(&F)"
 
-#. i18n: file ./window_main.ui line 334
-#: rc.cpp:315
-#, no-c-format
+#. i18n: file: mainwindow.ui:396
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:389 rc.cpp:366
 msgid "Enters or leaves the fullscreen mode"
-msgstr ""
+msgstr "进入或退出全屏模式"
 
-#. i18n: file ./window_main.ui line 337
-#: rc.cpp:318
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:399
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:391 rc.cpp:369
 msgid "F11"
-msgstr "F1"
+msgstr "F11"
 
-#. i18n: file ./window_main.ui line 351
-#: rc.cpp:321
-#, no-c-format
-msgid "Enable &side window"
-msgstr ""
+#. i18n: file: mainwindow.ui:417
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:392 rc.cpp:372
+msgid "Show &navigator window"
+msgstr "显示导航栏(&N)"
 
-#. i18n: file ./window_main.ui line 354
-#: rc.cpp:324
-#, no-c-format
+#. i18n: file: mainwindow.ui:420
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:394 rc.cpp:375
+msgid "Show navigator dock window"
+msgstr "显示导航侧边栏"
+
+#. i18n: file: mainwindow.ui:423
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:397 rc.cpp:378
 msgid ""
 "Shows or hides the size window (with Content, Index, Search and Bookmark "
 "tabs)"
-msgstr ""
+msgstr "显示或隐藏侧边栏(包含内容，索引，搜索和书签分页)"
 
-#. i18n: file ./window_main.ui line 357
-#: rc.cpp:327
-#, no-c-format
+#. i18n: file: mainwindow.ui:426
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:399 rc.cpp:381
 msgid "F9"
-msgstr ""
+msgstr "F9"
 
-#. i18n: file ./window_main.ui line 369
-#: rc.cpp:330
-#, no-c-format
-msgid "&Locate in contents window"
-msgstr "目录窗口&定位(&L)"
+#. i18n: file: mainwindow.ui:438
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:400 rc.cpp:384
+msgid "&Locate"
+msgstr "定位(&L)"
 
-#. i18n: file ./window_main.ui line 372
-#: rc.cpp:333
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:441
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:402 rc.cpp:387
 msgid "Locate the current page in contents window"
-msgstr "在目录窗口定位主题"
+msgstr "在内容窗口中定位当前页"
 
-#. i18n: file ./window_main.ui line 375
-#: rc.cpp:336
-#, no-c-format
+#. i18n: file: mainwindow.ui:444
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:405 rc.cpp:390
 msgid ""
 "If the current page is present in the Table of Contents, locate it there. "
-msgstr ""
+msgstr "如果目录中存在当前页，那定位到这页。"
 
-#. i18n: file ./window_main.ui line 378
-#: rc.cpp:339
-#, no-c-format
-msgid "Ctrl+"
-msgstr ""
+#. i18n: file: mainwindow.ui:447
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:407 rc.cpp:393
+msgid "Ctrl+L"
+msgstr "Ctrl+L"
 
-#. i18n: file ./window_main.ui line 383
-#: rc.cpp:342
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:456
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:408 rc.cpp:396
 msgid "Set &encoding"
-msgstr "设置编码(&S)"
+msgstr "设置编码(&E)"
 
-#. i18n: file ./window_main.ui line 386
-#: rc.cpp:345
-#, no-c-format
+#. i18n: file: mainwindow.ui:459
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:410 rc.cpp:399
 msgid "Changes the current document encoding. "
-msgstr ""
+msgstr "改变当前文档的编码。"
 
-#. i18n: file ./window_main.ui line 395
-#: rc.cpp:348
-#, no-c-format
+#. i18n: file: mainwindow.ui:468
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:412 rc.cpp:402
 msgid "&Open..."
-msgstr ""
+msgstr "打开...(&O)"
 
-#. i18n: file ./window_main.ui line 398
-#: rc.cpp:351
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:471
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:414 rc.cpp:405
 msgid "Open a CHM file"
-msgstr "打开文件"
+msgstr "打开 CHM 文件"
 
-#. i18n: file ./window_main.ui line 401
-#: rc.cpp:354
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:474
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:417 rc.cpp:408
 msgid "Opens a new CHM file"
-msgstr "总打开新的CHM文件"
+msgstr "打开一个新的 CHM 文件"
 
-#. i18n: file ./window_main.ui line 410
-#: rc.cpp:357
-#, no-c-format
+#. i18n: file: mainwindow.ui:483
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:419 rc.cpp:411
 msgid "Back"
-msgstr ""
+msgstr "后退"
 
-#. i18n: file ./window_main.ui line 413
-#: rc.cpp:360
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:486
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:421 rc.cpp:414
 msgid "Navigate back"
-msgstr "导航"
+msgstr "后退"
 
-#. i18n: file ./window_main.ui line 416
-#: rc.cpp:363
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:489
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:424 rc.cpp:417
 msgid "Navigate back in navigation history"
-msgstr "在历史中后退"
+msgstr "在导航历史中后退"
 
-#. i18n: file ./window_main.ui line 425
-#: rc.cpp:366
-#, no-c-format
+#. i18n: file: mainwindow.ui:498
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:426 rc.cpp:420
 msgid "Forward"
-msgstr ""
+msgstr "前进"
 
-#. i18n: file ./window_main.ui line 428
-#: rc.cpp:369
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:501
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:428 rc.cpp:423
 msgid "Navigate forward"
-msgstr "导航"
+msgstr "前进"
 
-#. i18n: file ./window_main.ui line 431
-#: rc.cpp:372
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:504
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:431 rc.cpp:426
 msgid "Navigate forward in navigation history"
-msgstr "在历史中前进"
+msgstr "在导航历史中前进"
 
-#. i18n: file ./window_main.ui line 440
-#: rc.cpp:375
-#, no-c-format
+#. i18n: file: mainwindow.ui:513
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:433 rc.cpp:429
 msgid "Home"
-msgstr ""
+msgstr "主页"
 
-#. i18n: file ./window_main.ui line 443
-#: rc.cpp:378
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:516
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:435 rc.cpp:432
 msgid "Navigate home"
-msgstr "导航"
+msgstr "导航到主页"
 
-#. i18n: file ./window_main.ui line 446
-#: rc.cpp:381
-#, no-c-format
+#. i18n: file: mainwindow.ui:519
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:438 rc.cpp:435
 msgid "Navigate to the document Home page, as specified in the document."
-msgstr ""
+msgstr "导航到文档所指定的主页。"
 
-#. i18n: file ./window_main.ui line 455
-#: rc.cpp:384
-#, fuzzy, no-c-format
-msgid "Previous page in Table of Context"
-msgstr "点击此按钮前往目录表格中的前一页"
+#. i18n: file: mainwindow.ui:528
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#. i18n: file: window_browser.ui:90
+#. i18n: ectx: property (text), widget (QToolButton, toolPrevious)
+#: ui_mainwindow.h:440 ui_window_browser.h:169 rc.cpp:438 rc.cpp:544
+msgid "Previous"
+msgstr "上一页"
 
-#. i18n: file ./window_main.ui line 458
-#: rc.cpp:387
-#, fuzzy, no-c-format
-msgid "Previous page in TOC"
-msgstr "目录表格的前一页"
-
-#. i18n: file ./window_main.ui line 461
-#: rc.cpp:390
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:531
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:442 rc.cpp:441
 msgid "Go to the previous page in the Table of Contents"
-msgstr "点击此按钮前往目录表格中的前一页"
+msgstr "翻到目录中的上一页"
 
-#. i18n: file ./window_main.ui line 464
-#: rc.cpp:393
-#, no-c-format
+#. i18n: file: mainwindow.ui:534
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:445 rc.cpp:444
 msgid ""
 "Go to the previous page in the <b>Table of Contents</b><br><br><i>Shortcut: "
 "Ctrl+Left Arrow</i>"
-msgstr ""
+msgstr "翻到<b>目录</b>中的上一页<i>快捷键：Ctrl+左</i>"
 
-#. i18n: file ./window_main.ui line 473
-#: rc.cpp:396
-#, fuzzy, no-c-format
-msgid "Next page in Table of Context"
-msgstr "目录表格的后一页"
+#. i18n: file: mainwindow.ui:543
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#. i18n: file: window_browser.ui:113
+#. i18n: ectx: property (text), widget (QToolButton, toolNext)
+#: ui_mainwindow.h:447 ui_window_browser.h:170 rc.cpp:447 rc.cpp:547
+msgid "Next"
+msgstr "下一页"
 
-#. i18n: file ./window_main.ui line 476
-#: rc.cpp:399
-#, no-c-format
-msgid "Next page in TOC"
-msgstr "目录表格的后一页"
-
-#. i18n: file ./window_main.ui line 479
-#: rc.cpp:402
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:546
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:449 rc.cpp:450
 msgid "Go to the next page in the Table of Contents"
-msgstr "点击此按钮前往目录表格的后一页"
+msgstr "翻到目录中的下一页"
 
-#. i18n: file ./window_main.ui line 482
-#: rc.cpp:405
-#, no-c-format
+#. i18n: file: mainwindow.ui:549
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:452 rc.cpp:453
 msgid ""
 "Go to the next page in the <b>Table of Contents</b><br><br><i>Shortcut: Ctrl"
 "+Right Arrow</i>"
-msgstr ""
+msgstr "翻到<b>目录</b>中的下一页<i>快捷键：Ctrl+右</i>"
 
-#. i18n: file ./window_main.ui line 487
-#: rc.cpp:408
-#, fuzzy, no-c-format
+#. i18n: file: mainwindow.ui:558
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:454 rc.cpp:456
 msgid "&Close window"
+msgstr "关闭窗口(&C)"
+
+#. i18n: file: mainwindow.ui:561
+#. i18n: ectx: property (toolTip), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:456 rc.cpp:459
+msgid "Close current window"
+msgstr "关闭当前窗口"
+
+#. i18n: file: mainwindow.ui:564
+#. i18n: ectx: property (whatsThis), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:459 rc.cpp:462
+msgid "Closes currently opened window"
+msgstr "关闭当前打开的窗口"
+
+#. i18n: file: mainwindow.ui:567
+#. i18n: ectx: property (shortcut), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:461 rc.cpp:465
+msgid "Ctrl+W"
+msgstr "Ctrl+W"
+
+#. i18n: file: mainwindow.ui:572
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:462 rc.cpp:468
+msgid "About kchmviewer..."
+msgstr "关于 kchmviewer..."
+
+#. i18n: file: mainwindow.ui:577
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:463 rc.cpp:471
+msgid "About Qt"
+msgstr "关于QT"
+
+#. i18n: file: mainwindow.ui:586
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:464 rc.cpp:474
+msgid "Check for updates"
+msgstr "检查更新"
+
+#. i18n: file: mainwindow.ui:595
+#. i18n: ectx: property (text), widget (QStatusBar, mainStatusBar)
+#: ui_mainwindow.h:465 rc.cpp:477
+msgid "Edit toolbars..."
+msgstr "编辑工具栏..."
+
+#. i18n: file: mainwindow.ui:28
+#. i18n: ectx: property (title), widget (QMenu, menu_Settings)
+#: ui_mainwindow.h:466 rc.cpp:195
+msgid "&Settings"
+msgstr "设置(&S)"
+
+#. i18n: file: mainwindow.ui:37
+#. i18n: ectx: property (title), widget (QMenu, menu_Bookmarks)
+#: ui_mainwindow.h:467 rc.cpp:198
+msgid "&Bookmarks"
+msgstr "书签(&B)"
+
+#. i18n: file: mainwindow.ui:44
+#. i18n: ectx: property (title), widget (QMenu, menu_File)
+#: ui_mainwindow.h:468 rc.cpp:201
+msgid "&File"
+msgstr "文件(&F)"
+
+#. i18n: file: mainwindow.ui:55
+#. i18n: ectx: property (title), widget (QMenu, menu_Edit)
+#: ui_mainwindow.h:469 rc.cpp:204
+msgid "&Edit"
+msgstr "编辑(E)"
+
+#. i18n: file: mainwindow.ui:64
+#. i18n: ectx: property (title), widget (QMenu, menu_View)
+#: ui_mainwindow.h:470 rc.cpp:207
+msgid "&View"
+msgstr "查看(&V)"
+
+#. i18n: file: mainwindow.ui:78
+#. i18n: ectx: property (title), widget (QMenu, menu_Windows)
+#: ui_mainwindow.h:471 rc.cpp:210
+msgid "&Windows"
 msgstr "窗口(&W)"
 
-#. i18n: file ./window_main.ui line 490
-#: rc.cpp:411
-#, fuzzy, no-c-format
-msgid "Close current window"
-msgstr "显示目录窗口(&S)"
+#. i18n: file: mainwindow.ui:85
+#. i18n: ectx: property (title), widget (QMenu, menuHelp)
+#: ui_mainwindow.h:472 rc.cpp:213
+msgid "Help"
+msgstr "帮助"
 
-#. i18n: file ./window_main.ui line 493
-#: rc.cpp:414
-#, no-c-format
-msgid "Closes currently opened window"
+#. i18n: file: mainwindow.ui:100
+#. i18n: ectx: property (windowTitle), widget (QToolBar, mainToolbar)
+#: ui_mainwindow.h:473 rc.cpp:216
+msgid "General toolbar"
+msgstr "一般工具栏"
+
+#. i18n: file: mainwindow.ui:125
+#. i18n: ectx: property (windowTitle), widget (QToolBar, navToolbar)
+#: ui_mainwindow.h:474 rc.cpp:219
+msgid "Navigation toolbar"
+msgstr "导航工具栏"
+
+#. i18n: file: mainwindow.ui:151
+#. i18n: ectx: property (windowTitle), widget (QToolBar, viewToolbar)
+#: ui_mainwindow.h:475 rc.cpp:222
+msgid "View toolbar"
+msgstr "查看工具栏"
+
+#. i18n: file: navigatorpanel.ui:17
+#. i18n: ectx: property (windowTitle), widget (QDockWidget, NavigatorPanel)
+#: ui_navigatorpanel.h:66 rc.cpp:480
+msgid "Navigator panel"
+msgstr "导航栏"
+
+#. i18n: file: navigatorpanel.ui:28
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: ui_navigatorpanel.h:67 rc.cpp:483
+msgid "Tab 1"
+msgstr "标签页1"
+
+#. i18n: file: tab_bookmarks.ui:36
+#. i18n: ectx: property (text), widget (QPushButton, btnAdd)
+#: ui_tab_bookmarks.h:84 rc.cpp:486
+msgid "&Add"
+msgstr "添加(&A)"
+
+#. i18n: file: tab_bookmarks.ui:43
+#. i18n: ectx: property (text), widget (QPushButton, btnEdit)
+#: ui_tab_bookmarks.h:85 rc.cpp:489
+msgid "Edi&t"
+msgstr "编辑(&E)"
+
+#. i18n: file: tab_bookmarks.ui:50
+#. i18n: ectx: property (text), widget (QPushButton, btnDel)
+#: ui_tab_bookmarks.h:86 rc.cpp:492
+msgid "&Del"
+msgstr "删除(&D)"
+
+#. i18n: file: tab_contents.ui:13
+#. i18n: ectx: property (windowTitle), widget (QWidget, TabContents)
+#. i18n: file: tab_index.ui:13
+#. i18n: ectx: property (windowTitle), widget (QWidget, TabIndex)
+#. i18n: file: tab_search.ui:13
+#. i18n: ectx: property (windowTitle), widget (QWidget, TabSearch)
+#: ui_tab_contents.h:55 ui_tab_index.h:66 ui_tab_search.h:117 rc.cpp:495
+#: rc.cpp:498 rc.cpp:504
+msgid "Form1"
+msgstr "表1"
+
+#. i18n: file: tab_index.ui:41
+#. i18n: ectx: property (text), widget (QTreeWidget, tree)
+#: ui_tab_index.h:68 rc.cpp:501
+msgid "1"
+msgstr "1"
+
+#. i18n: file: tab_search.ui:33
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui_tab_search.h:118 rc.cpp:507
+msgid "Type in word(s) to search for:"
+msgstr "输入要搜索的词："
+
+#. i18n: file: tab_search.ui:48
+#. i18n: ectx: property (text), widget (QLabel, lblHelp)
+#: ui_tab_search.h:119 rc.cpp:510
+msgid "<a href=\"help\">Help</a>"
+msgstr "<a href=\"help\">帮助</a>"
+
+#. i18n: file: tab_search.ui:86
+#. i18n: ectx: property (text), widget (QPushButton, btnGo)
+#: ui_tab_search.h:120 rc.cpp:513
+msgid "&Go"
+msgstr "搜索(&G)"
+
+#. i18n: file: tab_search.ui:116
+#. i18n: ectx: property (text), widget (QTreeWidget, tree)
+#: ui_tab_search.h:122 rc.cpp:519
+msgid "Location"
+msgstr "位置"
+
+#. i18n: file: tab_search.ui:111
+#. i18n: ectx: property (text), widget (QTreeWidget, tree)
+#: ui_tab_search.h:123 rc.cpp:516
+msgid "Title"
+msgstr "标题"
+
+#. i18n: file: toolbareditor.ui:14
+#. i18n: ectx: property (windowTitle), widget (QDialog, ToolbarEditor)
+#: ui_toolbareditor.h:142 rc.cpp:522
+msgid "Dialog"
+msgstr "对话框"
+
+#. i18n: file: toolbareditor.ui:20
+#. i18n: ectx: property (title), widget (QGroupBox, groupEditToolbars)
+#: ui_toolbareditor.h:143 rc.cpp:525
+msgid "Select a toolbar"
+msgstr "选择一个工具栏"
+
+#. i18n: file: toolbareditor.ui:26
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: ui_toolbareditor.h:144 rc.cpp:528
+msgid "Editing the toolbar "
+msgstr "编辑工具栏"
+
+#. i18n: file: toolbareditor.ui:47
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: ui_toolbareditor.h:145 rc.cpp:531
+msgid ""
+"Drag the actions to the toolbar list to add them to the toolbar. \n"
+"Drag them from toolbar list to remove them from the toolbar."
 msgstr ""
+"将操作拖到工具栏操作列表可将其加入工具栏。\n"
+"从工具栏操作列表将它们拖走可将其从工具栏移除。"
 
-#. i18n: file ./window_main.ui line 496
-#: rc.cpp:417
-#, no-c-format
-msgid "Ctrl+W"
-msgstr ""
+#. i18n: file: toolbareditor.ui:65
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: ui_toolbareditor.h:147 rc.cpp:535
+msgid "Available actions"
+msgstr "可用操作列表"
 
-#: rc.cpp:418
+#. i18n: file: toolbareditor.ui:90
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: ui_toolbareditor.h:148 rc.cpp:538
+msgid "Toolbar actions"
+msgstr "工具栏操作列表"
+
+#. i18n: file: window_browser.ui:36
+#. i18n: ectx: property (windowTitle), widget (QWidget, TabbedBrowser)
+#: ui_window_browser.h:167 rc.cpp:541
+msgid "TabbedBrowser"
+msgstr "分页浏览器"
+
+#. i18n: file: window_browser.ui:133
+#. i18n: ectx: property (text), widget (QCheckBox, checkCase)
+#: ui_window_browser.h:171 rc.cpp:550
+msgid "Case Sensitive"
+msgstr "大小写敏感"
+
+#. i18n: file: window_browser.ui:152
+#. i18n: ectx: property (text), widget (QLabel, labelWrapped)
+#: ui_window_browser.h:172 rc.cpp:553
+msgid "<img src=\":/images/find_wrap.png\">&nbsp;Search wrapped"
+msgstr "<img src=\":/images/find_wrap.png\">&nbsp;已经搜索到末尾，从头开始"
+
+#: viewwindow.cpp:342
+msgid "Printing aborted"
+msgstr "打印被取消"
+
+#: viewwindow.cpp:347
+msgid "Printing finished"
+msgstr "打印完成"
+
+#: viewwindow.cpp:486
+msgid "Open Link in a new tab\tShift+LMB"
+msgstr "在新的标签页打开此链接\tShift+左键"
+
+#: viewwindow.cpp:487
+msgid "Open Link in a new background tab\tCtrl+LMB"
+msgstr "在后台标签页打开此链接\tCtrl+左键"
+
+#: viewwindowmgr.cpp:74
+msgid "Add page"
+msgstr "添加页面"
+
+#: viewwindowmgr.cpp:155 viewwindowmgr.cpp:234
+msgid "Alt+%1"
+msgstr "Alt+%1"
+
+#: rc.cpp:554
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "林俊, Henry Hu"
 
-#: rc.cpp:419
+#: rc.cpp:555
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "demonlinjun@163.com, henry.hu.sh@gmail.com"
+
+#~ msgid "Loading aborted"
+#~ msgstr "取消载入"
+
+#~ msgid "About %1"
+#~ msgstr "关于 %1"
+
+#~ msgid "&About"
+#~ msgstr "关于(&A)"
+
+#~ msgid "Close current page"
+#~ msgstr "关闭当前页面"
+
+#~ msgid "If no arguments given on load"
+#~ msgstr "如果载入时没有参数"
+
+#~ msgid "Version-specific settings"
+#~ msgstr "版本指定设置"
+
+#~ msgid "KDE version settings"
+#~ msgstr "KDE 版本设置"
+
+#~ msgid "To show HTML content, use"
+#~ msgstr "要显示HTML内容，使用"
+
+#~ msgid "&QTextBrowser-based widget"
+#~ msgstr "基于QTextBrowser的组件(&Q)"
+
+#~ msgid "Alt+Q"
+#~ msgstr "Alt+Q"
+
+#~ msgid "&KHTMLPart-based widget"
+#~ msgstr "基于KHTMLPart的组件(&K)"
+
+#~ msgid "Alt+K"
+#~ msgstr "Alt+K"
+
+#~ msgid "Qt &Webkit (requires Qt 4.4 or higher)"
+#~ msgstr "Qt Webkit (需要 Qt 4.4 或者更高版本) (&W)"
+
+#~ msgid "KHTMLPart security"
+#~ msgstr "KHTMLPart 安全性"
+
+#~ msgid "Enable &refresh"
+#~ msgstr "启用刷新(&R)"
+
+#~ msgid "Enable &plugins"
+#~ msgstr "启用插件(&P)"
+
+#~ msgid "Find"
+#~ msgstr "查找"
+
+#~ msgid "&View HTML source"
+#~ msgstr "查看HTML源码(&V)"
+
+#~ msgid "Enable &side window"
+#~ msgstr "启用侧边栏(&S)"
+
+#~ msgid "&Locate in contents window"
+#~ msgstr "在内容窗口中定位(&L)"
+
+#~ msgid "Previous page in Table of Context"
+#~ msgstr "目录中的前一页"
+
+#~ msgid "Previous page in TOC"
+#~ msgstr "目录中的前一页"
+
+#~ msgid "Next page in Table of Context"
+#~ msgstr "目录中的后一页"
+
+#~ msgid "Next page in TOC"
+#~ msgstr "目录中的后一页"
 
 #~ msgid "Qt version settings"
 #~ msgstr "QT 版本设置"
@@ -1211,14 +1594,8 @@ msgstr ""
 #~ "Your emails"
 #~ msgstr "demonlinjun@163.com"
 
-#~ msgid "&Add"
-#~ msgstr "添加(&A)"
-
 #~ msgid "Topics"
 #~ msgstr "主题"
-
-#~ msgid "Please select one of the topics below:"
-#~ msgstr "请在下面选取一个主题"
 
 #~ msgid "&Ok"
 #~ msgstr "确定(&O)"
@@ -1243,9 +1620,6 @@ msgstr ""
 #~ "在GNU GPL授权方式下发行。\n"
 #~ "\n"
 #~ "请尝试我们的另一个项目，www.transientmail.com - 临时 E-Mail地址。"
-
-#~ msgid "File Operations"
-#~ msgstr "文件操作"
 
 #~ msgid "Click this button to open an existing chm file."
 #~ msgstr "点击此按钮打开存在的CHM文件"
@@ -1323,12 +1697,6 @@ msgstr ""
 
 #~ msgid "&Set language"
 #~ msgstr "设置语言(&S)"
-
-#~ msgid "Type in word(s) to search for:"
-#~ msgstr "输入要搜索的词"
-
-#~ msgid "Location"
-#~ msgstr "位置"
 
 #~ msgid "How to use search"
 #~ msgstr "如何使用搜索"

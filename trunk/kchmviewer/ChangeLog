@@ -10,7 +10,7 @@
     - Fixed binary TOC parser check which led to crashes for some CHM files.
     - Fixed incorrect settings file storage name when the CHM file contains multiple dots.
     - Fixed the Ctrl+click and Shift+click when the release event was intercepted by other applications (i.e. GoldenDict)
-
+    - 'Esc' closes the search dialog and restores focus in the content  window.
 
 2011-12-18 tim <gyunaev@ulduzsoft.com>
     - Version 6.0 released

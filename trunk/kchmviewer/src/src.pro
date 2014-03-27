@@ -4,7 +4,6 @@ HEADERS += config.h \
     dialog_chooseurlfromlist.h \
     dialog_setup.h \
     kde-qt.h \
-    keyeventfilter.h \
     mainwindow.h \
     recentfiles.h \
     settings.h \
@@ -26,7 +25,6 @@ SOURCES += config.cpp \
     dialog_chooseurlfromlist.cpp \
     dialog_setup.cpp \
     kde-qt.cpp \
-    keyeventfilter.cpp \
     main.cpp \
     mainwindow.cpp \
     recentfiles.cpp \

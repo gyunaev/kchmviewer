@@ -38,7 +38,6 @@
 #include "settings.h"
 #include "viewwindow.h"
 #include "viewwindowmgr.h"
-#include "keyeventfilter.h"
 #include "dialog_setup.h"
 #include "recentfiles.h"
 #include "navigationpanel.h"
@@ -291,10 +290,12 @@ void MainWindow::activateLink ( const QString & link )
 {
 	if ( link.isEmpty() )
 		return;
-	
-	if ( gKeyEventFilter.isShiftPressed() )
+
+	Qt::KeyboardModifiers mods = QApplication::keyboardModifiers();
+
+	if ( mods & Qt::ShiftModifier )
 		openPage( link, OPF_NEW_TAB | OPF_CONTENT_TREE );
-	else if ( gKeyEventFilter.isCtrlPressed() )
+	else if ( mods & Qt::ControlModifier )
 		openPage( link, OPF_NEW_TAB | OPF_BACKGROUND );
 	else
 		openPage( link, OPF_CONTENT_TREE | OPF_ADD2HISTORY );

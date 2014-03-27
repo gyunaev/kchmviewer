@@ -89,7 +89,8 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 	connect( editFind, SIGNAL(returnPressed()), this, SLOT(onFindNext()) );
 
 	// Search toolbar buttons
-	connect( toolClose, SIGNAL(clicked()), frameFind, SLOT( hide()) );
+	toolClose->setShortcut( Qt::Key_Escape );
+	connect( toolClose, SIGNAL(clicked()), this, SLOT( closeSearch()) );
 	connect( toolPrevious, SIGNAL(clicked()), this, SLOT( onFindPrevious()) );
 	connect( toolNext, SIGNAL(clicked()), this, SLOT( onFindNext()) );
 }
@@ -315,6 +316,12 @@ void ViewWindowMgr::activateWindow()
 	}
 }
 
+void ViewWindowMgr::closeSearch()
+{
+	frameFind->hide();
+	m_tabWidget->currentWidget()->setFocus();
+}
+
 ViewWindowMgr::TabData * ViewWindowMgr::findTab(QWidget * widget)
 {
 	for ( WindowsIterator it = m_Windows.begin(); it != m_Windows.end(); ++it )
@@ -366,7 +373,6 @@ void ViewWindowMgr::find( bool backward )
 		p.setColor( QPalette::Active, QPalette::Base, Qt::white );
 
 	editFind->setPalette( p );
-	//labelWrapped->setVisible( status == SearchResultFoundWrapped );
 }
 
 

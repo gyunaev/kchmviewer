@@ -78,6 +78,7 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		void	onTabChanged( int newtabIndex );
 		void	updateCloseButtons();
 		void	activateWindow();
+		void	closeSearch();
 		
 		void	editTextEdited( const QString & text );
 	

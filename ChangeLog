@@ -1,4 +1,5 @@
 2014-03-26 tim <gyunaev@ulduzsoft.com>
+    - Version 6.1 released
     - Keyboard usability improved thanks to the Giuseppe "Cowo" Corbelli.
     - The focus is now moved to the content page once the link is clicked, so the keyboard navigation is available immediately. You can switch the focus back by pressing Ctrl+(1-4).
     - Added extended keyboard shortcuts for FindNext and FindPrevious; F3 still works.
@@ -7,6 +8,9 @@
     - Upon successful search, the focus moves to the results list.
     - Titles are now space-trimmed.
     - Fixed binary TOC parser check which led to crashes for some CHM files.
+    - Fixed incorrect settings file storage name when the CHM file contains multiple dots.
+    - Fixed the Ctrl+click and Shift+click when the release event was intercepted by other applications (i.e. GoldenDict)
+
 
 2011-12-18 tim <gyunaev@ulduzsoft.com>
     - Version 6.0 released

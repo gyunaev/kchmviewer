@@ -25,7 +25,6 @@
 
 #include "mainwindow.h"
 #include "config.h"
-#include "keyeventfilter.h"
 #include "dbus_interface.h"
 #include "version.h"
 
@@ -89,8 +88,6 @@ int main( int argc, char ** argv )
 	// Configuration
 	pConfig = new Config();
 
-	app.installEventFilter( &gKeyEventFilter );
-	
 #if !defined (WIN32) && !defined(Q_WS_MAC)
 	if ( QDBusConnection::sessionBus().isConnected() )
 	{

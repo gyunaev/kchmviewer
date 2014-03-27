@@ -22,6 +22,6 @@ CONFIG += warn_on \
 TEMPLATE = lib
 INCLUDEPATH += ../../src
 
-win32-g++: {
+win32-g++*: {
 	DEFINES += USE_PATCHED_CHMLIB
 }

@@ -65,14 +65,23 @@ RESOURCES += resources/images.qrc
 QT += webkit \
     dbus \
     network
-win32-g++: {
+
+win32-g++*: {
     QT -= dbus
     HEADERS -= dbus_interface.h
     SOURCES -= dbus_interface.cpp
     CONFIG -= dbus
-    LIBS -= -lchm 
-    LIBS += -lwsock32 ../lib/libchmfile/chmlib-win32/chmlib.lib
+    LIBS -= -lchm ../lib/libchmfile/libchmfile.a
+    POST_TARGETDEPS -= ../lib/libchmfile/libchmfile.a
     DEFINES += USE_PATCHED_CHMLIB
+    
+	CONFIG( debug, debug|release ) {
+		LIBS += "../lib/libchmfile/debug/libchmfile.a"
+	} else {
+		LIBS += "../lib/libchmfile/release/libchmfile.a"
+	}    
+
+    LIBS += -lwsock32 ../lib/libchmfile/chmlib-win32/chmlib.lib
 }
 
 macx-g++: {
@@ -85,4 +94,6 @@ macx-g++: {
     QMAKE_POST_LINK += cp resources/*.icns ${DESTDIR}/kchmviewer.app/Contents/Resources;
 }
 
-
+linux-g++-32: {
+	LIBS += -L.
+}

@@ -1,9 +1,7 @@
 #!/bin/sh
 
 # Path to (cross-platform) mingw compiler
-#MINGWPATH=/home/tim/bin/mingw/bin
-#QTPATH=/home/tim/bin/qt-4.6.0/qt/
-MINGWPATH=/usr/toolchains/windows-x86-mingw/bin
+MINGWPATH=/usr/toolchains/windows-x86-mingw-oldqtwebkit/bin
 QMAKE=i686-pc-mingw32-qmake
 
 BUILDDIR="build.win32"
@@ -19,4 +17,4 @@ cd "$BUILDDIR"
 
 # Compile it
 export PATH=$MINGWPATH:$PATH
-$QMAKE -r -spec win32-g++ "CONFIG += release" && make -j4  || exit 1
+$QMAKE -r "CONFIG -= release_and_debug" "CONFIG += release"  && make -j4  || exit 1

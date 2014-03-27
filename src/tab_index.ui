@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>TabIndex</class>
- <widget class="QWidget" name="TabIndex" >
-  <property name="geometry" >
+ <widget class="QWidget" name="TabIndex">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,35 +10,43 @@
     <height>382</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Form1</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLineEdit" name="text" />
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>F&amp;ind:</string>
+       </property>
+       <property name="buddy">
+        <cstring>text</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="text"/>
+     </item>
+    </layout>
    </item>
    <item>
-    <widget class="QTreeWidget" name="tree" >
-     <property name="indentation" >
+    <widget class="QTreeWidget" name="tree">
+     <property name="indentation">
       <number>10</number>
      </property>
-     <property name="rootIsDecorated" >
+     <property name="rootIsDecorated">
       <bool>false</bool>
      </property>
-     <property name="allColumnsShowFocus" >
+     <property name="allColumnsShowFocus">
       <bool>true</bool>
      </property>
-     <property name="columnCount" >
+     <property name="columnCount">
       <number>1</number>
      </property>
      <column>
-      <property name="text" >
+      <property name="text">
        <string>1</string>
       </property>
      </column>
@@ -45,7 +54,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

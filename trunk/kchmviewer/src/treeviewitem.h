@@ -30,8 +30,7 @@
 #include <QTreeWidget>
 #include <QTableWidget>
 
-#include "libchmfile.h"
-
+class EBookIndexEntry;
 
 //! This is a list item used both in Index and Table Of Content trees
 class IndexTocItem : public QTreeWidgetItem
@@ -54,6 +53,6 @@ class IndexTocItem : public QTreeWidgetItem
 
 
 
-void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, IndexTocItem*> * map );
+void kchmFillListViewWithParsedData( QTreeWidget * list, const QList< EBookIndexEntry >& data, QMap<QString, IndexTocItem*> * map );
 
 #endif

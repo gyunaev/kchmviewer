@@ -16,7 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#include "libchmfile.h"
 #include "libchmtocimage.h"
 
 typedef struct
@@ -2091,7 +2090,7 @@ static const png_memory_image_t png_image_bookarray[42] =
 
 LCHMTocImageKeeper::LCHMTocImageKeeper( )
 {
-	for ( int i = 0; i < LCHMBookIcons::MAX_BUILTIN_ICONS; i++ )
+	for ( int i = 0; i < 42; i++ )
 	{
 		const png_memory_image_t * image = png_image_bookarray + i;
 		
@@ -2102,8 +2101,8 @@ LCHMTocImageKeeper::LCHMTocImageKeeper( )
 
 const QPixmap * LCHMTocImageKeeper::getImage( int id )
 {
-	if ( id < 0 || id > LCHMBookIcons::MAX_BUILTIN_ICONS )
-		qFatal("LCHMTocImageKeeper::getImage: requested image id (%d) is out of range (%d)", id,  LCHMBookIcons::MAX_BUILTIN_ICONS );
+	if ( id < 0 || id > 42 )
+		qFatal("LCHMTocImageKeeper::getImage: requested image id (%d) is out of range (%d)", id,  42 );
 	
 	return &m_images[id];
 }

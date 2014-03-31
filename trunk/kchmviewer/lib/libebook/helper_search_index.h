@@ -16,18 +16,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef QASSISTANTINDEX_H
-#define QASSISTANTINDEX_H
+#ifndef EBOOK_SEARCH_INDEX_H
+#define EBOOK_SEARCH_INDEX_H
 
 #include <QHash>
 #include <QVector>
 #include <QDataStream>
 #include <QStringList>
 
-//#include "libchmurlfactory.h"
+#include "helper_entitydecoder.h"
 
-class LCHMFile;
 
+class EBook;
+
+// This code is based on some pretty old version of Qt Assistant
 namespace QtAs
 {
 
@@ -71,8 +73,8 @@ class Index : public QObject
 		
 		void 		writeDict( QDataStream& stream );
 		bool 		readDict( QDataStream& stream );
-		bool 		makeIndex( const QStringList& docs, LCHMFile * chmFile );
-		QStringList query( const QStringList&, const QStringList&, const QStringList&, LCHMFile * chmFile );
+		bool 		makeIndex( const QStringList& docs, EBook * chmFile );
+		QStringList query( const QStringList&, const QStringList&, const QStringList&, EBook * chmFile );
 		QString 	getCharsSplit() const { return m_charssplit; }
 		QString 	getCharsPartOfWord() const { return m_charsword; }
 
@@ -96,18 +98,19 @@ class Index : public QObject
 			QList<uint> positions;
 		};
 		
-		bool	parseDocumentToStringlist( LCHMFile * chmFile, const QString& filename, QStringList& tokenlist );
+		bool	parseDocumentToStringlist( EBook * chmFile, const QString& filename, QStringList& tokenlist );
 		void	insertInDict( const QString&, int );
 		
 		QStringList				getWildcardTerms( const QString& );
 		QStringList				split( const QString& );
 		QList<Document> 		setupDummyTerm( const QStringList& );
-		bool 					searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename, LCHMFile * chmFile );
+		bool 					searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename, EBook * chmFile );
 		
 		QStringList 			docList;
 		QHash<QString, Entry*> 	dict;
 		QHash<QString,PosEntry*>miniDict;
 		bool 					lastWindowClosed;
+		HelperEntityDecoder		entityDecoder;
 	
 		// Those characters are splitters (i.e. split the word), but added themselves into dictionary too.
 		// This makes the dictionary MUCH larger, but ensure that for the piece of "window->print" both 
@@ -120,4 +123,4 @@ class Index : public QObject
 
 };
 
-#endif /* QASSISTANTINDEX_H */
+#endif // EBOOK_SEARCH_INDEX_H

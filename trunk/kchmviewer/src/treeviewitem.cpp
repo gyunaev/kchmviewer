@@ -48,7 +48,7 @@ QString IndexTocItem::getUrl( ) const
 	// Create a dialog with URLs, and show it, so user can select an URL he/she wants.
 	QStringList urls = m_url.split( '|' );
 	QStringList titles;
-	LCHMFile * xchm = ::mainWindow->chmFile();
+	EBook * xchm = ::mainWindow->chmFile();
 
 	for ( int i = 0; i < urls.size(); i++ )
 	{
@@ -88,21 +88,21 @@ QVariant IndexTocItem::data(int column, int role) const
 		
 		// Item image
 		case Qt::DecorationRole:
-			if ( m_image_number != LCHMBookIcons::IMAGE_NONE 
-        	&& m_image_number != LCHMBookIcons::IMAGE_INDEX )
+			if ( m_image_number != EBookIndexEntry::IMAGE_NONE
+			&& m_image_number != EBookIndexEntry::IMAGE_INDEX )
 			{
 				// If the item has children, we change the book image to "open book", or next image automatically
 				if ( childCount() )
 				{
 					if ( isExpanded() )
-						imagenum = (m_image_number == LCHMBookIcons::IMAGE_AUTO) ? 1 : m_image_number;
+						imagenum = (m_image_number == EBookIndexEntry::IMAGE_AUTO) ? 1 : m_image_number;
 					else
-						imagenum = (m_image_number == LCHMBookIcons::IMAGE_AUTO) ? 0 : m_image_number + 1;
+						imagenum = (m_image_number == EBookIndexEntry::IMAGE_AUTO) ? 0 : m_image_number + 1;
 				}
 				else
-					imagenum = (m_image_number == LCHMBookIcons::IMAGE_AUTO) ? 10 : m_image_number;
+					imagenum = (m_image_number == EBookIndexEntry::IMAGE_AUTO) ? 10 : m_image_number;
 			
-				const QPixmap *pix = ::mainWindow->chmFile()->getBookIconPixmap( imagenum );
+				const QPixmap *pix = ::mainWindow->chmFile()->getBookIconPixmap( (EBookIndexEntry::Icon) imagenum );
 			
 				if ( !pix || pix->isNull() )
 					abort();
@@ -130,7 +130,7 @@ QVariant IndexTocItem::data(int column, int role) const
 }
 
 
-void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMParsedEntry >& data, QMap<QString, IndexTocItem*> * map )
+void kchmFillListViewWithParsedData( QTreeWidget * list, const QList< EBookIndexEntry >& data, QMap<QString, IndexTocItem*> * map )
 {
 	QVector< IndexTocItem *> lastchild;
 	QVector< IndexTocItem *> rootentry;
@@ -182,7 +182,7 @@ void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMPars
 		QString url = data[i].urls.join ("|");
 		
 		if ( indent == 0 )
-			item = new IndexTocItem( list, lastchild[indent], data[i].name, url, data[i].imageid );
+			item = new IndexTocItem( list, lastchild[indent], data[i].name, url, data[i].iconid );
 		else
 		{
 			// New non-root entry. It is possible (for some buggy CHMs) that there is no previous entry: previoous entry had indent 1,
@@ -190,7 +190,7 @@ void kchmFillListViewWithParsedData( QTreeWidget * list, const QVector< LCHMPars
 			if ( rootentry[indent-1] == 0 )
 				qFatal("Child entry indented as %d with no root entry!", indent);
 			
-			item = new IndexTocItem( rootentry[indent-1], lastchild[indent], data[i].name, url, data[i].imageid );
+			item = new IndexTocItem( rootentry[indent-1], lastchild[indent], data[i].name, url, data[i].iconid );
 		}
 		
 		// Hack: if map is 0, we have index, so make it open

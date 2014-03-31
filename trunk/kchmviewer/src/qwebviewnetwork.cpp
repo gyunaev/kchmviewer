@@ -28,7 +28,6 @@
 #include "qwebviewnetwork.h"
 #include "viewwindow.h"
 #include "config.h"
-#include "libchmfile.h"
 #include "mainwindow.h"
 
 
@@ -76,10 +75,7 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 	QString data, file, path = url.toString( QUrl::StripTrailingSlash );
 
 	// Retreive the data from chm file
-	LCHMFile * chm = ::mainWindow->chmFile();
-
-	// Does the file point to another URL?
-	LCHMFile newfile;
+	EBook * chm = ::mainWindow->chmFile();
 
 	// Does the file have a file name, or just a path with ms-its prefix?
 	if ( !path.contains( "::" ) )
@@ -95,13 +91,15 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 
 		if ( LCHMUrlFactory::isNewChmURL ( path, mainWindow->getOpenedFileName(), file, data) )
 		{
-			if ( !newfile.loadFile( file ) )
+			EBook * newchm = EBook::loadFile( file );
+
+			if ( !newchm )
 			{
 				qWarning( "External resource %s cannot be loaded from file %s\n", qPrintable( data ), qPrintable( file ) );
 				return QByteArray();
 			}
 
-			chm = &newfile;
+			chm = newchm;
 			path = data;
 		}
 	}
@@ -127,7 +125,7 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 		// If encoding autodetection is enabled, decode it. Otherwise pass as binary.
 		if ( pConfig->m_advAutodetectEncoding )
 		{
-			if ( !chm->getFileContentAsString( &data, path ) )
+			if ( !chm->getFileContentAsString( data, path ) )
 				qWarning( "Could not resolve file %s\n", qPrintable( path ) );
 
 			setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
@@ -135,7 +133,7 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 		}
 		else
 		{
-			if ( !chm->getFileContentAsBinary( &buf, path ) )
+			if ( !chm->getFileContentAsBinary( buf, path ) )
 				qWarning( "Could not resolve file %s\n", qPrintable( path ) );
 
 			setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
@@ -145,7 +143,7 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 	{
 		QString fpath = ViewWindow::decodeUrl( path );
 
-		if ( !chm->getFileContentAsBinary( &buf, fpath ) )
+		if ( !chm->getFileContentAsBinary( buf, fpath ) )
 			qWarning( "Could not resolve file %s\n", qPrintable( path ) );
 
 		setHeader( QNetworkRequest::ContentTypeHeader, "binary/octet" );

@@ -28,7 +28,7 @@
 #include "ui_navigatorpanel.h"
 #include "kde-qt.h"
 
-class LCHMFile;
+class EBook;
 
 // This class shows content, index, search and bookmark tabs
 class NavigationPanel : public QDockWidget, public Ui::NavigatorPanel
@@ -53,7 +53,7 @@ class NavigationPanel : public QDockWidget, public Ui::NavigatorPanel
 		void	invalidate();
 
 		// Update tabs content from CHM file data
-		void	updateTabs( LCHMFile * file );
+		void	updateTabs(EBook *file );
 
 		// Save/load current file settings
 		void	applySettings( Settings * settings );

@@ -4,16 +4,16 @@
 FILE_VERSION=../src/version.h
 
 # Generated binary
-BINARY=../build.win32/bin/kchmviewer.exe
+BINARY=../build.win32/src/bin/kchmviewer.exe
 
 # Qt libs
-QTPATH=/usr/toolchains/windows-x86-mingw/i686-pc-mingw32/lib/
-QTPLUGPATH=/usr/toolchains/windows-x86-mingw/i686-pc-mingw32/plugins/
+QTPATH=/usr/toolchains/windows-x86-complete/i686-pc-mingw32/qt4-shared/bin/
+QTPLUGPATH=/usr/toolchains/windows-x86-complete/i686-pc-mingw32/qt4-shared/plugins/
 
 # Start the mojo
-QTLIBS="QtGui4.dll QtCore4.dll QtNetwork4.dll QtWebKit4.dll QtXmlPatterns4.dll"
+QTLIBS="QtGui4.dll QtCore4.dll QtNetwork4.dll QtWebKit4.dll QtXml4.dll QtSvg4.dll"
 QTPLUGINS="imageformats/qgif4.dll imageformats/qico4.dll imageformats/qjpeg4.dll imageformats/qmng4.dll imageformats/qsvg4.dll \
-	imageformats/qtiff4.dll iconengines/qsvgicon4.dll codecs/qcncodecs4.dll codecs/qjpcodecs4.dll codecs/qkrcodecs4.dll codecs/qtwcodecs4.dll"
+	imageformats/qtiff4.dll iconengines/qsvgicon4.dll"
 
 find . -type l -delete
 
@@ -40,7 +40,6 @@ for plug in $QTPLUGINS; do
 	echo "Added Qt plugin $plug"
 done
 
-ln -s "$QTPATH/../bin/mingwm10.dll" mingwm10.dll
 cp $BINARY kchmviewer.exe
 
 export NSISDIR=/home/tim/bin/nsis

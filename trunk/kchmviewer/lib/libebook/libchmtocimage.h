@@ -21,6 +21,8 @@
 
 #include <QPixmap>
 
+//FIXME! dump to resources
+
 //! This class is used to retrieve the book TOC icons associated with images
 class LCHMTocImageKeeper
 {
@@ -29,7 +31,7 @@ class LCHMTocImageKeeper
 		const QPixmap * getImage( int id );
 		
 	private:
-		QPixmap	m_images[LCHMBookIcons::MAX_BUILTIN_ICONS];
+		QPixmap	m_images[42];
 };
 
 

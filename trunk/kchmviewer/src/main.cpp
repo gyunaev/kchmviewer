@@ -45,8 +45,6 @@
 MainWindow * mainWindow;
 
 
-
-
 int main( int argc, char ** argv )
 {
 #if defined (USE_KDE)

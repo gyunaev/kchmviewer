@@ -23,7 +23,6 @@
 
 #include "kde-qt.h"
 
-#include "libchmfile.h"
 #include "libchmurlfactory.h"
 
 #include "mainwindow.h"
@@ -66,9 +65,9 @@ TabContents::~TabContents()
 void TabContents::refillTableOfContents( )
 {
 	ShowWaitCursor wc;
-	QVector< LCHMParsedEntry > data;
+	QList< EBookIndexEntry > data;
 	
-	if ( !::mainWindow->chmFile()->parseTableOfContents( &data )
+	if ( !::mainWindow->chmFile()->parseTableOfContents( data )
 	|| data.size() == 0 )
 	{
 		qWarning ("CHM toc present but is empty; wrong parsing?");
@@ -88,7 +87,7 @@ IndexTocItem * TabContents::getTreeItem( const QString & url )
 
 	if ( it == m_urlListMap.end() )
 	{
-		QString fixedstr = ::mainWindow->chmFile()->normalizeUrl( url );
+		QString fixedstr = LCHMUrlFactory::normalizeUrl( url );
 		it = m_urlListMap.find( fixedstr );
 	}
 

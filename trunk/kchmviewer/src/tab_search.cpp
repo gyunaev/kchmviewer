@@ -23,12 +23,11 @@
 
 #include <QHeaderView>
 
-#include "libchmfile.h"
-
 #include "mainwindow.h"
 #include "config.h"
 #include "treeviewitem.h"
 #include "tab_search.h"
+#include "ebook_search.h"
 
 
 class SearchTreeViewItem : public QTreeWidgetItem
@@ -111,7 +110,7 @@ TabSearch::TabSearch( QWidget * parent )
 	m_genIndexProgress = 0;
 	m_searchEngineInitDone = false;
 	
-	m_searchEngine = new LCHMSearchEngine();
+	m_searchEngine = new EBookSearch();
 	connect( m_searchEngine, SIGNAL( progressStep( int, const QString& ) ), this, SLOT( onProgressStep( int, const QString& ) ) );
 }
 

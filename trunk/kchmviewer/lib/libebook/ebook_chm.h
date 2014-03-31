@@ -12,7 +12,7 @@
 
 #include "ebook.h"
 #include "helper_entitydecoder.h"
-#include "libchmtocimage.h"
+
 
 class EBook_CHM : public EBook
 {
@@ -227,8 +227,8 @@ class EBook_CHM : public EBook
 		//! Indicates whether index, either binary or text, is available.
 		bool			m_indexAvailable;
 
-		//! Book TOC icon images storage
-		LCHMTocImageKeeper	m_imagesKeeper;
+		//! Built-in CHM icons
+		QVector< QPixmap> m_chmBuiltinIcons;
 
 		//! Map url->topic
 		QMap< QString, QString >	m_url2topics;

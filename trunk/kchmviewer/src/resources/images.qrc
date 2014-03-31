@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/images" >
+    <qresource prefix="/images">
         <file>addtab.png</file>
         <file>closetab.png</file>
         <file>find_close.png</file>
@@ -27,5 +27,49 @@
         <file>dryicons_replace.png</file>
         <file>dryicons_save.png</file>
         <file>dryicons_window.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>chm_icons/icon_0.png</file>
+        <file>chm_icons/icon_1.png</file>
+        <file>chm_icons/icon_2.png</file>
+        <file>chm_icons/icon_3.png</file>
+        <file>chm_icons/icon_4.png</file>
+        <file>chm_icons/icon_5.png</file>
+        <file>chm_icons/icon_6.png</file>
+        <file>chm_icons/icon_7.png</file>
+        <file>chm_icons/icon_8.png</file>
+        <file>chm_icons/icon_9.png</file>
+        <file>chm_icons/icon_17.png</file>
+        <file>chm_icons/icon_18.png</file>
+        <file>chm_icons/icon_19.png</file>
+        <file>chm_icons/icon_20.png</file>
+        <file>chm_icons/icon_21.png</file>
+        <file>chm_icons/icon_22.png</file>
+        <file>chm_icons/icon_23.png</file>
+        <file>chm_icons/icon_24.png</file>
+        <file>chm_icons/icon_25.png</file>
+        <file>chm_icons/icon_10.png</file>
+        <file>chm_icons/icon_11.png</file>
+        <file>chm_icons/icon_12.png</file>
+        <file>chm_icons/icon_26.png</file>
+        <file>chm_icons/icon_27.png</file>
+        <file>chm_icons/icon_28.png</file>
+        <file>chm_icons/icon_29.png</file>
+        <file>chm_icons/icon_13.png</file>
+        <file>chm_icons/icon_14.png</file>
+        <file>chm_icons/icon_15.png</file>
+        <file>chm_icons/icon_16.png</file>
+        <file>chm_icons/icon_30.png</file>
+        <file>chm_icons/icon_31.png</file>
+        <file>chm_icons/icon_32.png</file>
+        <file>chm_icons/icon_33.png</file>
+        <file>chm_icons/icon_34.png</file>
+        <file>chm_icons/icon_35.png</file>
+        <file>chm_icons/icon_36.png</file>
+        <file>chm_icons/icon_37.png</file>
+        <file>chm_icons/icon_38.png</file>
+        <file>chm_icons/icon_39.png</file>
+        <file>chm_icons/icon_40.png</file>
+        <file>chm_icons/icon_41.png</file>
     </qresource>
 </RCC>

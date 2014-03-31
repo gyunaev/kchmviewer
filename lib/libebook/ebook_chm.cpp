@@ -5,7 +5,6 @@
 
 #include "bitfiddle.h"
 #include "helper_urlfactory.h"
-#include "libchmtocimage.h"
 
 
 // Big-enough buffer size for use with various routines.
@@ -190,6 +189,8 @@ bool EBook_CHM::load(const QString &archiveName)
 	else
 		m_indexAvailable = false;
 
+	// Prepare the embedded icons
+	m_chmBuiltinIcons.resize( EBookIndexEntry::MAX_BUILTIN_ICONS );
 	return true;
 }
 
@@ -698,7 +699,15 @@ bool EBook_CHM::enumerateFiles( QStringList& files )
 
 const QPixmap * EBook_CHM::getBookIconPixmap( EBookIndexEntry::Icon imagenum )
 {
-	return m_imagesKeeper.getImage( imagenum );
+	if ( m_chmBuiltinIcons[imagenum].isNull() )
+	{
+		QString resicon = QString( ":/chm_icons/icon_%1.png") .arg( imagenum );
+
+		if ( !m_chmBuiltinIcons[imagenum].load( resicon ) )
+			qFatal("Could not initialize the internal icon %d as %s", imagenum, qPrintable( resicon ) );
+	}
+
+	return &(m_chmBuiltinIcons[imagenum]);
 }
 
 QString EBook_CHM::currentEncoding() const

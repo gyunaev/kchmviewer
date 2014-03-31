@@ -28,8 +28,7 @@
 #include "settings.h"
 #include "ui_tab_search.h"
 
-#include "libchmsearchengine.h"
-
+class EBookSearch;
 
 class TabSearch : public QWidget, public Ui::TabSearch
 {
@@ -58,7 +57,7 @@ class TabSearch : public QWidget, public Ui::TabSearch
 		
 	private:
 		QMenu			* 	m_contextMenu;
-		LCHMSearchEngine*	m_searchEngine;
+		EBookSearch		*	m_searchEngine;
 		bool				m_searchEngineInitDone;
 		
 		// For index generation

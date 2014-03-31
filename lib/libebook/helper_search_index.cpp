@@ -16,14 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#include <QApplication>
+#include "kde-qt.h"
 
-#include "libchmfileimpl.h"
-#include "libchmsearchengine_indexing.h"
-
+#include "ebook.h"
+#include "ebook_search.h"
+#include "helper_search_index.h"
 
 static const int DICT_VERSION = 3;
-
 
 namespace QtAs {
 
@@ -74,12 +73,13 @@ void Index::setLastWinClosed()
 }
 
 
-bool Index::makeIndex( const QStringList& docs, LCHMFile * chmFile )
+bool Index::makeIndex(const QStringList& docs, EBook *chmFile )
 {
 	if ( docs.isEmpty() )
 		return false;
 	
 	docList = docs;
+	entityDecoder.changeEncoding( QTextCodec::codecForName( chmFile->currentEncoding().toUtf8() ) );
 	
 	QStringList::ConstIterator it = docList.begin();
 	int steps = docList.count() / 100;
@@ -136,11 +136,11 @@ void Index::insertInDict( const QString &str, int docNum )
 }
 
 
-bool Index::parseDocumentToStringlist( LCHMFile * chmFile, const QString& filename, QStringList& tokenlist )
+bool Index::parseDocumentToStringlist(EBook *chmFile, const QString& filename, QStringList& tokenlist )
 {
 	QString parsedbuf, parseentity, text;
 	
-	if ( !chmFile->getFileContentAsString( &text, filename )
+	if ( !chmFile->getFileContentAsString( text, filename )
 	|| text.isEmpty() )
 	{
 		qWarning( "Search index generator: could not retrieve the document content for %s", qPrintable( filename ) );
@@ -158,7 +158,7 @@ bool Index::parseDocumentToStringlist( LCHMFile * chmFile, const QString& filena
 		STATE_OUTSIDE_TAGS,		// outside HTML tags; parse text
 		STATE_IN_HTML_TAG,		// inside HTML tags; wait for end tag
 		STATE_IN_QUOTES,		// inside HTML tags and inside quotes; wait for end quote (in var QuoteChar)
-		STATE_IN_HTML_ENTITY,	// inside HTML entity; parse the entity
+		STATE_IN_HTML_ENTITY	// inside HTML entity; parse the entity
 	};
 	
 	state_t state = STATE_OUTSIDE_TAGS;
@@ -226,7 +226,7 @@ bool Index::parseDocumentToStringlist( LCHMFile * chmFile, const QString& filena
 			// Don't we have a space?
 			if ( parseentity.toLower() != "nbsp" )
 			{
-				QString entity = chmFile->impl()->decodeEntity( parseentity );
+				QString entity = entityDecoder.decode( parseentity );
 			
 				if ( entity.isNull() )
 				{
@@ -354,7 +354,7 @@ bool Index::readDict( QDataStream& stream )
 }
 
 
-QStringList Index::query( const QStringList &terms, const QStringList &termSeq, const QStringList &seqWords, LCHMFile * chmFile )
+QStringList Index::query(const QStringList &terms, const QStringList &termSeq, const QStringList &seqWords, EBook *chmFile )
 {
 	QList<Term> termList;
 
@@ -418,7 +418,7 @@ QStringList Index::query( const QStringList &terms, const QStringList &termSeq, 
 }
 
 
-bool Index::searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename, LCHMFile * chmFile )
+bool Index::searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename, EBook * chmFile )
 {
 	QStringList parsed_document;
 

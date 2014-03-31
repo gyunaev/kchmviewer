@@ -1,4 +1,4 @@
-INCLUDEPATH += ../lib/libchmfile
+INCLUDEPATH += ../lib/libebook
 HEADERS += config.h \
     dbus_interface.h \
     dialog_chooseurlfromlist.h \
@@ -19,7 +19,8 @@ HEADERS += config.h \
     checknewversion.h \
     toolbarmanager.h \
     toolbareditor.h \
-    qwebviewnetwork.h
+    qwebviewnetwork.h \
+    textencodings.h
 SOURCES += config.cpp \
     dbus_interface.cpp \
     dialog_chooseurlfromlist.cpp \
@@ -40,9 +41,10 @@ SOURCES += config.cpp \
     checknewversion.cpp \
     toolbarmanager.cpp \
     toolbareditor.cpp \
-    qwebviewnetwork.cpp
-POST_TARGETDEPS += ../lib/libchmfile/libchmfile.a
-LIBS += ../lib/libchmfile/libchmfile.a -lchm
+    qwebviewnetwork.cpp \
+    textencodings.cpp
+POST_TARGETDEPS += ../lib/libebook/libebook.a
+LIBS += ../lib/libebook/libebook.a -lchm
 TARGET = ../bin/kchmviewer
 CONFIG += threads \
     warn_on \
@@ -71,17 +73,17 @@ win32-g++*: {
     HEADERS -= dbus_interface.h
     SOURCES -= dbus_interface.cpp
     CONFIG -= dbus
-    LIBS -= -lchm ../lib/libchmfile/libchmfile.a
-    POST_TARGETDEPS -= ../lib/libchmfile/libchmfile.a
+    LIBS -= -lchm ../lib/libebook/libebook.a
+    POST_TARGETDEPS -= ../lib/libebook/libebook.a
     DEFINES += USE_PATCHED_CHMLIB
     
 	CONFIG( debug, debug|release ) {
-		LIBS += "../lib/libchmfile/debug/libchmfile.a"
+		LIBS += "../lib/libebook/debug/libebook.a"
 	} else {
-		LIBS += "../lib/libchmfile/release/libchmfile.a"
+		LIBS += "../lib/libebook/release/libebook.a"
 	}    
 
-    LIBS += -lwsock32 ../lib/libchmfile/chmlib-win32/chmlib.lib
+    LIBS += -lwsock32 ../lib/libebook/chmlib-win32/chmlib.lib
 }
 
 macx-g++: {

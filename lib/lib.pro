@@ -1,2 +1,2 @@
-SUBDIRS += libchmfile
+SUBDIRS += libebook
 TEMPLATE = subdirs 

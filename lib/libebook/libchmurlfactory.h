@@ -128,6 +128,13 @@ static inline bool handleFileType( const QString& link, QString& generated )
 	return true;
 }
 
+static inline QString normalizeUrl(const QString &path)
+{
+	int pos = path.indexOf ('#');
+	QString fixedpath = pos == -1 ? path : path.left (pos);
+
+	return makeURLabsoluteIfNeeded( fixedpath );
+}
 
 };
 

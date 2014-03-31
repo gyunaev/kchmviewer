@@ -24,7 +24,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "libchmfile.h"
+#include "ebook.h"
 
 #include "kde-qt.h"
 #include "viewwindow.h"
@@ -71,9 +71,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 	
 		bool		openPage ( const QString &url, unsigned int flags = OPF_CONTENT_TREE );
 		
-		LCHMFile *	chmFile() const	{ return m_chmFile; }
-		const QString&	getOpenedFileName () { return m_chmFilename; }
-		const QString&	getOpenedFileBaseName () { return m_chmFileBasename; }
+		EBook	*	chmFile() const	{ return m_ebookFile; }
+		const QString&	getOpenedFileName () { return m_ebookFilename; }
+		const QString&	getOpenedFileBaseName () { return m_ebookFileBasename; }
 		
 		ViewWindow * currentBrowser() const;
 		Settings   * currentSettings() const { return m_currentSettings; }
@@ -81,7 +81,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		NavigationPanel * navigator() const { return m_navPanel; }
 
 		void		showInStatusBar (const QString& text);
-		void		setTextEncoding (const LCHMTextEncoding * enc);
+		void		setTextEncoding (const QString &enc);
 		QMenu * 	tabItemsContextMenu();
 	
 		// Called from WindowMgr when another browser tab is activated
@@ -168,11 +168,11 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		bool		handleUserEvent( const UserEvent * event );
 		
 	private:		
-		QString 				m_chmFilename;
-		QString 				m_chmFileBasename;
+		QString 				m_ebookFilename;
+		QString 				m_ebookFileBasename;
 		
 		Settings			*	m_currentSettings;
-		LCHMFile			*	m_chmFile;
+		EBook				*	m_ebookFile;
 		
 		QList<QTemporaryFile*>	m_tempFileKeeper;
 

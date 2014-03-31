@@ -75,7 +75,7 @@ void NavigationPanel::invalidate()
 	m_bookmarksTab->invalidate();
 }
 
-void NavigationPanel::updateTabs( LCHMFile * file )
+void NavigationPanel::updateTabs( EBook * file )
 {
 	invalidate();
 

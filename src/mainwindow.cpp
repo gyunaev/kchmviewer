@@ -28,8 +28,7 @@
 
 #include "kde-qt.h"
 
-#include "libchmfile.h"
-#include "libchmfileimpl.h"
+//FIXME!
 #include "libchmurlfactory.h"
 
 #include "mainwindow.h"
@@ -43,6 +42,7 @@
 #include "navigationpanel.h"
 #include "toolbarmanager.h"
 #include "version.h"
+#include "textencodings.h"
 #include "ui_dialog_about.h"
 
 
@@ -65,7 +65,7 @@ MainWindow::MainWindow()
 	else
 		qApp->setLayoutDirection( Qt::LeftToRight );
 	
-	m_chmFile = 0;
+	m_ebookFile = 0;
 	m_autoteststate = STATE_OFF;
 
 	m_currentSettings = new Settings();
@@ -159,41 +159,41 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 	if ( fileName.startsWith( "file://" ) )
 		fileName.remove( 0, 7 );
 			
-	LCHMFile * new_chmfile = new LCHMFile();
+	EBook * new_ebook = EBook::loadFile( fileName );
 	
-	if ( new_chmfile->loadFile( fileName ) )
+	if ( new_ebook )
 	{
 		// The new file is opened, so we can close the old one
-		if ( m_chmFile )
+		if ( m_ebookFile )
 		{
 			closeFile( );
-			delete m_chmFile;
+			delete m_ebookFile;
 		}
 	
-		m_chmFile = new_chmfile;
+		m_ebookFile = new_ebook;
 		updateActions();
 		
 		// Show current encoding in status bar
 		showInStatusBar( i18n("Detected file encoding: %1 ( %2 )") 
-		                 .arg( m_chmFile->currentEncoding()->family)
-		                 .arg( m_chmFile->currentEncoding()->qtcodec) );
+						 .arg( TextEncodings::languageForCodec( m_ebookFile->currentEncoding() ))
+						 .arg( m_ebookFile->currentEncoding() ) );
 
 		// Make the file name absolute; we'll need it later
 		QDir qd;
 		qd.setPath (fileName);
-		m_chmFilename = qd.absolutePath();
+		m_ebookFilename = qd.absolutePath();
 		
 		// Qt's 'dirname' does not work well
-		QFileInfo qf ( m_chmFilename );
+		QFileInfo qf ( m_ebookFilename );
 		pConfig->m_lastOpenedDir = qf.dir().path();
-		m_chmFileBasename = qf.fileName();
+		m_ebookFileBasename = qf.fileName();
 
 		// Apply settings to the navigation dock
-		m_navPanel->updateTabs( m_chmFile );
+		m_navPanel->updateTabs( m_ebookFile );
 
 		// and to navigation buttons
-		nav_actionPreviousPage->setEnabled( m_chmFile->hasTableOfContents() );
-		nav_actionNextPageToc->setEnabled( m_chmFile->hasTableOfContents() );
+		nav_actionPreviousPage->setEnabled( m_ebookFile->hasTableOfContents() );
+		nav_actionNextPageToc->setEnabled( m_ebookFile->hasTableOfContents() );
 
 		navSetBackEnabled( false );
 		navSetForwardEnabled( false );
@@ -203,12 +203,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 
 		if ( m_currentSettings->loadSettings (fileName) )
 		{
-			const LCHMTextEncoding * encoding = 
-					m_chmFile->impl()->lookupByQtCodec(  m_currentSettings->m_activeEncoding );
-
-			if ( encoding )
-				setTextEncoding( encoding );
-
+			setTextEncoding(m_currentSettings->m_activeEncoding );
 			m_navPanel->applySettings( m_currentSettings );
 			
 			if ( call_open_page )
@@ -216,7 +211,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 				m_viewWindowMgr->restoreSettings( m_currentSettings->m_viewwindows );
 				m_viewWindowMgr->setCurrentPage( m_currentSettings->m_activetabwindow );
 				
-				if ( m_chmFile->hasTableOfContents() )
+				if ( m_ebookFile->hasTableOfContents() )
 					actionLocateInContentsTab();
 			}
 			
@@ -228,14 +223,14 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		else
 		{
 			m_navPanel->setActive( NavigationPanel::TAB_CONTENTS );
-			setTextEncoding( m_chmFile->currentEncoding() );
+			setTextEncoding( m_ebookFile->currentEncoding() );
 			
 			if ( call_open_page )
-				openPage( m_chmFile->homeUrl() );
+				openPage( m_ebookFile->homeUrl() );
 		}
 
 		if ( m_recentFiles )
-			m_recentFiles->setCurrentFile( m_chmFilename );
+			m_recentFiles->setCurrentFile( m_ebookFilename );
 
 		return true;
 	}
@@ -254,7 +249,6 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 				i18n("Could not load file %1").arg(fileName),
 				2000 );
 
-		delete new_chmfile;
 		return false;
 	}
 }
@@ -263,7 +257,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 
 void MainWindow::refreshCurrentBrowser( )
 {
-	QString title = m_chmFile->title();
+	QString title = m_ebookFile->title();
 	
 	if ( title.isEmpty() )
 		title = QCoreApplication::applicationName();
@@ -307,7 +301,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	QString otherlink, otherfile, url = srcurl;
 	
 	if ( url == "/" )
-		url = m_chmFile->homeUrl();
+		url = m_ebookFile->homeUrl();
 
 	if ( LCHMUrlFactory::isRemoteURL (url, otherlink) )
 	{
@@ -350,7 +344,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 
 	if ( LCHMUrlFactory::isNewChmURL (url, getOpenedFileName(), otherfile, otherlink) )
 	{
-		if ( otherfile != m_chmFilename )
+		if ( otherfile != m_ebookFilename )
 		{
 			if ( QMessageBox::question( this,
 				i18n( "%1 - link to a new CHM file clicked"). arg(QCoreApplication::applicationName()),
@@ -415,9 +409,9 @@ void MainWindow::firstShow()
 }
 
 
-void MainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
+void MainWindow::setTextEncoding( const QString& encoding )
 {
-	m_chmFile->setCurrentEncoding( encoding );
+	m_ebookFile->setCurrentEncoding( qPrintable( encoding ) );
 	
 	// Find the appropriate encoding item in "Set encodings" menu
 	const QList<QAction *> encodings = m_encodingActions->actions();
@@ -426,9 +420,7 @@ void MainWindow::setTextEncoding( const LCHMTextEncoding * encoding )
 	      it != encodings.end();
 	      ++it )
 	{
-		const LCHMTextEncoding * enc = (const LCHMTextEncoding *) (*it)->data().value< void* > ();
-		
-		if ( !strcmp( enc->qtcodec, encoding->qtcodec ) )
+		if ( (*it)->data().toString() == encoding  )
 		{
 			if ( !(*it)->isChecked() )
 				(*it)->setChecked( true );
@@ -452,7 +444,7 @@ void MainWindow::closeFile( )
 	// Prepare the settings
 	if ( pConfig->m_HistoryStoreExtra )
 	{
-		m_currentSettings->m_activeEncoding = m_chmFile->currentEncoding()->qtcodec;
+		m_currentSettings->m_activeEncoding = m_ebookFile->currentEncoding();
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
 		
 		m_currentSettings->m_window_size_x = width();
@@ -473,11 +465,11 @@ void MainWindow::closeFile( )
 void MainWindow::closeEvent ( QCloseEvent * e )
 {
 	// Save the settings if we have something opened
-	if ( m_chmFile )
+	if ( m_ebookFile )
 	{
 		closeFile( );
-		delete m_chmFile;
-		m_chmFile = 0;
+		delete m_ebookFile;
+		m_ebookFile = 0;
 	}
 
 	// Save toolbars
@@ -783,7 +775,7 @@ void MainWindow::actionExtractCHM()
 	outdir += "/";
 	
 	// Enumerate all the files in archive
-	if ( !m_chmFile || !m_chmFile->enumerateFiles( &files ) )
+	if ( !m_ebookFile || !m_ebookFile->enumerateFiles( files ) )
 		return;
 
 	KQProgressModalDialog progress( i18n("Extracting CHM content"), 
@@ -807,7 +799,7 @@ void MainWindow::actionExtractCHM()
 		// Extract the file
 		QByteArray buf;
 		
-		if ( m_chmFile->getFileContentAsBinary( &buf, files[i] ) )
+		if ( m_ebookFile->getFileContentAsBinary( buf, files[i] ) )
 		{
 			// Split filename to get the list of subdirectories
 			QStringList dirs = files[i].split( '/' );
@@ -874,7 +866,7 @@ void MainWindow::actionViewHTMLsource()
 {
 	QString text;
 
-	if ( !m_chmFile->getFileContentAsString( &text, currentBrowser()->getOpenedPage() ) || text.isEmpty() )
+	if ( !m_ebookFile->getFileContentAsString( text, currentBrowser()->getOpenedPage() ) || text.isEmpty() )
 		return;
 
 	if ( pConfig->m_advUseInternalEditor )
@@ -1202,18 +1194,17 @@ void MainWindow::setupLangEncodingMenu()
 	// Create the action group
 	m_encodingActions = new QActionGroup( this );
 	
-	// Add the codepage entries
-	const LCHMTextEncoding * enctable = LCHMFileImpl::getTextEncodingTable();
-	
-	for ( int idx = 0; (enctable + idx)->family; idx++ )
+	// Get the supported languages and encodings
+	QStringList languages, qencodings;
+	TextEncodings::getSupported( languages, qencodings );
+
+	for ( int idx = 0; idx < qencodings.size(); idx++ )
 	{
-		const LCHMTextEncoding * enc = enctable + idx;
-		
 		QAction * action = new QAction( this );
 		
-		QString text = i18n("%1 ( %2 )") .arg( enc->family) .arg( enc->qtcodec );
+		QString text = i18n("%1 ( %2 )") .arg( languages[idx] ) .arg( qencodings[idx] );
 		action->setText( text );
-		action->setData( qVariantFromValue( (void*) enc ) );
+		action->setData( qVariantFromValue( qencodings[idx] ) );
 		action->setCheckable( true );
 		
 		// Add to the action group, so only one is checkable
@@ -1236,8 +1227,8 @@ void MainWindow::setupLangEncodingMenu()
 
 void MainWindow::actionEncodingChanged( QAction * action )
 {
-	const LCHMTextEncoding * enc = (const LCHMTextEncoding *) action->data().value< void* > ();
-	setTextEncoding( enc );
+	QString encoding = action->data().toString();
+	setTextEncoding( encoding );
 }
 
 
@@ -1266,17 +1257,17 @@ void MainWindow::setupPopupMenu( QMenu * menu )
 
 bool MainWindow::hasTableOfContents() const
 {
-	return m_chmFile && m_chmFile->hasTableOfContents();
+	return m_ebookFile && m_ebookFile->hasTableOfContents();
 }
 
 bool MainWindow::hasIndex() const
 {
-	return m_chmFile && m_chmFile->hasIndexTable();
+	return m_ebookFile && m_ebookFile->hasIndexTable();
 }
 
 void MainWindow::updateActions()
 {
-	bool enabled = m_chmFile != 0;
+	bool enabled = m_ebookFile != 0;
 
 	file_Print_action->setEnabled( enabled );
 	edit_Copy_action->setEnabled( enabled );

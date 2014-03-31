@@ -21,8 +21,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#include "libchmfile.h"
-
 #include "mainwindow.h"
 #include "treeviewitem.h"
 #include "tab_index.h"
@@ -146,9 +144,9 @@ void TabIndex::onItemActivated ( QTreeWidgetItem * item, int )
 void TabIndex::refillIndex( )
 {
 	ShowWaitCursor wc;
-	QVector< LCHMParsedEntry > data;
+	QList< EBookIndexEntry > data;
 	
-	if ( !::mainWindow->chmFile()->parseIndex( &data )
+	if ( !::mainWindow->chmFile()->parseIndex( data )
 			   || data.size() == 0 )
 	{
 		qWarning ("CHM index present but is empty; wrong parsing?");

@@ -16,52 +16,99 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#include "libchmfile.h"
+#include <QApplication>
 #include "libchmurlfactory.h"
-#include "libchmsearchengine.h"
-#include "libchmsearchengine_impl.h"
-#include "libchmsearchengine_indexing.h"
+
+#include "ebook.h"
+#include "ebook_search.h"
 
 
-LCHMSearchEngine::LCHMSearchEngine()
+// Helper class to simplity state management and data keeping
+class SearchDataKeeper
 {
-	impl = new LCHMSearchEngineImpl();
+	public:
+		SearchDataKeeper() { m_inPhrase = false; }
+
+		void beginPhrase()
+		{
+			phrase_terms.clear();
+			m_inPhrase = true;
+		}
+
+		void endPhrase()
+		{
+			m_inPhrase = false;
+			phrasewords += phrase_terms;
+			phrases.push_back( phrase_terms.join(" ") );
+		}
+
+		bool isInPhrase() const { return m_inPhrase; }
+
+		void addTerm( const QString& term )
+		{
+			if ( !term.isEmpty() )
+			{
+				terms.push_back( term );
+
+				if ( m_inPhrase )
+					phrase_terms.push_back( term );
+			}
+		}
+
+		// Should contain all the search terms present in query, includind those from phrases. One element - one term .
+		QStringList terms;
+
+		// Should contain phrases present in query without quotes. One element - one phrase.
+		QStringList phrases;
+
+		// Should contain all the terms present in all the phrases (but not outside).
+		QStringList phrasewords;
+
+	private:
+		bool		m_inPhrase;
+		QStringList phrase_terms;
+};
+
+
+
+EBookSearch::EBookSearch()
+{
+	m_Index = 0;
 }
 
 
-LCHMSearchEngine::~ LCHMSearchEngine()
+EBookSearch::~ EBookSearch()
 {
-	delete impl;
+	delete m_Index;
 }
 
 
-bool LCHMSearchEngine::loadIndex( QDataStream & stream )
+bool EBookSearch::loadIndex( QDataStream & stream )
 {
-	if ( impl->m_Index )
-		delete impl->m_Index;
+	delete m_Index;
 
-	impl->m_Index = new QtAs::Index();
-	return impl->m_Index->readDict( stream );
+	m_Index = new QtAs::Index();
+	return m_Index->readDict( stream );
 }
 
 
-bool LCHMSearchEngine::generateIndex( LCHMFile * chmFile, QDataStream & stream )
+bool EBookSearch::generateIndex( EBook * ebookFile, QDataStream & stream )
 {
 	QStringList documents;
 	QStringList alldocuments;
 	
 	emit progressStep( 0, "Generating the list of documents" );
-	impl->processEvents();
+	processEvents();
 
 	// Enumerate the documents
-	if ( !chmFile->enumerateFiles( &alldocuments ) )
+	if ( !ebookFile->enumerateFiles( alldocuments ) )
 		return false;
 			
-	if ( impl->m_Index )
-		delete impl->m_Index;
+	if ( m_Index )
+		delete m_Index;
 
-	impl->m_Index = new QtAs::Index();
-	connect( impl->m_Index, SIGNAL( indexingProgress( int, const QString& ) ), this, SLOT( updateProgress( int, const QString& ) ) );
+	m_Index = new QtAs::Index();
+	connect( m_Index, SIGNAL( indexingProgress( int, const QString& ) ), this, SLOT( updateProgress( int, const QString& ) ) );
 	
 	// Process the list of files in CHM archive and keep only HTML document files from there
 	for ( int i = 0; i < alldocuments.size(); i++ )
@@ -69,43 +116,49 @@ bool LCHMSearchEngine::generateIndex( LCHMFile * chmFile, QDataStream & stream )
 		|| alldocuments[i].endsWith( ".htm", Qt::CaseInsensitive ) )
 			documents.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
 
-	if ( impl->m_Index->makeIndex( documents, chmFile ) == -1 )
+	if ( m_Index->makeIndex( documents, ebookFile ) == -1 )
 	{
-		delete impl->m_Index;
-		impl->m_Index = 0;
+		delete m_Index;
+		m_Index = 0;
 		return false;
 	}
 	
-	impl->m_Index->writeDict( stream );
-	impl->m_keywordDocuments.clear();
+	m_Index->writeDict( stream );
+	m_keywordDocuments.clear();
 	
 	return true;
 }
 
 
-void LCHMSearchEngine::cancelIndexGeneration()
+void EBookSearch::cancelIndexGeneration()
 {
-	impl->m_Index->setLastWinClosed();
+	m_Index->setLastWinClosed();
 }
 
 
-void LCHMSearchEngine::updateProgress(int value, const QString & stepName)
+void EBookSearch::updateProgress(int value, const QString & stepName)
 {
 	emit progressStep( value, stepName );
 }
 
+void EBookSearch::processEvents()
+{
+	// Do it up to ten times; some events generate other events
+	for ( int i = 0; i < 10; i++ )
+		qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+}
 
-bool LCHMSearchEngine::searchQuery(const QString & query, QStringList * results, LCHMFile * chmFile, unsigned int limit)
+bool EBookSearch::searchQuery(const QString & query, QStringList * results, EBook *ebookFile, unsigned int limit)
 {
 	// We should have index
-	if ( !impl->m_Index )
+	if ( !m_Index )
 		return false;
 	
 	// Characters which split the words. We need to make them separate tokens
-	QString splitChars = impl->m_Index->getCharsSplit();
+	QString splitChars = m_Index->getCharsSplit();
 	
 	// Characters which are part of the word. We should keep them apart.
-	QString partOfWordChars = impl->m_Index->getCharsPartOfWord();
+	QString partOfWordChars = m_Index->getCharsPartOfWord();
 	
 	// Variables to store current state
 	SearchDataKeeper keeper;	
@@ -155,7 +208,7 @@ bool LCHMSearchEngine::searchQuery(const QString & query, QStringList * results,
 	if ( keeper.isInPhrase() )
 		return false;
 	
-	QStringList foundDocs = impl->m_Index->query( keeper.terms, keeper.phrases, keeper.phrasewords, chmFile );
+	QStringList foundDocs = m_Index->query( keeper.terms, keeper.phrases, keeper.phrasewords, ebookFile );
 	
 	for ( QStringList::iterator it = foundDocs.begin(); it != foundDocs.end() && limit > 0; ++it, limit-- )
 		results->push_back( *it );
@@ -163,7 +216,7 @@ bool LCHMSearchEngine::searchQuery(const QString & query, QStringList * results,
 	return true;
 }
 
-bool LCHMSearchEngine::hasIndex() const
+bool EBookSearch::hasIndex() const
 {
-	return impl->m_Index != 0;
+	return m_Index != 0;
 }

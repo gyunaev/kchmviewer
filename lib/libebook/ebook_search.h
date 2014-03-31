@@ -16,22 +16,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  **************************************************************************/
 
-#ifndef LCHMSEARCHENGINE_H
-#define LCHMSEARCHENGINE_H
+#ifndef EBookSearch_H
+#define EBookSearch_H
 
 #include <QDataStream>
+#include "helper_search_index.h"
 
-// forward declaration
-class LCHMFile;
-class LCHMSearchEngineImpl;
+class EBook;
 
-class LCHMSearchEngine : public QObject
+class EBookSearch : public QObject
 {
 	Q_OBJECT
 			
 	public:
-		LCHMSearchEngine();
-		~LCHMSearchEngine();
+		EBookSearch();
+		~EBookSearch();
 		
 		//! Loads the search index from the data stream \param stream. 
 		//! The index should be previously saved with generateIndex().
@@ -49,7 +48,7 @@ class LCHMSearchEngine : public QObject
 		//! If \param progressDls is not null, it will be used to display progress.
 		//! Returns true if the index has been generated and saved, or false if internal
 		//! error occurs, or (most likely) the cancelIndexGeneration() slot has been called.
-		bool	generateIndex( LCHMFile * chmFile, QDataStream& stream );
+		bool	generateIndex( EBook * ebook, QDataStream& stream );
 		
 		//! Executes the search query. The \param query is a string like <i>"C++ language" class</i>,
 		//! \param results is a pointer to QStringList, and \param limit limits the number of
@@ -61,7 +60,7 @@ class LCHMSearchEngine : public QObject
 		//!
 		//! Note that the function does not clear \param results before adding search results, so if you are
 		//! not merging search results, make sure it's empty.
-		bool	searchQuery ( const QString& query, QStringList * results, LCHMFile * chmFile, unsigned int limit = 100 );
+		bool	searchQuery ( const QString& query, QStringList * results, EBook * chmFile, unsigned int limit = 100 );
 		
 		//! Returns true if a valid search index is present, and therefore search could be executed
 		bool	hasIndex() const;
@@ -74,9 +73,12 @@ class LCHMSearchEngine : public QObject
 		
 	private slots:
 		void	updateProgress( int value, const QString& stepName );
+		void	processEvents();
 		
 	private:
-		LCHMSearchEngineImpl * impl;
+		QStringList 				m_keywordDocuments;
+		QtAs::Index 			*	m_Index;
+
 };
 
 #endif

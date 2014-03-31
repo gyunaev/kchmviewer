@@ -28,8 +28,7 @@
 
 #include "kde-qt.h"
 
-//FIXME!
-#include "libchmurlfactory.h"
+#include "helper_urlfactory.h"
 
 #include "mainwindow.h"
 #include "config.h"
@@ -303,7 +302,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	if ( url == "/" )
 		url = m_ebookFile->homeUrl();
 
-	if ( LCHMUrlFactory::isRemoteURL (url, otherlink) )
+	if ( HelperUrlFactory::isRemoteURL (url, otherlink) )
 	{
 		switch ( pConfig->m_onExternalLinkClick )
 		{
@@ -333,7 +332,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	}
 		
 	// Filter the URLs which do not need to be opened at all by Qt version
-	if ( LCHMUrlFactory::isJavascriptURL(url)  )
+	if ( HelperUrlFactory::isJavascriptURL(url)  )
 	{
 		QMessageBox::information( this, 
 			i18n( "%1 - JavsScript link clicked") . arg(QCoreApplication::applicationName()),
@@ -342,7 +341,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 		return false;
 	}
 
-	if ( LCHMUrlFactory::isNewChmURL (url, getOpenedFileName(), otherfile, otherlink) )
+	if ( HelperUrlFactory::isNewChmURL (url, getOpenedFileName(), otherfile, otherlink) )
 	{
 		if ( otherfile != m_ebookFilename )
 		{

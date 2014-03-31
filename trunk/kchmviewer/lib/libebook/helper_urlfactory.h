@@ -23,9 +23,8 @@
 #include <QString>
 #include <QRegExp>
 
-namespace LCHMUrlFactory
+namespace HelperUrlFactory
 {
-	
 static inline bool isRemoteURL( const QString & url, QString & protocol )
 {
 	// Check whether the URL is external

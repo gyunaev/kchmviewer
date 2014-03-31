@@ -17,11 +17,10 @@
  **************************************************************************/
 
 #include <QApplication>
-#include "libchmurlfactory.h"
 
 #include "ebook.h"
 #include "ebook_search.h"
-
+#include "helper_urlfactory.h"
 
 // Helper class to simplity state management and data keeping
 class SearchDataKeeper
@@ -114,7 +113,7 @@ bool EBookSearch::generateIndex( EBook * ebookFile, QDataStream & stream )
 	for ( int i = 0; i < alldocuments.size(); i++ )
 		if ( alldocuments[i].endsWith( ".html", Qt::CaseInsensitive )
 		|| alldocuments[i].endsWith( ".htm", Qt::CaseInsensitive ) )
-			documents.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
+			documents.push_back( HelperUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
 
 	if ( m_Index->makeIndex( documents, ebookFile ) == -1 )
 	{

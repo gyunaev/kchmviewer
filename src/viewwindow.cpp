@@ -29,7 +29,7 @@
 #include <QWebView>
 #include <QWebFrame>
 
-#include "libchmurlfactory.h"
+#include "helper_urlfactory.h"
 
 #include "config.h"
 #include "viewwindow.h"
@@ -80,9 +80,9 @@ QString ViewWindow::makeURLabsolute ( const QString & url, bool set_as_base )
 {
 	QString p1, p2, newurl = url;
 
-	if ( !LCHMUrlFactory::isRemoteURL (url, p1)
-	&& !LCHMUrlFactory::isJavascriptURL (url)
-	&& !LCHMUrlFactory::isNewChmURL (url, mainWindow->getOpenedFileName(), p1, p2) )
+	if ( !HelperUrlFactory::isRemoteURL (url, p1)
+	&& !HelperUrlFactory::isJavascriptURL (url)
+	&& !HelperUrlFactory::isNewChmURL (url, mainWindow->getOpenedFileName(), p1, p2) )
 	{
 		newurl = QDir::cleanPath (url);
 
@@ -121,7 +121,7 @@ bool ViewWindow::openUrl ( const QString& origurl )
 
 	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
 	// or will be loaded (for kio slave). We care only about the path component.
-	if ( LCHMUrlFactory::isNewChmURL( newurl, mainWindow->getOpenedFileName(), chmfile, page ) )
+	if ( HelperUrlFactory::isNewChmURL( newurl, mainWindow->getOpenedFileName(), chmfile, page ) )
 	{
 		// If a new chm file is opened here, we better abort
 		if ( chmfile != ::mainWindow->getOpenedFileBaseName()  )
@@ -161,7 +161,7 @@ void ViewWindow::handleStartPageAsImage( QString & link )
 	|| link.endsWith( ".gif", Qt::CaseInsensitive )
 	|| link.endsWith( ".png", Qt::CaseInsensitive )
 	|| link.endsWith( ".bmp", Qt::CaseInsensitive ) )
-		link += LCHMUrlFactory::getInternalUriExtension();
+		link += HelperUrlFactory::getInternalUriExtension();
 }
 
 

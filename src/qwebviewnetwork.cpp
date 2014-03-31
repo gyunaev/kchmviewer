@@ -23,7 +23,7 @@
 
 #include <QDir>
 
-#include "libchmurlfactory.h"
+#include "helper_urlfactory.h"
 
 #include "qwebviewnetwork.h"
 #include "viewwindow.h"
@@ -89,7 +89,7 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 		if ( path[7] == '/' )
 			path.remove( 7, 1 );
 
-		if ( LCHMUrlFactory::isNewChmURL ( path, mainWindow->getOpenedFileName(), file, data) )
+		if ( HelperUrlFactory::isNewChmURL ( path, mainWindow->getOpenedFileName(), file, data) )
 		{
 			EBook * newchm = EBook::loadFile( file );
 
@@ -114,7 +114,7 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 	// To handle a single-image pages, we need to generate the HTML page to show
 	// this image. We did it in KCHMViewWindow::handleStartPageAsImage; now we need
 	// to generate the HTML page, and set it.
-	if ( LCHMUrlFactory::handleFileType( path, data ) )
+	if ( HelperUrlFactory::handleFileType( path, data ) )
 		return qPrintable( data );
 
 	QByteArray buf;

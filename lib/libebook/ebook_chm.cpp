@@ -4,7 +4,7 @@
 #include "helper_entitydecoder.h"
 
 #include "bitfiddle.h"
-#include "libchmurlfactory.h"
+#include "helper_urlfactory.h"
 #include "libchmtocimage.h"
 
 
@@ -384,7 +384,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< EBookIndexEnt
 			else if ( pname == "merge" )
 			{
 				// MERGE implementation is experimental
-				QString mergeurl = LCHMUrlFactory::makeURLabsoluteIfNeeded( pvalue );
+				QString mergeurl = HelperUrlFactory::makeURLabsoluteIfNeeded( pvalue );
 				QString mergecontent;
 
 				if ( getFileContentAsString( mergecontent, mergeurl ) && !mergecontent.isEmpty() )
@@ -403,7 +403,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< EBookIndexEnt
 			else if ( pname == "local" )
 			{
 				// Check for URL duplication
-				QString url = LCHMUrlFactory::makeURLabsoluteIfNeeded( pvalue );
+				QString url = HelperUrlFactory::makeURLabsoluteIfNeeded( pvalue );
 
 				if ( !entry.urls.contains( url ) )
 					entry.urls.push_back( url );
@@ -794,7 +794,7 @@ void EBook_CHM::fillTopicsUrlMap()
 		unsigned int off_url = get_int32_le( (unsigned int *)(topics.data() + i + 8) );
 		off_url = get_int32_le( (unsigned int *)( urltbl.data() + off_url + 8) ) + 8;
 
-		QString url = LCHMUrlFactory::makeURLabsoluteIfNeeded( (const char*) urlstr.data() + off_url );
+		QString url = HelperUrlFactory::makeURLabsoluteIfNeeded( (const char*) urlstr.data() + off_url );
 
 		if ( off_title < (unsigned int)strings.size() )
 			m_url2topics[url] = encodeWithCurrentCodec ( (const char*) strings.data() + off_title );
@@ -913,7 +913,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 			if ( !entry.name.isEmpty() )
 			{
 				if ( !value.isEmpty() )
-					entry.urls.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( value ) );
+					entry.urls.push_back( HelperUrlFactory::makeURLabsoluteIfNeeded( value ) );
 
 				entry.iconid = EBookIndexEntry::IMAGE_AUTO;
 				entry.indent = level;
@@ -1099,7 +1099,7 @@ bool EBook_CHM::loadBinaryIndex( QList< EBookIndexEntry >& entries ) const
 					}
 
 					QString url = encodeWithCurrentCodec( urlstr.data() + tocoffset + 8 );
-					entry.urls.push_back( LCHMUrlFactory::makeURLabsoluteIfNeeded( url ) );
+					entry.urls.push_back( HelperUrlFactory::makeURLabsoluteIfNeeded( url ) );
 					offset += sizeof(unsigned int);
 					spaceLeft -= sizeof(unsigned int);
 				}

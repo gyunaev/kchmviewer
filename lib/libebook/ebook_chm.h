@@ -68,6 +68,13 @@ class EBook_CHM : public EBook
 		virtual bool  hasIndexTable() const;
 
 		/*!
+		 * \brief Checks whether the ebook supports change of encoding.
+		 * \return true if does; false otherwise.
+		 * \ingroup information
+		 */
+		virtual bool  supportsEncodingChange() const;
+
+		/*!
 		 * \brief Parses and fills up the Table of Contents (TOC)
 		 * \param topics A pointer to the container which will store the parsed results.
 		 *               Will be cleaned before parsing.
@@ -76,7 +83,7 @@ class EBook_CHM : public EBook
 		 *         by really buggy files; please report a bug if the file is opened ok under Windows.
 		 * \ingroup fileparsing
 		 */
-		virtual bool parseTableOfContents( QList< EBookIndexEntry >& toc ) const;
+		virtual bool getTableOfContents( QList< EBookIndexEntry >& toc ) const;
 
 		/*!
 		 * \brief Parses the index table
@@ -87,7 +94,7 @@ class EBook_CHM : public EBook
 		 *         by really buggy chm file; so far it never happened on indexes.
 		 * \ingroup fileparsing
 		 */
-		virtual bool parseIndex( QList< EBookIndexEntry >& index ) const;
+		virtual bool getIndex( QList< EBookIndexEntry >& index ) const;
 
 		/*!
 		 * \brief Retrieves the content associated with the url from the current ebook as QString.
@@ -145,15 +152,6 @@ class EBook_CHM : public EBook
 		 * \ingroup dataretrieve
 		 */
 		virtual QString		getTopicByUrl ( const QString& url );
-
-		/*!
-		 * \brief Gets the appropriate CHM pixmap icon (there are no icons in EPUB).
-		 * \param imagenum The image number from TOC.
-		 * \return The pixmap to show in TOC tree or NULL if there is no icon associated.
-		 *
-		 * \ingroup dataretrieve
-		 */
-		virtual const QPixmap * getBookIconPixmap(EBookIndexEntry::Icon imagenum );
 
 		/*!
 		 * \brief Gets the current ebook encoding (set or autodetected) as qtcodec
@@ -226,9 +224,6 @@ class EBook_CHM : public EBook
 
 		//! Indicates whether index, either binary or text, is available.
 		bool			m_indexAvailable;
-
-		//! Built-in CHM icons
-		QVector< QPixmap> m_chmBuiltinIcons;
 
 		//! Map url->topic
 		QMap< QString, QString >	m_url2topics;

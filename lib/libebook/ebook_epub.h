@@ -2,8 +2,12 @@
 #define EBOOK_EPUB_H
 
 #include <QString>
+#include <QFile>
 
 #include "ebook.h"
+#include "zip.h"
+
+class QXmlDefaultHandler;
 
 
 class EBook_EPUB : public EBook
@@ -59,6 +63,13 @@ class EBook_EPUB : public EBook
 		virtual bool  hasIndexTable() const;
 
 		/*!
+		 * \brief Checks whether the ebook supports change of encoding.
+		 * \return true if does; false otherwise.
+		 * \ingroup information
+		 */
+		virtual bool  supportsEncodingChange() const;
+
+		/*!
 		 * \brief Parses and fills up the Table of Contents (TOC)
 		 * \param topics A pointer to the container which will store the parsed results.
 		 *               Will be cleaned before parsing.
@@ -67,7 +78,7 @@ class EBook_EPUB : public EBook
 		 *         by really buggy files; please report a bug if the file is opened ok under Windows.
 		 * \ingroup fileparsing
 		 */
-		virtual bool parseTableOfContents( QList< EBookIndexEntry >& toc ) const;
+		virtual bool getTableOfContents( QList< EBookIndexEntry >& toc ) const;
 
 		/*!
 		 * \brief Parses the index table
@@ -78,7 +89,7 @@ class EBook_EPUB : public EBook
 		 *         by really buggy chm file; so far it never happened on indexes.
 		 * \ingroup fileparsing
 		 */
-		virtual bool parseIndex( QList< EBookIndexEntry >& index ) const;
+		virtual bool getIndex( QList< EBookIndexEntry >& index ) const;
 
 		/*!
 		 * \brief Retrieves the content associated with the url from the current ebook as QString.
@@ -138,15 +149,6 @@ class EBook_EPUB : public EBook
 		virtual QString	getTopicByUrl ( const QString& url );
 
 		/*!
-		 * \brief Gets the appropriate CHM pixmap icon (there are no icons in EPUB).
-		 * \param imagenum The image number from TOC.
-		 * \return The pixmap to show in TOC tree or NULL if there is no icon associated.
-		 *
-		 * \ingroup dataretrieve
-		 */
-		virtual const QPixmap * getBookIconPixmap(EBookIndexEntry::Icon imagenum );
-
-		/*!
 		 * \brief Gets the current ebook encoding (set or autodetected) as qtcodec
 		 * \return The current encoding.
 		 *
@@ -162,6 +164,28 @@ class EBook_EPUB : public EBook
 		 */
 		virtual bool setCurrentEncoding ( const char * encoding );
 
+	private:
+		// Parses the XML file using a specified parser
+		bool	parseXML( const QString& uri, QXmlDefaultHandler * reader );
+
+		// Parses the book description file. Fills up the ebook info
+		bool	parseBookinfo();
+
+		// ZIP archive fd and structs
+		QFile			m_epubFile;
+		struct zip *	m_zipFile;
+
+		// Ebook info
+		QString			m_title;
+
+		// List of files in the ebook
+		QStringList		m_ebookManifest;
+
+		// Table of contents
+		QList< EBookIndexEntry > m_tocEntries;
+
+		// Map of URL-Title
+		QMap< QString, QString>	m_urlTitleMap;
 };
 
 #endif // EBOOK_EPUB_H

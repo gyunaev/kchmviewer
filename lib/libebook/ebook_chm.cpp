@@ -77,12 +77,17 @@ bool EBook_CHM::hasIndexTable() const
 	return m_indexAvailable;
 }
 
-bool EBook_CHM::parseTableOfContents( QList<EBookIndexEntry> &toc ) const
+bool EBook_CHM::supportsEncodingChange() const
+{
+	return true;
+}
+
+bool EBook_CHM::getTableOfContents( QList<EBookIndexEntry> &toc ) const
 {
 	return parseBinaryTOC( toc ) || parseFileAndFillArray( m_topicsFile, toc, false );
 }
 
-bool EBook_CHM::parseIndex(QList<EBookIndexEntry> &index) const
+bool EBook_CHM::getIndex(QList<EBookIndexEntry> &index) const
 {
 	return parseFileAndFillArray( m_indexFile, index, true );
 }
@@ -189,8 +194,6 @@ bool EBook_CHM::load(const QString &archiveName)
 	else
 		m_indexAvailable = false;
 
-	// Prepare the embedded icons
-	m_chmBuiltinIcons.resize( EBookIndexEntry::MAX_BUILTIN_ICONS );
 	return true;
 }
 
@@ -695,19 +698,6 @@ bool EBook_CHM::enumerateFiles( QStringList& files )
 {
 	files.clear();
 	return chm_enumerate( m_chmFile, CHM_ENUMERATE_ALL, chm_enumerator_callback, &files );
-}
-
-const QPixmap * EBook_CHM::getBookIconPixmap( EBookIndexEntry::Icon imagenum )
-{
-	if ( m_chmBuiltinIcons[imagenum].isNull() )
-	{
-		QString resicon = QString( ":/chm_icons/icon_%1.png") .arg( imagenum );
-
-		if ( !m_chmBuiltinIcons[imagenum].load( resicon ) )
-			qFatal("Could not initialize the internal icon %d as %s", imagenum, qPrintable( resicon ) );
-	}
-
-	return &(m_chmBuiltinIcons[imagenum]);
 }
 
 QString EBook_CHM::currentEncoding() const

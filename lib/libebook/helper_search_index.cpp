@@ -79,7 +79,9 @@ bool Index::makeIndex(const QStringList& docs, EBook *chmFile )
 		return false;
 	
 	docList = docs;
-	entityDecoder.changeEncoding( QTextCodec::codecForName( chmFile->currentEncoding().toUtf8() ) );
+
+	if ( chmFile->supportsEncodingChange() )
+		entityDecoder.changeEncoding( QTextCodec::codecForName( chmFile->currentEncoding().toUtf8() ) );
 	
 	QStringList::ConstIterator it = docList.begin();
 	int steps = docList.count() / 100;

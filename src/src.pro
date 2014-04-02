@@ -44,7 +44,7 @@ SOURCES += config.cpp \
     qwebviewnetwork.cpp \
     textencodings.cpp
 POST_TARGETDEPS += ../lib/libebook/libebook.a
-LIBS += ../lib/libebook/libebook.a -lchm
+LIBS += ../lib/libebook/libebook.a -lchm -lzip
 TARGET = ../bin/kchmviewer
 CONFIG += threads \
     warn_on \

@@ -173,9 +173,10 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		updateActions();
 		
 		// Show current encoding in status bar
-		showInStatusBar( i18n("Detected file encoding: %1 ( %2 )") 
-						 .arg( TextEncodings::languageForCodec( m_ebookFile->currentEncoding() ))
-						 .arg( m_ebookFile->currentEncoding() ) );
+		if ( m_ebookFile->supportsEncodingChange() )
+			showInStatusBar( i18n("Detected file encoding: %1 ( %2 )")
+							 .arg( TextEncodings::languageForCodec( m_ebookFile->currentEncoding() ))
+							 .arg( m_ebookFile->currentEncoding() ) );
 
 		// Make the file name absolute; we'll need it later
 		QDir qd;
@@ -222,7 +223,9 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		else
 		{
 			m_navPanel->setActive( NavigationPanel::TAB_CONTENTS );
-			setTextEncoding( m_ebookFile->currentEncoding() );
+
+			if ( m_ebookFile->supportsEncodingChange() )
+				setTextEncoding( m_ebookFile->currentEncoding() );
 			
 			if ( call_open_page )
 				openPage( m_ebookFile->homeUrl() );
@@ -443,7 +446,9 @@ void MainWindow::closeFile( )
 	// Prepare the settings
 	if ( pConfig->m_HistoryStoreExtra )
 	{
-		m_currentSettings->m_activeEncoding = m_ebookFile->currentEncoding();
+		if ( m_ebookFile->supportsEncodingChange() )
+			m_currentSettings->m_activeEncoding = m_ebookFile->currentEncoding();
+
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
 		
 		m_currentSettings->m_window_size_x = width();
@@ -709,12 +714,12 @@ void MainWindow::actionNavigateHome()
 void MainWindow::actionOpenFile()
 {
 #if defined (USE_KDE)
-	QString fn = KFileDialog::getOpenFileName( pConfig->m_lastOpenedDir, i18n("*.chm|Compressed Help Manual (*.chm)"), this);
+	QString fn = KFileDialog::getOpenFileName( pConfig->m_lastOpenedDir, i18n("*.chm|Compressed Help Manual;*.epub|EPUB electronic book"), this);
 #else
 	QString fn = QFileDialog::getOpenFileName( this, 
 	                                           i18n( "Open a chm file"), 
 											   pConfig->m_lastOpenedDir,
-	                                           i18n("Compressed Help Manual (*.chm)"),
+											   i18n("Electronic books (*.chm *.epub)"),
 	                                           0,
 	                                           QFileDialog::DontResolveSymlinks );
 #endif
@@ -1262,6 +1267,19 @@ bool MainWindow::hasTableOfContents() const
 bool MainWindow::hasIndex() const
 {
 	return m_ebookFile && m_ebookFile->hasIndexTable();
+}
+
+const QPixmap *MainWindow::getEBookIconPixmap(EBookIndexEntry::Icon imagenum)
+{
+	if ( m_builtinIcons[imagenum].isNull() )
+	{
+		QString resicon = QString( ":/chm_icons/icon_%1.png") .arg( imagenum );
+
+		if ( !m_builtinIcons[imagenum].load( resicon ) )
+			qFatal("Could not initialize the internal icon %d as %s", imagenum, qPrintable( resicon ) );
+	}
+
+	return &(m_builtinIcons[imagenum]);
 }
 
 void MainWindow::updateActions()

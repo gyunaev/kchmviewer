@@ -111,6 +111,13 @@ class EBook
 		virtual bool  hasIndexTable() const = 0;
 
 		/*!
+		 * \brief Checks whether the ebook supports change of encoding.
+		 * \return true if does; false otherwise.
+		 * \ingroup information
+		 */
+		virtual bool  supportsEncodingChange() const = 0;
+
+		/*!
 		 * \brief Parses and fills up the Table of Contents (TOC)
 		 * \param topics A pointer to the container which will store the parsed results.
 		 *               Will be cleaned before parsing.
@@ -119,7 +126,7 @@ class EBook
 		 *         by really buggy files; please report a bug if the file is opened ok under Windows.
 		 * \ingroup fileparsing
 		 */
-		virtual bool parseTableOfContents( QList< EBookIndexEntry >& toc ) const = 0;
+		virtual bool getTableOfContents( QList< EBookIndexEntry >& toc ) const = 0;
 
 		/*!
 		 * \brief Parses the index table
@@ -130,7 +137,7 @@ class EBook
 		 *         by really buggy chm file; so far it never happened on indexes.
 		 * \ingroup fileparsing
 		 */
-		virtual bool parseIndex( QList< EBookIndexEntry >& index ) const = 0;
+		virtual bool getIndex( QList< EBookIndexEntry >& index ) const = 0;
 
 		/*!
 		 * \brief Retrieves the content associated with the url from the current ebook as QString.
@@ -188,15 +195,6 @@ class EBook
 		 * \ingroup dataretrieve
 		 */
 		virtual QString		getTopicByUrl ( const QString& url ) = 0;
-
-		/*!
-		 * \brief Gets the appropriate CHM pixmap icon (there are no icons in EPUB).
-		 * \param imagenum The image number from TOC.
-		 * \return The pixmap to show in TOC tree or NULL if there is no icon associated.
-		 *
-		 * \ingroup dataretrieve
-		 */
-		virtual const QPixmap * getBookIconPixmap( EBookIndexEntry::Icon icon ) = 0;
 
 		/*!
 		 * \brief Gets the current ebook encoding (set or autodetected) as qtcodec

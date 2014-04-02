@@ -102,7 +102,7 @@ QVariant IndexTocItem::data(int column, int role) const
 				else
 					imagenum = (m_image_number == EBookIndexEntry::IMAGE_AUTO) ? 10 : m_image_number;
 			
-				const QPixmap *pix = ::mainWindow->chmFile()->getBookIconPixmap( (EBookIndexEntry::Icon) imagenum );
+				const QPixmap *pix = ::mainWindow->getEBookIconPixmap( (EBookIndexEntry::Icon) imagenum );
 			
 				if ( !pix || pix->isNull() )
 					abort();

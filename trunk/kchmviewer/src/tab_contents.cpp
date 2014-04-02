@@ -67,7 +67,7 @@ void TabContents::refillTableOfContents( )
 	ShowWaitCursor wc;
 	QList< EBookIndexEntry > data;
 	
-	if ( !::mainWindow->chmFile()->parseTableOfContents( data )
+	if ( !::mainWindow->chmFile()->getTableOfContents( data )
 	|| data.size() == 0 )
 	{
 		qWarning ("CHM toc present but is empty; wrong parsing?");

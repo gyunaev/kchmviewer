@@ -120,7 +120,8 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 	QByteArray buf;
 
 	if ( path.endsWith( ".html", Qt::CaseInsensitive )
-	|| path.endsWith( ".htm", Qt::CaseInsensitive ) )
+	|| path.endsWith( ".htm", Qt::CaseInsensitive )
+	|| path.endsWith( ".xhtml", Qt::CaseInsensitive ) )
 	{
 		// If encoding autodetection is enabled, decode it. Otherwise pass as binary.
 		if ( pConfig->m_advAutodetectEncoding )

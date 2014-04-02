@@ -24,9 +24,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ebook.h"
-
 #include "kde-qt.h"
+#include "ebook.h"
 #include "viewwindow.h"
 #include "checknewversion.h"
 
@@ -93,6 +92,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		// Returns true if currently opened file has TOC/index
 		bool		hasTableOfContents() const;
 		bool		hasIndex() const;
+
+		// Gets the appropriate CHM pixmap icon (there are no icons in EPUB).
+		const QPixmap * getEBookIconPixmap( EBookIndexEntry::Icon imagenum );
 
 	public slots:
 		// Navigation toolbar icons
@@ -184,6 +186,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		ViewWindowMgr		*	m_viewWindowMgr;
 		NavigationPanel		*	m_navPanel;
 		ToolbarManager		*	m_toolbarMgr;
+
+		// Storage for built-in icons
+		QPixmap				 	m_builtinIcons[ EBookIndexEntry::MAX_BUILTIN_ICONS ];
 
 	private:
 		// This is used for application automatic testing

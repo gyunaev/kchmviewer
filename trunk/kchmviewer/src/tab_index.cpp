@@ -146,7 +146,7 @@ void TabIndex::refillIndex( )
 	ShowWaitCursor wc;
 	QList< EBookIndexEntry > data;
 	
-	if ( !::mainWindow->chmFile()->parseIndex( data )
+	if ( !::mainWindow->chmFile()->getIndex( data )
 			   || data.size() == 0 )
 	{
 		qWarning ("CHM index present but is empty; wrong parsing?");

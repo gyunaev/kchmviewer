@@ -2,6 +2,8 @@
 #include "ebook_chm.h"
 #include "ebook_epub.h"
 
+const char * const INTERNAL_URL_SCHEME = "kchm";
+
 EBook::EBook()
 {
 }

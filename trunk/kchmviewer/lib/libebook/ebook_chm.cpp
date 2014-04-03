@@ -17,6 +17,7 @@
 //#define DEBUGPARSER(A)	qDebug A
 #define DEBUGPARSER(A)
 
+static const char * URL_SCHEME_CHM = "ms-its";
 
 
 EBook_CHM::EBook_CHM()
@@ -62,46 +63,100 @@ QString EBook_CHM::title() const
 	return encodeWithCurrentCodec( m_title );
 }
 
-QString EBook_CHM::homeUrl() const
+QUrl EBook_CHM::homeUrl() const
 {
-	return encodeWithCurrentCodec( m_home );
+	return pathToUrl( m_home );
 }
 
-bool EBook_CHM::hasTableOfContents() const
+bool EBook_CHM::hasFeature(EBook::Feature code) const
 {
-	return m_tocAvailable;
+    switch ( code )
+    {
+    case FEATURE_TOC:
+        return m_tocAvailable;
+
+    case FEATURE_INDEX:
+        return m_indexAvailable;
+
+    case FEATURE_ENCODING:
+        return true;
+    }
+
+	return false;
 }
 
-bool EBook_CHM::hasIndexTable() const
+bool EBook_CHM::getTableOfContents( QList<EBookTocEntry> &toc ) const
 {
-	return m_indexAvailable;
-}
+	if ( parseBinaryTOC( toc ) )
+		return true;
 
-bool EBook_CHM::supportsEncodingChange() const
-{
+	// Parse the plain text TOC
+	QList< ParsedEntry > parsed;
+
+	if ( !parseFileAndFillArray( m_topicsFile, parsed, false ) )
+		return false;
+
+	// Fill up the real toc
+	toc.reserve( parsed.size() );
+	Q_FOREACH( const ParsedEntry& e, parsed )
+	{
+		if ( e.urls.empty() )
+			continue;
+
+		EBookTocEntry entry;
+		entry.iconid = (EBookTocEntry::Icon) e.iconid;
+		entry.indent = e.indent;
+		entry.name = e.name;
+		entry.url = e.urls[0];
+
+		toc.append( entry );
+	}
+
 	return true;
-}
-
-bool EBook_CHM::getTableOfContents( QList<EBookIndexEntry> &toc ) const
-{
-	return parseBinaryTOC( toc ) || parseFileAndFillArray( m_topicsFile, toc, false );
 }
 
 bool EBook_CHM::getIndex(QList<EBookIndexEntry> &index) const
 {
-	return parseFileAndFillArray( m_indexFile, index, true );
+	// Parse the plain text index
+	QList< ParsedEntry > parsed;
+
+	if ( !parseFileAndFillArray( m_topicsFile, parsed, true ) )
+		return false;
+
+	// Fill up the real index
+	index.reserve( parsed.size() );
+	Q_FOREACH( const ParsedEntry& e, parsed )
+	{
+		if ( e.urls.empty() )
+			continue;
+
+		EBookIndexEntry entry;
+		entry.name = e.name;
+		entry.urls = e.urls;
+		entry.indent = e.indent;
+		entry.seealso = e.seealso;
+
+		index.append( entry );
+	}
+
+	return true;
 }
 
-bool EBook_CHM::getFileContentAsString( QString &str, const QString &url ) const
+bool EBook_CHM::getFileContentAsString( QString &str, const QUrl &url ) const
 {
-	return chmGetFileContentAsString( str, url );
+	return chmGetFileContentAsString( str, urlToPath( url ) );
+}
+
+bool EBook_CHM::getFileContentAsBinary( QByteArray &data, const QUrl &url ) const
+{
+	return getFileContentAsBinary( data, urlToPath(url) );
 }
 
 bool EBook_CHM::getFileContentAsBinary( QByteArray &data, const QString &url ) const
 {
 	chmUnitInfo ui;
 
-	if( !ResolveObject( url, &ui ) )
+	if( !ResolveObject( urlToPath(url), &ui ) )
 		return false;
 
 	return chmGetFileContentAsBinary( data, &ui );
@@ -252,7 +307,7 @@ int EBook_CHM::findStringInQuotes (const QString& tag, int offset, QString& valu
 }
 
 
-bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< EBookIndexEntry >& data, bool asIndex ) const
+bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >& data, bool asIndex ) const
 {
 	QString src;
 	const int MAX_NEST_DEPTH = 256;
@@ -274,11 +329,11 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< EBookIndexEnt
 	}
 */
 
-	EBookIndexEntry::Icon defaultimagenum = asIndex ? EBookIndexEntry::IMAGE_INDEX : EBookIndexEntry::IMAGE_AUTO;
+	EBookTocEntry::Icon defaultimagenum = EBookTocEntry::IMAGE_AUTO;
 	int pos = 0, indent = 0, root_indent_offset = 0;
 	bool in_object = false, root_indent_offset_set = false;
 
-	EBookIndexEntry entry;
+	ParsedEntry entry;
 	entry.iconid = defaultimagenum;
 
 	// Split the HHC file by HTML tags
@@ -332,7 +387,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< EBookIndexEnt
 			{
 				// If the name is empty, use the URL as name
 				if ( entry.name.isEmpty() )
-					entry.name = entry.urls[0];
+					entry.name = entry.urls[0].toString();
 
 				if ( !root_indent_offset_set )
 				{
@@ -419,8 +474,8 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< EBookIndexEnt
 				bool bok;
 				int imgnum = pvalue.toInt (&bok);
 
-				if ( bok && imgnum >= 0 && imgnum < EBookIndexEntry::MAX_BUILTIN_ICONS )
-					entry.iconid = (EBookIndexEntry::Icon) imgnum;
+				if ( bok && imgnum >= 0 && imgnum < EBookTocEntry::MAX_BUILTIN_ICONS )
+					entry.iconid = (EBookTocEntry::Icon) imgnum;
 			}
 		}
 		else if ( tagword == "ul" ) // increase indent level
@@ -677,9 +732,9 @@ bool EBook_CHM::chmGetFileContentAsString( QString& str, const QString & url, bo
 	return false;
 }
 
-QString EBook_CHM::getTopicByUrl( const QString & url )
+QString EBook_CHM::getTopicByUrl( const QUrl& url )
 {
-	QMap< QString, QString >::const_iterator it = m_url2topics.find( url );
+	QMap< QUrl, QString >::const_iterator it = m_url2topics.find( url );
 
 	if ( it == m_url2topics.end() )
 		return QString::null;
@@ -709,6 +764,11 @@ bool EBook_CHM::setCurrentEncoding( const char * encoding )
 {
 	m_currentEncoding = encoding;
 	return changeFileEncoding( encoding );
+}
+
+bool EBook_CHM::isSupportedUrl(const QUrl &url)
+{
+	return url.scheme() == URL_SCHEME_CHM;
 }
 
 bool EBook_CHM::guessTextEncoding()
@@ -803,7 +863,7 @@ void EBook_CHM::fillTopicsUrlMap()
 }
 
 
-bool EBook_CHM::parseBinaryTOC( QList< EBookIndexEntry >& toc ) const
+bool EBook_CHM::parseBinaryTOC( QList< EBookTocEntry >& toc ) const
 {
 	if ( !m_lookupTablesValid )
 		return false;
@@ -839,7 +899,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 									const QByteArray& urlstr,
 									const QByteArray& strings,
 									int offset,
-									QList< EBookIndexEntry >& entries,
+									QList< EBookTocEntry >& entries,
 									int level ) const
 {
 	while ( offset )
@@ -906,15 +966,15 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 				value = encodeWithCurrentCodec( urlstr.data() + tocoffset + 8 );
 			}
 
-			EBookIndexEntry entry;
+			EBookTocEntry entry;
 			entry.name = name.trimmed();
 
 			if ( !entry.name.isEmpty() )
 			{
 				if ( !value.isEmpty() )
-					entry.urls.push_back( HelperUrlFactory::makeURLabsoluteIfNeeded( value ) );
+					entry.url = HelperUrlFactory::makeURLabsoluteIfNeeded( value );
 
-				entry.iconid = EBookIndexEntry::IMAGE_AUTO;
+				entry.iconid = EBookTocEntry::IMAGE_AUTO;
 				entry.indent = level;
 				entries.push_back( entry );
 			}
@@ -954,179 +1014,25 @@ bool EBook_CHM::hasOption(const QString & name) const
 	return false;
 }
 
-
-//
-// This piece of code was based on the one in xchm written by Razvan Cojocaru <razvanco@gmx.net>
-//
-bool EBook_CHM::parseBinaryIndex( QList< EBookIndexEntry >& entries ) const
+QUrl EBook_CHM::pathToUrl(const QString &link) const
 {
-	if ( !m_lookupTablesValid )
-		return false;
+	QUrl url;
+	url.setScheme( URL_SCHEME_CHM );
+	url.setHost( URL_SCHEME_CHM );
+	url.setPath( link );
 
-	if ( hasOption("nobintables") )
-		return false;
-
-	if ( !loadBinaryIndex( entries ) )
-	{
-		qWarning("Failed to parse binary index, fallback to text-based index");
-		entries.clear();
-		return false;
-	}
-
-	return true;
+	return url;
 }
 
-
-QString EBook_CHM::getBtreeString( const QByteArray& btidx, unsigned long * offset, unsigned short * spaceLeft ) const
+QString EBook_CHM::urlToPath(const QUrl &link) const
 {
-	QByteArray string;
-	unsigned short tmp;
-
-	while ( 1 )
+	if ( link.scheme() == URL_SCHEME_CHM )
 	{
-		// accumulate the name
-		if ( (unsigned) btidx.size() < *offset + sizeof(unsigned short) )
-			return QString();
+		if ( link.path() == "/" || link.path().isEmpty() )
+			return m_home;
 
-		tmp = UINT16ARRAY( btidx.data() + *offset );
-		*offset += sizeof(unsigned short);
-		*spaceLeft -= sizeof(unsigned short);
-
-		if ( tmp == 0x00 )
-			break;
-
-		string.push_back( tmp );
+		return link.path();
 	}
 
-	return encodeWithCurrentCodec( string ).trimmed();
-}
-
-
-bool EBook_CHM::loadBinaryIndex( QList< EBookIndexEntry >& entries ) const
-{
-	QByteArray btidx, topics, urltbl, urlstr, strings;
-
-	// Read the index tables
-	if ( !getFileContentAsBinary( btidx, "/$WWKeywordLinks/BTree" )
-	|| !getFileContentAsBinary( topics, "/#TOPICS" )
-	|| !getFileContentAsBinary( urltbl, "/#URLTBL" )
-	|| !getFileContentAsBinary( urlstr, "/#URLSTR" )
-	|| !getFileContentAsBinary( strings, "/#STRINGS" ) )
-		return false;
-
-	// Make sure we have enough entries in tree
-	if ( btidx.size() < 88 )
-	{
-		qWarning("EBook_CHM::loadBinaryIndex: BTree is too small" );
-		return false;
-	}
-
-	unsigned long offset = 0x4c;
-	int next = -1;
-	unsigned short freeSpace, spaceLeft;
-	const short blockSize = 2048;
-	bool found_item = false;
-
-	do
-	{
-		if ( (unsigned) btidx.size() < offset + 12 )
-			break;
-
-		freeSpace = UINT16ARRAY( btidx.data() + offset );
-		next = INT32ARRAY( btidx.data() + offset + 8 );
-		spaceLeft = blockSize - 12;
-		offset += 12;
-
-		while ( spaceLeft > freeSpace )
-		{
-			QString value;
-			EBookIndexEntry entry;
-
-			entry.name = getBtreeString( btidx, &offset, &spaceLeft );
-
-			if ( entry.name.isEmpty() )
-			{
-				qWarning("EBook_CHM::loadBinaryIndex: cannot parse name" );
-				return false;
-			}
-
-			if ( (unsigned) btidx.size() < offset + 16 )
-			{
-				qWarning("EBook_CHM::loadBinaryIndex: index is terminated by name" );
-				return false;
-			}
-
-			unsigned short seeAlso = UINT16ARRAY(btidx.data() + offset);
-			unsigned int numTopics = UINT32ARRAY(btidx.data() + offset + 0xc);
-			offset += 16;
-			spaceLeft -= 16;
-
-			if ( seeAlso )
-			{
-				QString seealso = getBtreeString( btidx, &offset, &spaceLeft );
-
-				if ( entry.name != seealso )
-					entry.urls.push_back( ":" + seealso );
-			}
-			else
-			{
-				for ( unsigned int i = 0; i < numTopics && spaceLeft > freeSpace; ++i )
-				{
-					if ( (unsigned) btidx.size() < offset + sizeof(unsigned int) )
-					{
-						qWarning("EBook_CHM::loadBinaryIndex: premature url termination" );
-						return false;
-					}
-
-					unsigned int index = UINT32ARRAY( btidx.data() + offset );
-
-					// #URLTBL index
-					unsigned int tocoffset = UINT32ARRAY( topics.data() + (index * 16) + 8 );
-
-					if ( (unsigned) urltbl.size() < tocoffset + 12 )
-					{
-						qWarning("EBook_CHM::loadBinaryIndex: invalid url index (%d) for TOC entry!", tocoffset );
-						return false;
-					}
-
-					tocoffset = UINT32ARRAY(urltbl.data() + tocoffset + 8);
-
-					if ( (unsigned) urlstr.size() < tocoffset )
-					{
-						qWarning("EBook_CHM::loadBinaryIndex: invalid url offset (%d) for TOC entry!", tocoffset );
-						return false;
-					}
-
-					QString url = encodeWithCurrentCodec( urlstr.data() + tocoffset + 8 );
-					entry.urls.push_back( HelperUrlFactory::makeURLabsoluteIfNeeded( url ) );
-					offset += sizeof(unsigned int);
-					spaceLeft -= sizeof(unsigned int);
-				}
-			}
-
-			entry.name = entry.name.trimmed();
-
-			if ( !entry.name.isEmpty() )
-			{
-				entry.iconid = EBookIndexEntry::IMAGE_INDEX;
-				entry.indent = 0;
-				found_item = true;
-				entries.push_back( entry );
-			}
-
-			if ( (unsigned) btidx.size() < offset + 8 )
-			{
-				qWarning("EBook_CHM::loadBinaryIndex: binary index is gone" );
-				return false;
-			}
-
-			offset += 8;
-			spaceLeft -= 8;
-		}
-
-		offset += spaceLeft;
-
-	} while ( next != -1 );
-
-	return found_item;
+	return "";
 }

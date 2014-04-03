@@ -23,7 +23,6 @@
 
 #include "mainwindow.h"
 #include "viewwindow.h"
-#include "treeviewitem.h"
 #include "version.h"
 #include "tab_bookmarks.h"
 
@@ -116,7 +115,7 @@ TabBookmarks::TabBookmarks( QWidget *parent )
 void TabBookmarks::onAddBookmarkPressed( )
 {
     bool ok;
-	QString url = ::mainWindow->currentBrowser()->getOpenedPage();
+	QString url = ::mainWindow->currentBrowser()->getOpenedPage().path();
 	QString title = ::mainWindow->chmFile()->getTopicByUrl(url);
 	QString name = QInputDialog::getText( 
 	        this,

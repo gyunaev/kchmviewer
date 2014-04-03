@@ -68,7 +68,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		MainWindow();
 		~MainWindow();
 	
-		bool		openPage ( const QString &url, unsigned int flags = OPF_CONTENT_TREE );
+		bool		openPage (const QUrl &url, unsigned int flags = OPF_CONTENT_TREE );
 		
 		EBook	*	chmFile() const	{ return m_ebookFile; }
 		const QString&	getOpenedFileName () { return m_ebookFilename; }
@@ -94,7 +94,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		bool		hasIndex() const;
 
 		// Gets the appropriate CHM pixmap icon (there are no icons in EPUB).
-		const QPixmap * getEBookIconPixmap( EBookIndexEntry::Icon imagenum );
+		const QPixmap * getEBookIconPixmap( EBookTocEntry::Icon imagenum );
 
 	public slots:
 		// Navigation toolbar icons
@@ -137,7 +137,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		actionEncodingChanged( QAction * action );
 	
 		// Link activation
-		void 		activateLink( const QString & link );
 		void 		activateUrl( const QUrl & link );
 
 		void		updateToolbars();
@@ -188,7 +187,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		ToolbarManager		*	m_toolbarMgr;
 
 		// Storage for built-in icons
-		QPixmap				 	m_builtinIcons[ EBookIndexEntry::MAX_BUILTIN_ICONS ];
+		QPixmap				 	m_builtinIcons[ EBookTocEntry::MAX_BUILTIN_ICONS ];
 
 	private:
 		// This is used for application automatic testing

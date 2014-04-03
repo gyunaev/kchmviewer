@@ -25,7 +25,6 @@
 
 #include "mainwindow.h"
 #include "config.h"
-#include "treeviewitem.h"
 #include "tab_search.h"
 #include "ebook_search.h"
 

@@ -32,7 +32,6 @@
 
 #include "mainwindow.h"
 #include "config.h"
-#include "treeviewitem.h"
 #include "settings.h"
 #include "viewwindow.h"
 #include "viewwindowmgr.h"
@@ -173,7 +172,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		updateActions();
 		
 		// Show current encoding in status bar
-		if ( m_ebookFile->supportsEncodingChange() )
+		if ( m_ebookFile->hasFeature( EBook::FEATURE_ENCODING ) )
 			showInStatusBar( i18n("Detected file encoding: %1 ( %2 )")
 							 .arg( TextEncodings::languageForCodec( m_ebookFile->currentEncoding() ))
 							 .arg( m_ebookFile->currentEncoding() ) );
@@ -192,8 +191,8 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		m_navPanel->updateTabs( m_ebookFile );
 
 		// and to navigation buttons
-		nav_actionPreviousPage->setEnabled( m_ebookFile->hasTableOfContents() );
-		nav_actionNextPageToc->setEnabled( m_ebookFile->hasTableOfContents() );
+		nav_actionPreviousPage->setEnabled( hasTableOfContents()  );
+		nav_actionNextPageToc->setEnabled( hasTableOfContents() );
 
 		navSetBackEnabled( false );
 		navSetForwardEnabled( false );
@@ -203,7 +202,9 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 
 		if ( m_currentSettings->loadSettings (fileName) )
 		{
-			setTextEncoding(m_currentSettings->m_activeEncoding );
+			if ( m_ebookFile->hasFeature( EBook::FEATURE_ENCODING ) )
+				setTextEncoding(m_currentSettings->m_activeEncoding );
+
 			m_navPanel->applySettings( m_currentSettings );
 			
 			if ( call_open_page )
@@ -211,7 +212,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 				m_viewWindowMgr->restoreSettings( m_currentSettings->m_viewwindows );
 				m_viewWindowMgr->setCurrentPage( m_currentSettings->m_activetabwindow );
 				
-				if ( m_ebookFile->hasTableOfContents() )
+				if ( m_ebookFile->hasFeature( EBook::FEATURE_TOC ) )
 					actionLocateInContentsTab();
 			}
 			
@@ -224,7 +225,7 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 		{
 			m_navPanel->setActive( NavigationPanel::TAB_CONTENTS );
 
-			if ( m_ebookFile->supportsEncodingChange() )
+			if ( m_ebookFile->hasFeature( EBook::FEATURE_ENCODING ) )
 				setTextEncoding( m_ebookFile->currentEncoding() );
 			
 			if ( call_open_page )
@@ -279,11 +280,6 @@ void MainWindow::refreshCurrentBrowser( )
 
 void MainWindow::activateUrl( const QUrl & link )
 {
-	activateLink( link.toString() );
-}
-
-void MainWindow::activateLink ( const QString & link )
-{
 	if ( link.isEmpty() )
 		return;
 
@@ -298,14 +294,12 @@ void MainWindow::activateLink ( const QString & link )
 }
 
 
-bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
+bool MainWindow::openPage( const QUrl& url, unsigned int flags )
 {
-	QString otherlink, otherfile, url = srcurl;
+	QString otherlink;
 	
-	if ( url == "/" )
-		url = m_ebookFile->homeUrl();
-
-	if ( HelperUrlFactory::isRemoteURL (url, otherlink) )
+	// Feed to the browser all non-internal URLs
+	if ( !m_ebookFile->isSupportedUrl( url  ) )
 	{
 		switch ( pConfig->m_onExternalLinkClick )
 		{
@@ -315,7 +309,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 		case Config::ACTION_ASK_USER:
 	   		if ( QMessageBox::question(this,
 				 i18n("%1 - remote link clicked - %2") . arg(QCoreApplication::applicationName()) . arg(otherlink),
-				 i18n("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url ),
+				 i18n("A remote link %1 will start the external program to open it.\n\nDo you want to continue?").arg( url.toString() ),
 				 i18n("&Yes"), i18n("&No"),
 				 QString::null, 0, 1 ) )
 					return false;
@@ -333,17 +327,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 
 		return false; // do not change the current page.
 	}
-		
-	// Filter the URLs which do not need to be opened at all by Qt version
-	if ( HelperUrlFactory::isJavascriptURL(url)  )
-	{
-		QMessageBox::information( this, 
-			i18n( "%1 - JavsScript link clicked") . arg(QCoreApplication::applicationName()),
-			i18n( "You have clicked a JavaScript link.\nTo prevent security-related issues JavaScript URLs are disabled in CHM files.") );
-		
-		return false;
-	}
-
+/*FIXME
 	if ( HelperUrlFactory::isNewChmURL (url, getOpenedFileName(), otherfile, otherlink) )
 	{
 		if ( otherfile != m_ebookFilename )
@@ -367,7 +351,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 		else
 			url = otherlink;
 	}
-	
+*/
 	ViewWindow * vwnd = currentBrowser();
 
 	if ( flags & OPF_NEW_TAB )
@@ -375,7 +359,7 @@ bool MainWindow::openPage( const QString & srcurl, unsigned int flags )
 	
 	// Store current page and position to add it to history if we change it
 	int hist_scrollpos = currentBrowser()->getScrollbarPosition();
-	QString hist_url = currentBrowser()->getOpenedPage();
+	QUrl hist_url = currentBrowser()->getOpenedPage();
 	
 	if ( vwnd->openUrl (url) )
 	{
@@ -433,7 +417,7 @@ void MainWindow::setTextEncoding( const QString& encoding )
 	
 	// Because updateView() will call view->invalidate(), which clears the view->getOpenedPage(),
 	// we have to make a copy of it.
-	QString url = currentBrowser()->getOpenedPage();
+	QUrl url = currentBrowser()->getOpenedPage();
 	
 	// Regenerate the content and index trees	
 	refreshCurrentBrowser();
@@ -446,7 +430,7 @@ void MainWindow::closeFile( )
 	// Prepare the settings
 	if ( pConfig->m_HistoryStoreExtra )
 	{
-		if ( m_ebookFile->supportsEncodingChange() )
+		if ( m_ebookFile->hasFeature( EBook::FEATURE_ENCODING ) )
 			m_currentSettings->m_activeEncoding = m_ebookFile->currentEncoding();
 
 		m_currentSettings->m_activetabwindow = m_viewWindowMgr->currentPageIndex( );
@@ -877,7 +861,7 @@ void MainWindow::actionViewHTMLsource()
 	{
 		QTextEdit * editor = new QTextEdit ( 0 );
 		editor->setPlainText( text );
-		editor->setWindowTitle( QString("HTML source of %1") .arg( currentBrowser()->getOpenedPage() ));
+		editor->setWindowTitle( i18n("HTML source") );
 		editor->resize( 800, 600 );
 		editor->show();
 	}
@@ -1261,15 +1245,15 @@ void MainWindow::setupPopupMenu( QMenu * menu )
 
 bool MainWindow::hasTableOfContents() const
 {
-	return m_ebookFile && m_ebookFile->hasTableOfContents();
+	return m_ebookFile && m_ebookFile->hasFeature( EBook::FEATURE_TOC );
 }
 
 bool MainWindow::hasIndex() const
 {
-	return m_ebookFile && m_ebookFile->hasIndexTable();
+	return m_ebookFile && m_ebookFile->hasFeature( EBook::FEATURE_INDEX );
 }
 
-const QPixmap *MainWindow::getEBookIconPixmap(EBookIndexEntry::Icon imagenum)
+const QPixmap *MainWindow::getEBookIconPixmap(EBookTocEntry::Icon imagenum)
 {
 	if ( m_builtinIcons[imagenum].isNull() )
 	{

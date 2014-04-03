@@ -43,15 +43,15 @@ class ViewWindow : public QWebView
 		virtual ~ViewWindow();
 	
 		//! Open a page from current chm archive
-		bool	openUrl (const QString& url );
+		bool	openUrl (const QUrl& url );
 		
-		QString	getBaseUrl() const	{ return m_base_url; }
-		QString	getOpenedPage() const	{ return m_openedPage; }
-		QString	getNewTabLink() const	{ return m_newTabLinkKeeper; }
-		QString	makeURLabsolute ( const QString &url, bool set_as_base = true );
+		QUrl	getBaseUrl() const	{ return m_base_url; }
+		QUrl	getOpenedPage() const	{ return m_openedPage; }
+		QUrl	getNewTabLink() const	{ return m_newTabLinkKeeper; }
+//		QUrl	makeURLabsolute ( const QUrl&url, bool set_as_base = true );
 		
 	public: 
-		static QString decodeUrl( const QString &input );
+		//static QString decodeUrl( const QString &input );
 
 		//! Invalidate current view, doing all the cleanups etc.
 		void	invalidate();
@@ -94,21 +94,21 @@ class ViewWindow : public QWebView
 		
 		//! Navigation auxiliary stuff
 		void	setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
-		void	addNavigationHistory( const QString & url, int scrollpos );
+		void	addNavigationHistory(const QUrl &url, int scrollpos );
 		void 	updateNavigationToolbar();
 		
 		//! Keeps the tab URL between link following
-		void	setTabKeeper ( const QString& link );
+		void	setTabKeeper ( const QUrl& link );
 
 	public slots:
 		void	zoomIncrease();
 		void	zoomDecrease();
 		
 	protected:
-		bool	openPage ( const QString& url );
-		virtual void	handleStartPageAsImage( QString& link );
+		bool			openPage ( const QUrl& url );
+		void			handleStartPageAsImage( QUrl& link );
 		
-		QMenu * 		getContextMenu( const QString& link, QWidget * parent );
+		QMenu * 		getContextMenu( const QUrl& link, QWidget * parent );
 		QMenu * 		createStandardContextMenu( QWidget * parent );
 		
 		// Overriden to change the source
@@ -123,20 +123,22 @@ class ViewWindow : public QWebView
 		void	onLoadFinished ( bool ok );
 
 	private:
+		//FIXME: embedded history
+		//FIXME: embedded search
 		//! History
 		class UrlHistory
 		{
 			public:
 				UrlHistory() { scrollbarpos = 0; }
-				UrlHistory( const QString& _url, int _scrollbarpos )
+				UrlHistory( const QUrl& _url, int _scrollbarpos )
 					: url(_url), scrollbarpos(_scrollbarpos) {}
 			
-				const QString&  getUrl() const { return url; }
+				const QUrl&		getUrl() const { return url; }
 				int 			getScrollPosition() const { return scrollbarpos; }
 				void			setScrollPosition( int pos ) { scrollbarpos = pos; }
 				
 			private:
-				QString  	url;
+				QUrl		url;
 				int 		scrollbarpos;
 		};
 	
@@ -146,13 +148,13 @@ class ViewWindow : public QWebView
 		QMenu 				*	m_contextMenuLink;
 		QList<UrlHistory>		m_history;
 
-		QString 				m_openedPage;
-		QString 				m_lastOpenedPage;
-		QString					m_base_url;
+		QUrl					m_openedPage;
+		QUrl					m_lastOpenedPage;
+		QUrl					m_base_url;
 	
 		// This member keeps a "open new tab" link between getContextMenu()
 		// call and appropriate slot call
-		QString					m_newTabLinkKeeper;
+		QUrl					m_newTabLinkKeeper;
 
 		// Keeps the scrollbar position to move after the page is loaded
 		int						m_storedScrollbarPosition;

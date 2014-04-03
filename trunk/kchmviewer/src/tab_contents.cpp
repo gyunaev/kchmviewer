@@ -26,7 +26,7 @@
 #include "helper_urlfactory.h"
 
 #include "mainwindow.h"
-#include "treeviewitem.h"
+#include "treeitem_toc.h"
 #include "tab_contents.h"
 
 
@@ -65,7 +65,7 @@ TabContents::~TabContents()
 void TabContents::refillTableOfContents( )
 {
 	ShowWaitCursor wc;
-	QList< EBookIndexEntry > data;
+	QList< EBookTocEntry > data;
 	
 	if ( !::mainWindow->chmFile()->getTableOfContents( data )
 	|| data.size() == 0 )
@@ -73,31 +73,95 @@ void TabContents::refillTableOfContents( )
 		qWarning ("CHM toc present but is empty; wrong parsing?");
 		return;
 	}
-			   
-	kchmFillListViewWithParsedData( tree, data, &m_urlListMap );
-}
 
+	// Fill up the tree; we use a pretty complex routine to handle buggy CHMs
+	QVector< TreeItem_TOC *> lastchild;
+	QVector< TreeItem_TOC *> rootentry;
+	bool warning_shown = false;
 
-IndexTocItem * TabContents::getTreeItem( const QString & url )
-{
-	QMap<QString, IndexTocItem*>::const_iterator it;
+	tree->clear();
 
-	// First try to find non-normalized URL (present in some ugly CHM files)
-	it = m_urlListMap.find( HelperUrlFactory::makeURLabsoluteIfNeeded(url) );
-
-	if ( it == m_urlListMap.end() )
+	for ( int i = 0; i < data.size(); i++ )
 	{
-		QString fixedstr = HelperUrlFactory::normalizeUrl( url );
-		it = m_urlListMap.find( fixedstr );
+		int indent = data[i].indent;
+
+		// Do we need to add another indent?
+		if ( indent >= rootentry.size() )
+		{
+			int maxindent = rootentry.size() - 1;
+
+			// Resize the arrays
+			lastchild.resize( indent + 1 );
+			rootentry.resize( indent + 1 );
+
+			if ( indent > 0 && maxindent < 0 )
+				qFatal("Invalid fisrt TOC indent (first entry has no root entry), aborting.");
+
+			// And init the rest if needed
+			if ( (indent - maxindent) > 1 )
+			{
+				if ( !warning_shown )
+				{
+					qWarning("Invalid TOC step, applying workaround. Results may vary.");
+					warning_shown = true;
+				}
+
+				for ( int j = maxindent; j < indent; j++ )
+				{
+					lastchild[j+1] = lastchild[j];
+					rootentry[j+1] = rootentry[j];
+				}
+			}
+
+			lastchild[indent] = 0;
+			rootentry[indent] = 0;
+		}
+
+		// Create the node
+		TreeItem_TOC * item;
+
+		if ( indent == 0 )
+			item = new TreeItem_TOC( tree, lastchild[indent], data[i].name, data[i].url, data[i].iconid );
+		else
+		{
+			// New non-root entry. It is possible (for some buggy CHMs) that there is no previous entry: previoous entry had indent 1,
+			// and next entry has indent 3. Backtracking it up, creating missing entries.
+			if ( rootentry[indent-1] == 0 )
+				qFatal("Child entry indented as %d with no root entry!", indent);
+
+			item = new TreeItem_TOC( rootentry[indent-1], lastchild[indent], data[i].name, data[i].url, data[i].iconid );
+		}
+
+		lastchild[indent] = item;
+		rootentry[indent] = item;
 	}
 
-	if ( it == m_urlListMap.end() )
-		return 0;
-		
-	return *it;
+	tree->update();
 }
 
-void TabContents::showItem( IndexTocItem * item )
+
+static TreeItem_TOC * findTreeItem( TreeItem_TOC *item, const QUrl& url )
+{
+	if ( item->containstUrl( url ) )
+		return item;
+
+	for ( int i = 0; i < item->childCount(); ++i )
+	{
+		TreeItem_TOC * item = findTreeItem( (TreeItem_TOC *) item->child( i ), url );
+
+		if ( item )
+			return item;
+	}
+
+	return 0;
+}
+
+TreeItem_TOC * TabContents::getTreeItem( const QUrl& url )
+{
+	return findTreeItem( (TreeItem_TOC *) tree->topLevelItem(0), url );
+}
+
+void TabContents::showItem( TreeItem_TOC * item )
 {
 	tree->setCurrentItem( item );
 	tree->scrollToItem( item );
@@ -109,13 +173,13 @@ void TabContents::onClicked(QTreeWidgetItem * item, int)
 	if ( !item )
 		return;
 	
-	IndexTocItem * treeitem = (IndexTocItem*) item;
-	::mainWindow->activateLink( treeitem->getUrl() );
+	TreeItem_TOC * treeitem = (TreeItem_TOC*) item;
+	::mainWindow->activateUrl( treeitem->getUrl() );
 }
 
 void TabContents::onContextMenuRequested(const QPoint & point)
 {
-	IndexTocItem * treeitem = (IndexTocItem *) tree->itemAt( point );
+	TreeItem_TOC * treeitem = (TreeItem_TOC *) tree->itemAt( point );
 	
 	if( treeitem )
 	{
@@ -132,8 +196,8 @@ void TabContents::search( const QString & text )
 	if ( items.isEmpty() )
 		return;
 			
-	IndexTocItem * treeitem = (IndexTocItem *) items.first();
-	::mainWindow->activateLink( treeitem->getUrl() );
+	TreeItem_TOC * treeitem = (TreeItem_TOC *) items.first();
+	::mainWindow->activateUrl( treeitem->getUrl() );
 }
 
 void TabContents::focus()

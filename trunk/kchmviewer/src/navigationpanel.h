@@ -67,7 +67,7 @@ class NavigationPanel : public QDockWidget, public Ui::NavigatorPanel
 		void	refresh();
 
 		// Locate URL or text in the contents tab
-		bool	findUrlInContents( const QString & url );
+        bool	findUrlInContents( const QUrl & url );
 		void	findTextInContents( const QString & text );
 
 		// Find text in index tab

@@ -265,7 +265,7 @@ void ViewWindowMgr::saveSettings( Settings::viewindow_saved_settings_t & setting
 		if ( !tab )
 			abort();
 		
-		settings.push_back( Settings::SavedViewWindow( tab->window->getOpenedPage(),
+		settings.push_back( Settings::SavedViewWindow( tab->window->getOpenedPage().toString(),
 													   tab->window->getScrollbarPosition(),
 													   tab->window->getZoomFactor()) );
 	}

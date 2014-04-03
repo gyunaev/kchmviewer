@@ -21,12 +21,10 @@
 
 #include <QString>
 #include <QList>
-#include <QTextCodec>
-#include <QPixmap>
+#include <QUrl>
 
-
-//! Stores a single index or TOC entry
-class EBookIndexEntry
+//! Stores a single table of content entry
+class EBookTocEntry
 {
 	public:
 		//! Content TOC icon indexes for CHM books (epub books contain no icons)
@@ -34,7 +32,6 @@ class EBookIndexEntry
 		{
 			IMAGE_NONE = -1,
 			IMAGE_AUTO = -2,
-			IMAGE_INDEX = -3,
 
 			MAX_BUILTIN_ICONS = 42
 		};
@@ -42,8 +39,8 @@ class EBookIndexEntry
 		//! Entry name
 		QString		name;
 
-		//! Entry URLs. The TOC entry should have only one URL; the index entry could have several.
-		QStringList	urls;
+		//! Entry URL.
+		QUrl		url;
 
 		//! Associated image number. Used for TOC only; indexes does not have the image.
 		//! If IMAGE_NONE, no icon is associated. Otherwise use getBookIconPixmap() to get associated pixmap icon.
@@ -54,12 +51,36 @@ class EBookIndexEntry
 };
 
 
+//! Stores a single index entry
+class EBookIndexEntry
+{
+	public:
+		//! Entry name
+		QString		name;
+
+		//! Entry URLs. The index entry could have several URLs
+        QList<QUrl> urls;
+
+		//! Whether this is a 'see also' index type
+		bool		seealso;
+
+		//! Indentation level for this entry.
+		int			indent;
+};
+
 
 //! Universal ebook files processor supporting both CHM and EPUB. Abstract.
 class EBook
 {
 	public:
-		//! Default constructor and destructor.
+        enum Feature
+        {
+            FEATURE_TOC,        // has table of contents
+            FEATURE_INDEX,      // has index
+            FEATURE_ENCODING    // Could be encoded with different encodings
+        };
+
+        //! Default constructor and destructor.
 		EBook();
 		virtual ~EBook();
 
@@ -94,28 +115,14 @@ class EBook
 		 *         the root of the archive filesystem. If no book has been opened, returns "/".
 		 * \ingroup information
 		 */
-		virtual QString homeUrl() const = 0;
+		virtual QUrl homeUrl() const = 0;
 
 		/*!
-		 * \brief Checks whether the Table of Contents is present in this file.
+         * \brief Checks whether the specific feature is present in this file.
 		 * \return true if it is available; false otherwise.
 		 * \ingroup information
 		 */
-		virtual bool  hasTableOfContents() const = 0;
-
-		/*!
-		 * \brief Checks whether the Index Table is present in this file.
-		 * \return true if it is available; false otherwise.
-		 * \ingroup information
-		 */
-		virtual bool  hasIndexTable() const = 0;
-
-		/*!
-		 * \brief Checks whether the ebook supports change of encoding.
-		 * \return true if does; false otherwise.
-		 * \ingroup information
-		 */
-		virtual bool  supportsEncodingChange() const = 0;
+        virtual bool  hasFeature( Feature code ) const = 0;
 
 		/*!
 		 * \brief Parses and fills up the Table of Contents (TOC)
@@ -126,7 +133,7 @@ class EBook
 		 *         by really buggy files; please report a bug if the file is opened ok under Windows.
 		 * \ingroup fileparsing
 		 */
-		virtual bool getTableOfContents( QList< EBookIndexEntry >& toc ) const = 0;
+		virtual bool getTableOfContents( QList< EBookTocEntry >& toc ) const = 0;
 
 		/*!
 		 * \brief Parses the index table
@@ -152,7 +159,7 @@ class EBook
 		 * \sa setCurrentEncoding() currentEncoding() getFileContentAsBinary()
 		 * \ingroup dataretrieve
 		 */
-		virtual bool getFileContentAsString( QString& str, const QString& url ) const = 0;
+		virtual bool getFileContentAsString( QString& str, const QUrl& url ) const = 0;
 
 		/*!
 		 * \brief Retrieves the content from url in current chm file to QByteArray.
@@ -166,21 +173,12 @@ class EBook
 		 * \sa getFileContentAsString()
 		 * \ingroup dataretrieve
 		 */
-		virtual bool getFileContentAsBinary( QByteArray& data, const QString& url ) const = 0;
-
-		/*!
-		 * \brief Retrieves the content size.
-		 * \param url An URL in ebook file to retreive content from. Must be absolute.
-		 * \return the size; -1 in case of error.
-		 *
-		 * \ingroup dataretrieve
-		 */
-		virtual int getContentSize( const QString& url ) = 0;
+		virtual bool getFileContentAsBinary( QByteArray& data, const QUrl& url ) const = 0;
 
 		/*!
 		 * \brief Obtains the list of all the files (URLs) in current ebook archive. This is used in search
 		 * and to dump the e-book content.
-		 * \param files An array to store list of URLs (file names) present in chm archive.
+		 * \param files An array to store list of URLs present in chm archive.
 		 * \return true if the enumeration succeed; false otherwise (I could hardly imagine a reason).
 		 *
 		 * \ingroup dataretrieve
@@ -194,7 +192,7 @@ class EBook
 		 *
 		 * \ingroup dataretrieve
 		 */
-		virtual QString		getTopicByUrl ( const QString& url ) = 0;
+		virtual QString		getTopicByUrl ( const QUrl& url ) = 0;
 
 		/*!
 		 * \brief Gets the current ebook encoding (set or autodetected) as qtcodec
@@ -212,44 +210,15 @@ class EBook
 		 */
 		virtual bool setCurrentEncoding ( const char * encoding ) = 0;
 
+		/*!
+		 * \brief Checks if this kind of URL is supported by the ebook format (i.e. could be passed to ebook functions)
+		 * \param url The url to check
+		 */
+		virtual bool isSupportedUrl( const QUrl& url ) = 0;
+
 	protected:
 		// Loads the file; returns true if loaded, false otherwise
 		virtual bool	load( const QString& archiveName ) = 0;
-
-#if 0
-		/*!
-		 * \brief Execute a search query, return the results.
-		 * \param query A search query.
-		 * \param results An array to store URLs where the query was found.
-		 * \return true if search was successful (this does not mean that it returned any results);
-		 *         false otherwise.
-		 *
-		 * This function executes a standard search query. The query should consist of one of more
-		 *  words separated by a space with a possible prefix. A prefix may be:
-		 *   +   Plus indicates that the word is required; any page without this word is excluded from the result.
-		 *   -   Minus indicates that the word is required to be absent; any page with this word is excluded from
-		 *       the result.
-		 *   "." Quotes indicates a phrase. Anything between quotes is a phrase, which is set of space-separated
-		 *       words. Will be in result only if the words in phrase are in page in the same sequence, and
-		 *       follow each other.
-		 *
-		 *   If there is no prefix, the word considered as required.
-		 * \ingroup search
-		 */
-		bool	searchQuery ( const QString& query, QStringList * results, unsigned int limit = 100 );
-
-		//! Access to implementation
-		LCHMFileImpl * impl()	{ return m_impl; }
-
-
-
-	private:
-		//! No copy construction allowed.
-		EBook( const EBook& );
-
-		//! No assignments allowed.
-		EBook& operator=( const EBook& );
-#endif
 };
 
 

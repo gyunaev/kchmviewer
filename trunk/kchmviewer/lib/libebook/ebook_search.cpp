@@ -112,7 +112,8 @@ bool EBookSearch::generateIndex( EBook * ebookFile, QDataStream & stream )
 	// Process the list of files in CHM archive and keep only HTML document files from there
 	for ( int i = 0; i < alldocuments.size(); i++ )
 		if ( alldocuments[i].endsWith( ".html", Qt::CaseInsensitive )
-		|| alldocuments[i].endsWith( ".htm", Qt::CaseInsensitive ) )
+		|| alldocuments[i].endsWith( ".htm", Qt::CaseInsensitive )
+		|| alldocuments[i].endsWith( ".xhtml", Qt::CaseInsensitive ) )
 			documents.push_back( HelperUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
 
 	if ( m_Index->makeIndex( documents, ebookFile ) == -1 )

@@ -1,8 +1,9 @@
 #include <QtDebug>
 #include "helperxmlhandler_epubtoc.h"
 
-HelperXmlHandler_EpubTOC::HelperXmlHandler_EpubTOC()
+HelperXmlHandler_EpubTOC::HelperXmlHandler_EpubTOC(EBook_EPUB *epub)
 {
+	m_epub = epub;
 	m_inNavMap = false;
 	m_inText = false;
 	m_indent = 0;
@@ -10,11 +11,11 @@ HelperXmlHandler_EpubTOC::HelperXmlHandler_EpubTOC()
 
 bool HelperXmlHandler_EpubTOC::startElement(const QString &, const QString &localName, const QString &, const QXmlAttributes &atts)
 {
-/*	qDebug() << "startElement " << " " << localName;
+//	qDebug() << "startElement " << " " << localName;
 
-	for ( int i = 0; i < atts.count(); i++ )
-		qDebug() << "    " << atts.localName(i) << " " << atts.value(i);
-*/
+//	for ( int i = 0; i < atts.count(); i++ )
+//		qDebug() << "    " << atts.localName(i) << " " << atts.value(i);
+
 	if ( localName == "navMap" )
 	{
 		m_inNavMap = true;
@@ -46,11 +47,11 @@ bool HelperXmlHandler_EpubTOC::startElement(const QString &, const QString &loca
 
 bool HelperXmlHandler_EpubTOC::characters(const QString &ch)
 {
+	//	qDebug() << "characters" << " " << ch;
 	if ( m_inText )
 		m_lastTitle = ch;
 
 	checkNewTocEntry();
-//	qDebug() << "characters" << " " << ch;
 	return true;
 }
 
@@ -77,10 +78,10 @@ void HelperXmlHandler_EpubTOC::checkNewTocEntry()
 {
 	if ( !m_lastId.isEmpty() && !m_lastTitle.isEmpty() )
 	{
-		EBookIndexEntry entry;
+		EBookTocEntry entry;
 		entry.name = m_lastTitle;
-		entry.urls.push_back( m_lastId );
-		entry.iconid = EBookIndexEntry::IMAGE_AUTO;
+		entry.url = m_epub->pathToUrl( m_lastId );
+		entry.iconid = EBookTocEntry::IMAGE_NONE;
 		entry.indent = m_indent - 1;
 
 		entries.push_back( entry );

@@ -2,14 +2,14 @@
 #define HELPERXMLHANDLER_EPUBTOC_H
 
 #include <QtXml/QXmlDefaultHandler>
-#include "ebook.h"
+#include "ebook_epub.h"
 
 class HelperXmlHandler_EpubTOC : public QXmlDefaultHandler
 {
 	public:
-		HelperXmlHandler_EpubTOC();
+		HelperXmlHandler_EpubTOC( EBook_EPUB * epub );
 
-		QList< EBookIndexEntry >	entries;
+		QList< EBookTocEntry >	entries;
 
 	private:
 		// Overridden members
@@ -23,6 +23,7 @@ class HelperXmlHandler_EpubTOC : public QXmlDefaultHandler
 		unsigned int	m_indent;
 		QString			m_lastId;
 		QString			m_lastTitle;
+		EBook_EPUB	*	m_epub;
 };
 
 #endif // HELPERXMLHANDLER_EPUBTOC_H

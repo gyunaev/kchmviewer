@@ -156,6 +156,7 @@ class TabContents;
 class Settings;
 class ViewWindow;
 class ViewWindowMgr;
+class EBookUrl;
 
 				 
 #endif /* KDE_QT_H */

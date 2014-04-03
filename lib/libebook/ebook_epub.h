@@ -2,7 +2,9 @@
 #define EBOOK_EPUB_H
 
 #include <QString>
+#include <QStringList>
 #include <QFile>
+#include <QUrl>
 
 #include "ebook.h"
 #include "zip.h"
@@ -46,28 +48,14 @@ class EBook_EPUB : public EBook
 		 *         the root of the archive filesystem. If no book has been opened, returns "/".
 		 * \ingroup information
 		 */
-		virtual QString homeUrl() const;
+		virtual QUrl homeUrl() const;
 
 		/*!
-		 * \brief Checks whether the Table of Contents is present in this file.
-		 * \return true if it is available; false otherwise.
-		 * \ingroup information
-		 */
-		virtual bool  hasTableOfContents() const;
-
-		/*!
-		 * \brief Checks whether the Index Table is present in this file.
-		 * \return true if it is available; false otherwise.
-		 * \ingroup information
-		 */
-		virtual bool  hasIndexTable() const;
-
-		/*!
-		 * \brief Checks whether the ebook supports change of encoding.
-		 * \return true if does; false otherwise.
-		 * \ingroup information
-		 */
-		virtual bool  supportsEncodingChange() const;
+         * \brief Checks whether the specific feature is present in this file.
+         * \return true if it is available; false otherwise.
+         * \ingroup information
+         */
+        virtual bool  hasFeature( Feature code ) const;
 
 		/*!
 		 * \brief Parses and fills up the Table of Contents (TOC)
@@ -78,7 +66,7 @@ class EBook_EPUB : public EBook
 		 *         by really buggy files; please report a bug if the file is opened ok under Windows.
 		 * \ingroup fileparsing
 		 */
-		virtual bool getTableOfContents( QList< EBookIndexEntry >& toc ) const;
+		virtual bool getTableOfContents( QList< EBookTocEntry >& toc ) const;
 
 		/*!
 		 * \brief Parses the index table
@@ -104,7 +92,7 @@ class EBook_EPUB : public EBook
 		 * \sa setCurrentEncoding() currentEncoding() getFileContentAsBinary()
 		 * \ingroup dataretrieve
 		 */
-		virtual bool getFileContentAsString( QString& str, const QString& url ) const;
+		virtual bool getFileContentAsString( QString& str, const QUrl& url ) const;
 
 		/*!
 		 * \brief Retrieves the content from url in current chm file to QByteArray.
@@ -118,16 +106,7 @@ class EBook_EPUB : public EBook
 		 * \sa getFileContentAsString()
 		 * \ingroup dataretrieve
 		 */
-		virtual bool getFileContentAsBinary( QByteArray& data, const QString& url ) const;
-
-		/*!
-		 * \brief Retrieves the content size.
-		 * \param url An URL in ebook file to retreive content from. Must be absolute.
-		 * \return the size; -1 in case of error.
-		 *
-		 * \ingroup dataretrieve
-		 */
-		virtual int getContentSize( const QString& url );
+		virtual bool getFileContentAsBinary( QByteArray& data, const QUrl& url ) const;
 
 		/*!
 		 * \brief Obtains the list of all the files (URLs) in current ebook archive. This is used in search
@@ -146,7 +125,7 @@ class EBook_EPUB : public EBook
 		 *
 		 * \ingroup dataretrieve
 		 */
-		virtual QString	getTopicByUrl ( const QString& url );
+		virtual QString	getTopicByUrl ( const QUrl& url );
 
 		/*!
 		 * \brief Gets the current ebook encoding (set or autodetected) as qtcodec
@@ -164,6 +143,18 @@ class EBook_EPUB : public EBook
 		 */
 		virtual bool setCurrentEncoding ( const char * encoding );
 
+		/*!
+		 * \brief Checks if this kind of URL is supported by the ebook format (i.e. could be passed to ebook functions)
+		 * \param url The url to check
+		 */
+		virtual bool isSupportedUrl( const QUrl& url );
+
+		// Converts the string to the ebook-specific URL format
+		QUrl pathToUrl( const QString & link ) const;
+
+		// Extracts the path component from the URL
+		QString urlToPath( const QUrl& link ) const;
+
 	private:
 		// Parses the XML file using a specified parser
 		bool	parseXML( const QString& uri, QXmlDefaultHandler * reader );
@@ -171,21 +162,26 @@ class EBook_EPUB : public EBook
 		// Parses the book description file. Fills up the ebook info
 		bool	parseBookinfo();
 
+		// Get file content from path
+		bool	getFileAsString( QString& str, const QString& path ) const;
+		bool	getFileAsBinary( QByteArray& data, const QString& path ) const;
+
 		// ZIP archive fd and structs
 		QFile			m_epubFile;
 		struct zip *	m_zipFile;
 
 		// Ebook info
 		QString			m_title;
+		QString			m_documentRoot;
 
 		// List of files in the ebook
 		QStringList		m_ebookManifest;
 
 		// Table of contents
-		QList< EBookIndexEntry > m_tocEntries;
+		QList< EBookTocEntry >	m_tocEntries;
 
 		// Map of URL-Title
-		QMap< QString, QString>	m_urlTitleMap;
+		QMap< QUrl, QString>	m_urlTitleMap;
 };
 
 #endif // EBOOK_EPUB_H

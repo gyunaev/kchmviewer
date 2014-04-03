@@ -47,6 +47,7 @@ ViewWindow::ViewWindow( QWidget * parent )
 	m_contextMenu = 0;
 	m_contextMenuLink = 0;
 	m_historyMaxSize = 25;
+	m_storedScrollbarPosition = 0;
 
 	// Use our network emulation layer
 	page()->setNetworkAccessManager( new KCHMNetworkAccessManager(this) );
@@ -75,8 +76,8 @@ void ViewWindow::invalidate( )
 	updateNavigationToolbar();
 }
 
-
-QString ViewWindow::makeURLabsolute ( const QString & url, bool set_as_base )
+/*
+QUrl ViewWindow::makeURLabsolute ( const QUrl & url, bool set_as_base )
 {
 	QString p1, p2, newurl = url;
 
@@ -111,9 +112,10 @@ QString ViewWindow::makeURLabsolute ( const QString & url, bool set_as_base )
 	//qDebug ("ViewWindow::makeURLabsolute (%s) -> (%s)", url.ascii(), newurl.ascii());
 	return newurl;
 }
-
-bool ViewWindow::openUrl ( const QString& origurl )
+*/
+bool ViewWindow::openUrl ( const QUrl& url )
 {
+/*
 	QString chmfile, page, newurl = origurl;
 
 	if ( origurl.isEmpty() )
@@ -135,24 +137,26 @@ bool ViewWindow::openUrl ( const QString& origurl )
 
 	makeURLabsolute (newurl);
 	handleStartPageAsImage( newurl );
-	
-	if ( openPage (newurl) )
-	{
-		m_newTabLinkKeeper = QString::null;
-		m_openedPage = newurl;
-		
-		// If m_openedPage contains #, strip it, and everything after it
-		int hash = m_openedPage.indexOf( '#' );
-		if ( hash != -1 )
-			m_openedPage = m_openedPage.left( hash );
-			
-		mainWindow->viewWindowMgr()->setTabName( this );
-		return true;
-	}
+*/
 
-	return false;
+	EBook * chm = ::mainWindow->chmFile();
+	qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
+
+	// Read the requested data from archive
+	QByteArray data;
+
+	if ( !chm->getFileContentAsBinary( data, url ) )
+		data = (QString( "Failed to load file %1") .arg( url.path() )).toUtf8();
+
+	setContent( data, "text/html", url );
+	return true;
+
+	m_newTabLinkKeeper.clear();;
+	m_openedPage = url;
+	mainWindow->viewWindowMgr()->setTabName( this );
+	return true;
 }
-
+/*
 void ViewWindow::handleStartPageAsImage( QString & link )
 {
 	// Handle pics
@@ -163,7 +167,7 @@ void ViewWindow::handleStartPageAsImage( QString & link )
 	|| link.endsWith( ".bmp", Qt::CaseInsensitive ) )
 		link += HelperUrlFactory::getInternalUriExtension();
 }
-
+*/
 
 QMenu * ViewWindow::createStandardContextMenu( QWidget * parent )
 {
@@ -176,7 +180,7 @@ QMenu * ViewWindow::createStandardContextMenu( QWidget * parent )
 }
 
 
-QMenu * ViewWindow::getContextMenu( const QString & link, QWidget * parent )
+QMenu * ViewWindow::getContextMenu( const QUrl & link, QWidget * parent )
 {
 	if ( link.isEmpty() )
 	{
@@ -210,7 +214,7 @@ QString ViewWindow::getTitle() const
 	QString title = ::mainWindow->chmFile()->getTopicByUrl( m_openedPage );
 	
 	if ( title.isEmpty() )
-		title = m_openedPage;
+		title = m_openedPage.path();
 	
 	return title;
 }
@@ -271,7 +275,7 @@ void ViewWindow::navigateHome( )
 	::mainWindow->openPage( ::mainWindow->chmFile()->homeUrl() );
 }
 
-void ViewWindow::addNavigationHistory( const QString & url, int scrollpos )
+void ViewWindow::addNavigationHistory( const QUrl& url, int scrollpos )
 {
 	// shred the 'forward' history
 	if ( m_historyCurrentPos < m_history.size() )
@@ -304,32 +308,9 @@ void ViewWindow::updateNavigationToolbar( )
 }
 
 
-void ViewWindow::setTabKeeper( const QString & link )
+void ViewWindow::setTabKeeper( const QUrl& link )
 {
-	// If we clicked on relative link, make sure we convert it to absolute right now,
-	// because later we will not have access to this view window variables
 	m_newTabLinkKeeper = link;
-	if ( m_newTabLinkKeeper[0] == '#' && !m_openedPage.isEmpty() )
-	{
-			// Clean up opened page URL
-		int pos = m_openedPage.indexOf('#');
-		QString fixedpath = pos == -1 ? m_openedPage : m_openedPage.left (pos);
-		m_newTabLinkKeeper = fixedpath + m_newTabLinkKeeper;
-	}
-		
-	m_newTabLinkKeeper = makeURLabsolute( m_newTabLinkKeeper, false );
-}
-
-bool ViewWindow::openPage(const QString &url)
-{
-	// Do URI decoding, qtextbrowser does stupid job.
-	QString fixedname = decodeUrl( url );
-
-	if ( !fixedname.startsWith( "ms-its:", Qt::CaseInsensitive ) )
-		fixedname = "ms-its:" + fixedname;
-
-	load( fixedname );
-	return true;
 }
 
 bool ViewWindow::printCurrentPage()
@@ -388,7 +369,7 @@ void ViewWindow::clipCopy()
 {
 	triggerPageAction( QWebPage::Copy );
 }
-
+/*
 // Shamelessly stolen from Qt
 QString ViewWindow::decodeUrl( const QString &input )
 {
@@ -432,7 +413,7 @@ QString ViewWindow::decodeUrl( const QString &input )
 
 	return temp;
 }
-
+*/
 
 QString ViewWindow::anchorAt(const QPoint & pos)
 {
@@ -496,5 +477,5 @@ void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
 
 void ViewWindow::onLoadFinished ( bool )
 {
-	page()->currentFrame()->setScrollBarValue( Qt::Vertical, m_storedScrollbarPosition );
+	//page()->currentFrame()->setScrollBarValue( Qt::Vertical, m_storedScrollbarPosition );
 }

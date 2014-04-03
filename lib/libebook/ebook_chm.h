@@ -8,7 +8,7 @@
 #endif
 
 #include <QMap>
-#include <QString>
+#include <QTextCodec>
 
 #include "ebook.h"
 #include "helper_entitydecoder.h"
@@ -51,28 +51,14 @@ class EBook_CHM : public EBook
 		 *         the root of the archive filesystem. If no book has been opened, returns "/".
 		 * \ingroup information
 		 */
-		virtual QString homeUrl() const;
+		virtual QUrl homeUrl() const;
 
 		/*!
-		 * \brief Checks whether the Table of Contents is present in this file.
-		 * \return true if it is available; false otherwise.
-		 * \ingroup information
-		 */
-		virtual bool  hasTableOfContents() const;
-
-		/*!
-		 * \brief Checks whether the Index Table is present in this file.
-		 * \return true if it is available; false otherwise.
-		 * \ingroup information
-		 */
-		virtual bool  hasIndexTable() const;
-
-		/*!
-		 * \brief Checks whether the ebook supports change of encoding.
-		 * \return true if does; false otherwise.
-		 * \ingroup information
-		 */
-		virtual bool  supportsEncodingChange() const;
+         * \brief Checks whether the specific feature is present in this file.
+         * \return true if it is available; false otherwise.
+         * \ingroup information
+         */
+        virtual bool  hasFeature( Feature code ) const;
 
 		/*!
 		 * \brief Parses and fills up the Table of Contents (TOC)
@@ -83,7 +69,7 @@ class EBook_CHM : public EBook
 		 *         by really buggy files; please report a bug if the file is opened ok under Windows.
 		 * \ingroup fileparsing
 		 */
-		virtual bool getTableOfContents( QList< EBookIndexEntry >& toc ) const;
+		virtual bool getTableOfContents( QList< EBookTocEntry >& toc ) const;
 
 		/*!
 		 * \brief Parses the index table
@@ -109,7 +95,7 @@ class EBook_CHM : public EBook
 		 * \sa setCurrentEncoding() currentEncoding() getFileContentAsBinary()
 		 * \ingroup dataretrieve
 		 */
-		virtual bool getFileContentAsString( QString& str, const QString& url ) const;
+		virtual bool getFileContentAsString( QString& str, const QUrl& url ) const;
 
 		/*!
 		 * \brief Retrieves the content from url in current chm file to QByteArray.
@@ -123,7 +109,7 @@ class EBook_CHM : public EBook
 		 * \sa getFileContentAsString()
 		 * \ingroup dataretrieve
 		 */
-		virtual bool getFileContentAsBinary( QByteArray& data, const QString& url ) const;
+		virtual bool getFileContentAsBinary( QByteArray& data, const QUrl& url ) const;
 
 		/*!
 		 * \brief Retrieves the content size.
@@ -151,7 +137,7 @@ class EBook_CHM : public EBook
 		 *
 		 * \ingroup dataretrieve
 		 */
-		virtual QString		getTopicByUrl ( const QString& url );
+		virtual QString		getTopicByUrl ( const QUrl& url );
 
 		/*!
 		 * \brief Gets the current ebook encoding (set or autodetected) as qtcodec
@@ -169,7 +155,107 @@ class EBook_CHM : public EBook
 		 */
 		virtual bool setCurrentEncoding ( const char * encoding );
 
+		/*!
+		 * \brief Checks if this kind of URL is supported by the ebook format (i.e. could be passed to ebook functions)
+		 * \param url The url to check
+		 */
+		virtual bool isSupportedUrl( const QUrl& url );
+
 	private:
+		// Used in local parser
+		class ParsedEntry
+		{
+			public:
+				QString		name;
+				QList<QUrl>	urls;
+				int			iconid;
+				int			indent;
+				bool		seealso;
+		};
+
+		//! Looks up fileName in the archive.
+		bool hasFile( const QString& fileName ) const;
+
+		//! Looks up fileName in the archive.
+		bool ResolveObject( const QString& fileName, chmUnitInfo *ui ) const;
+
+		//!  Retrieves an uncompressed chunk of a file in the .chm.
+		size_t RetrieveObject( const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize) const;
+
+		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
+		inline QString encodeWithCurrentCodec( const QByteArray& str) const
+		{
+			return (m_textCodec ? m_textCodec->toUnicode( str.constData () ) : str);
+		}
+
+		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
+		inline QString encodeWithCurrentCodec (const char * str) const
+		{
+			return (m_textCodec ? m_textCodec->toUnicode( str ) : (QString) str);
+		}
+
+		//! Encode the string from internal files with the currently selected text codec, if possible.
+		//! Or return as-is, if not.
+		inline QString encodeInternalWithCurrentCodec (const QString& str) const
+		{
+			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode( qPrintable(str) ) : str);
+		}
+
+		//! Encode the string from internal files with the currently selected text codec, if possible.
+		//! Or return as-is, if not.
+		inline QString encodeInternalWithCurrentCodec (const char * str) const
+		{
+			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode (str) : (QString) str);
+		}
+
+		//! Helper. Translates from Win32 encodings to generic wxWidgets ones.
+		const char * GetFontEncFromCharSet (const QString& font) const;
+
+		//! Parse the HHC or HHS file, and fill the context (asIndex is false) or index (asIndex is true) array.
+		bool  		parseFileAndFillArray (const QString& file, QList< ParsedEntry >& data, bool asIndex ) const;
+
+		bool 		chmGetFileContentAsString( QString& str, const QString& url, bool internal_encoding = false ) const;
+		bool		chmGetFileContentAsBinary( QByteArray& data, const chmUnitInfo *ui) const;
+		bool		getFileContentAsBinary( QByteArray &data, const QString &url ) const;
+
+		/*!
+		 * Parse binary TOC
+		 */
+		bool parseBinaryTOC(QList<EBookTocEntry> &data ) const;
+
+		//! btree string parser
+		QString getBtreeString( const QByteArray& btidx, unsigned long * offset, unsigned short * spaceLeft ) const;
+
+		/*!
+		 * Recursively parse and fill binary TOC
+		 */
+		bool RecurseLoadBTOC(const QByteArray& tocidx,
+							  const QByteArray& topics,
+							  const QByteArray& urltbl,
+							  const QByteArray& urlstr,
+							  const QByteArray& strings,
+							  int offset,
+							  QList<EBookTocEntry> &data,
+							  int level ) const;
+
+		/*!
+		 * Helper procedure in TOC parsing, decodes the string between the quotes (first or last) with decoding HTML
+		 * entities like &iacute;
+		 */
+		int findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities ) const;
+		bool getInfoFromWindows();
+		bool getInfoFromSystem();
+		bool changeFileEncoding(const QString &qtencoding);
+		bool guessTextEncoding();
+		void fillTopicsUrlMap();
+		bool hasOption(const QString &name) const;
+
+		// Converts the string to the ebook-specific URL format
+		QUrl pathToUrl( const QString & link ) const;
+
+		// Extracts the path component from the URL
+		QString urlToPath( const QUrl& link ) const;
+
 		// Members
 
 		//! Pointer to the chmlib structure
@@ -226,98 +312,13 @@ class EBook_CHM : public EBook
 		bool			m_indexAvailable;
 
 		//! Map url->topic
-		QMap< QString, QString >	m_url2topics;
+		QMap< QUrl, QString >	m_url2topics;
 
 		//! KCHMViewer debug options from environment
 		QString			m_envOptions;
 
 		//! HTML entity decoder
 		HelperEntityDecoder		m_htmlEntityDecoder;
-
-		//! Looks up fileName in the archive.
-		bool hasFile( const QString& fileName ) const;
-
-		//! Looks up fileName in the archive.
-		bool ResolveObject( const QString& fileName, chmUnitInfo *ui ) const;
-
-		//!  Retrieves an uncompressed chunk of a file in the .chm.
-		size_t RetrieveObject( const chmUnitInfo *ui, unsigned char *buffer, LONGUINT64 fileOffset, LONGINT64 bufferSize) const;
-
-		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
-		inline QString encodeWithCurrentCodec( const QByteArray& str) const
-		{
-			return (m_textCodec ? m_textCodec->toUnicode( str.constData () ) : str);
-		}
-
-		//! Encode the string with the currently selected text codec, if possible. Or return as-is, if not.
-		inline QString encodeWithCurrentCodec (const char * str) const
-		{
-			return (m_textCodec ? m_textCodec->toUnicode( str ) : (QString) str);
-		}
-
-		//! Encode the string from internal files with the currently selected text codec, if possible.
-		//! Or return as-is, if not.
-		inline QString encodeInternalWithCurrentCodec (const QString& str) const
-		{
-			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode( qPrintable(str) ) : str);
-		}
-
-		//! Encode the string from internal files with the currently selected text codec, if possible.
-		//! Or return as-is, if not.
-		inline QString encodeInternalWithCurrentCodec (const char * str) const
-		{
-			return (m_textCodecForSpecialFiles ? m_textCodecForSpecialFiles->toUnicode (str) : (QString) str);
-		}
-
-		//! Helper. Translates from Win32 encodings to generic wxWidgets ones.
-		const char * GetFontEncFromCharSet (const QString& font) const;
-
-		//! Parse the HHC or HHS file, and fill the context (asIndex is false) or index (asIndex is true) array.
-		bool  		parseFileAndFillArray (const QString& file, QList< EBookIndexEntry >& data, bool asIndex ) const;
-
-		bool 		chmGetFileContentAsString( QString& str, const QString& url, bool internal_encoding = false ) const;
-
-		bool		chmGetFileContentAsBinary( QByteArray& data, const chmUnitInfo *ui) const;
-
-		/*!
-		 * Parse binary TOC
-		 */
-		bool parseBinaryTOC( QList< EBookIndexEntry >& data ) const;
-
-		/*!
-		 * Parse binary index
-		 */
-		bool parseBinaryIndex( QList< EBookIndexEntry >& data ) const;
-
-		//! Internal loader
-		bool loadBinaryIndex( QList< EBookIndexEntry >& data ) const;
-
-		//! btree string parser
-		QString getBtreeString( const QByteArray& btidx, unsigned long * offset, unsigned short * spaceLeft ) const;
-
-		/*!
-		 * Recursively parse and fill binary TOC
-		 */
-		bool RecurseLoadBTOC( const QByteArray& tocidx,
-							  const QByteArray& topics,
-							  const QByteArray& urltbl,
-							  const QByteArray& urlstr,
-							  const QByteArray& strings,
-							  int offset,
-							  QList< EBookIndexEntry >& data,
-							  int level ) const;
-
-		/*!
-		 * Helper procedure in TOC parsing, decodes the string between the quotes (first or last) with decoding HTML
-		 * entities like &iacute;
-		 */
-		int findStringInQuotes (const QString& tag, int offset, QString& value, bool firstquote, bool decodeentities ) const;
-		bool getInfoFromWindows();
-		bool getInfoFromSystem();
-		bool changeFileEncoding(const QString &qtencoding);
-		bool guessTextEncoding();
-		void fillTopicsUrlMap();
-		bool hasOption(const QString &name) const;
 };
 
 #endif // EBOOK_CHM_H

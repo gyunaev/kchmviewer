@@ -25,7 +25,7 @@
 #define TAB_CONTENTS_H
 
 #include "kde-qt.h"
-#include "treeviewitem.h"
+#include "treeitem_toc.h"
 #include "ui_tab_contents.h"
 
 
@@ -37,11 +37,11 @@ class TabContents : public QWidget, public Ui::TabContents
 		~TabContents();
 		
 		void	refillTableOfContents();
-		void	showItem( IndexTocItem * item );
+		void	showItem( TreeItem_TOC * item );
 		void	search( const QString& text );
 		void	focus();
 		
-		IndexTocItem *	getTreeItem( const QString& url );
+		TreeItem_TOC *	getTreeItem(const QUrl &url );
 		
 	public slots:
 		void	onContextMenuRequested ( const QPoint &point );
@@ -49,7 +49,6 @@ class TabContents : public QWidget, public Ui::TabContents
 	
 	private:
 		QMenu 	*	m_contextMenu;
-		QMap<QString, IndexTocItem*>	m_urlListMap;
 };
 
 

@@ -80,13 +80,13 @@ void NavigationPanel::updateTabs( EBook * file )
 	invalidate();
 
 	// Insert index first
-	if ( file->hasIndexTable() )
+	if ( file->hasFeature( EBook::FEATURE_INDEX) )
 	{
 		m_indexTab = new TabIndex(m_tabWidget);
 		m_tabWidget->insertTab( 0, m_indexTab, i18n( "Index" ) );
 	}
 
-	if ( file->hasTableOfContents() )
+	if ( file->hasFeature( EBook::FEATURE_TOC) )
 	{
 		m_contentsTab = new TabContents( m_tabWidget );
 		m_tabWidget->insertTab( 0, m_contentsTab, i18n( "Contents" ) );
@@ -111,23 +111,17 @@ void NavigationPanel::refresh()
 		m_contentsTab->refillTableOfContents();
 }
 
-bool NavigationPanel::findUrlInContents( const QString & url )
+bool NavigationPanel::findUrlInContents( const QUrl& url )
 {
 	if ( !m_contentsTab )
 		return false;
 
-	IndexTocItem * treeitem;
-
-	// Strip the prefix if it is here
-	if ( url.startsWith( "ms-its:" ) )
-		treeitem = m_contentsTab->getTreeItem( url.mid( 7 ) );
-	else
-		treeitem = m_contentsTab->getTreeItem( url );
+	TreeItem_TOC * treeitem = m_contentsTab->getTreeItem( url );
 
 	if ( treeitem )
 	{
-		IndexTocItem * itemparent = treeitem;
-		while ( (itemparent = (IndexTocItem*) itemparent->parent()) != 0 )
+		TreeItem_TOC * itemparent = treeitem;
+		while ( (itemparent = (TreeItem_TOC*) itemparent->parent()) != 0 )
 			itemparent->setExpanded(true);
 
 		m_contentsTab->showItem( treeitem );
@@ -148,7 +142,7 @@ void NavigationPanel::showPrevInToc()
 		return;
 
 	// Try to find current list item
-	IndexTocItem * current = m_contentsTab->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
+	TreeItem_TOC * current = m_contentsTab->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
@@ -157,7 +151,7 @@ void NavigationPanel::showPrevInToc()
 	lit--;
 
 	if ( *lit )
-		::mainWindow->openPage( ((IndexTocItem *) (*lit) )->getUrl(),
+		::mainWindow->openPage( ((TreeItem_TOC *) (*lit) )->getUrl(),
 							MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
 }
 
@@ -167,7 +161,7 @@ void NavigationPanel::showNextInToc()
 		return;
 
 	// Try to find current list item
-	IndexTocItem * current = m_contentsTab->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
+	TreeItem_TOC * current = m_contentsTab->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
@@ -176,7 +170,7 @@ void NavigationPanel::showNextInToc()
 	lit++;
 
 	if ( *lit )
-		::mainWindow->openPage( ((IndexTocItem *) (*lit) )->getUrl(),
+		::mainWindow->openPage( ((TreeItem_TOC *) (*lit) )->getUrl(),
 								MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
 }
 

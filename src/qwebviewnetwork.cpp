@@ -72,10 +72,16 @@ qint64 KCHMNetworkReply::readData(char *buffer, qint64 maxlen)
 
 QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 {
-	QString data, file, path = url.toString( QUrl::StripTrailingSlash );
+	QString data, file, path = url.path();
+
+	// We're only concerned about the path component
+	qDebug("loadResource %s", qPrintable(url.toString()) );
 
 	// Retreive the data from chm file
 	EBook * chm = ::mainWindow->chmFile();
+
+	// FIXME: ms-its
+/*
 
 	// Does the file have a file name, or just a path with ms-its prefix?
 	if ( !path.contains( "::" ) )
@@ -110,46 +116,23 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 	int pos = path.indexOf('#');
 	if ( pos != -1 )
 		path = path.left (pos);
+*/
 
+	/*
+// FIXME: still needed???
 	// To handle a single-image pages, we need to generate the HTML page to show
 	// this image. We did it in KCHMViewWindow::handleStartPageAsImage; now we need
 	// to generate the HTML page, and set it.
 	if ( HelperUrlFactory::handleFileType( path, data ) )
 		return qPrintable( data );
+*/
 
 	QByteArray buf;
 
-	if ( path.endsWith( ".html", Qt::CaseInsensitive )
-	|| path.endsWith( ".htm", Qt::CaseInsensitive )
-	|| path.endsWith( ".xhtml", Qt::CaseInsensitive ) )
-	{
-		// If encoding autodetection is enabled, decode it. Otherwise pass as binary.
-		if ( pConfig->m_advAutodetectEncoding )
-		{
-			if ( !chm->getFileContentAsString( data, path ) )
-				qWarning( "Could not resolve file %s\n", qPrintable( path ) );
+	if ( !chm->getFileContentAsBinary( buf, url ) )
+		qWarning( "Could not resolve file %s\n", qPrintable( url.toString() ) );
 
-			setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
-			buf = qPrintable( data );
-		}
-		else
-		{
-			if ( !chm->getFileContentAsBinary( buf, path ) )
-				qWarning( "Could not resolve file %s\n", qPrintable( path ) );
-
-			setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
-		}
-	}
-	else
-	{
-		QString fpath = ViewWindow::decodeUrl( path );
-
-		if ( !chm->getFileContentAsBinary( buf, fpath ) )
-			qWarning( "Could not resolve file %s\n", qPrintable( path ) );
-
-		setHeader( QNetworkRequest::ContentTypeHeader, "binary/octet" );
-	}
-
+	setHeader( QNetworkRequest::ContentTypeHeader, "binary/octet" );
 	return buf;
 }
 
@@ -161,9 +144,7 @@ KCHMNetworkAccessManager::KCHMNetworkAccessManager( QObject *parent )
 
 QNetworkReply * KCHMNetworkAccessManager::createRequest( Operation op, const QNetworkRequest &request, QIODevice *outgoingData )
 {
-	const QString scheme = request.url().scheme();
-
-	if ( scheme == QLatin1String("ms-its") )
+	if ( ::mainWindow->chmFile()->isSupportedUrl( request.url() ) )
 		return new KCHMNetworkReply( request, request.url() );
 
 	if ( pConfig->m_browserEnableRemoteContent )

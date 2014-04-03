@@ -11,7 +11,6 @@ HEADERS += config.h \
     tab_contents.h \
     tab_index.h \
     tab_search.h \
-    treeviewitem.h \
     version.h \
     viewwindow.h \
     viewwindowmgr.h \
@@ -20,7 +19,9 @@ HEADERS += config.h \
     toolbarmanager.h \
     toolbareditor.h \
     qwebviewnetwork.h \
-    textencodings.h
+    textencodings.h \
+    treeitem_toc.h \
+    treeitem_index.h
 SOURCES += config.cpp \
     dbus_interface.cpp \
     dialog_chooseurlfromlist.cpp \
@@ -34,7 +35,6 @@ SOURCES += config.cpp \
     tab_contents.cpp \
     tab_index.cpp \
     tab_search.cpp \
-    treeviewitem.cpp \
     viewwindow.cpp \
     viewwindowmgr.cpp \
     navigationpanel.cpp \
@@ -42,7 +42,9 @@ SOURCES += config.cpp \
     toolbarmanager.cpp \
     toolbareditor.cpp \
     qwebviewnetwork.cpp \
-    textencodings.cpp
+    textencodings.cpp \
+    treeitem_toc.cpp \
+    treeitem_index.cpp
 POST_TARGETDEPS += ../lib/libebook/libebook.a
 LIBS += ../lib/libebook/libebook.a -lchm -lzip
 TARGET = ../bin/kchmviewer

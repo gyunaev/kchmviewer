@@ -24,7 +24,6 @@
 #include "kde-qt.h"
 
 #include "dialog_chooseurlfromlist.h"
-#include "treeviewitem.h"
 
 
 DialogChooseUrlFromList::DialogChooseUrlFromList( QWidget* parent )
@@ -46,7 +45,7 @@ void DialogChooseUrlFromList::onDoubleClicked( QListWidgetItem * item )
 }
 
 
-QString DialogChooseUrlFromList::getSelectedItemUrl( const QStringList & urls, const QStringList & titles )
+QUrl DialogChooseUrlFromList::getSelectedItemUrl(const QList<QUrl> &urls, const QStringList & titles )
 {
 	for ( int i = 0; i < urls.size(); i++ )
 		list->addItem( titles[i] );
@@ -54,5 +53,5 @@ QString DialogChooseUrlFromList::getSelectedItemUrl( const QStringList & urls, c
 	if ( exec() == QDialog::Accepted && list->currentRow() != -1 )
 		return urls[ list->currentRow() ];
 	
-	return QString::null;
+	return QUrl();
 }

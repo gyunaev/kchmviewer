@@ -18,6 +18,8 @@
 
 #include "kde-qt.h"
 
+#include <QTextCodec>
+
 #include "ebook.h"
 #include "ebook_search.h"
 #include "helper_search_index.h"
@@ -80,7 +82,7 @@ bool Index::makeIndex(const QStringList& docs, EBook *chmFile )
 	
 	docList = docs;
 
-	if ( chmFile->supportsEncodingChange() )
+	if ( chmFile->hasFeature( EBook::FEATURE_ENCODING ) )
 		entityDecoder.changeEncoding( QTextCodec::codecForName( chmFile->currentEncoding().toUtf8() ) );
 	
 	QStringList::ConstIterator it = docList.begin();

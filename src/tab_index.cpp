@@ -22,7 +22,7 @@
  **************************************************************************/
 
 #include "mainwindow.h"
-#include "treeviewitem.h"
+#include "treeitem_index.h"
 #include "tab_index.h"
 
 
@@ -93,8 +93,8 @@ void TabIndex::onReturnPressed( )
 	if ( !m_lastSelectedItem )
 		return;
 	
-	IndexTocItem * treeitem = (IndexTocItem*) m_lastSelectedItem;
-	::mainWindow->activateLink( treeitem->getUrl() );
+	TreeItem_Index * treeitem = (TreeItem_Index*) m_lastSelectedItem;
+	::mainWindow->activateUrl( treeitem->getUrl() );
 }
 
 
@@ -110,7 +110,7 @@ void TabIndex::onItemActivated ( QTreeWidgetItem * item, int )
 	if ( !item )
 		return;
 	
-	IndexTocItem * treeitem = (IndexTocItem*) item;
+	TreeItem_Index * treeitem = (TreeItem_Index*) item;
 	
 	// Prevent opened index tree item from closing; because the tree open/close 
 	// procedure will be triggered after the slots are called, we change the tree
@@ -118,11 +118,11 @@ void TabIndex::onItemActivated ( QTreeWidgetItem * item, int )
 	if ( item->isExpanded() )
 		item->setExpanded( false );
 	
-	QString url = treeitem->getUrl();
+	QUrl url = treeitem->getUrl();
 	
-	if ( url.isEmpty() )
+	if ( !url.isValid() )
 		return;
-
+/*FIXME
 	if ( url[0] == ':' ) // 'see also' link
 	{
 		QList<QTreeWidgetItem *> items = tree->findItems( url.mid(1), Qt::MatchFixedString );
@@ -137,7 +137,7 @@ void TabIndex::onItemActivated ( QTreeWidgetItem * item, int )
 			m_lastSelectedItem = 0;
 	}
 	else
-		::mainWindow->openPage( url, MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
+*/		::mainWindow->openPage( url, MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
 }
 
 
@@ -146,14 +146,77 @@ void TabIndex::refillIndex( )
 	ShowWaitCursor wc;
 	QList< EBookIndexEntry > data;
 	
-	if ( !::mainWindow->chmFile()->getIndex( data )
-			   || data.size() == 0 )
+	if ( !::mainWindow->chmFile()->getIndex( data ) || data.size() == 0 )
 	{
 		qWarning ("CHM index present but is empty; wrong parsing?");
 		return;
 	}
 	
-	kchmFillListViewWithParsedData( tree, data, 0 );
+	QVector< TreeItem_Index *> lastchild;
+	QVector< TreeItem_Index *> rootentry;
+	bool warning_shown = false;
+
+	tree->clear();
+
+	for ( int i = 0; i < data.size(); i++ )
+	{
+		int indent = data[i].indent;
+
+		// Do we need to add another indent?
+		if ( indent >= rootentry.size() )
+		{
+			int maxindent = rootentry.size() - 1;
+
+			// Resize the arrays
+			lastchild.resize( indent + 1 );
+			rootentry.resize( indent + 1 );
+
+			if ( indent > 0 && maxindent < 0 )
+				qFatal("Invalid fisrt TOC indent (first entry has no root entry), aborting.");
+
+			// And init the rest if needed
+			if ( (indent - maxindent) > 1 )
+			{
+				if ( !warning_shown )
+				{
+					qWarning("Invalid TOC step, applying workaround. Results may vary.");
+					warning_shown = true;
+				}
+
+				for ( int j = maxindent; j < indent; j++ )
+				{
+					lastchild[j+1] = lastchild[j];
+					rootentry[j+1] = rootentry[j];
+				}
+			}
+
+			lastchild[indent] = 0;
+			rootentry[indent] = 0;
+		}
+
+		// Create the node
+		TreeItem_Index * item;
+
+		if ( indent == 0 )
+			item = new TreeItem_Index( tree, lastchild[indent], data[i].name, data[i].urls, data[i].seealso );
+		else
+		{
+			// New non-root entry. It is possible (for some buggy CHMs) that there is no previous entry: previoous entry had indent 1,
+			// and next entry has indent 3. Backtracking it up, creating missing entries.
+			if ( rootentry[indent-1] == 0 )
+				qFatal("Child entry indented as %d with no root entry!", indent);
+
+			item = new TreeItem_Index( rootentry[indent-1], lastchild[indent], data[i].name, data[i].urls, data[i].seealso );
+		}
+
+		// Make it open
+		item->setExpanded( true );
+
+		lastchild[indent] = item;
+		rootentry[indent] = item;
+	}
+
+	tree->update();
 }
 
 void TabIndex::search( const QString & index )
@@ -179,7 +242,7 @@ void TabIndex::focus()
 
 void TabIndex::onContextMenuRequested(const QPoint & point)
 {
-	IndexTocItem * treeitem = (IndexTocItem *) tree->itemAt( point );
+	TreeItem_Index * treeitem = (TreeItem_Index *) tree->itemAt( point );
 	
 	if( treeitem )
 	{

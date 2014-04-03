@@ -19,12 +19,14 @@
 #ifndef LIBCHMURLFACTORY_H
 #define LIBCHMURLFACTORY_H
 
+#include <QUrl>
 #include <QDir>
 #include <QString>
 #include <QRegExp>
 
 namespace HelperUrlFactory
 {
+
 static inline bool isRemoteURL( const QString & url, QString & protocol )
 {
 	// Check whether the URL is external

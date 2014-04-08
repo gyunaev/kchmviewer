@@ -20,7 +20,6 @@
 
 #include "ebook.h"
 #include "ebook_search.h"
-#include "helper_urlfactory.h"
 
 // Helper class to simplity state management and data keeping
 class SearchDataKeeper

@@ -23,8 +23,6 @@
 
 #include <QDir>
 
-#include "helper_urlfactory.h"
-
 #include "qwebviewnetwork.h"
 #include "viewwindow.h"
 #include "config.h"

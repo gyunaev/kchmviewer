@@ -23,8 +23,6 @@
 
 #include "kde-qt.h"
 
-#include "helper_urlfactory.h"
-
 #include "mainwindow.h"
 #include "treeitem_toc.h"
 #include "tab_contents.h"

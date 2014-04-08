@@ -140,17 +140,17 @@ void TabContents::refillTableOfContents( )
 }
 
 
-static TreeItem_TOC * findTreeItem( TreeItem_TOC *item, const QUrl& url )
+static TreeItem_TOC * findTreeItem( TreeItem_TOC *item, const QUrl& url, bool ignorefragment )
 {
-	if ( item->containstUrl( url ) )
+	if ( item->containstUrl( url, ignorefragment ) )
 		return item;
 
 	for ( int i = 0; i < item->childCount(); ++i )
 	{
-		TreeItem_TOC * item = findTreeItem( (TreeItem_TOC *) item->child( i ), url );
+		TreeItem_TOC * bitem = findTreeItem( (TreeItem_TOC *) item->child( i ), url, ignorefragment );
 
-		if ( item )
-			return item;
+		if ( bitem )
+			return bitem;
 	}
 
 	return 0;
@@ -158,7 +158,27 @@ static TreeItem_TOC * findTreeItem( TreeItem_TOC *item, const QUrl& url )
 
 TreeItem_TOC * TabContents::getTreeItem( const QUrl& url )
 {
-	return findTreeItem( (TreeItem_TOC *) tree->topLevelItem(0), url );
+	// During the first iteraction we check for the fragment as well, so the URLs
+	// like ch05.htm#app1 and ch05.htm#app2 could be handled as different TOC entries
+	for ( int i = 0; i < tree->topLevelItemCount(); i++ )
+	{
+		TreeItem_TOC * item = findTreeItem( (TreeItem_TOC*) tree->topLevelItem(i), url, false );
+
+		if ( item )
+			return item;
+	}
+
+	// During the second iteraction we ignore the fragment, so if there is no ch05.htm#app1
+	// but there is ch05.htm, we just use it
+	for ( int i = 0; i < tree->topLevelItemCount(); i++ )
+	{
+		TreeItem_TOC * item = findTreeItem( (TreeItem_TOC*) tree->topLevelItem(i), url, true );
+
+		if ( item )
+			return item;
+	}
+
+	return 0;
 }
 
 void TabContents::showItem( TreeItem_TOC * item )

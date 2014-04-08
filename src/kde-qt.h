@@ -87,6 +87,7 @@
 #include <QTimer>
 #include <QMap>
 #include <QShortcut>
+#include <QDebug>
 
 // events
 #include <QEventLoop>

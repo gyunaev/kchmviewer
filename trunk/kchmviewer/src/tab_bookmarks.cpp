@@ -226,7 +226,7 @@ void TabBookmarks::onItemActivated(QListWidgetItem * item)
 	BookmarkItem * treeitem = (BookmarkItem *) item;
 	
 	if ( ::mainWindow->currentBrowser()->getOpenedPage() != treeitem->m_url )
-		::mainWindow->openPage( treeitem->m_url, MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
+		::mainWindow->openPage( treeitem->m_url, MainWindow::OPF_CONTENT_TREE );
 	
 	::mainWindow->currentBrowser()->setScrollbarPosition( treeitem->m_scroll_y );
 }
@@ -241,7 +241,7 @@ void TabBookmarks::actionBookmarkActivated()
 		return;
 	
 	if ( ::mainWindow->currentBrowser()->getOpenedPage() != item->m_url )
-		::mainWindow->openPage( item->m_url, MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
+		::mainWindow->openPage( item->m_url, MainWindow::OPF_CONTENT_TREE );
 	
 	::mainWindow->currentBrowser()->setScrollbarPosition( item->m_scroll_y );
 }

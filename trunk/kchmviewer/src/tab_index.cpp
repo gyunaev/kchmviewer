@@ -137,7 +137,7 @@ void TabIndex::onItemActivated ( QTreeWidgetItem * item, int )
 			m_lastSelectedItem = 0;
 	}
 	else
-*/		::mainWindow->openPage( url, MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
+*/		::mainWindow->openPage( url, MainWindow::OPF_CONTENT_TREE );
 }
 
 

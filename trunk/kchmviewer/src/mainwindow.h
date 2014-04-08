@@ -59,7 +59,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		enum
 		{
 			OPF_CONTENT_TREE = 1 << 0,	//! Locate this page in the content tree
-			OPF_ADD2HISTORY	= 1 << 1,	//! Add the previous page into the history
 			OPF_NEW_TAB = 1 << 2,		//! Open the page in a new tab
 			OPF_BACKGROUND 	= 1 << 3	//! Open the page in a new tab in background
 		};

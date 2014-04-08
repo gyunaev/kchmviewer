@@ -25,6 +25,7 @@
 #include <QString>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QWebHistory>
 
 #include <QWebView>
 #include <QWebFrame>
@@ -46,7 +47,6 @@ ViewWindow::ViewWindow( QWidget * parent )
 	invalidate();
 	m_contextMenu = 0;
 	m_contextMenuLink = 0;
-	m_historyMaxSize = 25;
 	m_storedScrollbarPosition = 0;
 
 	// Use our network emulation layer
@@ -69,11 +69,8 @@ void ViewWindow::invalidate( )
 	m_newTabLinkKeeper = QString::null;
 
 	m_storedScrollbarPosition = 0;
-	m_historyCurrentPos = 0;
-	m_history.clear();
 	
 	reload();
-	updateNavigationToolbar();
 }
 
 /*
@@ -115,45 +112,22 @@ QUrl ViewWindow::makeURLabsolute ( const QUrl & url, bool set_as_base )
 */
 bool ViewWindow::openUrl ( const QUrl& url )
 {
-/*
-	QString chmfile, page, newurl = origurl;
-
-	if ( origurl.isEmpty() )
-		return true;
-
-	// URL could be a complete ms-its link. The file should be already loaded (for QTextBrowser),
-	// or will be loaded (for kio slave). We care only about the path component.
-	if ( HelperUrlFactory::isNewChmURL( newurl, mainWindow->getOpenedFileName(), chmfile, page ) )
-	{
-		// If a new chm file is opened here, we better abort
-		if ( chmfile != ::mainWindow->getOpenedFileBaseName()  )
-			qFatal("ViewWindow::openUrl(): opened new chm file %s while current is %s",
-				   qPrintable( chmfile ),
-				   qPrintable( ::mainWindow->getOpenedFileName() ) );
-
-		// It is OK to have a new file in chm for KHTMLPart
-		newurl = page;
-	}
-
-	makeURLabsolute (newurl);
-	handleStartPageAsImage( newurl );
-*/
-
-	EBook * chm = ::mainWindow->chmFile();
 	qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
 
-	// Read the requested data from archive
-	QByteArray data;
+	// Do not use setContent() here, it resets QWebHistory
+	load( url );
 
-	if ( !chm->getFileContentAsBinary( data, url ) )
-		data = (QString( "Failed to load file %1") .arg( url.path() )).toUtf8();
-
-	setContent( data, "text/html", url );
-	return true;
-
-	m_newTabLinkKeeper.clear();;
+	m_newTabLinkKeeper.clear();
 	m_openedPage = url;
 	mainWindow->viewWindowMgr()->setTabName( this );
+
+	qDebug("ViewWindow: history count %d", history()->count());
+
+	for ( int i = 0; i < history()->count(); i++ )
+	{
+		qDebug("history entry %d: %s", i, qPrintable( history()->itemAt(i).url().toString() ) );
+	}
+
 	return true;
 }
 /*
@@ -222,91 +196,18 @@ QString ViewWindow::getTitle() const
 
 void ViewWindow::navigateForward()
 {
-	if ( m_historyCurrentPos < m_history.size() )
-	{
-		m_historyCurrentPos++;		
-		::mainWindow->openPage( m_history[m_historyCurrentPos].getUrl() );
-		setScrollbarPosition( m_history[m_historyCurrentPos].getScrollPosition() );
-		
-		// By default navigation starts with empty array, and a new entry is added when
-		// you change the current page (or it may not be added). So to have the whole system
-		// worked, the m_historyCurrentPos should never be m_history.size() - 1, it should be
-		// either greater or lesser.
-		// 
-		// This is a dirty hack - but the whole navigation system now looks to me like
-		// it was written by some drunk monkey - which is probably not far from The Real Truth.
-		// Shame on me - Tim.
-		if ( m_historyCurrentPos == (m_history.size() - 1) )
-			m_historyCurrentPos++;
-	}
-	
-	updateNavigationToolbar();
+	forward();
 }
 
 void ViewWindow::navigateBack( )
 {
-	if ( m_historyCurrentPos > 0 )
-	{
-		// If we're on top of list, and pressing Back, the last page is still
-		// not in list - so add it, if it is not still here
-		if ( m_historyCurrentPos == m_history.size() )
-		{
-			if ( m_history[m_historyCurrentPos-1].getUrl() != m_openedPage )
-				m_history.push_back( UrlHistory( m_openedPage, getScrollbarPosition() ) );
-			else
-			{
-				// part 2 of the navigation hack - see navigateForward() comment
-				m_history[m_historyCurrentPos-1].setScrollPosition( getScrollbarPosition() );
-				m_historyCurrentPos--;
-			}
-		}
-
-		m_historyCurrentPos--;
-	
-		::mainWindow->openPage( m_history[m_historyCurrentPos].getUrl() );
-		setScrollbarPosition( m_history[m_historyCurrentPos].getScrollPosition() );
-	}
-	
-	updateNavigationToolbar();
+	back();
 }
 
 void ViewWindow::navigateHome( )
 {
 	::mainWindow->openPage( ::mainWindow->chmFile()->homeUrl() );
 }
-
-void ViewWindow::addNavigationHistory( const QUrl& url, int scrollpos )
-{
-	// shred the 'forward' history
-	if ( m_historyCurrentPos < m_history.size() )
-		m_history.erase( m_history.begin() + m_historyCurrentPos, m_history.end() );
-
-	// do not grow the history if already max size
-	if ( m_history.size() >= m_historyMaxSize )
-		m_history.pop_front();
-
-	m_history.push_back( UrlHistory( url, scrollpos ) );
-	m_historyCurrentPos = m_history.size();
-			
-	updateNavigationToolbar();
-}
-
-void ViewWindow::updateNavigationToolbar( )
-{
-	// Dump navigation for debugging
-#if 0
-	qDebug("\nNavigation dump (%d entries, current pos %d)", m_history.size(), m_historyCurrentPos );
-	for ( unsigned int i = 0; i < m_history.size(); i++ )
-		qDebug("[%02d]: %s [%d]", i, m_history[i].getUrl().ascii(),  m_history[i].getScrollPosition());
-#endif
-	
-	if ( mainWindow )
-	{
-		mainWindow->navSetBackEnabled( m_historyCurrentPos > 0 );
-		mainWindow->navSetForwardEnabled( m_historyCurrentPos < (m_history.size() - 1) );
-	}
-}
-
 
 void ViewWindow::setTabKeeper( const QUrl& link )
 {
@@ -368,6 +269,15 @@ void ViewWindow::clipSelectAll()
 void ViewWindow::clipCopy()
 {
 	triggerPageAction( QWebPage::Copy );
+}
+
+void ViewWindow::updateHistoryIcons()
+{
+	if ( mainWindow )
+	{
+		mainWindow->navSetBackEnabled( history()->canGoBack() );
+		mainWindow->navSetForwardEnabled( history()->canGoForward() );
+	}
 }
 /*
 // Shamelessly stolen from Qt
@@ -477,5 +387,12 @@ void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
 
 void ViewWindow::onLoadFinished ( bool )
 {
-	//page()->currentFrame()->setScrollBarValue( Qt::Vertical, m_storedScrollbarPosition );
+	if ( m_storedScrollbarPosition > 0 )
+	{
+		page()->currentFrame()->setScrollBarValue( Qt::Vertical, m_storedScrollbarPosition );
+		m_storedScrollbarPosition = 0;
+	}
+
+	updateHistoryIcons();
 }
+

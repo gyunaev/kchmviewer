@@ -32,10 +32,10 @@
 class SearchTreeViewItem : public QTreeWidgetItem
 {
 	public:
-		SearchTreeViewItem( QTreeWidget * tree, const QString& name, const QString& url )
+		SearchTreeViewItem( QTreeWidget * tree, const QString& name, const QUrl& url )
 			:	QTreeWidgetItem( tree ), m_name( name ), m_url( url ) {}
 	
-		QString		getUrl() const { return m_url; }
+		QUrl	getUrl() const { return m_url; }
 	
 	protected:
 		// Overriden members
@@ -53,7 +53,7 @@ class SearchTreeViewItem : public QTreeWidgetItem
 				if ( column == 0 )
 					return m_name;
 				else
-					return m_url;
+					return m_url.path();
 			}
 			
 			return QVariant();
@@ -61,7 +61,7 @@ class SearchTreeViewItem : public QTreeWidgetItem
 	
 	private:
 		QString		m_name;		
-		QString		m_url;
+		QUrl		m_url;
 };
 
 
@@ -129,7 +129,7 @@ void TabSearch::invalidate( )
 
 void TabSearch::onReturnPressed( )
 {
-	QStringList results;
+	QList<QUrl> results;
 	QString text = searchBox->lineEdit()->text();
 	
 	if ( text.isEmpty() )
@@ -168,7 +168,7 @@ void TabSearch::onItemActivated( QTreeWidgetItem * item, int )
 		return;
 	
 	SearchTreeViewItem * treeitem = (SearchTreeViewItem *) item;
-	::mainWindow->openPage( treeitem->getUrl() );
+	::mainWindow->currentBrowser()->openUrl( treeitem->getUrl() );
 }
 
 
@@ -268,7 +268,7 @@ void TabSearch::execSearchQueryInGui( const QString & query )
 }
 
 
-bool TabSearch::searchQuery( const QString & query, QStringList * results )
+bool TabSearch::searchQuery( const QString & query, QList< QUrl > * results )
 {
 	if ( !m_searchEngineInitDone )
 	{

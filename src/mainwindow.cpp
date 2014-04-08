@@ -735,7 +735,7 @@ void MainWindow::actionChangeSettings()
 
 void MainWindow::actionExtractCHM()
 {
-	QStringList files;
+	QList< QUrl > files;
 	
 #if defined (USE_KDE)
 	QString outdir = KFileDialog::getExistingDirectory (
@@ -783,7 +783,7 @@ void MainWindow::actionExtractCHM()
 		if ( m_ebookFile->getFileContentAsBinary( buf, files[i] ) )
 		{
 			// Split filename to get the list of subdirectories
-			QStringList dirs = files[i].split( '/' );
+			QStringList dirs = files[i].path().split( '/' );
 
 			// Walk through the list of subdirectories, and create them if needed
 			// dirlevel is used to detect extra .. and prevent overwriting files
@@ -827,7 +827,7 @@ void MainWindow::actionExtractCHM()
 			wf.close();
 		}
 		else
-			qWarning( "Could not get file %s\n", qPrintable( files[i] ) );
+			qWarning( "Could not get file %s\n", qPrintable( files[i].toString() ) );
 	}
 	
 	progress.setValue( files.size() );

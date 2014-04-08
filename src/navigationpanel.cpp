@@ -239,8 +239,12 @@ void NavigationPanel::executeQueryInSearch( const QString& text )
 
 QStringList NavigationPanel::searchQuery( const QString& text )
 {
-	QStringList res;
+	QList< QUrl > res;
+	QStringList result;
 	m_searchTab->searchQuery( text, &res );
 
-	return res;
+	Q_FOREACH( QUrl u, res )
+		result.push_back( u.path() );
+
+	return result;
 }

@@ -62,12 +62,8 @@ ViewWindow::~ViewWindow()
 
 void ViewWindow::invalidate( )
 {
-	m_base_url = "/";
-	m_openedPage = QString::null;
 	m_newTabLinkKeeper = QString::null;
-
 	m_storedScrollbarPosition = 0;
-	
 	reload();
 }
 
@@ -116,7 +112,6 @@ bool ViewWindow::openUrl ( const QUrl& url )
 	load( url );
 
 	m_newTabLinkKeeper.clear();
-	m_openedPage = url;
 	mainWindow->viewWindowMgr()->setTabName( this );
 
 	qDebug("ViewWindow: history count %d", history()->count());
@@ -183,10 +178,11 @@ QMenu * ViewWindow::getContextMenu( const QUrl & link, QWidget * parent )
 
 QString ViewWindow::getTitle() const
 {
-	QString title = ::mainWindow->chmFile()->getTopicByUrl( m_openedPage );
+	QString title = ::mainWindow->chmFile()->getTopicByUrl( url() );
 	
+	// If no title is found, use the path (without the first /)
 	if ( title.isEmpty() )
-		title = m_openedPage.path();
+		title = url().path().mid( 1 );
 	
 	return title;
 }
@@ -277,51 +273,6 @@ void ViewWindow::updateHistoryIcons()
 		mainWindow->navSetForwardEnabled( history()->canGoForward() );
 	}
 }
-/*
-// Shamelessly stolen from Qt
-QString ViewWindow::decodeUrl( const QString &input )
-{
-	QString temp;
-
-	int i = 0;
-	int len = input.length();
-	int a, b;
-	QChar c;
-	while (i < len)
-	{
-		c = input[i];
-		if (c == '%' && i + 2 < len)
-		{
-			a = input[++i].unicode();
-			b = input[++i].unicode();
-
-			if (a >= '0' && a <= '9')
-				a -= '0';
-			else if (a >= 'a' && a <= 'f')
-				a = a - 'a' + 10;
-			else if (a >= 'A' && a <= 'F')
-				a = a - 'A' + 10;
-
-			if (b >= '0' && b <= '9')
-				b -= '0';
-			else if (b >= 'a' && b <= 'f')
-				b  = b - 'a' + 10;
-			else if (b >= 'A' && b <= 'F')
-				b  = b - 'A' + 10;
-
-			temp.append( (QChar)((a << 4) | b ) );
-		}
-		else
-		{
-			temp.append( c );
-		}
-
-		++i;
-	}
-
-	return temp;
-}
-*/
 
 QString ViewWindow::anchorAt(const QPoint & pos)
 {

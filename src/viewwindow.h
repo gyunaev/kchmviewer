@@ -45,14 +45,10 @@ class ViewWindow : public QWebView
 		//! Open a page from current chm archive
 		bool	openUrl (const QUrl& url );
 		
-		QUrl	getBaseUrl() const	{ return m_base_url; }
-		QUrl	getOpenedPage() const	{ return m_openedPage; }
+		QUrl	getOpenedPage() const	{ return url(); }
 		QUrl	getNewTabLink() const	{ return m_newTabLinkKeeper; }
-//		QUrl	makeURLabsolute ( const QUrl&url, bool set_as_base = true );
 		
 	public: 
-		//static QString decodeUrl( const QString &input );
-
 		//! Invalidate current view, doing all the cleanups etc.
 		void	invalidate();
 	
@@ -118,17 +114,13 @@ class ViewWindow : public QWebView
 		void			mouseReleaseEvent ( QMouseEvent * event );
 
 	private slots:
-		void	onLoadFinished ( bool ok );
+		// Used to restore the scrollbar position and the navigation button status
+		void			onLoadFinished ( bool ok );
 
 	private:
-		//FIXME: embedded search
 		QMenu 				*	m_contextMenu;
 		QMenu 				*	m_contextMenuLink;
 
-		QUrl					m_openedPage;
-		QUrl					m_lastOpenedPage;
-		QUrl					m_base_url;
-	
 		// This member keeps a "open new tab" link between getContextMenu()
 		// call and appropriate slot call
 		QUrl					m_newTabLinkKeeper;

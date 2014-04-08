@@ -28,8 +28,6 @@
 
 #include "kde-qt.h"
 
-#include "helper_urlfactory.h"
-
 #include "mainwindow.h"
 #include "config.h"
 #include "settings.h"

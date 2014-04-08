@@ -30,8 +30,6 @@
 #include <QWebView>
 #include <QWebFrame>
 
-#include "helper_urlfactory.h"
-
 #include "config.h"
 #include "viewwindow.h"
 #include "mainwindow.h"

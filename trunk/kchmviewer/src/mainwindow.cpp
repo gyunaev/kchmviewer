@@ -1,25 +1,20 @@
-/**************************************************************************
- *  Kchmviewer - a portable CHM file viewer with the best support for     *
- *  the international languages                                           *
- *                                                                        *
- *  Copyright (C) 2004-2012 George Yunaev, kchmviewer@ulduzsoft.com       *
- *                                                                        *
- *  Please read http://www.kchmviewer.net/reportbugs.html if you want     *
- *  to report a bug. It lists things I need to fix it!                    *
- *                                                                        *
- *  This program is free software: you can redistribute it and/or modify  *
- *  it under the terms of the GNU General Public License as published by  *
- *  the Free Software Foundation, either version 3 of the License, or     *
- *  (at your option) any later version.                                   *
- *																	      *
- *  This program is distributed in the hope that it will be useful,       *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *  GNU General Public License for more details.                          *
- *                                                                        *
- *  You should have received a copy of the GNU General Public License     *
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
- **************************************************************************/
+/*
+ *  Kchmviewer - a CHM and EPUB file viewer with broad language support
+ *  Copyright (C) 2004-2014 George Yunaev, gyunaev@ulduzsoft.com
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <QProcess>
 #include <QDesktopServices>
@@ -325,31 +320,7 @@ bool MainWindow::openPage( const QUrl& url, unsigned int flags )
 
 		return false; // do not change the current page.
 	}
-/*FIXME
-	if ( HelperUrlFactory::isNewChmURL (url, getOpenedFileName(), otherfile, otherlink) )
-	{
-		if ( otherfile != m_ebookFilename )
-		{
-			if ( QMessageBox::question( this,
-				i18n( "%1 - link to a new CHM file clicked"). arg(QCoreApplication::applicationName()),
-				i18n( "You have clicked a link, which leads to a new CHM file %1.\nThe current file will be closed.\n\nDo you want to continue?").arg( otherfile ),
-				i18n( "&Yes" ), i18n( "&No" ),
-				QString::null, 0, 1 ) )
-					return false;
-	
-			// Because chm file always contain relative link, and current filename is not changed,
-			// we need to form a new path
-			QStringList event_args;
-			event_args.push_back( otherfile );
-			event_args.push_back( otherlink ); // url
-			
-			qApp->postEvent( this, new UserEvent( "loadAndOpen", event_args ) );
-			return false;
-		}
-		else
-			url = otherlink;
-	}
-*/
+
 	ViewWindow * vwnd = currentBrowser();
 
 	if ( flags & OPF_NEW_TAB )

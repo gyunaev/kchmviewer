@@ -1,25 +1,20 @@
-/**************************************************************************
- *  Kchmviewer - a portable CHM file viewer with the best support for     *
- *  the international languages                                           *
- *                                                                        *
- *  Copyright (C) 2004-2012 George Yunaev, kchmviewer@ulduzsoft.com       *
- *                                                                        *
- *  Please read http://www.kchmviewer.net/reportbugs.html if you want     *
- *  to report a bug. It lists things I need to fix it!                    *
- *                                                                        *
- *  This program is free software: you can redistribute it and/or modify  *
- *  it under the terms of the GNU General Public License as published by  *
- *  the Free Software Foundation, either version 3 of the License, or     *
- *  (at your option) any later version.                                   *
- *																	      *
- *  This program is distributed in the hope that it will be useful,       *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *  GNU General Public License for more details.                          *
- *                                                                        *
- *  You should have received a copy of the GNU General Public License     *
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>. *
- **************************************************************************/
+/*
+ *  Kchmviewer - a CHM and EPUB file viewer with broad language support
+ *  Copyright (C) 2004-2014 George Yunaev, gyunaev@ulduzsoft.com
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <QDir>
 
@@ -70,67 +65,15 @@ qint64 KCHMNetworkReply::readData(char *buffer, qint64 maxlen)
 
 QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 {
-	QString data, file, path = url.path();
-
 	// We're only concerned about the path component
-	qDebug("loadResource %s", qPrintable(url.toString()) );
+	//qDebug("loadResource %s", qPrintable(url.toString()) );
 
-	// Retreive the data from chm file
-	EBook * chm = ::mainWindow->chmFile();
-
-	// FIXME: ms-its
-/*
-
-	// Does the file have a file name, or just a path with ms-its prefix?
-	if ( !path.contains( "::" ) )
-	{
-		// Just the prefix, so strip it
-		path.remove( 0, 7 );
-	}
-	else if ( path.startsWith( "ms-its:", Qt::CaseInsensitive ) )
-	{
-		// A broken? implementation inserts mandatory / path before the file name here. Remove it.
-		if ( path[7] == '/' )
-			path.remove( 7, 1 );
-
-		if ( HelperUrlFactory::isNewChmURL ( path, mainWindow->getOpenedFileName(), file, data) )
-		{
-			EBook * newchm = EBook::loadFile( file );
-
-			if ( !newchm )
-			{
-				qWarning( "External resource %s cannot be loaded from file %s\n", qPrintable( data ), qPrintable( file ) );
-				return QByteArray();
-			}
-
-			chm = newchm;
-			path = data;
-		}
-	}
-
-	if ( !chm )
-		return QByteArray();
-
-	int pos = path.indexOf('#');
-	if ( pos != -1 )
-		path = path.left (pos);
-*/
-
-	/*
-// FIXME: still needed???
-	// To handle a single-image pages, we need to generate the HTML page to show
-	// this image. We did it in KCHMViewWindow::handleStartPageAsImage; now we need
-	// to generate the HTML page, and set it.
-	if ( HelperUrlFactory::handleFileType( path, data ) )
-		return qPrintable( data );
-*/
-
+	// Retreive the data from ebook file
 	QByteArray buf;
 
-	if ( !chm->getFileContentAsBinary( buf, url ) )
+	if ( !::mainWindow->chmFile()->getFileContentAsBinary( buf, url ) )
 		qWarning( "Could not resolve file %s\n", qPrintable( url.toString() ) );
 
-	//setHeader( QNetworkRequest::ContentTypeHeader, "binary/octet" );
 	return buf;
 }
 

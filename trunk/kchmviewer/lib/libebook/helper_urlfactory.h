@@ -26,7 +26,7 @@
 
 namespace HelperUrlFactory
 {
-
+/*
 static inline bool isRemoteURL( const QString & url, QString & protocol )
 {
 	// Check whether the URL is external
@@ -136,7 +136,7 @@ static inline QString normalizeUrl(const QString &path)
 
 	return makeURLabsoluteIfNeeded( fixedpath );
 }
-
+*/
 };
 
 #endif // LIBCHMURLFACTORY_H

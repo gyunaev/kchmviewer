@@ -116,7 +116,7 @@ class EBook_EPUB : public EBook
 		 *
 		 * \ingroup dataretrieve
 		 */
-		virtual bool enumerateFiles( QStringList& files );
+		virtual bool enumerateFiles( QList<QUrl>& files );
 
 		/*!
 		 * \brief Gets the Title of the page referenced by url.
@@ -175,7 +175,7 @@ class EBook_EPUB : public EBook
 		QString			m_documentRoot;
 
 		// List of files in the ebook
-		QStringList		m_ebookManifest;
+		QList<QUrl>		m_ebookManifest;
 
 		// Table of contents
 		QList< EBookTocEntry >	m_tocEntries;

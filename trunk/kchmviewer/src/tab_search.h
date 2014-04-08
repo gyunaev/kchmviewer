@@ -40,7 +40,7 @@ class TabSearch : public QWidget, public Ui::TabSearch
 		void	restoreSettings (const Settings::search_saved_settings_t& settings);
 		void	saveSettings( Settings::search_saved_settings_t& settings );
 		void	execSearchQueryInGui( const QString& query );
-		bool	searchQuery( const QString& query, QStringList * results );
+		bool	searchQuery(const QString& query, QList<QUrl> *results );
 		void	focus();
 		
 	private slots:

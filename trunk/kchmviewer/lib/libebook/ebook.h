@@ -183,7 +183,7 @@ class EBook
 		 *
 		 * \ingroup dataretrieve
 		 */
-		virtual bool enumerateFiles( QStringList& files ) = 0;
+		virtual bool enumerateFiles( QList<QUrl>& files ) = 0;
 
 		/*!
 		 * \brief Gets the Title of the page referenced by url.

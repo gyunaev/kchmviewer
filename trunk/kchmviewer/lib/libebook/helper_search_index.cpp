@@ -24,7 +24,7 @@
 #include "ebook_search.h"
 #include "helper_search_index.h"
 
-static const int DICT_VERSION = 3;
+static const int DICT_VERSION = 4;
 
 namespace QtAs {
 
@@ -75,7 +75,7 @@ void Index::setLastWinClosed()
 }
 
 
-bool Index::makeIndex(const QStringList& docs, EBook *chmFile )
+bool Index::makeIndex(const QList< QUrl >& docs, EBook *chmFile )
 {
 	if ( docs.isEmpty() )
 		return false;
@@ -85,7 +85,7 @@ bool Index::makeIndex(const QStringList& docs, EBook *chmFile )
 	if ( chmFile->hasFeature( EBook::FEATURE_ENCODING ) )
 		entityDecoder.changeEncoding( QTextCodec::codecForName( chmFile->currentEncoding().toUtf8() ) );
 	
-	QStringList::ConstIterator it = docList.begin();
+	QList< QUrl >::ConstIterator it = docList.begin();
 	int steps = docList.count() / 100;
 	
 	if ( !steps )
@@ -98,7 +98,7 @@ bool Index::makeIndex(const QStringList& docs, EBook *chmFile )
 		if ( lastWindowClosed )
 			return false;
 
-		QString filename = *it;
+		QUrl filename = *it;
 		QStringList terms;
 		
 		if ( parseDocumentToStringlist( chmFile, filename, terms ) )
@@ -111,7 +111,7 @@ bool Index::makeIndex(const QStringList& docs, EBook *chmFile )
 		{
 			prog++;
 			prog = qMin( prog, 99 );
-			emit indexingProgress( prog, tr("Processing document %1") .arg( *it ) );
+			emit indexingProgress( prog, tr("Processing document %1") .arg( (*it).path() ) );
 		}
 	}
 	
@@ -140,14 +140,14 @@ void Index::insertInDict( const QString &str, int docNum )
 }
 
 
-bool Index::parseDocumentToStringlist(EBook *chmFile, const QString& filename, QStringList& tokenlist )
+bool Index::parseDocumentToStringlist(EBook *chmFile, const QUrl& filename, QStringList& tokenlist )
 {
 	QString parsedbuf, parseentity, text;
 	
 	if ( !chmFile->getFileContentAsString( text, filename )
 	|| text.isEmpty() )
 	{
-		qWarning( "Search index generator: could not retrieve the document content for %s", qPrintable( filename ) );
+		qWarning( "Search index generator: could not retrieve the document content for %s", qPrintable( filename.toString() ) );
 		return false;
 	}
 
@@ -358,7 +358,7 @@ bool Index::readDict( QDataStream& stream )
 }
 
 
-QStringList Index::query(const QStringList &terms, const QStringList &termSeq, const QStringList &seqWords, EBook *chmFile )
+QList< QUrl > Index::query(const QStringList &terms, const QStringList &termSeq, const QStringList &seqWords, EBook *chmFile )
 {
 	QList<Term> termList;
 
@@ -374,12 +374,12 @@ QStringList Index::query(const QStringList &terms, const QStringList &termSeq, c
 		}
 		else
 		{
-			return QStringList();
+			return QList< QUrl >();
 		}
 	}
 	
 	if ( !termList.count() )
-		return QStringList();
+		return QList< QUrl >();
 	
 	qSort( termList );
 
@@ -403,7 +403,7 @@ QStringList Index::query(const QStringList &terms, const QStringList &termSeq, c
 		}
 	}
 
-	QStringList results;
+	QList< QUrl > results;
 	qSort( minDocs );
 	if ( termSeq.isEmpty() ) {
 		for(QVector<Document>::Iterator it = minDocs.begin(); it != minDocs.end(); ++it)
@@ -411,7 +411,7 @@ QStringList Index::query(const QStringList &terms, const QStringList &termSeq, c
 		return results;
 	}
 
-	QString fileName;
+	QUrl fileName;
 	for(QVector<Document>::Iterator it = minDocs.begin(); it != minDocs.end(); ++it) {
 		fileName =  docList[ (int)(*it).docNumber ];
 		if ( searchForPhrases( termSeq, seqWords, fileName, chmFile ) )
@@ -422,7 +422,7 @@ QStringList Index::query(const QStringList &terms, const QStringList &termSeq, c
 }
 
 
-bool Index::searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename, EBook * chmFile )
+bool Index::searchForPhrases( const QStringList &phrases, const QStringList &words, const QUrl &filename, EBook * chmFile )
 {
 	QStringList parsed_document;
 

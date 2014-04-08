@@ -93,8 +93,8 @@ bool EBookSearch::loadIndex( QDataStream & stream )
 
 bool EBookSearch::generateIndex( EBook * ebookFile, QDataStream & stream )
 {
-	QStringList documents;
-	QStringList alldocuments;
+	QList< QUrl > documents;
+	QList< QUrl > alldocuments;
 	
 	emit progressStep( 0, "Generating the list of documents" );
 	processEvents();
@@ -111,10 +111,14 @@ bool EBookSearch::generateIndex( EBook * ebookFile, QDataStream & stream )
 	
 	// Process the list of files in CHM archive and keep only HTML document files from there
 	for ( int i = 0; i < alldocuments.size(); i++ )
-		if ( alldocuments[i].endsWith( ".html", Qt::CaseInsensitive )
-		|| alldocuments[i].endsWith( ".htm", Qt::CaseInsensitive )
-		|| alldocuments[i].endsWith( ".xhtml", Qt::CaseInsensitive ) )
-			documents.push_back( HelperUrlFactory::makeURLabsoluteIfNeeded( alldocuments[i] ) );
+	{
+		QString docpath = alldocuments[i].path();
+
+		if ( docpath.endsWith( ".html", Qt::CaseInsensitive )
+		|| docpath.endsWith( ".htm", Qt::CaseInsensitive )
+		|| docpath.endsWith( ".xhtml", Qt::CaseInsensitive ) )
+			documents.push_back( alldocuments[i] );
+	}
 
 	if ( m_Index->makeIndex( documents, ebookFile ) == -1 )
 	{
@@ -148,7 +152,7 @@ void EBookSearch::processEvents()
 		qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
 }
 
-bool EBookSearch::searchQuery(const QString & query, QStringList * results, EBook *ebookFile, unsigned int limit)
+bool EBookSearch::searchQuery(const QString & query, QList< QUrl > * results, EBook *ebookFile, unsigned int limit)
 {
 	// We should have index
 	if ( !m_Index )
@@ -208,9 +212,9 @@ bool EBookSearch::searchQuery(const QString & query, QStringList * results, EBoo
 	if ( keeper.isInPhrase() )
 		return false;
 	
-	QStringList foundDocs = m_Index->query( keeper.terms, keeper.phrases, keeper.phrasewords, ebookFile );
+	QList< QUrl > foundDocs = m_Index->query( keeper.terms, keeper.phrases, keeper.phrasewords, ebookFile );
 	
-	for ( QStringList::iterator it = foundDocs.begin(); it != foundDocs.end() && limit > 0; ++it, limit-- )
+	for ( QList< QUrl >::iterator it = foundDocs.begin(); it != foundDocs.end() && limit > 0; ++it, limit-- )
 		results->push_back( *it );
 
 	return true;

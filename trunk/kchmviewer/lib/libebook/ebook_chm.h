@@ -128,7 +128,7 @@ class EBook_CHM : public EBook
 		 *
 		 * \ingroup dataretrieve
 		 */
-		virtual bool enumerateFiles( QStringList& files );
+		virtual bool enumerateFiles( QList<QUrl>& files );
 
 		/*!
 		 * \brief Gets the Title of the page referenced by url.
@@ -160,6 +160,12 @@ class EBook_CHM : public EBook
 		 * \param url The url to check
 		 */
 		virtual bool isSupportedUrl( const QUrl& url );
+
+		// Converts the string to the ebook-specific URL format
+		static QUrl pathToUrl( const QString & link );
+
+		// Extracts the path component from the URL
+		QString urlToPath( const QUrl& link ) const;
 
 	private:
 		// Used in local parser
@@ -249,12 +255,6 @@ class EBook_CHM : public EBook
 		bool guessTextEncoding();
 		void fillTopicsUrlMap();
 		bool hasOption(const QString &name) const;
-
-		// Converts the string to the ebook-specific URL format
-		QUrl pathToUrl( const QString & link ) const;
-
-		// Extracts the path component from the URL
-		QString urlToPath( const QUrl& link ) const;
 
 		// Members
 

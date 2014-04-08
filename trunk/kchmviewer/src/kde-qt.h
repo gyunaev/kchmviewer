@@ -86,6 +86,7 @@
 #include <QRegExp>
 #include <QTimer>
 #include <QMap>
+#include <QUrl>
 #include <QShortcut>
 #include <QDebug>
 

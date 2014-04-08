@@ -19,6 +19,7 @@
 #ifndef EBOOK_SEARCH_INDEX_H
 #define EBOOK_SEARCH_INDEX_H
 
+#include <QUrl>
 #include <QHash>
 #include <QVector>
 #include <QDataStream>
@@ -73,8 +74,8 @@ class Index : public QObject
 		
 		void 		writeDict( QDataStream& stream );
 		bool 		readDict( QDataStream& stream );
-		bool 		makeIndex( const QStringList& docs, EBook * chmFile );
-		QStringList query( const QStringList&, const QStringList&, const QStringList&, EBook * chmFile );
+		bool 		makeIndex(const QList<QUrl> &docs, EBook * chmFile );
+		QList<QUrl>	query( const QStringList&, const QStringList&, const QStringList&, EBook * chmFile );
 		QString 	getCharsSplit() const { return m_charssplit; }
 		QString 	getCharsPartOfWord() const { return m_charsword; }
 
@@ -98,15 +99,15 @@ class Index : public QObject
 			QList<uint> positions;
 		};
 		
-		bool	parseDocumentToStringlist( EBook * chmFile, const QString& filename, QStringList& tokenlist );
+		bool	parseDocumentToStringlist( EBook * chmFile, const QUrl& filename, QStringList& tokenlist );
 		void	insertInDict( const QString&, int );
 		
 		QStringList				getWildcardTerms( const QString& );
 		QStringList				split( const QString& );
 		QList<Document> 		setupDummyTerm( const QStringList& );
-		bool 					searchForPhrases( const QStringList &phrases, const QStringList &words, const QString &filename, EBook * chmFile );
+		bool 					searchForPhrases(const QStringList &phrases, const QStringList &words, const QUrl &filename, EBook * chmFile );
 		
-		QStringList 			docList;
+		QList< QUrl > 			docList;
 		QHash<QString, Entry*> 	dict;
 		QHash<QString,PosEntry*>miniDict;
 		bool 					lastWindowClosed;

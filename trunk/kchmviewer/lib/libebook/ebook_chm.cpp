@@ -443,7 +443,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 			else if ( pname == "merge" )
 			{
 				// MERGE implementation is experimental
-				QString mergeurl = HelperUrlFactory::makeURLabsoluteIfNeeded( pvalue );
+				QUrl mergeurl = pathToUrl( pvalue );
 				QString mergecontent;
 
 				if ( getFileContentAsString( mergecontent, mergeurl ) && !mergecontent.isEmpty() )
@@ -457,12 +457,12 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 					stringlen = src.length();
 				}
 				else
-					qWarning( "MERGE is used in index but file %s was not found in CHM archive", qPrintable(mergeurl) );
+					qWarning( "MERGE is used in index but file %s was not found in CHM archive", qPrintable(pvalue) );
 			}
 			else if ( pname == "local" )
 			{
 				// Check for URL duplication
-				QString url = HelperUrlFactory::makeURLabsoluteIfNeeded( pvalue );
+				QUrl url = pathToUrl( pvalue );
 
 				if ( !entry.urls.contains( url ) )
 					entry.urls.push_back( url );
@@ -745,11 +745,11 @@ QString EBook_CHM::getTopicByUrl( const QUrl& url )
 
 static int chm_enumerator_callback( struct chmFile*, struct chmUnitInfo *ui, void *context )
 {
-	((QStringList*) context)->push_back( ui->path );
+	((QList<QUrl> *) context)->push_back( EBook_CHM::pathToUrl( ui->path ) );
 	return CHM_ENUMERATOR_CONTINUE;
 }
 
-bool EBook_CHM::enumerateFiles( QStringList& files )
+bool EBook_CHM::enumerateFiles(QList<QUrl> &files )
 {
 	files.clear();
 	return chm_enumerate( m_chmFile, CHM_ENUMERATE_ALL, chm_enumerator_callback, &files );
@@ -853,7 +853,7 @@ void EBook_CHM::fillTopicsUrlMap()
 		unsigned int off_url = get_int32_le( (unsigned int *)(topics.data() + i + 8) );
 		off_url = get_int32_le( (unsigned int *)( urltbl.data() + off_url + 8) ) + 8;
 
-		QString url = HelperUrlFactory::makeURLabsoluteIfNeeded( (const char*) urlstr.data() + off_url );
+		QUrl url = pathToUrl( (const char*) urlstr.data() + off_url );
 
 		if ( off_title < (unsigned int)strings.size() )
 			m_url2topics[url] = encodeWithCurrentCodec ( (const char*) strings.data() + off_title );
@@ -972,7 +972,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 			if ( !entry.name.isEmpty() )
 			{
 				if ( !value.isEmpty() )
-					entry.url = HelperUrlFactory::makeURLabsoluteIfNeeded( value );
+					entry.url = pathToUrl( value );
 
 				entry.iconid = EBookTocEntry::IMAGE_AUTO;
 				entry.indent = level;
@@ -1014,7 +1014,7 @@ bool EBook_CHM::hasOption(const QString & name) const
 	return false;
 }
 
-QUrl EBook_CHM::pathToUrl(const QString &link) const
+QUrl EBook_CHM::pathToUrl(const QString &link)
 {
 	QUrl url;
 	url.setScheme( URL_SCHEME_CHM );

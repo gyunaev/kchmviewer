@@ -84,6 +84,9 @@ class ViewWindow : public QWebView
 		//! Copies the selected content to the clipboard
 		void	clipCopy();
 	
+		//! Updates the history toolbar icon status
+		void	updateHistoryIcons();
+
 		//! Returns the window title
 		QString	getTitle() const;
 		
@@ -91,11 +94,6 @@ class ViewWindow : public QWebView
 		void	navigateBack();
 		void	navigateHome();
 		void	navigateForward();
-		
-		//! Navigation auxiliary stuff
-		void	setHistoryMaxSize (unsigned int size) { m_historyMaxSize = size; }
-		void	addNavigationHistory(const QUrl &url, int scrollpos );
-		void 	updateNavigationToolbar();
 		
 		//! Keeps the tab URL between link following
 		void	setTabKeeper ( const QUrl& link );
@@ -123,30 +121,9 @@ class ViewWindow : public QWebView
 		void	onLoadFinished ( bool ok );
 
 	private:
-		//FIXME: embedded history
 		//FIXME: embedded search
-		//! History
-		class UrlHistory
-		{
-			public:
-				UrlHistory() { scrollbarpos = 0; }
-				UrlHistory( const QUrl& _url, int _scrollbarpos )
-					: url(_url), scrollbarpos(_scrollbarpos) {}
-			
-				const QUrl&		getUrl() const { return url; }
-				int 			getScrollPosition() const { return scrollbarpos; }
-				void			setScrollPosition( int pos ) { scrollbarpos = pos; }
-				
-			private:
-				QUrl		url;
-				int 		scrollbarpos;
-		};
-	
-		int						m_historyMaxSize;
-		int						m_historyCurrentPos;
 		QMenu 				*	m_contextMenu;
 		QMenu 				*	m_contextMenuLink;
-		QList<UrlHistory>		m_history;
 
 		QUrl					m_openedPage;
 		QUrl					m_lastOpenedPage;

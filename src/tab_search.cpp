@@ -168,7 +168,7 @@ void TabSearch::onItemActivated( QTreeWidgetItem * item, int )
 		return;
 	
 	SearchTreeViewItem * treeitem = (SearchTreeViewItem *) item;
-	::mainWindow->openPage( treeitem->getUrl(), MainWindow::OPF_ADD2HISTORY );
+	::mainWindow->openPage( treeitem->getUrl() );
 }
 
 

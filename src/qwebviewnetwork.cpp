@@ -132,7 +132,7 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 	if ( !chm->getFileContentAsBinary( buf, url ) )
 		qWarning( "Could not resolve file %s\n", qPrintable( url.toString() ) );
 
-	setHeader( QNetworkRequest::ContentTypeHeader, "binary/octet" );
+	//setHeader( QNetworkRequest::ContentTypeHeader, "binary/octet" );
 	return buf;
 }
 

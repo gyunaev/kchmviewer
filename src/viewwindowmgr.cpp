@@ -288,7 +288,7 @@ void ViewWindowMgr::onTabChanged( int newtabIndex )
 	
 	if ( tab )
 	{
-		tab->window->updateNavigationToolbar();
+		tab->window->updateHistoryIcons();
 		mainWindow->browserChanged( tab->window );
 		tab->widget->setFocus();
 	}
@@ -297,8 +297,7 @@ void ViewWindowMgr::onTabChanged( int newtabIndex )
 
 void ViewWindowMgr::openNewTab()
 {
-	::mainWindow->openPage( current()->getOpenedPage(), 
-							MainWindow::OPF_NEW_TAB | MainWindow::OPF_CONTENT_TREE | MainWindow::OPF_ADD2HISTORY );
+	::mainWindow->openPage( current()->getOpenedPage(), MainWindow::OPF_NEW_TAB | MainWindow::OPF_CONTENT_TREE );
 }
 
 void ViewWindowMgr::activateWindow()

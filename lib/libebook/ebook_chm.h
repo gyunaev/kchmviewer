@@ -220,9 +220,8 @@ class EBook_CHM : public EBook
 		//! Parse the HHC or HHS file, and fill the context (asIndex is false) or index (asIndex is true) array.
 		bool  		parseFileAndFillArray (const QString& file, QList< ParsedEntry >& data, bool asIndex ) const;
 
-		bool 		chmGetFileContentAsString( QString& str, const QString& url, bool internal_encoding = false ) const;
-		bool		chmGetFileContentAsBinary( QByteArray& data, const chmUnitInfo *ui) const;
-		bool		getFileContentAsBinary( QByteArray &data, const QString &url ) const;
+		bool		getBinaryContent( QByteArray &data, const QString &url ) const;
+		bool		getTextContent( QString& str, const QString& url, bool internal_encoding = false ) const;
 
 		/*!
 		 * Parse binary TOC

@@ -143,22 +143,48 @@ bool EBook_CHM::getIndex(QList<EBookIndexEntry> &index) const
 
 bool EBook_CHM::getFileContentAsString( QString &str, const QUrl &url ) const
 {
-	return chmGetFileContentAsString( str, urlToPath( url ) );
+	return getTextContent( str, urlToPath( url ) );
 }
 
 bool EBook_CHM::getFileContentAsBinary( QByteArray &data, const QUrl &url ) const
 {
-	return getFileContentAsBinary( data, urlToPath(url) );
+	return getBinaryContent( data, urlToPath(url) );
 }
 
-bool EBook_CHM::getFileContentAsBinary( QByteArray &data, const QString &url ) const
+bool EBook_CHM::getBinaryContent( QByteArray &data, const QString &url ) const
 {
 	chmUnitInfo ui;
 
-	if( !ResolveObject( urlToPath(url), &ui ) )
+	if( !ResolveObject( url, &ui ) )
 		return false;
 
-	return chmGetFileContentAsBinary( data, &ui );
+	data.resize( ui.length );
+
+	if ( RetrieveObject( &ui, (unsigned char*) data.data(), 0, ui.length ) )
+		return true;
+
+	return false;
+}
+
+bool EBook_CHM::getTextContent( QString& str, const QString& url, bool internal_encoding ) const
+{
+	QByteArray buf;
+
+	if ( getBinaryContent( buf, url ) )
+	{
+		unsigned int length = buf.size();
+
+		if ( length > 0 )
+		{
+			buf.resize( length + 1 );
+			buf [length] = '\0';
+
+			str = internal_encoding ? (QString)( buf.constData() ) :  encodeWithCurrentCodec( buf.constData() );
+			return true;
+		}
+	}
+
+	return false;
 }
 
 int EBook_CHM::getContentSize(const QString &url)
@@ -170,18 +196,6 @@ int EBook_CHM::getContentSize(const QString &url)
 
 	return ui.length;
 }
-
-
-bool EBook_CHM::chmGetFileContentAsBinary( QByteArray& data, const chmUnitInfo * ui ) const
-{
-	data.resize( ui->length );
-
-	if ( RetrieveObject( ui, (unsigned char*) data.data(), 0, ui->length ) )
-		return true;
-	else
-		return false;
-}
-
 
 bool EBook_CHM::load(const QString &archiveName)
 {
@@ -311,7 +325,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 	QString src;
 	const int MAX_NEST_DEPTH = 256;
 
-	if ( !getFileContentAsString( src, file ) || src.isEmpty() )
+	if ( !getTextContent( src, file ) || src.isEmpty() )
 		return false;
 
 	ShowWaitCursor wc;
@@ -709,28 +723,6 @@ bool EBook_CHM::getInfoFromSystem()
 	return true;
 }
 
-
-bool EBook_CHM::chmGetFileContentAsString( QString& str, const QString & url, bool internal_encoding ) const
-{
-	QByteArray buf;
-
-	if ( getFileContentAsBinary( buf, url ) )
-	{
-		unsigned int length = buf.size();
-
-		if ( length > 0 )
-		{
-			buf.resize( length + 1 );
-			buf [length] = '\0';
-
-			str = internal_encoding ? (QString)( buf.constData() ) :  encodeWithCurrentCodec( buf.constData() );
-			return true;
-		}
-	}
-
-	return false;
-}
-
 QString EBook_CHM::getTopicByUrl( const QUrl& url )
 {
 	QMap< QUrl, QString >::const_iterator it = m_url2topics.find( url );
@@ -870,11 +862,11 @@ bool EBook_CHM::parseBinaryTOC( QList< EBookTocEntry >& toc ) const
 	QByteArray tocidx, topics, urltbl, urlstr, strings;
 
 	// Read the index tables
-	if ( !getFileContentAsBinary( tocidx, "/#TOCIDX" )
-	|| !getFileContentAsBinary( topics, "/#TOPICS" )
-	|| !getFileContentAsBinary( urltbl, "/#URLTBL" )
-	|| !getFileContentAsBinary( urlstr, "/#URLSTR" )
-	|| !getFileContentAsBinary( strings, "/#STRINGS" ) )
+	if ( !getBinaryContent( tocidx, "/#TOCIDX" )
+	|| !getBinaryContent( topics, "/#TOPICS" )
+	|| !getBinaryContent( urltbl, "/#URLTBL" )
+	|| !getBinaryContent( urlstr, "/#URLSTR" )
+	|| !getBinaryContent( strings, "/#STRINGS" ) )
 		return false;
 
 	// Shamelessly stolen from xchm
@@ -1015,6 +1007,9 @@ bool EBook_CHM::hasOption(const QString & name) const
 
 QUrl EBook_CHM::pathToUrl(const QString &link)
 {
+	if ( link.startsWith( "http://" ) || link.startsWith( "https://" ) )
+		return QUrl( link );
+
 	QUrl url;
 	url.setScheme( URL_SCHEME_CHM );
 	url.setHost( URL_SCHEME_CHM );

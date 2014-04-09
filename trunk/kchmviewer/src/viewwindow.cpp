@@ -62,46 +62,9 @@ void ViewWindow::invalidate( )
 	reload();
 }
 
-/*
-QUrl ViewWindow::makeURLabsolute ( const QUrl & url, bool set_as_base )
-{
-	QString p1, p2, newurl = url;
-
-	if ( !HelperUrlFactory::isRemoteURL (url, p1)
-	&& !HelperUrlFactory::isJavascriptURL (url)
-	&& !HelperUrlFactory::isNewChmURL (url, mainWindow->getOpenedFileName(), p1, p2) )
-	{
-		newurl = QDir::cleanPath (url);
-
-		// Normalize url, so it becomes absolute
-		if ( newurl[0] != '/' )
-		{
-			if ( m_base_url != "/" )
-				newurl = m_base_url + "/" + newurl;
-			else
-				newurl = "/" + newurl;
-		}
-	
-		newurl = QDir::cleanPath (newurl);
-
-		if ( set_as_base )
-		{
-			m_base_url = newurl;
-		
-			// and set up new baseurl
-			int i = newurl.lastIndexOf('/');
-			if ( i != -1 )
-				m_base_url = QDir::cleanPath (newurl.left (i + 1));
-		}
-	}
-
-	//qDebug ("ViewWindow::makeURLabsolute (%s) -> (%s)", url.ascii(), newurl.ascii());
-	return newurl;
-}
-*/
 bool ViewWindow::openUrl ( const QUrl& url )
 {
-	qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
+//	qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
 
 	// Do not use setContent() here, it resets QWebHistory
 	load( url );
@@ -109,27 +72,8 @@ bool ViewWindow::openUrl ( const QUrl& url )
 	m_newTabLinkKeeper.clear();
 	mainWindow->viewWindowMgr()->setTabName( this );
 
-	qDebug("ViewWindow: history count %d", history()->count());
-
-	for ( int i = 0; i < history()->count(); i++ )
-	{
-		qDebug("history entry %d: %s", i, qPrintable( history()->itemAt(i).url().toString() ) );
-	}
-
 	return true;
 }
-/*
-void ViewWindow::handleStartPageAsImage( QString & link )
-{
-	// Handle pics
-	if ( link.endsWith( ".jpg", Qt::CaseInsensitive )
-	|| link.endsWith( ".jpeg", Qt::CaseInsensitive )
-	|| link.endsWith( ".gif", Qt::CaseInsensitive )
-	|| link.endsWith( ".png", Qt::CaseInsensitive )
-	|| link.endsWith( ".bmp", Qt::CaseInsensitive ) )
-		link += HelperUrlFactory::getInternalUriExtension();
-}
-*/
 
 QMenu * ViewWindow::createStandardContextMenu( QWidget * parent )
 {
@@ -339,4 +283,3 @@ void ViewWindow::onLoadFinished ( bool )
 
 	updateHistoryIcons();
 }
-

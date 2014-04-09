@@ -285,7 +285,7 @@ bool EBook_EPUB::getFileAsBinary(QByteArray &data, const QString &path) const
 	else
 		completeUrl = m_documentRoot + path;
 
-	qDebug("URL requested: %s (%s)", qPrintable(path), qPrintable(completeUrl));
+	//qDebug("URL requested: %s (%s)", qPrintable(path), qPrintable(completeUrl));
 
 	// http://www.nih.at/libzip/zip_stat.html
 	if ( zip_stat( m_zipFile, completeUrl.toUtf8().constData(), 0, &fileinfo) != 0 )

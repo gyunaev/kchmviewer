@@ -24,12 +24,13 @@
 class TreeItem_Index : public QTreeWidgetItem
 {
 	public:
-		TreeItem_Index( QTreeWidgetItem* parent, QTreeWidgetItem* after, const QString& name, const QList<QUrl>& urls, bool seealso );
-		TreeItem_Index( QTreeWidget* parent, QTreeWidgetItem* after, const QString& name, const QList<QUrl>& urls, bool seealso );
+		TreeItem_Index( QTreeWidgetItem* parent, QTreeWidgetItem* after, const QString& name, const QList<QUrl>& urls, const QString& seealso );
+		TreeItem_Index( QTreeWidget* parent, QTreeWidgetItem* after, const QString& name, const QList<QUrl>& urls, const QString& seealso );
 
 		QUrl		getUrl() const;
 		bool		containstUrl( const QUrl& url ) const;
 		bool		isSeeAlso() const;
+		QString		seeAlso() const;
 
 		// Overridden methods
 		int 		columnCount () const;
@@ -38,8 +39,7 @@ class TreeItem_Index : public QTreeWidgetItem
 	private:
 		QString		m_name;
 		QList<QUrl>	m_urls;
-		bool		m_seealso;
-
+		QString		m_seealso;
 };
 
 #endif // TREEITEM_INDEX_H

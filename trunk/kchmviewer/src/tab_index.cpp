@@ -120,7 +120,7 @@ void TabIndex::onItemActivated ( QTreeWidgetItem * item, int )
 
 	if ( treeitem->isSeeAlso() ) // 'see also' link
 	{
-		QList<QTreeWidgetItem *> items = tree->findItems( url.path(), Qt::MatchFixedString );
+		QList<QTreeWidgetItem *> items = tree->findItems( treeitem->seeAlso(), Qt::MatchFixedString );
 	
 		if ( !items.isEmpty() )
 		{

@@ -23,7 +23,6 @@
 
 #include "bitfiddle.h"
 
-
 // Big-enough buffer size for use with various routines.
 #define BUF_SIZE 4096
 #define COMMON_BUF_LEN 1025
@@ -113,6 +112,10 @@ bool EBook_CHM::getTableOfContents( QList<EBookTocEntry> &toc ) const
 	if ( !parseFileAndFillArray( m_topicsFile, parsed, false ) )
 		return false;
 
+	// Find out the root offset, and reduce the indent level to it
+	// so the toc starts from zero offset.
+	int root_offset = -1;
+
 	// Fill up the real toc
 	toc.reserve( parsed.size() );
 	Q_FOREACH( const ParsedEntry& e, parsed )
@@ -120,9 +123,12 @@ bool EBook_CHM::getTableOfContents( QList<EBookTocEntry> &toc ) const
 		if ( e.urls.empty() )
 			continue;
 
+		if ( root_offset == -1 )
+			root_offset = e.indent;
+
 		EBookTocEntry entry;
 		entry.iconid = (EBookTocEntry::Icon) e.iconid;
-		entry.indent = e.indent;
+		entry.indent = e.indent - root_offset;
 		entry.name = e.name;
 		entry.url = e.urls[0];
 
@@ -137,20 +143,28 @@ bool EBook_CHM::getIndex(QList<EBookIndexEntry> &index) const
 	// Parse the plain text index
 	QList< ParsedEntry > parsed;
 
-	if ( !parseFileAndFillArray( m_topicsFile, parsed, true ) )
+	if ( !parseFileAndFillArray( m_indexFile, parsed, true ) )
 		return false;
+
+	// Find out the root offset, and reduce the indent level to it
+	// so the index starts from zero offset.
+	int root_offset = -1;
 
 	// Fill up the real index
 	index.reserve( parsed.size() );
+
 	Q_FOREACH( const ParsedEntry& e, parsed )
 	{
 		if ( e.urls.empty() )
 			continue;
 
+		if ( root_offset == -1 )
+			root_offset = e.indent;
+
 		EBookIndexEntry entry;
 		entry.name = e.name;
 		entry.urls = e.urls;
-		entry.indent = e.indent;
+		entry.indent = e.indent - root_offset;
 		entry.seealso = e.seealso;
 
 		index.append( entry );
@@ -441,6 +455,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 			entry.name = QString::null;
 			entry.urls.clear();
 			entry.iconid = defaultimagenum;
+			entry.seealso.clear();
 			in_object = false;
 		}
 		else if ( tagword == "param" && in_object )
@@ -499,7 +514,10 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 					entry.urls.push_back( url );
 			}
 			else if ( pname == "see also" && asIndex && entry.name != pvalue )
-				entry.urls.push_back (":" + pvalue);
+			{
+				entry.urls.push_back( QUrl("seealso") );
+				entry.seealso = pvalue;
+			}
 			else if ( pname == "imagenumber" )
 			{
 				bool bok;
@@ -1013,8 +1031,6 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 	return true;
 }
 
-
-
 bool EBook_CHM::hasOption(const QString & name) const
 {
 	if ( !m_envOptions.isEmpty() && m_envOptions.contains( name ) )
@@ -1047,4 +1063,11 @@ QString EBook_CHM::urlToPath(const QUrl &link) const
 	}
 
 	return "";
+}
+
+
+EBook_CHM::ParsedEntry::ParsedEntry()
+{
+	iconid = 0;
+	indent = 0;
 }

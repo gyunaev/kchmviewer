@@ -190,11 +190,13 @@ class EBook_CHM : public EBook
 		class ParsedEntry
 		{
 			public:
+				ParsedEntry();
+
 				QString		name;
 				QList<QUrl>	urls;
 				int			iconid;
 				int			indent;
-				bool		seealso;
+				QString		seealso;
 		};
 
 		//! Looks up fileName in the archive.

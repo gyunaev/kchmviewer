@@ -21,7 +21,7 @@
 #include "dialog_chooseurlfromlist.h"
 #include "treeitem_index.h"
 
-TreeItem_Index::TreeItem_Index(QTreeWidgetItem *parent, QTreeWidgetItem *after, const QString &name, const QList<QUrl> &urls, bool seealso)
+TreeItem_Index::TreeItem_Index(QTreeWidgetItem *parent, QTreeWidgetItem *after, const QString &name, const QList<QUrl> &urls, const QString& seealso)
 	: QTreeWidgetItem( parent, after )
 {
 	m_name = name;
@@ -29,7 +29,7 @@ TreeItem_Index::TreeItem_Index(QTreeWidgetItem *parent, QTreeWidgetItem *after, 
 	m_seealso = seealso;
 }
 
-TreeItem_Index::TreeItem_Index(QTreeWidget *parent, QTreeWidgetItem *after, const QString &name, const QList<QUrl> &urls, bool seealso)
+TreeItem_Index::TreeItem_Index(QTreeWidget *parent, QTreeWidgetItem *after, const QString &name, const QList<QUrl> &urls, const QString &seealso)
 	: QTreeWidgetItem( parent, after )
 {
 	m_name = name;
@@ -76,6 +76,11 @@ bool TreeItem_Index::containstUrl(const QUrl &url) const
 
 bool TreeItem_Index::isSeeAlso() const
 {
+	return !m_seealso.isEmpty();
+}
+
+QString TreeItem_Index::seeAlso() const
+{
 	return m_seealso;
 }
 
@@ -100,7 +105,7 @@ QVariant TreeItem_Index::data(int column, int role) const
 			// For Index URL it means that there is URL list in m_url
 			if ( m_urls.size() > 1 )
 				return QBrush( QColor( Qt::red ) );
-			else if ( m_seealso )
+			else if ( isSeeAlso() )
 				return QBrush( QColor( Qt::lightGray ) );
 			break;
 

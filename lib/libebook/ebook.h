@@ -61,8 +61,8 @@ class EBookIndexEntry
 		//! Entry URLs. The index entry could have several URLs
         QList<QUrl> urls;
 
-		//! Whether this is a 'see also' index type
-		bool		seealso;
+		//! Whether this is a 'see also' index type, and its value
+		QString		seealso;
 
 		//! Indentation level for this entry.
 		int			indent;

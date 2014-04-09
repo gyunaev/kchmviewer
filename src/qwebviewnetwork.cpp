@@ -65,14 +65,23 @@ qint64 KCHMNetworkReply::readData(char *buffer, qint64 maxlen)
 
 QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 {
-	// We're only concerned about the path component
 	//qDebug("loadResource %s", qPrintable(url.toString()) );
+
+	bool htmlfile = url.path().endsWith( ".html" ) || url.path().endsWith( ".htm" ) || url.path().endsWith( ".xhtml" );
 
 	// Retreive the data from ebook file
 	QByteArray buf;
 
 	if ( !::mainWindow->chmFile()->getFileContentAsBinary( buf, url ) )
+	{
 		qWarning( "Could not resolve file %s\n", qPrintable( url.toString() ) );
+
+		if ( htmlfile )
+			buf = (QString("Could not load file %1").arg( url.path())).toUtf8();
+	}
+
+	if ( htmlfile )
+		setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
 
 	return buf;
 }

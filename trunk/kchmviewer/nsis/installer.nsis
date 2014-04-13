@@ -76,17 +76,14 @@
 		File /oname=$INSTDIR\imageformats\qsvg4.dll qsvg4.dll
 		File /oname=$INSTDIR\imageformats\qtiff4.dll qtiff4.dll
 		File /oname=$INSTDIR\iconengines\qsvgicon4.dll qsvgicon4.dll
-		File /oname=$INSTDIR\codecs\qcncodecs4.dll qcncodecs4.dll
-		File /oname=$INSTDIR\codecs\qjpcodecs4.dll qjpcodecs4.dll
-		File /oname=$INSTDIR\codecs\qkrcodecs4.dll qkrcodecs4.dll
-		File /oname=$INSTDIR\codecs\qtwcodecs4.dll qtwcodecs4.dll
 		File kchmviewer.exe
 		File QtGui4.dll  
 		File QtCore4.dll
 		File QtNetwork4.dll
 		File QtWebKit4.dll
 		File QtXmlPatterns4.dll
-		File mingwm10.dll
+		File QtXml4.dll
+;		File mingwm10.dll
 		File kchmviewer.exe.manifest
 
 		;Store installation folder

@@ -906,9 +906,9 @@ void MainWindow::actionLocateInContentsTab()
 void MainWindow::actionAboutApp()
 {
 	QString abouttext = i18n( "<html><b>kchmviewer version %1.%2</b><br><br>"
-							  "Copyright (C) George Yunaev, 2004-2010<br>"
+							  "Copyright (C) George Yunaev, 2004-2014<br>"
 							  "<a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</a><br>"
-							  "<a href=\"http://www.kchmviewer.net\">http://www.kchmviewer.net</a><br><br>"
+							  "<a href=\"http://www.ulduzsoft.com/kchmviewer\">http://www.ulduzsoft.com/kchmviewer</a><br><br>"
 							  "Licensed under GNU GPL license version 3.</html>" )
 								.arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR);
 

@@ -1,14 +1,16 @@
 # Project files
-SET( libchmfileSources
-        libchmfile.cpp
-        libchmfileimpl.cpp
-        libchmfile_search.cpp
-        libchmsearchengine.cpp
-        libchmsearchengine_impl.cpp
-        libchmsearchengine_indexing.cpp
-        libchmtextencoding.cpp
-        libchmtocimage.cpp 
-  )
+SET( libebookSources
+    ebook_chm.cpp
+    ebook_epub.cpp
+    ebook.cpp
+    ebook_chm_encoding.cpp
+    ebook_search.cpp
+    helper_entitydecoder.cpp
+    helper_search_index.cpp
+    helperxmlhandler_epubcontainer.cpp
+    helperxmlhandler_epubcontent.cpp
+    helperxmlhandler_epubtoc.cpp
+ )
 
-KDE4_ADD_LIBRARY( chmfile STATIC ${libchmfileSources} )
+KDE4_ADD_LIBRARY( ebook STATIC ${libebookSources} )
 

@@ -2,28 +2,29 @@ INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR}/src )
 
 # Project files
 SET( kchmviewerSources 
-	checknewversion.cpp
 	config.cpp
 	dbus_interface.cpp
 	dialog_chooseurlfromlist.cpp
 	dialog_setup.cpp
 	kde-qt.cpp
-	keyeventfilter.cpp
 	main.cpp
 	mainwindow.cpp
-	navigationpanel.cpp
 	recentfiles.cpp
 	settings.cpp
 	tab_bookmarks.cpp
 	tab_contents.cpp
 	tab_index.cpp
 	tab_search.cpp
-	treeviewitem.cpp
-	toolbarmanager.cpp
-	toolbareditor.cpp
 	viewwindow.cpp
 	viewwindowmgr.cpp
+	navigationpanel.cpp
+	checknewversion.cpp
+	toolbarmanager.cpp
+	toolbareditor.cpp
 	qwebviewnetwork.cpp
+	textencodings.cpp
+	treeitem_toc.cpp
+	treeitem_index.cpp
   )
 
 # UI files
@@ -47,8 +48,9 @@ QT4_ADD_RESOURCES( kchmviewerResources resources/images.qrc )
 KDE4_ADD_EXECUTABLE( kchmviewer ${kchmviewerSources} ${kchmviewerResources} )
 
 TARGET_LINK_LIBRARIES( kchmviewer 
-	chmfile 
+	ebook
 	${LIBCHM_LIBRARY}
+	${LIBZIP_LIBRARY}
 	${KDE4_KDEUI_LIBS} 
 	${QT_QTWEBKIT_LIBRARY}	
 	${KDE4_KFILE_LIBS}  )

@@ -50,8 +50,8 @@ LIBS += ../lib/libebook/libebook.a -lchm -lzip
 TARGET = ../bin/kchmviewer
 CONFIG += threads \
     warn_on \
-    qt \
     precompile_header \
+    xml \
     dbus
 TEMPLATE = app
 FORMS += tab_bookmarks.ui \
@@ -68,6 +68,7 @@ FORMS += tab_bookmarks.ui \
 RESOURCES += resources/images.qrc
 QT += webkit \
     dbus \
+	xml \
     network
 
 win32-g++*: {
@@ -85,7 +86,7 @@ win32-g++*: {
 		LIBS += "../lib/libebook/release/libebook.a"
 	}    
 
-    LIBS += -lwsock32 ../lib/libebook/chmlib-win32/chmlib.lib
+	LIBS += -lwsock32 ../lib/libebook/chmlib-win32/chmlib.lib -lzip -lz
 }
 
 macx-g++: {

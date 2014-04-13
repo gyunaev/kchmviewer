@@ -11,7 +11,7 @@ QTPATH=/usr/toolchains/windows-x86-complete/i686-pc-mingw32/qt4-shared/bin/
 QTPLUGPATH=/usr/toolchains/windows-x86-complete/i686-pc-mingw32/qt4-shared/plugins/
 
 # Start the mojo
-QTLIBS="QtGui4.dll QtCore4.dll QtNetwork4.dll QtWebKit4.dll QtXml4.dll QtSvg4.dll"
+QTLIBS="QtGui4.dll QtCore4.dll QtNetwork4.dll QtWebKit4.dll QtXml4.dll QtXmlPatterns4.dll QtSvg4.dll"
 QTPLUGINS="imageformats/qgif4.dll imageformats/qico4.dll imageformats/qjpeg4.dll imageformats/qmng4.dll imageformats/qsvg4.dll \
 	imageformats/qtiff4.dll iconengines/qsvgicon4.dll"
 
@@ -46,7 +46,7 @@ export NSISDIR=/home/tim/bin/nsis
 
 # Get current, and save the next version
 VERSION_MAJOR=`sed -n 's/^\#define\s\+APP_VERSION_MAJOR\s\+\([0-9]\+\)/\1/p' $FILE_VERSION`
-VERSION_MINOR=`sed -n 's/^\#define\s\+APP_VERSION_MINOR\s\+\([0-9]\+\)/\1/p' $FILE_VERSION`
+VERSION_MINOR=`sed -n 's/^\#define\s\+APP_VERSION_MINOR\s\+\"\?\([0-9a-z]\+\)\"\?/\1/p' $FILE_VERSION`
 VERSION="$VERSION_MAJOR.$VERSION_MINOR"
 
 INSTNAME="InstallKchmviewer-$VERSION.exe"

@@ -12,8 +12,8 @@ FILE_VERSION="src/version.h"
 RPM_OUTDIR="/home/tim/rpmbuild/RPMS"
 
 # Get current version
-VERSION_MAJOR=`sed -n 's/^\#define\s\+APP_VERSION_MAJOR\s\+\([0-9]\+\)/\1/p' $FILE_VERSION`
-VERSION_MINOR=`sed -n 's/^\#define\s\+APP_VERSION_MINOR\s\+\([0-9]\+\)/\1/p' $FILE_VERSION`
+VERSION_MAJOR=`sed -n 's/^\#define\s\+APP_VERSION_MAJOR\s\+\([0-9a-z]\+\)/\1/p' $FILE_VERSION`
+VERSION_MINOR=`sed -n 's/^\#define\s\+APP_VERSION_MINOR\s\+\"\?\([0-9a-z]\+\)\"\?/\1/p' $FILE_VERSION`
 CURRENTVER="$VERSION_MAJOR.$VERSION_MINOR"
 
 BUILDDIR="$PACKAGE-$CURRENTVER"

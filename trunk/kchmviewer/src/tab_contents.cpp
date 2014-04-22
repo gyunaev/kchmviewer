@@ -125,6 +125,7 @@ void TabContents::refillTableOfContents( )
 			item = new TreeItem_TOC( rootentry[indent-1], lastchild[indent], data[i].name, data[i].url, data[i].iconid );
 		}
 
+		item->setExpanded( true );
 		lastchild[indent] = item;
 		rootentry[indent] = item;
 	}

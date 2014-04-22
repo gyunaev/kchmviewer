@@ -235,7 +235,17 @@ QUrl EBook_EPUB::pathToUrl(const QString &link) const
 	QUrl url;
 	url.setScheme( URL_SCHEME_EPUB );
 	url.setHost( URL_SCHEME_EPUB );
-	url.setPath( link );
+
+	// Does the link contain the fragment as well?
+	int off = link.indexOf( '#' );
+
+	if ( off != -1 )
+	{
+		url.setPath( link.left( off ) );
+		url.setFragment( link.mid( off + 1 ) );
+	}
+	else
+		url.setPath( link );
 
 	return url;
 }

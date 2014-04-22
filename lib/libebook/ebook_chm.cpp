@@ -1047,7 +1047,17 @@ QUrl EBook_CHM::pathToUrl(const QString &link)
 	QUrl url;
 	url.setScheme( URL_SCHEME_CHM );
 	url.setHost( URL_SCHEME_CHM );
-	url.setPath( link );
+
+	// Does the link contain the fragment as well?
+	int off = link.indexOf( '#' );
+
+	if ( off != -1 )
+	{
+		url.setPath( link.left( off ) );
+		url.setFragment( link.mid( off + 1 ) );
+	}
+	else
+		url.setPath( link );
 
 	return url;
 }

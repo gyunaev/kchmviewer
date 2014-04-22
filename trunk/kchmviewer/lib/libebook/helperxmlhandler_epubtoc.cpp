@@ -99,7 +99,7 @@ void HelperXmlHandler_EpubTOC::checkNewTocEntry()
 		EBookTocEntry entry;
 		entry.name = m_lastTitle;
 		entry.url = m_epub->pathToUrl( m_lastId );
-		entry.iconid = EBookTocEntry::IMAGE_NONE;
+		entry.iconid = EBookTocEntry::IMAGE_AUTO;
 		entry.indent = m_indent - 1;
 
 		entries.push_back( entry );

@@ -3,7 +3,6 @@ Name=KchmViewer
 Categories=Qt;KDE;Office;Viewer;
 Terminal=false
 Type=Application
-Encoding=UTF-8
 Exec=kchmviewer %f
 Icon=kchmviewer
 GenericName=CHM file viewer

@@ -81,7 +81,7 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 	}
 
 	if ( htmlfile )
-		setHeader( QNetworkRequest::ContentTypeHeader, "text/html" );
+		setHeader( QNetworkRequest::ContentTypeHeader, QString( "text/html; charset=%1" ) .arg( ::mainWindow->chmFile()->currentEncoding() );
 
 	return buf;
 }

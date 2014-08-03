@@ -67,7 +67,7 @@ class ViewWindow : public QWebView
 		int		getScrollbarPosition();
 		
 		//! Sets the scrollbar position.
-		void	setScrollbarPosition(int pos);
+		void	setScrollbarPosition(int pos, bool force = false);
 	
 		//! Select the content of the whole page
 		void	clipSelectAll();

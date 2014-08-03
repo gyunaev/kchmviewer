@@ -189,9 +189,12 @@ int ViewWindow::getScrollbarPosition()
 	return page()->currentFrame()->scrollBarValue( Qt::Vertical );
 }
 
-void ViewWindow::setScrollbarPosition(int pos)
+void ViewWindow::setScrollbarPosition(int pos, bool force)
 {
-	m_storedScrollbarPosition = pos;
+	if ( !force )
+		m_storedScrollbarPosition = pos;
+	else
+		page()->currentFrame()->setScrollBarValue( Qt::Vertical, pos );
 }
 
 void ViewWindow::clipSelectAll()
@@ -277,6 +280,7 @@ void ViewWindow::onLoadFinished ( bool )
 {
 	if ( m_storedScrollbarPosition > 0 )
 	{
+		qDebug("scrollbar value changed");
 		page()->currentFrame()->setScrollBarValue( Qt::Vertical, m_storedScrollbarPosition );
 		m_storedScrollbarPosition = 0;
 	}

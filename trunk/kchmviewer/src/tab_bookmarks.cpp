@@ -110,7 +110,7 @@ TabBookmarks::TabBookmarks( QWidget *parent )
 void TabBookmarks::onAddBookmarkPressed( )
 {
     bool ok;
-	QString url = ::mainWindow->currentBrowser()->getOpenedPage().path();
+	QString url = ::mainWindow->currentBrowser()->getOpenedPage().toString();
 	QString title = ::mainWindow->chmFile()->getTopicByUrl(url);
 	QString name = QInputDialog::getText( 
 	        this,
@@ -220,10 +220,16 @@ void TabBookmarks::onItemActivated(QListWidgetItem * item)
 	
 	BookmarkItem * treeitem = (BookmarkItem *) item;
 	
-	if ( ::mainWindow->currentBrowser()->getOpenedPage() != treeitem->m_url )
+	if ( ::mainWindow->currentBrowser()->getOpenedPage().toString() != treeitem->m_url )
+	{
 		::mainWindow->openPage( treeitem->m_url, MainWindow::OPF_CONTENT_TREE );
-	
-	::mainWindow->currentBrowser()->setScrollbarPosition( treeitem->m_scroll_y );
+		::mainWindow->currentBrowser()->setScrollbarPosition( treeitem->m_scroll_y );
+	}
+	else
+	{
+		// Force the scroll since the page is not reloaded
+		::mainWindow->currentBrowser()->setScrollbarPosition( treeitem->m_scroll_y, true );
+	}
 }
 
 void TabBookmarks::actionBookmarkActivated()
@@ -231,14 +237,7 @@ void TabBookmarks::actionBookmarkActivated()
 	QAction *action = qobject_cast< QAction * >(sender());
 
 	BookmarkItem * item = (BookmarkItem *) action->data().value< void* > ();
-	
-	if ( !item )
-		return;
-	
-	if ( ::mainWindow->currentBrowser()->getOpenedPage() != item->m_url )
-		::mainWindow->openPage( item->m_url, MainWindow::OPF_CONTENT_TREE );
-	
-	::mainWindow->currentBrowser()->setScrollbarPosition( item->m_scroll_y );
+	onItemActivated( item );
 }
 
 void TabBookmarks::onContextMenuRequested(const QPoint & point)

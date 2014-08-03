@@ -80,8 +80,8 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 			buf = (QString("Could not load file %1").arg( url.path())).toUtf8();
 	}
 
-	if ( htmlfile )
-		setHeader( QNetworkRequest::ContentTypeHeader, QString( "text/html; charset=%1" ) .arg( ::mainWindow->chmFile()->currentEncoding() );
+	if ( htmlfile && ::mainWindow->chmFile()->hasFeature( EBook::FEATURE_ENCODING) )
+		setHeader( QNetworkRequest::ContentTypeHeader, QString( "text/html; charset=%1" ) .arg( ::mainWindow->chmFile()->currentEncoding() ) );
 
 	return buf;
 }

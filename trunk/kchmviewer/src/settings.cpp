@@ -138,8 +138,8 @@ bool Settings::loadSettings( const QString & filename )
 	// Init those params, as they'll be used during save the first time even if the file is not here
 	m_currentfilesize = finfo.size();
 	m_currentfiledate = finfo.lastModified().toTime_t();
-	
-	getFilenames( filename, &m_settingsFile, &m_searchIndex );
+	m_settingsFile = pConfig->getEbookSettingFile( filename );
+	m_searchIndex = pConfig->getEbookIndexFile( filename );
 	
 	QFile file( m_settingsFile );
 
@@ -294,20 +294,9 @@ bool Settings::saveSettings( )
 
 void Settings::removeSettings( const QString & filename )
 {
-	QString settingsfile, idxfile;
-	
-	getFilenames( filename, &settingsfile, &idxfile );
-	
+	QString settingsfile = pConfig->getEbookSettingFile( filename );
+	QString idxfile = pConfig->getEbookIndexFile( filename );
+
 	QFile::remove( settingsfile );
 	QFile::remove( idxfile );
-}
-
-
-void Settings::getFilenames(const QString & helpfilename, QString * settingsfile, QString * indexfile )
-{
-	QFileInfo finfo ( helpfilename );
-	QString prefix = pConfig->m_datapath + "/" + finfo.completeBaseName();
-
-	*settingsfile = prefix + ".kchmviewer";
-	*indexfile = prefix + ".idx";
 }

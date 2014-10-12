@@ -21,10 +21,10 @@
 
 #include <QString>
 #include <QStringList>
+#include <QSettings>
 
 #include "recentfiles.h"
 
-extern const char * APP_PATHINUSERDIR;
 
 class Config
 {
@@ -53,9 +53,14 @@ class Config
 
 		Config();
 		void	save();
-				
+
+		// Returns the setting filename for this ebook
+		QString	getEbookSettingFile( const QString& ebookfile ) const;
+
+		// Returns the index filename for this ebook
+		QString	getEbookIndexFile( const QString& ebookfile )  const;
+
 	public:
-		QString				m_datapath;
 		QString				m_lastOpenedDir;
 		
 		StartupMode			m_startupMode;
@@ -78,6 +83,9 @@ class Config
 		bool				m_advLayoutDirectionRL;
 		bool				m_advAutodetectEncoding;
 		bool				m_advCheckNewVersion;
+
+	private:
+		QString				m_datapath;
 };
 
 extern Config * pConfig;

@@ -71,8 +71,6 @@ class Settings
 		viewindow_saved_settings_t	m_viewwindows;
 	
 	private:
-		void		getFilenames(const QString & helpfilename, QString * settingsfile, QString * indexfile );
-		
 		unsigned int				m_currentfilesize;
 		unsigned int				m_currentfiledate;
 		QString						m_settingsFile;

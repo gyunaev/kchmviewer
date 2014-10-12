@@ -201,7 +201,11 @@ void HelperEntityDecoder::changeEncoding(QTextCodec *encoder)
 QString HelperEntityDecoder::decode( const QString &entity ) const
 {
 	// If entity is an ASCII code like &#12349; - just decode it
-	if ( entity[0] == '#' )
+	if ( entity.isEmpty() )
+	{
+		return "";
+	}
+	else if ( entity[0] == '#' )
 	{
 		bool valid;
 		unsigned int ascode = entity.mid(1).toUInt( &valid );
@@ -221,7 +225,7 @@ QString HelperEntityDecoder::decode( const QString &entity ) const
 		if ( it == m_entityDecodeMap.end() )
 		{
 			qWarning ("HelperEntityDecoder::decode: could not decode HTML entity '%s'", qPrintable( entity ));
-			return QString::null;
+			return "";
 		}
 
 		return *it;

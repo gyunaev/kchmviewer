@@ -94,6 +94,8 @@ KCHMNetworkAccessManager::KCHMNetworkAccessManager( QObject *parent )
 
 QNetworkReply * KCHMNetworkAccessManager::createRequest( Operation op, const QNetworkRequest &request, QIODevice *outgoingData )
 {
+	//qDebug("KCHMNetworkAccessManager::createRequest %s", qPrintable( request.url().toString()) );
+
 	if ( ::mainWindow->chmFile()->isSupportedUrl( request.url() ) )
 		return new KCHMNetworkReply( request, request.url() );
 

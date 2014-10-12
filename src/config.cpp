@@ -17,7 +17,7 @@
  */
 
 #include <QTextStream>
-#include <QSettings>
+#include <QFile>
 
 #include "kde-qt.h"
 #include "config.h"
@@ -26,17 +26,18 @@
 
 Config * pConfig;
 
-const char * APP_PATHINUSERDIR = ".kchmviewer";
-
 Config::Config()
 {
-	QDir dir;
-	m_datapath = QDir::homePath () + "/" + APP_PATHINUSERDIR;
-	 
-	dir.setPath (m_datapath);
-	
-	if ( !dir.exists() && !dir.mkdir(m_datapath) )
-		qWarning( "Could not create directory %s", qPrintable( m_datapath ));
+	// Support for portable app - if the data path is specified in the configuration, use it.
+	m_datapath = QCoreApplication::applicationDirPath() + QDir::separator() + "portable";
+
+	if ( QFile( m_datapath ).exists() )
+	{
+		QSettings::setPath( QSettings::defaultFormat(), QSettings::UserScope, m_datapath );
+		m_datapath += QDir::separator() + QString("data");
+	}
+	else
+		m_datapath = QDir::homePath () + "/" + ".kchmviewer";
 
 	QSettings settings;
 	m_startupMode = (Config::StartupMode) settings.value( "general/onstartup", STARTUP_DO_NOTHING ).toInt();
@@ -59,12 +60,20 @@ Config::Config()
 	m_browserEnableOfflineStorage = settings.value( "browser/enableofflinestorage", false ).toBool();
 	m_browserEnableLocalStorage = settings.value( "browser/enablelocalstorage", false ).toBool();
 	m_browserEnableRemoteContent = settings.value( "browser/enableremotecontent", false ).toBool();
+
+	QDir dir;
+	dir.setPath (m_datapath);
+
+	if ( !dir.exists() && !dir.mkdir(m_datapath) )
+		qWarning( "Could not create directory %s", qPrintable( m_datapath ));
 }
 
 
 void Config::save( )
 {
 	QSettings settings;
+
+	qDebug("saving into settings %s", qPrintable( settings.fileName()));
 
 	settings.setValue( "general/onstartup", m_startupMode );
 	settings.setValue( "general/onnewchm", m_onNewChmClick );
@@ -86,4 +95,20 @@ void Config::save( )
 	settings.setValue( "browser/enableofflinestorage", m_browserEnableOfflineStorage );
 	settings.setValue( "browser/enablelocalstorage", m_browserEnableLocalStorage );
 	settings.setValue( "browser/enableremotecontent", m_browserEnableRemoteContent );
+}
+
+QString Config::getEbookSettingFile(const QString &ebookfile ) const
+{
+	QFileInfo finfo ( ebookfile );
+	QString prefix = pConfig->m_datapath + QDir::separator() + finfo.completeBaseName();
+
+	return prefix + ".kchmviewer";
+}
+
+QString Config::getEbookIndexFile(const QString &ebookfile) const
+{
+	QFileInfo finfo ( ebookfile );
+	QString prefix = pConfig->m_datapath + "/" + finfo.completeBaseName();
+
+	return prefix + ".idx";
 }

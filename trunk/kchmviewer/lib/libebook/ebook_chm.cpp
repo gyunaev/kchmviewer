@@ -1050,15 +1050,17 @@ QUrl EBook_CHM::pathToUrl(const QString &link)
 
 	// Does the link contain the fragment as well?
 	int off = link.indexOf( '#' );
+	QString path;
 
 	if ( off != -1 )
 	{
-		url.setPath( link.left( off ) );
+		path = link.left( off );
 		url.setFragment( link.mid( off + 1 ) );
 	}
 	else
-		url.setPath( link );
+		path = link;
 
+	url.setPath( QUrl::fromPercentEncoding( path.toUtf8() ) );
 	return url;
 }
 

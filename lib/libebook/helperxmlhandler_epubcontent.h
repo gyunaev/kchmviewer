@@ -19,6 +19,8 @@
 #ifndef HELPERXMLHANDLER_EPUBCONTENT_H
 #define HELPERXMLHANDLER_EPUBCONTENT_H
 
+#include <QMap>
+#include <QString>
 #include <QtXml/QXmlDefaultHandler>
 
 class HelperXmlHandler_EpubContent : public QXmlDefaultHandler

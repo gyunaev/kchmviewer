@@ -1,3 +1,9 @@
+2014-10-12  tim <gyunaev@ulduzsoft.com>
+    - Version 7.1 released
+    - Added support for creating kchmviewer as a portable app
+    - Fixed a crash when indexing (in search) certain malformed HTML files
+    - Fixed parsing CHM files whose filenames contained URL-encoded characters
+
 2014-03-26 tim <gyunaev@ulduzsoft.com>
     - Version 6.1 released
     - Keyboard usability improved thanks to the Giuseppe "Cowo" Corbelli.

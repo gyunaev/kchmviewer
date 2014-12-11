@@ -772,7 +772,8 @@ QString EBook_CHM::getTopicByUrl( const QUrl& url )
 
 static int chm_enumerator_callback( struct chmFile*, struct chmUnitInfo *ui, void *context )
 {
-	((QList<QUrl> *) context)->push_back( EBook_CHM::pathToUrl( ui->path ) );
+    EBook_CHM tmp;
+    ((QList<QUrl> *) context)->push_back( tmp.pathToUrl( ui->path ) );
 	return CHM_ENUMERATOR_CONTINUE;
 }
 
@@ -1039,7 +1040,7 @@ bool EBook_CHM::hasOption(const QString & name) const
 	return false;
 }
 
-QUrl EBook_CHM::pathToUrl(const QString &link)
+QUrl EBook_CHM::pathToUrl(const QString &link) const
 {
 	if ( link.startsWith( "http://" ) || link.startsWith( "https://" ) )
 		return QUrl( link );

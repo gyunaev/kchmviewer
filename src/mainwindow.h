@@ -77,7 +77,12 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		showInStatusBar (const QString& text);
 		void		setTextEncoding (const QString &enc);
 		QMenu * 	tabItemsContextMenu();
-	
+        void        launch();
+
+        // Returns true if there's another instance running with the same token (assuming there's token);
+        // also sends the command-line data there so it runs properly.
+        bool        hasSameTokenInstance();
+
 		// Called from WindowMgr when another browser tab is activated
 		void		browserChanged( ViewWindow * newbrowser );
 	
@@ -147,13 +152,16 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		newVerAvailError( int  );
 		void		newVerAvailable( NewVersionMetaMap metadata );
 		
+        // single app mode
+        void        checkForSharedMemoryMessage();
+
 	protected:
 		// Reimplemented functions
 		void		closeEvent ( QCloseEvent * e );
 		bool		event ( QEvent * e );
 		
 	private:
-		bool		parseCmdLineArgs();
+        bool		parseCmdLineArgs(const QStringList &args, bool from_another_app = false );
 		void 		setupActions();
 		void		setupLangEncodingMenu();
 		
@@ -180,6 +188,9 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		ViewWindowMgr		*	m_viewWindowMgr;
 		NavigationPanel		*	m_navPanel;
 		ToolbarManager		*	m_toolbarMgr;
+
+        // For a single instance mode
+        QSharedMemory       *   m_sharedMemory;
 
 		// Storage for built-in icons
 		QPixmap				 	m_builtinIcons[ EBookTocEntry::MAX_BUILTIN_ICONS ];

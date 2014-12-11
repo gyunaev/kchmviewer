@@ -43,36 +43,13 @@ MainWindow * mainWindow;
 int main( int argc, char ** argv )
 {
 #if defined (USE_KDE)
- 	KCmdLineOptions options;
-	options.add( "autotestmode", ki18n("Perform auto testing") );
-	options.add( "shortautotestmode", ki18n("Perform short auto testing") );
-	options.add( "+[chmfile]", ki18n("A CHM file to show") );
-	options.add( "search <query>", ki18n("'--search <query>' specifies the search query to search, and activate the first entry if found") );
-	options.add( "sindex <word>", ki18n("'--sindex <word>' specifies the word to find in index, and activate if found") );
-	options.add( "stoc <word>", ki18n("'--stoc <word(s)>' specifies the word(s) to find in TOC, and activate if found. Wildcards allowed.") );
-	options.add( "url <word>", ki18n("'--url <relative url>' specifies the URL to activate if found.") );
-
-	KAboutData aboutdata ( "kchmviewer",
-				QByteArray(),
-				ki18n("kchmviewer"),
-				qPrintable( QString("%1.%2") .arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR) ),
-				ki18n("CHM file viewer"),
-				KAboutData::License_GPL,
-				ki18n("(c) 2004-2008 George Yunaev, gyunaev@ulduzsoft.com"),
-				ki18n("Please report bugs to kchmviewer@ulduzsoft.com"),
-				"http://www.kchmviewer.net",
-				"kchmviewer@ulduzsoft.com");
-
-	KCmdLineArgs::init (argc, argv, &aboutdata);
-	KCmdLineArgs::addCmdLineOptions( options );
-
 	KApplication app;
 #else
 	KchmviewerApp app( argc, argv );
 
 	app.addLibraryPath ( "qt-plugins" );
 #endif
-	
+
 	// Set data for QSettings
 	QCoreApplication::setOrganizationName("Ulduzsoft");
 	QCoreApplication::setOrganizationDomain("kchmviewer.net");
@@ -97,9 +74,14 @@ int main( int argc, char ** argv )
 #endif
 
 	mainWindow = new MainWindow();
+
+    // If we already have the duplicate instance, the data has been already sent to it - quit now
+    if ( mainWindow->hasSameTokenInstance() )
+        return 0;
+
 	mainWindow->show();
-	
+    mainWindow->launch();
+
 	app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );
-	
 	return app.exec();
 }

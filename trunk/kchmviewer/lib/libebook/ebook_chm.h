@@ -180,7 +180,7 @@ class EBook_CHM : public EBook
 		virtual bool isSupportedUrl( const QUrl& url );
 
 		// Converts the string to the ebook-specific URL format
-		static QUrl pathToUrl( const QString & link );
+        QUrl pathToUrl( const QString & link ) const;
 
 		// Extracts the path component from the URL
 		QString urlToPath( const QUrl& link ) const;

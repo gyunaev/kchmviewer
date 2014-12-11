@@ -36,6 +36,7 @@
 #include "textencodings.h"
 #include "ui_dialog_about.h"
 
+static const int SHARED_MEMORY_SIZE = 4096;
 
 MainWindow::MainWindow()
 	: QMainWindow ( 0 ), Ui::MainWindow()
@@ -58,6 +59,7 @@ MainWindow::MainWindow()
 	
 	m_ebookFile = 0;
 	m_autoteststate = STATE_OFF;
+    m_sharedMemory = 0;
 
 	m_currentSettings = new Settings();
 		
@@ -104,22 +106,6 @@ MainWindow::MainWindow()
 
 	// Basically disable everything
 	updateActions();
-
-	// Check for a new version if needed
-	if ( pConfig->m_advCheckNewVersion )
-	{
-		QSettings settings;
-
-		if ( settings.contains( "advanced/lastupdate" ) )
-		{
-			QDateTime lastupdate = settings.value( "advanced/lastupdate" ).toDateTime();
-
-			if ( lastupdate.secsTo( QDateTime::currentDateTime() ) >= 86400 * 7 ) // seven days
-				checkNewVersionAvailable();
-		}
-	}
-
-	QTimer::singleShot( 0, this, SLOT( firstShow()) );
 }
 
 MainWindow::~MainWindow()
@@ -127,6 +113,101 @@ MainWindow::~MainWindow()
 	// Temporary files cleanup
 	while ( !m_tempFileKeeper.isEmpty() )
 		delete m_tempFileKeeper.takeFirst();
+
+    delete m_sharedMemory;
+}
+
+void MainWindow::launch()
+{
+    QTimer::singleShot( 0, this, SLOT( firstShow()) );
+}
+
+bool MainWindow::hasSameTokenInstance()
+{
+    // Find out if token has been specified as this would mean we're running in a single instance mode
+    QString token;
+
+    // argv[0] in Qt is still a program name
+    for ( int i = 1; i < qApp->argc(); i++  )
+    {
+        // This is not bulletproof (think -showPage -token) but this is not likely to happen
+        if ( !strcmp (qApp->argv()[i], "-token") )
+        {
+            token = qApp->argv()[++i];
+            break;
+        }
+    }
+
+    if ( token.isEmpty() )
+        return false;
+
+    m_sharedMemory = new QSharedMemory( token );
+
+    // If we can attach to it, the segment already exists
+    if ( m_sharedMemory->attach() )
+    {
+        // Another instance exists; send the command-line there
+        QByteArray args = qApp->arguments().join("|").toLocal8Bit();
+
+        if ( args.size() < SHARED_MEMORY_SIZE - 2 )
+        {
+            // Write the size first, then the string
+            m_sharedMemory->lock();
+            char * data = (char*) m_sharedMemory->data();
+            *((short*)data) = args.size();
+            memcpy( data + 2, args.data(), args.size() );
+            m_sharedMemory->unlock();
+        }
+
+        // Clean up
+        delete m_sharedMemory;
+        m_sharedMemory = 0;
+
+        return true;
+    }
+
+    // Create a new segment
+    if ( !m_sharedMemory->create( SHARED_MEMORY_SIZE ) )
+    {
+        QMessageBox::critical( 0,
+                               i18n("Shared memory segment failed"),
+                               i18n("Failed to create a shared memory segment: %1").arg( m_sharedMemory->errorString()) );
+        return false;
+    }
+
+    // Set it up so our checker knows there's no data yet
+    *((short*) m_sharedMemory->data()) = 0;
+
+    // Recheck every second
+    QTimer * timer = new QTimer( this );
+    connect( timer, SIGNAL(timeout()), this, SLOT(checkForSharedMemoryMessage()));
+    timer->start(1000);
+    return false;
+}
+
+void MainWindow::checkForSharedMemoryMessage()
+{
+    QStringList args;
+    m_sharedMemory->lock();
+
+    // Is there any data?
+    char * data = (char*) m_sharedMemory->data();
+
+    if ( data[0] != 0 || data[1] != 0 )
+    {
+        // Get the message length and the message
+        short len = *((short*) data);
+        args = QString::fromLocal8Bit( data + 2, len ).split( "|" );
+
+        // Clean up
+        *((short*) data) = 0;
+    }
+
+    m_sharedMemory->unlock();
+
+    // And process it if we find anything
+    if ( !args.isEmpty() )
+        parseCmdLineArgs( args, true );
 }
 
 void MainWindow::checkNewVersionAvailable()
@@ -250,7 +331,6 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 }
 
 
-
 void MainWindow::refreshCurrentBrowser( )
 {
 	QString title = m_ebookFile->title();
@@ -343,7 +423,7 @@ bool MainWindow::openPage( const QUrl& url, unsigned int flags )
 
 void MainWindow::firstShow()
 {
-	if ( !parseCmdLineArgs( ) )
+    if ( !parseCmdLineArgs( qApp->arguments() ) )
 	{
 		if ( m_recentFiles && pConfig->m_startupMode == Config::STARTUP_LOAD_LAST_FILE && !m_recentFiles->latestFile().isEmpty() )
 		{
@@ -428,56 +508,80 @@ void MainWindow::closeEvent ( QCloseEvent * e )
 	QMainWindow::closeEvent ( e );
 }
 
-bool MainWindow::parseCmdLineArgs( )
+static void print_help_and_exit()
 {
-	QString filename = QString::null, search_query = QString::null;
-	QString search_index = QString::null, open_url = QString::null, search_toc = QString::null;
-	bool do_autotest = false;
+    fprintf (stderr, "Usage: %s [options] [helpfile]\n"
+            "    The following options supported:\n"
+            "  -showPage <url>   opens the url in the help file\n"
+            "  -index <text>     searches for text in the Index tab\n"
+            "  -search <query>   searches for query in the Search tab, and activate the first entry if found\n"
+            "  -token <token>    specifies the application token; see the integration reference\n"
+            "  -background       start minimized\n"
+            "  -novcheck         disable check for new version even if enabled in configuration\n"
+             , qApp->argv()[0] );
 
-#if defined (USE_KDE)
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    exit (1);
+}
 
-	if ( args->isSet("autotestmode") || args->isSet("shortautotestmode") )
-		do_autotest = true;
+bool MainWindow::parseCmdLineArgs(const QStringList& args , bool from_another_app )
+{
+    QString filename, search_query, search_index, open_url, search_toc;
+    bool do_autotest = false, disable_vcheck = false, force_background = false;
 
-	search_query = args->getOption ("search");
-	search_index = args->getOption ("sindex");
-	search_toc = args->getOption ("stoc");
-	open_url = args->getOption ("url");
-	
-	if ( args->count() > 0 )
-		filename = args->arg(0);
-#else
 	// argv[0] in Qt is still a program name
-	for ( int i = 1; i < qApp->argc(); i++  )
+    for ( int i = 1; i < args.size(); i++  )
 	{
-		if ( !strcmp (qApp->argv()[i], "-h") || !strcmp (qApp->argv()[i], "--help") )
-		{
-			fprintf (stderr, "Usage: %s [options] [chmfile]\n"
-					"    The following options supported:\n"
-					"  --search <query> specifies the search query to search, and activate the first entry if found\n"
-					"  --sindex <word>  specifies the word to find in index, and activate if found\n"
-					"  --stoc <word(s)> specifies the word(s) to find in TOC, and activate if found. Wildcards allowed\n"
-					"  --url <word>     specifies the URL to activate if found.",
-	 				qApp->argv()[0] );
-			
-			exit (1);
-		}
-		else if ( !strcmp (qApp->argv()[i], "--autotestmode") || !strcmp (qApp->argv()[i], "--shortautotestmode") )
+        if ( args[i] == "-h" || args[i] == "--help" )
+            print_help_and_exit();
+        else if ( args[i] == "--autotestmode" || args[i] == "--shortautotestmode" )
 			do_autotest = true;
-		else if ( !strcmp (qApp->argv()[i], "--search") )
-			search_query = qApp->argv()[++i];
-		else if ( !strcmp (qApp->argv()[i], "--sindex") )
-			search_index = qApp->argv()[++i];
-		else if ( !strcmp (qApp->argv()[i], "--stoc") )
-			search_toc = qApp->argv()[++i];
-		else if ( !strcmp (qApp->argv()[i], "--url") )
-			open_url = qApp->argv()[++i];
+        else if ( args[i] == "--search" || args[i] == "-search" )
+            search_query = args[++i];
+        else if ( args[i] == "--sindex" || args[i] == "-index" )
+            search_index = args[++i];
+        else if ( args[i] == "--stoc" )
+            search_toc = args[++i];
+        else if ( args[i] == "-token" )
+            i++; // ignore
+        else if ( args[i] == "-background" )
+            force_background = true;
+        else if ( args[i] == "-novcheck" )
+            disable_vcheck = true;
+        else if ( args[i] == "--url" || args[i] == "-showPage" )
+            open_url = args[++i];
 		else
-			filename = QString::fromLocal8Bit( qApp->argv()[i] );
-	}
-#endif
+        {
+            if ( filename.isEmpty() )
+                filename = args[i];
+            else
+            {
+                // Don't quit just because wrong CL was passed
+                if ( from_another_app )
+                    return false;
 
+                fprintf (stderr, "Invalid command-line option %s (ebook filename is already specified as %s)\n",
+                         qPrintable( filename ), qPrintable( args[i] ) );
+
+                print_help_and_exit();
+            }
+        }
+	}
+
+    // Check for a new version if needed
+    if ( pConfig->m_advCheckNewVersion && !disable_vcheck )
+    {
+        QSettings settings;
+
+        if ( settings.contains( "advanced/lastupdate" ) )
+        {
+            QDateTime lastupdate = settings.value( "advanced/lastupdate" ).toDateTime();
+
+            if ( lastupdate.secsTo( QDateTime::currentDateTime() ) >= 86400 * 7 ) // seven days
+                checkNewVersionAvailable();
+        }
+    }
+
+    // Opening the file?
 	if ( !filename.isEmpty() )
 	{
 		if ( !loadFile( filename ) )
@@ -486,8 +590,8 @@ bool MainWindow::parseCmdLineArgs( )
 		if ( !open_url.isEmpty() )
 		{
 			QStringList event_args;
-			event_args.push_back( open_url );
-			qApp->postEvent( this, new UserEvent( "openPage", event_args ) );
+            event_args.push_back( m_ebookFile->pathToUrl(open_url).toString() );
+            qApp->postEvent( this, new UserEvent( "openPage", event_args ) );
 		}
 		else if ( !search_index.isEmpty() )
 		{
@@ -517,6 +621,16 @@ bool MainWindow::parseCmdLineArgs( )
 			showMinimized ();
 			runAutoTest();
 		}
+
+        if ( force_background )
+            showMinimized();
+        else if ( from_another_app )
+        {
+            // This might or might not work depending on WM
+            activateWindow();
+            raise();
+        }
+
 		return true;
 	}
 	

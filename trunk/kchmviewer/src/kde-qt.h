@@ -133,7 +133,8 @@ public:
 #include <QListWidget>
 #include <QTreeWidget>
 #include <QPixmap>
-				 				 
+#include <QSharedMemory>
+
 
 class ShowWaitCursor
 {

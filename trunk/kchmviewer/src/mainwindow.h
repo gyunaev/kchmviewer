@@ -20,6 +20,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QSharedMemory>
 #include "kde-qt.h"
 #include "ebook.h"
 #include "viewwindow.h"

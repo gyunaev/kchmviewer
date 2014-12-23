@@ -16,7 +16,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kde-qt.h"
+#include <QFile>
+#include <QVector>
+
 #include "ebook_chm.h"
 #include "ebook_chm_encoding.h"
 #include "helper_entitydecoder.h"
@@ -360,8 +362,6 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 	if ( !getTextContent( src, file ) || src.isEmpty() )
 		return false;
 
-	ShowWaitCursor wc;
-
 /*
 	// Save the index for debugging purposes
 	QFile outfile( "parsed.htm" );
@@ -469,14 +469,14 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 				qFatal ("EBook_CHMImpl::ParseAndFillTopicsTree: bad <param> tag '%s': no name=\n", qPrintable( tag ));
 
 			// offset+5 skips 'name='
-			offset = findStringInQuotes (tag, offset + name_pattern.length(), pname, TRUE, FALSE);
+            offset = findStringInQuotes (tag, offset + name_pattern.length(), pname, true, false);
 			pname = pname.toLower();
 
 			if ( (offset = tag.indexOf(value_pattern, offset, Qt::CaseInsensitive )) == -1 )
 				qFatal ("EBook_CHMImpl::ParseAndFillTopicsTree: bad <param> tag '%s': no value=\n", qPrintable( tag ));
 
 			// offset+6 skips 'value='
-			findStringInQuotes (tag, offset + value_pattern.length(), pvalue, FALSE, TRUE);
+            findStringInQuotes (tag, offset + value_pattern.length(), pvalue, false, true);
 
 			//qDebug ("<param>: name '%s', value '%s'", qPrintable( pname ), qPrintable( pvalue ));
 

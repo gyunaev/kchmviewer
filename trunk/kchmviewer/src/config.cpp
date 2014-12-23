@@ -73,8 +73,6 @@ void Config::save( )
 {
 	QSettings settings;
 
-	qDebug("saving into settings %s", qPrintable( settings.fileName()));
-
 	settings.setValue( "general/onstartup", m_startupMode );
 	settings.setValue( "general/onnewchm", m_onNewChmClick );
 	settings.setValue( "general/onexternal", m_onExternalLinkClick );

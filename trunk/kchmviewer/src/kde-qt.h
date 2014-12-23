@@ -53,8 +53,8 @@
 	#include <QTabWidget>
 	#include <QMessageBox>
 	#include <QProgressDialog>
-	#include <QPrinter>
-	#include <QPrintDialog>
+    #include <QPrinter>
+    #include <QPrintDialog>
 
 	#define i18n(A)		tr(A)
 
@@ -90,14 +90,6 @@
 #include <QCloseEvent>
 #include <QShowEvent>
 #include <QEvent>
-
-
-class KQMainWindow : public KQ_CLASSNAME(MainWindow)
-{
-public:
-	KQMainWindow ( QWidget * parent, Qt::WFlags f )
-		: KQ_CLASSNAME(MainWindow) (parent, f) {};
-};
 
 
 class KQProgressModalDialog : public KQ_CLASSNAME(ProgressDialog)

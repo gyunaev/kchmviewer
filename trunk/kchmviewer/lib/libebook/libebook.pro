@@ -26,7 +26,7 @@ CONFIG += warn_on \
 		  staticlib
 TEMPLATE = lib
 INCLUDEPATH += ../../src
-
+QT += widgets
 win32-g++*: {
 	DEFINES += USE_PATCHED_CHMLIB
 }

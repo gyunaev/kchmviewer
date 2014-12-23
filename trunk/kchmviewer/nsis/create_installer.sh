@@ -4,11 +4,12 @@
 FILE_VERSION=../src/version.h
 
 # Generated binary
-BINARY=../build.win32/src/bin/kchmviewer.exe
+BINARY=../src/bin/kchmviewer.exe
 
 # Qt libs
-QTPATH=/usr/toolchains/windows-x86-complete/i686-pc-mingw32/qt4-shared/bin/
-QTPLUGPATH=/usr/toolchains/windows-x86-complete/i686-pc-mingw32/qt4-shared/plugins/
+QT=/usr/toolchains/windows-x86-complete/i686-w64-mingw32.static/qt4-shared/
+QTPATH=${QT}/bin
+QTPLUGPATH=${QT}/plugins
 
 # Start the mojo
 QTLIBS="QtGui4.dll QtCore4.dll QtNetwork4.dll QtWebKit4.dll QtXml4.dll QtXmlPatterns4.dll QtSvg4.dll"
@@ -40,7 +41,7 @@ for plug in $QTPLUGINS; do
 	echo "Added Qt plugin $plug"
 done
 
-cp $BINARY kchmviewer.exe
+cp $BINARY kchmviewer.exe || exit 1
 
 export NSISDIR=/home/tim/bin/nsis
 

@@ -69,7 +69,10 @@ RESOURCES += resources/images.qrc
 QT += webkit \
     dbus \
 	xml \
-    network
+    network \
+    widgets \
+    webkitwidgets \
+    printsupport
 
 win32-g++*: {
     QT -= dbus

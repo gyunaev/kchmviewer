@@ -1,3 +1,9 @@
+2014-12-23  tim <gyunaev@ulduzsoft.com>
+    - Version 7.2 released
+    - Ported to Qt5 (but still builds and works with Qt4)
+    - Added support for 3rd party integration
+    - Fixed some minor issues
+
 2014-10-12  tim <gyunaev@ulduzsoft.com>
     - Version 7.1 released
     - Added support for creating kchmviewer as a portable app

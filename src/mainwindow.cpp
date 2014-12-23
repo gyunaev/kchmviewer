@@ -128,12 +128,12 @@ bool MainWindow::hasSameTokenInstance()
     QString token;
 
     // argv[0] in Qt is still a program name
-    for ( int i = 1; i < qApp->argc(); i++  )
+    for ( int i = 1; i < qApp->arguments().size(); i++  )
     {
         // This is not bulletproof (think -showPage -token) but this is not likely to happen
-        if ( !strcmp (qApp->argv()[i], "-token") )
+        if ( qApp->arguments()[i] == "-token")
         {
-            token = qApp->argv()[++i];
+            token = qApp->arguments()[++i];
             break;
         }
     }
@@ -518,7 +518,7 @@ static void print_help_and_exit()
             "  -token <token>    specifies the application token; see the integration reference\n"
             "  -background       start minimized\n"
             "  -novcheck         disable check for new version even if enabled in configuration\n"
-             , qApp->argv()[0] );
+             , qPrintable( qApp->arguments()[0] ) );
 
     exit (1);
 }

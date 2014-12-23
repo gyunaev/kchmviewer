@@ -136,7 +136,7 @@ class ActionListModel : public QAbstractListModel
 				return 0;
 
 			QMimeData *mimeData = new QMimeData();
-			mimeData->setData( ACTION_MIME_FORMAT, m_actions[ indexes[0].row() ].toAscii() );
+            mimeData->setData( ACTION_MIME_FORMAT, m_actions[ indexes[0].row() ].toUtf8() );
 			return mimeData;
 		}
 

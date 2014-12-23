@@ -16,8 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kde-qt.h"
-
+#include <QMessageBox>
 #include <QtXml/QXmlSimpleReader>
 
 #include "ebook_epub.h"

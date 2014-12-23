@@ -56,7 +56,7 @@ qint64 KCHMNetworkReply::readData(char *buffer, qint64 maxlen)
 
 	if (len)
 	{
-		qMemCopy(buffer, m_data.constData(), len);
+        memcpy(buffer, m_data.constData(), len);
 		m_data.remove(0, len);
 	}
 

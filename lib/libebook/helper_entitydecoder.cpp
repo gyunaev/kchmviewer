@@ -18,7 +18,6 @@
 
 #include <QTextCodec>
 
-#include "kde-qt.h"
 #include "helper_entitydecoder.h"
 
 

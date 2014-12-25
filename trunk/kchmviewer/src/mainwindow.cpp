@@ -38,12 +38,14 @@
 
 static const int SHARED_MEMORY_SIZE = 4096;
 
-MainWindow::MainWindow()
+MainWindow::MainWindow( const QStringList& arguments )
 	: QMainWindow ( 0 ), Ui::MainWindow()
 {
 	const unsigned int WND_X_SIZE = 900;
 	const unsigned int WND_Y_SIZE = 700;
 	const unsigned int SPLT_X_SIZE = 300;
+
+    m_arguments = arguments;
 
 	// Delete the pointer when the window is closed
 	setAttribute( Qt::WA_DeleteOnClose );
@@ -128,12 +130,12 @@ bool MainWindow::hasSameTokenInstance()
     QString token;
 
     // argv[0] in Qt is still a program name
-    for ( int i = 1; i < qApp->arguments().size(); i++  )
+    for ( int i = 1; i < m_arguments.size(); i++  )
     {
         // This is not bulletproof (think -showPage -token) but this is not likely to happen
-        if ( qApp->arguments()[i] == "-token")
+        if ( m_arguments[i] == "-token")
         {
-            token = qApp->arguments()[++i];
+            token = m_arguments[++i];
             break;
         }
     }
@@ -147,7 +149,7 @@ bool MainWindow::hasSameTokenInstance()
     if ( m_sharedMemory->attach() )
     {
         // Another instance exists; send the command-line there
-        QByteArray args = qApp->arguments().join("|").toLocal8Bit();
+        QByteArray args = m_arguments.join("|").toLocal8Bit();
 
         if ( args.size() < SHARED_MEMORY_SIZE - 2 )
         {
@@ -423,7 +425,7 @@ bool MainWindow::openPage( const QUrl& url, unsigned int flags )
 
 void MainWindow::firstShow()
 {
-    if ( !parseCmdLineArgs( qApp->arguments() ) )
+    if ( !parseCmdLineArgs( m_arguments ) )
 	{
 		if ( m_recentFiles && pConfig->m_startupMode == Config::STARTUP_LOAD_LAST_FILE && !m_recentFiles->latestFile().isEmpty() )
 		{
@@ -508,7 +510,7 @@ void MainWindow::closeEvent ( QCloseEvent * e )
 	QMainWindow::closeEvent ( e );
 }
 
-static void print_help_and_exit()
+void MainWindow::printHelpAndExit()
 {
     fprintf (stderr, "Usage: %s [options] [helpfile]\n"
             "    The following options supported:\n"
@@ -518,7 +520,7 @@ static void print_help_and_exit()
             "  -token <token>    specifies the application token; see the integration reference\n"
             "  -background       start minimized\n"
             "  -novcheck         disable check for new version even if enabled in configuration\n"
-             , qPrintable( qApp->arguments()[0] ) );
+             , qPrintable( m_arguments[0] ) );
 
     exit (1);
 }
@@ -532,7 +534,7 @@ bool MainWindow::parseCmdLineArgs(const QStringList& args , bool from_another_ap
     for ( int i = 1; i < args.size(); i++  )
 	{
         if ( args[i] == "-h" || args[i] == "--help" )
-            print_help_and_exit();
+            printHelpAndExit();
         else if ( args[i] == "--autotestmode" || args[i] == "--shortautotestmode" )
 			do_autotest = true;
         else if ( args[i] == "--search" || args[i] == "-search" )
@@ -562,7 +564,7 @@ bool MainWindow::parseCmdLineArgs(const QStringList& args , bool from_another_ap
                 fprintf (stderr, "Invalid command-line option %s (ebook filename is already specified as %s)\n",
                          qPrintable( filename ), qPrintable( args[i] ) );
 
-                print_help_and_exit();
+                printHelpAndExit();
             }
         }
 	}

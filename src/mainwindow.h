@@ -61,7 +61,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		};
 		
 	public:
-		MainWindow();
+        MainWindow( const QStringList& arguments );
 		~MainWindow();
 	
 		bool		openPage (const QUrl &url, unsigned int flags = OPF_CONTENT_TREE );
@@ -171,7 +171,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		refreshCurrentBrowser();
 		
 		bool		handleUserEvent( const UserEvent * event );
-		
+        void        printHelpAndExit();
+
 	private:		
 		QString 				m_ebookFilename;
 		QString 				m_ebookFileBasename;
@@ -196,6 +197,10 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		// Storage for built-in icons
 		QPixmap				 	m_builtinIcons[ EBookTocEntry::MAX_BUILTIN_ICONS ];
 
+        // Storage for command-line arguments due to KDE really insisting to use its own way
+        // for command-line parsing.
+        QStringList             m_arguments;
+
 	private:
 		// This is used for application automatic testing
 		enum	auto_test_state_t
@@ -207,8 +212,8 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		};
 		
 		auto_test_state_t			m_autoteststate;
-	
-	private slots:
+
+private slots:
 		void	runAutoTest();
 		
 };

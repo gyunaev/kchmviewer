@@ -43,7 +43,19 @@ MainWindow * mainWindow;
 int main( int argc, char ** argv )
 {
 #if defined (USE_KDE)
-	KApplication app;
+    KAboutData aboutdata ( "kchmviewer",
+                           QByteArray(),
+                           ki18n("kchmviewer"),
+                           qPrintable( QString("%1.%2") .arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR) ),
+                           ki18n("CHM file viewer"),
+                           KAboutData::License_GPL,
+                           ki18n("(c) 2004-2013 George Yunaev, gyunaev@ulduzsoft.com"),
+                           ki18n("Please report bugs to kchmviewer@ulduzsoft.com"),
+                           "http://www.ulduzsoft.com/kchmviewer",
+                           "kchmviewer@ulduzsoft.com");
+
+    KCmdLineArgs::init( &aboutdata );
+    KApplication app;
 #else
 	KchmviewerApp app( argc, argv );
 
@@ -73,7 +85,19 @@ int main( int argc, char ** argv )
 		qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
 #endif
 
-	mainWindow = new MainWindow();
+#if defined (USE_KDE)
+    // Because KDE insists of using its KCmdLineArgs class for argument processing, and does not let you just
+    // to use QCoreApplication::arguments(), it forces us to write two different process functions. To avoid this,
+    // we convert command-line options to arguments ourselves here.
+    QStringList arguments;
+
+    for ( int i = 0; i < argc; i++ )
+        arguments << argv[i];
+
+    mainWindow = new MainWindow( arguments );
+#else
+    mainWindow = new MainWindow( QCoreApplication::arguments() );
+#endif
 
     // If we already have the duplicate instance, the data has been already sent to it - quit now
     if ( mainWindow->hasSameTokenInstance() )

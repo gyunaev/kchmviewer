@@ -46,7 +46,7 @@ SOURCES += config.cpp \
     treeitem_toc.cpp \
     treeitem_index.cpp
 POST_TARGETDEPS += ../lib/libebook/libebook.a
-LIBS += ../lib/libebook/libebook.a -lchm -lzip
+LIBS += ../lib/libebook/libebook.a -lchm -lzip -lX11
 TARGET = ../bin/kchmviewer
 CONFIG += threads \
     warn_on \

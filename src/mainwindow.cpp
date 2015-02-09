@@ -20,6 +20,7 @@
 #include <QDesktopServices>
 #include <QSettings>
 #include <QDateTime>
+#include <QTextStream>
 
 #include "kde-qt.h"
 
@@ -36,6 +37,12 @@
 #include "textencodings.h"
 #include "ui_dialog_about.h"
 
+#ifdef Q_WS_X11
+    #include <QX11Info>
+    #include <X11/Xlib.h>
+#endif
+
+// Maximum memory size for inter-application communication
 static const int SHARED_MEMORY_SIZE = 4096;
 
 MainWindow::MainWindow( const QStringList& arguments )
@@ -154,11 +161,16 @@ bool MainWindow::hasSameTokenInstance()
         if ( args.size() < SHARED_MEMORY_SIZE - 2 )
         {
             // Write the size first, then the string
-            m_sharedMemory->lock();
-            char * data = (char*) m_sharedMemory->data();
-            *((short*)data) = args.size();
-            memcpy( data + 2, args.data(), args.size() );
-            m_sharedMemory->unlock();
+            if ( m_sharedMemory->lock() )
+            {
+                char * data = (char*) m_sharedMemory->data();
+                *((short*)data) = args.size();
+                memcpy( data + 2, args.data(), args.size() );
+
+                m_sharedMemory->unlock();
+            }
+            else
+                qDebug("failed to lock");
         }
 
         // Clean up
@@ -628,9 +640,28 @@ bool MainWindow::parseCmdLineArgs(const QStringList& args , bool from_another_ap
             showMinimized();
         else if ( from_another_app )
         {
-            // This might or might not work depending on WM
+#ifdef Q_WS_X11
+            // On Linux - at least on KDE - activating the foreground window
+            // via activateWindow(); raise(); only works twice. Then it does not
+            // work anymore, most likely because of some internal counter in Qt.
+            // The code below, however, works fine.
+            Display * display = x11Info().display();
+            WId win = winId();
+
+            XEvent event = { 0 };
+            event.xclient.type = ClientMessage;
+            event.xclient.serial = 0;
+            event.xclient.send_event = True;
+            event.xclient.message_type = XInternAtom( display, "_NET_ACTIVE_WINDOW", False);
+            event.xclient.window = win;
+            event.xclient.format = 32;
+
+            XSendEvent( display, DefaultRootWindow(display), False, SubstructureRedirectMask | SubstructureNotifyMask, &event );
+            XMapRaised( display, win );
+#else
             activateWindow();
             raise();
+#endif
         }
 
 		return true;

@@ -49,6 +49,12 @@ ViewWindow::ViewWindow( QWidget * parent )
 	page()->setLinkDelegationPolicy( QWebPage::DelegateAllLinks );
 
 	connect( this, SIGNAL( loadFinished(bool)), this, SLOT( onLoadFinished(bool)) );
+
+    // Search results highlighter
+    QPalette pal = palette();
+    pal.setColor( QPalette::Inactive, QPalette::Highlight, pal.color(QPalette::Active, QPalette::Highlight) );
+    pal.setColor( QPalette::Inactive, QPalette::HighlightedText, pal.color(QPalette::Active, QPalette::HighlightedText) );
+    setPalette( pal );
 }
 
 ViewWindow::~ViewWindow()
@@ -244,18 +250,6 @@ void ViewWindow::mouseReleaseEvent ( QMouseEvent * event )
 	QWebView::mouseReleaseEvent( event );
 }
 
-bool ViewWindow::findTextInPage(const QString &text, int flags)
-{
-	QWebPage::FindFlags webkitflags = QWebPage::FindWrapsAroundDocument;
-
-	if ( flags & ViewWindow::SEARCH_BACKWARD )
-		webkitflags |= QWebPage::FindBackward;
-
-	if ( flags & ViewWindow::SEARCH_CASESENSITIVE )
-		webkitflags |= QWebPage::FindCaseSensitively;
-
-	return findText( text, webkitflags );
-}
 
 void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
 {

@@ -60,6 +60,7 @@ Config::Config()
 	m_browserEnableOfflineStorage = settings.value( "browser/enableofflinestorage", false ).toBool();
 	m_browserEnableLocalStorage = settings.value( "browser/enablelocalstorage", false ).toBool();
 	m_browserEnableRemoteContent = settings.value( "browser/enableremotecontent", false ).toBool();
+    m_browserHighlightSearchResults = settings.value( "browser/highlightsearchresults", true ).toBool();
 
 	QDir dir;
 	dir.setPath (m_datapath);
@@ -93,6 +94,7 @@ void Config::save( )
 	settings.setValue( "browser/enableofflinestorage", m_browserEnableOfflineStorage );
 	settings.setValue( "browser/enablelocalstorage", m_browserEnableLocalStorage );
 	settings.setValue( "browser/enableremotecontent", m_browserEnableRemoteContent );
+    settings.setValue( "browser/highlightsearchresults", m_browserHighlightSearchResults );
 }
 
 QString Config::getEbookSettingFile(const QString &ebookfile ) const

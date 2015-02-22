@@ -52,6 +52,7 @@ DialogSetup::DialogSetup(QWidget *parent)
 	m_radioExtLinkOpenAlways->setChecked ( pConfig->m_onExternalLinkClick == Config::ACTION_ALWAYS_OPEN );
 	m_radioExtLinkAsk->setChecked ( pConfig->m_onExternalLinkClick == Config::ACTION_ASK_USER );
 	m_radioExtLinkOpenNever->setChecked ( pConfig->m_onExternalLinkClick == Config::ACTION_DONT_OPEN );
+    m_highlightSearchResults->setChecked( pConfig->m_browserHighlightSearchResults );
 	
 	m_radioNewChmOpenAlways->setChecked ( pConfig->m_onNewChmClick == Config::ACTION_ALWAYS_OPEN );
 	m_radioNewChmAsk->setChecked ( pConfig->m_onNewChmClick == Config::ACTION_ASK_USER );
@@ -121,6 +122,7 @@ void DialogSetup::accept()
 
 	pConfig->m_numOfRecentFiles = m_historySize->value();
 	pConfig->m_HistoryStoreExtra = m_rememberHistoryInfo->isChecked();
+    pConfig->m_browserHighlightSearchResults = m_highlightSearchResults->isChecked();
 
 	if ( m_radioExtLinkOpenAlways->isChecked () )
 		pConfig->m_onExternalLinkClick = Config::ACTION_ALWAYS_OPEN;

@@ -28,12 +28,6 @@ class ViewWindow : public QWebView
 	Q_OBJECT
 
 	public:
-		enum
-		{
-			SEARCH_CASESENSITIVE = 0x10,
-			SEARCH_BACKWARD = 0x20
-		};
-	
 		ViewWindow( QWidget * parent );
 		virtual ~ViewWindow();
 	
@@ -49,9 +43,6 @@ class ViewWindow : public QWebView
 	
 		//! Popups the print dialog, and prints the current page on the printer.
 		bool	printCurrentPage();
-	
-		//! Search function. find() starts new search, onFindNext and onFindPrevious continue it
-		bool	findTextInPage( const QString& text, int flags );
 	
 		//! Return current ZoomFactor.
 		qreal	getZoomFactor() const;

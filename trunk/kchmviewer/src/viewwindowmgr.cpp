@@ -80,11 +80,14 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 	         this, 
 	         SLOT( editTextEdited( const QString & ) ) );
 	
+    connect( editFind, SIGNAL( textEdited ( const QString & ) ), this, SLOT( on_highlight_clicked() )) ;
+
 	connect( editFind, SIGNAL(returnPressed()), this, SLOT(onFindNext()) );
 
 	// Search toolbar buttons
 	toolClose->setShortcut( Qt::Key_Escape );
 	connect( toolClose, SIGNAL(clicked()), this, SLOT( closeSearch()) );
+
 	connect( toolPrevious, SIGNAL(clicked()), this, SLOT( onFindPrevious()) );
 	connect( toolNext, SIGNAL(clicked()), this, SLOT( onFindNext()) );
 }
@@ -344,23 +347,56 @@ void ViewWindowMgr::onActivateFind()
 
 void ViewWindowMgr::find( bool backward )
 {
-	int flags = 0;
+    QWebPage::FindFlags webkitflags = 0;
 	
 	if ( checkCase->isChecked() )
-		flags |= ViewWindow::SEARCH_CASESENSITIVE;
+        webkitflags |= QWebPage::FindCaseSensitively;
 	
 	if ( backward )
-		flags |= ViewWindow::SEARCH_BACKWARD;
+        webkitflags |= QWebPage::FindBackward;
 
-	// Remember the existing selection position to check the wraps
-	bool res = current()->findTextInPage( editFind->text(), flags );
-		
+    if ( pConfig->m_browserHighlightSearchResults )
+    {
+        // From the doc:
+        // If the HighlightAllOccurrences flag is passed, the
+        // function will highlight all occurrences that exist
+        // in the page. All subsequent calls will extend the
+        // highlight, rather than replace it, with occurrences
+        // of the new string.
+
+        // If the search text is different, we run the empty string search
+        // to discard old highlighting
+        if ( m_lastSearchedWord != editFind->text() )
+            current()->findText( "", webkitflags | QWebPage::HighlightAllOccurrences );
+
+        m_lastSearchedWord = editFind->text();
+
+        // Now we call search with highlighting enabled, while the main search below will have
+        // it disabled. This leads in both having the highlighting results AND working forward/
+        // backward buttons.
+        current()->findText( editFind->text(), webkitflags | QWebPage::HighlightAllOccurrences );
+    }
+
+    // Pre-hide the wrapper
+    labelWrapped->hide();
+
+    bool found = current()->findText( editFind->text(), webkitflags );
+
+    // If we didn't find anything, enable the wrap and try again
+    if ( !found )
+    {
+        found = current()->findText( editFind->text(), webkitflags | QWebPage::FindWrapsAroundDocument );
+
+        if ( found )
+            labelWrapped->show();
+    }
+
 	if ( !frameFind->isVisible() )
 		frameFind->show();
 
 	QPalette p = editFind->palette();
 
-	if ( !res )
+    if ( !found )
 		p.setColor( QPalette::Active, QPalette::Base, QColor(255, 102, 102) );
 	else
 		p.setColor( QPalette::Active, QPalette::Base, Qt::white );

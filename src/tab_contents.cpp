@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 #include "treeitem_toc.h"
 #include "tab_contents.h"
+#include "config.h"
 
 
 TabContents::TabContents( QWidget *parent )
@@ -125,7 +126,9 @@ void TabContents::refillTableOfContents( )
 			item = new TreeItem_TOC( rootentry[indent-1], lastchild[indent], data[i].name, data[i].url, data[i].iconid );
 		}
 
-		item->setExpanded( true );
+        if ( pConfig->m_tocOpenAllEntries )
+            item->setExpanded( true );
+
 		lastchild[indent] = item;
 		rootentry[indent] = item;
 	}

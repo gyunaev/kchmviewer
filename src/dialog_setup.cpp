@@ -74,6 +74,7 @@ DialogSetup::DialogSetup(QWidget *parent)
 	m_enablePlugins->setChecked( pConfig->m_browserEnablePlugins );
 	m_enableOfflineStorage->setChecked( pConfig->m_browserEnableOfflineStorage );
 	m_enableLocalStorage->setChecked( pConfig->m_browserEnableLocalStorage );
+    m_openAllTOCEntries->setChecked( pConfig->m_tocOpenAllEntries );
 
 	switch ( pConfig->m_toolbarMode )
 	{
@@ -123,6 +124,7 @@ void DialogSetup::accept()
 	pConfig->m_numOfRecentFiles = m_historySize->value();
 	pConfig->m_HistoryStoreExtra = m_rememberHistoryInfo->isChecked();
     pConfig->m_browserHighlightSearchResults = m_highlightSearchResults->isChecked();
+    pConfig->m_tocOpenAllEntries = m_openAllTOCEntries->isChecked();
 
 	if ( m_radioExtLinkOpenAlways->isChecked () )
 		pConfig->m_onExternalLinkClick = Config::ACTION_ALWAYS_OPEN;

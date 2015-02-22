@@ -1,3 +1,14 @@
+2015-02-22  tim <gyunaev@ulduzsoft.com>
+    - Version 7.3 released (r440)
+    - Fixed Windows-specific issues, Windows build works again
+    - Added X11-specific way to bring the window to front when requested;
+    - Added search highlighting suggested by Jomart
+    - Various KDE build fixes
+    - Added an option to disable automatic auto-expansion of Table of Contents entries
+    - Fixed the new version check which was triggered on older versions
+    - Fixed Qt5 build, it works fine now
+    - Fixed settings storage on Qt4/Qt5
+
 2014-12-23  tim <gyunaev@ulduzsoft.com>
     - Version 7.2 released
     - Ported to Qt5 (but still builds and works with Qt4)

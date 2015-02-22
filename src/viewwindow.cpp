@@ -70,7 +70,7 @@ void ViewWindow::invalidate( )
 
 bool ViewWindow::openUrl ( const QUrl& url )
 {
-//	qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
+    //qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
 
 	// Do not use setContent() here, it resets QWebHistory
 	load( url );

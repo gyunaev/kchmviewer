@@ -1061,7 +1061,10 @@ QUrl EBook_CHM::pathToUrl(const QString &link) const
 	else
 		path = link;
 
-	url.setPath( QUrl::fromPercentEncoding( path.toUtf8() ) );
+    if ( !path.startsWith( '/' ) )
+        path.prepend( '/' );
+
+    url.setPath( QUrl::fromPercentEncoding( path.toUtf8() ) );
 	return url;
 }
 

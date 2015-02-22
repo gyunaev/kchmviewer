@@ -235,16 +235,22 @@ QUrl EBook_EPUB::pathToUrl(const QString &link) const
 	url.setScheme( URL_SCHEME_EPUB );
 	url.setHost( URL_SCHEME_EPUB );
 
-	// Does the link contain the fragment as well?
-	int off = link.indexOf( '#' );
+    // Does the link contain the fragment as well?
+    int off = link.indexOf( '#' );
+    QString path;
 
-	if ( off != -1 )
-	{
-		url.setPath( link.left( off ) );
-		url.setFragment( link.mid( off + 1 ) );
-	}
-	else
-		url.setPath( link );
+    if ( off != -1 )
+    {
+        path = link.left( off );
+        url.setFragment( link.mid( off + 1 ) );
+    }
+    else
+        path = link;
+
+    if ( !path.startsWith( '/' ) )
+        path.prepend( '/' );
+
+    url.setPath( QUrl::fromPercentEncoding( path.toUtf8() ) );
 
 	return url;
 }

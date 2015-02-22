@@ -1,0 +1,125 @@
+; NSIS script file
+
+;--------------------------------
+;Include Modern UI
+
+	!include "MUI.nsh"
+
+;--------------------------------
+;General
+
+	; The icon for the installer.
+	; MUI_ICON icon_file
+
+	; The icon for the uninstaller.
+	; MUI_UNICON icon_file
+
+	Name "KchmViewer"
+	OutFile "InstallKchmViewer.exe"
+	InstallDir "$PROGRAMFILES\Ulduzsoft\KchmViewer"
+	InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Ulduzsoft\KchmViewer" ""
+	SetCompressor lzma
+
+;--------------------------------
+;Variables
+	
+	Var MUI_TEMP
+	Var STARTMENU_FOLDER
+  
+;--------------------------------
+;Interface Settings
+
+	!define MUI_ABORTWARNING
+
+
+;--------------------------------
+;Pages
+	
+	!insertmacro MUI_PAGE_WELCOME
+	!insertmacro MUI_PAGE_LICENSE "license.txt"
+	!insertmacro MUI_PAGE_DIRECTORY
+
+	;Start Menu Folder Page Configuration
+	!define MUI_STARTMENUPAGE_REGISTRY_ROOT HKEY_LOCAL_MACHINE 
+	!define MUI_STARTMENUPAGE_REGISTRY_KEY "SOFTWARE\Ulduzsoft\KchmViewer"
+	!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
+	!insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
+	
+	!insertmacro MUI_PAGE_INSTFILES
+	!insertmacro MUI_PAGE_FINISH
+
+	; Uninstaller pages
+	!insertmacro MUI_UNPAGE_WELCOME
+	!insertmacro MUI_UNPAGE_CONFIRM
+	!insertmacro MUI_UNPAGE_INSTFILES
+	!insertmacro MUI_UNPAGE_FINISH
+
+;--------------------------------
+;Languages
+ 
+	!insertmacro MUI_LANGUAGE "English"
+
+
+;--------------------------------
+;Installer Sections
+
+	Section "General" General
+		SetOutPath "$INSTDIR"
+		
+		; Our files
+		CreateDirectory "$INSTDIR"
+		File kchmviewer.exe
+		File QtGui4.dll  
+		File QtCore4.dll
+		File QtNetwork4.dll
+		File QtWebKit4.dll
+		File QtXml4.dll
+		File libgcc_s_dw2-1.dll
+		File libstdc++-6.dll
+		File libwinpthread-1.dll
+		File kchmviewer.exe.manifest
+
+		;Store installation folder
+		WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Ulduzsoft\KchmViewer" "" "$INSTDIR"
+		
+		;Create uninstaller
+		WriteUninstaller "$INSTDIR\uninst.exe"
+		
+		!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+		;Create shortcuts
+		CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
+		CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\kchmviewer.lnk" "$INSTDIR\kchmviewer.exe"
+		CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\uninst.exe"
+		!insertmacro MUI_STARTMENU_WRITE_END
+
+	SectionEnd
+
+;--------------------------------
+;Uninstaller Section
+
+	Section "Uninstall"
+
+		; Our files
+		Delete "$INSTDIR\kchmviewer.exe"
+		Delete "$INSTDIR\QtGui4.dll"
+		Delete "$INSTDIR\QtCore4.dll"
+		Delete "$INSTDIR\QtNetwork4.dll"
+		Delete "$INSTDIR\QtWebKit4.dll"
+		Delete "$INSTDIR\QtXml.dll"
+		Delete "$INSTDIR\libgcc_s_dw2-1.dll"
+		Delete "$INSTDIR\libstdc++-6.dll"
+		Delete "$INSTDIR\libwinpthread-1.dll"
+		Delete "$INSTDIR\kchmviewer.exe.manifest"
+		
+		Delete "$INSTDIR\uninst.exe"
+ 		RMDir "$INSTDIR"
+
+		!insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
+		Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
+		Delete "$SMPROGRAMS\$MUI_TEMP\kchmviewer.lnk"
+		Delete "$SMPROGRAMS\$MUI_TEMP"
+  
+  		DeleteRegKey /ifempty HKEY_LOCAL_MACHINE "SOFTWARE\Ulduzsoft\KchmViewer"
+  		DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\KchmViewer"
+	
+	SectionEnd

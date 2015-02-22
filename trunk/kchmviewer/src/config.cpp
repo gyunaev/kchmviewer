@@ -62,6 +62,8 @@ Config::Config()
 	m_browserEnableRemoteContent = settings.value( "browser/enableremotecontent", false ).toBool();
     m_browserHighlightSearchResults = settings.value( "browser/highlightsearchresults", true ).toBool();
 
+    m_tocOpenAllEntries = settings.value( "browser/tocopenallentries", true ).toBool();
+
 	QDir dir;
 	dir.setPath (m_datapath);
 
@@ -95,6 +97,8 @@ void Config::save( )
 	settings.setValue( "browser/enablelocalstorage", m_browserEnableLocalStorage );
 	settings.setValue( "browser/enableremotecontent", m_browserEnableRemoteContent );
     settings.setValue( "browser/highlightsearchresults", m_browserHighlightSearchResults );
+
+    settings.setValue( "browser/tocopenallentries", m_tocOpenAllEntries );
 }
 
 QString Config::getEbookSettingFile(const QString &ebookfile ) const

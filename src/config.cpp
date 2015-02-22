@@ -40,11 +40,12 @@ Config::Config()
 		m_datapath = QDir::homePath () + "/" + ".kchmviewer";
 
 	QSettings settings;
-	m_startupMode = (Config::StartupMode) settings.value( "general/onstartup", STARTUP_DO_NOTHING ).toInt();
-	m_onNewChmClick = (Config::choose_action_t) settings.value( "general/onnewchm", ACTION_ASK_USER ).toInt();
-	m_onExternalLinkClick = (Config::choose_action_t) settings.value( "general/onexternal", ACTION_ASK_USER ).toInt();
-	m_numOfRecentFiles = settings.value( "general/maxrecentfiles", 10 ).toInt();
-	m_HistoryStoreExtra = settings.value( "general/extrahistory", true ).toBool();
+
+    m_startupMode = (Config::StartupMode) settings.value( "settings/onstartup", STARTUP_DO_NOTHING ).toInt();
+    m_onNewChmClick = (Config::choose_action_t) settings.value( "settings/onnewchm", ACTION_ASK_USER ).toInt();
+    m_onExternalLinkClick = (Config::choose_action_t) settings.value( "settings/onexternal", ACTION_ASK_USER ).toInt();
+    m_numOfRecentFiles = settings.value( "settings/maxrecentfiles", 10 ).toInt();
+    m_HistoryStoreExtra = settings.value( "settings/extrahistory", true ).toBool();
 	m_advUseInternalEditor = settings.value( "advanced/internaleditor", true ).toBool();
 	m_advLayoutDirectionRL = settings.value( "advanced/layoutltr", false ).toBool();
 	m_advAutodetectEncoding = settings.value( "advanced/autodetectenc", false ).toBool();
@@ -76,11 +77,11 @@ void Config::save( )
 {
 	QSettings settings;
 
-	settings.setValue( "general/onstartup", m_startupMode );
-	settings.setValue( "general/onnewchm", m_onNewChmClick );
-	settings.setValue( "general/onexternal", m_onExternalLinkClick );
-	settings.setValue( "general/maxrecentfiles", m_numOfRecentFiles );
-	settings.setValue( "general/extrahistory", m_HistoryStoreExtra );
+    settings.setValue( "settings/onstartup", m_startupMode );
+    settings.setValue( "settings/onnewchm", m_onNewChmClick );
+    settings.setValue( "settings/onexternal", m_onExternalLinkClick );
+    settings.setValue( "settings/maxrecentfiles", m_numOfRecentFiles );
+    settings.setValue( "settings/extrahistory", m_HistoryStoreExtra );
 	settings.setValue( "advanced/internaleditor", m_advUseInternalEditor );
 	settings.setValue( "advanced/layoutltr", m_advLayoutDirectionRL );
 	settings.setValue( "advanced/autodetectenc", m_advAutodetectEncoding );

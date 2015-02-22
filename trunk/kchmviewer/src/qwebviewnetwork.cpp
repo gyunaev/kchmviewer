@@ -65,7 +65,7 @@ qint64 KCHMNetworkReply::readData(char *buffer, qint64 maxlen)
 
 QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 {
-	//qDebug("loadResource %s", qPrintable(url.toString()) );
+    //qDebug("loadResource %s", qPrintable(url.toString()) );
 
 	bool htmlfile = url.path().endsWith( ".html" ) || url.path().endsWith( ".htm" ) || url.path().endsWith( ".xhtml" );
 
@@ -94,7 +94,7 @@ KCHMNetworkAccessManager::KCHMNetworkAccessManager( QObject *parent )
 
 QNetworkReply * KCHMNetworkAccessManager::createRequest( Operation op, const QNetworkRequest &request, QIODevice *outgoingData )
 {
-	//qDebug("KCHMNetworkAccessManager::createRequest %s", qPrintable( request.url().toString()) );
+    //qDebug("KCHMNetworkAccessManager::createRequest %s", qPrintable( request.url().toString()) );
 
 	if ( ::mainWindow->chmFile()->isSupportedUrl( request.url() ) )
 		return new KCHMNetworkReply( request, request.url() );

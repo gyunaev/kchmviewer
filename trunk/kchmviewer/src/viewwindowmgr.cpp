@@ -79,10 +79,8 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 	         SIGNAL( textEdited ( const QString & ) ),
 	         this, 
 	         SLOT( editTextEdited( const QString & ) ) );
-	
-    connect( editFind, SIGNAL( textEdited ( const QString & ) ), this, SLOT( on_highlight_clicked() )) ;
 
-	connect( editFind, SIGNAL(returnPressed()), this, SLOT(onFindNext()) );
+    connect( editFind, SIGNAL(returnPressed()), this, SLOT(onFindNext()) );
 
 	// Search toolbar buttons
 	toolClose->setShortcut( Qt::Key_Escape );

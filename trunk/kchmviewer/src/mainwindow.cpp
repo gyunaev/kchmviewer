@@ -1411,7 +1411,7 @@ void MainWindow::newVerAvailable( NewVersionMetaMap metadata )
 	// What is the latest version?
 	QString current = QString("%1.%2") .arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR);
 
-	if ( metadata["Version"] != current )
+    if ( metadata["Version"].toFloat() > current.toFloat() )
 	{
 		if ( QMessageBox::question( 0,
 				tr("New version available"),

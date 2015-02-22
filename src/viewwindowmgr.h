@@ -103,6 +103,9 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		// actions will be relinked and replaced.
 		QList< QAction* >		m_actions;
 
+        // Last word searched
+        QString                 m_lastSearchedWord;
+
 		ViewWindowTabWidget	*	m_tabWidget;
 };
 

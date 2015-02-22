@@ -344,6 +344,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QCheckBox" name="m_highlightSearchResults">
+            <property name="text">
+             <string>Highlight search results during in-page search</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

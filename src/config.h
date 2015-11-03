@@ -79,6 +79,7 @@ class Config
 		bool				m_browserEnableRemoteContent;
         bool                m_browserHighlightSearchResults;
         bool                m_tocOpenAllEntries;
+        bool                m_tabUseSingleClick;
 		
 		bool				m_advUseInternalEditor;
 		QString				m_advExternalEditorPath;

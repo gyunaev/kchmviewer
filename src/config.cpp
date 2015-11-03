@@ -18,6 +18,7 @@
 
 #include <QTextStream>
 #include <QFile>
+#include <QDir>
 
 #include "kde-qt.h"
 #include "config.h"
@@ -64,6 +65,7 @@ Config::Config()
     m_browserHighlightSearchResults = settings.value( "browser/highlightsearchresults", true ).toBool();
 
     m_tocOpenAllEntries = settings.value( "browser/tocopenallentries", true ).toBool();
+    m_tabUseSingleClick = settings.value( "browser/tabusesingleclick", false ).toBool();
 
 	QDir dir;
 	dir.setPath (m_datapath);
@@ -100,6 +102,7 @@ void Config::save( )
     settings.setValue( "browser/highlightsearchresults", m_browserHighlightSearchResults );
 
     settings.setValue( "browser/tocopenallentries", m_tocOpenAllEntries );
+    settings.setValue( "browser/tabusesingleclick", m_tabUseSingleClick );
 }
 
 QString Config::getEbookSettingFile(const QString &ebookfile ) const

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>652</width>
-    <height>449</height>
+    <width>630</width>
+    <height>441</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -357,13 +357,20 @@
        <item>
         <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
-          <string>Table of Contents</string>
+          <string>Table of Contents and other windows</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QCheckBox" name="m_openAllTOCEntries">
             <property name="text">
              <string>Open all Table of Contents entries automatically</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="boxUseSingleClick">
+            <property name="text">
+             <string>Always use a single click to open the elements instead of OS-specific activation</string>
             </property>
            </widget>
           </item>

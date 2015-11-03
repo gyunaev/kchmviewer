@@ -418,7 +418,10 @@ bool MainWindow::openPage( const QUrl& url, unsigned int flags )
 	ViewWindow * vwnd = currentBrowser();
 
 	if ( flags & OPF_NEW_TAB )
+    {
 		vwnd = m_viewWindowMgr->addNewTab( !(flags & OPF_BACKGROUND) );
+        vwnd->setZoomFactor( currentBrowser()->zoomFactor() );
+    }
 	
 	if ( vwnd->openUrl (url) )
 	{

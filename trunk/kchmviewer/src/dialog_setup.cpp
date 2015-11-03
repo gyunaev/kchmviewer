@@ -75,6 +75,7 @@ DialogSetup::DialogSetup(QWidget *parent)
 	m_enableOfflineStorage->setChecked( pConfig->m_browserEnableOfflineStorage );
 	m_enableLocalStorage->setChecked( pConfig->m_browserEnableLocalStorage );
     m_openAllTOCEntries->setChecked( pConfig->m_tocOpenAllEntries );
+    boxUseSingleClick->setChecked( pConfig->m_tabUseSingleClick );
 
 	switch ( pConfig->m_toolbarMode )
 	{
@@ -149,6 +150,7 @@ void DialogSetup::accept()
 	Check_Need_Restart( m_enablePlugins, &pConfig->m_browserEnablePlugins, &need_restart );
 	Check_Need_Restart( m_enableOfflineStorage, &pConfig->m_browserEnableOfflineStorage, &need_restart );
 	Check_Need_Restart( m_enableLocalStorage, &pConfig->m_browserEnableLocalStorage, &need_restart );
+    Check_Need_Restart( boxUseSingleClick, &pConfig->m_tabUseSingleClick, &need_restart );
 
 	Config::ToolbarMode newmode;
 

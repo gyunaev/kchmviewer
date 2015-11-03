@@ -19,7 +19,7 @@
 #include "mainwindow.h"
 #include "treeitem_index.h"
 #include "tab_index.h"
-
+#include "config.h"
 
 TabIndex::TabIndex ( QWidget * parent )
 	: QWidget( parent ), Ui::TabIndex()
@@ -39,11 +39,20 @@ TabIndex::TabIndex ( QWidget * parent )
 			 this, 
 			 SLOT( onReturnPressed() ) );
 	
-	connect( tree,
-			 SIGNAL( itemActivated(QTreeWidgetItem*, int)),
-			 this,
-			 SLOT( onItemActivated( QTreeWidgetItem*, int)) );
-
+    if ( pConfig->m_tabUseSingleClick )
+    {
+        connect( tree,
+                 SIGNAL( itemClicked(QTreeWidgetItem*,int)),
+                 this,
+                 SLOT( onItemActivated( QTreeWidgetItem *, int ) ) );
+    }
+    else
+    {
+        connect( tree,
+                 SIGNAL( itemActivated ( QTreeWidgetItem *, int ) ),
+                 this,
+                 SLOT( onItemActivated( QTreeWidgetItem *, int ) ) );
+    }
 
 	// Activate custom context menu, and connect it
 	tree->setContextMenuPolicy( Qt::CustomContextMenu );

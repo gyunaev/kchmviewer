@@ -19,6 +19,7 @@
 #include "mainwindow.h"
 #include "viewwindow.h"
 #include "version.h"
+#include "config.h"
 #include "tab_bookmarks.h"
 
 class BookmarkItem : public QListWidgetItem
@@ -72,10 +73,20 @@ TabBookmarks::TabBookmarks( QWidget *parent )
 	// UIC code
 	setupUi( this );
 	
-	connect( list,
-			 SIGNAL( itemActivated(QListWidgetItem*)),
-			 this, 
-			 SLOT( onItemActivated( QListWidgetItem*)) );
+    if ( pConfig->m_tabUseSingleClick )
+    {
+        connect( list,
+                 SIGNAL( itemClicked(QListWidgetItem*)),
+                 this,
+                 SLOT( onItemActivated( QListWidgetItem*)) );
+    }
+    else
+    {
+        connect( list,
+                 SIGNAL( itemActivated(QListWidgetItem*)),
+                 this,
+                 SLOT( onItemActivated( QListWidgetItem*)) );
+    }
 	
 	connect( btnAdd, 
 			 SIGNAL( clicked () ), 

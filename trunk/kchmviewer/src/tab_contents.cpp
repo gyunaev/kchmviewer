@@ -34,11 +34,21 @@ TabContents::TabContents( QWidget *parent )
 	tree->header()->hide();
 	
 	// Handle clicking on m_contentsWindow element
-	connect( tree, 
-			 SIGNAL( itemActivated ( QTreeWidgetItem *, int ) ),
-	         this, 
-	         SLOT( onClicked ( QTreeWidgetItem *, int ) ) );
-	
+    if ( pConfig->m_tabUseSingleClick )
+    {
+        connect( tree,
+                 SIGNAL( itemClicked(QTreeWidgetItem*,int)),
+                 this,
+                 SLOT( onClicked ( QTreeWidgetItem *, int ) ) );
+    }
+    else
+    {
+        connect( tree,
+                 SIGNAL( itemActivated ( QTreeWidgetItem *, int ) ),
+                 this,
+                 SLOT( onClicked ( QTreeWidgetItem *, int ) ) );
+    }
+
 	// Activate custom context menu, and connect it
 	tree->setContextMenuPolicy( Qt::CustomContextMenu );
 	connect( tree, 

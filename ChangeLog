@@ -1,3 +1,12 @@
+2015-11-02  tim <gyunaev@ulduzsoft.com>
+    - Version 7.4 released (r450)
+    - Zoom level is now inherited in newly opened windows
+    - Fixed the empty or stale tab names while using the back/forward navigation buttons and new tab options
+    - Added -v and --version command-line options
+    - Added an option (Settings/Browser/Always use single click) to use a single-click to open tree items in the contents/index tabs despite the selected OS activator such as KDE double-click. Off by default.
+    - Fixed TOC parsing on some CHM files which had TOC names without associated URLs.
+    - Disabled encoding selection menu for epubs
+    
 2015-02-22  tim <gyunaev@ulduzsoft.com>
     - Version 7.3 released (r440)
     - Fixed Windows-specific issues, Windows build works again

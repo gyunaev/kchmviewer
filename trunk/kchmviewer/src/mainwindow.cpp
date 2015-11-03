@@ -315,10 +315,13 @@ bool MainWindow::loadFile ( const QString &loadFileName, bool call_open_page )
 
 			if ( m_ebookFile->hasFeature( EBook::FEATURE_ENCODING ) )
 				setTextEncoding( m_ebookFile->currentEncoding() );
-			
+
 			if ( call_open_page )
 				openPage( m_ebookFile->homeUrl() );
 		}
+
+        // Disable the menu if ebook format doesn't support encoding changes
+        view_Set_encoding_action->setEnabled( m_ebookFile->hasFeature( EBook::FEATURE_ENCODING ) );
 
 		if ( m_recentFiles )
 			m_recentFiles->setCurrentFile( m_ebookFilename );

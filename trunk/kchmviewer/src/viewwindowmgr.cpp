@@ -82,7 +82,7 @@ ViewWindowMgr::ViewWindowMgr( QWidget *parent )
 
     connect( editFind, SIGNAL(returnPressed()), this, SLOT(onFindNext()) );
 
-	// Search toolbar buttons
+    // Search toolbar buttons
 	toolClose->setShortcut( Qt::Key_Escape );
 	connect( toolClose, SIGNAL(clicked()), this, SLOT( closeSearch()) );
 
@@ -147,7 +147,9 @@ ViewWindow * ViewWindowMgr::addNewTab( bool set_active )
 			 SIGNAL( linkClicked ( const QUrl& ) ),
 	         ::mainWindow, 
 			 SLOT( activateUrl( const QUrl& ) ) );
-	
+
+    connect( viewvnd, SIGNAL(dataLoaded(ViewWindow*)), this, SLOT(onWindowContentChanged(ViewWindow*)));
+
 	// Set up the accelerator if we have room
 	if ( m_Windows.size() < 10 )
 		tabdata.action->setShortcut( QKeySequence( i18n("Alt+%1").arg( m_Windows.size() ) ) );
@@ -170,7 +172,7 @@ void ViewWindowMgr::setTabName( ViewWindow * window )
 	
 	if ( tab )
 	{
-		QString title = window->getTitle().trimmed();
+        QString title = window->title().trimmed();
 		
 		// Trim too long string
 		if ( title.length() > 25 )
@@ -415,7 +417,12 @@ void ViewWindowMgr::onFindNext()
 
 void ViewWindowMgr::onFindPrevious()
 {
-	find( true );
+    find( true );
+}
+
+void ViewWindowMgr::onWindowContentChanged(ViewWindow *window)
+{
+    setTabName( (ViewWindow*) window );
 }
 
 void ViewWindowMgr::applyBrowserSettings()

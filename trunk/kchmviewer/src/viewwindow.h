@@ -37,6 +37,9 @@ class ViewWindow : public QWebView
 		QUrl	getOpenedPage() const	{ return url(); }
 		QUrl	getNewTabLink() const	{ return m_newTabLinkKeeper; }
 		
+    signals:
+        void    dataLoaded( ViewWindow * window );
+
 	public: 
 		//! Invalidate current view, doing all the cleanups etc.
 		void	invalidate();
@@ -70,7 +73,7 @@ class ViewWindow : public QWebView
 		void	updateHistoryIcons();
 
 		//! Returns the window title
-		QString	getTitle() const;
+        QString	title() const;
 		
 		//! Navigation stuff
 		void	navigateBack();

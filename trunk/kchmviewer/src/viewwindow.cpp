@@ -121,7 +121,7 @@ QMenu * ViewWindow::getContextMenu( const QUrl & link, QWidget * parent )
 	}
 }
 
-QString ViewWindow::getTitle() const
+QString ViewWindow::title() const
 {
 	QString title = ::mainWindow->chmFile()->getTopicByUrl( url() );
 	
@@ -274,10 +274,11 @@ void ViewWindow::onLoadFinished ( bool )
 {
 	if ( m_storedScrollbarPosition > 0 )
 	{
-		qDebug("scrollbar value changed");
 		page()->currentFrame()->setScrollBarValue( Qt::Vertical, m_storedScrollbarPosition );
 		m_storedScrollbarPosition = 0;
 	}
 
 	updateHistoryIcons();
+
+    emit dataLoaded( this );
 }

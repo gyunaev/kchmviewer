@@ -18,6 +18,7 @@
 
 #include <QFile>
 #include <QVector>
+#include <QDebug>
 
 #include "ebook_chm.h"
 #include "ebook_chm_encoding.h"
@@ -122,8 +123,8 @@ bool EBook_CHM::getTableOfContents( QList<EBookTocEntry> &toc ) const
 	toc.reserve( parsed.size() );
 	Q_FOREACH( const ParsedEntry& e, parsed )
 	{
-		if ( e.urls.empty() )
-			continue;
+        //if ( e.urls.empty() )
+//			continue;
 
 		if ( root_offset == -1 )
 			root_offset = e.indent;
@@ -132,7 +133,9 @@ bool EBook_CHM::getTableOfContents( QList<EBookTocEntry> &toc ) const
 		entry.iconid = (EBookTocEntry::Icon) e.iconid;
 		entry.indent = e.indent - root_offset;
 		entry.name = e.name;
-		entry.url = e.urls[0];
+
+        if ( !e.urls.empty() )
+            entry.url = e.urls[0];
 
 		toc.append( entry );
 	}
@@ -416,7 +419,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 		else
 			tagword = tag.toLower();
 
-//		qDebug ("tag: '%s', tagword: '%s'\n", qPrintable( tag ), qPrintable( tagword ) );
+        DEBUGPARSER(("tag: '%s', tagword: '%s'\n", qPrintable( tag ), qPrintable( tagword ) ));
 
 		// <OBJECT type="text/sitemap"> - a topic entry
 		if ( tagword == "object" && tag.indexOf ("text/sitemap", 0, Qt::CaseInsensitive ) != -1 )
@@ -478,7 +481,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 			// offset+6 skips 'value='
             findStringInQuotes (tag, offset + value_pattern.length(), pvalue, false, true);
 
-			//qDebug ("<param>: name '%s', value '%s'", qPrintable( pname ), qPrintable( pvalue ));
+            DEBUGPARSER(("<param>: name '%s', value '%s'", qPrintable( pname ), qPrintable( pvalue )));
 
 			if ( pname == "name" || pname == "keyword" )
 			{
@@ -533,8 +536,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 			if ( ++indent >= MAX_NEST_DEPTH )
 				qFatal("EBook_CHMImpl::ParseAndFillTopicsTree: max nest depth (%d) is reached, error in help file", MAX_NEST_DEPTH);
 
-			// This intended to fix <ul><ul>, which was seen in some buggy chm files,
-			// and brokes rootentry[indent-1] check
+            DEBUGPARSER(("<ul>: new intent is %d\n", indent - root_indent_offset));
 		}
 		else if ( tagword == "/ul" ) // decrease indent level
 		{
@@ -546,6 +548,10 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 
 		pos = i;
 	}
+
+    // Dump our array
+//    for ( int i = 0; i < data.size(); i++ )
+//        qDebug() << data[i].indent << data[i].name << data[i].urls;
 
 	return true;
 }

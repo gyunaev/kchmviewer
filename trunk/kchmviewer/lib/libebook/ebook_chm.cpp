@@ -123,9 +123,6 @@ bool EBook_CHM::getTableOfContents( QList<EBookTocEntry> &toc ) const
 	toc.reserve( parsed.size() );
 	Q_FOREACH( const ParsedEntry& e, parsed )
 	{
-        //if ( e.urls.empty() )
-//			continue;
-
 		if ( root_offset == -1 )
 			root_offset = e.indent;
 

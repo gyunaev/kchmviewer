@@ -564,6 +564,11 @@ bool MainWindow::parseCmdLineArgs(const QStringList& args , bool from_another_ap
             force_background = true;
         else if ( args[i] == "-novcheck" )
             disable_vcheck = true;
+        else if ( args[i] == "-v" || args[i] == "--version" )
+        {
+            printf("kchmviewer version %d.%d built at %s %s\n", APP_VERSION_MAJOR, APP_VERSION_MINOR, __DATE__, __TIME__ );
+            exit( 0 );
+        }
         else if ( args[i] == "--url" || args[i] == "-showPage" )
             open_url = args[++i];
 		else

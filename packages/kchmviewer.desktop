@@ -7,4 +7,4 @@ Exec=kchmviewer %f
 Icon=kchmviewer
 GenericName=CHM file viewer
 Comment=A viewer of CHM (MS-Help) files
-MimeType=application/chm;application/x-chm;
+MimeType=application/chm;application/x-chm;application/vnd.ms-htmlhelp;application/epub+zip

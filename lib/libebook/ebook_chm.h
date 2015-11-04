@@ -19,14 +19,14 @@
 #ifndef EBOOK_CHM_H
 #define EBOOK_CHM_H
 
-#if defined (USE_PATCHED_CHMLIB)
-	#include "chmlib-win32/chm_lib.h"
-#else
-	#include "chm_lib.h"
-#endif
-
 #include <QMap>
 #include <QTextCodec>
+
+// Enable Unicode use in libchm
+#if defined (WIN32)
+    #define PPC_BSTR
+#endif
+#include <chm_lib.h>
 
 #include "ebook.h"
 #include "helper_entitydecoder.h"

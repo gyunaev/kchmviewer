@@ -46,7 +46,7 @@ SOURCES += config.cpp \
     treeitem_toc.cpp \
     treeitem_index.cpp
 POST_TARGETDEPS += ../lib/libebook/libebook.a
-LIBS += ../lib/libebook/libebook.a -lchm -lzip -lX11
+LIBS += ../lib/libebook/libebook.a -lchm -lzip
 TARGET = ../bin/kchmviewer
 CONFIG += threads \
     warn_on \
@@ -74,22 +74,31 @@ QT += webkit \
     webkitwidgets \
     printsupport
 
+linux-g++*:{
+    LIBS += -lX11
+}
+
+# This is used by cross-build on 64-bit when building a 32-bit version
+linux-g++-32: {
+       LIBS += -L.
+}
+
+
 win32-g++*: {
     QT -= dbus
     HEADERS -= dbus_interface.h
     SOURCES -= dbus_interface.cpp
     CONFIG -= dbus
-    LIBS -= -lchm ../lib/libebook/libebook.a
+    LIBS -= ../lib/libebook/libebook.a
     POST_TARGETDEPS -= ../lib/libebook/libebook.a
-    DEFINES += USE_PATCHED_CHMLIB
     
-	CONFIG( debug, debug|release ) {
-		LIBS += "../lib/libebook/debug/libebook.a"
-	} else {
-		LIBS += "../lib/libebook/release/libebook.a"
-	}    
+    CONFIG( debug, debug|release ) {
+            LIBS += "../lib/libebook/debug/libebook.a"
+    } else {
+            LIBS += "../lib/libebook/release/libebook.a"
+    }
 
-	LIBS += -lwsock32 ../lib/libebook/chmlib-win32/chmlib.lib -lzip -lz
+    LIBS += -lchm -lwsock32 -lzip -lz -loleaut32
 }
 
 macx-g++: {
@@ -100,8 +109,4 @@ macx-g++: {
     SOURCES += kchmviewerapp.cpp
     QMAKE_INFO_PLIST=resources/Info.plist
     QMAKE_POST_LINK += cp resources/*.icns ${DESTDIR}/kchmviewer.app/Contents/Resources;
-}
-
-linux-g++-32: {
-	LIBS += -L.
 }

@@ -35,9 +35,9 @@ svn export . "$BUILDDIR/" || exit 1
 tar zcf "$RELEASEDIR/$PACKAGE-$CURRENTVER.tar.gz" $BUILDDIR || exit 1
 
 # win32
-#sh build-win32-mingw.sh -nsis || exit 1
-#mv build.win32/nsis/InstallKchmviewer*.exe $RELEASEDIR
-#rm -rf "build.win32"
+sh build-win32-mingw.sh -nsis || exit 1
+mv build.win32/nsis/InstallKchmviewer*.exe $RELEASEDIR
+rm -rf "build.win32"
 
 # Linux RPMs
 for target in qt5-32 qt5-64 qt4-32 qt4-64; do

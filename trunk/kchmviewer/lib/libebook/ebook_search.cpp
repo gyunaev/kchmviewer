@@ -119,7 +119,7 @@ bool EBookSearch::generateIndex( EBook * ebookFile, QDataStream & stream )
 			documents.push_back( alldocuments[i] );
 	}
 
-	if ( m_Index->makeIndex( documents, ebookFile ) == -1 )
+    if ( !m_Index->makeIndex( documents, ebookFile ) )
 	{
 		delete m_Index;
 		m_Index = 0;

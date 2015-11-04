@@ -244,8 +244,12 @@ bool EBook_CHM::load(const QString &archiveName)
 	if( m_chmFile )
 		close();
 
-#if defined (USE_PATCHED_CHMLIB)
-	m_chmFile = chm_open( (WCHAR*) filename.utf16() );
+#if defined (WIN32)
+    // chmlib on Win32 uses BSTR, so we need to alloc/free a string
+    BSTR bstrfilename = SysAllocStringLen( 0, filename.length() );
+    filename.toWCharArray( bstrfilename );
+    m_chmFile = chm_open( bstrfilename );
+    SysFreeString( bstrfilename );
 #else
 	m_chmFile = chm_open( QFile::encodeName(filename) );
 #endif

@@ -144,7 +144,7 @@ QString EBook_EPUB::getTopicByUrl(const QUrl& url)
 
 QString EBook_EPUB::currentEncoding() const
 {
-	abort();
+    return "UTF-8";
 }
 
 bool EBook_EPUB::setCurrentEncoding(const char *)
@@ -214,17 +214,45 @@ bool EBook_EPUB::parseBookinfo()
 	// Get the data
 	m_title = content_parser.metadata[ "title" ];
 
-	// Copy the manifest information and fill up the other maps
-	Q_FOREACH( EBookTocEntry e, toc_parser.entries )
-	{
-		// Add into url-title map
-		m_urlTitleMap[ e.url ] = e.name;
-		m_tocEntries.push_back( e );
-	}
+    // Move the manifest entries into the list
+    Q_FOREACH( QString f, content_parser.manifest.values() )
+        m_ebookManifest.push_back( pathToUrl( f ) );
 
-	// Move the manifest entries into the list
-	Q_FOREACH( QString f, content_parser.manifest.values() )
-		m_ebookManifest.push_back( pathToUrl( f ) );
+    // Copy the manifest information and fill up the other maps if we have it
+    if ( !toc_parser.entries.isEmpty() )
+    {
+        Q_FOREACH( EBookTocEntry e, toc_parser.entries )
+        {
+            // Add into url-title map
+            m_urlTitleMap[ e.url ] = e.name;
+            m_tocEntries.push_back( e );
+        }
+    }
+    else
+    {
+        // Copy them from spline
+        Q_FOREACH( QString u, content_parser.spine )
+        {
+            EBookTocEntry e;
+            QString url = u;
+
+            if ( content_parser.manifest.contains( u ) )
+                url = content_parser.manifest[ u ];
+
+            e.name = url;
+            e.url= pathToUrl( url );
+            e.iconid = EBookTocEntry::IMAGE_NONE;
+            e.indent = 0;
+
+            // Add into url-title map
+            m_urlTitleMap[ pathToUrl( url ) ] = url;
+            m_tocEntries.push_back( e );
+        }
+    }
+
+    // EPub with an empty TOC is not valid
+    if ( m_tocEntries.isEmpty() )
+        return false;
 
 	return true;
 }

@@ -1,3 +1,10 @@
+2015-11-14  tim <gyunaev@ulduzsoft.com>
+    - Version 7.5 released (r458);
+    - Added more useful information into About window;
+    - Fixed EPUB default encoding to be UTF-8;
+    - Changed the TOC/Index/Search default click to be single-click, not system-specific.
+    - On Windows we do not store the window size if it is minimized or maximized; using default size instead.    
+
 2015-11-02  tim <gyunaev@ulduzsoft.com>
     - Version 7.4 released (r450)
     - Zoom level is now inherited in newly opened windows

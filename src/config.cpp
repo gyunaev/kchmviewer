@@ -65,7 +65,7 @@ Config::Config()
     m_browserHighlightSearchResults = settings.value( "browser/highlightsearchresults", true ).toBool();
 
     m_tocOpenAllEntries = settings.value( "browser/tocopenallentries", true ).toBool();
-    m_tabUseSingleClick = settings.value( "browser/tabusesingleclick", false ).toBool();
+    m_tabUseSingleClick = settings.value( "browser/tabusesingleclick", true ).toBool();
 
 	QDir dir;
 	dir.setPath (m_datapath);

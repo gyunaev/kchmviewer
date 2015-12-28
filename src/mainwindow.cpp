@@ -45,11 +45,13 @@
 // Maximum memory size for inter-application communication
 static const int SHARED_MEMORY_SIZE = 4096;
 
+static const unsigned int WINDOW_DEFAULT_X_SIZE = 900;
+static const unsigned int WINDOW_DEFAULT_Y_SIZE = 700;
+
+
 MainWindow::MainWindow( const QStringList& arguments )
 	: QMainWindow ( 0 ), Ui::MainWindow()
 {
-	const unsigned int WND_X_SIZE = 900;
-	const unsigned int WND_Y_SIZE = 700;
 	const unsigned int SPLT_X_SIZE = 300;
 
     m_arguments = arguments;
@@ -98,7 +100,7 @@ MainWindow::MainWindow( const QStringList& arguments )
 	setupLangEncodingMenu();
 
 	// Resize main window and dock
-	resize( WND_X_SIZE, WND_Y_SIZE );	
+    resize( WINDOW_DEFAULT_X_SIZE, WINDOW_DEFAULT_Y_SIZE );
 	m_navPanel->resize( SPLT_X_SIZE, m_navPanel->height() );
 
 	statusBar()->show();
@@ -499,6 +501,17 @@ void MainWindow::closeFile( )
 		
 		m_currentSettings->m_window_size_x = width();
 		m_currentSettings->m_window_size_y = height();
+
+#ifdef Q_OS_WIN
+        // On Windows if the window is maximised or minimized, the WM will not restore positions/state,
+        // so we reset to default size
+        if ( isMaximized() || isMinimized() )
+        {
+            m_currentSettings->m_window_size_x = WINDOW_DEFAULT_X_SIZE;
+            m_currentSettings->m_window_size_y = WINDOW_DEFAULT_Y_SIZE;
+        }
+#endif
+
 		m_currentSettings->m_window_size_splitter = m_navPanel->width();
 
 		m_navPanel->getSettings( m_currentSettings );
@@ -672,6 +685,11 @@ bool MainWindow::parseCmdLineArgs(const QStringList& args , bool from_another_ap
             XSendEvent( display, DefaultRootWindow(display), False, SubstructureRedirectMask | SubstructureNotifyMask, &event );
             XMapRaised( display, win );
 #else
+            // On Windows it is not possible to activate the window of a non-active process. From MSDN:
+            // https://msdn.microsoft.com/en-us/library/windows/desktop/ms633539%28v=vs.85%29.aspx
+            //
+            // An application cannot force a window to the foreground while the user is working with another window.
+            // Instead, Windows flashes the taskbar button of the window to notify the user.
             activateWindow();
             raise();
             show();
@@ -1066,12 +1084,22 @@ void MainWindow::actionLocateInContentsTab()
 
 void MainWindow::actionAboutApp()
 {
-	QString abouttext = i18n( "<html><b>kchmviewer version %1.%2</b><br><br>"
-							  "Copyright (C) George Yunaev, 2004-2014<br>"
+#if QT_VERSION >= 0x050000
+    QString info = QString( "<br>Built for %1 arch using %2 ABI<br>Running on %3, Qt version %4" )
+            .arg( QSysInfo::buildCpuArchitecture() )
+            .arg( QSysInfo::buildAbi() )
+            .arg( QSysInfo::prettyProductName() )
+            .arg( qVersion() );
+#else
+    QString info = QString( "<br>Using Qt version %1") .arg( qVersion() );
+#endif
+
+    QString abouttext = i18n( "<html><b>kchmviewer version %1.%2</b>%3<br><br>"
+                              "Copyright (C) George Yunaev, 2004-2015<br>"
 							  "<a href=\"mailto:gyunaev@ulduzsoft.com\">gyunaev@ulduzsoft.com</a><br>"
 							  "<a href=\"http://www.ulduzsoft.com/kchmviewer\">http://www.ulduzsoft.com/kchmviewer</a><br><br>"
 							  "Licensed under GNU GPL license version 3.</html>" )
-								.arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR);
+                                .arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR) .arg( info );
 
 	// It is quite funny that the argument order differs
 #if defined (USE_KDE)

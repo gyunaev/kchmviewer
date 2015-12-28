@@ -195,7 +195,8 @@ class EBook
 		virtual QString		getTopicByUrl ( const QUrl& url ) = 0;
 
 		/*!
-		 * \brief Gets the current ebook encoding (set or autodetected) as qtcodec
+         * \brief Gets the current ebook encoding (set or autodetected) as qtcodec name. Must be implemented,
+         * even if the book doesn't support change of encoding (then it should return a default encoding)
 		 * \return The current encoding.
 		 *
 		 * \ingroup encoding

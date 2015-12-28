@@ -74,7 +74,7 @@ void TabContents::refillTableOfContents( )
 	if ( !::mainWindow->chmFile()->getTableOfContents( data )
 	|| data.size() == 0 )
 	{
-		qWarning ("CHM toc present but is empty; wrong parsing?");
+		qWarning ("Table of contents is present but is empty; wrong parsing?");
 		return;
 	}
 

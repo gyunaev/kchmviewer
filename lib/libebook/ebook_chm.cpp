@@ -150,26 +150,39 @@ bool EBook_CHM::getIndex(QList<EBookIndexEntry> &index) const
 
 	// Find out the root offset, and reduce the indent level to it
 	// so the index starts from zero offset.
-	int root_offset = -1;
+    int root_offset = 0;
 
 	// Fill up the real index
 	index.reserve( parsed.size() );
 
+    // Find the index root offset
+    Q_FOREACH( const ParsedEntry& e, parsed )
+    {
+        if ( e.urls.empty() )
+            continue;
+
+        root_offset = qMin( root_offset, e.indent );
+    }
+
+    // And apply the index
 	Q_FOREACH( const ParsedEntry& e, parsed )
 	{
 		if ( e.urls.empty() )
 			continue;
 
-		if ( root_offset == -1 )
-			root_offset = e.indent;
-
 		EBookIndexEntry entry;
 		entry.name = e.name;
 		entry.urls = e.urls;
-		entry.indent = e.indent - root_offset;
 		entry.seealso = e.seealso;
 
+        // If the index array is empty, make sure the first entry is on root offset
+        if ( index.isEmpty() )
+            entry.indent = root_offset;
+        else
+            entry.indent = e.indent - root_offset;
+
 		index.append( entry );
+        printf("%d: %s\n", entry.indent, qPrintable(entry.name));
 	}
 
 	return true;
@@ -420,7 +433,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 		else
 			tagword = tag.toLower();
 
-        DEBUGPARSER(("tag: '%s', tagword: '%s'\n", qPrintable( tag ), qPrintable( tagword ) ));
+        //DEBUGPARSER(("tag: '%s', tagword: '%s'\n", qPrintable( tag ), qPrintable( tagword ) ));
 
 		// <OBJECT type="text/sitemap"> - a topic entry
 		if ( tagword == "object" && tag.indexOf ("text/sitemap", 0, Qt::CaseInsensitive ) != -1 )
@@ -482,7 +495,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 			// offset+6 skips 'value='
             findStringInQuotes (tag, offset + value_pattern.length(), pvalue, false, true);
 
-            DEBUGPARSER(("<param>: name '%s', value '%s'", qPrintable( pname ), qPrintable( pvalue )));
+            //DEBUGPARSER(("<param>: name '%s', value '%s'", qPrintable( pname ), qPrintable( pvalue )));
 
 			if ( pname == "name" || pname == "keyword" )
 			{

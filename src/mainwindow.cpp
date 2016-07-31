@@ -1262,7 +1262,14 @@ void MainWindow::setupActions()
 						  SLOT( showPrevInToc() ),
 						  SLOT( showPrevInToc() ),
 	                      Qt::ApplicationShortcut );
-	
+
+    // Copy current URL to clipboard global shortcut
+    (void) new QShortcut( QKeySequence( i18n("Ctrl+I") ),
+                          m_viewWindowMgr,
+                          SLOT( copyUrlToClipboard()),
+                          SLOT( copyUrlToClipboard()),
+                          Qt::ApplicationShortcut );
+
 	// Context menu
 	m_contextMenu = new QMenu( this );
 	

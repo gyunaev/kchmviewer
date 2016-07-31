@@ -425,6 +425,15 @@ void ViewWindowMgr::onWindowContentChanged(ViewWindow *window)
     setTabName( (ViewWindow*) window );
 }
 
+void ViewWindowMgr::copyUrlToClipboard()
+{
+    QString url = current()->getOpenedPage().toString();
+
+    if ( !url.isEmpty() )
+        QApplication::clipboard()->setText( url );
+}
+
+
 void ViewWindowMgr::applyBrowserSettings()
 {
 	QWebSettings * setup = QWebSettings::globalSettings();

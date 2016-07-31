@@ -68,6 +68,7 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		void	onFindNext();
 		void	onFindPrevious();
         void    onWindowContentChanged(ViewWindow *window );
+        void	copyUrlToClipboard();
 		
 	protected slots:
 		void	openNewTab();

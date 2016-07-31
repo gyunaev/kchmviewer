@@ -83,6 +83,7 @@
 #include <QMap>
 #include <QUrl>
 #include <QShortcut>
+#include <QClipboard>
 #include <QDebug>
 
 // events

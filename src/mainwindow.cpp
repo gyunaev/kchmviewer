@@ -420,7 +420,7 @@ bool MainWindow::openPage( const QUrl& url, unsigned int flags )
 		return false; // do not change the current page.
 	}
 
-	ViewWindow * vwnd = currentBrowser();
+    ViewWindow * vwnd = currentBrowser();
 
 	if ( flags & OPF_NEW_TAB )
     {
@@ -702,7 +702,7 @@ bool MainWindow::parseCmdLineArgs(const QStringList& args , bool from_another_ap
 	return false;
 }
 
-ViewWindow * MainWindow::currentBrowser( ) const
+ViewWindow *MainWindow::currentBrowser( ) const
 {
 	return m_viewWindowMgr->current();
 }
@@ -717,7 +717,7 @@ void MainWindow::onOpenPageInNewBackgroundTab( )
 	openPage( currentBrowser()->getNewTabLink(), OPF_NEW_TAB | OPF_BACKGROUND );
 }
 
-void MainWindow::browserChanged( ViewWindow * newbrowser )
+void MainWindow::browserChanged(ViewWindow *newbrowser )
 {
 	m_navPanel->findUrlInContents( newbrowser->getOpenedPage() );
 }

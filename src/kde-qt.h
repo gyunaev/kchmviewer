@@ -145,7 +145,6 @@ class TabSearch;
 class TabBookmarks;
 class TabContents;
 class Settings;
-class ViewWindow;
 class ViewWindowMgr;
 class EBookUrl;
 

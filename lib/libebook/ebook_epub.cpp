@@ -154,7 +154,12 @@ bool EBook_EPUB::setCurrentEncoding(const char *)
 
 bool EBook_EPUB::isSupportedUrl(const QUrl &url)
 {
-	return url.scheme() == URL_SCHEME_EPUB;
+    return url.scheme() == URL_SCHEME_EPUB;
+}
+
+QString EBook_EPUB::ebookURLscheme()
+{
+    return URL_SCHEME_EPUB;
 }
 
 bool EBook_EPUB::parseXML(const QString &uri, QXmlDefaultHandler * parser)

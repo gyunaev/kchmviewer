@@ -179,6 +179,12 @@ class EBook_CHM : public EBook
 		 */
 		virtual bool isSupportedUrl( const QUrl& url );
 
+        /*!
+         * \brief Return the URL scheme used by this ebook format
+         */
+        virtual QString ebookURLscheme();
+
+
 		// Converts the string to the ebook-specific URL format
         QUrl pathToUrl( const QString & link ) const;
 

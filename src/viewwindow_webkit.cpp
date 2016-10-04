@@ -26,10 +26,10 @@
 #include <QWebFrame>
 
 #include "config.h"
-#include "viewwindow.h"
+#include "viewwindow_webkit.h"
 #include "mainwindow.h"
 #include "viewwindowmgr.h"
-#include "qwebviewnetwork.h"
+#include "dataprovider_qwebkit.h"
 
 static const qreal ZOOM_FACTOR_CHANGE = 0.1;
 
@@ -78,7 +78,20 @@ bool ViewWindow::openUrl ( const QUrl& url )
 	m_newTabLinkKeeper.clear();
 	mainWindow->viewWindowMgr()->setTabName( this );
 
-	return true;
+    return true;
+}
+
+void ViewWindow::applySettings()
+{
+    QWebSettings * setup = QWebSettings::globalSettings();
+
+    setup->setAttribute( QWebSettings::AutoLoadImages, pConfig->m_browserEnableImages );
+    setup->setAttribute( QWebSettings::JavascriptEnabled, pConfig->m_browserEnableJS );
+    setup->setAttribute( QWebSettings::JavaEnabled, pConfig->m_browserEnableJava );
+    setup->setAttribute( QWebSettings::PluginsEnabled, pConfig->m_browserEnablePlugins );
+    setup->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, pConfig->m_browserEnableOfflineStorage );
+    setup->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, pConfig->m_browserEnableLocalStorage );
+    setup->setAttribute( QWebSettings::LocalStorageEnabled, pConfig->m_browserEnableLocalStorage );
 }
 
 QMenu * ViewWindow::createStandardContextMenu( QWidget * parent )

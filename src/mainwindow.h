@@ -70,7 +70,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		const QString&	getOpenedFileName () { return m_ebookFilename; }
 		const QString&	getOpenedFileBaseName () { return m_ebookFileBasename; }
 		
-		ViewWindow * currentBrowser() const;
+        ViewWindow * currentBrowser() const;
 		Settings   * currentSettings() const { return m_currentSettings; }
 		ViewWindowMgr*	viewWindowMgr() const { return m_viewWindowMgr; }
 		NavigationPanel * navigator() const { return m_navPanel; }
@@ -85,7 +85,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
         bool        hasSameTokenInstance();
 
 		// Called from WindowMgr when another browser tab is activated
-		void		browserChanged( ViewWindow * newbrowser );
+        void		browserChanged( ViewWindow * newbrowser );
 	
 		// Adds some main window actions to the provided popup menu
 		void		setupPopupMenu( QMenu * menu );	

@@ -12,16 +12,15 @@ HEADERS += config.h \
     tab_index.h \
     tab_search.h \
     version.h \
-    viewwindow.h \
     viewwindowmgr.h \
     navigationpanel.h \
     checknewversion.h \
     toolbarmanager.h \
     toolbareditor.h \
-    qwebviewnetwork.h \
     textencodings.h \
     treeitem_toc.h \
-    treeitem_index.h
+    treeitem_index.h \
+    viewwindow.h
 SOURCES += config.cpp \
     dbus_interface.cpp \
     dialog_chooseurlfromlist.cpp \
@@ -35,16 +34,15 @@ SOURCES += config.cpp \
     tab_contents.cpp \
     tab_index.cpp \
     tab_search.cpp \
-    viewwindow.cpp \
     viewwindowmgr.cpp \
     navigationpanel.cpp \
     checknewversion.cpp \
     toolbarmanager.cpp \
     toolbareditor.cpp \
-    qwebviewnetwork.cpp \
     textencodings.cpp \
     treeitem_toc.cpp \
     treeitem_index.cpp
+
 POST_TARGETDEPS += ../lib/libebook/libebook.a
 LIBS += ../lib/libebook/libebook.a -lchm -lzip
 TARGET = ../bin/kchmviewer
@@ -66,12 +64,9 @@ FORMS += tab_bookmarks.ui \
     dialog_about.ui \
     toolbareditor.ui
 RESOURCES += resources/images.qrc
-QT += webkit \
-    dbus \
-	xml \
+QT += dbus xml \
     network \
     widgets \
-    webkitwidgets \
     printsupport
 
 linux-g++*:{
@@ -109,4 +104,24 @@ macx-g++: {
     SOURCES += kchmviewerapp.cpp
     QMAKE_INFO_PLIST=resources/Info.plist
     QMAKE_POST_LINK += cp resources/*.icns ${DESTDIR}/kchmviewer.app/Contents/Resources;
+}
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+    # Qt 5
+    greaterThan(QT_MINOR_VERSION, 5) {
+        # Qt 5.6+
+        error("You use Qt5.6+ - QWebEngine is not yet suitable for kchmviewer and is not supported")
+        QT += webengine webenginewidgets
+        DEFINES += USE_WEBENGINE
+        SOURCES += viewwindow_webengine.cpp dataprovider_qwebengine.cpp
+        HEADERS += dataprovider_qwebengine.h viewwindow_webengine.h
+    } else {
+        # Qt 5.0-5.5
+        QT += webkit webkitwidgets
+        DEFINES += USE_WEBKIT
+        SOURCES += viewwindow_webkit.cpp dataprovider_qwebkit.cpp
+        HEADERS += dataprovider_qwebkit.h viewwindow_webkit.h
+    }
+} else {
+    message("Qt4 is not supported anymore, please do not report any errors")
 }

@@ -816,7 +816,12 @@ bool EBook_CHM::setCurrentEncoding( const char * encoding )
 
 bool EBook_CHM::isSupportedUrl(const QUrl &url)
 {
-	return url.scheme() == URL_SCHEME_CHM;
+    return url.scheme() == URL_SCHEME_CHM;
+}
+
+QString EBook_CHM::ebookURLscheme()
+{
+    return URL_SCHEME_CHM;
 }
 
 bool EBook_CHM::guessTextEncoding()

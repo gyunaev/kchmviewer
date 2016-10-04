@@ -18,7 +18,7 @@
 
 #include <QDir>
 
-#include "qwebviewnetwork.h"
+#include "dataprovider_qwebkit.h"
 #include "viewwindow.h"
 #include "config.h"
 #include "mainwindow.h"

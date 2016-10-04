@@ -1,3 +1,7 @@
+2016-07-30 tim <gyunaev@ulduzsoft.com>
+    - Added a Ctrl-I shortcut which copies the URL of currently opened page to clipboard
+    - Minor bugfixes    
+    
 2015-11-14  tim <gyunaev@ulduzsoft.com>
     - Version 7.5 released (r458);
     - Added more useful information into About window;

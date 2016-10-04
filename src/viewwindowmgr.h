@@ -35,13 +35,13 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		
 		// Returns a handle to a currently viewed window.
 		// Guaranteeed to return a valid handle, or aborts.
-		ViewWindow	* 	current();
+        ViewWindow	* 	current();
 		
 		// Adds a new tab, creating a new browser window
-		ViewWindow	*	addNewTab( bool set_active );
+        ViewWindow	*	addNewTab( bool set_active );
 		
 		// Sets the tab name and updates Windows menu
-		void	setTabName( ViewWindow* window );
+        void	setTabName( ViewWindow* window );
 		
 		void 	invalidate();
 		
@@ -85,7 +85,7 @@ class ViewWindowMgr : public QWidget, public Ui::TabbedBrowser
 		typedef struct
 		{
 			QWidget			*	widget;
-			ViewWindow		*	window;
+            ViewWindow		*	window;
 			QAction			*	action;
 		} TabData;
 		

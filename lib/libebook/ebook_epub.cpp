@@ -18,6 +18,8 @@
 
 #if defined (WIN32)
     #include <io.h>     // dup
+#else
+    #include <unistd.h>
 #endif
 
 #include <QMessageBox>

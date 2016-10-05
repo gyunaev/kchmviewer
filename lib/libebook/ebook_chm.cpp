@@ -40,6 +40,7 @@ static const char * URL_SCHEME_CHM = "ms-its";
 
 
 EBook_CHM::EBook_CHM()
+    : EBook()
 {
 	m_envOptions = getenv("KCHMVIEWEROPTS");
 	m_chmFile = NULL;
@@ -258,11 +259,13 @@ bool EBook_CHM::load(const QString &archiveName)
 		close();
 
 #if defined (WIN32)
-    // chmlib on Win32 uses BSTR, so we need to alloc/free a string
-    BSTR bstrfilename = SysAllocStringLen( 0, filename.length() );
-    filename.toWCharArray( bstrfilename );
-    m_chmFile = chm_open( bstrfilename );
-    SysFreeString( bstrfilename );
+    // chm_open on Windows OS uses the following prototype:
+    //   struct chmFile* chm_open(BSTR filename);
+    //
+    // however internally it simply passes the filename
+    // directly to CreateFileW function without any conversion.
+    // Thus we need to pass it as WCHAR * and not BSTR.
+    m_chmFile = chm_open( (BSTR) filename.toStdWString().c_str() );
 #else
 	m_chmFile = chm_open( QFile::encodeName(filename) );
 #endif
@@ -816,12 +819,7 @@ bool EBook_CHM::setCurrentEncoding( const char * encoding )
 
 bool EBook_CHM::isSupportedUrl(const QUrl &url)
 {
-    return url.scheme() == URL_SCHEME_CHM;
-}
-
-QString EBook_CHM::ebookURLscheme()
-{
-    return URL_SCHEME_CHM;
+	return url.scheme() == URL_SCHEME_CHM;
 }
 
 bool EBook_CHM::guessTextEncoding()

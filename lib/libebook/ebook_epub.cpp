@@ -16,6 +16,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if defined (WIN32)
+    #include <io.h>     // dup
+#endif
+
 #include <QMessageBox>
 #include <QtXml/QXmlSimpleReader>
 
@@ -27,6 +31,7 @@
 static const char * URL_SCHEME_EPUB = "epub";
 
 EBook_EPUB::EBook_EPUB()
+    : EBook()
 {
 	m_zipFile = 0;
 }
@@ -50,8 +55,18 @@ bool EBook_EPUB::load(const QString &archiveName)
 	}
 
 	// Open the ZIP archive: http://www.nih.at/libzip/zip_fdopen.html
+    // Note that zip_fdopen takes control over the passed descriptor,
+    // so we need to pass a duplicate of it for this to work correctly
+    int fdcopy = dup( m_epubFile.handle() );
+
+    if ( fdcopy < 0 )
+    {
+        qWarning("Could not duplicate descriptor" );
+        return false;
+    }
+
 	int errcode;
-	m_zipFile = zip_fdopen( m_epubFile.handle(), 0, &errcode );
+    m_zipFile = zip_fdopen( fdcopy, 0, &errcode );
 
 	if ( !m_zipFile )
 	{
@@ -74,8 +89,8 @@ void EBook_EPUB::close()
 		m_zipFile = 0;
 	}
 
-	if ( m_epubFile.isOpen() )
-		m_epubFile.close();
+    //if ( m_epubFile.isOpen() )
+    //	m_epubFile.close();
 
 
 }
@@ -154,12 +169,7 @@ bool EBook_EPUB::setCurrentEncoding(const char *)
 
 bool EBook_EPUB::isSupportedUrl(const QUrl &url)
 {
-    return url.scheme() == URL_SCHEME_EPUB;
-}
-
-QString EBook_EPUB::ebookURLscheme()
-{
-    return URL_SCHEME_EPUB;
+	return url.scheme() == URL_SCHEME_EPUB;
 }
 
 bool EBook_EPUB::parseXML(const QString &uri, QXmlDefaultHandler * parser)

@@ -217,12 +217,6 @@ class EBook
 		 */
 		virtual bool isSupportedUrl( const QUrl& url ) = 0;
 
-        /*!
-         * \brief Return the URL scheme used by this ebook format
-         */
-        virtual QString ebookURLscheme() = 0;
-
-
         // Converts the string to the ebook-specific URL format
         virtual QUrl pathToUrl( const QString & link ) const = 0;
 

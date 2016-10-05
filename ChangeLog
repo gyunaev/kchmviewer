@@ -1,3 +1,7 @@
+2016-10-05 tim <gyunaev@ulduzsoft.com>
+    - Version 7.7 released (there were no 7.6)
+    - Windows build now uses Qt 5.5 and VS2013; both 32-bit and 64-bit Windows versions are released
+
 2016-07-30 tim <gyunaev@ulduzsoft.com>
     - Added a Ctrl-I shortcut which copies the URL of currently opened page to clipboard
     - Minor bugfixes    

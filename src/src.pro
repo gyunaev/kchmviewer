@@ -130,4 +130,8 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     }
 } else {
     message("Qt4 is not supported anymore, please do not report any errors")
+    QT += webkit webkitwidgets
+    DEFINES += USE_WEBKIT
+    SOURCES += viewwindow_webkit.cpp dataprovider_qwebkit.cpp
+    HEADERS += dataprovider_qwebkit.h viewwindow_webkit.h
 }

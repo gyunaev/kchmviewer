@@ -1,6 +1,5 @@
 INCLUDEPATH += ../lib/libebook
 HEADERS += config.h \
-    dbus_interface.h \
     dialog_chooseurlfromlist.h \
     dialog_setup.h \
     kde-qt.h \
@@ -12,6 +11,7 @@ HEADERS += config.h \
     tab_index.h \
     tab_search.h \
     version.h \
+    viewwindow.h \
     viewwindowmgr.h \
     navigationpanel.h \
     checknewversion.h \
@@ -19,10 +19,8 @@ HEADERS += config.h \
     toolbareditor.h \
     textencodings.h \
     treeitem_toc.h \
-    treeitem_index.h \
-    viewwindow.h
+    treeitem_index.h
 SOURCES += config.cpp \
-    dbus_interface.cpp \
     dialog_chooseurlfromlist.cpp \
     dialog_setup.cpp \
     kde-qt.cpp \
@@ -42,15 +40,12 @@ SOURCES += config.cpp \
     textencodings.cpp \
     treeitem_toc.cpp \
     treeitem_index.cpp
-
-POST_TARGETDEPS += ../lib/libebook/libebook.a
-LIBS += ../lib/libebook/libebook.a -lchm -lzip
+LIBS += -lchm -lzip
 TARGET = ../bin/kchmviewer
 CONFIG += threads \
     warn_on \
     precompile_header \
-    xml \
-    dbus
+    xml
 TEMPLATE = app
 FORMS += tab_bookmarks.ui \
     tab_index.ui \
@@ -64,9 +59,12 @@ FORMS += tab_bookmarks.ui \
     dialog_about.ui \
     toolbareditor.ui
 RESOURCES += resources/images.qrc
-QT += dbus xml \
+
+QT += webkit \
+	xml \
     network \
     widgets \
+    webkitwidgets \
     printsupport
 
 linux-g++*:{
@@ -78,32 +76,40 @@ linux-g++-32: {
        LIBS += -L.
 }
 
-
-win32-g++*: {
-    QT -= dbus
-    HEADERS -= dbus_interface.h
-    SOURCES -= dbus_interface.cpp
-    CONFIG -= dbus
-    LIBS -= ../lib/libebook/libebook.a
-    POST_TARGETDEPS -= ../lib/libebook/libebook.a
-    
-    CONFIG( debug, debug|release ) {
-            LIBS += "../lib/libebook/debug/libebook.a"
-    } else {
-            LIBS += "../lib/libebook/release/libebook.a"
-    }
-
-    LIBS += -lchm -lwsock32 -lzip -lz -loleaut32
-}
-
-macx-g++: {
-    HEADERS -= dbus_interface.h
-    SOURCES -= dbus_interface.cpp
-    CONFIG -= dbus
+# General per-platform settings
+macx: {
     HEADERS += kchmviewerapp.h
     SOURCES += kchmviewerapp.cpp
     QMAKE_INFO_PLIST=resources/Info.plist
     QMAKE_POST_LINK += cp resources/*.icns ${DESTDIR}/kchmviewer.app/Contents/Resources;
+    LIBS += ../lib/libebook/libebook.a
+    POST_TARGETDEPS += ../lib/libebook/libebook.a
+}
+
+win32-*: {
+
+    # Only for Creator build; also uncomment one in libebook
+    #LIBPATH += C:/Users/Test/Documents/builder/extralibs/x64/lib
+    
+    CONFIG( debug, debug|release ) {
+            LIBS += "../lib/libebook/debug/ebook.lib"
+            POST_TARGETDEPS += "../lib/libebook/debug/ebook.lib"
+    } else {
+            LIBS += "../lib/libebook/release/ebook.lib"
+            POST_TARGETDEPS += "../lib/libebook/release/ebook.lib"
+    }
+
+    LIBS += -lwsock32 -loleaut32
+}
+
+unix:!macx: {
+
+    QT += dbus
+    HEADERS += dbus_interface.h
+    SOURCES += dbus_interface.cpp
+    CONFIG += dbus
+    LIBS += ../lib/libebook/libebook.a
+    POST_TARGETDEPS += ../lib/libebook/libebook.a
 }
 
 greaterThan(QT_MAJOR_VERSION, 4) {

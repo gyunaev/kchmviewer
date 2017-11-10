@@ -18,7 +18,6 @@ SET( kchmviewerSources
 	viewwindow.cpp
 	viewwindowmgr.cpp
 	navigationpanel.cpp
-	checknewversion.cpp
 	toolbarmanager.cpp
 	toolbareditor.cpp
 	qwebviewnetwork.cpp

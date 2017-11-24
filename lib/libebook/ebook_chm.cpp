@@ -879,6 +879,8 @@ bool EBook_CHM::changeFileEncoding( const QString& qtencoding  )
 		}
 	}
 
+	m_url2topics.clear();
+	fillTopicsUrlMap();
 	m_htmlEntityDecoder.changeEncoding( m_textCodec );
 	return true;
 }

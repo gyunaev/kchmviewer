@@ -227,7 +227,7 @@ bool EBook_CHM::getTextContent( QString& str, const QString& url, bool internal_
 			buf.resize( length + 1 );
 			buf [length] = '\0';
 
-			str = internal_encoding ? (QString)( buf.constData() ) :  encodeWithCurrentCodec( buf.constData() );
+			str = internal_encoding ? encodeInternalWithCurrentCodec( buf.constData() ) :  encodeWithCurrentCodec( buf.constData() );
 			return true;
 		}
 	}
@@ -379,7 +379,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 	QString src;
 	const int MAX_NEST_DEPTH = 256;
 
-	if ( !getTextContent( src, file ) || src.isEmpty() )
+	if ( !getTextContent( src, file, true ) || src.isEmpty() )
 		return false;
 
 /*
@@ -976,7 +976,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 					return false;
 				}
 
-				name = encodeWithCurrentCodec( strings.data() + index);
+				name = encodeInternalWithCurrentCodec( strings.data() + index);
 			}
 			else
 			{
@@ -997,7 +997,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 				if ( tocoffset < 0 )
 					name.clear();
 				else
-					name = encodeWithCurrentCodec( strings.data() + tocoffset );
+					name = encodeInternalWithCurrentCodec( strings.data() + tocoffset );
 
 				// #URLTBL index
 				tocoffset = (int) UINT32ARRAY( topics.data() + (index * 16) + 8 );
@@ -1016,7 +1016,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 					return false;
 				}
 
-				value = encodeWithCurrentCodec( urlstr.data() + tocoffset + 8 );
+				value = encodeInternalWithCurrentCodec( urlstr.data() + tocoffset + 8 );
 			}
 
 			EBookTocEntry entry;

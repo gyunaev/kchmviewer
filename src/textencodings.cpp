@@ -57,6 +57,16 @@ static const TextEncodingEntry text_encoding_table [] =
 	},
 
 	{
+		"Chinese Simplified",
+		"UTF-8/GBK"
+	},
+
+	{
+		"Chinese Simplified",
+		"GBK/UTF-8"
+	},
+
+	{
 		"Chinese Traditional",
 		"Big5"
 	},

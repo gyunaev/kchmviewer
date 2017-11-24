@@ -85,7 +85,7 @@ QString EBook_CHM::title() const
 
 QUrl EBook_CHM::homeUrl() const
 {
-	return pathToUrl( m_home );
+	return pathToUrl( encodeWithCurrentCodec(m_home) );
 }
 
 bool EBook_CHM::hasFeature(EBook::Feature code) const
@@ -113,7 +113,7 @@ bool EBook_CHM::getTableOfContents( QList<EBookTocEntry> &toc ) const
 	// Parse the plain text TOC
 	QList< ParsedEntry > parsed;
 
-	if ( !parseFileAndFillArray( m_topicsFile, parsed, false ) )
+	if ( !parseFileAndFillArray( encodeWithCurrentCodec(m_topicsFile), parsed, false ) )
 		return false;
 
 	// Find out the root offset, and reduce the indent level to it
@@ -146,7 +146,7 @@ bool EBook_CHM::getIndex(QList<EBookIndexEntry> &index) const
 	// Parse the plain text index
 	QList< ParsedEntry > parsed;
 
-	if ( !parseFileAndFillArray( m_indexFile, parsed, true ) )
+	if ( !parseFileAndFillArray( encodeWithCurrentCodec(m_indexFile), parsed, true ) )
 		return false;
 
 	// Find out the root offset, and reduce the indent level to it

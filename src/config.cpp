@@ -19,6 +19,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QDir>
+#include <QStandardPaths>
 
 #include "kde-qt.h"
 #include "config.h"
@@ -38,8 +39,7 @@ Config::Config()
 		m_datapath += QDir::separator() + QString("data");
 	}
 	else
-		m_datapath = QDir::homePath () + "/" + ".kchmviewer";
-
+		m_datapath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 	QSettings settings;
 
     m_startupMode = (Config::StartupMode) settings.value( "settings/onstartup", STARTUP_DO_NOTHING ).toInt();

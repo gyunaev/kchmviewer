@@ -63,7 +63,7 @@ int main( int argc, char ** argv )
 #endif
 
 	// Set data for QSettings
-	QCoreApplication::setOrganizationName("Ulduzsoft");
+	// QCoreApplication::setOrganizationName("Ulduzsoft");
 	QCoreApplication::setOrganizationDomain("kchmviewer.net");
 	QCoreApplication::setApplicationName("kchmviewer");
 

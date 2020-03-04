@@ -1193,10 +1193,10 @@ void MainWindow::setupActions()
 	connect( m_navPanel, SIGNAL(visibilityChanged(bool)), this, SLOT( navigatorVisibilityChanged(bool) ) );
 
 	// "What's this" action
-	QAction * whatsthis = QWhatsThis::createAction( this );
+	/* QAction * whatsthis = QWhatsThis::createAction( this );
 	menuHelp->addAction( whatsthis );
-	viewToolbar->addAction( whatsthis );
-		
+	viewToolbar->addAction( whatsthis ); */
+
 	// Tab switching actions
 	(void) new QShortcut( QKeySequence( i18n("Ctrl+1") ),
 	                      this,

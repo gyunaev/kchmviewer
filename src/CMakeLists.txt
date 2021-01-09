@@ -1,59 +1,121 @@
-INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR}/src )
+
+cmake_minimum_required(VERSION 3.0)
+# Need to include generated files.
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Project files
-SET( kchmviewerSources 
-	config.cpp
-	dbus_interface.cpp
-	dialog_chooseurlfromlist.cpp
-	dialog_setup.cpp
-	kde-qt.cpp
-	main.cpp
-	mainwindow.cpp
-	recentfiles.cpp
-	settings.cpp
-	tab_bookmarks.cpp
-	tab_contents.cpp
-	tab_index.cpp
-	tab_search.cpp
-	viewwindow.cpp
-	viewwindowmgr.cpp
-	navigationpanel.cpp
-	checknewversion.cpp
-	toolbarmanager.cpp
-	toolbareditor.cpp
-	qwebviewnetwork.cpp
-	textencodings.cpp
-	treeitem_toc.cpp
-	treeitem_index.cpp
-  )
+set(CPP_SOURCES
+    config.cpp
+    dbus_interface.cpp
+    dialog_chooseurlfromlist.cpp
+    dialog_setup.cpp
+    kde-qt.cpp
+    main.cpp
+    mainwindow.cpp
+    recentfiles.cpp
+    settings.cpp
+    tab_bookmarks.cpp
+    tab_contents.cpp
+    tab_index.cpp
+    tab_search.cpp
+    viewwindow.cpp
+    viewwindowmgr.cpp
+    navigationpanel.cpp
+    checknewversion.cpp
+    toolbarmanager.cpp
+    toolbareditor.cpp
+    qwebviewnetwork.cpp
+    textencodings.cpp
+    treeitem_toc.cpp
+    treeitem_index.cpp
+    )
+
+set(MOC_HEADERS
+    dbus_interface.h
+    dialog_chooseurlfromlist.h
+    dialog_setup.h
+    mainwindow.h
+    recentfiles.h
+    tab_bookmarks.h
+    tab_contents.h
+    tab_index.h
+    tab_search.h
+    viewwindow.h
+    viewwindowmgr.h
+    navigationpanel.h
+    checknewversion.h
+    toolbarmanager.h
+    toolbareditor.h
+    )
 
 # UI files
-KDE4_ADD_UI_FILES( kchmviewerSources 
-	dialog_about.ui
-	dialog_setup.ui
-	dialog_topicselector.ui
-	mainwindow.ui
-	navigatorpanel.ui
-	tab_bookmarks.ui
-	tab_contents.ui
-	tab_index.ui
-	tab_search.ui
-	toolbareditor.ui
-	window_browser.ui
-   )
+set(UIS
+    dialog_about.ui
+    dialog_setup.ui
+    dialog_topicselector.ui
+    mainwindow.ui
+    navigatorpanel.ui
+    tab_bookmarks.ui
+    tab_contents.ui
+    tab_index.ui
+    tab_search.ui
+    toolbareditor.ui
+    window_browser.ui
+    )
 
-# Resources
-QT4_ADD_RESOURCES( kchmviewerResources resources/images.qrc )
+if(${QT4_FOUND})
+    qt4_add_resources(RSRCS resources/images.qrc)
+else(${QT5_FOUND})
+    qt5_add_resources(RSRCS resources/images.qrc)
+endif()
 
-KDE4_ADD_EXECUTABLE( kchmviewer ${kchmviewerSources} ${kchmviewerResources} )
+if(${KDE4_FOUND})
+    kde4_add_ui_files(CPP_SOURCES ${UIS})
+    kde4_add_executable(kchmviewer ${CPP_SOURCES} ${RSRCS})
+    target_link_libraries(kchmviewer
+        ebook
+        chm
+        ${KDE4_KDEUI_LIBS}
+        ${QT_QTWEBKIT_LIBRARY}
+        ${KDE4_KFILE_LIBS}
+        $<$<BOOL:UNIX>:X11>
+        )
 
-TARGET_LINK_LIBRARIES( kchmviewer 
-	ebook
-	${LIBCHM_LIBRARY}
-	${LIBZIP_LIBRARY}
-	${KDE4_KDEUI_LIBS} 
-	${QT_QTWEBKIT_LIBRARY}	
-	${KDE4_KFILE_LIBS}  )
+    install(TARGETS kchmviewer DESTINATION ${KDE4_BIN_INSTALL_DIR})
+elseif(${QT4_FOUND})
+    qt4_wrap_ui(UI_SOURCES ${UIS})
+    qt4_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
+    add_executable(kchmviewer ${CPP_SOURCES} ${RSRCS} ${UI_SOURCES} ${MOC_SOURCES})
+    target_link_libraries(kchmviewer
+        ebook
+        chm
+        Qt4::QtCore
+        Qt4::QtDBus
+        Qt4::QtNetwork
+        Qt4::QtWebKit
+        Qt4::QtGui
+        Qt4::QtXml
+        $<$<BOOL:UNIX>:X11>
+        )
+else(${QT5_FOUND})
+    qt5_wrap_ui(UI_SOURCES ${UIS})
+    qt5_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
+    add_executable(kchmviewer ${CPP_SOURCES} ${RSRCS} ${UI_SOURCES} ${MOC_SOURCES})
+    target_link_libraries(kchmviewer
+        ebook
+        chm
+        Qt5::Core
+        Qt5::DBus
+        Qt5::Network
+        Qt5::PrintSupport
+        Qt5::WebKit
+        Qt5::WebKitWidgets
+        Qt5::Widgets
+        Qt5::Xml
+        )
+endif()
 
-INSTALL( TARGETS kchmviewer DESTINATION ${KDE4_BIN_INSTALL_DIR} )
-
+target_compile_options(kchmviewer PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/Wall>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra>
+)

@@ -1,4 +1,4 @@
-SUBDIRS += lib src
-TEMPLATE = subdirs 
-CONFIG += debug
-src.depends = lib
+
+TEMPLATE = subdirs
+SUBDIRS = lib/libchm lib/libebook src
+src.depends = lib/libchm lib/libebook

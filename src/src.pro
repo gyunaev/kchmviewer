@@ -1,5 +1,18 @@
-INCLUDEPATH += ../lib/libebook
-HEADERS += config.h \
+
+TEMPLATE = app
+TARGET = ../bin/kchmviewer
+CONFIG *= c++11 warn_on threads # xml dbus precompile_header
+QT += \
+    webkit \
+    dbus \
+    xml \
+    network \
+    widgets \
+    webkitwidgets \
+    printsupport
+
+HEADERS += \
+    config.h \
     dialog_chooseurlfromlist.h \
     dialog_setup.h \
     kde-qt.h \
@@ -20,7 +33,9 @@ HEADERS += config.h \
     textencodings.h \
     treeitem_toc.h \
     treeitem_index.h
-SOURCES += config.cpp \
+
+SOURCES += \
+    config.cpp \
     dialog_chooseurlfromlist.cpp \
     dialog_setup.cpp \
     kde-qt.cpp \
@@ -40,13 +55,7 @@ SOURCES += config.cpp \
     textencodings.cpp \
     treeitem_toc.cpp \
     treeitem_index.cpp
-LIBS += -lchm -lzip
-TARGET = ../bin/kchmviewer
-CONFIG += threads \
-    warn_on \
-    precompile_header \
-    xml
-TEMPLATE = app
+
 FORMS += tab_bookmarks.ui \
     tab_index.ui \
     tab_contents.ui \
@@ -58,14 +67,15 @@ FORMS += tab_bookmarks.ui \
     navigatorpanel.ui \
     dialog_about.ui \
     toolbareditor.ui
+
 RESOURCES += resources/images.qrc
 
-QT += webkit \
-	xml \
-    network \
-    widgets \
-    webkitwidgets \
-    printsupport
+INCLUDEPATH *= ../lib/libebook ../lib/libchm
+
+LIBS += \
+    -L"../lib/libebook" -lebook \
+    -L"../lib/libchm" -lchm \
+    -lzip
 
 linux-g++*:{
     LIBS += -lX11
@@ -77,7 +87,7 @@ linux-g++-32: {
 }
 
 # General per-platform settings
-macx: {
+macx:{
     HEADERS += kchmviewerapp.h
     SOURCES += kchmviewerapp.cpp
     QMAKE_INFO_PLIST=resources/Info.plist
@@ -86,30 +96,22 @@ macx: {
     POST_TARGETDEPS += ../lib/libebook/libebook.a
 }
 
-win32-*: {
-
-    # Only for Creator build; also uncomment one in libebook
-    #LIBPATH += C:/Users/Test/Documents/builder/extralibs/x64/lib
-    
+win32:{
     CONFIG( debug, debug|release ) {
             LIBS += "../lib/libebook/debug/ebook.lib"
-            POST_TARGETDEPS += "../lib/libebook/debug/ebook.lib"
     } else {
             LIBS += "../lib/libebook/release/ebook.lib"
-            POST_TARGETDEPS += "../lib/libebook/release/ebook.lib"
     }
 
     LIBS += -lwsock32 -loleaut32
 }
 
 unix:!macx: {
-
     QT += dbus
     HEADERS += dbus_interface.h
     SOURCES += dbus_interface.cpp
     CONFIG += dbus
     LIBS += ../lib/libebook/libebook.a
-    POST_TARGETDEPS += ../lib/libebook/libebook.a
 }
 
 greaterThan(QT_MAJOR_VERSION, 4) {

@@ -25,11 +25,11 @@
 #include <QWebView>
 #include <QWebFrame>
 
-#include "config.h"
-#include "viewwindow_webkit.h"
-#include "mainwindow.h"
-#include "viewwindowmgr.h"
-#include "dataprovider_qwebkit.h"
+#include "../config.h"
+#include "../viewwindow.h"
+#include "../mainwindow.h"
+#include "../viewwindowmgr.h"
+#include "dataprovider.h"
 
 static const qreal ZOOM_FACTOR_CHANGE = 0.1;
 

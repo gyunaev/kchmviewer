@@ -18,10 +18,10 @@
 
 #include <QDir>
 
-#include "dataprovider_qwebkit.h"
-#include "viewwindow.h"
-#include "config.h"
-#include "mainwindow.h"
+#include "dataprovider.h"
+#include "../viewwindow.h"
+#include "../config.h"
+#include "../mainwindow.h"
 
 
 KCHMNetworkReply::KCHMNetworkReply( const QNetworkRequest &request, const QUrl &url )

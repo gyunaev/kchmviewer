@@ -85,7 +85,7 @@ QString EBook_CHM::title() const
 
 QUrl EBook_CHM::homeUrl() const
 {
-	return pathToUrl( m_home );
+	return pathToUrl( encodeWithCurrentCodec(m_home) );
 }
 
 bool EBook_CHM::hasFeature(EBook::Feature code) const
@@ -113,7 +113,7 @@ bool EBook_CHM::getTableOfContents( QList<EBookTocEntry> &toc ) const
 	// Parse the plain text TOC
 	QList< ParsedEntry > parsed;
 
-	if ( !parseFileAndFillArray( m_topicsFile, parsed, false ) )
+	if ( !parseFileAndFillArray( encodeWithCurrentCodec(m_topicsFile), parsed, false ) )
 		return false;
 
 	// Find out the root offset, and reduce the indent level to it
@@ -146,7 +146,7 @@ bool EBook_CHM::getIndex(QList<EBookIndexEntry> &index) const
 	// Parse the plain text index
 	QList< ParsedEntry > parsed;
 
-	if ( !parseFileAndFillArray( m_indexFile, parsed, true ) )
+	if ( !parseFileAndFillArray( encodeWithCurrentCodec(m_indexFile), parsed, true ) )
 		return false;
 
 	// Find out the root offset, and reduce the indent level to it
@@ -227,7 +227,7 @@ bool EBook_CHM::getTextContent( QString& str, const QString& url, bool internal_
 			buf.resize( length + 1 );
 			buf [length] = '\0';
 
-			str = internal_encoding ? (QString)( buf.constData() ) :  encodeWithCurrentCodec( buf.constData() );
+			str = internal_encoding ? encodeInternalWithCurrentCodec( buf.constData() ) :  encodeWithCurrentCodec( buf.constData() );
 			return true;
 		}
 	}
@@ -379,7 +379,7 @@ bool EBook_CHM::parseFileAndFillArray( const QString& file, QList< ParsedEntry >
 	QString src;
 	const int MAX_NEST_DEPTH = 256;
 
-	if ( !getTextContent( src, file ) || src.isEmpty() )
+	if ( !getTextContent( src, file, true ) || src.isEmpty() )
 		return false;
 
 /*
@@ -879,6 +879,8 @@ bool EBook_CHM::changeFileEncoding( const QString& qtencoding  )
 		}
 	}
 
+	m_url2topics.clear();
+	fillTopicsUrlMap();
 	m_htmlEntityDecoder.changeEncoding( m_textCodec );
 	return true;
 }
@@ -974,7 +976,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 					return false;
 				}
 
-				name = encodeWithCurrentCodec( strings.data() + index);
+				name = encodeInternalWithCurrentCodec( strings.data() + index);
 			}
 			else
 			{
@@ -995,7 +997,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 				if ( tocoffset < 0 )
 					name.clear();
 				else
-					name = encodeWithCurrentCodec( strings.data() + tocoffset );
+					name = encodeInternalWithCurrentCodec( strings.data() + tocoffset );
 
 				// #URLTBL index
 				tocoffset = (int) UINT32ARRAY( topics.data() + (index * 16) + 8 );
@@ -1014,7 +1016,7 @@ bool EBook_CHM::RecurseLoadBTOC( const QByteArray& tocidx,
 					return false;
 				}
 
-				value = encodeWithCurrentCodec( urlstr.data() + tocoffset + 8 );
+				value = encodeInternalWithCurrentCodec( urlstr.data() + tocoffset + 8 );
 			}
 
 			EBookTocEntry entry;

@@ -30,9 +30,28 @@
 #include "viewwindow_webengine.h"
 #include "mainwindow.h"
 #include "viewwindowmgr.h"
-
+#include "ebook_chm.h"
+#include "ebook_epub.h"
 
 static const qreal ZOOM_FACTOR_CHANGE = 0.1;
+
+void ViewWindow::initialize()
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    // Register URL schemes
+    QWebEngineUrlScheme::Flags flags = QWebEngineUrlScheme::SecureScheme | QWebEngineUrlScheme::LocalScheme | QWebEngineUrlScheme::ViewSourceAllowed | QWebEngineUrlScheme::LocalAccessAllowed;
+
+    QWebEngineUrlScheme chmscheme( EBook_CHM::urlScheme() );
+    chmscheme.setSyntax( QWebEngineUrlScheme::Syntax::Path );
+    chmscheme.setFlags( flags );
+    QWebEngineUrlScheme::registerScheme( chmscheme );
+
+    QWebEngineUrlScheme epubscheme( EBook_EPUB::urlScheme() );
+    epubscheme.setSyntax( QWebEngineUrlScheme::Syntax::Path );
+    epubscheme.setFlags( flags );
+    QWebEngineUrlScheme::registerScheme( epubscheme );
+#endif
+}
 
 
 ViewWindow::ViewWindow( QWidget * parent )
@@ -41,14 +60,16 @@ ViewWindow::ViewWindow( QWidget * parent )
     invalidate();
     m_contextMenu = 0;
     m_contextMenuLink = 0;
-    m_storedScrollbarPosition = 0;
+    m_storedScrollbarPosition = -1; // see header
 
     //QWebEnginePage *page
 
     // Use our network emulation layer. I don't know if we transfer the ownership when we install it, so we create
     // one per page. May be unnecessary.
     m_provider = new DataProvider_QWebEngine( this );
-    page()->profile()->installUrlSchemeHandler( ::mainWindow->chmFile()->ebookURLscheme().toUtf8(), m_provider );
+
+    page()->profile()->installUrlSchemeHandler( EBook_CHM::urlScheme(), m_provider );
+    page()->profile()->installUrlSchemeHandler( EBook_EPUB::urlScheme(), m_provider );
 
     // All links are going through us
     //page()->setLinkDelegationPolicy( QWebPage::DelegateAllLinks );
@@ -75,7 +96,7 @@ void ViewWindow::invalidate( )
 
 bool ViewWindow::openUrl ( const QUrl& url )
 {
-    //qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
+    qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
 
     // Do not use setContent() here, it resets QWebHistory
     load( url );
@@ -160,8 +181,12 @@ void ViewWindow::setTabKeeper( const QUrl& link )
 
 bool ViewWindow::printCurrentPage()
 {
-/*    QPrinter printer( QPrinter::HighResolution );
-    QPrintDialog dlg( &printer, this );
+    page()->runJavaScript( QString("window.scrollTo(0, 400);" ) );
+    return true;
+
+    // Has to be a pointer because printing happens later, and it will get out of scope
+    QPrinter * printer = new QPrinter( QPrinter::HighResolution );
+    QPrintDialog dlg( printer, this );
 
     if ( dlg.exec() != QDialog::Accepted )
     {
@@ -169,9 +194,11 @@ bool ViewWindow::printCurrentPage()
         return false;
     }
 
-    print( &printer );
-    ::mainWindow->showInStatusBar( i18n( "Printing finished") );
-*/
+    page()->print( printer, [printer](bool ok){
+            ::mainWindow->showInStatusBar( ok ? i18n( "Printing finished successfully") : i18n( "Failed to print") );
+            delete printer;
+        });
+
     return true;
 }
 
@@ -210,19 +237,19 @@ int ViewWindow::getScrollbarPosition()
     return value;
 }
 
-void ViewWindow::setScrollbarPosition(int pos, bool force)
+void ViewWindow::setScrollbarPosition(int pos, bool )
 {
-    /*
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
-    if ( !force )
-         m_storedScrollbarPosition = pos;
-     else
-         page()->scrollPosition() ScurrentFrame()->setScrollBarValue( Qt::Vertical, pos );
+    qDebug( "setScrollbarPosition %d (%d)", pos, m_storedScrollbarPosition );
 
-#else
-    return 0;
-#endi
-*/
+    // m_storedScrollbarPosition means the page isn't loaded yet. Thus it makes no sense to touch scrollbar.
+    if ( m_storedScrollbarPosition == -1 )
+    {
+        m_storedScrollbarPosition = pos;
+        return;
+    }
+
+    // See https://forum.qt.io/topic/60091/scroll-a-qwebengineview/4
+    page()->runJavaScript( QString("window.scrollTo( { top : %1 } );").arg( pos ) );
 }
 
 void ViewWindow::clipSelectAll()
@@ -265,12 +292,16 @@ void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
 
 void ViewWindow::onLoadFinished ( bool )
 {
-/*    if ( m_storedScrollbarPosition > 0 )
-    {
-        page()->currentFrame()->setScrollBarValue( Qt::Vertical, m_storedScrollbarPosition );
+    // If m_storedScrollbarPosition is -1 this means we have not had a request to set the scrollbar; change to 0
+    if ( m_storedScrollbarPosition == -1 )
         m_storedScrollbarPosition = 0;
+    else if ( m_storedScrollbarPosition > 0 )
+    {
+        // The scrollbar was requested to change after the document is loaded, so do it now.
+        // However delay it after this handler finishes, as JS cannot be executed here
+        QTimer::singleShot( 0, [this]() { setScrollbarPosition( m_storedScrollbarPosition ); });
     }
-*/
+
     updateHistoryIcons();
 
     emit dataLoaded( this );
@@ -282,9 +313,6 @@ void ViewWindow::applySettings()
 
     setup->setAttribute( QWebEngineSettings::AutoLoadImages, pConfig->m_browserEnableImages );
     setup->setAttribute( QWebEngineSettings::JavascriptEnabled, pConfig->m_browserEnableJS );
-    //setup->setAttribute( QWebEngineSettings::JavaEnabled, pConfig->m_browserEnableJava );
     setup->setAttribute( QWebEngineSettings::PluginsEnabled, pConfig->m_browserEnablePlugins );
-    //setup->setAttribute( QWebEngineSettings::OfflineStorageDatabaseEnabled, pConfig->m_browserEnableOfflineStorage );
-    //setup->setAttribute( QWebEngineSettings::LocalStorageDatabaseEnabled, pConfig->m_browserEnableLocalStorage );
     setup->setAttribute( QWebEngineSettings::LocalStorageEnabled, pConfig->m_browserEnableLocalStorage );
 }

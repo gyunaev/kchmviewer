@@ -58,7 +58,7 @@ MainWindow::MainWindow( const QStringList& arguments )
 
 	// Delete the pointer when the window is closed
 	setAttribute( Qt::WA_DeleteOnClose );
-	
+
 	// UIC stuff
 	setupUi( this );
 	

@@ -173,6 +173,9 @@ class EBook_EPUB : public EBook
 		// Extracts the path component from the URL
 		QString urlToPath( const QUrl& link ) const;
 
+        // Returns the URL scheme used by this kind of ebooks
+        static const char * urlScheme();
+
 	private:
 		// Parses the XML file using a specified parser
 		bool	parseXML( const QString& uri, QXmlDefaultHandler * reader );

@@ -223,7 +223,6 @@ class EBook
         // Extracts the path component from the URL
         virtual QString urlToPath( const QUrl& link ) const = 0;
 
-
 	protected:
 		// Loads the file; returns true if loaded, false otherwise
 		virtual bool	load( const QString& archiveName ) = 0;

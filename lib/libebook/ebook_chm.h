@@ -185,6 +185,9 @@ class EBook_CHM : public EBook
 		// Extracts the path component from the URL
 		QString urlToPath( const QUrl& link ) const;
 
+        // Returns the URL scheme used by this kind of ebooks
+        static const char * urlScheme();
+
 	private:
 		// Used in local parser
 		class ParsedEntry

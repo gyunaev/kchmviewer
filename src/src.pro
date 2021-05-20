@@ -116,7 +116,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     # Qt 5
     greaterThan(QT_MINOR_VERSION, 5) {
         # Qt 5.6+
-        error("You use Qt5.6+ - QWebEngine is not yet suitable for kchmviewer and is not supported")
+#        error("You use Qt5.6+ - QWebEngine is not yet suitable for kchmviewer and is not supported")
         QT += webengine webenginewidgets
         DEFINES += USE_WEBENGINE
         SOURCES += viewwindow_webengine.cpp dataprovider_qwebengine.cpp

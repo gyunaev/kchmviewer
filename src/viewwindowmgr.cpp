@@ -346,7 +346,7 @@ void ViewWindowMgr::onActivateFind()
 }
 
 void ViewWindowMgr::find( bool backward )
-{
+{/*
     QWebPage::FindFlags webkitflags = 0;
 	
 	if ( checkCase->isChecked() )
@@ -402,6 +402,7 @@ void ViewWindowMgr::find( bool backward )
 		p.setColor( QPalette::Active, QPalette::Base, Qt::white );
 
 	editFind->setPalette( p );
+    */
 }
 
 
@@ -436,13 +437,5 @@ void ViewWindowMgr::copyUrlToClipboard()
 
 void ViewWindowMgr::applyBrowserSettings()
 {
-	QWebSettings * setup = QWebSettings::globalSettings();
-
-	setup->setAttribute( QWebSettings::AutoLoadImages, pConfig->m_browserEnableImages );
-	setup->setAttribute( QWebSettings::JavascriptEnabled, pConfig->m_browserEnableJS );
-	setup->setAttribute( QWebSettings::JavaEnabled, pConfig->m_browserEnableJava );
-	setup->setAttribute( QWebSettings::PluginsEnabled, pConfig->m_browserEnablePlugins );
-	setup->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, pConfig->m_browserEnableOfflineStorage );
-	setup->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, pConfig->m_browserEnableLocalStorage );
-	setup->setAttribute( QWebSettings::LocalStorageEnabled, pConfig->m_browserEnableLocalStorage );
+    ViewWindow::applySettings();
 }

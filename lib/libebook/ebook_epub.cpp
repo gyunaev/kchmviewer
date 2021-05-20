@@ -198,38 +198,38 @@ bool EBook_EPUB::parseXML(const QString &uri, QXmlDefaultHandler * parser)
 
 bool EBook_EPUB::parseBookinfo()
 {
-	// Parse the container.xml to find the content descriptor
-	HelperXmlHandler_EpubContainer container_parser;
+    // Parse the container.xml to find the content descriptor
+    HelperXmlHandler_EpubContainer container_parser;
 
-	if ( !parseXML( "META-INF/container.xml", &container_parser )
-		 || container_parser.contentPath.isEmpty() )
-		return false;
+    if ( !parseXML( "META-INF/container.xml", &container_parser )
+         || container_parser.contentPath.isEmpty() )
+        return false;
 
-	// Parse the content.opf
-	HelperXmlHandler_EpubContent content_parser;
+    // Parse the content.opf
+    HelperXmlHandler_EpubContent content_parser;
 
-	if ( !parseXML( container_parser.contentPath, &content_parser ) )
-		return false;
+    if ( !parseXML( container_parser.contentPath, &content_parser ) )
+        return false;
 
-	// At least title and the TOC must be present
-	if ( !content_parser.metadata.contains("title") || content_parser.tocname.isEmpty() )
-		return false;
+    // At least title and the TOC must be present
+    if ( !content_parser.metadata.contains("title") || content_parser.tocname.isEmpty() )
+        return false;
 
-	// All the files, including TOC, are relative to the container_parser.contentPath
-	m_documentRoot.clear();
-	int sep = container_parser.contentPath.lastIndexOf( '/' );
+    // All the files, including TOC, are relative to the container_parser.contentPath
+    m_documentRoot.clear();
+    int sep = container_parser.contentPath.lastIndexOf( '/' );
 
-	if ( sep != -1 )
-		m_documentRoot = container_parser.contentPath.left( sep + 1 );	// Keep the trailing slash
+    if ( sep != -1 )
+        m_documentRoot = container_parser.contentPath.left( sep + 1 );	// Keep the trailing slash
 
-	// Parse the TOC
-	HelperXmlHandler_EpubTOC toc_parser( this );
+    // Parse the TOC
+    HelperXmlHandler_EpubTOC toc_parser( this );
 
-	if ( !parseXML( content_parser.tocname, &toc_parser ) )
-		return false;
+    if ( !parseXML( content_parser.tocname, &toc_parser ) )
+        return false;
 
-	// Get the data
-	m_title = content_parser.metadata[ "title" ];
+    // Get the data
+    m_title = content_parser.metadata[ "title" ];
 
     // Move the manifest entries into the list
     Q_FOREACH( QString f, content_parser.manifest.values() )
@@ -271,7 +271,7 @@ bool EBook_EPUB::parseBookinfo()
     if ( m_tocEntries.isEmpty() )
         return false;
 
-	return true;
+    return true;
 }
 
 QUrl EBook_EPUB::pathToUrl(const QString &link) const
@@ -305,7 +305,12 @@ QString EBook_EPUB::urlToPath(const QUrl &link) const
 	if ( link.scheme() == URL_SCHEME_EPUB )
 		return link.path();
 
-	return "";
+    return "";
+}
+
+const char *EBook_EPUB::urlScheme()
+{
+    return URL_SCHEME_EPUB;
 }
 
 bool EBook_EPUB::getFileAsString(QString &str, const QString &path) const

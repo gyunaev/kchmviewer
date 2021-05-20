@@ -1101,11 +1101,15 @@ QString EBook_CHM::urlToPath(const QUrl &link) const
 			return m_home;
 
 		return link.path();
-	}
+    }
 
-	return "";
+    return "";
 }
 
+const char * EBook_CHM::urlScheme()
+{
+    return URL_SCHEME_CHM;
+}
 
 EBook_CHM::ParsedEntry::ParsedEntry()
 {

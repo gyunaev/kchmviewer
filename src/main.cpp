@@ -42,6 +42,9 @@ MainWindow * mainWindow;
 
 int main( int argc, char ** argv )
 {
+    // See https://doc.qt.io/qt-5/qwebengineurlschemehandler.html
+    ViewWindow::initialize();
+
 #if defined (USE_KDE)
     KAboutData aboutdata ( "kchmviewer",
                            QByteArray(),
@@ -49,7 +52,7 @@ int main( int argc, char ** argv )
                            qPrintable( QString("%1.%2") .arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR) ),
                            ki18n("CHM file viewer"),
                            KAboutData::License_GPL,
-                           ki18n("(c) 2004-2015 George Yunaev, gyunaev@ulduzsoft.com"),
+                           ki18n("(c) 2004-2021 George Yunaev, gyunaev@ulduzsoft.com"),
                            ki18n("Please report bugs to kchmviewer@ulduzsoft.com"),
                            "http://www.ulduzsoft.com/kchmviewer",
                            "kchmviewer@ulduzsoft.com");

@@ -37,6 +37,8 @@ class ViewWindow : public QWebView
 		QUrl	getOpenedPage() const	{ return url(); }
 		QUrl	getNewTabLink() const	{ return m_newTabLinkKeeper; }
 		
+        static  void initialize();
+
     signals:
         void    dataLoaded( ViewWindow * window );
 

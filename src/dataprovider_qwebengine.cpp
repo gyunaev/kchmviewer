@@ -26,13 +26,11 @@ void DataProvider_QWebEngine::requestStarted( QWebEngineUrlRequestJob *request )
         return;
     }
 
-    QString mimetype;
+    const char * mimetype = "application/octet-stream";
 
-    // Specify the encoding in case the page content is not UTF-8
+    // Specify the encoding in case the page content is not UTF-8 - this is ignored by WebEngine
     if ( htmlfile )
-        mimetype = QString( "text/html; charset=%1" ) .arg( ::mainWindow->chmFile()->currentEncoding() );
-    else
-        mimetype = "application/octet-stream";
+        mimetype = "text/html";
 
     // We will use the buffer because reply() requires the QIODevice.
     // This buffer must be valid until the request is deleted.
@@ -44,5 +42,5 @@ void DataProvider_QWebEngine::requestStarted( QWebEngineUrlRequestJob *request )
     connect( request, SIGNAL(destroyed()), outbuf, SLOT(deleteLater()) );
 
     // We're good to go
-    request->reply( "text/html", outbuf );
+    request->reply( mimetype, outbuf );
 }

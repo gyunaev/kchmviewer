@@ -81,6 +81,10 @@ bool ViewWindow::openUrl ( const QUrl& url )
     return true;
 }
 
+void ViewWindow::initialize()
+{
+}
+
 void ViewWindow::applySettings()
 {
     QWebSettings * setup = QWebSettings::globalSettings();

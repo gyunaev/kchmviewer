@@ -21,12 +21,12 @@
 
 #include <QWebEngineView>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    #include <QWebEngineUrlScheme>
+#endif
+
 #include "kde-qt.h"
 #include "dataprovider_qwebengine.h"
-
-// NOT WORKING PROPERLY YET, DO NOT USE.
-// Unfortunately as of 5.7 QWebEngine is still not having all the required functions for kchmviewer
-// to implement. Notably this bug: https://bugreports.qt.io/browse/QTBUG-41242 results in kernel crash on my machine.
 
 class ViewWindow : public QWebEngineView
 {
@@ -41,6 +41,8 @@ class ViewWindow : public QWebEngineView
 
         QUrl	getOpenedPage() const	{ return url(); }
         QUrl	getNewTabLink() const	{ return m_newTabLinkKeeper; }
+
+        static  void initialize();
 
     signals:
         void    dataLoaded( ViewWindow * window );
@@ -122,7 +124,9 @@ class ViewWindow : public QWebEngineView
         // call and appropriate slot call
         QUrl					m_newTabLinkKeeper;
 
-        // Keeps the scrollbar position to move after the page is loaded
+        // Keeps the scrollbar position to move after the page is loaded.
+        // It is set to -1 if no scrollbar position has been set and the page is not loaded yet
+        // It is set to 0 if no scrollbar position has been set and the page is loaded already
         int						m_storedScrollbarPosition;
 
         // Data provider

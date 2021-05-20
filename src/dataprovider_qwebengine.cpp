@@ -14,8 +14,6 @@ void DataProvider_QWebEngine::requestStarted( QWebEngineUrlRequestJob *request )
     QUrl url = request->requestUrl();
     bool htmlfile = url.path().endsWith( ".html" ) || url.path().endsWith( ".htm" ) || url.path().endsWith( ".xhtml" );
 
-    qDebug("requestStarted %s", qPrintable(url.toString()) );
-
     // Retreive the data from ebook file
     QByteArray buf;
 

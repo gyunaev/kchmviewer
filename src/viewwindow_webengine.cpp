@@ -25,6 +25,7 @@
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
+#include <QWebEngineContextMenuData>
 
 #include "config.h"
 #include "viewwindow_webengine.h"
@@ -62,10 +63,8 @@ ViewWindow::ViewWindow( QWidget * parent )
     m_contextMenuLink = 0;
     m_storedScrollbarPosition = -1; // see header
 
-    //QWebEnginePage *page
-
-    // Use our network emulation layer. I don't know if we transfer the ownership when we install it, so we create
-    // one per page. May be unnecessary.
+    // Use our network emulation layer. I don't know if we transfer the ownership when we install it,
+    // so we create one per page. May be unnecessary.
     m_provider = new DataProvider_QWebEngine( this );
 
     page()->profile()->installUrlSchemeHandler( EBook_CHM::urlScheme(), m_provider );
@@ -181,9 +180,6 @@ void ViewWindow::setTabKeeper( const QUrl& link )
 
 bool ViewWindow::printCurrentPage()
 {
-    page()->runJavaScript( QString("window.scrollTo(0, 400);" ) );
-    return true;
-
     // Has to be a pointer because printing happens later, and it will get out of scope
     QPrinter * printer = new QPrinter( QPrinter::HighResolution );
     QPrintDialog dlg( printer, this );
@@ -233,14 +229,11 @@ int ViewWindow::getScrollbarPosition()
         QApplication::processEvents();
     }
 
-    qDebug( "scroll value %d", value.load() );
     return value;
 }
 
 void ViewWindow::setScrollbarPosition(int pos, bool )
 {
-    qDebug( "setScrollbarPosition %d (%d)", pos, m_storedScrollbarPosition );
-
     // m_storedScrollbarPosition means the page isn't loaded yet. Thus it makes no sense to touch scrollbar.
     if ( m_storedScrollbarPosition == -1 )
     {
@@ -273,9 +266,10 @@ void ViewWindow::updateHistoryIcons()
 
 void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
 {
-    // From Qt Assistant
     QMenu *m = new QMenu(0);
-/*    QString link = anchorAt( e->pos() );
+
+    // See https://stackoverflow.com/questions/48126230/pyqt5-right-click-and-open-in-new-tab
+    QString link = page()->contextMenuData().linkUrl().toString();
 
     if ( !link.isEmpty() )
     {
@@ -284,7 +278,7 @@ void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
         m->addSeparator();
         setTabKeeper( link );
     }
-*/
+
     ::mainWindow->setupPopupMenu( m );
     m->exec( e->globalPos() );
     delete m;

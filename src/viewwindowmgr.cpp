@@ -346,7 +346,35 @@ void ViewWindowMgr::onActivateFind()
 }
 
 void ViewWindowMgr::find( bool backward )
-{/*
+{
+#if defined (USE_WEBENGINE)
+    QWebEnginePage::FindFlags flags = 0;
+
+    if ( checkCase->isChecked() )
+        flags |= QWebEnginePage::FindCaseSensitively;
+
+    if ( backward )
+        flags |= QWebEnginePage::FindBackward;
+
+    // Pre-hide the wrapper
+    labelWrapped->hide();
+
+    current()->findText( editFind->text(), flags, [this](bool found) {
+        // If we didn't find anything, enable the wrap and try again
+        if ( !frameFind->isVisible() )
+            frameFind->show();
+
+        QPalette p = editFind->palette();
+
+        if ( !found )
+            p.setColor( QPalette::Active, QPalette::Base, QColor(255, 102, 102) );
+        else
+            p.setColor( QPalette::Active, QPalette::Base, Qt::white );
+
+        editFind->setPalette( p );
+    });
+
+#else
     QWebPage::FindFlags webkitflags = 0;
 	
 	if ( checkCase->isChecked() )
@@ -402,7 +430,7 @@ void ViewWindowMgr::find( bool backward )
 		p.setColor( QPalette::Active, QPalette::Base, Qt::white );
 
 	editFind->setPalette( p );
-    */
+#endif
 }
 
 

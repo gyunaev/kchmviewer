@@ -128,9 +128,6 @@ class ViewWindow : public QWebEngineView
         // It is set to -1 if no scrollbar position has been set and the page is not loaded yet
         // It is set to 0 if no scrollbar position has been set and the page is loaded already
         int						m_storedScrollbarPosition;
-
-        // Data provider
-        DataProvider_QWebEngine * m_provider;
 };
 
 #endif // VIEWWINDOW_WEBENGINE_H

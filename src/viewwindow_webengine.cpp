@@ -63,15 +63,21 @@ ViewWindow::ViewWindow( QWidget * parent )
     m_contextMenuLink = 0;
     m_storedScrollbarPosition = -1; // see header
 
-    // Use our network emulation layer. I don't know if we transfer the ownership when we install it,
-    // so we create one per page. May be unnecessary.
-    m_provider = new DataProvider_QWebEngine( this );
-
-    page()->profile()->installUrlSchemeHandler( EBook_CHM::urlScheme(), m_provider );
-    page()->profile()->installUrlSchemeHandler( EBook_EPUB::urlScheme(), m_provider );
-
     // All links are going through us
     //page()->setLinkDelegationPolicy( QWebPage::DelegateAllLinks );
+
+    // This needs to be done only once
+    static bool providerInstalled = false;
+
+    if ( !providerInstalled )
+    {
+        // Use our network emulation layer. We do not transfer the ownership when we install it. See https://doc.qt.io/qt-5/qwebengineurlschemehandler.html
+        DataProvider_QWebEngine * provider = new DataProvider_QWebEngine( 0 );
+
+        QWebEngineProfile::defaultProfile()->installUrlSchemeHandler( EBook_CHM::urlScheme(), provider );
+        QWebEngineProfile::defaultProfile()->installUrlSchemeHandler( EBook_EPUB::urlScheme(), provider );
+        providerInstalled = true;
+    }
 
     connect( this, SIGNAL( loadFinished(bool)), this, SLOT( onLoadFinished(bool)) );
 

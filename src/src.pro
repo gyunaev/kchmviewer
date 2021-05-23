@@ -40,7 +40,6 @@ SOURCES += config.cpp \
     textencodings.cpp \
     treeitem_toc.cpp \
     treeitem_index.cpp
-LIBS += -lchm -lzip
 TARGET = ../bin/kchmviewer
 CONFIG += threads \
     warn_on \
@@ -106,6 +105,7 @@ unix:!macx: {
     LIBS += ../lib/libebook/libebook.a
     POST_TARGETDEPS += ../lib/libebook/libebook.a
 }
+LIBS += -lchm -lzip
 
 greaterThan(QT_MAJOR_VERSION, 4) {
     # Qt 5

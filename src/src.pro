@@ -60,12 +60,7 @@ FORMS += tab_bookmarks.ui \
     toolbareditor.ui
 RESOURCES += resources/images.qrc
 
-QT += webkit \
-	xml \
-    network \
-    widgets \
-    webkitwidgets \
-    printsupport
+QT += xml network widgets printsupport
 
 linux-g++*:{
     LIBS += -lX11

@@ -290,6 +290,36 @@ void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
     delete m;
 }
 
+QWebEngineView *ViewWindow::createWindow(QWebEnginePage::WebWindowType type)
+{
+    QWebEngineView *tab = nullptr;
+
+    switch (type)
+    {
+    case QWebEnginePage::WebBrowserWindow:
+    case QWebEnginePage::WebBrowserTab:
+    case QWebEnginePage::WebBrowserBackgroundTab:
+        {
+            bool active = (type != QWebEnginePage::WebBrowserBackgroundTab);
+
+            tab = ::mainWindow->viewWindowMgr()->addNewTab(active);
+            tab->setZoomFactor( ::mainWindow->currentBrowser()->zoomFactor() );
+
+            if (active)
+            {
+                tab->setFocus( Qt::OtherFocusReason );
+            }
+        }
+        break;
+
+    case QWebEnginePage::WebDialog:
+        // TODO: implement
+        break;
+    }
+
+    return tab;
+}
+
 void ViewWindow::onLoadFinished ( bool )
 {
     // If m_storedScrollbarPosition is -1 this means we have not had a request to set the scrollbar; change to 0

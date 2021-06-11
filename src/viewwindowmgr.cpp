@@ -142,11 +142,13 @@ ViewWindow * ViewWindowMgr::addNewTab( bool set_active )
 	if ( set_active || m_Windows.size() == 1 )
 		m_tabWidget->setCurrentWidget( tabdata.widget );
 	
+#if defined (USE_WEBKIT)
 	// Handle clicking on link in browser window
 	connect( viewvnd,
 			 SIGNAL( linkClicked ( const QUrl& ) ),
 	         ::mainWindow, 
 			 SLOT( activateUrl( const QUrl& ) ) );
+#endif
 
     connect( viewvnd, SIGNAL(dataLoaded(ViewWindow*)), this, SLOT(onWindowContentChanged(ViewWindow*)));
 

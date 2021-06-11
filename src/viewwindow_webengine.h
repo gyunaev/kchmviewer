@@ -112,6 +112,8 @@ class ViewWindow : public QWebEngineView
         void 			contextMenuEvent( QContextMenuEvent *e );
         //void			mouseReleaseEvent ( QMouseEvent * event );
 
+        virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type) override;
+
     private slots:
         // Used to restore the scrollbar position and the navigation button status
         void			onLoadFinished ( bool ok );

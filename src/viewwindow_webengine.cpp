@@ -30,6 +30,7 @@
 #include "config.h"
 #include "viewwindow_webengine.h"
 #include "mainwindow.h"
+#include "navigationpanel.h"
 #include "viewwindowmgr.h"
 #include "ebook_chm.h"
 #include "ebook_epub.h"
@@ -86,10 +87,15 @@ ViewWindow::ViewWindow( QWidget * parent )
     pal.setColor( QPalette::Inactive, QPalette::Highlight, pal.color(QPalette::Active, QPalette::Highlight) );
     pal.setColor( QPalette::Inactive, QPalette::HighlightedText, pal.color(QPalette::Active, QPalette::HighlightedText) );
     setPalette( pal );
+
+    connect(this, &QWebEngineView::urlChanged, [this] (const QUrl &url) {
+        ::mainWindow->navigator()->findUrlInContents(url);
+    });
 }
 
 ViewWindow::~ViewWindow()
 {
+    disconnect(this, &QWebEngineView::urlChanged, nullptr, nullptr);
 }
 
 void ViewWindow::invalidate( )
@@ -288,6 +294,36 @@ void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
     ::mainWindow->setupPopupMenu( m );
     m->exec( e->globalPos() );
     delete m;
+}
+
+QWebEngineView *ViewWindow::createWindow(QWebEnginePage::WebWindowType type)
+{
+    QWebEngineView *tab = nullptr;
+
+    switch (type)
+    {
+    case QWebEnginePage::WebBrowserWindow:
+    case QWebEnginePage::WebBrowserTab:
+    case QWebEnginePage::WebBrowserBackgroundTab:
+        {
+            bool active = (type != QWebEnginePage::WebBrowserBackgroundTab);
+
+            tab = ::mainWindow->viewWindowMgr()->addNewTab(active);
+            tab->setZoomFactor( ::mainWindow->currentBrowser()->zoomFactor() );
+
+            if (active)
+            {
+                tab->setFocus( Qt::OtherFocusReason );
+            }
+        }
+        break;
+
+    case QWebEnginePage::WebDialog:
+        // TODO: implement
+        break;
+    }
+
+    return tab;
 }
 
 void ViewWindow::onLoadFinished ( bool )

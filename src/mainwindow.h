@@ -102,6 +102,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void		navSetBackEnabled( bool enabled );
 		void		navSetForwardEnabled( bool enabled );
 		
+		bool		loadFile( const QString &fileName,  bool call_open_page = true );
 		void 		onOpenPageInNewTab();
 		void 		onOpenPageInNewBackgroundTab();
 					
@@ -166,7 +167,6 @@ class MainWindow : public QMainWindow, public Ui::MainWindow
 		void 		setupActions();
 		void		setupLangEncodingMenu();
 		
-		bool		loadFile( const QString &fileName,  bool call_open_page = true );
 		void		closeFile();	
 		void		refreshCurrentBrowser();
 		

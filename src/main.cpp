@@ -31,7 +31,7 @@
 	#include <kaboutdata.h>
 #endif
 
-#if defined (Q_WS_MAC)
+#if defined (Q_OS_MACOS)
         #include "kchmviewerapp.h"
 #else
         typedef QApplication  KchmviewerApp;
@@ -73,7 +73,7 @@ int main( int argc, char ** argv )
 	// Configuration
 	pConfig = new Config();
 
-#if !defined (WIN32) && !defined(Q_WS_MAC)
+#if !defined (WIN32) && !defined(Q_OS_MACOS)
 	if ( QDBusConnection::sessionBus().isConnected() )
 	{
 		if ( QDBusConnection::sessionBus().registerService(SERVICE_NAME) )
